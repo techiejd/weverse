@@ -183,6 +183,7 @@ const shuffle = (array: Array<any>) => {
   return array;
 };
 
+// TODO(techiejd): Move to pages.
 export function vote(
   req: NextApiRequest,
   res: NextApiResponse
@@ -223,6 +224,7 @@ export const requestJuryRoom = (params: Record<string, any>) => {
   convoHandler.send(makeJuryRoomFor(params.senderId));
 };
 
+// TODO(techiejd): Move to pages.
 export function submit(
   req: NextApiRequest,
   res: NextApiResponse
