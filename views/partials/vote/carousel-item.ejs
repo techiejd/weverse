@@ -1,0 +1,15 @@
+<div class="d-block w-100 bg-dark text-center">
+  <% if (media.type.startsWith('video')) { %>
+    <video class="video-fluid" autoplay loop muted>
+      <source src=<%=media.source%> type="video/mp4"/>
+    </video>  
+  <% } else if (media.type == 'photo') { %>
+    <img src=<%=media.image%> class="img-fluid">
+  <% } else if (media.type == 'share') { %>
+    <a href="https://instagram.com/latiendamagicamedellin?igshid=YmMyMTA2M2Y=">
+      <img src=<%=media.image%> class="img-fluid">
+    </a>
+  <%} else { %> 
+    <p> Error media type is  <%=media.type%></p>
+  <% } %>
+</div>

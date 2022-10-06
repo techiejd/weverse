@@ -1,0 +1,23 @@
+<div class="card" style="margin-bottom: 25px;">
+  <div class="card-header text-white bg-dark">
+    <p>Reconozcamos esta publicación.</p>
+  </div>
+  <% candidate.message.split("\n").forEach(function(line){ %>
+    <p class="card-text"><%= line%></p>
+  <% }); %>
+  <% if (candidate.medias) { %>
+    <hr/>
+    <%- include('./carousel', {medias: candidate.medias}); %>
+  <% } %>
+  <div class="card-footer text-white bg-dark">
+    <div class="input-group">
+      <button type="button" name="<%=candidate.id%>" class="btn btn-danger btn-vote"  data-type="minus" data-id="<%=candidate.id%>" disabled="true">
+        <span class="glyphicon glyphicon-minus"></span>
+      </button>
+      <input type="text" name="candidate-<%=candidate.id%>" class="form-control" value="0" readonly="readonly" form="vote">
+      <button type="button" class="btn btn-success btn-vote" data-type="plus" data-id="<%=candidate.id%>">
+        <span class="glyphicon glyphicon-plus"></span>
+      </button>
+    </div>
+  </div>
+</div>

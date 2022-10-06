@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Sala de jurado</title>
+  <%- include('./partials/head'); %>
+</head>
+<body class="container">
+
+<main>
+  <form action="/submitVote?psid=<%=psid%>" method="post" id="vote" style="height: 100%;">
+    <div class="d-block fixed-top bg-black text-center text-white">
+      <h2>Tienes <span id="remainingStars"><%= starAllowance %></span> 🌟 para recompensar.</h2>
+    </div>
+    <div style="padding-top: 35px;">
+      <% candidates.forEach(function(candidate, index){ %>
+        <%- include('./partials/vote/card', {candidate: candidate, index}); %>
+      <% }); %>
+    </div>
+    <button type="submit" class="btn btn-dark btn-lg btn-block" form="vote" style="height: 50px; margin-bottom: 15px;">Entregar</button>
+  </form>
+</main>
+
+<script>
+  const starsAllowance = Number("<%= starAllowance%>");
+
+  var allCandidateInputs = [];
+  for (let i = 0; i < Number("<%= candidates.length%>"); i++) {
+    allCandidateInputs.push($("input[name='candidate-"+i+"']"));
+  }
+
+  $('.btn-vote').click(function(e){
+    e.preventDefault();
+
+    const prevCount = allCandidateInputs.reduce((prev, curr) => prev + parseInt(curr.val()), 0);
+    
+    id = $(this).attr('data-id');
+    type      = $(this).attr('data-type');
+    var input = $("input[name='candidate-"+id+"']");
+    var prevVal = parseInt(input.val());
+    var change = 0;
+    if (!isNaN(prevVal)) {
+        if(type == 'minus') {
+            if(prevVal == 1) {
+              $(this).attr('disabled', true);
+            }
+            if (prevCount == starsAllowance) {
+              $('.btn-success').each(function() {
+                $(this).attr('disabled', false);
+              });
+            }
+            change = - 1;
+        } else if(type == 'plus') {
+            if (prevVal == 0) {
+              $(".btn-danger[name='"+id+"']").attr('disabled', false);
+            }
+            if(prevCount == starsAllowance - 1) {
+              $('.btn-success').each(function() {
+                $(this).attr('disabled', true);
+              });
+            }
+            change = 1;
+        }
+    }
+    $("#remainingStars").text(parseInt($("#remainingStars").text()) - change);
+    input.val(prevVal + change).change();
+  });
+</script>
+
+</body>
+</html>

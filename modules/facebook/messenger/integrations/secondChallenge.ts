@@ -27,109 +27,6 @@ export const learnAbout : schemas.MessengerMessage = makeButtonMessage(
     ]
 );
 
-/*
-const posts = [
-  // José - 1
-  `En mi comunidad soy profesor de yoga y meditación para beneficio de \
-todos los seres sintientes.`,
-  `Hago parte de la organización de dislalicos unidos para la región \
-Caribe, con el propósito de generar conciencia del correcto uno de la \
-letra "R"`,
-  // Leydi - 3
-  `Apoyé a comunidades Embera Chami del municipio de Andes en la construcción \
-de la escuela de lenguas en la que ellos nos enseñaban su lengua y nosotros ( \
-Área artística de Medellín en ese momento) la lengua del español.`,
-  `Participé como voluntaria por más de 6 meses junto a una amiga en la \
-creación del espacio artístico ( teatro y manualidades) con los niños de \
-Antorchas de vida, un orfanato de la ciudad de Medellín, culminando el \
-aprendizaje con una bella obra de teatro en Diciembre donde resimbolizamos \
-junto con ellos lo que era una familia y el verdadero espíritu de la amistad \
-y el amor.`,
-  // JD - 1
-  `Enseñe ingles en el SENA como voluntariado.`,
-  `Cuidé un río durante cuatro años monitoreando y reportando indicadores de \
-contaminación.`,
-  // Devon - 2
-  `Hago un producto que facilita la terapia psicodélica. Por ejemplo, \
-los veteranos ucranianos diagnosticados con PTSD de la guerra actual`,
-  `Cofundé una organización sin fines de lucro que ayuda a miles de \
-personas a aprender idiomas`,
-  // Sol - 2
-  `He compartido servicio de recreación en dibujo, pintura y juegos en \
-el pabellón de pediatría en el hospital general y en el pabellón de \
-quemados en san Vicente de Paul con una fundación cristiana. `,
-  `He sido voluntaria en la fundación Juguemos en el Bosque apadrinando \
-niños de bajos recursos en días de recreación en el parque norte. `,
-  // Nico - 2
-  `Apadrinar como mentor una familia desplazada por la violencia y \
-acompañarlos a vender en la calle, conseguir trabajo, apartamento y \
-estabilizarse económicamente y desarrollar inteligencia emocional para \
-administrar mejor su patrimonio.`,
-  `Trabajar con el cónsul de Dubai y un emprendedor caficultor para activar \
-la economía de el corregimiento de palmitas, dando como resultado lá compra a \
-un precio mucho más justo de la producción de café y sus subproductos que \
-antes se desaprovechan, además de  incentivar la producción orgánica en la \
-región ya que era requisito, lo que mejoro la calidad de vida de los \
-agricultores, trajo especies nativas nuevamente a repoblar he impulso el \
-turismo ecológico.`,
-  // Zuelly - 1
-  `Con mi familia compramos utiles escolares y regalamos estos elementos a \
-niños de bajos recursos `,
-  `Durante mi jornadas labores regale medicamentos que no cubría la eps  a \
-pacientes con  alteraciones respiratorias y con poca facilidad económica.`,
-  // Cristian - 2
-  `He acompañado a empresas y emprendedores en el proceso de conceptualización \
-de marca y estructuración de planes estratégicos para logro de objetivos.`,
-  `He acompañado a las personas a construir marca personal, ayudándolos a \
-encontrar y consolidar su vocación y misión de vida.`,
-  // Carlos - 3
-  `Lleve a un mochilero hasta un pueblo y le ayude para que se comunicará \
-con su familia.`,
-  `Realice un taller para niños en el barrio de Manrrique.`,
-  // Camila - 3
-  `Cree en mi anterior empleo un estándar de evaluación de accesibilidad \
-web, lo cual impacta positivamente las personas con algún tipo de \
-discapacidad cognitiva a acceder a la web, en este caso a las páginas \
-de las secretarias de tránsito del país.`,
-  `Todas las navidades en la empresa familiar hacemos novenas con los \
-niños de escasos recursos de la zona y les damos regalos y merienda el 24.`,
-  // Anelim - 3
-  `Busco dignificar el proceso del tejido en comunidades como la de \
-Aguadas Caldas y su sombrero Aguadeño buscando no solo un valor agregado \
-sino innovación y relevo generacional. Iragua Ancestral`,
-  `hago parte de una red de Mujeresqueviajan&Emprenden que pretende \
-potencializar la independencia de la mujer por medio de charlas talleres, \
-ferias y viajes.`,
-  // David - 2
-  `Lideré un proyecto de Hockey Sobre Patines para llevar a los niños \
-de bajos recursos a poder disciplinarse con el deporte y obtener los \
-valores por medio de este.`,
-  `De la mano del Colegio Alemán prepare a 20 estudiantes para poder \
-realizar sus estudios en Alemania.`,
-  // Yuliana - 2
-  `Participe en el diseño de los módulos para Bachillerato digital \
-gratuito, por la gobernación de Antioquia secretaría de educación \
-departamental, enfocado en las personas que por diferentes motivos han \
-tenido que suspender sus procesos de educación básica o media.`,
-  `Dicté un taller en el Hormiguero colectivo cultural a niños del \
-territorio de reutilización de botellas plástico en la creación de macetas,\
- se plantaron varias suculentas y se les orientó el cuidado y riego.`,
-  // Andrea - 3
-  `Trabaje como representante de víctimas, con asesorías de orientación y \
-acompañamiento legal por delitos de violencia intrafamiliar.`,
-  `Apoye a una fundación con la recolección de implementos de aseo, ropa, \
-juguetes, y realizando múltiples actividades de juego y recreación a niños \
-de escasos recursos dentro de la cuidad.`,
-  // Yesica - 2
-  `Brindar acompañamiento y atención a personas de la tercera edad que \
-estuvieron mal de salud y necesitaban el cuidado absoluto (bañar, vestir, \
-cambiar pañal, ayudarlos a mover de lugar, darles de comer, etc).`,
-  ` Liderar un proyecto ambiental para fomentar la limpieza y cuidado de \
-los espacios públicos con Jornadas de recolección de basura y separación de \
-residuos que aportamos al grupo de reciclaje del municipio.`,
-];
-*/
-
 const parsePostForVotingInfo = async (post: schemas.Post) => {
   let medias : Array<{
     height: number | undefined;
@@ -199,7 +96,7 @@ export function vote(
         const candidates = await Promise.all(
             posts.map(parsePostForVotingInfo));
         ejs.renderFile(
-            path.join(__dirname, '../../../views/vote.ejs'),
+            path.join(__dirname, '../../../../views/vote.ejs'),
             {
               candidates: candidates,
               starAllowance: 5,
@@ -260,7 +157,7 @@ export function submit(
           };
         });
         ejs.renderFile(
-            path.join(__dirname, '../../../views/submitVote.ejs'),
+            path.join(__dirname, '../../../../views/submitVote.ejs'),
             {voteTable: voteTable},
             (err, string) => {
               if (err) {
