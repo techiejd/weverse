@@ -1,0 +1,67 @@
+import {OneWePrivateConversationHandler} from
+  '../../oneWePrivateConversationHandler';
+import {notifyAllUsers} from '../../notifyUtils';
+import * as schemas from '../../../schemas';
+import * as utils from '../../../utils';
+import {getBody, getCommand} from './utils';
+import {getUserSnapshot} from '../../../../../common/db';
+
+export const notify = async (params: Record<string, any>) => {
+  const adminHandler =
+  new OneWePrivateConversationHandler.OneWeToAdminConversationHandler();
+
+  const closeNotifyChannel = () => adminHandler.deleteUserMenu();
+  closeNotifyChannel();
+
+  const command = getCommand(params);
+  const body = getBody(params);
+  const isSend = command.includes('send');
+  const isButtonNotification = command.includes('button:');
+
+  const prepareMessage = (
+      user:FirebaseFirestore.DocumentData) :
+      Promise<schemas.MessengerMessage> => {
+    const templatedBody = (() => {
+      const templateFunc =
+          new Function('user', 'return `' + body + '`;');
+      const userFacingInfo = {
+        name: user.name,
+        resources: user.gameInfo.resources,
+        psid: user.psid,
+      };
+      return templateFunc(userFacingInfo);
+    })();
+    const [extractedMessage, extractedButtons] = (() => {
+      if (isButtonNotification) {
+        const buttons = new Array<utils.ButtonInfo>();
+        const numButtons = parseInt(
+            command.substring(command.indexOf(':') + 1)[0]);
+        const bodyByLine = templatedBody.split('\n');
+        for (let i = 0; i < numButtons; i++) {
+          const title = bodyByLine[i * 2];
+          const url = bodyByLine[i * 2 + 1];
+          buttons.push({title: title, url: url});
+        }
+        const message = bodyByLine.slice(numButtons * 2).join('\n');
+        return [message, buttons];
+      }
+      return [templatedBody, []];
+    })();
+
+    const message : schemas.MessengerMessage = isButtonNotification ?
+    utils.makeButtonMessage(extractedMessage, extractedButtons) : {
+      text: extractedMessage,
+    };
+
+    return Promise.resolve(message);
+  };
+
+  if (isSend) {
+    return notifyAllUsers({createMessageForUser: prepareMessage});
+  } else {
+    return getUserSnapshot(adminHandler.recipient).then(
+        async (userSnapshot) => {
+          return adminHandler.send(await prepareMessage(userSnapshot.data()));
+        });
+  }
+};
