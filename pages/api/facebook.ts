@@ -21,8 +21,6 @@ export default function facebook(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-      //TODO(techiejd): figure out secrets in this app. 'FB_PAGE_ACCESS_TOKEN', 'FB_VERIFY_TOKEN'
-      //TODO(techiejd): figure out logging.
       try {
         switch (req.method) {
           case 'GET': {
