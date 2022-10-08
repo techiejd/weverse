@@ -9,14 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.6",
+    "@mui/material": "^5.10.8",
+    "@mui/styled-engine-sc": "^5.10.6",
     "ejs": "^3.1.8",
     "firebase-admin": "^11.0.1",
     "next": "12.3.1",
     "node-fetch": "^3.2.10",
     "pino": "^8.6.1",
+    "pino-pretty": "^9.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.36.1",
+    "react-material-ui-carousel": "^3.4.2",
+    "styled-components": "^5.3.6",
     "zod": "^3.18.0"
   },
   "devDependencies": {

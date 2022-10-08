@@ -71,3 +71,28 @@ export const challenge = z.object({
 });
 
 export type Challenge = z.infer<typeof challenge>;
+
+const media = z.object({
+  height: z.number().optional(),
+  width: z.number().optional(),
+  image: z.string().optional(),
+  source: z.string().optional(),
+  type: z.enum(["image", "video"])
+});
+
+const candidate = z.object({
+  message: z.string().optional(),
+  id: z.string(),
+  medias: media.array().optional()
+})
+
+export type Candidate = z.infer<typeof candidate>;
+
+export const votesRes = z.object({
+  candidates: candidate.array(),
+  starAllowance: z.number(),
+  psid: z.string()
+})
+
+export type VotesRes = z.infer<typeof votesRes>;
+export type Media = z.infer<typeof media>;

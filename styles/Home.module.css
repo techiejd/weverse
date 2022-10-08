@@ -125,7 +125,15 @@
   height: 1em;
   margin-left: 0.5rem;
 }
-
+.GridPost {
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  column-gap: 1em;
+  margin:5%;
+}
+.imgGrid{
+  max-width: 400px;
+}
 @media (max-width: 600px) {
   .grid {
     width: 100%;
