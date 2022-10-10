@@ -10,6 +10,12 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Carousel from 'react-material-ui-carousel';
+import Tooltip from '@mui/material/Tooltip';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+
+import Cards from './card';
+
 
 
 
@@ -19,7 +25,7 @@ const RespuestaVotes : VotesRes = {
       message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       id:"aksdlasdjlasd",
       medias:[{
-              height: 50,
+              height: 300,
               width: 50,
               image:"https://firebasestorage.googleapis.com/v0/b/mavifun-e06ed.appspot.com/o/pantalon%20Pat%201.png?alt=media&token=f54db53d-1dc7-4fe4-baeb-4a79a02bf493",
               type:"image"
@@ -31,13 +37,13 @@ const RespuestaVotes : VotesRes = {
       id:"asdasd",
       medias:[
         {
-          height: 50,
+          height: 300,
           width: 50,
           image:"https://firebasestorage.googleapis.com/v0/b/mavifun-e06ed.appspot.com/o/pantalon%20Pat%201.png?alt=media&token=f54db53d-1dc7-4fe4-baeb-4a79a02bf493",
           type:"image"
         },
         {
-          height: 50,
+          height: 300,
           width: 50,
           image:"https://firebasestorage.googleapis.com/v0/b/mavifun-e06ed.appspot.com/o/pantalon%20Pat%201.png?alt=media&token=f54db53d-1dc7-4fe4-baeb-4a79a02bf493",
           type:"image"
@@ -65,44 +71,32 @@ const Challenge: NextPage = () => {
     // });
     useEffect(() => {
       setCandidates(RespuestaVotes.candidates);
-      candidates.forEach(candidate =>{
-        if (candidate.medias != undefined) {
-          setImages(images.concat(candidate.medias));
-        }
-      });
+      // candidates.forEach(candidate =>{
+      //   if (candidate.medias != undefined) {
+      //     setImages(images.concat(candidate.medias));
+      //   }
+      // });
         
       console.log(images);
 
     })
-    
+    const [count, setCount] = useState(0);
+    const IncNum = () => {
+      setCount(count + 1);
+    };
+    const DecNum = () => {
+      if (count > 0) setCount(count - 1);
+      else {
+        setCount(0);
+        alert("min limit reached");
+      }
+    }; 
 
   return (<>
         {candidates ?(<div className={styles.GridPost}>
-          {candidates.map((can)=>(
-              <Card sx={{ maxWidth: 345 }}>
-                {can.medias?(<>
-                  <Carousel>
-                    {can.medias.map((m, i)=>(
-                      <CardMedia
-                      component="img"
-                      height={m.height}
-                      image={m.image}
-                      alt="green iguana"
-                    />
-                    ))}
-                  </Carousel>
-                </>):(<></>)}
-              <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                  {can.message}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Share</Button>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-              </Card>
-            ))}
+          {candidates.map(can=>(
+            <Cards key={can.id} candidate={can}/>
+          ))}
         </div>):(<>
           loading...
         </>)}

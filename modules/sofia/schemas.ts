@@ -72,7 +72,7 @@ export const challenge = z.object({
 
 export type Challenge = z.infer<typeof challenge>;
 
-const media = z.object({
+export const media = z.object({
   height: z.number().optional(),
   width: z.number().optional(),
   image: z.string().optional(),
