@@ -3,7 +3,7 @@ import styles from "../../styles/Home.module.css";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import FileUploader from '../components/fileUploader'
+import FileUploader from '../../common/components/fileUpload'
 
 const OnboardingForm: NextPage = () => {
   const [selectedFiles, setSelectedFiles] = useState<Array<{url: string, file: File}>>([]);
@@ -63,7 +63,7 @@ const OnboardingForm: NextPage = () => {
               {...register("truth1", { required: "*" })}
             />
             <h3>Selecciona las validaciones de tu verdad 🌟</h3>
-              <FileUploader selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>
+              <FileUploader selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} message="Elegir todos las pruebas (imagenes o video) de tu verdad."/>
             <br />
             <br />
             <hr />
