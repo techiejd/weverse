@@ -77,7 +77,7 @@ export const media = z.object({
   width: z.number().optional(),
   image: z.string().optional(),
   source: z.string().optional(),
-  type: z.enum(["image", "video"])
+  type: z.string().optional(),
 });
 
 const candidate = z.object({

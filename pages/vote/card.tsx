@@ -1,7 +1,5 @@
-import type { NextPage } from 'next'
 import {useState, useEffect} from 'react'
 import {Candidate, Media, VotesRes } from '../../modules/sofia/schemas';
-import styles from "../../styles/Home.module.css";
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -13,6 +11,7 @@ import Carousel from 'react-material-ui-carousel';
 import Tooltip from '@mui/material/Tooltip';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import Container from '@mui/material/Container';
 
 const Cards = (props : {candidate: Candidate}) => {
     const [can,setCan]=useState<Candidate | undefined>();
@@ -32,15 +31,17 @@ const Cards = (props : {candidate: Candidate}) => {
       console.log('can',can)
     },[])
 
-  return (<>
-              <Card sx={{ maxWidth: 345 }}>
+  return (<Container fixed>
+              <Card sx={{ maxWidth: 500, mt:5}} variant="outlined">
                 {can ? (<>
                   {can.medias?(<>
                   <Carousel>
                     {can.medias.map((m, i)=>(
                       <CardMedia
                       component="img"
-                      height={m.height}
+                      max-height="200px"
+                      width="100px"
+                      // height={m.height}
                       image={m.image}
                       alt="green iguana"
                       key={i}
@@ -68,7 +69,7 @@ const Cards = (props : {candidate: Candidate}) => {
                 </>):(<>loading...</>)}
     
               </Card>
-        </>)
+        </Container>)
 };
 
 export default Cards
