@@ -1,10 +1,9 @@
 import type { NextPage } from "next";
-import Image from "next/image";
 import styles from "../../styles/Home.module.css";
 import { useForm } from "react-hook-form";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, MouseEvent } from "react";
 import { useRouter } from "next/router";
-import { Card, CardHeader, CardMedia } from "@mui/material";
+import { Card, CardHeader, CardMedia, Container } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -17,7 +16,6 @@ const OnboardingForm: NextPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [createObjectURL, setCreateObjectURL] = useState<string | null>(null);
 
   const selectFiles = (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) {
@@ -31,19 +29,19 @@ const OnboardingForm: NextPage = () => {
     setSelectedFiles(selectedFiles.concat(newFiles));
   };
 
+  const closeCardFor = (i: number) => (e: MouseEvent) => {
+    selectedFiles.splice(i, 1);
+    // Must be spread out to re-render
+    // See https://stackoverflow.com/questions/56266575/why-is-usestate-not-triggering-re-render
+    setSelectedFiles([...selectedFiles]);
+  };
+
   const router = useRouter();
   const onSubmit = async (data: any) => {
-    console.log("In onSubmit!");
-    console.log(data);
     const body = ((): FormData => {
       const body = new FormData();
-      body.append("lie", data.lie);
-      body.append("truth1", data.truth1);
-      body.append("truth2", data.truth2);
-      console.log(data.truth1Proofs);
-      for (let i = 0; i < data.truth1Proofs.length; i++) {
-        console.log(data.truth1Proofs[i]);
-        body.append("truth1Proofs", data.truth1Proofs[i]);
+      for (let i = 0; i < selectedFiles.length; i++) {
+        body.append("truth1Proofs", selectedFiles[i].file);
       }
       return body;
     })();
@@ -51,7 +49,6 @@ const OnboardingForm: NextPage = () => {
       method: "POST",
       body: body,
     });
-    console.log("body:", body.keys());
     // router.push("/onboarding/success");
     return true;
   };
@@ -104,32 +101,41 @@ const OnboardingForm: NextPage = () => {
                 onChange: selectFiles,
               })}
             />
-            {selectedFiles.map((fileInfo, i) => (
-              <Card key={i}>
-                <CardHeader
-                  action={
-                    <IconButton aria-label="close">
-                      <CloseIcon />
-                    </IconButton>
-                  }
-                  title={fileInfo.file.name}
-                />
-                <CardMedia
-                  component="img"
-                  sx={{}}
-                  image={fileInfo.url}
-                  alt={`file-${i}`}
-                />
-              </Card>
-            ))}
-            {/* <ul>
+            <Container
+              sx={{
+                display: "flex",
+              }}
+              id="uploadedFiles"
+            >
               {selectedFiles.map((fileInfo, i) => (
-                <li key={`name-${i}`}>
-                  <p>{fileInfo.file.name}</p>
-                  <Image src={fileInfo.url} alt="yoyo" layout="fill" />
-                </li>
+                <Card
+                  sx={{
+                    height: 200,
+                    width: 200,
+                  }}
+                  key={i}
+                >
+                  <CardHeader
+                    action={
+                      <IconButton
+                        aria-label="close"
+                        onClick={closeCardFor(i)}
+                        key={i}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    }
+                    title={fileInfo.file.name}
+                    titleTypographyProps={{ variant: "body2" }}
+                  />
+                  <CardMedia
+                    component="img"
+                    image={fileInfo.url}
+                    alt={`file-${i}`}
+                  />
+                </Card>
               ))}
-            </ul> */}
+            </Container>
             <br />
             <br />
             <hr />
