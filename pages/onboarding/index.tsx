@@ -1,41 +1,17 @@
 import type { NextPage } from "next";
 import styles from "../../styles/Home.module.css";
 import { useForm } from "react-hook-form";
-import { useState, ChangeEvent, MouseEvent } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
-import { Card, CardHeader, CardMedia, Container } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+import FileUploader from '../components/fileUploader'
 
 const OnboardingForm: NextPage = () => {
-  const [selectedFiles, setSelectedFiles] = useState<
-    Array<{ url: string; file: File }>
-  >([]);
+  const [selectedFiles, setSelectedFiles] = useState<Array<{url: string, file: File}>>([]);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const selectFiles = (event: ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files) {
-      return;
-    }
-    const newFiles = Array<{ url: string; file: File }>();
-    for (let i = 0; i < event.target.files.length; i++) {
-      const file = event.target.files.item(i) as File;
-      newFiles.push({ url: URL.createObjectURL(file), file: file });
-    }
-    setSelectedFiles(selectedFiles.concat(newFiles));
-  };
-
-  const closeCardFor = (i: number) => (e: MouseEvent) => {
-    selectedFiles.splice(i, 1);
-    // Must be spread out to re-render
-    // See https://stackoverflow.com/questions/56266575/why-is-usestate-not-triggering-re-render
-    setSelectedFiles([...selectedFiles]);
-  };
-
   const router = useRouter();
   const onSubmit = async (data: any) => {
     const body = ((): FormData => {
@@ -49,7 +25,7 @@ const OnboardingForm: NextPage = () => {
       method: "POST",
       body: body,
     });
-    // router.push("/onboarding/success");
+    router.push("/onboarding/success");
     return true;
   };
   return (
@@ -87,55 +63,7 @@ const OnboardingForm: NextPage = () => {
               {...register("truth1", { required: "*" })}
             />
             <h3>Selecciona las validaciones de tu verdad 🌟</h3>
-            <label htmlFor="file-upload" className={styles.labelInput}>
-              Elegir todos las pruebas (imagenes o video) de tu verdad.
-            </label>
-            <input
-              className={styles.hiddenInput}
-              id="file-upload"
-              placeholder="Elegir todos las pruebas (imagenes o video) de tu verdad"
-              type="file"
-              multiple
-              {...register("truth1Proofs", {
-                required: "*",
-                onChange: selectFiles,
-              })}
-            />
-            <Container
-              sx={{
-                display: "flex",
-              }}
-              id="uploadedFiles"
-            >
-              {selectedFiles.map((fileInfo, i) => (
-                <Card
-                  sx={{
-                    height: 200,
-                    width: 200,
-                  }}
-                  key={i}
-                >
-                  <CardHeader
-                    action={
-                      <IconButton
-                        aria-label="close"
-                        onClick={closeCardFor(i)}
-                        key={i}
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    }
-                    title={fileInfo.file.name}
-                    titleTypographyProps={{ variant: "body2" }}
-                  />
-                  <CardMedia
-                    component="img"
-                    image={fileInfo.url}
-                    alt={`file-${i}`}
-                  />
-                </Card>
-              ))}
-            </Container>
+              <FileUploader selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>
             <br />
             <br />
             <hr />
