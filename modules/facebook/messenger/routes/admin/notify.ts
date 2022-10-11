@@ -1,10 +1,11 @@
 import {OneWePrivateConversationHandler} from
   '../../oneWePrivateConversationHandler';
-import {notifyAllUsers} from '../../notifyUtils';
+import {notifyAllUsers, templateBody} from '../../notifyUtils';
 import * as schemas from '../../../schemas';
 import * as utils from '../../../utils';
 import {getBody, getCommand} from './utils';
 import {getUserSnapshot} from '../../../../../common/db';
+import { userData, UserData } from '../../../../db/schemas';
 
 export const notify = async (params: Record<string, any>) => {
   const adminHandler =
@@ -19,18 +20,9 @@ export const notify = async (params: Record<string, any>) => {
   const isButtonNotification = command.includes('button:');
 
   const prepareMessage = (
-      user:FirebaseFirestore.DocumentData) :
+      user:UserData) :
       Promise<schemas.MessengerMessage> => {
-    const templatedBody = (() => {
-      const templateFunc =
-          new Function('user', 'return `' + body + '`;');
-      const userFacingInfo = {
-        name: user.name,
-        resources: user.gameInfo.resources,
-        psid: user.psid,
-      };
-      return templateFunc(userFacingInfo);
-    })();
+    const templatedBody = templateBody(body, user);
     const [extractedMessage, extractedButtons] = (() => {
       if (isButtonNotification) {
         const buttons = new Array<utils.ButtonInfo>();
@@ -61,7 +53,7 @@ export const notify = async (params: Record<string, any>) => {
   } else {
     return getUserSnapshot(adminHandler.recipient).then(
         async (userSnapshot) => {
-          return adminHandler.send(await prepareMessage(userSnapshot.data()));
+          return adminHandler.send(await prepareMessage(userData.parse(userSnapshot.data())));
         });
   }
 };

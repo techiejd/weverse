@@ -9,7 +9,7 @@ export const config = {
   }
 };
 // TODO(techiejd): Add onboarding intake API.
-export default async function onboarding(
+export default async function admin(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
