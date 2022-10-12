@@ -1,12 +1,17 @@
 import type { NextPage } from "next";
 import styles from "../../styles/Home.module.css";
 import { useForm } from "react-hook-form";
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, Component } from "react";
 import { useRouter } from "next/router";
 import FileUploader from '../../common/components/fileUpload'
 import { getUserSnapshot } from "../../common/db";
 import { userData, UserData } from "../../modules/db/schemas";
 import * as utils from "../../modules/facebook/messenger/utils";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import Tooltip from '@mui/material/Tooltip';
+import React, { FC } from 'react';
+import {ButtonInput} from './buttonInput'
 
 export async function getServerSideProps() {
   return getUserSnapshot(String(process.env.ADMIN_ID)).then(
@@ -49,9 +54,30 @@ const dashboard: NextPage<{admin: UserData}> = (
     return true;
   };
   const processInput = (e: MouseEvent)=>{
+    e.preventDefault();
     const templated = utils.Notify.templateBody(inputMessage,props.admin);
     setTemplatedMessage(templated);
   }
+
+  const [buttonInputs, setButtonInputs] = useState<Array<() => JSX.Element>>([]);
+
+  const incNumButtonInputs = (e:MouseEvent) => {
+    e.preventDefault();
+    if(buttonInputs.length >= 3){
+      alert("max limit reached")
+    }else{
+      setButtonInputs([...buttonInputs,ButtonInput]);
+    }
+  };
+
+  const decNumButtonInputs = (e:MouseEvent) => {
+    e.preventDefault();
+    if (buttonInputs.length > 0) {
+      buttonInputs.pop();
+      setButtonInputs([...buttonInputs, ButtonInput])
+    }
+  };
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
@@ -70,12 +96,28 @@ const dashboard: NextPage<{admin: UserData}> = (
             <br/>
             <br/>
                <FileUploader selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} message="Activa tus publicaciones"/>
+            <br/>
+            <br/>
+              <button  onClick={decNumButtonInputs} >
+                  <RemoveIcon color="action"/>
+                </button>
+              <h1>Up to 3 buttons allowed</h1>
+              <button onClick={incNumButtonInputs}>
+                <AddIcon color="action" />
+              </button>
+              <br/>
+              <br/>
+            {buttonInputs.map((buttonInput) =>(
+              <ButtonInput/>
+            ))}
             <button onClick={processInput}>
               Check
             </button>
             {templatedMessage?(<>
                 {templatedMessage}
             </>):(<></>)}
+            <br/>
+            <hr/>
             <button type="submit" className={styles.button}>
               Enviar
             </button>
