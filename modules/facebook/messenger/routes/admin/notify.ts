@@ -1,8 +1,9 @@
 import {OneWePrivateConversationHandler} from
   '../../oneWePrivateConversationHandler';
-import {notifyAllUsers, templateBody} from '../../notifyUtils';
+import {notifyAllUsers} from '../../notifyUtils';
 import * as schemas from '../../../schemas';
 import * as utils from '../../../utils';
+import * as messengerUtils from '../../utils';
 import {getBody, getCommand} from './utils';
 import {getUserSnapshot} from '../../../../../common/db';
 import { userData, UserData } from '../../../../db/schemas';
@@ -22,7 +23,7 @@ export const notify = async (params: Record<string, any>) => {
   const prepareMessage = (
       user:UserData) :
       Promise<schemas.MessengerMessage> => {
-    const templatedBody = templateBody(body, user);
+    const templatedBody = messengerUtils.Notify.templateBody(body, user);
     const [extractedMessage, extractedButtons] = (() => {
       if (isButtonNotification) {
         const buttons = new Array<utils.ButtonInfo>();
@@ -49,7 +50,7 @@ export const notify = async (params: Record<string, any>) => {
   };
 
   if (isSend) {
-    return notifyAllUsers({createMessageForUser: prepareMessage});
+    return notifyAllUsers(prepareMessage);
   } else {
     return getUserSnapshot(adminHandler.recipient).then(
         async (userSnapshot) => {

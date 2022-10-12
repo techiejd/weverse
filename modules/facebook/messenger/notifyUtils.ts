@@ -5,12 +5,8 @@ import * as schemas from '../schemas';
 import {logger} from '../../../common/logger';
 import { userData, UserData } from '../../db/schemas';
 
-export type notifyMessageLoad =
-{message: schemas.MessengerMessage, createMessageForUser?: never} |
-{message?: never, createMessageForUser:(
-  user: UserData) => Promise<schemas.MessengerMessage>};
-
-export const notifyAllUsers = async (load: notifyMessageLoad) => {
+export const notifyAllUsers = async (createMessageForUser: (
+  user: UserData) => Promise<schemas.MessengerMessage>) => {
   return getAllUsersSnapshot().then((userSnapshots) => {
     return userSnapshots.forEach(async (userSnapshot) => {
       const user = userSnapshot.data();
@@ -21,8 +17,7 @@ export const notifyAllUsers = async (load: notifyMessageLoad) => {
             'user without notification permissions');
         return;
       }
-      const message : schemas.MessengerMessage = load.message ? load.message :
-      await load.createMessageForUser(userData.parse(user));
+      const message : schemas.MessengerMessage = await createMessageForUser(userData.parse(user));
       return convoHolder.notify(
           message, user.notifications_permissions.token);
     });

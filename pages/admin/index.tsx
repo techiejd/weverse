@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import styles from "../../styles/Home.module.css";
 import { useForm } from "react-hook-form";
-import { useState, MouseEvent, Component } from "react";
+import { useState, MouseEvent } from "react";
 import { useRouter } from "next/router";
 import FileUploader from "../../common/components/fileUpload";
 import { getUserSnapshot } from "../../common/db";
@@ -9,7 +9,6 @@ import { userData, UserData } from "../../modules/db/schemas";
 import * as utils from "../../modules/facebook/messenger/utils";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import Tooltip from "@mui/material/Tooltip";
 import React, { FC } from "react";
 import { ButtonInput } from "./buttonInput";
 
