@@ -10,7 +10,9 @@ import * as utils from "../../modules/facebook/messenger/utils";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import React, { FC } from "react";
-import { ButtonInput } from "./buttonInput";
+import  ButtonInput from "./buttonInput";
+import { ButtonInfo } from "../../modules/facebook/messenger/utils";
+
 
 export async function getServerSideProps() {
   return getUserSnapshot(String(process.env.ADMIN_ID)).then(
@@ -26,21 +28,24 @@ export async function getServerSideProps() {
 
 const Dashboard: NextPage<{ admin: UserData }> = (props) => {
   const [templatedMessage, setTemplatedMessage] = useState<string>("");
+  const [templatedButtons, setTemplatedButtons] = useState<Array<ButtonInfo>>([]);
   const [inputMessage, setInputMessage] = useState<string>("");
   const [selectedFiles, setSelectedFiles] = useState<
     Array<{ url: string; file: File }>
   >([]);
+  const [buttonInfos, setButtonInfos] = useState<Array<ButtonInfo>>([]);
+
   const {
     register,
-    handleSubmit,
-    formState: { errors },
+    handleSubmit
   } = useForm();
   const router = useRouter();
+
   const onSubmit = async (data: any) => {
-    console.log(data);
     const body = ((): FormData => {
       const body = new FormData();
       body.append("message", data.message);
+      body.append("buttons",JSON.stringify(buttonInfos));
       for (let i = 0; i < selectedFiles.length; i++) {
         body.append("messageFiles", selectedFiles[i].file);
       }
@@ -50,32 +55,34 @@ const Dashboard: NextPage<{ admin: UserData }> = (props) => {
       method: "POST",
       body: body,
     });
-    console.log("I{m in here");
+
     router.push("/admin/success");
+
     return true;
   };
+
   const processInput = (e: MouseEvent) => {
     e.preventDefault();
-    const templated = utils.Notify.templateBody(inputMessage, props.admin);
-    setTemplatedMessage(templated);
-  };
 
-  const [buttonInputKeys, setButtonInputKeys] = useState<Array<number>>([]);
+    const templater = utils.Notify.getTemplaters(props.admin);
+    setTemplatedMessage(templater.templateBody(inputMessage));
+    setTemplatedButtons(buttonInfos.map(templater.templateButton));
+  };
 
   const incNumButtonInputs = (e: MouseEvent) => {
     e.preventDefault();
-    if (buttonInputKeys.length >= 3) {
+
+    if (buttonInfos.length >= 3) {
       alert("max limit reached");
     } else {
-      setButtonInputKeys([...buttonInputKeys, buttonInputKeys.length]);
+      setButtonInfos([...buttonInfos, {title: "", payload: ""}]);
     }
   };
-
   const decNumButtonInputs = (e: MouseEvent) => {
     e.preventDefault();
-    if (buttonInputKeys.length > 0) {
-      buttonInputKeys.pop();
-      setButtonInputKeys([...buttonInputKeys]);
+    if (buttonInfos.length > 0) {
+      buttonInfos.pop();
+      setButtonInfos([...buttonInfos]);
     }
   };
 
@@ -112,12 +119,22 @@ const Dashboard: NextPage<{ admin: UserData }> = (props) => {
             </button>
             <br />
             <br />
-            {buttonInputKeys.map((buttonInputKey) => (
-              <ButtonInput key={buttonInputKey} />
+            {buttonInfos.map((buttonInfo, i) => (
+              <div key={i}>
+                <ButtonInput id={i} buttonInfos={buttonInfos} setButtonInfos={setButtonInfos} />
+                <br/>
+                <hr/>
+              </div>
             ))}
             <button onClick={processInput}>Check</button>
-            {templatedMessage ? <>{templatedMessage}</> : <></>}
+            <br/>
+            {templatedMessage ? <><h1>Message:</h1> {templatedMessage}</> : <></>}
             <br />
+            {templatedButtons.map((button,i)=>(<div key={i}>
+              <h1>Button {i}:</h1>
+              <p>Title:   {button.title}</p>
+              <p>{button.url? <> url:  {button.url}</> : <> payload: {button.payload}</>}</p>
+            </div>))}
             <hr />
             <button type="submit" className={styles.button}>
               Enviar

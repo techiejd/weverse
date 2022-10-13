@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import * as schemas from './schemas';
 import {getUserSnapshot} from '../../common/db';
 import {logger} from '../../common/logger';
+import { ButtonInfo, buttonInfoToButton } from './messenger/utils';
 
 export const getPaginatedData =
 (url:string) : Promise<Record<string, unknown>[]> => {
@@ -31,36 +32,6 @@ export const getFlattenedPaginatedData = async (
   startPaginatedData.data.concat(await getPaginatedData(next)) :
   startPaginatedData.data;
 };
-
-export type ButtonInfo = {title: string, payload: string, url?:never} |
-{title:string, payload?: never, url: string}
-
-const buttonInfoToButton = (buttonInfo: ButtonInfo) => {
-  return buttonInfo.payload ? {
-    title: buttonInfo.title,
-    type: 'postback',
-    payload: buttonInfo.payload,
-  } : {
-    title: buttonInfo.title,
-    type: 'web_url',
-    url: buttonInfo.url,
-    // TODO(techiejd): Deal with this.
-    messenger_extensions: false, // buttonInfo.url?.startsWith('https://onewe.tech') ? true : false,
-  };
-};
-
-export const makeButtonMessage = (text: string,
-    buttonInfos:Array<ButtonInfo>) : schemas.MessengerMessage => ({
-  attachment: {
-    type: 'template',
-    payload: {
-      template_type: 'button',
-      text: text,
-      buttons: buttonInfos.map(buttonInfoToButton),
-    },
-  },
-});
-
 
 /**
  * Handles a page's conversation

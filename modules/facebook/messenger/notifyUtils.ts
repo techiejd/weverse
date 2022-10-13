@@ -9,7 +9,7 @@ export const notifyAllUsers = async (createMessageForUser: (
   user: UserData) => Promise<schemas.MessengerMessage>) => {
   return getAllUsersSnapshot().then((userSnapshots) => {
     return userSnapshots.forEach(async (userSnapshot) => {
-      const user = userSnapshot.data();
+      const user = userData.parse(userSnapshot.data());
       const convoHolder = new OneWePrivateConversationHandler(user.psid);
       if (user.notifications_permissions == undefined) {
         logger.warn(
@@ -17,7 +17,7 @@ export const notifyAllUsers = async (createMessageForUser: (
             'user without notification permissions');
         return;
       }
-      const message : schemas.MessengerMessage = await createMessageForUser(userData.parse(user));
+      const message : schemas.MessengerMessage = await createMessageForUser(user);
       return convoHolder.notify(
           message, user.notifications_permissions.token);
     });

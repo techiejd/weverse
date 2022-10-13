@@ -17,5 +17,4 @@ export default async function onboarding(
   const parsedForm = form.parse(req, async function (err, fields, files) {
     logger.info({error: err, files: files, fields: fields}, "info");
   });
-  console.log(parsedForm);
 };
