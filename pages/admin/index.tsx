@@ -10,9 +10,8 @@ import * as utils from "../../modules/facebook/messenger/utils";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import React, { FC } from "react";
-import  ButtonInput from "./buttonInput";
+import ButtonInput from "../../modules/admin/components/buttonInput";
 import { ButtonInfo } from "../../modules/facebook/messenger/utils";
-
 
 export async function getServerSideProps() {
   return getUserSnapshot(String(process.env.ADMIN_ID)).then(
@@ -28,24 +27,23 @@ export async function getServerSideProps() {
 
 const Dashboard: NextPage<{ admin: UserData }> = (props) => {
   const [templatedMessage, setTemplatedMessage] = useState<string>("");
-  const [templatedButtons, setTemplatedButtons] = useState<Array<ButtonInfo>>([]);
+  const [templatedButtons, setTemplatedButtons] = useState<Array<ButtonInfo>>(
+    []
+  );
   const [inputMessage, setInputMessage] = useState<string>("");
   const [selectedFiles, setSelectedFiles] = useState<
     Array<{ url: string; file: File }>
   >([]);
   const [buttonInfos, setButtonInfos] = useState<Array<ButtonInfo>>([]);
 
-  const {
-    register,
-    handleSubmit
-  } = useForm();
+  const { register, handleSubmit } = useForm();
   const router = useRouter();
 
   const onSubmit = async (data: any) => {
     const body = ((): FormData => {
       const body = new FormData();
       body.append("message", data.message);
-      body.append("buttons",JSON.stringify(buttonInfos));
+      body.append("buttons", JSON.stringify(buttonInfos));
       for (let i = 0; i < selectedFiles.length; i++) {
         body.append("messageFiles", selectedFiles[i].file);
       }
@@ -75,7 +73,7 @@ const Dashboard: NextPage<{ admin: UserData }> = (props) => {
     if (buttonInfos.length >= 3) {
       alert("max limit reached");
     } else {
-      setButtonInfos([...buttonInfos, {title: "", payload: ""}]);
+      setButtonInfos([...buttonInfos, { title: "", payload: "" }]);
     }
   };
   const decNumButtonInputs = (e: MouseEvent) => {
@@ -121,20 +119,38 @@ const Dashboard: NextPage<{ admin: UserData }> = (props) => {
             <br />
             {buttonInfos.map((buttonInfo, i) => (
               <div key={i}>
-                <ButtonInput id={i} buttonInfos={buttonInfos} setButtonInfos={setButtonInfos} />
-                <br/>
-                <hr/>
+                <ButtonInput
+                  id={i}
+                  buttonInfos={buttonInfos}
+                  setButtonInfos={setButtonInfos}
+                />
+                <br />
+                <hr />
               </div>
             ))}
             <button onClick={processInput}>Check</button>
-            <br/>
-            {templatedMessage ? <><h1>Message:</h1> {templatedMessage}</> : <></>}
             <br />
-            {templatedButtons.map((button,i)=>(<div key={i}>
-              <h1>Button {i}:</h1>
-              <p>Title:   {button.title}</p>
-              <p>{button.url? <> url:  {button.url}</> : <> payload: {button.payload}</>}</p>
-            </div>))}
+            {templatedMessage ? (
+              <>
+                <h1>Message:</h1> {templatedMessage}
+              </>
+            ) : (
+              <></>
+            )}
+            <br />
+            {templatedButtons.map((button, i) => (
+              <div key={i}>
+                <h1>Button {i}:</h1>
+                <p>Title: {button.title}</p>
+                <p>
+                  {button.url ? (
+                    <> url: {button.url}</>
+                  ) : (
+                    <> payload: {button.payload}</>
+                  )}
+                </p>
+              </div>
+            ))}
             <hr />
             <button type="submit" className={styles.button}>
               Enviar
