@@ -1,24 +1,25 @@
 import * as schemas from '../../schemas';
 import * as ejs from 'ejs';
 import * as path from 'path';
-import {makeButtonMessage, GroupHandler,
+import {GroupHandler,
   getFlattenedPaginatedData} from '../../utils';
 import {OneWePrivateConversationHandler} from
   './../oneWePrivateConversationHandler';
 import {getUserSnapshot} from '../../../../common/db';
 import { logger } from '../../../../common/logger';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import {makeMessage} from '../utils';
 
 // Colombia is GMT-05:00 and month starts by 0
 export const since = new Date(2022, 8, 27, 15);
 // export const until = new Date(2022, 8, 29, 0);
 
 export const makeJuryRoomFor =
-(psid:string) : schemas.MessengerMessage => makeButtonMessage(
+(psid:string) : schemas.MessengerMessage => makeMessage(
     `Ingresa a la sala del jurado a través de este botón.`,
     [{title: `A votar`, url: 'https://onewe.tech/vote?psid=' + psid}]);
 
-export const learnAbout : schemas.MessengerMessage = makeButtonMessage(
+export const learnAbout : schemas.MessengerMessage = makeMessage(
     'Hola ya empezó #WeRaceEmp01',
     [
       {title: 'Linea de tiempo ⌛', url: 'https://youtu.be/xaq6A6Fdy8A'},

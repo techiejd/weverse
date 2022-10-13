@@ -1,11 +1,13 @@
 import { UserData } from '../../db/schemas';
-import { MessengerMessage } from '../schemas';
+import { MessengerMessage, QuickReply } from '../schemas';
 
 export const prettifyJSON = (json: Record<string, any>) => JSON.stringify(
   json, null, 2).replace('{', '').replace('}', '');
 
 export type ButtonInfo = {title: string, payload: string, url?:never} |
-{title:string, payload?: never, url: string}
+{title:string, payload?: never, url: string};
+
+export type QuickReplyInfo = {title: string, payload: string};
 
 export const buttonInfoToButton = (buttonInfo: ButtonInfo) => {
   return buttonInfo.payload ? {
@@ -21,17 +23,43 @@ export const buttonInfoToButton = (buttonInfo: ButtonInfo) => {
   };
 };
 
-export const makeButtonMessage = (text: string,
-    buttonInfos:Array<ButtonInfo>) : MessengerMessage => ({
-  attachment: {
-    type: 'template',
-    payload: {
-      template_type: 'button',
-      text: text,
-      buttons: buttonInfos.map(buttonInfoToButton),
-    },
-  },
+const quickReplyInfoToQuickReply = (info: QuickReplyInfo) : QuickReply=> ({
+  content_type: "text",
+  title: info.title,
+  payload: info.payload
 });
+
+export const makeMessage = (text: string,
+    buttonInfos : Array<ButtonInfo> = [],
+    quickReplyInfos: Array<QuickReplyInfo> = [],
+    ) : MessengerMessage => {
+      let message : MessengerMessage;
+      if (buttonInfos.length > 0) {
+        message = {
+          attachment: {
+            type: 'template',
+            payload: {
+              template_type: 'button',
+              text: text,
+              buttons: buttonInfos.map(buttonInfoToButton),
+            },
+          },
+        }
+      } else {
+        message = {
+          text: text
+        }
+      }
+
+      if (quickReplyInfos.length > 0) {
+        message = {
+          ...message,
+          quick_replies: quickReplyInfos.map(quickReplyInfoToQuickReply)
+        }
+      }
+
+      return message;
+    };
 
 
 export namespace Notify {

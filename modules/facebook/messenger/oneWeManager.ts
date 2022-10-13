@@ -18,6 +18,7 @@ import {toggleSofia} from './routes/toggleSofia';
 import {search} from './routes/admin/search';
 import {requestJuryRoom} from './integrations/secondChallenge';
 import {logger} from '../../../common/logger';
+import {remindMe} from './routes/remindMe';
 
 type MessengerManagerEvent = {
   messenger: schemas.MessengerEvent, logIn?: never}
@@ -166,6 +167,7 @@ export class OneWeManager {
       'Accept.Notifications': notifications.accepted,
       'Challenge.1': consumeLie,
       'Request.JuryRoom': requestJuryRoom,
+      'Remind.Me': remindMe,
       // TODO(techiejd): Remove this one once migrated to 'Start'
       'get_started_payload': start,
       'Event.LogIn': logInRoutes.event,
