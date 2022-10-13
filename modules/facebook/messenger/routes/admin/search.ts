@@ -4,6 +4,7 @@ import {OneWePrivateConversationHandler} from
 import * as messengerUtils from '../../utils';
 import * as schemas from '../../../schemas';
 import {getBody} from './utils';
+import { makeQueryUsersSnapshot } from '../../../../admin/search';
 
 const tryAgain : messengerUtils.ButtonInfo = {
   title: 'Try again.', payload: 'Admin.Search.open'};
@@ -27,7 +28,7 @@ const isArray = function(a: {constructor: unknown} | undefined ) {
   return false;
 };
 
-export const search = (params: Record<string, any>) => {
+export const search = async (params: Record<string, any>) => {
   const adminHandler =
   new OneWePrivateConversationHandler.OneWeToAdminConversationHandler();
   const closeSearch = () => adminHandler.deleteUserMenu();
@@ -40,21 +41,17 @@ export const search = (params: Record<string, any>) => {
   }
 
   closeSearch();
-  const queries = getBody(params).split('\n');
 
-  return getAllUsersSnapshot().then(async (userSnapshots) => {
-    let anyUserFound = false;
-    for (const userDoc of userSnapshots.docs) {
-      const user = userDoc.data();
-      const userFound = queries.some(
-          (query) => user.name.toLowerCase().includes(query.toLowerCase()));
-      if (userFound) {
-        anyUserFound = true;
-        adminHandler.send(searchResult(user.psid, user.name));
-      }
-    }
-    return anyUserFound ?
-    adminHandler.send({text: 'Done with search.'}) :
-    adminHandler.send(searchFailure);
-  });
+  const queries = getBody(params).split('\n');
+  const queryUsersSnapshot = makeQueryUsersSnapshot(queries);
+
+  const usersFound = await getAllUsersSnapshot().then(queryUsersSnapshot);
+  if (usersFound.length > 0) {
+    for (const user of usersFound) {
+      adminHandler.send(searchResult(user.psid, user.name));
+    } 
+    return adminHandler.send({text: 'Done with search.'})
+  } else {
+    return adminHandler.send(searchFailure)
+  }
 };
