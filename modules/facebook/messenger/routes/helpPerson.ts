@@ -8,7 +8,7 @@ export const askForHelp = async (psid: string, about: unknown) => {
   return getUserSnapshot(psid).then((userSnapshot) => {
     const user = userSnapshot.data();
     const text = `Usuario ${user.name} necesita tu ayuda con ` + about;
-    const buttonMessage = utils.makeButtonMessage(
+    const buttonMessage = utils.makeMessage(
         text, [toggleSofiaOffButtonFor(psid, user.name)]);
     return new OneWePrivateConversationHandler.
         OneWeToAdminConversationHandler().send(buttonMessage);

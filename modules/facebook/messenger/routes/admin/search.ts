@@ -11,11 +11,11 @@ const tryAgain : utils.ButtonInfo = {
 // There's only one page per user result right now for toggling Sofia.
 const searchResult =
 (psid:string, name: string) : schemas.MessengerMessage => (
-  utils.makeButtonMessage('Search found: ',
+  utils.makeMessage('Search found: ',
       [{title: name, payload: 'Toggle.Sofia.' + '' /* state */ +
       '.' + psid + '.' + name},
       tryAgain]));
-const searchFailure : schemas.MessengerMessage = utils.makeButtonMessage(
+const searchFailure : schemas.MessengerMessage = utils.makeMessage(
     'Search failed',
     [tryAgain]
 );

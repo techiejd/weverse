@@ -20,7 +20,7 @@ export const toggleSofia = async (params: Record<string, any>) => {
 
 
   if (newState == '') {
-    const toWhatState = utils.makeButtonMessage(
+    const toWhatState = utils.makeMessage(
         `What would you like Sofí to do for user ${name}?`,
         [toggleSofiaOnButton, toggleSofiaOffButtonFor(psid, name)]);
     return adminConvoHandler.send(toWhatState);
@@ -30,7 +30,7 @@ export const toggleSofia = async (params: Record<string, any>) => {
   if (newState == 'off') {
     return convoHandler.setUserMenu(false, [toggleSofiaOnButton]).then(() => {
       const text = `Cuando termines con ${name}:`;
-      const buttonMessage = utils.makeButtonMessage(
+      const buttonMessage = utils.makeMessage(
           text, [toggleSofiaOnButton]);
 
       return adminConvoHandler.send(buttonMessage);

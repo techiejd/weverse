@@ -108,15 +108,19 @@ export const tokenResponse = z.object({
 });
 export type TokenResponseType = z.infer<typeof tokenResponse>;
 
-const messengerMessage = z.object({
+const quickReply = z.object({
+  content_type: z.enum(['text', 'user_phone_number', 'user_email']),
+  title: z.string(),
+  payload: z.string(),
+  image_url: z.string().optional(),
+});
+
+export type QuickReply = z.infer<typeof quickReply>;
+
+export const messengerMessage = z.object({
   text: z.string().optional(),
   attachment: z.object({}).optional(),
-  quick_replies: z.object({
-    content_type: z.enum(['text', 'user_phone_number', 'user_email']),
-    title: z.string(),
-    payload: z.string(),
-    image_url: z.string().optional(),
-  }).array().optional(),
+  quick_replies: quickReply.array().optional(),
 });
 
 export type MessengerMessage = z.infer<typeof messengerMessage>;

@@ -16,6 +16,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@google-cloud/tasks": "^3.0.2",
     "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.8",
     "ejs": "^3.1.8",

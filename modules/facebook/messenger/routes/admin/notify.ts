@@ -49,7 +49,7 @@ export const notify = async (params: Record<string, any>) => {
     })();
 
     const message : schemas.MessengerMessage = isButtonNotification ?
-    utils.makeButtonMessage(extractedMessage, extractedButtons) : {
+    utils.makeMessage(extractedMessage, extractedButtons) : {
       text: extractedMessage,
     };
 
