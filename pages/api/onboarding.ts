@@ -16,7 +16,5 @@ export default async function onboarding(
   const form = new formidable.IncomingForm({ multiples: true });
   const parsedForm = form.parse(req, async function (err, fields, files) {
     logger.info({error: err, files: files, fields: fields}, "info");
-    res.redirect("/onboarding/success");
   });
-  console.log(parsedForm);
 };

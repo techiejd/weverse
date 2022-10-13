@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import * as schemas from './schemas';
 import {getUserSnapshot} from '../../common/db';
 import {logger} from '../../common/logger';
+import { ButtonInfo, buttonInfoToButton } from './messenger/utils';
 
 export const getPaginatedData =
 (url:string) : Promise<Record<string, unknown>[]> => {
@@ -31,64 +32,6 @@ export const getFlattenedPaginatedData = async (
   startPaginatedData.data.concat(await getPaginatedData(next)) :
   startPaginatedData.data;
 };
-
-export type ButtonInfo = {title: string, payload: string, url?:never} |
-{title:string, payload?: never, url: string};
-
-export type QuickReplyInfo = {title: string, payload: string};
-
-const buttonInfoToButton = (buttonInfo: ButtonInfo) => {
-  return buttonInfo.payload ? {
-    title: buttonInfo.title,
-    type: 'postback',
-    payload: buttonInfo.payload,
-  } : {
-    title: buttonInfo.title,
-    type: 'web_url',
-    url: buttonInfo.url,
-    // TODO(techiejd): Deal with this.
-    messenger_extensions: false, // buttonInfo.url?.startsWith('https://onewe.tech') ? true : false,
-  };
-};
-
-const quickReplyInfoToQuickReply = (info: QuickReplyInfo) : schemas.QuickReply=> ({
-  content_type: "text",
-  title: info.title,
-  payload: info.payload
-});
-
-export const makeMessage = (text: string,
-    buttonInfos : Array<ButtonInfo> = [],
-    quickReplyInfos: Array<QuickReplyInfo> = [],
-    ) : schemas.MessengerMessage => {
-      let message : schemas.MessengerMessage;
-      if (buttonInfos.length > 0) {
-        message = {
-          attachment: {
-            type: 'template',
-            payload: {
-              template_type: 'button',
-              text: text,
-              buttons: buttonInfos.map(buttonInfoToButton),
-            },
-          },
-        }
-      } else {
-        message = {
-          text: text
-        }
-      }
-
-      if (quickReplyInfos.length > 0) {
-        message = {
-          ...message,
-          quick_replies: quickReplyInfos.map(quickReplyInfoToQuickReply)
-        }
-      }
-
-      return message;
-    };
-
 
 /**
  * Handles a page's conversation

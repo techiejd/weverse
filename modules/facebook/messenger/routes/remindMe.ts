@@ -1,7 +1,7 @@
 import { OneWePrivateConversationHandler } from "../oneWePrivateConversationHandler";
 import { setReminder } from '../../../remindMe/utils';
 import * as fbSchemas from '../../schemas';
-import * as fbUtils from '../../utils';
+import * as messengerUtils from '../utils';
 const thisRoute = 'Remind.Me';
 
 export const remindMe = (params: Record<string, any>) => {
@@ -11,7 +11,7 @@ export const remindMe = (params: Record<string, any>) => {
     const reminderPayloadSeconds = (seconds: number) => `${thisRoute}.${seconds}.${psid}.${message}`;
 
     const convoHandler = new OneWePrivateConversationHandler(psid);
-    const messageAskingInHowLong : fbSchemas.MessengerMessage = fbUtils.makeMessage(
+    const messageAskingInHowLong : fbSchemas.MessengerMessage = messengerUtils.makeMessage(
       "¿En cuanto tiempo?",
       [
         {title: "Media hora.", payload: reminderPayloadSeconds(1800)},

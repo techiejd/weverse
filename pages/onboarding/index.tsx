@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import FileUploader from '../../common/components/fileUpload'
 
-const OnboardingForm: NextPage = () => {
+const onboardingForm: NextPage = () => {
   const [selectedFiles, setSelectedFiles] = useState<Array<{url: string, file: File}>>([]);
   const {
     register,
@@ -21,7 +21,7 @@ const OnboardingForm: NextPage = () => {
       }
       return body;
     })();
-    const response = await fetch("/api/onboarding", {
+    const response = fetch("/api/onboarding", {
       method: "POST",
       body: body,
     });
@@ -86,4 +86,4 @@ const OnboardingForm: NextPage = () => {
   );
 };
 
-export default OnboardingForm;
+export default onboardingForm;

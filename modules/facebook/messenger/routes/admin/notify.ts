@@ -2,9 +2,10 @@ import {OneWePrivateConversationHandler} from
   '../../oneWePrivateConversationHandler';
 import {notifyAllUsers} from '../../notifyUtils';
 import * as schemas from '../../../schemas';
-import * as utils from '../../../utils';
+import * as messengerUtils from '../../utils';
 import {getBody, getCommand} from './utils';
 import {getUserSnapshot} from '../../../../../common/db';
+import { userData, UserData } from '../../../../db/schemas';
 
 export const notify = async (params: Record<string, any>) => {
   const adminHandler =
@@ -19,21 +20,12 @@ export const notify = async (params: Record<string, any>) => {
   const isButtonNotification = command.includes('button:');
 
   const prepareMessage = (
-      user:FirebaseFirestore.DocumentData) :
+      user:UserData) :
       Promise<schemas.MessengerMessage> => {
-    const templatedBody = (() => {
-      const templateFunc =
-          new Function('user', 'return `' + body + '`;');
-      const userFacingInfo = {
-        name: user.name,
-        resources: user.gameInfo.resources,
-        psid: user.psid,
-      };
-      return templateFunc(userFacingInfo);
-    })();
+    const templatedBody = messengerUtils.Notify.getTemplaters(user).templateBody(body);
     const [extractedMessage, extractedButtons] = (() => {
       if (isButtonNotification) {
-        const buttons = new Array<utils.ButtonInfo>();
+        const buttons = new Array<messengerUtils.ButtonInfo>();
         const numButtons = parseInt(
             command.substring(command.indexOf(':') + 1)[0]);
         const bodyByLine = templatedBody.split('\n');
@@ -49,7 +41,7 @@ export const notify = async (params: Record<string, any>) => {
     })();
 
     const message : schemas.MessengerMessage = isButtonNotification ?
-    utils.makeMessage(extractedMessage, extractedButtons) : {
+    messengerUtils.makeMessage(extractedMessage, extractedButtons) : {
       text: extractedMessage,
     };
 
@@ -57,11 +49,11 @@ export const notify = async (params: Record<string, any>) => {
   };
 
   if (isSend) {
-    return notifyAllUsers({createMessageForUser: prepareMessage});
+    return notifyAllUsers(prepareMessage);
   } else {
     return getUserSnapshot(adminHandler.recipient).then(
         async (userSnapshot) => {
-          return adminHandler.send(await prepareMessage(userSnapshot.data()));
+          return adminHandler.send(await prepareMessage(userData.parse(userSnapshot.data())));
         });
   }
 };

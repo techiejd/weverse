@@ -1,13 +1,14 @@
 import * as schemas from '../../schemas';
 import * as ejs from 'ejs';
 import * as path from 'path';
-import {makeMessage, GroupHandler,
+import {GroupHandler,
   getFlattenedPaginatedData} from '../../utils';
 import {OneWePrivateConversationHandler} from
   './../oneWePrivateConversationHandler';
 import {getUserSnapshot} from '../../../../common/db';
 import { logger } from '../../../../common/logger';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import {makeMessage} from '../utils';
 
 // Colombia is GMT-05:00 and month starts by 0
 export const since = new Date(2022, 8, 27, 15);
