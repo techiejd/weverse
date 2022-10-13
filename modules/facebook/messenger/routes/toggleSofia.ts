@@ -1,11 +1,11 @@
 import {OneWePrivateConversationHandler} from
   './../oneWePrivateConversationHandler';
-import * as utils from '../../utils';
+import * as messengerUtils from '../utils';
 
 const thisRoute = 'Toggle.Sofia';
 
 export const toggleSofiaOffButtonFor =
-(psid : string, name : string) : utils.ButtonInfo => (
+(psid : string, name : string) : messengerUtils.ButtonInfo => (
   {title: `Despedir a Sofí.`,
     payload: thisRoute + `.off.` + psid + '.' + name});
 
@@ -15,12 +15,12 @@ export const toggleSofia = async (params: Record<string, any>) => {
   const adminConvoHandler = new OneWePrivateConversationHandler.
       OneWeToAdminConversationHandler();
 
-  const toggleSofiaOnButton : utils.ButtonInfo = {title: `Despertar a Sofí.`,
+  const toggleSofiaOnButton : messengerUtils.ButtonInfo = {title: `Despertar a Sofí.`,
     payload: thisRoute + `.on.` + psid + '.' + name};
 
 
   if (newState == '') {
-    const toWhatState = utils.makeMessage(
+    const toWhatState = messengerUtils.makeMessage(
         `What would you like Sofí to do for user ${name}?`,
         [toggleSofiaOnButton, toggleSofiaOffButtonFor(psid, name)]);
     return adminConvoHandler.send(toWhatState);
@@ -30,7 +30,7 @@ export const toggleSofia = async (params: Record<string, any>) => {
   if (newState == 'off') {
     return convoHandler.setUserMenu(false, [toggleSofiaOnButton]).then(() => {
       const text = `Cuando termines con ${name}:`;
-      const buttonMessage = utils.makeMessage(
+      const buttonMessage = messengerUtils.makeMessage(
           text, [toggleSofiaOnButton]);
 
       return adminConvoHandler.send(buttonMessage);
