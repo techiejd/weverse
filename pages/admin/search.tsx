@@ -1,30 +1,58 @@
-import type { NextPage } from "next";
+import type { NextPage, GetServerSideProps } from "next";
 import { getAllUsersSnapshot } from "../../common/db";
 import styles from "../../styles/Home.module.css";
+import { MouseEvent, useState } from "react";
+import { useForm } from "react-hook-form";
+import {userData, UserData} from "../../modules/db/schemas";
+import Link from "next/link";
+import { makeUserNameQueryFilter } from "../../modules/admin/search";
 
-export async function getServerSideProps() {
+export const getServerSideProps : GetServerSideProps = (context) => {
   return getAllUsersSnapshot().then(async (usersSnapshot) => {
     return {
       props: {
-        usersSnapshot: usersSnapshot,
+        userDatas: usersSnapshot.docs.map(userSnapshot => userData.parse(userSnapshot.data())),
       },
     };
   });
 }
 
 const search: NextPage<{
-  usersSnapshot: FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>;
+  userDatas: Array<UserData>;
 }> = (props) => {
-  // TODO(jimenez1917): Add search functionality.
-  // 1) Get queries from text input.
-  // 2) Use /modules/admin/search makeQueryUsersSnapshot to query.
-  // usersFound = makeQueryUsersSnapshot(queries)(props.usersSnapshot)
+  const [userNameQueryInput, setUserNameQueryInput] = useState<string>("");
+  const [foundUsers, setFoundUsers] = useState<Array<UserData>>([]);
+  const { register} = useForm();
+
+  const processUserNameQueryInput = async (e : MouseEvent) =>{
+    e.preventDefault();
+
+    const userNameQueryFilter = makeUserNameQueryFilter(userNameQueryInput.split('\n'));
+    const foundUsers = props.userDatas.filter(userNameQueryFilter);
+
+    setFoundUsers(foundUsers);
+  };
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title}>Search within the WeVerse.</h1>
-
-        <p className={styles.description}>FILL HERE</p>
+        <h1 className={styles.title}>Search by user name: </h1>
+        <form>
+            <textarea
+                placeholder="Search users by user name here |"
+                className={styles.textInput}
+                {...register("userNameQueryInput", {
+                  required: "*",
+                  onChange: (e) => setUserNameQueryInput(e.target.value),
+                })}
+            /><hr/>
+            <button onClick={processUserNameQueryInput}>Search</button>
+        </form>
+        <hr/>
+        <ul>
+          {foundUsers.map((user,i) =>(
+            <Link key={i} href={`./user/${user.psid}`}><a target="_blank"><li className={styles.cursor}>{user.name}</li></a></Link>
+          ))}
+        </ul>
       </main>
     </div>
   );

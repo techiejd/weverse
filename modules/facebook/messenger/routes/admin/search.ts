@@ -2,21 +2,22 @@ import {getAllUsersSnapshot} from '../../../../../common/db';
 import {OneWePrivateConversationHandler} from
   '../../oneWePrivateConversationHandler';
 import * as messengerUtils from '../../utils';
-import * as schemas from '../../../schemas';
+import * as fbSchemas from '../../../schemas';
+import * as dbSchemas from '../../../../db/schemas';
 import {getBody} from './utils';
-import { makeQueryUsersSnapshot } from '../../../../admin/search';
+import { makeUserNameQueryFilter } from '../../../../admin/search';
 
 const tryAgain : messengerUtils.ButtonInfo = {
   title: 'Try again.', payload: 'Admin.Search.open'};
 
 // There's only one page per user result right now for toggling Sofia.
 const searchResult =
-(psid:string, name: string) : schemas.MessengerMessage => (
+(psid:string, name: string) : fbSchemas.MessengerMessage => (
   messengerUtils.makeMessage('Search found: ',
       [{title: name, payload: 'Toggle.Sofia.' + '' /* state */ +
       '.' + psid + '.' + name},
       tryAgain]));
-const searchFailure : schemas.MessengerMessage = messengerUtils.makeMessage(
+const searchFailure : fbSchemas.MessengerMessage = messengerUtils.makeMessage(
     'Search failed',
     [tryAgain]
 );
@@ -43,9 +44,17 @@ export const search = async (params: Record<string, any>) => {
   closeSearch();
 
   const queries = getBody(params).split('\n');
-  const queryUsersSnapshot = makeQueryUsersSnapshot(queries);
 
-  const usersFound = await getAllUsersSnapshot().then(queryUsersSnapshot);
+  const usersFound = await getAllUsersSnapshot().then((usersSnapshot) => {
+    const queryUserNameFilter = makeUserNameQueryFilter(queries);
+
+    const usersFound = (() => {
+      const users = usersSnapshot.docs.map(u => dbSchemas.userData.parse(u.data()));
+      return users.filter(queryUserNameFilter);
+    })();
+    
+    return usersFound;
+  });
   if (usersFound.length > 0) {
     for (const user of usersFound) {
       adminHandler.send(searchResult(user.psid, user.name));

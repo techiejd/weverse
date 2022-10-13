@@ -11,12 +11,12 @@ export const userData = z.object({
     token: z.string(),
     gameInfo: z.object({
         resources: z.object({
+            [sofi.Resource.Ween]: z.number(),
             [sofi.Resource.Camera]: z.number(),
             [sofi.Resource.MagnifyingGlass]: z.number(),
             [sofi.Resource.Mask]: z.number(),
             [sofi.Resource.Star]: z.number(),
             [sofi.Resource.VipPass]: z.number(),
-            [sofi.Resource.Ween]: z.number(),
         })
     }),
     asid: z.string(),
