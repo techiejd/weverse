@@ -31,15 +31,18 @@ export default async function admin(
   const prepareMessage = (user:UserData) :
     Promise<fbSchemas.MessengerMessage> => {
       const templaters = messengerUtils.Notify.getTemplaters(user);
-      const isButtonNotification = buttons.length > 0;
 
       const templatedMessage = templaters.templateBody(message);
       const templatedButtons = buttons.map(templaters.templateButton);
 
-      const messengerMessage : fbSchemas.MessengerMessage = isButtonNotification ?
-      messengerUtils.makeButtonMessage(templatedMessage, templatedButtons) : {
-        text: templatedMessage,
-      };
+      const internalMessage = messengerUtils.makeMessage(
+        templatedMessage,
+        templatedButtons);
+
+      const messengerMessage : fbSchemas.MessengerMessage = messengerUtils.makeMessage(
+        templatedMessage,
+        templatedButtons,
+        [{title: "Recuerdame después.", payload: `Remind.Me..${user.psid}.${internalMessage}`}]);
 
       return Promise.resolve(messengerMessage);
     }
