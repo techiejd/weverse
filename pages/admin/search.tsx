@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import {userData, UserData} from "../../modules/db/schemas";
 import Link from "next/link";
 import { makeUserNameQueryFilter } from "../../modules/admin/search";
-import adminStyles from "../../../styles/admin.module.css";
+import adminStyles from "../../styles/admin.module.css";
 
 export const getServerSideProps : GetServerSideProps = (context) => {
   return getAllUsersSnapshot().then(async (usersSnapshot) => {

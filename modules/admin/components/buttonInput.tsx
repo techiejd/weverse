@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
-import { ButtonInfo } from '../../modules/facebook/messenger/utils';
+import { ButtonInfo } from '../../facebook/messenger/utils';
 
 const ButtonInput : React.FC<{
   id: number,  
