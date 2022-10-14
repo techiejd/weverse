@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import {userData, UserData} from "../../modules/db/schemas";
 import Link from "next/link";
 import { makeUserNameQueryFilter } from "../../modules/admin/search";
+import adminStyles from "../../../styles/admin.module.css";
 
 export const getServerSideProps : GetServerSideProps = (context) => {
   return getAllUsersSnapshot().then(async (usersSnapshot) => {
@@ -50,7 +51,7 @@ const search: NextPage<{
         <hr/>
         <ul>
           {foundUsers.map((user,i) =>(
-            <Link key={i} href={`./user/${user.psid}`}><a target="_blank"><li className={styles.cursor}>{user.name}</li></a></Link>
+            <Link key={i} href={`./user/${user.psid}`}><a target="_blank"><li className={adminStyles.cursor}>{user.name}</li></a></Link>
           ))}
         </ul>
       </main>
