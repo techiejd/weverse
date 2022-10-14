@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import * as schemas from './schemas';
 import {getUserSnapshot} from '../../common/db';
 import {logger} from '../../common/logger';
-import { ButtonInfo, buttonInfoToButton } from './messenger/utils';
+import { ButtonInfo, buttonInfoToButton } from './conversation/utils';
 
 export const getPaginatedData =
 (url:string) : Promise<Record<string, unknown>[]> => {

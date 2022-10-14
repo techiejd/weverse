@@ -2,7 +2,7 @@ import {OneWePrivateConversationHandler} from
   '../../oneWePrivateConversationHandler';
 import {notifyAllUsers} from '../../notifyUtils';
 import * as schemas from '../../../schemas';
-import * as messengerUtils from '../../utils';
+import * as conversationUtils from '../../utils';
 import {getBody, getCommand} from './utils';
 import {getUserSnapshot} from '../../../../../common/db';
 import { userData, UserData } from '../../../../db/schemas';
@@ -22,10 +22,10 @@ export const notify = async (params: Record<string, any>) => {
   const prepareMessage = (
       user:UserData) :
       Promise<schemas.MessengerMessage> => {
-    const templatedBody = messengerUtils.Notify.getTemplaters(user).templateBody(body);
+    const templatedBody = conversationUtils.Notify.getTemplaters(user).templateBody(body);
     const [extractedMessage, extractedButtons] = (() => {
       if (isButtonNotification) {
-        const buttons = new Array<messengerUtils.ButtonInfo>();
+        const buttons = new Array<conversationUtils.ButtonInfo>();
         const numButtons = parseInt(
             command.substring(command.indexOf(':') + 1)[0]);
         const bodyByLine = templatedBody.split('\n');
@@ -41,7 +41,7 @@ export const notify = async (params: Record<string, any>) => {
     })();
 
     const message : schemas.MessengerMessage = isButtonNotification ?
-    messengerUtils.makeMessage(extractedMessage, extractedButtons) : {
+    conversationUtils.makeMessage(extractedMessage, extractedButtons) : {
       text: extractedMessage,
     };
 
