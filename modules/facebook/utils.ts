@@ -148,7 +148,7 @@ export class PrivateConversationHandler {
    * @param {schemas.MessengerMessage} message to send to recipient.
    * @return {Promise<void>} Logs result of sending and then returns.
    */
-  send(message:schemas.MessengerMessage): Promise<void> {
+  send(message:schemas.Messenger.Message): Promise<void> {
     const body = {
       'messaging_type': 'RESPONSE',
       'recipient': {
@@ -166,7 +166,7 @@ export class PrivateConversationHandler {
    * @return {Promise<void[]>} Logs result of sending and then returns.
    */
   sendMultiple(
-      messages : schemas.MessengerMessage[]): Promise<void[]> {
+      messages : schemas.Messenger.Message[]): Promise<void[]> {
     return Promise.all(messages.map((message) => this.send(message)));
   }
 
@@ -176,11 +176,11 @@ export class PrivateConversationHandler {
    * @param {string} notificationPermissionsToken the users notifications token
    * @return {Promise<void>}
    */
-  async notify(message: schemas.MessengerMessage,
+  async notify(message: schemas.Messenger.Message,
       notificationPermissionsToken: string): Promise<void> {
     // TODO(techiejd): Get cache going so we don't have to
     // pass notificationPermissionsToken.
-    const notificationBody : schemas.MessengerMessageBody = {
+    const notificationBody : schemas.Messenger.MessageBody = {
       'messaging_type': 'UPDATE',
       'recipient': {
         'notification_messages_token': notificationPermissionsToken,

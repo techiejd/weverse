@@ -21,7 +21,7 @@ export const notify = async (params: Record<string, any>) => {
 
   const prepareMessage = (
       user:UserData) :
-      Promise<schemas.MessengerMessage> => {
+      Promise<schemas.Messenger.Message> => {
     const templatedBody = conversationUtils.Notify.getTemplaters(user).templateBody(body);
     const [extractedMessage, extractedButtons] = (() => {
       if (isButtonNotification) {
@@ -40,7 +40,7 @@ export const notify = async (params: Record<string, any>) => {
       return [templatedBody, []];
     })();
 
-    const message : schemas.MessengerMessage = isButtonNotification ?
+    const message : schemas.Messenger.Message = isButtonNotification ?
     conversationUtils.makeMessage(extractedMessage, extractedButtons) : {
       text: extractedMessage,
     };

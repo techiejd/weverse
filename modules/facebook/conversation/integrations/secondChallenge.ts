@@ -15,11 +15,11 @@ export const since = new Date(2022, 8, 27, 15);
 // export const until = new Date(2022, 8, 29, 0);
 
 export const makeJuryRoomFor =
-(psid:string) : schemas.MessengerMessage => makeMessage(
+(psid:string) : schemas.Messenger.Message => makeMessage(
     `Ingresa a la sala del jurado a través de este botón.`,
     [{title: `A votar`, url: 'https://onewe.tech/vote?psid=' + psid}]);
 
-export const learnAbout : schemas.MessengerMessage = makeMessage(
+export const learnAbout : schemas.Messenger.Message = makeMessage(
     'Hola ya empezó #WeRaceEmp01',
     [
       {title: 'Linea de tiempo ⌛', url: 'https://youtu.be/xaq6A6Fdy8A'},

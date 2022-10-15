@@ -1,10 +1,10 @@
-import { MessengerMessage } from "../facebook/schemas";
+import { Messenger } from "../facebook/schemas";
 import * as tasks from '@google-cloud/tasks';
 import {logger} from '../../common/logger';
 
 export const setReminder = async function (
   psid: string,
-  message: MessengerMessage,
+  message: Messenger.Message,
   inHowManySeconds: number,
 ) {
   const client = new tasks.CloudTasksClient();

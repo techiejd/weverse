@@ -7,7 +7,7 @@ import * as ConversationHandler from '../../modules/facebook/conversation/oneWeP
 
 const remindMeBody = z.object({
   psid: z.string(),
-  message: fbSchemas.messengerMessage,
+  message: fbSchemas.Messenger.message,
   create: z.object({
     inHowManySeconds: z.number(),
   }).optional()

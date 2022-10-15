@@ -108,86 +108,89 @@ export const tokenResponse = z.object({
 });
 export type TokenResponseType = z.infer<typeof tokenResponse>;
 
-const quickReply = z.object({
-  content_type: z.enum(['text', 'user_phone_number', 'user_email']),
-  title: z.string(),
-  payload: z.string(),
-  image_url: z.string().optional(),
-});
-
-export type QuickReply = z.infer<typeof quickReply>;
-
-export const messengerMessage = z.object({
-  text: z.string().optional(),
-  attachment: z.object({}).optional(),
-  quick_replies: quickReply.array().optional(),
-});
-
-export type MessengerMessage = z.infer<typeof messengerMessage>;
-
-const messengerMessageBody = z.object({
-  messaging_type: z.enum(['RESPONSE', 'UPDATE', 'MESSAGE_TAG']),
-  recipient: z.object({
-    id: z.string().optional(),
-    notification_messages_token: z.string().optional(),
-  }),
-  message: messengerMessage,
-});
-
-export type MessengerMessageBody = z.infer<typeof messengerMessageBody>;
-
-const messengerMessageEvent = z.object({
-  mid: z.string(),
-  text: z.string().optional(),
-  quick_reply: z.object({
+// TODO(techiejd): Clean by abstracting away Messenger.
+export namespace Messenger {
+  const quickReply = z.object({
+    content_type: z.enum(['text', 'user_phone_number', 'user_email']),
+    title: z.string(),
     payload: z.string(),
-  }).optional(),
-  reply_to: z.object({
+    image_url: z.string().optional(),
+  });
+  
+  export type QuickReply = z.infer<typeof quickReply>;
+  
+  export const message = z.object({
+    text: z.string().optional(),
+    attachment: z.object({}).optional(),
+    quick_replies: quickReply.array().optional(),
+  });
+  
+  export type Message = z.infer<typeof message>;
+  
+  const MessageBody = z.object({
+    messaging_type: z.enum(['RESPONSE', 'UPDATE', 'MESSAGE_TAG']),
+    recipient: z.object({
+      id: z.string().optional(),
+      notification_messages_token: z.string().optional(),
+    }),
+    message: message,
+  });
+  
+  export type MessageBody = z.infer<typeof MessageBody>;
+  
+  const messageEvent = z.object({
     mid: z.string(),
-  }).optional(),
-  // TODO(techiejd): Flesh out the attachments. Could be useful for PoHW.
-  attachments: z.object({}).array().optional(),
-});
-
-export type MessengerMessageEvent = z.infer<typeof messengerMessageEvent>;
-
-export const messengerOptInEvent = z.object({
-  type: z.enum(['notification_messages']),
-  // payload is string definable by us and only have one value at the moment
-  payload: z.enum(['Accept.Notifications']),
-  notification_messages_timezone: z.enum(['UTC']),
-  token_expiry_timestamp: z.number(),
-  notification_messages_token: z.string(),
-  // Also 'WEEKLY', 'MONTHLY' possible and only have one value at the moment
-  notification_messages_frequency: z.enum(['DAILY']),
-  user_token_status: z.enum(['REFRESHED', 'NOT_REFRESHED']),
-  notification_messages_status:
-    z.enum(['STOP NOTIFICATIONS', 'RESUME NOTIFICATIONS']).optional(),
-});
-
-export type MessengerOptInEvent = z.infer<typeof messengerOptInEvent>;
-
-const messengerPostbackEvent = z.object({
-  title: z.string(),
-  payload: z.string(),
-});
-
-export type MessengerPostbackEvent = z.infer<typeof messengerPostbackEvent>;
-
-export const messengerEvent = z.object({
-  sender: z.object({
-    id: z.string(),
-  }),
-  recipient: z.object({
-    id: z.string(),
-  }),
-  timestamp: z.number(),
-  message: messengerMessageEvent.optional(),
-  postback: messengerPostbackEvent.optional(),
-  optin: messengerOptInEvent.optional(),
-});
-
-export type MessengerEvent = z.infer<typeof messengerEvent>;
+    text: z.string().optional(),
+    quick_reply: z.object({
+      payload: z.string(),
+    }).optional(),
+    reply_to: z.object({
+      mid: z.string(),
+    }).optional(),
+    // TODO(techiejd): Flesh out the attachments. Could be useful for PoHW.
+    attachments: z.object({}).array().optional(),
+  });
+  
+  export type MessageEvent = z.infer<typeof messageEvent>;
+  
+  export const optInEvent = z.object({
+    type: z.enum(['notification_messages']),
+    // payload is string definable by us and only have one value at the moment
+    payload: z.enum(['Accept.Notifications']),
+    notification_messages_timezone: z.enum(['UTC']),
+    token_expiry_timestamp: z.number(),
+    notification_messages_token: z.string(),
+    // Also 'WEEKLY', 'MONTHLY' possible and only have one value at the moment
+    notification_messages_frequency: z.enum(['DAILY']),
+    user_token_status: z.enum(['REFRESHED', 'NOT_REFRESHED']),
+    notification_messages_status:
+      z.enum(['STOP NOTIFICATIONS', 'RESUME NOTIFICATIONS']).optional(),
+  });
+  
+  export type OptInEvent = z.infer<typeof optInEvent>;
+  
+  const postbackEvent = z.object({
+    title: z.string(),
+    payload: z.string(),
+  });
+  
+  export type PostbackEvent = z.infer<typeof postbackEvent>;
+  
+  export const event = z.object({
+    sender: z.object({
+      id: z.string(),
+    }),
+    recipient: z.object({
+      id: z.string(),
+    }),
+    timestamp: z.number(),
+    message: messageEvent.optional(),
+    postback: postbackEvent.optional(),
+    optin: optInEvent.optional(),
+  });
+  
+  export type Event = z.infer<typeof event>;
+}
 
 
 export const reqBody = z.object({
@@ -195,7 +198,7 @@ export const reqBody = z.object({
   entry: z.object({
     id: z.string(),
     time: z.number(),
-    messaging: messengerEvent.array().optional(),
+    messaging: Messenger.event.array().optional(),
   }).array(),
 });
 
@@ -224,7 +227,7 @@ export const facebookResponse = z.object({
 export class DialogFlow {
   private static _originalRequest = z.object({
     payload: z.object({
-      data: messengerEvent,
+      data: Messenger.event,
     }),
   });
 

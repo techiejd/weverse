@@ -29,7 +29,7 @@ export default async function admin(
   });
 
   const prepareMessage = (user:UserData) :
-    Promise<fbSchemas.MessengerMessage> => {
+    Promise<fbSchemas.Messenger.Message> => {
       const templaters = conversationUtils.Notify.getTemplaters(user);
 
       const templatedMessage = templaters.templateBody(message);
@@ -39,7 +39,7 @@ export default async function admin(
         templatedMessage,
         templatedButtons);
 
-      const messengerMessage : fbSchemas.MessengerMessage = conversationUtils.makeMessage(
+      const messengerMessage : fbSchemas.Messenger.Message = conversationUtils.makeMessage(
         templatedMessage,
         templatedButtons,
         [{title: "Recuerdame después.", payload: `Remind.Me..${user.psid}.${internalMessage}`}]);
