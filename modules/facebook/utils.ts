@@ -143,6 +143,35 @@ export class PrivateConversationHandler {
       return Promise.resolve();
     });
   };
+
+  private postToWAMessages = async (body: Record<string, unknown>) => {
+    // TODO(techiejd): bring in the number as a parameter to be able to message other uers
+    const waMessagesUrl = 'https://graph.facebook.com/v14.0/' + String(process.env.ADMIN_NUMBER) + '/messages';
+    logger.info({body: body}, 'postToWAMessages');
+    return fetch(waMessagesUrl, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.WA_BUSINESS_ACCESS_TOKEN}`,
+      },
+    }).then(async (response) => {
+      if (!response.ok) {
+        return response.text().then((text) => {
+          logger.error(
+            {error: text, fetch: {
+              method: 'POST',
+              body: JSON.stringify(body),
+              headers: {
+                'Content-Type': 'application/json', 
+              'Authorization': 'Bearer REDACTED'
+            }}},
+              'Error in posting (sending) to wa messages.');
+        });
+      }
+      return Promise.resolve();
+    });
+  };
   /**
    *
    * @param {schemas.MessengerMessage} message to send to recipient.
@@ -172,7 +201,7 @@ export class PrivateConversationHandler {
 
   /**
    *
-   * @param {schemas.MessengerMessage} message to be sent
+   * @param {schemas.Messenger.Message} message to be sent
    * @param {string} notificationPermissionsToken the users notifications token
    * @return {Promise<void>}
    */
@@ -188,6 +217,16 @@ export class PrivateConversationHandler {
       'message': message,
     };
     return this.postToFBMessages(notificationBody);
+  }
+
+  async sendWhatsApp(message: schemas.WhatsApp.Message) {
+    const messageBody : schemas.WhatsApp.MessageBody = {
+      messaging_product: "whatsapp",
+      to: String(process.env.ADMIN_NUMBER),
+      text: message,
+    };
+
+    return this.postToWAMessages(messageBody);
   }
 }
 

@@ -192,6 +192,19 @@ export namespace Messenger {
   export type Event = z.infer<typeof event>;
 }
 
+export namespace WhatsApp {
+  export const message = z.object({
+    body: z.string(),
+  });
+  export type Message = z.infer<typeof message>;
+  export const messageBody = z.object({
+    messaging_product: z.literal("whatsapp"),
+    to: z.string(),
+    text: message
+  })
+  export type MessageBody = z.infer<typeof messageBody>;
+}
+
 
 export const reqBody = z.object({
   object: z.string(),
