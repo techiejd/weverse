@@ -3,7 +3,9 @@ import {OneWePrivateConversationHandler} from
   '../../oneWePrivateConversationHandler';
 import * as conversationUtils from '../../utils';
 import * as schemas from '../../../schemas';
+import * as dbSchemas from '../../../../db/schemas';
 import {getBody} from './utils';
+import { makeUserNameQueryFilter } from '../../../../admin/search';
 
 const tryAgain : conversationUtils.ButtonInfo = {
   title: 'Try again.', payload: 'Admin.Search.open'};
@@ -27,7 +29,7 @@ const isArray = function(a: {constructor: unknown} | undefined ) {
   return false;
 };
 
-export const search = (params: Record<string, any>) => {
+export const search = async (params: Record<string, any>) => {
   const adminHandler =
   new OneWePrivateConversationHandler.OneWeToAdminConversationHandler();
   const closeSearch = () => adminHandler.deleteUserMenu();
@@ -40,21 +42,25 @@ export const search = (params: Record<string, any>) => {
   }
 
   closeSearch();
+
   const queries = getBody(params).split('\n');
 
-  return getAllUsersSnapshot().then(async (userSnapshots) => {
-    let anyUserFound = false;
-    for (const userDoc of userSnapshots.docs) {
-      const user = userDoc.data();
-      const userFound = queries.some(
-          (query) => user.name.toLowerCase().includes(query.toLowerCase()));
-      if (userFound) {
-        anyUserFound = true;
-        adminHandler.send(searchResult(user.psid, user.name));
-      }
-    }
-    return anyUserFound ?
-    adminHandler.send({text: 'Done with search.'}) :
-    adminHandler.send(searchFailure);
+  const usersFound = await getAllUsersSnapshot().then((usersSnapshot) => {
+    const queryUserNameFilter = makeUserNameQueryFilter(queries);
+
+    const usersFound = (() => {
+      const users = usersSnapshot.docs.map(u => dbSchemas.userData.parse(u.data()));
+      return users.filter(queryUserNameFilter);
+    })();
+    
+    return usersFound;
   });
+  if (usersFound.length > 0) {
+    for (const user of usersFound) {
+      adminHandler.send(searchResult(user.psid, user.name));
+    } 
+    return adminHandler.send({text: 'Done with search.'})
+  } else {
+    return adminHandler.send(searchFailure)
+  }
 };
