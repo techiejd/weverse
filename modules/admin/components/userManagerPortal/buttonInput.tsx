@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState, useEffect } from "react";
-import { ButtonInfo } from "../../facebook/conversation/utils";
+import { ButtonInfo } from "../../../facebook/conversation/utils";
 
 const ButtonInput: React.FC<{
   id: number;
