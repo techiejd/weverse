@@ -113,8 +113,8 @@ const User: NextPage<{
           <h2>Resources</h2>
           <hr />
           {Object.entries(props.userDatas.gameInfo.resources).map(
-            ([resource, amount]) => (
-              <div>
+            ([resource, amount], i) => (
+              <div key={i}>
                 <p>
                   {resource}:{amount}
                 </p>
@@ -127,8 +127,8 @@ const User: NextPage<{
           <hr />
           {resourcesChange ? (
             <>
-              {Object.entries(resourcesChange).map((resource) => (
-                <div className={adminStyles.resource}>
+              {Object.entries(resourcesChange).map((resource, i) => (
+                <div className={adminStyles.resource} key={i}>
                   <p>{resource}</p>
                   <button
                     className={adminStyles.negativeButton}

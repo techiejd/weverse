@@ -3,32 +3,36 @@ import { getAllUsersSnapshot } from "../../common/db";
 import styles from "../../styles/Home.module.css";
 import { MouseEvent, useState } from "react";
 import { useForm } from "react-hook-form";
-import {userData, UserData} from "../../modules/db/schemas";
+import { userData, UserData } from "../../modules/db/schemas";
 import Link from "next/link";
 import { makeUserNameQueryFilter } from "../../modules/admin/search";
 import adminStyles from "../../styles/admin.module.css";
 
-export const getServerSideProps : GetServerSideProps = (context) => {
+export const getServerSideProps: GetServerSideProps = (context) => {
   return getAllUsersSnapshot().then(async (usersSnapshot) => {
     return {
       props: {
-        userDatas: usersSnapshot.docs.map(userSnapshot => userData.parse(userSnapshot.data())),
+        userDatas: usersSnapshot.docs.map((userSnapshot) =>
+          userData.parse(userSnapshot.data())
+        ),
       },
     };
   });
-}
+};
 
-const search: NextPage<{
+const Search: NextPage<{
   userDatas: Array<UserData>;
 }> = (props) => {
   const [userNameQueryInput, setUserNameQueryInput] = useState<string>("");
   const [foundUsers, setFoundUsers] = useState<Array<UserData>>([]);
-  const { register} = useForm();
+  const { register } = useForm();
 
-  const processUserNameQueryInput = async (e : MouseEvent) =>{
+  const processUserNameQueryInput = async (e: MouseEvent) => {
     e.preventDefault();
 
-    const userNameQueryFilter = makeUserNameQueryFilter(userNameQueryInput.split('\n'));
+    const userNameQueryFilter = makeUserNameQueryFilter(
+      userNameQueryInput.split("\n")
+    );
     const foundUsers = props.userDatas.filter(userNameQueryFilter);
 
     setFoundUsers(foundUsers);
@@ -38,20 +42,25 @@ const search: NextPage<{
       <main className={styles.main}>
         <h1 className={styles.title}>Search by user name: </h1>
         <form>
-            <textarea
-                placeholder="Search users by user name here |"
-                className={styles.textInput}
-                {...register("userNameQueryInput", {
-                  required: "*",
-                  onChange: (e) => setUserNameQueryInput(e.target.value),
-                })}
-            /><hr/>
-            <button onClick={processUserNameQueryInput}>Search</button>
+          <textarea
+            placeholder="Search users by user name here |"
+            className={styles.textInput}
+            {...register("userNameQueryInput", {
+              required: "*",
+              onChange: (e) => setUserNameQueryInput(e.target.value),
+            })}
+          />
+          <hr />
+          <button onClick={processUserNameQueryInput}>Search</button>
         </form>
-        <hr/>
+        <hr />
         <ul>
-          {foundUsers.map((user,i) =>(
-            <Link key={i} href={`./user/${user.psid}`}><a target="_blank"><li className={adminStyles.cursor}>{user.name}</li></a></Link>
+          {foundUsers.map((user, i) => (
+            <Link key={i} href={`./user/${user.psid}`}>
+              <a target="_blank">
+                <li className={adminStyles.cursor}>{user.name}</li>
+              </a>
+            </Link>
           ))}
         </ul>
       </main>
@@ -59,4 +68,4 @@ const search: NextPage<{
   );
 };
 
-export default search;
+export default Search;
