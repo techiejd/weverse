@@ -37,6 +37,8 @@ export default async function admin(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  let users = Array<string>();
+  let notifiedUsers = Array<string>();
   let message = "";
   let buttons = Array<conversationUtils.ButtonInfo>();
   let messageType : conversationUtils.MessageType;
@@ -53,9 +55,7 @@ export default async function admin(
     resourcesChange = changesInResources.parse(nonStringResourcesChange);
     const nonStringButtons = JSON.parse(String(fields["buttons"]));
     buttons = conversationUtils.buttonInfo.array().parse(nonStringButtons);
-
-    logger.info({message: message, messageType: messageType, resourcesChange: resourcesChange,
-    buttons: buttons}, "admin parsed objects")
+    users = JSON.parse(String(fields["users"]));
   });
 
   const prepareMessage = (user:UserData) :
@@ -80,6 +80,10 @@ export default async function admin(
     getAllUsersSnapshot().then((userSnapshots) => {
       return userSnapshots.forEach(async (userSnapshot) => {
         const user = userData.parse(userSnapshot.data());
+
+        if (!users.includes(user.psid)) {return};
+
+
         const convoHolder = new OneWePrivateConversationHandler(user.psid);
         if (user.notifications_permissions == undefined) {
           logger.warn(
@@ -91,7 +95,9 @@ export default async function admin(
 
         const resourcesUpdateEntries = Object.entries(resourcesChange).map(
           ([resource, change]) => ['gameInfo.resources.' + resource, user.gameInfo.resources[resourceEnum.parse(resource)] + change]);
-        userSnapshot.ref.update(Object.fromEntries(resourcesUpdateEntries));
+        if (resourcesUpdateEntries.length > 0) {
+          userSnapshot.ref.update(Object.fromEntries(resourcesUpdateEntries));
+        }
 
         if (messageType == "Notify") {
           return convoHolder.notify(

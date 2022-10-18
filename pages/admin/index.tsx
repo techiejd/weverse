@@ -65,7 +65,7 @@ const Dashboard: NextPage<{ admin: UserData }> = (props) => {
       <main className={styles.main}>
         <h1 className={styles.title}>Actuar como Sofí : {props.admin.name}</h1>
         <div>
-          <form action="/api/onboarding" onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <UserManagerPortal
               userForTemplating={props.admin}
               resourcesChange={resourcesChange}
