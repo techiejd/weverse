@@ -1,5 +1,5 @@
 import { UserData } from '../../db/schemas';
-import { MessengerMessage, QuickReply } from '../schemas';
+import { Messenger } from '../schemas';
 
 export const prettifyJSON = (json: Record<string, any>) => JSON.stringify(
   json, null, 2).replace('{', '').replace('}', '');
@@ -23,7 +23,7 @@ export const buttonInfoToButton = (buttonInfo: ButtonInfo) => {
   };
 };
 
-const quickReplyInfoToQuickReply = (info: QuickReplyInfo) : QuickReply=> ({
+const quickReplyInfoToQuickReply = (info: QuickReplyInfo) : Messenger.QuickReply=> ({
   content_type: "text",
   title: info.title,
   payload: info.payload
@@ -32,8 +32,8 @@ const quickReplyInfoToQuickReply = (info: QuickReplyInfo) : QuickReply=> ({
 export const makeMessage = (text: string,
     buttonInfos : Array<ButtonInfo> = [],
     quickReplyInfos: Array<QuickReplyInfo> = [],
-    ) : MessengerMessage => {
-      let message : MessengerMessage;
+    ) : Messenger.Message => {
+      let message : Messenger.Message;
       if (buttonInfos.length > 0) {
         message = {
           attachment: {

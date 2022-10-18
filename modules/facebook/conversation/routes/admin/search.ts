@@ -1,23 +1,23 @@
 import {getAllUsersSnapshot} from '../../../../../common/db';
 import {OneWePrivateConversationHandler} from
   '../../oneWePrivateConversationHandler';
-import * as messengerUtils from '../../utils';
-import * as fbSchemas from '../../../schemas';
+import * as conversationUtils from '../../utils';
+import * as schemas from '../../../schemas';
 import * as dbSchemas from '../../../../db/schemas';
 import {getBody} from './utils';
 import { makeUserNameQueryFilter } from '../../../../admin/search';
 
-const tryAgain : messengerUtils.ButtonInfo = {
+const tryAgain : conversationUtils.ButtonInfo = {
   title: 'Try again.', payload: 'Admin.Search.open'};
 
 // There's only one page per user result right now for toggling Sofia.
 const searchResult =
-(psid:string, name: string) : fbSchemas.MessengerMessage => (
-  messengerUtils.makeMessage('Search found: ',
+(psid:string, name: string) : schemas.Messenger.Message => (
+  conversationUtils.makeMessage('Search found: ',
       [{title: name, payload: 'Toggle.Sofia.' + '' /* state */ +
       '.' + psid + '.' + name},
       tryAgain]));
-const searchFailure : fbSchemas.MessengerMessage = messengerUtils.makeMessage(
+const searchFailure : schemas.Messenger.Message = conversationUtils.makeMessage(
     'Search failed',
     [tryAgain]
 );

@@ -6,12 +6,12 @@ import { useRouter } from "next/router";
 import FileUploader from "../../common/components/fileUpload";
 import { getUserSnapshot } from "../../common/db";
 import { userData, UserData } from "../../modules/db/schemas";
-import * as utils from "../../modules/facebook/messenger/utils";
+import * as utils from "../../modules/facebook/conversation/utils";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import React, { FC } from "react";
 import ButtonInput from "../../modules/admin/components/buttonInput";
-import { ButtonInfo } from "../../modules/facebook/messenger/utils";
+import { ButtonInfo } from "../../modules/facebook/conversation/utils";
 
 export async function getServerSideProps() {
   return getUserSnapshot(String(process.env.ADMIN_ID)).then(

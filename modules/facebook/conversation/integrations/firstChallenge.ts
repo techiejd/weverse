@@ -6,7 +6,7 @@ import {consultResources} from '../routes/consultResources';
 import {getUserSnapshot, usedSource} from '../../../../common/db';
 
 export const challengeNotificationMessageFor = (
-    challengeId:string) : schemas.MessengerMessage => ({
+    challengeId:string) : schemas.Messenger.Message => ({
   attachment: {
     payload: {
       template_type: 'button',
@@ -72,7 +72,7 @@ export const giveResources = async (psid: string, challengeRef: string) => {
   });
 };
 
-export const whatIsYourLie : schemas.MessengerMessage = {
+export const whatIsYourLie : schemas.Messenger.Message = {
   attachment: {
     payload: {
       template_type: 'button',
@@ -144,7 +144,7 @@ export const requestResources = (params: Record<string, any>) => {
     (Sofí no se unió a la jornada de aguapaneleros) y la persona que \
     escribió 'R/2' en los comentarios acertó correctamente.`,
       };
-      const goToPostMessage : schemas.MessengerMessage = {
+      const goToPostMessage : schemas.Messenger.Message = {
         attachment: {
           payload: {
             template_type: 'button',

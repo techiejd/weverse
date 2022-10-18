@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import * as schemas from '../../modules/facebook/schemas';
-import {OneWeManager} from '../../modules/facebook/messenger/oneWeManager';
+import {OneWeManager} from '../../modules/facebook/conversation/oneWeManager';
 import {logger} from '../../common/logger';
 
 const authorizeHeadersAgainst = (req: NextApiRequest,
