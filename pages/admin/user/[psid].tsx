@@ -8,7 +8,10 @@ import {
 } from "../../../modules/db/schemas";
 import { UserManagerPortal } from "../../../modules/admin/components/userManagerPortal";
 import { useState } from "react";
-import { ButtonInfo } from "../../../modules/facebook/conversation/utils";
+import {
+  ButtonInfo,
+  MessageType,
+} from "../../../modules/facebook/conversation/utils";
 
 export const getServerSideProps: GetServerSideProps = (context) => {
   return getUserSnapshot(String(context.params?.psid)).then(
@@ -25,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = (context) => {
 const User: NextPage<{
   userData: UserData;
 }> = (props) => {
-  const [target, setTarget] = useState<"Notify" | "Response">("Notify");
+  const [target, setTarget] = useState<MessageType>("Notify");
   const [inputMessage, setInputMessage] = useState<string>("");
   const [resourcesChange, setResourcesChange] = useState<ChangesInResources>(
     {}
@@ -53,8 +56,8 @@ const User: NextPage<{
           userForTemplating={props.userData}
           resourcesChange={resourcesChange}
           setResourcesChange={setResourcesChange}
-          target={target}
-          setTarget={setTarget}
+          messageType={target}
+          setMessageType={setTarget}
           inputMessage={inputMessage}
           setInputMessage={setInputMessage}
           buttonInfos={buttonInfos}

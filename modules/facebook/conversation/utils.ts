@@ -1,11 +1,19 @@
 import { UserData } from '../../db/schemas';
 import { Messenger } from '../schemas';
+import {z} from 'zod';
 
 export const prettifyJSON = (json: Record<string, any>) => JSON.stringify(
   json, null, 2).replace('{', '').replace('}', '');
 
-export type ButtonInfo = {title: string, payload: string, url?:never} |
-{title:string, payload?: never, url: string};
+export const messageType = z.enum(["Notify", "Response"]);
+export type MessageType = z.infer<typeof messageType>;
+
+export const buttonInfo = z.object({
+  title: z.string(),
+  payload: z.string().optional(),
+  url: z.string().optional(),
+})
+export type ButtonInfo = z.infer<typeof buttonInfo>;
 
 export type QuickReplyInfo = {title: string, payload: string};
 

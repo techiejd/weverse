@@ -3,8 +3,9 @@ import formidable from 'formidable';
 import {logger} from '../../common/logger';
 import * as fbSchemas from '../../modules/facebook/schemas';
 import * as conversationUtils from "../../modules/facebook/conversation/utils";
-import * as notifyUtils from '../../modules/facebook/conversation/notifyUtils';
-import { UserData } from '../../modules/db/schemas';
+import { changesInResources, ChangesInResources, resourceEnum, userData, UserData } from '../../modules/db/schemas';
+import { getAllUsersSnapshot } from '../../common/db';
+import { OneWePrivateConversationHandler } from '../../modules/facebook/conversation/oneWePrivateConversationHandler';
 
 export const config = {
   api: {
@@ -13,19 +14,48 @@ export const config = {
   }
 };
 
+export const templateWhatsAppMessage = (message: string, buttons:Array<conversationUtils.ButtonInfo>) => {
+  const annotatedMessage = `for: all
+${message}`;
+
+  if (buttons.length == 0) {
+    return annotatedMessage;
+  }
+
+  let prevMessage = annotatedMessage;
+  for (const button of buttons) {
+    if (button.title == undefined) {
+      continue;
+    }
+    prevMessage = `${prevMessage}
+${button.title} : ${button.url}`
+  }
+  return prevMessage;
+}
+
 export default async function admin(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   let message = "";
   let buttons = Array<conversationUtils.ButtonInfo>();
+  let messageType : conversationUtils.MessageType;
+  let resourcesChange : ChangesInResources;
+  const adminConvoHolder = new OneWePrivateConversationHandler.OneWeToAdminConversationHandler();
 
   const form = new formidable.IncomingForm({ multiples: true });
   form.parse(req, async function (err, fields, files) {
     // TODO(techiejd): Look into files
-    logger.info({error: err, files: files, fields: fields}, "info");
+    logger.info({error: err, files: files, fields: fields}, "admin parsed form");
     message = String(fields["message"]);
-    buttons =JSON.parse(String(fields["buttons"]));
+    messageType = conversationUtils.messageType.parse(fields["messageType"]);
+    const nonStringResourcesChange = JSON.parse(String(fields["resourcesChange"]));
+    resourcesChange = changesInResources.parse(nonStringResourcesChange);
+    const nonStringButtons = JSON.parse(String(fields["buttons"]));
+    buttons = conversationUtils.buttonInfo.array().parse(nonStringButtons);
+
+    logger.info({message: message, messageType: messageType, resourcesChange: resourcesChange,
+    buttons: buttons}, "admin parsed objects")
   });
 
   const prepareMessage = (user:UserData) :
@@ -47,8 +77,32 @@ export default async function admin(
       return Promise.resolve(messengerMessage);
     }
   
-  notifyUtils.notifyAllUsers(prepareMessage);
+    getAllUsersSnapshot().then((userSnapshots) => {
+      return userSnapshots.forEach(async (userSnapshot) => {
+        const user = userData.parse(userSnapshot.data());
+        const convoHolder = new OneWePrivateConversationHandler(user.psid);
+        if (user.notifications_permissions == undefined) {
+          logger.warn(
+            {user: user},
+              'user without notification permissions');
+          return;
+        }
+        const message : fbSchemas.Messenger.Message = await prepareMessage(user);
+
+        const resourcesUpdateEntries = Object.entries(resourcesChange).map(
+          ([resource, change]) => ['gameInfo.resources.' + resource, user.gameInfo.resources[resourceEnum.parse(resource)] + change]);
+        userSnapshot.ref.update(Object.fromEntries(resourcesUpdateEntries));
+
+        if (messageType == "Notify") {
+          return convoHolder.notify(
+            message, user.notifications_permissions.token);
+        }
+        return convoHolder.send(message);
+      });
+    })
   
+  adminConvoHolder.sendWhatsApp({body: templateWhatsAppMessage(message, buttons)});
+
   res.status(200).end();
 };
 
