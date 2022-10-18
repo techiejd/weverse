@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import * as schemas from './schemas';
 import {getUserSnapshot} from '../../common/db';
 import {logger} from '../../common/logger';
-import { ButtonInfo, buttonInfoToButton } from './messenger/utils';
+import { ButtonInfo, buttonInfoToButton } from './conversation/utils';
 
 export const getPaginatedData =
 (url:string) : Promise<Record<string, unknown>[]> => {
@@ -143,12 +143,41 @@ export class PrivateConversationHandler {
       return Promise.resolve();
     });
   };
+
+  private postToWAMessages = async (body: Record<string, unknown>) => {
+    // TODO(techiejd): bring in the number as a parameter to be able to message other uers
+    const waMessagesUrl = 'https://graph.facebook.com/v14.0/' + String(process.env.ADMIN_NUMBER) + '/messages';
+    logger.info({body: body}, 'postToWAMessages');
+    return fetch(waMessagesUrl, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.WA_BUSINESS_ACCESS_TOKEN}`,
+      },
+    }).then(async (response) => {
+      if (!response.ok) {
+        return response.text().then((text) => {
+          logger.error(
+            {error: text, fetch: {
+              method: 'POST',
+              body: JSON.stringify(body),
+              headers: {
+                'Content-Type': 'application/json', 
+              'Authorization': 'Bearer REDACTED'
+            }}},
+              'Error in posting (sending) to wa messages.');
+        });
+      }
+      return Promise.resolve();
+    });
+  };
   /**
    *
    * @param {schemas.MessengerMessage} message to send to recipient.
    * @return {Promise<void>} Logs result of sending and then returns.
    */
-  send(message:schemas.MessengerMessage): Promise<void> {
+  send(message:schemas.Messenger.Message): Promise<void> {
     const body = {
       'messaging_type': 'RESPONSE',
       'recipient': {
@@ -166,21 +195,21 @@ export class PrivateConversationHandler {
    * @return {Promise<void[]>} Logs result of sending and then returns.
    */
   sendMultiple(
-      messages : schemas.MessengerMessage[]): Promise<void[]> {
+      messages : schemas.Messenger.Message[]): Promise<void[]> {
     return Promise.all(messages.map((message) => this.send(message)));
   }
 
   /**
    *
-   * @param {schemas.MessengerMessage} message to be sent
+   * @param {schemas.Messenger.Message} message to be sent
    * @param {string} notificationPermissionsToken the users notifications token
    * @return {Promise<void>}
    */
-  async notify(message: schemas.MessengerMessage,
+  async notify(message: schemas.Messenger.Message,
       notificationPermissionsToken: string): Promise<void> {
     // TODO(techiejd): Get cache going so we don't have to
     // pass notificationPermissionsToken.
-    const notificationBody : schemas.MessengerMessageBody = {
+    const notificationBody : schemas.Messenger.MessageBody = {
       'messaging_type': 'UPDATE',
       'recipient': {
         'notification_messages_token': notificationPermissionsToken,
@@ -188,6 +217,16 @@ export class PrivateConversationHandler {
       'message': message,
     };
     return this.postToFBMessages(notificationBody);
+  }
+
+  async sendWhatsApp(message: schemas.WhatsApp.Message) {
+    const messageBody : schemas.WhatsApp.MessageBody = {
+      messaging_product: "whatsapp",
+      to: String(process.env.ADMIN_NUMBER),
+      text: message,
+    };
+
+    return this.postToWAMessages(messageBody);
   }
 }
 

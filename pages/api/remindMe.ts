@@ -3,11 +3,11 @@ import {logger} from '../../common/logger';
 import {z} from 'zod';
 import * as fbSchemas from '../../modules/facebook/schemas';
 import * as utils from '../../modules/remindMe/utils';
-import * as ConversationHandler from '../../modules/facebook/messenger/oneWePrivateConversationHandler';
+import * as ConversationHandler from '../../modules/facebook/conversation/oneWePrivateConversationHandler';
 
 const remindMeBody = z.object({
   psid: z.string(),
-  message: fbSchemas.messengerMessage,
+  message: fbSchemas.Messenger.message,
   create: z.object({
     inHowManySeconds: z.number(),
   }).optional()

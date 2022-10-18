@@ -6,7 +6,9 @@ import {logger} from '../../../common/logger';
 import { userData, UserData } from '../../db/schemas';
 
 export const notifyAllUsers = async (createMessageForUser: (
-  user: UserData) => Promise<schemas.MessengerMessage>) => {
+  user: UserData) => Promise<schemas.Messenger.Message>) => {
+  const adminConvoHolder = new OneWePrivateConversationHandler.OneWeToAdminConversationHandler();
+  
   return getAllUsersSnapshot().then((userSnapshots) => {
     return userSnapshots.forEach(async (userSnapshot) => {
       const user = userData.parse(userSnapshot.data());
@@ -17,7 +19,13 @@ export const notifyAllUsers = async (createMessageForUser: (
             'user without notification permissions');
         return;
       }
-      const message : schemas.MessengerMessage = await createMessageForUser(user);
+      const message : schemas.Messenger.Message = await createMessageForUser(user);
+
+      if (adminConvoHolder.recipient == convoHolder.recipient) {
+        //TODO(techiejd): Get whatsapp better integrated
+      adminConvoHolder.sendWhatsApp({body: JSON.stringify(message)});
+      }
+
       return convoHolder.notify(
           message, user.notifications_permissions.token);
     });
