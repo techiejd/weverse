@@ -1,11 +1,20 @@
 import adminStyles from "../../../../styles/admin.module.css";
 import { ChangesInResources, resourceEnum } from "../../../db/schemas";
-import { ChangeEvent, MouseEvent, useState, FC } from "react";
+import {
+  ChangeEvent,
+  MouseEvent,
+  useState,
+  FC,
+  SetStateAction,
+  Dispatch,
+} from "react";
 import { Resource } from "../../../sofia/schemas";
 import { z } from "zod";
 
-export const Assign: FC = () => {
-  const [resourcesChange, setResourcesChange] = useState<ChangesInResources>();
+export const Assign: FC<{
+  resourcesChange: ChangesInResources;
+  setResourcesChange: Dispatch<SetStateAction<ChangesInResources>>;
+}> = (props) => {
   const [selectedResource, setSelectedResource] = useState<
     Resource | undefined
   >(undefined);
@@ -39,8 +48,8 @@ export const Assign: FC = () => {
     }
 
     const changeAmount = sign == "+" ? inputAmount : -inputAmount;
-    setResourcesChange({
-      ...resourcesChange,
+    props.setResourcesChange({
+      ...props.resourcesChange,
       [selectedResource as Resource]: changeAmount,
     });
 
@@ -53,9 +62,9 @@ export const Assign: FC = () => {
   const handleDeleteResourceChange = (e: MouseEvent) => {
     const resourceToDelete = resourceEnum.parse(e.currentTarget.id);
 
-    if (resourcesChange) {
-      delete resourcesChange[resourceToDelete];
-      setResourcesChange(resourcesChange);
+    if (props.resourcesChange) {
+      delete props.resourcesChange[resourceToDelete];
+      props.setResourcesChange(props.resourcesChange);
     }
 
     setPossibleResourceLabels([
@@ -67,9 +76,9 @@ export const Assign: FC = () => {
   return (
     <div>
       <hr />
-      {resourcesChange ? (
+      {props.resourcesChange ? (
         <>
-          {Object.entries(resourcesChange).map((resource, i) => (
+          {Object.entries(props.resourcesChange).map((resource, i) => (
             <div className={adminStyles.resource} key={i}>
               <p>{resource}</p>
               <button

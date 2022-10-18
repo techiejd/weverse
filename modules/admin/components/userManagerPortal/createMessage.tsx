@@ -1,5 +1,13 @@
 import styles from "../../../../styles/Home.module.css";
-import { ChangeEvent, useEffect, useState, FC, MouseEvent } from "react";
+import {
+  ChangeEvent,
+  useEffect,
+  useState,
+  FC,
+  MouseEvent,
+  SetStateAction,
+  Dispatch,
+} from "react";
 import { useForm } from "react-hook-form";
 import FileUploader from "../../../../common/components/fileUpload";
 import AddIcon from "@mui/icons-material/Add";
@@ -9,9 +17,15 @@ import * as utils from "../../../facebook/conversation/utils";
 import { ButtonInfo } from "../../../facebook/conversation/utils";
 import { UserData } from "../../../db/schemas";
 
-export const CreateMessage: FC<{ userForTemplating: UserData }> = (props) => {
-  const [target, setTarget] = useState<"Notify" | "Response">("Notify");
-  const [inputMessage, setInputMessage] = useState<string>("");
+export const CreateMessage: FC<{
+  userForTemplating: UserData;
+  target: "Notify" | "Response";
+  setTarget: Dispatch<SetStateAction<"Notify" | "Response">>;
+  inputMessage: string;
+  setInputMessage: Dispatch<SetStateAction<string>>;
+  buttonInfos: Array<ButtonInfo>;
+  setButtonInfos: Dispatch<SetStateAction<Array<ButtonInfo>>>;
+}> = (props) => {
   const [templatedMessage, setTemplatedMessage] = useState<string>("");
   const [templatedButtons, setTemplatedButtons] = useState<Array<ButtonInfo>>(
     []
@@ -19,30 +33,29 @@ export const CreateMessage: FC<{ userForTemplating: UserData }> = (props) => {
   const [selectedFiles, setSelectedFiles] = useState<
     Array<{ url: string; file: File }>
   >([]);
-  const [buttonInfos, setButtonInfos] = useState<Array<ButtonInfo>>([]);
 
   const processInput = (e: MouseEvent) => {
     e.preventDefault();
 
     const templater = utils.Notify.getTemplaters(props.userForTemplating);
-    setTemplatedMessage(templater.templateBody(inputMessage));
-    setTemplatedButtons(buttonInfos.map(templater.templateButton));
+    setTemplatedMessage(templater.templateBody(props.inputMessage));
+    setTemplatedButtons(props.buttonInfos.map(templater.templateButton));
   };
 
   const incNumButtonInputs = (e: MouseEvent) => {
     e.preventDefault();
 
-    if (buttonInfos.length >= 3) {
+    if (props.buttonInfos.length >= 3) {
       alert("max limit reached");
     } else {
-      setButtonInfos([...buttonInfos, { title: "", payload: "" }]);
+      props.setButtonInfos([...props.buttonInfos, { title: "", payload: "" }]);
     }
   };
   const decNumButtonInputs = (e: MouseEvent) => {
     e.preventDefault();
-    if (buttonInfos.length > 0) {
-      buttonInfos.pop();
-      setButtonInfos([...buttonInfos]);
+    if (props.buttonInfos.length > 0) {
+      props.buttonInfos.pop();
+      props.setButtonInfos([...props.buttonInfos]);
     }
   };
 
@@ -56,11 +69,11 @@ export const CreateMessage: FC<{ userForTemplating: UserData }> = (props) => {
 
   const notifyRadioClicked = (event: ChangeEvent<HTMLInputElement>) => {
     getResponseRadio().checked = false;
-    setTarget("Notify");
+    props.setTarget("Notify");
   };
   const responseRadioClicked = (event: ChangeEvent<HTMLInputElement>) => {
     getNotifyRadio().checked = false;
-    setTarget("Response");
+    props.setTarget("Response");
   };
   const { register, handleSubmit } = useForm();
 
@@ -78,7 +91,7 @@ export const CreateMessage: FC<{ userForTemplating: UserData }> = (props) => {
         className={styles.textInput}
         {...register("message", {
           required: "*",
-          onChange: (e) => setInputMessage(e.target.value),
+          onChange: (e) => props.setInputMessage(e.target.value),
         })}
       />
       <br />
@@ -99,12 +112,12 @@ export const CreateMessage: FC<{ userForTemplating: UserData }> = (props) => {
       </button>
       <br />
       <br />
-      {buttonInfos.map((buttonInfo, i) => (
+      {props.buttonInfos.map((buttonInfo, i) => (
         <div key={i}>
           <ButtonInput
             id={i}
-            buttonInfos={buttonInfos}
-            setButtonInfos={setButtonInfos}
+            buttonInfos={props.buttonInfos}
+            setButtonInfos={props.setButtonInfos}
           />
           <br />
           <hr />
