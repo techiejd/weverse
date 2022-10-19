@@ -62,7 +62,7 @@ const datum = z.discriminatedUnion("type", [
 ]);
 
 export const transaction = z.object({
-  from: user,
+  from: admin, // right now, only admins can send.
   to: user.array().nonempty(),
   data: datum.array().nonempty(),
 });
