@@ -21,7 +21,7 @@ import {logger} from '../../../common/logger';
 import {remindMe} from './routes/remindMe';
 
 type MessengerManagerEvent = {
-  messenger: schemas.MessengerEvent, logIn?: never}
+  messenger: schemas.Messenger.Event, logIn?: never}
 | {messenger?: never, logIn: LogInEvent}
 
 /**
@@ -30,7 +30,7 @@ type MessengerManagerEvent = {
 export class OneWeManager {
   // eslint-disable-next-line valid-jsdoc
   private getRouteFromPostback = (
-      messengerEvent: schemas.MessengerEvent) :
+      messengerEvent: schemas.Messenger.Event) :
      [string, Record<string, any>] => {
     let conversationRoute = messengerEvent.postback!.payload;
     let params : string[] = [];
@@ -46,7 +46,7 @@ export class OneWeManager {
 
   // eslint-disable-next-line valid-jsdoc
   private getRouteFromMessage = async (
-      messengerEvent: schemas.MessengerEvent) :
+      messengerEvent: schemas.Messenger.Event) :
      Promise<[string, Record<string, unknown>]> => {
     const params = {'senderId': messengerEvent.sender.id,
       'Admin': {
@@ -59,7 +59,7 @@ export class OneWeManager {
   // TODO(techiejd): Wow we really going full buttons?
   // eslint-disable-next-line valid-jsdoc
   /* private getRouteFromMessage = async (
-      messengerEvent: schemas.MessengerEvent) :
+      messengerEvent: schemas.Messenger.Event) :
        Promise<[string, Record<string, string>]> => {
     const params = {'senderId': messengerEvent.sender.id};
     if (messengerEvent.message!.quick_reply) {
@@ -78,7 +78,7 @@ export class OneWeManager {
 
   // eslint-disable-next-line valid-jsdoc
   private getRouteFromOptin = (
-      messengerEvent: schemas.MessengerEvent) :
+      messengerEvent: schemas.Messenger.Event) :
     [string, Record<string, any>] => {
     return [messengerEvent.optin!.payload,
       {
