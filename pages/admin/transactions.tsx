@@ -1,6 +1,10 @@
 import type { NextPage } from "next";
 import { FC, useEffect, useReducer, useState } from "react";
-import { ChangesInResources, Transaction } from "../../modules/db/schemas";
+import {
+  ChangesInResources,
+  Transaction,
+  TxMessage,
+} from "../../modules/db/schemas";
 // TODO(jimenez1917): Get correct styles
 import styles from "../../styles/Home.module.css";
 import adminStyles from "../../styles/Admin.module.css";
@@ -24,19 +28,6 @@ const getDataByType = (tx: Transaction, type: string) =>
 const Transactions: NextPage<{ transactions: Array<Transaction> }> = (
   props
 ) => {
-  const [message, setMessage] = useState<string>("");
-  const [resourcesTransactions, setResourcesTransactions] = useState<Object>(
-    {}
-  );
-  useEffect(() => {
-    props.transactions[0].data.map((data, i) => {
-      if (data.type === "resourcesChange" && data.resourcesChange) {
-        setResourcesTransactions(data.resourcesChange);
-      } else if (data.type === "message") {
-        setMessage(data.message.text);
-      }
-    });
-  }, []);
   return (
     <div className={styles.container}>
       <main className={styles.main}>
@@ -61,7 +52,33 @@ const Transactions: NextPage<{ transactions: Array<Transaction> }> = (
             {getDataByType(tx, "message") == undefined ? (
               <></>
             ) : (
-              <h2>{message}</h2>
+              <div>
+                <h2>Message</h2>
+                <p>
+                  Type:{" "}
+                  {
+                    (getDataByType(tx, "message") as { message: TxMessage })
+                      .message.type
+                  }
+                </p>
+                <p>
+                  {
+                    (getDataByType(tx, "message") as { message: TxMessage })
+                      .message.text
+                  }
+                </p>
+                {(
+                  getDataByType(tx, "message") as { message: TxMessage }
+                ).message.buttons?.map((buttonInfo, i) => (
+                  <div key={i}>
+                    <h3>Button {i}</h3>
+                    <p>{buttonInfo.title}</p>
+                    <p>
+                      {buttonInfo.url ? buttonInfo.url : buttonInfo.payload}
+                    </p>
+                  </div>
+                ))}
+              </div>
             )}
             {getDataByType(tx, "resourcesChange") == undefined ? (
               <></>
@@ -83,6 +100,10 @@ const Transactions: NextPage<{ transactions: Array<Transaction> }> = (
                 ))}
               </ul>
             )}
+            <p>
+              <b>Created At: </b>
+              {tx.createdAt}
+            </p>
           </div>
         ))}
       </main>
