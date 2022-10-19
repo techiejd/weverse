@@ -10,7 +10,10 @@ import {
 } from "../../modules/db/schemas";
 import React, { useState } from "react";
 import { UserManagerPortal } from "../../modules/admin/components/userManagerPortal";
-import { ButtonInfo } from "../../modules/facebook/conversation/utils";
+import {
+  ButtonInfo,
+  MessageType,
+} from "../../modules/facebook/conversation/utils";
 
 export async function getServerSideProps() {
   return getUserSnapshot(String(process.env.ADMIN_ID)).then(
@@ -25,7 +28,7 @@ export async function getServerSideProps() {
 }
 
 const Dashboard: NextPage<{ admin: UserData }> = (props) => {
-  const [target, setTarget] = useState<"Notify" | "Response">("Notify");
+  const [messageType, setMessageType] = useState<MessageType>("Notify");
   const [inputMessage, setInputMessage] = useState<string>("");
   const [resourcesChange, setResourcesChange] = useState<ChangesInResources>(
     {}
@@ -34,11 +37,13 @@ const Dashboard: NextPage<{ admin: UserData }> = (props) => {
   const { register, handleSubmit } = useForm();
   const router = useRouter();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async () => {
     const body = ((): FormData => {
       const body = new FormData();
-      body.append("message", data.message);
+      body.append("messageType", messageType);
+      body.append("message", inputMessage);
       body.append("buttons", JSON.stringify(buttonInfos));
+      body.append("resourcesChange", JSON.stringify(resourcesChange));
       // TODO(jddominguez): Get Media working.
       // for (let i = 0; i < selectedFiles.length; i++) {
       //   body.append("messageFiles", selectedFiles[i].file);
@@ -60,13 +65,13 @@ const Dashboard: NextPage<{ admin: UserData }> = (props) => {
       <main className={styles.main}>
         <h1 className={styles.title}>Actuar como Sofí : {props.admin.name}</h1>
         <div>
-          <form action="/api/onboarding" onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <UserManagerPortal
               userForTemplating={props.admin}
               resourcesChange={resourcesChange}
               setResourcesChange={setResourcesChange}
-              target={target}
-              setTarget={setTarget}
+              messageType={messageType}
+              setMessageType={setMessageType}
               inputMessage={inputMessage}
               setInputMessage={setInputMessage}
               buttonInfos={buttonInfos}

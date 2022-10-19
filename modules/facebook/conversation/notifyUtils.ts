@@ -5,6 +5,7 @@ import * as schemas from '../schemas';
 import {logger} from '../../../common/logger';
 import { userData, UserData } from '../../db/schemas';
 
+// TODO(techiejd): Clean up notify.
 export const notifyAllUsers = async (createMessageForUser: (
   user: UserData) => Promise<schemas.Messenger.Message>) => {
   const adminConvoHolder = new OneWePrivateConversationHandler.OneWeToAdminConversationHandler();

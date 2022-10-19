@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import { ChangesInResources, UserData } from "../../../db/schemas";
-import { ButtonInfo } from "../../../facebook/conversation/utils";
+import { ButtonInfo, MessageType } from "../../../facebook/conversation/utils";
 import { Assign } from "./assignResources";
 import { CreateMessage } from "./createMessage";
 
@@ -9,8 +9,8 @@ export const UserManagerPortal: FC<{
   userForTemplating: UserData;
   resourcesChange: ChangesInResources;
   setResourcesChange: Dispatch<SetStateAction<ChangesInResources>>;
-  target: "Notify" | "Response";
-  setTarget: Dispatch<SetStateAction<"Notify" | "Response">>;
+  messageType: MessageType;
+  setMessageType: Dispatch<SetStateAction<MessageType>>;
   inputMessage: string;
   setInputMessage: Dispatch<SetStateAction<string>>;
   buttonInfos: Array<ButtonInfo>;
@@ -24,8 +24,8 @@ export const UserManagerPortal: FC<{
       />
       <CreateMessage
         userForTemplating={props.userForTemplating}
-        target={props.target}
-        setTarget={props.setTarget}
+        messageType={props.messageType}
+        setMessageType={props.setMessageType}
         inputMessage={props.inputMessage}
         setInputMessage={props.setInputMessage}
         buttonInfos={props.buttonInfos}
