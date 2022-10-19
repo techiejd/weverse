@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { buttonInfo, messageType } from "../facebook/conversation/utils";
 import * as sofi from "../sofia/schemas";
 
 const resources = z.object({
@@ -47,11 +48,16 @@ export const Sofi: Admin = {
 };
 
 const user = z.union([admin, baseUser]);
+export type User = z.infer<typeof user>;
 
-// TODO(jddominguez): flesh out message
+// TODO(techiejd): flesh out message
 const message = z.object({
+  type: messageType,
   text: z.string(),
+  buttons: buttonInfo.array().optional(),
 });
+
+export type TxMessage = z.infer<typeof message>;
 
 const datum = z.discriminatedUnion("type", [
   z.object({ type: z.literal("message"), message: message }),
@@ -61,10 +67,13 @@ const datum = z.discriminatedUnion("type", [
   }),
 ]);
 
+export type TxDatum = z.infer<typeof datum>;
+
 export const transaction = z.object({
   from: admin, // right now, only admins can send.
   to: user.array().nonempty(),
   data: datum.array().nonempty(),
+  createdAt: z.string()
 });
 
 export type Transaction = z.infer<typeof transaction>;
