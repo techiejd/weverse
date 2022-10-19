@@ -125,6 +125,7 @@ export class PrivateConversationHandler {
   private postToFBMessages = async (body: Record<string, unknown>) => {
     const fbMessagesURL = 'https://graph.facebook.com/v14.0/' + this.id + '/messages?access_token=' + this.token;
     logger.info({body: body}, 'postToFBMessages');
+    return;
     return fetch(fbMessagesURL, {
       method: 'POST',
       body: JSON.stringify(body),
@@ -146,7 +147,7 @@ export class PrivateConversationHandler {
 
   private postToWAMessages = async (body: Record<string, unknown>) => {
     // TODO(techiejd): bring in the number as a parameter to be able to message other uers
-    const waMessagesUrl = 'https://graph.facebook.com/v14.0/' + String(process.env.ADMIN_NUMBER) + '/messages';
+    const waMessagesUrl = 'https://graph.facebook.com/v14.0/' + String(process.env.WA_BUSINESS_PHONE_ID) + '/messages';
     logger.info({body: body}, 'postToWAMessages');
     return fetch(waMessagesUrl, {
       method: 'POST',
@@ -162,9 +163,10 @@ export class PrivateConversationHandler {
             {error: text, fetch: {
               method: 'POST',
               body: JSON.stringify(body),
+              waMessagesUrl: waMessagesUrl,
               headers: {
-                'Content-Type': 'application/json', 
-              'Authorization': 'Bearer REDACTED'
+              'Content-Type': 'application/json', 
+              'Authorization': `Bearer ${process.env.WA_BUSINESS_ACCESS_TOKEN}`
             }}},
               'Error in posting (sending) to wa messages.');
         });
