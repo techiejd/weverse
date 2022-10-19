@@ -19,8 +19,8 @@ import { UserData } from "../../../db/schemas";
 
 export const CreateMessage: FC<{
   userForTemplating: UserData;
-  target: "Notify" | "Response";
-  setTarget: Dispatch<SetStateAction<"Notify" | "Response">>;
+  messageType: utils.MessageType;
+  setMessageType: Dispatch<SetStateAction<utils.MessageType>>;
   inputMessage: string;
   setInputMessage: Dispatch<SetStateAction<string>>;
   buttonInfos: Array<ButtonInfo>;
@@ -69,11 +69,11 @@ export const CreateMessage: FC<{
 
   const notifyRadioClicked = (event: ChangeEvent<HTMLInputElement>) => {
     getResponseRadio().checked = false;
-    props.setTarget("Notify");
+    props.setMessageType("Notify");
   };
   const responseRadioClicked = (event: ChangeEvent<HTMLInputElement>) => {
     getNotifyRadio().checked = false;
-    props.setTarget("Response");
+    props.setMessageType("Response");
   };
   const { register, handleSubmit } = useForm();
 

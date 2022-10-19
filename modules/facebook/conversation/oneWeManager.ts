@@ -130,7 +130,7 @@ export class OneWeManager {
     try {
       return this.handleRoute(route, params);
     } catch (error) {
-      logger.error({error: error}, 'Error in handling MessengerEvent');
+      logger.error({error: error}, 'Error in handling Messenger.Event');
       // TODO(techiejd): maybe send info back to client
     }
   }
