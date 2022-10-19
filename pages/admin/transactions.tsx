@@ -5,56 +5,17 @@ import { ChangesInResources, Transaction } from "../../modules/db/schemas";
 import styles from "../../styles/Home.module.css";
 import adminStyles from "../../styles/Admin.module.css";
 import Link from "next/link";
+import { getAllTx } from "../../common/db";
 
 // TODO(techiejd): Are these records or transactions?
 export async function getServerSideProps() {
-  const transactions: Array<Transaction> = [
-    {
-      from: { name: "Nico", id: "Nico's psid", actingAsSofi: true },
-      to: [
-        { name: "David", id: "08309830980938" },
-        { name: "David", id: "08309830980938" },
-        { name: "David", id: "08309830980938" },
-      ],
-      data: [
-        { type: "message", message: { text: "I'm a little teapot" } },
-        { type: "resourcesChange", resourcesChange: { "🌟": -5, "👺": 3 } },
-      ],
-    },
-    {
-      from: { name: "Nico", id: "Nico's psid", actingAsSofi: true },
-      to: [{ name: "David", id: "David's psid" }],
-      data: [
-        { type: "message", message: { text: "I'm a little teapot" } },
-        { type: "resourcesChange", resourcesChange: { "🌟": -5, "⚡": 3 } },
-      ],
-    },
-    {
-      from: { name: "Nico", id: "Nico's psid", actingAsSofi: true },
-      to: [{ name: "David", id: "David's psid" }],
-      data: [
-        { type: "resourcesChange", resourcesChange: { "🌟": -5, "⚡": 3 } },
-        { type: "message", message: { text: "I'm a little teapot" } },
-      ],
-    },
-    {
-      from: { name: "Nico", id: "Nico's psid", actingAsSofi: true },
-      to: [{ name: "David", id: "David's psid" }],
-      data: [
-        { type: "resourcesChange", resourcesChange: { "🌟": -5, "⚡": 3 } },
-      ],
-    },
-    {
-      from: { name: "Nico", id: "Nico's psid", actingAsSofi: true },
-      to: [{ name: "David", id: "David's psid" }],
-      data: [{ type: "message", message: { text: "I'm a little teapot" } }],
-    },
-  ];
-  return {
-    props: {
-      transactions: transactions,
-    },
-  };
+  return getAllTx().then((transactions) => {
+    return {
+      props: {
+        transactions: transactions,
+      },
+    };
+  });
 }
 
 const getDataByType = (tx: Transaction, type: string) =>

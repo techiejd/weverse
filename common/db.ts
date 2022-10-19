@@ -54,3 +54,9 @@ export const usedSource = async (psid: string, challengeRef: string) => {
 export const addTx = async (tx: Transaction) => {
   return db.collection('transactions').add(tx);
 };
+
+export const getAllTx = () => {
+  return db.collection('transactions').get().then((transactionSnapshots) => {
+    return transactionSnapshots.docs.map(transactionSnapshot => transactionSnapshot.data())
+  })
+}
