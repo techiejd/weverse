@@ -1,11 +1,16 @@
-.cursor{
-    cursor:alias;
+.cursor {
+  cursor: alias;
 }
-.resource{
-    display: flex;
+.resource {
+  display: flex;
 }
-.negativeButton{
-    height:2%;
-    margin-left:10%;
-    margin-top:5%;
+.negativeButton {
+  height: 2%;
+  margin-left: 10%;
+  margin-top: 5%;
+}
+.boxTransactions {
+  border: 1px solid gray;
+  border-radius: 15px;
+  padding: 15px;
 }
