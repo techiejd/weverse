@@ -59,7 +59,7 @@ export class OneWeManager {
   // TODO(techiejd): Wow we really going full buttons?
   // eslint-disable-next-line valid-jsdoc
   /* private getRouteFromMessage = async (
-      messengerEvent: schemas.MessengerEvent) :
+      messengerEvent: schemas.Messenger.Event) :
        Promise<[string, Record<string, string>]> => {
     const params = {'senderId': messengerEvent.sender.id};
     if (messengerEvent.message!.quick_reply) {
