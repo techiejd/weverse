@@ -14,8 +14,8 @@ export const config = {
   }
 };
 
-const templateWhatsAppMessage = (message: string, buttons:Array<conversationUtils.ButtonInfo>) => {
-  const annotatedMessage = `for: all
+const templateWhatsAppMessage = (message: string, buttons:Array<conversationUtils.ButtonInfo>, users: Array<string>) => {
+  const annotatedMessage = `for: ${users.length > 0 ? JSON.stringify(users) : `all`}
 ${message}`;
 
   if (buttons.length == 0) {
@@ -37,8 +37,8 @@ export default async function admin(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  let users = Array<string>();
-  let notifiedUsers = Array<string>();
+  let usersOfInterest = Array<string>();
+  let messagedUsers = Array<string>();
   let message = "";
   let buttons = Array<conversationUtils.ButtonInfo>();
   let messageType : conversationUtils.MessageType;
@@ -55,7 +55,7 @@ export default async function admin(
     resourcesChange = changesInResources.parse(nonStringResourcesChange);
     const nonStringButtons = JSON.parse(String(fields["buttons"]));
     buttons = conversationUtils.buttonInfo.array().parse(nonStringButtons);
-    users = JSON.parse(String(fields["users"]));
+    usersOfInterest = JSON.parse(String(fields["users"]));
   });
 
   const prepareMessage = (user:UserData) :
@@ -77,37 +77,51 @@ export default async function admin(
       return Promise.resolve(messengerMessage);
     }
   
-    getAllUsersSnapshot().then((userSnapshots) => {
+    await getAllUsersSnapshot().then((userSnapshots) => {
       return userSnapshots.forEach(async (userSnapshot) => {
         const user = userData.parse(userSnapshot.data());
+        if (!usersOfInterest.includes(user.psid)) {return};
 
-        if (!users.includes(user.psid)) {return};
-
-
-        const convoHolder = new OneWePrivateConversationHandler(user.psid);
-        if (user.notifications_permissions == undefined) {
-          logger.warn(
-            {user: user},
-              'user without notification permissions');
-          return;
+        const updateResources = () => {
+          const resourcesUpdateEntries = Object.entries(resourcesChange).map(
+            ([resource, change]) => ['gameInfo.resources.' + resource, user.gameInfo.resources[resourceEnum.parse(resource)] + change]);
+          if (resourcesUpdateEntries.length > 0) {
+            return userSnapshot.ref.update(Object.fromEntries(resourcesUpdateEntries));
+          }
         }
-        const message : fbSchemas.Messenger.Message = await prepareMessage(user);
+        const messageUser = async () => {
+          const message : fbSchemas.Messenger.Message = await prepareMessage(user);
+          if (message == "") {
+            return Promise.resolve();
+          }
 
-        const resourcesUpdateEntries = Object.entries(resourcesChange).map(
-          ([resource, change]) => ['gameInfo.resources.' + resource, user.gameInfo.resources[resourceEnum.parse(resource)] + change]);
-        if (resourcesUpdateEntries.length > 0) {
-          userSnapshot.ref.update(Object.fromEntries(resourcesUpdateEntries));
-        }
-
-        if (messageType == "Notify") {
+          const convoHolder = new OneWePrivateConversationHandler(user.psid);
+          
+          if (messageType == "Response") {
+            return convoHolder.send(message);
+          }
+          if (user.notifications_permissions == undefined) {
+            const errorMessage = 'user without notification permissions';
+            logger.error(
+              {user: user},
+              errorMessage);
+            throw new Error(errorMessage);
+          }
           return convoHolder.notify(
             message, user.notifications_permissions.token);
         }
-        return convoHolder.send(message);
+
+        messageUser().then(() => {
+          messagedUsers.push(user.name);
+          updateResources();
+        })
       });
-    })
-  
-  adminConvoHolder.sendWhatsApp({body: templateWhatsAppMessage(message, buttons)});
+    });
+
+  // TODO(techiejd): save transactions here.
+  if (message != "") {
+    adminConvoHolder.sendWhatsApp({body: templateWhatsAppMessage(message, buttons, messagedUsers)});
+  }
 
   res.status(200).end();
 };

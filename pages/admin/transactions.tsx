@@ -29,6 +29,26 @@ export async function getServerSideProps() {
         { type: "resourcesChange", resourcesChange: { "🌟": -5, "⚡": 3 } },
       ],
     },
+    {
+      from: { name: "Nico", id: "Nico's psid", actingAsSofi: true },
+      to: [{ name: "David", id: "David's psid" }],
+      data: [
+        { type: "resourcesChange", resourcesChange: { "🌟": -5, "⚡": 3 } },
+        { type: "message", message: { text: "I'm a little teapot" } },
+      ],
+    },
+    {
+      from: { name: "Nico", id: "Nico's psid", actingAsSofi: true },
+      to: [{ name: "David", id: "David's psid" }],
+      data: [
+        { type: "resourcesChange", resourcesChange: { "🌟": -5, "⚡": 3 } },
+      ],
+    },
+    {
+      from: { name: "Nico", id: "Nico's psid", actingAsSofi: true },
+      to: [{ name: "David", id: "David's psid" }],
+      data: [{ type: "message", message: { text: "I'm a little teapot" } }],
+    },
   ];
   return {
     props: {
