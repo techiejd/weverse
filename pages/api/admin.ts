@@ -14,7 +14,7 @@ export const config = {
   }
 };
 
-export const templateWhatsAppMessage = (message: string, buttons:Array<conversationUtils.ButtonInfo>) => {
+const templateWhatsAppMessage = (message: string, buttons:Array<conversationUtils.ButtonInfo>) => {
   const annotatedMessage = `for: all
 ${message}`;
 
