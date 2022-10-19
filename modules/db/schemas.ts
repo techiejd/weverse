@@ -31,3 +31,37 @@ export const resourceEnum = z.nativeEnum(sofi.Resource);
 const changesInResources = resources.partial();
 
 export type ChangesInResources = z.infer<typeof changesInResources>
+
+const baseUser = z.object({
+    name: z.string(),
+    id: z.string()
+})
+const baseAdmin = z.object({
+    actingAsSofi: z.literal(true)
+})
+
+const admin = baseAdmin.merge(baseUser.partial());
+type Admin = z.infer<typeof admin>;
+export const Sofi : Admin = {
+    actingAsSofi: true
+}
+
+const user = z.union([admin, baseUser]);
+
+// TODO(jddominguez): flesh out message
+const message = z.object({
+    text: z.string()
+})
+
+const datum = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("message"), message: message }),
+  z.object({ type: z.literal("resourcesChange"), resourcesChange: changesInResources }),
+])
+
+export const transaction = z.object({
+    from: user,
+    to: user.array().nonempty(),
+    data: datum.array().nonempty()
+})
+
+export type Transaction = z.infer<typeof transaction>;
