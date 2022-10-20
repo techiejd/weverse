@@ -661,7 +661,7 @@ export async function getServerSideProps() {
   };
 }
 
-const Challenge: NextPage<{
+const Vote: NextPage<{
   psid: string;
   starAllowance: number;
   candidates: Array<Candidate>;
@@ -679,32 +679,28 @@ const Challenge: NextPage<{
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        {candidates ? (
-          <div>
-            {candidates.map((can, i) => (
-              <Grid
-                container
-                spacing={0}
-                direction="column"
-                textAlign="center"
-                justifyContent="center"
-              >
-                <Cards
-                  key={i}
-                  candidate={can}
-                  starAllowance={starAllowance}
-                  setStarAllowance={setStarAllowance}
-                  incrementButtonsDisabled={incrementButtonsDisabled}
-                />
-              </Grid>
-            ))}
-          </div>
-        ) : (
-          <>loading...</>
-        )}
+        <div>
+          {candidates.map((can, i) => (
+            <Grid
+              container
+              spacing={0}
+              direction="column"
+              textAlign="center"
+              justifyContent="center"
+            >
+              <Cards
+                key={i}
+                candidate={can}
+                starAllowance={starAllowance}
+                setStarAllowance={setStarAllowance}
+                incrementButtonsDisabled={incrementButtonsDisabled}
+              />
+            </Grid>
+          ))}
+        </div>
       </main>
     </div>
   );
 };
 
-export default Challenge;
+export default Vote;
