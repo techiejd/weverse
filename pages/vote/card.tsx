@@ -11,75 +11,93 @@ import Carousel from "react-material-ui-carousel";
 import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import Container from "@mui/material/Container";
 
 const Cards: React.FC<{
   candidate: Candidate;
+  starAllowance: number;
+  setStarAllowance: React.Dispatch<React.SetStateAction<number>>;
+  incrementButtonsDisabled: boolean;
 }> = (props) => {
-  const [can, setCan] = useState<Candidate | undefined>();
   const [count, setCount] = useState(0);
+  const [decrementButtonDisabled, setDecrementButtonDisabled] = useState(false);
+  useEffect(() => {
+    setDecrementButtonDisabled(count === 0);
+  }, [count]);
   const IncNum = () => {
+    props.setStarAllowance(props.starAllowance - 1);
     setCount(count + 1);
   };
   const DecNum = () => {
-    if (count > 0) setCount(count - 1);
-    else {
-      setCount(0);
-      alert("min limit reached");
-    }
+    props.setStarAllowance(props.starAllowance + 1);
+    setCount(count - 1);
   };
-  useEffect(() => {
-    setCan(props.candidate);
-    console.log("can", can);
-  }, []);
 
   return (
-    <Container fixed>
-      <Card sx={{ maxWidth: 500, mt: 5 }} variant="outlined">
-        {can ? (
-          <>
-            {can.medias ? (
-              <>
-                <Carousel>
-                  {can.medias.map((m, i) => (
-                    <CardMedia
-                      component="img"
-                      max-height="200px"
-                      width="100px"
-                      // height={m.height}
-                      image={m.image}
-                      alt="green iguana"
-                      key={i}
-                    />
-                  ))}
-                </Carousel>
-              </>
-            ) : (
-              <></>
-            )}
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                {can.message}
-              </Typography>
-            </CardContent>
-            <h1>Estrellas</h1>
-            <CardActions>
-              <Tooltip title="Delete">
-                <Button onClick={DecNum}>
-                  <RemoveIcon color="action" />
-                </Button>
-              </Tooltip>
-              <h1>{count}</h1>
-              <Button onClick={IncNum}>
-                <AddIcon color="action" />
-              </Button>
-            </CardActions>
-          </>
-        ) : (
-          <>loading...</>
-        )}
-      </Card>
-    </Container>
+    <Card
+      sx={{ maxWidth: 700, mt: 5 }}
+      variant="outlined"
+      style={{
+        backgroundColor: "black",
+        color: "white",
+        borderColor: "white",
+        borderRadius: "15px",
+      }}
+    >
+      {props.candidate.medias ? (
+        <>
+          <Carousel>
+            {props.candidate.medias.map((m, i) => (
+              <CardMedia
+                component="img"
+                height="400px"
+                max-width="650px"
+                image={m.image}
+                alt="green iguana"
+                key={i}
+                sx={{ objectFit: "contain" }}
+              />
+            ))}
+          </Carousel>
+        </>
+      ) : (
+        <></>
+      )}
+      <CardContent>
+        <Typography variant="body2" color="common.white">
+          {props.candidate.message}
+        </Typography>
+      </CardContent>
+      <h1>🌟</h1>
+      <CardActions style={{ justifyContent: "center" }}>
+        <Tooltip title="Delete">
+          <Button
+            onClick={DecNum}
+            disabled={decrementButtonDisabled}
+            style={{
+              borderRadius: 15,
+              backgroundColor: "grey",
+              marginRight: "15px",
+              fontSize: "10px",
+            }}
+          >
+            <RemoveIcon color="action" />
+          </Button>
+        </Tooltip>
+        <h1>{count}</h1>
+        <Button
+          onClick={IncNum}
+          disabled={props.incrementButtonsDisabled}
+          style={{
+            borderRadius: 15,
+            backgroundColor: "grey",
+            marginLeft: "15px",
+            fontSize: "10px",
+          }}
+        >
+          <AddIcon color="action" />
+        </Button>
+      </CardActions>
+    </Card>
   );
 };
 

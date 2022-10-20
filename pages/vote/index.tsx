@@ -8,9 +8,8 @@ import Grid from "@mui/material/Grid";
 
 import styles from "../../styles/Home.module.css";
 
-const Challenge: NextPage = () => {
-  const [candidates, setCandidates] = useState<Array<Candidate>>([]);
-  const [starAllowance, setStarAllowance] = useState<Number>();
+export async function getServerSideProps() {
+  // TODO(techiejd): move to a regular serversideprops fetch.
   // const voteFetch = async () => {
   //   const response = await fetch(
   //     "http://localhost:3000/api/vote?psid=5813040455394701"
@@ -657,30 +656,49 @@ const Challenge: NextPage = () => {
     psid: 5813040455394701,
     starAllowance: 5,
   };
+  return {
+    props: info,
+  };
+}
+
+const Challenge: NextPage<{
+  psid: string;
+  starAllowance: number;
+  candidates: Array<Candidate>;
+}> = (props) => {
+  const candidates = props.candidates;
+  const [starAllowance, setStarAllowance] = useState<number>(
+    props.starAllowance
+  );
+  const [incrementButtonsDisabled, setIncrementButtonsDisabled] =
+    useState<boolean>(false);
   useEffect(() => {
-    setCandidates(info.candidates);
-    setStarAllowance(info.starAllowance);
-  }, []);
+    setIncrementButtonsDisabled(starAllowance == 0);
+  }, [starAllowance]);
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
         {candidates ? (
-          <Grid
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-          >
-            {candidates.map((can) => (
-              <Grid xs={8}>
+          <div>
+            {candidates.map((can, i) => (
+              <Grid
+                container
+                spacing={0}
+                direction="column"
+                textAlign="center"
+                justifyContent="center"
+              >
                 <Cards
-                  key={can.id}
+                  key={i}
                   candidate={can}
                   starAllowance={starAllowance}
                   setStarAllowance={setStarAllowance}
+                  incrementButtonsDisabled={incrementButtonsDisabled}
                 />
               </Grid>
             ))}
-          </Grid>
+          </div>
         ) : (
           <>loading...</>
         )}
