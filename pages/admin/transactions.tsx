@@ -24,6 +24,14 @@ export async function getServerSideProps() {
 
 const getDataByType = (tx: Transaction, type: string) =>
   tx.data.find((datum) => datum.type == type);
+const getMessage = (tx: Transaction) =>
+  (getDataByType(tx, "message") as { message: TxMessage }).message;
+const getResourcesChange = (tx: Transaction) =>
+  (
+    getDataByType(tx, "resourcesChange") as {
+      resourcesChange: ChangesInResources;
+    }
+  ).resourcesChange;
 
 const Transactions: NextPage<{ transactions: Array<Transaction> }> = (
   props
@@ -54,22 +62,9 @@ const Transactions: NextPage<{ transactions: Array<Transaction> }> = (
             ) : (
               <div>
                 <h2>Message</h2>
-                <p>
-                  Type:{" "}
-                  {
-                    (getDataByType(tx, "message") as { message: TxMessage })
-                      .message.type
-                  }
-                </p>
-                <p>
-                  {
-                    (getDataByType(tx, "message") as { message: TxMessage })
-                      .message.text
-                  }
-                </p>
-                {(
-                  getDataByType(tx, "message") as { message: TxMessage }
-                ).message.buttons?.map((buttonInfo, i) => (
+                <p>Type: {getMessage(tx).type}</p>
+                <p>{getMessage(tx).text}</p>
+                {getMessage(tx).buttons?.map((buttonInfo, i) => (
                   <div key={i}>
                     <h3>Button {i}</h3>
                     <p>{buttonInfo.title}</p>
@@ -84,13 +79,7 @@ const Transactions: NextPage<{ transactions: Array<Transaction> }> = (
               <></>
             ) : (
               <ul>
-                {Object.entries(
-                  (
-                    getDataByType(tx, "resourcesChange") as {
-                      resourcesChange: ChangesInResources;
-                    }
-                  ).resourcesChange
-                ).map((resource, i) => (
+                {Object.entries(getResourcesChange(tx)).map((resource, i) => (
                   <li key={i}>
                     <div>
                       {resource}
