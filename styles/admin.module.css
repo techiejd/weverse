@@ -1,0 +1,11 @@
+.cursor{
+    cursor:alias;
+}
+.resource{
+    display: flex;
+}
+.negativeButton{
+    height:2%;
+    margin-left:10%;
+    margin-top:5%;
+}

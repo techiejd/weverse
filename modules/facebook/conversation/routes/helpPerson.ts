@@ -1,14 +1,14 @@
 import {getUserSnapshot} from '../../../../common/db';
 import {OneWePrivateConversationHandler} from
   './../oneWePrivateConversationHandler';
-import * as utils from '../../utils';
+import * as conversationUtils from '../utils';
 import {toggleSofiaOffButtonFor, toggleSofia} from './toggleSofia';
 
 export const askForHelp = async (psid: string, about: unknown) => {
   return getUserSnapshot(psid).then((userSnapshot) => {
     const user = userSnapshot.data();
     const text = `Usuario ${user.name} necesita tu ayuda con ` + about;
-    const buttonMessage = utils.makeButtonMessage(
+    const buttonMessage = conversationUtils.makeMessage(
         text, [toggleSofiaOffButtonFor(psid, user.name)]);
     return new OneWePrivateConversationHandler.
         OneWeToAdminConversationHandler().send(buttonMessage);

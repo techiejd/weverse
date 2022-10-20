@@ -18,9 +18,10 @@ import {toggleSofia} from './routes/toggleSofia';
 import {search} from './routes/admin/search';
 import {requestJuryRoom} from './integrations/secondChallenge';
 import {logger} from '../../../common/logger';
+import {remindMe} from './routes/remindMe';
 
 type MessengerManagerEvent = {
-  messenger: schemas.MessengerEvent, logIn?: never}
+  messenger: schemas.Messenger.Event, logIn?: never}
 | {messenger?: never, logIn: LogInEvent}
 
 /**
@@ -29,7 +30,7 @@ type MessengerManagerEvent = {
 export class OneWeManager {
   // eslint-disable-next-line valid-jsdoc
   private getRouteFromPostback = (
-      messengerEvent: schemas.MessengerEvent) :
+      messengerEvent: schemas.Messenger.Event) :
      [string, Record<string, any>] => {
     let conversationRoute = messengerEvent.postback!.payload;
     let params : string[] = [];
@@ -45,7 +46,7 @@ export class OneWeManager {
 
   // eslint-disable-next-line valid-jsdoc
   private getRouteFromMessage = async (
-      messengerEvent: schemas.MessengerEvent) :
+      messengerEvent: schemas.Messenger.Event) :
      Promise<[string, Record<string, unknown>]> => {
     const params = {'senderId': messengerEvent.sender.id,
       'Admin': {
@@ -58,7 +59,7 @@ export class OneWeManager {
   // TODO(techiejd): Wow we really going full buttons?
   // eslint-disable-next-line valid-jsdoc
   /* private getRouteFromMessage = async (
-      messengerEvent: schemas.MessengerEvent) :
+      messengerEvent: schemas.Messenger.Event) :
        Promise<[string, Record<string, string>]> => {
     const params = {'senderId': messengerEvent.sender.id};
     if (messengerEvent.message!.quick_reply) {
@@ -77,7 +78,7 @@ export class OneWeManager {
 
   // eslint-disable-next-line valid-jsdoc
   private getRouteFromOptin = (
-      messengerEvent: schemas.MessengerEvent) :
+      messengerEvent: schemas.Messenger.Event) :
     [string, Record<string, any>] => {
     return [messengerEvent.optin!.payload,
       {
@@ -129,7 +130,7 @@ export class OneWeManager {
     try {
       return this.handleRoute(route, params);
     } catch (error) {
-      logger.error({error: error}, 'Error in handling MessengerEvent');
+      logger.error({error: error}, 'Error in handling Messenger.Event');
       // TODO(techiejd): maybe send info back to client
     }
   }
@@ -166,6 +167,7 @@ export class OneWeManager {
       'Accept.Notifications': notifications.accepted,
       'Challenge.1': consumeLie,
       'Request.JuryRoom': requestJuryRoom,
+      'Remind.Me': remindMe,
       // TODO(techiejd): Remove this one once migrated to 'Start'
       'get_started_payload': start,
       'Event.LogIn': logInRoutes.event,

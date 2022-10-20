@@ -1,21 +1,22 @@
 import * as schemas from '../../schemas';
 import * as ejs from 'ejs';
 import * as path from 'path';
-import {makeButtonMessage, GroupHandler,
+import {GroupHandler,
   getFlattenedPaginatedData} from '../../utils';
 import {OneWePrivateConversationHandler} from
   './../oneWePrivateConversationHandler';
 import {getUserSnapshot} from '../../../../common/db';
 import { logger } from '../../../../common/logger';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import {makeMessage} from '../utils';
 
 
 export const makeJuryRoomFor =
-(psid:string) : schemas.MessengerMessage => makeButtonMessage(
+(psid:string) : schemas.Messenger.Message => makeMessage(
     `Ingresa a la sala del jurado a través de este botón.`,
     [{title: `A votar`, url: 'https://onewe.tech/vote?psid=' + psid}]);
 
-export const learnAbout : schemas.MessengerMessage = makeButtonMessage(
+export const learnAbout : schemas.Messenger.Message = makeMessage(
     'Hola ya empezó #WeRaceEmp01',
     [
       {title: 'Linea de tiempo ⌛', url: 'https://youtu.be/xaq6A6Fdy8A'},

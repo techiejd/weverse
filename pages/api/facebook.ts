@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import * as schemas from '../../modules/facebook/schemas';
-import {OneWeManager} from '../../modules/facebook/messenger/oneWeManager';
+import {OneWeManager} from '../../modules/facebook/conversation/oneWeManager';
 import {logger} from '../../common/logger';
 
 const authorizeHeadersAgainst = (req: NextApiRequest,
@@ -21,8 +21,6 @@ export default function facebook(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-      //TODO(techiejd): figure out secrets in this app. 'FB_PAGE_ACCESS_TOKEN', 'FB_VERIFY_TOKEN'
-      //TODO(techiejd): figure out logging.
       try {
         switch (req.method) {
           case 'GET': {
