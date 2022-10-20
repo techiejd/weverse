@@ -13,7 +13,9 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Container from "@mui/material/Container";
 
-const Cards = (props: { candidate: Candidate }) => {
+const Cards: React.FC<{
+  candidate: Candidate;
+}> = (props) => {
   const [can, setCan] = useState<Candidate | undefined>();
   const [count, setCount] = useState(0);
   const IncNum = () => {
