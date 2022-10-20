@@ -70,7 +70,10 @@ const search: NextPage<{
   function processPostQueryInput(e: MouseEvent) {
     e.preventDefault();
 
-    console.log("Start", startDate);
+    console.log("chosen date: toDateString ", startDate?.toDateString());
+    console.log("chosen date: ", startDate?.toISOString());
+
+    console.log("Start", typeof startDate);
     console.log("End", endDate);
   }
   return (
