@@ -50,7 +50,6 @@ export const Sofi: Admin = {
 const user = z.union([admin, baseUser]);
 export type User = z.infer<typeof user>;
 
-// TODO(techiejd): flesh out message
 const message = z.object({
   type: messageType,
   text: z.string(),
@@ -59,10 +58,11 @@ const message = z.object({
 
 export type TxMessage = z.infer<typeof message>;
 
+const txDatumType = z.enum(["message", "resourcesChange"]);
 const datum = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("message"), message: message }),
+  z.object({ type: z.literal(txDatumType.enum.message), message: message }),
   z.object({
-    type: z.literal("resourcesChange"),
+    type: z.literal(txDatumType.enum.resourcesChange),
     resourcesChange: changesInResources,
   }),
 ]);

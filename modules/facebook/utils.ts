@@ -125,7 +125,6 @@ export class PrivateConversationHandler {
   private postToFBMessages = async (body: Record<string, unknown>) => {
     const fbMessagesURL = 'https://graph.facebook.com/v14.0/' + this.id + '/messages?access_token=' + this.token;
     logger.info({body: body}, 'postToFBMessages');
-    return;
     return fetch(fbMessagesURL, {
       method: 'POST',
       body: JSON.stringify(body),
