@@ -1,15 +1,13 @@
 import type { GetServerSideProps, NextPage } from "next";
-import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import React, { useState, useEffect, MouseEvent } from "react";
+import { pickBy, identity } from "lodash";
+import Grid from "@mui/material/Grid";
 import {
   Candidate,
   Media,
   media as mediaSchema,
 } from "../../modules/sofia/schemas";
-import { pickBy, identity } from "lodash";
-
-import Cards from "./card";
-import Grid from "@mui/material/Grid";
-
 import styles from "../../styles/Home.module.css";
 import { getUserSnapshot } from "../../common/db";
 import {
@@ -20,6 +18,7 @@ import {
   Post,
   attachment as attachmentSchema,
 } from "../../modules/facebook/schemas";
+import VotingCard from "./votingCard";
 
 const parsePostForVotingInfo = async (post: Post): Promise<Candidate> => {
   let medias = Array<Media>();
@@ -116,7 +115,7 @@ export const getServerSideProps: GetServerSideProps = (context) => {
   });
 };
 
-const Challenge: NextPage<{
+const Vote: NextPage<{
   psid: string;
   starAllowance: number;
   candidates: Array<Candidate>;
@@ -125,41 +124,66 @@ const Challenge: NextPage<{
   const [starAllowance, setStarAllowance] = useState<number>(
     props.starAllowance
   );
+  const [candidate2Votes, setCandidate2Votes] = useState<
+    Record<string, number>
+  >({});
   const [incrementButtonsDisabled, setIncrementButtonsDisabled] =
     useState<boolean>(false);
   useEffect(() => {
     setIncrementButtonsDisabled(starAllowance == 0);
   }, [starAllowance]);
+  const router = useRouter();
+  const submitVotes = (e: MouseEvent) => {
+    e.preventDefault();
+
+    const body = (() => {
+      const filteredVotes = Object.entries(candidate2Votes).filter(
+        ([candidate, votes]) => votes > 0
+      );
+      const body = {
+        psid: props.psid,
+        votes: Object.fromEntries(filteredVotes),
+      };
+      return JSON.stringify(body);
+    })();
+    const response = fetch("/api/admin", {
+      method: "POST",
+      body,
+    });
+
+    router.push("/admin/success");
+
+    return true;
+  };
 
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        {candidates ? (
-          <div>
-            {candidates.map((can, i) => (
-              <Grid
-                container
-                spacing={0}
-                direction="column"
-                textAlign="center"
-                justifyContent="center"
-                key={i}
-              >
-                <Cards
-                  candidate={can}
-                  starAllowance={starAllowance}
-                  setStarAllowance={setStarAllowance}
-                  incrementButtonsDisabled={incrementButtonsDisabled}
-                />
-              </Grid>
-            ))}
-          </div>
-        ) : (
-          <>loading...</>
-        )}
+        <div>
+          {candidates.map((can, i) => (
+            <Grid
+              container
+              spacing={0}
+              direction="column"
+              textAlign="center"
+              justifyContent="center"
+              key={i}
+            >
+              <VotingCard
+                candidate={can}
+                starAllowance={starAllowance}
+                setStarAllowance={setStarAllowance}
+                incrementButtonsDisabled={incrementButtonsDisabled}
+                candidate2Votes={candidate2Votes}
+                setCandidate2Votes={setCandidate2Votes}
+              />
+            </Grid>
+          ))}
+        </div>
+        <button onClick={submitVotes}>Entregar</button>
       </main>
     </div>
   );
 };
 
-export default Challenge;
+export default Vote;
