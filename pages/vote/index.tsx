@@ -78,20 +78,8 @@ const shuffle = (array: Array<any>) => {
 };
 
 export const getServerSideProps: GetServerSideProps = (context) => {
-  // TODO(techiejd): move to a regular serversideprops fetch.
-  // const voteFetch = async () => {
-  //   const response = await fetch(
-  //     "http://localhost:3000/api/vote?psid=5813040455394701"
-  //   );
-  //   const voteInfo = await response.json();
-  //   console.log(voteInfo);
-  //   setCandidates(voteInfo.candidates);
-  // };
-  // useEffect(() => {
-  //   voteFetch();
-  // }, []);
-  console.log("context.query: ", JSON.stringify(context.query));
   const psid = String(context.query?.psid);
+  const submitToLink = `/api/vote/${psid}/OpdzyT2NPj9W066AKZ0N`;
 
   return getUserSnapshot(psid).then(async (userSnapshot) => {
     const posts = await GroupHandler.getWeVersePosts(
@@ -103,13 +91,13 @@ export const getServerSideProps: GetServerSideProps = (context) => {
     );
     shuffle(posts);
     const candidates = await Promise.all(posts.map(parsePostForVotingInfo));
-    // setCandidates(candidates);
 
     return {
       props: {
         candidates: candidates,
         starAllowance: 5,
         psid: psid,
+        submitLink: submitToLink,
       },
     };
   });
@@ -119,6 +107,7 @@ const Vote: NextPage<{
   psid: string;
   starAllowance: number;
   candidates: Array<Candidate>;
+  submitLink: string;
 }> = (props) => {
   const candidates = props.candidates;
   const [starAllowance, setStarAllowance] = useState<number>(
