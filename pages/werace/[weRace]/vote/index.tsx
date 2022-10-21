@@ -7,17 +7,17 @@ import {
   Candidate,
   Media,
   media as mediaSchema,
-} from "../../modules/sofia/schemas";
-import styles from "../../styles/Home.module.css";
-import { getUserSnapshot } from "../../common/db";
+} from "../../../../modules/sofia/schemas";
+import styles from "../../../../styles/Home.module.css";
+import { getUserSnapshot } from "../../../../common/db";
 import {
   getFlattenedPaginatedData,
   GroupHandler,
-} from "../../modules/facebook/utils";
+} from "../../../../modules/facebook/utils";
 import {
   Post,
   attachment as attachmentSchema,
-} from "../../modules/facebook/schemas";
+} from "../../../../modules/facebook/schemas";
 import VotingCard from "./votingCard";
 
 const parsePostForVotingInfo = async (post: Post): Promise<Candidate> => {
@@ -78,8 +78,10 @@ const shuffle = (array: Array<any>) => {
 };
 
 export const getServerSideProps: GetServerSideProps = (context) => {
+  const weRace = String(context.query?.weRace);
   const psid = String(context.query?.psid);
-  const submitToLink = `/api/vote/${psid}/OpdzyT2NPj9W066AKZ0N`;
+  const submitToLink = `/api/weRace/${weRace}/vote/${psid}`;
+  console.log(submitToLink);
 
   return getUserSnapshot(psid).then(async (userSnapshot) => {
     const posts = await GroupHandler.getWeVersePosts(

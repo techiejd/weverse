@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Candidate, Media, VotesRes } from "../../modules/sofia/schemas";
+import { Candidate } from "../../../../modules/sofia/schemas";
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
