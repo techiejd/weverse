@@ -95,11 +95,8 @@ export default async function admin(
         const messageUser = async () => {
           const preparedMessage : fbSchemas.Messenger.Message = await prepareMessage(user);
           if (preparedMessage == "") {
-            console.log("I am early returning");
             return Promise.resolve();
           }
-          console.log("I am not early returning");
-          console.log("message: ", preparedMessage);
 
           const convoHolder = new OneWePrivateConversationHandler(user.psid);
           
