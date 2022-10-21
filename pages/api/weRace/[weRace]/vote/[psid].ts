@@ -12,7 +12,7 @@ export default function vote(
       const psid = String(req.query.psid);
       const weRace = String(req.query.weRace);
       getUserSnapshot(psid).then(async (userSnapshot) => {
-        const candidate2Votes = candidate2VotesSchema.parse(req.body);
+        const candidate2Votes = candidate2VotesSchema.parse(JSON.parse(req.body));
         userSnapshot.ref.update({
           [`challenges.${weRace}.votes`]: candidate2Votes,
         }).then(() => res.status(200).end());

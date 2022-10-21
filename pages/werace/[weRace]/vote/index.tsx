@@ -7,9 +7,10 @@ import {
   Candidate,
   Media,
   media as mediaSchema,
+  challenge as challengeSchema,
 } from "../../../../modules/sofia/schemas";
 import styles from "../../../../styles/Home.module.css";
-import { getUserSnapshot } from "../../../../common/db";
+import { getChallenge, getUserSnapshot } from "../../../../common/db";
 import {
   getFlattenedPaginatedData,
   GroupHandler,
@@ -20,6 +21,7 @@ import {
 } from "../../../../modules/facebook/schemas";
 import VotingCard from "./votingCard";
 import votestyles from "../../../../styles/vote.module.css";
+import { logger } from "../../../../common/logger";
 
 const parsePostForVotingInfo = async (post: Post): Promise<Candidate> => {
   let medias = Array<Media>();
@@ -82,27 +84,37 @@ export const getServerSideProps: GetServerSideProps = (context) => {
   const weRace = String(context.query?.weRace);
   const psid = String(context.query?.psid);
   const submitToLink = `/api/weRace/${weRace}/vote/${psid}`;
-  console.log(submitToLink);
 
-  return getUserSnapshot(psid).then(async (userSnapshot) => {
-    const posts = await GroupHandler.getWeVersePosts(
-      userSnapshot.data().token,
-      undefined,
-      undefined,
-      // Add the since correctly
-      "all"
-    );
-    shuffle(posts);
-    const candidates = await Promise.all(posts.map(parsePostForVotingInfo));
+  // Get 'challenge' start time, use it for querying.
+  // Then use the end time to filter.
+  // Then use the hashtags.
 
-    return {
-      props: {
-        candidates: candidates,
-        starAllowance: 5,
-        psid: psid,
-        submitLink: submitToLink,
-      },
-    };
+  return getChallenge(weRace).then((challengeSnapshot) => {
+    if (!challengeSnapshot.exists) {
+      const errorMessage = "error in finding werace for getting votes";
+      logger.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+    const challenge = challengeSchema.parse(challengeSnapshot.data());
+    return getUserSnapshot(psid).then(async (userSnapshot) => {
+      const posts = await GroupHandler.getWeVersePosts(
+        userSnapshot.data().token,
+        challenge.start.toDate(),
+        undefined,
+        "all"
+      );
+      shuffle(posts);
+      const candidates = await Promise.all(posts.map(parsePostForVotingInfo));
+
+      return {
+        props: {
+          candidates: candidates,
+          starAllowance: 5,
+          psid: psid,
+          submitLink: submitToLink,
+        },
+      };
+    });
   });
 };
 
@@ -134,13 +146,10 @@ const Vote: NextPage<{
       const filteredVotes = Object.entries(candidate2Votes).filter(
         ([candidate, votes]) => votes > 0
       );
-      const body = {
-        psid: props.psid,
-        votes: Object.fromEntries(filteredVotes),
-      };
+      const body = Object.fromEntries(filteredVotes);
       return JSON.stringify(body);
     })();
-    const response = fetch("/api/admin", {
+    const response = fetch(props.submitLink, {
       method: "POST",
       body,
     });
