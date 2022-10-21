@@ -1,4 +1,5 @@
 import {z} from 'zod';
+import {firestore} from "firebase-admin";
 
 
 /**
@@ -66,8 +67,9 @@ export const startingUserGameInfo: UserGameInfo = (() => {
 
 export const challenge = z.object({
   title: z.string(),
-  start: z.date(),
-  end: z.date().optional(),
+  start: z.instanceof(firestore.Timestamp),
+  end: z.instanceof(firestore.Timestamp).optional(),
+  hashtags: z.string().array().optional(),
 });
 
 export type Challenge = z.infer<typeof challenge>;

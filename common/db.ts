@@ -33,6 +33,10 @@ export const addChallenge = async (challenge: Challenge) => {
   return db.collection('challenges').add(challenge);
 };
 
+export const getChallenge = async (challengeId: string) => {
+  return db.collection('challenges').doc(challengeId).get();
+}
+
 export const usedSource = async (psid: string, challengeRef: string) => {
   // TODO(techiejd): They didn't really accept a challenge but
   // rather they used a source for their new resources.
