@@ -3,6 +3,7 @@ import {
   getApp,
   initializeApp,
 } from "firebase-admin/app";
+import { Transaction } from '../modules/db/schemas';
 import {Challenge} from '../modules/sofia/schemas';
 
 const db = (() => {
@@ -49,3 +50,13 @@ export const usedSource = async (psid: string, challengeRef: string) => {
     acceptedChallenges: newAcceptedChallenges,
   });
 };
+
+export const addTx = async (tx: Transaction) => {
+  return db.collection('transactions').add(tx);
+};
+
+export const getAllTx = () => {
+  return db.collection('transactions').get().then((transactionSnapshots) => {
+    return transactionSnapshots.docs.map(transactionSnapshot => transactionSnapshot.data())
+  })
+}
