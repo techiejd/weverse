@@ -81,7 +81,6 @@ export const getServerSideProps: GetServerSideProps = (context) => {
   const weRace = String(context.query?.weRace);
   const psid = String(context.query?.psid);
   const submitToLink = `/api/weRace/${weRace}/vote/${psid}`;
-  console.log(submitToLink);
 
   return getUserSnapshot(psid).then(async (userSnapshot) => {
     const posts = await GroupHandler.getWeVersePosts(
@@ -131,13 +130,10 @@ const Vote: NextPage<{
       const filteredVotes = Object.entries(candidate2Votes).filter(
         ([candidate, votes]) => votes > 0
       );
-      const body = {
-        psid: props.psid,
-        votes: Object.fromEntries(filteredVotes),
-      };
+      const body = Object.fromEntries(filteredVotes);
       return JSON.stringify(body);
     })();
-    const response = fetch("/api/admin", {
+    const response = fetch(props.submitLink, {
       method: "POST",
       body,
     });
