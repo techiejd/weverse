@@ -129,6 +129,7 @@ const Vote: NextPage<{
   const [starAllowance, setStarAllowance] = useState<number>(
     props.starAllowance
   );
+  const [canVote, setCanVote] = useState(false);
   const [candidate2Votes, setCandidate2Votes] = useState<
     Record<string, number>
   >({});
@@ -136,6 +137,7 @@ const Vote: NextPage<{
     useState<boolean>(false);
   useEffect(() => {
     setIncrementButtonsDisabled(starAllowance <= 0);
+    setCanVote(starAllowance <= 0);
     setCanModifyStarAllowance(true);
   }, [starAllowance]);
   const router = useRouter();
@@ -163,9 +165,7 @@ const Vote: NextPage<{
     <div className={styles.container}>
       <main className={styles.main}>
         <div className={votestyles.vote}>
-          <div className={votestyles.stars}>
-            <h1> Tienes 🌟:{starAllowance} Votos </h1>
-          </div>
+          <h1> Apreciemos estas publicaciones!</h1>
           {candidates.map((can, i) => (
             <Grid
               container
@@ -192,8 +192,11 @@ const Vote: NextPage<{
           id={votestyles.mybutton}
           className={votestyles.buttonFixed}
           onClick={submitVotes}
+          disabled={!canVote}
         >
-          Votar
+          {canVote
+            ? `Finalizar votar`
+            : `Tienes ${starAllowance} 🌟 para votar. `}
         </button>
       </main>
     </div>
