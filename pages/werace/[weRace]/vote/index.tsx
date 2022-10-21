@@ -19,6 +19,7 @@ import {
   attachment as attachmentSchema,
 } from "../../../../modules/facebook/schemas";
 import VotingCard from "./votingCard";
+import votestyles from "../../../../styles/vote.module.css";
 
 const parsePostForVotingInfo = async (post: Post): Promise<Candidate> => {
   let medias = Array<Media>();
@@ -112,6 +113,7 @@ const Vote: NextPage<{
   submitLink: string;
 }> = (props) => {
   const candidates = props.candidates;
+  const [canModifyStarAllowance, setCanModifyStarAllowance] = useState(true);
   const [starAllowance, setStarAllowance] = useState<number>(
     props.starAllowance
   );
@@ -121,7 +123,8 @@ const Vote: NextPage<{
   const [incrementButtonsDisabled, setIncrementButtonsDisabled] =
     useState<boolean>(false);
   useEffect(() => {
-    setIncrementButtonsDisabled(starAllowance == 0);
+    setIncrementButtonsDisabled(starAllowance <= 0);
+    setCanModifyStarAllowance(true);
   }, [starAllowance]);
   const router = useRouter();
   const submitVotes = (e: MouseEvent) => {
@@ -150,7 +153,10 @@ const Vote: NextPage<{
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <div>
+        <div className={votestyles.vote}>
+          <div className={votestyles.stars}>
+            <h1> Tienes 🌟:{starAllowance} Votos </h1>
+          </div>
           {candidates.map((can, i) => (
             <Grid
               container
@@ -167,11 +173,19 @@ const Vote: NextPage<{
                 incrementButtonsDisabled={incrementButtonsDisabled}
                 candidate2Votes={candidate2Votes}
                 setCandidate2Votes={setCandidate2Votes}
+                canModifyStarAllowance={canModifyStarAllowance}
+                setCanModifyStarAllowance={setCanModifyStarAllowance}
               />
             </Grid>
           ))}
         </div>
-        <button onClick={submitVotes}>Entregar</button>
+        <button
+          id={votestyles.mybutton}
+          className={votestyles.buttonFixed}
+          onClick={submitVotes}
+        >
+          Votar
+        </button>
       </main>
     </div>
   );

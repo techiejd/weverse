@@ -133,6 +133,7 @@
 .imgGrid {
   max-width: 400px;
 }
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;

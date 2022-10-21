@@ -21,6 +21,8 @@ const VotingCard: React.FC<{
   setCandidate2Votes: React.Dispatch<
     React.SetStateAction<Record<string, number>>
   >;
+  canModifyStarAllowance: boolean;
+  setCanModifyStarAllowance: React.Dispatch<React.SetStateAction<boolean>>;
 }> = (props) => {
   const [count, setCount] = useState(0);
   const [decrementButtonDisabled, setDecrementButtonDisabled] = useState(false);
@@ -32,12 +34,18 @@ const VotingCard: React.FC<{
     });
   }, [count]);
   const IncNum = () => {
-    props.setStarAllowance(props.starAllowance - 1);
-    setCount(count + 1);
+    if (props.canModifyStarAllowance) {
+      props.setCanModifyStarAllowance(false);
+      props.setStarAllowance(props.starAllowance - 1);
+      setCount(count + 1);
+    }
   };
   const DecNum = () => {
-    props.setStarAllowance(props.starAllowance + 1);
-    setCount(count - 1);
+    if (props.canModifyStarAllowance) {
+      props.setCanModifyStarAllowance(false);
+      props.setStarAllowance(props.starAllowance + 1);
+      setCount(count - 1);
+    }
   };
 
   return (
@@ -71,7 +79,11 @@ const VotingCard: React.FC<{
         <></>
       )}
       <CardContent>
-        <Typography variant="body2" color="common.white">
+        <Typography
+          variant="body2"
+          color="common.white"
+          style={{ fontSize: "20px" }}
+        >
           {props.candidate.message}
         </Typography>
       </CardContent>
