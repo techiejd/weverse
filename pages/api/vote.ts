@@ -61,20 +61,6 @@ export default function vote(
   res: NextApiResponse
 ) {
     logger.info({query: req.query}, 'vote req query');
-    getUserSnapshot(String(req.query.psid)).then(async (userSnapshot) => {
-      const posts = await
-      GroupHandler.getWeVersePosts(userSnapshot.data().token,
-          since, undefined, 'all');
-      shuffle(posts);
-      const candidates = await Promise.all(
-          posts.map(parsePostForVotingInfo));
-          // setCandidates(candidates);
-          
-          res.send({
-            candidates: candidates,
-            starAllowance: 5,
-            psid: req.query.psid
-          });
-      })
+    
 }
 
