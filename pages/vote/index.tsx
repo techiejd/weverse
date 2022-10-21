@@ -1,12 +1,13 @@
 import type { NextPage } from "next";
 import { useState, useEffect } from "react";
 import { Candidate, Media, VotesRes } from "../../modules/sofia/schemas";
-import * as React from "react";
+import React, { MouseEvent } from "react";
 
-import Cards from "./card";
+import VotingCard from "./votingCard";
 import Grid from "@mui/material/Grid";
 
 import styles from "../../styles/Home.module.css";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps() {
   // TODO(techiejd): move to a regular serversideprops fetch.
@@ -670,11 +671,37 @@ const Vote: NextPage<{
   const [starAllowance, setStarAllowance] = useState<number>(
     props.starAllowance
   );
+  const [candidate2Votes, setCandidate2Votes] = useState<
+    Record<string, number>
+  >({});
   const [incrementButtonsDisabled, setIncrementButtonsDisabled] =
     useState<boolean>(false);
   useEffect(() => {
     setIncrementButtonsDisabled(starAllowance == 0);
   }, [starAllowance]);
+  const router = useRouter();
+  const submitVotes = (e: MouseEvent) => {
+    e.preventDefault();
+
+    const body = (() => {
+      const filteredVotes = Object.entries(candidate2Votes).filter(
+        ([candidate, votes]) => votes > 0
+      );
+      const body = {
+        psid: props.psid,
+        votes: Object.fromEntries(filteredVotes),
+      };
+      return JSON.stringify(body);
+    })();
+    const response = fetch("/api/admin", {
+      method: "POST",
+      body,
+    });
+
+    router.push("/admin/success");
+
+    return true;
+  };
 
   return (
     <div className={styles.container}>
@@ -688,16 +715,19 @@ const Vote: NextPage<{
               textAlign="center"
               justifyContent="center"
             >
-              <Cards
+              <VotingCard
                 key={i}
                 candidate={can}
                 starAllowance={starAllowance}
                 setStarAllowance={setStarAllowance}
                 incrementButtonsDisabled={incrementButtonsDisabled}
+                candidate2Votes={candidate2Votes}
+                setCandidate2Votes={setCandidate2Votes}
               />
             </Grid>
           ))}
         </div>
+        <button onClick={submitVotes}>Entregar</button>
       </main>
     </div>
   );

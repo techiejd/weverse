@@ -12,16 +12,24 @@ import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-const Cards: React.FC<{
+const VotingCard: React.FC<{
   candidate: Candidate;
   starAllowance: number;
   setStarAllowance: React.Dispatch<React.SetStateAction<number>>;
   incrementButtonsDisabled: boolean;
+  candidate2Votes: Record<string, number>;
+  setCandidate2Votes: React.Dispatch<
+    React.SetStateAction<Record<string, number>>
+  >;
 }> = (props) => {
   const [count, setCount] = useState(0);
   const [decrementButtonDisabled, setDecrementButtonDisabled] = useState(false);
   useEffect(() => {
     setDecrementButtonDisabled(count === 0);
+    props.setCandidate2Votes({
+      ...props.candidate2Votes,
+      [props.candidate.id]: count,
+    });
   }, [count]);
   const IncNum = () => {
     props.setStarAllowance(props.starAllowance - 1);
@@ -101,4 +109,4 @@ const Cards: React.FC<{
   );
 };
 
-export default Cards;
+export default VotingCard;
