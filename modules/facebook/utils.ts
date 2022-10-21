@@ -125,7 +125,6 @@ export class PrivateConversationHandler {
   private postToFBMessages = async (body: Record<string, unknown>) => {
     const fbMessagesURL = 'https://graph.facebook.com/v14.0/' + this.id + '/messages?access_token=' + this.token;
     logger.info({body: body}, 'postToFBMessages');
-    return;
     return fetch(fbMessagesURL, {
       method: 'POST',
       body: JSON.stringify(body),
@@ -358,7 +357,6 @@ export class GroupHandler {
     if (until) {
       params.set('until', removeSeconds(until.toISOString()));
     }
-    console.log("Yo this is the url you are getting feed from: ", fbUrl + params);
     const feed = schemas.feed.parse(
         await getPaginatedData(fbUrl + params));
     return whose == 'own' ? feed.filter((post) => post.from) : feed;

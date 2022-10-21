@@ -6,11 +6,12 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Carousel from "react-material-ui-carousel";
 import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const VotingCard: React.FC<{
   candidate: Candidate;
@@ -24,6 +25,20 @@ const VotingCard: React.FC<{
 }> = (props) => {
   const [count, setCount] = useState(0);
   const [decrementButtonDisabled, setDecrementButtonDisabled] = useState(false);
+  const [message, setMessage] = useState(
+    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+      {String(props.candidate.message)}
+    </ReactMarkdown>
+  );
+  useEffect(
+    () =>
+      setMessage(
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          {String(props.candidate.message)}
+        </ReactMarkdown>
+      ),
+    []
+  );
   useEffect(() => {
     setDecrementButtonDisabled(count === 0);
     props.setCandidate2Votes({
@@ -70,11 +85,7 @@ const VotingCard: React.FC<{
       ) : (
         <></>
       )}
-      <CardContent>
-        <Typography variant="body2" color="common.white">
-          {props.candidate.message}
-        </Typography>
-      </CardContent>
+      <CardContent>{message}</CardContent>
       <h1>🌟</h1>
       <CardActions style={{ justifyContent: "center" }}>
         <Tooltip title="Delete">
