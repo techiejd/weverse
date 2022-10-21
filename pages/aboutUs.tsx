@@ -5,28 +5,24 @@ import aboutUsStyle from "./../styles/aboutUs.module.css";
 const Vote: NextPage = () => {
   return (
     <div className={aboutUsStyle.aboutUs}>
-      <title>OneWe</title>
-      <nav>
-        <img src="" alt="logo" />
-        <h1>OneWe</h1>
+      <nav className={aboutUsStyle.nav}>
+        <img className={aboutUsStyle.logo} src="/Icon.png" alt="logo" />
+        <h1 className={aboutUsStyle.title}>OneWe Networks LLC</h1>
       </nav>
+      <div className={aboutUsStyle.Banner}>
+        <h2 className={aboutUsStyle.BannerH2}>ONEWE NETWORKS LLC </h2>
+      </div>
+      <div className={aboutUsStyle.header}></div>
+      <div className={aboutUsStyle.markdiv}>
+        <p className={aboutUsStyle.markdivPsubBanner}>
+          "Systems were made for men, and not men for systems, and the interest
+          of man which is self-development, is above all systems, whether
+          theological, political or economic."
+          <br />
+          <br />- C. H. Douglas
+        </p>
+      </div>
       <main>
-        <div>
-          <img
-            src="https://drive.google.com/drive/folders/1zLfqgG0YbUmmKUaWa4wGJ1qq9BgZBNCp"
-            alt="Banner"
-          />
-          <h2>ONEWE NETWORKS LLC </h2>
-        </div>
-        <div className={aboutUsStyle.header}></div>
-        <div className={aboutUsStyle.subbanner}>
-          <h3>
-            "Systems were made for men, and not men for systems, and the
-            interest of man which is self-development, is above all systems,
-            whether theological, political or economic."
-          </h3>
-          <h3>- C. H. Douglas</h3>
-        </div>
         <section className={aboutUsStyle.first}>
           <h3 className={aboutUsStyle.seccionP}>
             Aunque OneWe Networks LLC es completamente virtual, fue registrado
@@ -55,21 +51,23 @@ const Vote: NextPage = () => {
               </p>
             </div>
             <div>
-              <blockquote className="twitter-tweet">
-                <p lang="en" dir="ltr">
-                  Decentralization doesn&#39;t mean an absence of leaders, but
-                  an abundance of them.
-                </p>
-                &mdash; Balaji Srinivasan (@balajis){" "}
-                <a href="https://twitter.com/balajis/status/1405383009558155265?ref_src=twsrc%5Etfw">
-                  June 17, 2021
-                </a>
-              </blockquote>{" "}
-              <script
-                async
-                src="https://platform.twitter.com/widgets.js"
-                charSet="utf-8"
-              ></script>
+              <div className={aboutUsStyle.twitter}>
+                <blockquote className="twitter-tweet">
+                  <p lang="en" dir="ltr">
+                    Decentralization doesn&#39;t mean an absence of leaders, but
+                    an abundance of them.
+                  </p>
+                  &mdash; Balaji Srinivasan (@balajis){" "}
+                  <a href="https://twitter.com/balajis/status/1405383009558155265?ref_src=twsrc%5Etfw">
+                    June 17, 2021
+                  </a>
+                </blockquote>{" "}
+                <script
+                  async
+                  src="https://platform.twitter.com/widgets.js"
+                  charSet="utf-8"
+                ></script>
+              </div>
               <p className={aboutUsStyle.mision}>LA FILOSOFÍA DE ONEWE</p>
               <p className={aboutUsStyle.seccionPFilosofia}>
                 Descentralizado es siempre mejor que centralizado.
@@ -149,7 +147,7 @@ const Vote: NextPage = () => {
         <section className={aboutUsStyle.first}>
           <div className={aboutUsStyle.twoColumns}>
             <div>
-              <img className={aboutUsStyle.img} src="/iStock-1135670850.jpg" />
+              <img className={aboutUsStyle.imgFundador} src="/JD.jpeg" />
             </div>
             <div>
               <p className={aboutUsStyle.mision}>Co-Fundador</p>
@@ -200,7 +198,7 @@ const Vote: NextPage = () => {
               </p>
             </div>
             <div>
-              <img className={aboutUsStyle.img} src="/iStock-1135670850.jpg" />
+              <img className={aboutUsStyle.imgFundador} src="/Nico.jpeg" />
             </div>
           </div>
         </section>
