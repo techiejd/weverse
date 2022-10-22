@@ -9,7 +9,7 @@ export const saidEntered = async (params: Record<string, any>) => {
       params.senderId);
   return GroupHandler.isUserInWeVerse(params.senderId).then((success) => {
     if (success) {
-      const successMessage: schemas.MessengerMessage = {
+      const successMessage: schemas.Messenger.Message = {
         text: `¡Bien hecho! Todo bien. Deberias tener 1000 ⚡
 No se te olvide; puedes decir lo siguiente a cualquier hora: `,
         quick_replies: [

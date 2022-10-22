@@ -19,7 +19,7 @@ import {
   Post,
   attachment as attachmentSchema,
 } from "../../../../modules/facebook/schemas";
-import VotingCard from "./votingCard";
+import VotingCard from "../../../../modules/weRace/vote/components/votingCard";
 import votestyles from "../../../../styles/vote.module.css";
 import { logger } from "../../../../common/logger";
 

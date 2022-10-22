@@ -39,7 +39,7 @@ const VotingCard: React.FC<{
           {String(props.candidate.message)}
         </ReactMarkdown>
       ),
-    []
+    [props.candidate.message]
   );
   useEffect(() => {
     setDecrementButtonDisabled(count === 0);
@@ -47,6 +47,8 @@ const VotingCard: React.FC<{
       ...props.candidate2Votes,
       [props.candidate.id]: count,
     });
+    //TODO(techiejd): switch to use reducer to fix dependency list issues.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
   const IncNum = () => {
     if (props.canModifyStarAllowance) {
@@ -93,7 +95,7 @@ const VotingCard: React.FC<{
       ) : (
         <></>
       )}
-      <CardContent>{message}</CardContent>
+      {message ? <></> : <CardContent>{message}</CardContent>}
       <h1>🌟</h1>
       <CardActions style={{ justifyContent: "center" }}>
         <Tooltip title="Delete">

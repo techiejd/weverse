@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import styles from "../../styles/Home.module.css";
+import styles from "../../../../styles/Home.module.css";
 
 // TODO(techiejd): Add table showing voting results.
 const onvoteSubmitted: NextPage = () => {

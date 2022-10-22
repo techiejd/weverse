@@ -175,7 +175,7 @@ export class PrivateConversationHandler {
   };
   /**
    *
-   * @param {schemas.MessengerMessage} message to send to recipient.
+   * @param {schemas.Messenger.Message} message to send to recipient.
    * @return {Promise<void>} Logs result of sending and then returns.
    */
   send(message:schemas.Messenger.Message): Promise<void> {
@@ -192,7 +192,7 @@ export class PrivateConversationHandler {
 
   /**
    *
-   * @param {schemas.MessengerMessage[]} messages to send. order not guaranteed
+   * @param {schemas.Messenger.Message[]} messages to send. order not guaranteed
    * @return {Promise<void[]>} Logs result of sending and then returns.
    */
   sendMultiple(

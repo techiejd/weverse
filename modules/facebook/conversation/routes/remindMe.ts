@@ -11,7 +11,7 @@ export const remindMe = (params: Record<string, any>) => {
     const reminderPayloadSeconds = (seconds: number) => `${thisRoute}.${seconds}.${psid}.${message}`;
 
     const convoHandler = new OneWePrivateConversationHandler(psid);
-    const messageAskingInHowLong : fbSchemas.MessengerMessage = conversationUtils.makeMessage(
+    const messageAskingInHowLong : fbSchemas.Messenger.Message = conversationUtils.makeMessage(
       "¿En cuanto tiempo?",
       [
         {title: "Media hora.", payload: reminderPayloadSeconds(1800)},

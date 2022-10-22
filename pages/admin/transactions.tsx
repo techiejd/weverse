@@ -7,7 +7,7 @@ import {
 } from "../../modules/db/schemas";
 // TODO(jimenez1917): Get correct styles
 import styles from "../../styles/Home.module.css";
-import adminStyles from "../../styles/Admin.module.css";
+import adminStyles from "../../styles/admin.module.css";
 import Link from "next/link";
 import { getAllTx } from "../../common/db";
 
