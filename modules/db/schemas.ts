@@ -29,6 +29,7 @@ export type UserData = z.infer<typeof userData>;
 
 export const resourceEnum = z.nativeEnum(sofi.Resource);
 
+// TODO(techiejd): Move to sofia
 export const changesInResources = resources.partial();
 
 export type ChangesInResources = z.infer<typeof changesInResources>;

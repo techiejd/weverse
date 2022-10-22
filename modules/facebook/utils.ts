@@ -334,8 +334,8 @@ export class GroupHandler {
   /**
    *
    * @param {string} token
-   * @param {Date | undefined} since for searching from when
-   * @param {Date | undefined} until for searching until when
+   * @param {Date | undefined} since for search from when -- updated_time (not created_at)
+   * @param {Date | undefined} until for searching until when -- updated_time
    * @param {'all' | 'own'} whose posts are we requesting
    * @return {Promise<schemas.Feed>}
    */
@@ -344,6 +344,7 @@ export class GroupHandler {
       since: Date | undefined = undefined,
       until: Date | undefined = undefined,
       whose: 'own' | 'all' = 'own'): Promise<schemas.Feed> {
+        const removeSeconds = (iso: string) => iso.split('.')[0];
     const fbUrl =
 'https://graph.facebook.com/' + process.env.FB_GROUP_ID + '/feed?';
     const params = new URLSearchParams({
@@ -351,10 +352,10 @@ export class GroupHandler {
       access_token: token,
     });
     if (since) {
-      params.set('since', String(Math.floor(since.getTime()/1000)));
+      params.set('since', removeSeconds(since.toISOString()));
     }
     if (until) {
-      params.set('until', String(Math.floor(until.getTime()/1000)));
+      params.set('until', removeSeconds(until.toISOString()));
     }
     const feed = schemas.feed.parse(
         await getPaginatedData(fbUrl + params));

@@ -77,27 +77,27 @@
 .card {
   max-width: 100vw;
 }
-.textInput{
+.textInput {
   width: 80vw;
   height: 20vh;
-  border-radius:15px;
-  padding:3%;
+  border-radius: 15px;
+  padding: 3%;
 }
-.hiddenInput{
+.hiddenInput {
   display: none;
 }
-.labelInput{
-  background-color:inherit;
-  width:5%;
-  border:1px solid #eaeaea;
-  border-radius:15px;
-  padding:5px;
-}
-.button{
-  width:80px;
-  height:50px;
+.labelInput {
+  background-color: inherit;
+  width: 5%;
+  border: 1px solid #eaeaea;
   border-radius: 15px;
-  margin-top:3%;
+  padding: 5px;
+}
+.button {
+  width: 80px;
+  height: 50px;
+  border-radius: 15px;
+  margin-top: 3%;
   background-color: rgb(31, 51, 31);
 }
 .card:hover,
@@ -116,13 +116,22 @@
   font-size: 1.25rem;
   line-height: 1.5;
 }
-.card input{
+.card input {
   width: 100%;
   height: 250px;
 }
 .logo {
   height: 1em;
   margin-left: 0.5rem;
+}
+.GridPost {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 1em;
+  margin: 5%;
+}
+.imgGrid {
+  max-width: 400px;
 }
 
 @media (max-width: 600px) {
