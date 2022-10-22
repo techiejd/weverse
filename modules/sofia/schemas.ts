@@ -66,8 +66,9 @@ export const startingUserGameInfo: UserGameInfo = (() => {
 
 export const challenge = z.object({
   title: z.string(),
-  start: z.date(),
-  end: z.date().optional(),
+  start: z.any(), // firestore.Timestamp
+  end: z.any().optional(),
+  hashtags: z.string().array().optional(),
 });
 
 export type Challenge = z.infer<typeof challenge>;
@@ -88,11 +89,4 @@ const candidate = z.object({
 
 export type Candidate = z.infer<typeof candidate>;
 
-export const votesRes = z.object({
-  candidates: candidate.array(),
-  starAllowance: z.number(),
-  psid: z.string()
-})
-
-export type VotesRes = z.infer<typeof votesRes>;
 export type Media = z.infer<typeof media>;

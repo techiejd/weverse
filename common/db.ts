@@ -3,7 +3,9 @@ import {
   getApp,
   initializeApp,
 } from "firebase-admin/app";
+import { Transaction } from '../modules/db/schemas';
 import {Challenge} from '../modules/sofia/schemas';
+import { logger } from './logger';
 
 const db = (() => {
   try {
@@ -18,6 +20,7 @@ export const getUserSnapshot = async (psid: string) => {
   const snapshot = await db.collection('users').where('psid', '==', psid)
       .get();
   if (snapshot.empty) {
+    logger.error({psid: psid}, "Error: PSID did not return any snapshot.")
     throw new Error('LOG_IN_NECESSARY');
   }
   return snapshot.docs[0];
@@ -30,6 +33,10 @@ export const getAllUsersSnapshot = async () => {
 export const addChallenge = async (challenge: Challenge) => {
   return db.collection('challenges').add(challenge);
 };
+
+export const getChallenge = async (challengeId: string) => {
+  return db.collection('challenges').doc(challengeId).get();
+}
 
 export const usedSource = async (psid: string, challengeRef: string) => {
   // TODO(techiejd): They didn't really accept a challenge but
@@ -49,3 +56,13 @@ export const usedSource = async (psid: string, challengeRef: string) => {
     acceptedChallenges: newAcceptedChallenges,
   });
 };
+
+export const addTx = async (tx: Transaction) => {
+  return db.collection('transactions').add(tx);
+};
+
+export const getAllTx = () => {
+  return db.collection('transactions').get().then((transactionSnapshots) => {
+    return transactionSnapshots.docs.map(transactionSnapshot => transactionSnapshot.data())
+  })
+}

@@ -2,7 +2,7 @@ import {OneWePrivateConversationHandler}
   from '../oneWePrivateConversationHandler';
 import * as schemas from '../../schemas';
 
-const joinOrAction : schemas.MessengerMessage = {
+const joinOrAction : schemas.Messenger.Message = {
   attachment: {
     payload: {
       template_type: 'button',

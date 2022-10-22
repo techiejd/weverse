@@ -3,8 +3,8 @@ import formidable from 'formidable';
 import {logger} from '../../common/logger';
 import * as fbSchemas from '../../modules/facebook/schemas';
 import * as conversationUtils from "../../modules/facebook/conversation/utils";
-import { changesInResources, ChangesInResources, resourceEnum, userData, UserData } from '../../modules/db/schemas';
-import { getAllUsersSnapshot } from '../../common/db';
+import { changesInResources, ChangesInResources, resourceEnum, userData, UserData, transaction as schemasTransaction, TxDatum, User as TxUser, TxMessage } from '../../modules/db/schemas';
+import { addTx, getAllUsersSnapshot } from '../../common/db';
 import { OneWePrivateConversationHandler } from '../../modules/facebook/conversation/oneWePrivateConversationHandler';
 
 export const config = {
@@ -14,8 +14,8 @@ export const config = {
   }
 };
 
-export const templateWhatsAppMessage = (message: string, buttons:Array<conversationUtils.ButtonInfo>) => {
-  const annotatedMessage = `for: all
+const templateWhatsAppMessage = (message: string, buttons:Array<conversationUtils.ButtonInfo>, users: Array<string>) => {
+  const annotatedMessage = `for: ${users.length > 0 ? JSON.stringify(users) : `all`}
 ${message}`;
 
   if (buttons.length == 0) {
@@ -37,12 +37,13 @@ export default async function admin(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  let users = Array<string>();
-  let notifiedUsers = Array<string>();
+  let usersOfInterest = Array<string>();
+  let usersOfInterestTxData = Array<TxUser>();
+  let messagedUsers = Array<string>();
   let message = "";
   let buttons = Array<conversationUtils.ButtonInfo>();
-  let messageType : conversationUtils.MessageType;
-  let resourcesChange : ChangesInResources;
+  let messageType : conversationUtils.MessageType = "Response";
+  let resourcesChange : ChangesInResources = {};
   const adminConvoHolder = new OneWePrivateConversationHandler.OneWeToAdminConversationHandler();
 
   const form = new formidable.IncomingForm({ multiples: true });
@@ -55,7 +56,7 @@ export default async function admin(
     resourcesChange = changesInResources.parse(nonStringResourcesChange);
     const nonStringButtons = JSON.parse(String(fields["buttons"]));
     buttons = conversationUtils.buttonInfo.array().parse(nonStringButtons);
-    users = JSON.parse(String(fields["users"]));
+    usersOfInterest = JSON.parse(String(fields["users"]));
   });
 
   const prepareMessage = (user:UserData) :
@@ -77,41 +78,84 @@ export default async function admin(
       return Promise.resolve(messengerMessage);
     }
   
-    getAllUsersSnapshot().then((userSnapshots) => {
+    await getAllUsersSnapshot().then((userSnapshots) => {
       return userSnapshots.forEach(async (userSnapshot) => {
         const user = userData.parse(userSnapshot.data());
+        if (usersOfInterest.length > 0 && 
+          !usersOfInterest.includes(user.psid)) {return};
+        usersOfInterestTxData.push({name: user.name, id: user.psid});
 
-        if (!users.includes(user.psid)) {return};
-
-
-        const convoHolder = new OneWePrivateConversationHandler(user.psid);
-        if (user.notifications_permissions == undefined) {
-          logger.warn(
-            {user: user},
-              'user without notification permissions');
-          return;
+        const updateResources = () => {
+          const resourcesUpdateEntries = Object.entries(resourcesChange).map(
+            ([resource, change]) => ['gameInfo.resources.' + resource, user.gameInfo.resources[resourceEnum.parse(resource)] + change]);
+          if (resourcesUpdateEntries.length > 0) {
+            return userSnapshot.ref.update(Object.fromEntries(resourcesUpdateEntries));
+          }
         }
-        const message : fbSchemas.Messenger.Message = await prepareMessage(user);
+        const messageUser = async () => {
+          const preparedMessage : fbSchemas.Messenger.Message = await prepareMessage(user);
+          if (preparedMessage == "") {
+            return Promise.resolve();
+          }
 
-        const resourcesUpdateEntries = Object.entries(resourcesChange).map(
-          ([resource, change]) => ['gameInfo.resources.' + resource, user.gameInfo.resources[resourceEnum.parse(resource)] + change]);
-        if (resourcesUpdateEntries.length > 0) {
-          userSnapshot.ref.update(Object.fromEntries(resourcesUpdateEntries));
-        }
-
-        if (messageType == "Notify") {
+          const convoHolder = new OneWePrivateConversationHandler(user.psid);
+          
+          if (messageType == "Response") {
+            return convoHolder.send(preparedMessage);
+          }
+          if (user.notifications_permissions == undefined) {
+            const errorMessage = 'user without notification permissions';
+            logger.error(
+              {user: user},
+              errorMessage);
+            // TODO(techiejd): Look into what happens if the error causes an early return wrt db.
+            throw new Error(errorMessage);
+          }
           return convoHolder.notify(
-            message, user.notifications_permissions.token);
+            preparedMessage, user.notifications_permissions.token);
         }
-        return convoHolder.send(message);
+
+        if (message == "") {
+          updateResources();
+        } else {
+          messageUser().then(() => {
+            messagedUsers.push(user.name);
+            updateResources();
+          })
+        }
       });
-    })
-  
-  adminConvoHolder.sendWhatsApp({body: templateWhatsAppMessage(message, buttons)});
+    });
+
+  let txData = Array<TxDatum>();
+
+  if (message != "") {
+    adminConvoHolder.sendWhatsApp({body: templateWhatsAppMessage(message, buttons, messagedUsers)});
+
+    let txMessage : TxMessage = {
+      type: messageType,
+      text: message,
+    };
+    if (buttons.length > 0) {
+      txMessage = {...txMessage, buttons};
+    }
+    txData.push({type: "message", message: txMessage});
+  }
+  if (Object.entries(resourcesChange).length > 0) {
+    txData.push({type: "resourcesChange", resourcesChange})
+  }
+
+  const tx = schemasTransaction.parse({
+    from: {
+      actingAsSofi: true, // Admin
+      name: "Nico",
+      id: process.env.ADMIN_ID
+    },
+    to: usersOfInterestTxData,
+    data: txData,
+    createdAt: (new Date()).toISOString()
+  })
+
+  addTx(tx);
 
   res.status(200).end();
 };
-
-export function templateBody(message: string): string {
-  throw new Error('Function not implemented.');
-}

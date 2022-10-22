@@ -5,6 +5,7 @@ import {z} from 'zod';
 export const prettifyJSON = (json: Record<string, any>) => JSON.stringify(
   json, null, 2).replace('{', '').replace('}', '');
 
+// TODO(techiejd): split into schemas.
 export const messageType = z.enum(["Notify", "Response"]);
 export type MessageType = z.infer<typeof messageType>;
 

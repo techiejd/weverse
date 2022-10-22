@@ -20,7 +20,7 @@ const services2Cost : {
    'Spotify': 7.5,
  };
 
-const chooseHowToRedeem : schemas.MessengerMessage = {
+const chooseHowToRedeem : schemas.Messenger.Message = {
   attachment: {
     type: 'template',
     payload: {
@@ -44,7 +44,7 @@ const chooseHowToRedeem : schemas.MessengerMessage = {
   },
 };
 
-export const chooseDigitalService : schemas.MessengerMessage = {
+export const chooseDigitalService : schemas.Messenger.Message = {
   attachment: {
     type: 'template',
     payload: {
@@ -64,7 +64,7 @@ export const chooseDigitalService : schemas.MessengerMessage = {
   },
 };
 
-export const informWillBeReached : schemas.MessengerMessage = {
+export const informWillBeReached : schemas.Messenger.Message = {
   text: `Ok, bien. Gracias por la solicitud, un agente de \
 Sofia se comunicará contigo para ayudarte redimir.`,
 };
@@ -92,7 +92,7 @@ const confirmTransaction = (ween:number,
   },
 });
 
-const sorryNotEnough : schemas.MessengerMessage = {
+const sorryNotEnough : schemas.Messenger.Message = {
   text: `¡Wow 😲! Estás muy cerca, ya casi tienes los ⚡WEEN necesarios para \
 redimir los WePremios 🥰.
 
@@ -150,7 +150,7 @@ Este pedido lleva su tiempo. Por favor espera una respuesta en 72 horas.`,
 };
 
 const cancelRedemption = (convoHandler: OneWePrivateConversationHandler) => {
-  const redemptionCanceled : schemas.MessengerMessage = {
+  const redemptionCanceled : schemas.Messenger.Message = {
     text: `Está bien, estoy acá para redimir cuando quieras`,
   };
   return convoHandler.send(redemptionCanceled);

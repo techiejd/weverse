@@ -6,7 +6,7 @@ import {OneWePrivateConversationHandler} from
 import {logger} from '../../../../common/logger';
 
 const respondToUserWelcome :
-schemas.MessengerMessage = {
+schemas.Messenger.Message = {
   attachment: {
     payload: {
       'template_type': 'button',
@@ -29,7 +29,7 @@ schemas.MessengerMessage = {
 };
 
 const wrapMessage = (
-    message : schemas.MessengerMessage) => {
+    message : schemas.Messenger.Message) => {
   return (params: Record<string, any>) => {
     return new OneWePrivateConversationHandler(
         params.senderId).send(message);

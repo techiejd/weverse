@@ -7,7 +7,7 @@ import {GroupHandler} from '../../utils';
 import {consultResources} from './consultResources';
 import {whatIsYourLie} from '../integrations/firstChallenge';
 
-const callToPost : schemas.MessengerMessage = {
+const callToPost : schemas.Messenger.Message = {
   attachment: {
     payload: {
       template_type: 'button',
@@ -60,7 +60,7 @@ export const saidDone = (params: Record<string, any>) => {
   return GroupHandler
       .userHasSingleWeVersePost(params.senderId).then((success) => {
         if (success) {
-          const usedResourcesMessage: schemas.MessengerMessage = {
+          const usedResourcesMessage: schemas.Messenger.Message = {
             text: `Has usado sabiamente tus recursos, consumiste  1 cámara \
 (${Resource.Camera}) y  1 mascará (${Resource.Mask}) de impostor`,
           };

@@ -27,7 +27,7 @@ export const request = async (params: Record<string, any>) => {
 };
 
 const addNotificationInfoToUser = async (
-    psid: string, optInInfo: schemas.MessengerOptInEvent) => {
+    psid: string, optInInfo: schemas.Messenger.OptInEvent) => {
   return getUserSnapshot(psid).then((userSnapshot) => {
     return userSnapshot.ref.update({
       notifications_permissions: {
@@ -41,11 +41,11 @@ const addNotificationInfoToUser = async (
 export const accepted = async (
     params: Record<string, any>) => {
   const optInInfo =
-  schemas.messengerOptInEvent.parse(params['Accept.Notifications']);
+  schemas.Messenger.optInEvent.parse(params['Accept.Notifications']);
   const convoHandler = new OneWePrivateConversationHandler(
       params.senderId);
 
-  const thankYouForOptingInMessage : schemas.MessengerMessage = {
+  const thankYouForOptingInMessage : schemas.Messenger.Message = {
     text: `Gracias por recibir notificaciones. \
 Ya casí terminamos acá! Vamos a verificar que todo este bien.`,
   };
@@ -56,7 +56,7 @@ Ya casí terminamos acá! Vamos a verificar que todo este bien.`,
   return GroupHandler
       .isUserInWeVerse(params.senderId).then(async (successful) => {
         if (successful) {
-          const youreReadyMessage : schemas.MessengerMessage = {
+          const youreReadyMessage : schemas.Messenger.Message = {
             text: `¡Te uniste al WeVerse!
 
 Ok, hasta ahora has:
@@ -72,7 +72,7 @@ Por ello, te enviaremos 1000 ⚡ (WEEN).
 De nuevo, felicitaciones.`,
           };
           return convoHandler.send(youreReadyMessage).then(() => {
-            const moneySentCheckResourcesMessage : schemas.MessengerMessage = {
+            const moneySentCheckResourcesMessage : schemas.Messenger.Message = {
               'text': `Acá están los 1000 ⚡ que prometimos. \
 Puede decir 'consultar recursos' en cualquier momento \
 para ver sus recursos en la WeBag: ` +

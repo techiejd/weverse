@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
-import { Candidate, Media, VotesRes } from "../../modules/sofia/schemas";
+import { Candidate } from "../../../../modules/sofia/schemas";
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Carousel from "react-material-ui-carousel";
 import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const VotingCard: React.FC<{
   candidate: Candidate;
@@ -21,23 +22,47 @@ const VotingCard: React.FC<{
   setCandidate2Votes: React.Dispatch<
     React.SetStateAction<Record<string, number>>
   >;
+  canModifyStarAllowance: boolean;
+  setCanModifyStarAllowance: React.Dispatch<React.SetStateAction<boolean>>;
 }> = (props) => {
   const [count, setCount] = useState(0);
   const [decrementButtonDisabled, setDecrementButtonDisabled] = useState(false);
+  const [message, setMessage] = useState(
+    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+      {String(props.candidate.message)}
+    </ReactMarkdown>
+  );
+  useEffect(
+    () =>
+      setMessage(
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          {String(props.candidate.message)}
+        </ReactMarkdown>
+      ),
+    [props.candidate.message]
+  );
   useEffect(() => {
     setDecrementButtonDisabled(count === 0);
     props.setCandidate2Votes({
       ...props.candidate2Votes,
       [props.candidate.id]: count,
     });
+    //TODO(techiejd): switch to use reducer to fix dependency list issues.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
   const IncNum = () => {
-    props.setStarAllowance(props.starAllowance - 1);
-    setCount(count + 1);
+    if (props.canModifyStarAllowance) {
+      props.setCanModifyStarAllowance(false);
+      props.setStarAllowance(props.starAllowance - 1);
+      setCount(count + 1);
+    }
   };
   const DecNum = () => {
-    props.setStarAllowance(props.starAllowance + 1);
-    setCount(count - 1);
+    if (props.canModifyStarAllowance) {
+      props.setCanModifyStarAllowance(false);
+      props.setStarAllowance(props.starAllowance + 1);
+      setCount(count - 1);
+    }
   };
 
   return (
@@ -70,11 +95,7 @@ const VotingCard: React.FC<{
       ) : (
         <></>
       )}
-      <CardContent>
-        <Typography variant="body2" color="common.white">
-          {props.candidate.message}
-        </Typography>
-      </CardContent>
+      {message ? <></> : <CardContent>{message}</CardContent>}
       <h1>🌟</h1>
       <CardActions style={{ justifyContent: "center" }}>
         <Tooltip title="Delete">
