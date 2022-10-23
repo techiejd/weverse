@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import React from "react";
 import aboutUsStyle from "./../styles/aboutUs.module.css";
 
+// TODO(jimenez1917): look into next Image for optimization.
 const Vote: NextPage = () => {
   return (
     <div className={aboutUsStyle.aboutUs}>
