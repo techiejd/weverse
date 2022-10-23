@@ -95,7 +95,7 @@ const VotingCard: React.FC<{
       ) : (
         <></>
       )}
-      {message ? <></> : <CardContent>{message}</CardContent>}
+      <CardContent>{message}</CardContent>
       <h1>🌟</h1>
       <CardActions style={{ justifyContent: "center" }}>
         <Tooltip title="Delete">
