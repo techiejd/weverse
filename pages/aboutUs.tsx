@@ -1,9 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
+// TODO(jimenez1917): look into next Image for optimization.
 import type { NextPage } from "next";
 import React from "react";
 import aboutUsStyle from "./../styles/aboutUs.module.css";
 
-// TODO(jimenez1917): look into next Image for optimization.
-const Vote: NextPage = () => {
+const AboutUs: NextPage = () => {
   return (
     <div className={aboutUsStyle.aboutUs}>
       <nav className={aboutUsStyle.nav}>
@@ -16,9 +17,9 @@ const Vote: NextPage = () => {
       <div className={aboutUsStyle.header}></div>
       <div className={aboutUsStyle.markdiv}>
         <p className={aboutUsStyle.markdivPsubBanner}>
-          "Systems were made for men, and not men for systems, and the interest
+          {`"Systems were made for men, and not men for systems, and the interest
           of man which is self-development, is above all systems, whether
-          theological, political or economic."
+          theological, political or economic."`}
           <br />
           <br />- C. H. Douglas
         </p>
@@ -208,4 +209,4 @@ const Vote: NextPage = () => {
   );
 };
 
-export default Vote;
+export default AboutUs;
