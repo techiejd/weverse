@@ -113,6 +113,7 @@ export const getServerSideProps: GetServerSideProps = (context) => {
           starAllowance: 5,
           psid: psid,
           submitLink: submitToLink,
+          successLink: `/weRace/${weRace}/vote/successVoted`,
         },
       };
     });
@@ -124,6 +125,7 @@ const Vote: NextPage<{
   starAllowance: number;
   candidates: Array<Candidate>;
   submitLink: string;
+  successLink: string;
 }> = (props) => {
   const candidates = props.candidates;
   const [canModifyStarAllowance, setCanModifyStarAllowance] = useState(true);
@@ -157,7 +159,7 @@ const Vote: NextPage<{
       body,
     });
 
-    router.push("/admin/success");
+    router.push(props.successLink);
 
     return true;
   };
