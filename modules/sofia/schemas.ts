@@ -83,6 +83,7 @@ export const media = z.object({
 
 const candidate = z.object({
   message: z.string().optional(),
+  link: z.string().optional(),
   id: z.string(),
   medias: media.array().optional()
 })

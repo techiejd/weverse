@@ -348,7 +348,7 @@ export class GroupHandler {
     const fbUrl =
 'https://graph.facebook.com/' + process.env.FB_GROUP_ID + '/feed?';
     const params = new URLSearchParams({
-      fields: 'from,reactions,comments{from,message},message,attachments',
+      fields: 'from,reactions,comments{from,message},message,attachments,link',
       access_token: token,
     });
     if (since) {

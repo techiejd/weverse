@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Candidate } from "../../../../modules/sofia/schemas";
+import { Candidate, Media } from "../../../../modules/sofia/schemas";
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -12,6 +12,28 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+
+const noPagesPublicInfoFix1Url =
+  // Yesica
+  "302143605_5567605466660981_6489124609017351362";
+const noPagesPublicInfoFix2Url =
+  // Camila
+  "9680260426559922442";
+const pagesPublicInfoFixImages = [
+  [noPagesPublicInfoFix1Url, "/yessica_hack.png"],
+  [noPagesPublicInfoFix2Url, "/camila_hack.png"],
+];
+
+const getMessage = (candidate: Candidate) => {
+  //TODO(techiejd): Make better plumbing for links.
+  let message = candidate.message;
+  if (candidate.link) {
+    message = `${message}
+
+Ver mas acá: ${candidate.link}`;
+  }
+  return message;
+};
 
 const VotingCard: React.FC<{
   candidate: Candidate;
@@ -27,19 +49,15 @@ const VotingCard: React.FC<{
 }> = (props) => {
   const [count, setCount] = useState(0);
   const [decrementButtonDisabled, setDecrementButtonDisabled] = useState(false);
-  const [message, setMessage] = useState(
-    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-      {String(props.candidate.message)}
-    </ReactMarkdown>
-  );
+  const [message, setMessage] = useState(<></>);
   useEffect(
     () =>
       setMessage(
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-          {String(props.candidate.message)}
+        <ReactMarkdown remarkPlugins={[remarkGfm]} linkTarget="_blank">
+          {String(getMessage(props.candidate))}
         </ReactMarkdown>
       ),
-    [props.candidate.message]
+    [props.candidate]
   );
   useEffect(() => {
     setDecrementButtonDisabled(count === 0);
@@ -65,6 +83,34 @@ const VotingCard: React.FC<{
     }
   };
 
+  const getFixedImage = (media: Media) => {
+    //TODO(techiejd): Fix issues with images and videos without permissions.
+    const fixedImageInfo = pagesPublicInfoFixImages.find((fixInfo) =>
+      String(media.image).includes(fixInfo[0])
+    );
+    return fixedImageInfo ? fixedImageInfo[1] : undefined;
+  };
+  const getSrc = (media: Media) => {
+    const fixedImage = getFixedImage(media);
+    if (fixedImage) {
+      return fixedImage;
+    }
+    if (media.type?.startsWith("video") && media.source) {
+      return String(media.source);
+    }
+
+    return String(media.image);
+  };
+  const getType = (media: Media) => {
+    if (getFixedImage(media)) {
+      return "img";
+    }
+    if (media.type?.startsWith("video") && media.source) {
+      return "video";
+    }
+    return "img";
+  };
+
   return (
     <Card
       sx={{ maxWidth: 700, mt: 5 }}
@@ -81,10 +127,10 @@ const VotingCard: React.FC<{
           <Carousel>
             {props.candidate.medias.map((m, i) => (
               <CardMedia
-                component="img"
+                component={getType(m)}
                 height="400px"
                 max-width="650px"
-                image={m.image}
+                src={getSrc(m)}
                 alt="green iguana"
                 key={i}
                 sx={{ objectFit: "contain" }}

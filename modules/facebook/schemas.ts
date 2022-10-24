@@ -90,6 +90,7 @@ const facebookPost = z.object({
   from: from.optional(),
   comments: paginatedComments.optional(),
   attachments: paginatedAttachments.optional(),
+  link: z.string().optional(),
 });
 export type Post = z.infer<typeof facebookPost>;
 

@@ -56,6 +56,7 @@ const parsePostForVotingInfo = async (post: Post): Promise<Candidate> => {
       message: post.message,
       id: post.id,
       medias: medias,
+      link: post.link,
     },
     identity
   ) as Candidate;
