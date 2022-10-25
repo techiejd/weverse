@@ -5,7 +5,7 @@ import styles from "../../styles/Home.module.css";
 import { getAllChallengesSnapshot } from "../../common/db";
 import { challengeData, ChallengeData } from "../../modules/db/schemas";
 import { logger } from "../../common/logger";
-import votestyles from "../../styles/vote.module.css";
+import cardStyles from "../../styles/card.module.css";
 import { Card, CardContent, Grid } from "@mui/material";
 import { pickBy, identity } from "lodash";
 import Link from "next/link";
@@ -15,7 +15,6 @@ export const getServerSideProps: GetServerSideProps = (context) => {
     return {
       props: {
         challengeData: challengesSnapshot.docs.map((challengeSnapshot) => {
-          console.log("challengeSnapshot.data(): ", challengeSnapshot.data());
           return challengeData.parse(
             pickBy(
               {
@@ -43,11 +42,11 @@ const AllChallege: NextPage<{
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <div className={votestyles.vote}>
+        <div className={cardStyles.vote}>
           <h1> WeRaces</h1>
           <button disabled={true}> Add New Race</button>
           {props.challengeData.map((challenge, i) => (
-            <Link key={i} href={`./werace/werace/${challenge.id}`}>
+            <Link key={i} href={`./werace/${challenge.id}`}>
               <Grid
                 container
                 spacing={0}
