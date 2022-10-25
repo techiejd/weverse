@@ -22,6 +22,7 @@ import {
 import VotingCard from "../../../../modules/weRace/vote/components/votingCard";
 import votestyles from "../../../../styles/vote.module.css";
 import { logger } from "../../../../common/logger";
+import { getWeRacePosts } from "../../../../modules/weRace/vote/utils/query";
 
 const parsePostForVotingInfo = async (post: Post): Promise<Candidate> => {
   let medias = Array<Media>();
@@ -86,10 +87,6 @@ export const getServerSideProps: GetServerSideProps = (context) => {
   const psid = String(context.query?.psid);
   const submitToLink = `/api/weRace/${weRace}/vote/${psid}`;
 
-  // Get 'challenge' start time, use it for querying.
-  // Then use the end time to filter.
-  // Then use the hashtags.
-
   return getChallenge(weRace).then((challengeSnapshot) => {
     if (!challengeSnapshot.exists) {
       const errorMessage = "error in finding werace for getting votes";
@@ -98,12 +95,7 @@ export const getServerSideProps: GetServerSideProps = (context) => {
     }
     const challenge = challengeSchema.parse(challengeSnapshot.data());
     return getUserSnapshot(psid).then(async (userSnapshot) => {
-      const posts = await GroupHandler.getWeVersePosts(
-        userSnapshot.data().token,
-        challenge.start.toDate(),
-        undefined,
-        "all"
-      );
+      const posts = await getWeRacePosts(weRace, userSnapshot.data().token);
       shuffle(posts);
       const candidates = await Promise.all(posts.map(parsePostForVotingInfo));
 

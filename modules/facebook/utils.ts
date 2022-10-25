@@ -1,36 +1,37 @@
-import fetch from 'node-fetch';
-import * as schemas from './schemas';
-import {getUserSnapshot} from '../../common/db';
-import {logger} from '../../common/logger';
-import { ButtonInfo, buttonInfoToButton } from './conversation/utils';
+import fetch from "node-fetch";
+import * as schemas from "./schemas";
+import { getUserSnapshot } from "../../common/db";
+import { logger } from "../../common/logger";
+import { ButtonInfo, buttonInfoToButton } from "./conversation/utils";
 
-export const getPaginatedData =
-(url:string) : Promise<Record<string, unknown>[]> => {
+export const getPaginatedData = (
+  url: string
+): Promise<Record<string, unknown>[]> => {
   return fetch(url, {
-    method: 'GET',
+    method: "GET",
   }).then(async (response) => {
     if (!response.ok) {
       response.text().then((text) => {
-        throw new Error('Error in fetching paginated data: ' + text);
+        throw new Error("Error in fetching paginated data: " + text);
       });
     }
     return response.json().then(async (response) => {
       const paginatedData = schemas.paginatedData.parse(response);
       const next = paginatedData.paging?.next;
-      return next ?
-        paginatedData.data.concat(await getPaginatedData(next)) :
-        paginatedData.data;
+      return next
+        ? paginatedData.data.concat(await getPaginatedData(next))
+        : paginatedData.data;
     });
   });
 };
 
 export const getFlattenedPaginatedData = async (
-    startPaginatedData : schemas.PaginatedData
+  startPaginatedData: schemas.PaginatedData
 ) => {
   const next = startPaginatedData.paging?.next;
-  return next ?
-  startPaginatedData.data.concat(await getPaginatedData(next)) :
-  startPaginatedData.data;
+  return next
+    ? startPaginatedData.data.concat(await getPaginatedData(next))
+    : startPaginatedData.data;
 };
 
 /**
@@ -46,8 +47,8 @@ export class PrivateConversationHandler {
   constructor(
     private token: string,
     private id: string,
-    public recipient: string) {
-  }
+    public recipient: string
+  ) {}
 
   /**
    *
@@ -55,35 +56,46 @@ export class PrivateConversationHandler {
    * @param {Array<ButtonInfo>} callToActions The buttons the user can press
    * @return {Promise<void>}
    */
-  setUserMenu = async (disableComposerInput: boolean,
-      callToActions?: Array<ButtonInfo>) => {
-    const fbCustomUserSettingsURL = 'https://graph.facebook.com/v15.0/' + this.id + '/custom_user_settings?access_token=' + this.token;
+  setUserMenu = async (
+    disableComposerInput: boolean,
+    callToActions?: Array<ButtonInfo>
+  ) => {
+    const fbCustomUserSettingsURL =
+      "https://graph.facebook.com/v15.0/" +
+      this.id +
+      "/custom_user_settings?access_token=" +
+      this.token;
     const body = {
-      'psid': this.recipient,
-      'persistent_menu': [
+      psid: this.recipient,
+      persistent_menu: [
         {
-          'locale': 'default',
-          'composer_input_disabled': disableComposerInput,
+          locale: "default",
+          composer_input_disabled: disableComposerInput,
         },
       ],
     };
     if (callToActions) {
-      (body.persistent_menu[0] as Record<string, any>)['call_to_actions'] =
-       callToActions.map(buttonInfoToButton);
+      (body.persistent_menu[0] as Record<string, any>)["call_to_actions"] =
+        callToActions.map(buttonInfoToButton);
     }
     return fetch(fbCustomUserSettingsURL, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(body),
-      headers: {'Content-Type': 'application/json'},
+      headers: { "Content-Type": "application/json" },
     }).then(async (response) => {
       if (!response.ok) {
         return response.text().then((text) => {
           logger.error(
-            {text: text, fetchWith: {
-              method: 'POST',
-              body: JSON.stringify(body),
-              headers: {'Content-Type': 'application/json'}}},
-              'Error in posting (sending) to fb custom user settings.');
+            {
+              text: text,
+              fetchWith: {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: { "Content-Type": "application/json" },
+              },
+            },
+            "Error in posting (sending) to fb custom user settings."
+          );
         });
       }
       return Promise.resolve();
@@ -103,14 +115,19 @@ export class PrivateConversationHandler {
     });
 
     return fetch(fbCustomUserSettingsURL + params, {
-      method: 'DELETE',
+      method: "DELETE",
     }).then(async (response) => {
       if (!response.ok) {
         return response.text().then((text) => {
           logger.error(
-              {error: text, fetch: {
-                method: 'DELETE'}},
-              'Error in posting (sending) to fb custom user settings.');
+            {
+              error: text,
+              fetch: {
+                method: "DELETE",
+              },
+            },
+            "Error in posting (sending) to fb custom user settings."
+          );
         });
       }
       return Promise.resolve();
@@ -123,21 +140,30 @@ export class PrivateConversationHandler {
    * @return {Promise<void>}
    */
   private postToFBMessages = async (body: Record<string, unknown>) => {
-    const fbMessagesURL = 'https://graph.facebook.com/v14.0/' + this.id + '/messages?access_token=' + this.token;
-    logger.info({body: body}, 'postToFBMessages');
+    const fbMessagesURL =
+      "https://graph.facebook.com/v14.0/" +
+      this.id +
+      "/messages?access_token=" +
+      this.token;
+    logger.info({ body: body }, "postToFBMessages");
     return fetch(fbMessagesURL, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(body),
-      headers: {'Content-Type': 'application/json'},
+      headers: { "Content-Type": "application/json" },
     }).then(async (response) => {
       if (!response.ok) {
         return response.text().then((text) => {
           logger.error(
-            {error: text, fetch: {
-              method: 'POST',
-              body: JSON.stringify(body),
-              headers: {'Content-Type': 'application/json'}}},
-              'Error in posting (sending) to fb messages.');
+            {
+              error: text,
+              fetch: {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: { "Content-Type": "application/json" },
+              },
+            },
+            "Error in posting (sending) to fb messages."
+          );
         });
       }
       return Promise.resolve();
@@ -146,28 +172,36 @@ export class PrivateConversationHandler {
 
   private postToWAMessages = async (body: Record<string, unknown>) => {
     // TODO(techiejd): bring in the number as a parameter to be able to message other uers
-    const waMessagesUrl = 'https://graph.facebook.com/v14.0/' + String(process.env.WA_BUSINESS_PHONE_ID) + '/messages';
-    logger.info({body: body}, 'postToWAMessages');
+    const waMessagesUrl =
+      "https://graph.facebook.com/v14.0/" +
+      String(process.env.WA_BUSINESS_PHONE_ID) +
+      "/messages";
+    logger.info({ body: body }, "postToWAMessages");
     return fetch(waMessagesUrl, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(body),
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.WA_BUSINESS_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.WA_BUSINESS_ACCESS_TOKEN}`,
       },
     }).then(async (response) => {
       if (!response.ok) {
         return response.text().then((text) => {
           logger.error(
-            {error: text, fetch: {
-              method: 'POST',
-              body: JSON.stringify(body),
-              waMessagesUrl: waMessagesUrl,
-              headers: {
-              'Content-Type': 'application/json', 
-              'Authorization': `Bearer ${process.env.WA_BUSINESS_ACCESS_TOKEN}`
-            }}},
-              'Error in posting (sending) to wa messages.');
+            {
+              error: text,
+              fetch: {
+                method: "POST",
+                body: JSON.stringify(body),
+                waMessagesUrl: waMessagesUrl,
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${process.env.WA_BUSINESS_ACCESS_TOKEN}`,
+                },
+              },
+            },
+            "Error in posting (sending) to wa messages."
+          );
         });
       }
       return Promise.resolve();
@@ -178,13 +212,13 @@ export class PrivateConversationHandler {
    * @param {schemas.Messenger.Message} message to send to recipient.
    * @return {Promise<void>} Logs result of sending and then returns.
    */
-  send(message:schemas.Messenger.Message): Promise<void> {
+  send(message: schemas.Messenger.Message): Promise<void> {
     const body = {
-      'messaging_type': 'RESPONSE',
-      'recipient': {
-        'id': this.recipient,
+      messaging_type: "RESPONSE",
+      recipient: {
+        id: this.recipient,
       },
-      'message': message,
+      message: message,
     };
 
     return this.postToFBMessages(body);
@@ -195,8 +229,7 @@ export class PrivateConversationHandler {
    * @param {schemas.Messenger.Message[]} messages to send. order not guaranteed
    * @return {Promise<void[]>} Logs result of sending and then returns.
    */
-  sendMultiple(
-      messages : schemas.Messenger.Message[]): Promise<void[]> {
+  sendMultiple(messages: schemas.Messenger.Message[]): Promise<void[]> {
     return Promise.all(messages.map((message) => this.send(message)));
   }
 
@@ -206,22 +239,24 @@ export class PrivateConversationHandler {
    * @param {string} notificationPermissionsToken the users notifications token
    * @return {Promise<void>}
    */
-  async notify(message: schemas.Messenger.Message,
-      notificationPermissionsToken: string): Promise<void> {
+  async notify(
+    message: schemas.Messenger.Message,
+    notificationPermissionsToken: string
+  ): Promise<void> {
     // TODO(techiejd): Get cache going so we don't have to
     // pass notificationPermissionsToken.
-    const notificationBody : schemas.Messenger.MessageBody = {
-      'messaging_type': 'UPDATE',
-      'recipient': {
-        'notification_messages_token': notificationPermissionsToken,
+    const notificationBody: schemas.Messenger.MessageBody = {
+      messaging_type: "UPDATE",
+      recipient: {
+        notification_messages_token: notificationPermissionsToken,
       },
-      'message': message,
+      message: message,
     };
     return this.postToFBMessages(notificationBody);
   }
 
   async sendWhatsApp(message: schemas.WhatsApp.Message) {
-    const messageBody : schemas.WhatsApp.MessageBody = {
+    const messageBody: schemas.WhatsApp.MessageBody = {
       messaging_product: "whatsapp",
       to: String(process.env.ADMIN_NUMBER),
       text: message,
@@ -239,9 +274,7 @@ export class GroupHandler {
    *
    * @param {string} id of the group
    */
-  constructor(
-    public id: string) {
-  }
+  constructor(public id: string) {}
 
   /**
    *
@@ -251,21 +284,23 @@ export class GroupHandler {
    */
   private async _isUserInGroup(asid: string, token: string): Promise<boolean> {
     return fetch(
-        'https://graph.facebook.com/' +
-    this.id +
-    '/opted_in_members?access_token=' + token, {
-          method: 'GET',
-        }).then(async (response) => {
+      "https://graph.facebook.com/" +
+        this.id +
+        "/opted_in_members?access_token=" +
+        token,
+      {
+        method: "GET",
+      }
+    ).then(async (response) => {
       if (!response.ok) {
         response.text().then((text) => {
-          throw new Error('Error in fetching fb opted_in: ' + text);
+          throw new Error("Error in fetching fb opted_in: " + text);
         });
       }
       return response.json().then((response) => {
         const res = schemas.facebookResponse.parse(response);
         const optedInMembers = schemas.optedInMembers.parse(res.data);
-        return optedInMembers.some(
-            (optedInMember) => optedInMember.id == asid);
+        return optedInMembers.some((optedInMember) => optedInMember.id == asid);
       });
     });
   }
@@ -275,14 +310,16 @@ export class GroupHandler {
    * @param {string} psid for looking up user
    * @return {Promise<boolean | void>}
    */
-  static async isUserInWeVerse(psid:string): Promise<boolean | void> {
+  static async isUserInWeVerse(psid: string): Promise<boolean | void> {
     return getUserSnapshot(psid).then(async (userSnapshot) => {
       const user = userSnapshot.data();
       if (process.env.FB_GROUP_ID) {
-        return new GroupHandler(process.env.FB_GROUP_ID).
-            _isUserInGroup(user.asid, user.token);
+        return new GroupHandler(process.env.FB_GROUP_ID)._isUserInGroup(
+          user.asid,
+          user.token
+        );
       } else {
-        throw new Error('no value for process.env.FB_GROUP_ID');
+        throw new Error("no value for process.env.FB_GROUP_ID");
       }
     });
   }
@@ -294,21 +331,23 @@ export class GroupHandler {
    */
   private async _userHasSinglePost(token: string): Promise<boolean> {
     return fetch(
-        'https://graph.facebook.com/' +
-  this.id +
-  '/feed?fields=from&access_token=' + token, {
-          method: 'GET',
-        }).then(async (response) => {
+      "https://graph.facebook.com/" +
+        this.id +
+        "/feed?fields=from&access_token=" +
+        token,
+      {
+        method: "GET",
+      }
+    ).then(async (response) => {
       if (!response.ok) {
         response.text().then((text) => {
-          throw new Error('Error in fetching fb feed: ' + text);
+          throw new Error("Error in fetching fb feed: " + text);
         });
       }
       return response.json().then((response) => {
         const res = schemas.facebookResponse.parse(response);
         const feed = schemas.feed.parse(res.data);
-        return feed.some(
-            (post) => post.from != undefined);
+        return feed.some((post) => post.from != undefined);
       });
     });
   }
@@ -318,14 +357,15 @@ export class GroupHandler {
    * @param {string} psid
    * @return {Promise<boolean | void>}
    */
-  static async userHasSingleWeVersePost(psid:string) : Promise<boolean | void> {
+  static async userHasSingleWeVersePost(psid: string): Promise<boolean | void> {
     return getUserSnapshot(psid).then(async (userSnapshot) => {
       const user = userSnapshot.data();
       if (process.env.FB_GROUP_ID) {
-        return new GroupHandler(process.env.FB_GROUP_ID).
-            _userHasSinglePost(user.token);
+        return new GroupHandler(process.env.FB_GROUP_ID)._userHasSinglePost(
+          user.token
+        );
       } else {
-        throw new Error('no value for process.env.FB_GROUP_ID');
+        throw new Error("no value for process.env.FB_GROUP_ID");
       }
     });
   }
@@ -340,25 +380,26 @@ export class GroupHandler {
    * @return {Promise<schemas.Feed>}
    */
   static async getWeVersePosts(
-      token : string,
-      since: Date | undefined = undefined,
-      until: Date | undefined = undefined,
-      whose: 'own' | 'all' = 'own'): Promise<schemas.Feed> {
-        const removeSeconds = (iso: string) => iso.split('.')[0];
+    token: string,
+    since: Date | undefined = undefined,
+    until: Date | undefined = undefined,
+    whose: "own" | "all" = "own"
+  ): Promise<schemas.Feed> {
+    const removeSeconds = (iso: string) => iso.split(".")[0];
     const fbUrl =
-'https://graph.facebook.com/' + process.env.FB_GROUP_ID + '/feed?';
+      "https://graph.facebook.com/" + process.env.FB_GROUP_ID + "/feed?";
     const params = new URLSearchParams({
-      fields: 'from,reactions,comments{from,message},message,attachments,link',
+      fields:
+        "from,reactions,comments{from,message},message,attachments,link,created_time,updated_time",
       access_token: token,
     });
     if (since) {
-      params.set('since', removeSeconds(since.toISOString()));
+      params.set("since", removeSeconds(since.toISOString()));
     }
     if (until) {
-      params.set('until', removeSeconds(until.toISOString()));
+      params.set("until", removeSeconds(until.toISOString()));
     }
-    const feed = schemas.feed.parse(
-        await getPaginatedData(fbUrl + params));
-    return whose == 'own' ? feed.filter((post) => post.from) : feed;
+    const feed = schemas.feed.parse(await getPaginatedData(fbUrl + params));
+    return whose == "own" ? feed.filter((post) => post.from) : feed;
   }
 }

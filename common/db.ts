@@ -1,11 +1,8 @@
-import * as admin from 'firebase-admin';
-import {
-  getApp,
-  initializeApp,
-} from "firebase-admin/app";
-import { Transaction } from '../modules/db/schemas';
-import {Challenge} from '../modules/sofia/schemas';
-import { logger } from './logger';
+import * as admin from "firebase-admin";
+import { getApp, initializeApp } from "firebase-admin/app";
+import { Transaction } from "../modules/db/schemas";
+import { Challenge } from "../modules/sofia/schemas";
+import { logger } from "./logger";
 
 const db = (() => {
   try {
@@ -14,29 +11,32 @@ const db = (() => {
     initializeApp();
   }
   return admin.firestore();
-})()
+})();
 
 export const getUserSnapshot = async (psid: string) => {
-  const snapshot = await db.collection('users').where('psid', '==', psid)
-      .get();
+  const snapshot = await db.collection("users").where("psid", "==", psid).get();
   if (snapshot.empty) {
-    logger.error({psid: psid}, "Error: PSID did not return any snapshot.")
-    throw new Error('LOG_IN_NECESSARY');
+    logger.error({ psid: psid }, "Error: PSID did not return any snapshot.");
+    throw new Error("LOG_IN_NECESSARY");
   }
   return snapshot.docs[0];
 };
 
 export const getAllUsersSnapshot = async () => {
-  return db.collection('users').get();
+  return db.collection("users").get();
 };
 
 export const addChallenge = async (challenge: Challenge) => {
-  return db.collection('challenges').add(challenge);
+  return db.collection("challenges").add(challenge);
+};
+
+export const getAllChallengesSnapshot = async () => {
+  return db.collection("challenges").get();
 };
 
 export const getChallenge = async (challengeId: string) => {
-  return db.collection('challenges').doc(challengeId).get();
-}
+  return db.collection("challenges").doc(challengeId).get();
+};
 
 export const usedSource = async (psid: string, challengeRef: string) => {
   // TODO(techiejd): They didn't really accept a challenge but
@@ -58,11 +58,16 @@ export const usedSource = async (psid: string, challengeRef: string) => {
 };
 
 export const addTx = async (tx: Transaction) => {
-  return db.collection('transactions').add(tx);
+  return db.collection("transactions").add(tx);
 };
 
 export const getAllTx = () => {
-  return db.collection('transactions').get().then((transactionSnapshots) => {
-    return transactionSnapshots.docs.map(transactionSnapshot => transactionSnapshot.data())
-  })
-}
+  return db
+    .collection("transactions")
+    .get()
+    .then((transactionSnapshots) => {
+      return transactionSnapshots.docs.map((transactionSnapshot) =>
+        transactionSnapshot.data()
+      );
+    });
+};
