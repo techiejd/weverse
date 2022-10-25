@@ -2,7 +2,7 @@ import type { GetServerSideProps, NextPage } from "next";
 import styles from "../../../styles/Home.module.css";
 import { getChallenge } from "../../../common/db";
 import { ChallengeData, challengeData } from "../../../modules/db/schemas";
-import votestyles from "../../../styles/vote.module.css";
+import cardStyles from "../../../styles/card.module.css";
 import { pickBy, identity } from "lodash";
 
 import { useRouter } from "next/router";
@@ -44,7 +44,7 @@ const User: NextPage<{
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <div className={votestyles.vote}>
+        <div className={cardStyles.vote}>
           <h1>{props.challengeData.title}</h1>
           <h2> WeRace</h2>
           <br />
