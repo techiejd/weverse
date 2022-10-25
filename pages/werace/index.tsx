@@ -15,7 +15,6 @@ export const getServerSideProps: GetServerSideProps = (context) => {
     return {
       props: {
         challengeData: challengesSnapshot.docs.map((challengeSnapshot) => {
-          console.log("challengeSnapshot.data(): ", challengeSnapshot.data());
           return challengeData.parse(
             pickBy(
               {
@@ -47,7 +46,7 @@ const AllChallege: NextPage<{
           <h1> WeRaces</h1>
           <button disabled={true}> Add New Race</button>
           {props.challengeData.map((challenge, i) => (
-            <Link key={i} href={`./werace/werace/${challenge.id}`}>
+            <Link key={i} href={`./werace/${challenge.id}`}>
               <Grid
                 container
                 spacing={0}
