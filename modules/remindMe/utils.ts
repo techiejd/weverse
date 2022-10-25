@@ -15,7 +15,7 @@ export const setReminder = async function (
   const convertedPayload = JSON.stringify({psid, message});
   const body = Buffer.from(convertedPayload).toString('base64');
 
-  const url = "https:onewe.tech/api/remindMe"
+  const url = "https://onewe.tech/api/remindMe"
   const task = {
     httpRequest: {
       httpMethod: 'POST' as 'POST',

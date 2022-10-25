@@ -259,23 +259,3 @@ export const asidResBody = z.object({
 export const facebookResponse = z.object({
   data: z.any(),
 });
-
-/** Utils class for dealing with fb <-> dialogflow */
-export class DialogFlow {
-  private static _originalRequest = z.object({
-    payload: z.object({
-      data: Messenger.event,
-    }),
-  });
-
-  /**
-   *
-   * @param {unknown} originalRequestJSON
-   * @return {string} The user's senderID
-   */
-  static parseForSenderID = (originalRequestJSON: unknown) => {
-    const fbOGRequest = DialogFlow._originalRequest.parse(originalRequestJSON);
-    const senderID = fbOGRequest.payload.data.sender.id;
-    return senderID;
-  };
-}

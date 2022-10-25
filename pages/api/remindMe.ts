@@ -7,7 +7,7 @@ import * as ConversationHandler from '../../modules/facebook/conversation/oneWeP
 
 const remindMeBody = z.object({
   psid: z.string(),
-  message: fbSchemas.Messenger.message,
+  message: z.string(), // fbSchemas.Messenger.message
   create: z.object({
     inHowManySeconds: z.number(),
   }).optional()
@@ -18,13 +18,14 @@ export default function remindMe(
   res: NextApiResponse
 ) {
   const {psid, message, create} = remindMeBody.parse(req.body);
+  const messageParsed = fbSchemas.Messenger.message.parse(JSON.parse(message));
 
   if (create) {
-    utils.setReminder(psid, message, create.inHowManySeconds);
+    utils.setReminder(psid, messageParsed, create.inHowManySeconds);
     logger.info({psid, message, inHowManySeconds: create.inHowManySeconds}, "Reminder created");
   } else {
     const convoHandler = new ConversationHandler.OneWePrivateConversationHandler(psid);
-    convoHandler.send(message);
+    convoHandler.send(messageParsed);
   }
   res.status(200).end();
 };
