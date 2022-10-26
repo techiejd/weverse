@@ -88,3 +88,7 @@ export const transaction = z.object({
 });
 
 export type Transaction = z.infer<typeof transaction>;
+
+export const draftTransaction = transaction.partial();
+
+export type DraftTransaction = z.infer<typeof draftTransaction>;

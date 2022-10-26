@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 import { getApp, initializeApp } from "firebase-admin/app";
-import { Transaction } from "../modules/db/schemas";
+import { Transaction, DraftTransaction } from "../modules/db/schemas";
 import { Challenge } from "../modules/sofia/schemas";
 import { logger } from "./logger";
 
@@ -70,4 +70,8 @@ export const getAllTx = () => {
         transactionSnapshot.data()
       );
     });
+};
+
+export const addDraftTx = async (draftTx: DraftTransaction) => {
+  return db.collection("draftTransactions").add(draftTx);
 };
