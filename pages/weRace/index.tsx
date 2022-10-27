@@ -46,7 +46,7 @@ const AllChallege: NextPage<{
           <h1> WeRaces</h1>
           <button disabled={true}> Add New Race</button>
           {props.challengeData.map((challenge, i) => (
-            <Link key={i} href={`./werace/${challenge.id}`}>
+            <Link key={i} href={`/weRace/${challenge.id}`}>
               <Grid
                 container
                 spacing={0}
