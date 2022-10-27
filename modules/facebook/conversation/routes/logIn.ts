@@ -4,8 +4,9 @@ import {LogInEvent} from '../integrations/logIn';
 import {OneWePrivateConversationHandler} from
   './../oneWePrivateConversationHandler';
 import * as notifications from './notifications';
+import * as fbSchemas from "../../schemas";
 
-export const makeLoggingInButton = (recipientId: string) => {
+export const makeLoggingInButton = (recipientId: string) : fbSchemas.Messenger.Message => {
   return {
     attachment: {
       payload: {
