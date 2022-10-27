@@ -18,6 +18,7 @@ export default function remindMe(
   res: NextApiResponse
 ) {
   const {psid, message, create} = remindMeBody.parse(req.body);
+  logger.info({psid, message, create}, "Remind Me parsed body");
   const messageParsed = fbSchemas.Messenger.message.parse(JSON.parse(message));
 
   if (create) {

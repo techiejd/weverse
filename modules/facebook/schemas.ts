@@ -137,7 +137,10 @@ export namespace Messenger {
 
   export const message = z.object({
     text: z.string().optional(),
-    attachment: z.object({}).optional(),
+    attachment: z.object({
+      type: z.literal("template"),
+      payload: z.any(), // see available templates: https://developers.facebook.com/docs/messenger-platform/reference/templates#available_templates
+    }).optional(),
     quick_replies: quickReply.array().optional(),
   });
 
