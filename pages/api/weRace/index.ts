@@ -19,9 +19,10 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
       identity
     )
   );
-  const timeStamp = Date.parse(newChallenge.start);
-  console.log(newChallenge);
-  console.log(timeStamp);
   const challengeId = await addChallenge(newChallenge);
-  res.status(200).end("challengeId");
+  if (challengeId) {
+    res.status(200).end();
+  } else {
+    throw new Error("Cannot write challenge");
+  }
 }
