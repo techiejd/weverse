@@ -18,7 +18,7 @@ export const makeLoggingInButton = (recipientId: string) : fbSchemas.Messenger.M
           {
             title: 'Dar permisos.',
             type: 'web_url',
-            url: 'https://onewe.tech/create_log_in_request/' + recipientId,
+            url: 'https://onewe.tech/api/logIn/createRequest?psid=' + recipientId,
           },
         ],
       },
