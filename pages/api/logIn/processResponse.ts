@@ -100,7 +100,7 @@ export default async function processResponse(
         manager.handle({logIn: {type: 'Registering', userId: psid}});
 
         addUser({asid: userInfo.asid, name: userInfo.name, psid, token}).then(() => {
-          // TODO(jddominguez): what happens if db adding fails?
+          // TODO(techiejd): what happens if db adding fails?
           manager.handle({logIn: {type: 'Registered', userId: psid}});
         });
       };
