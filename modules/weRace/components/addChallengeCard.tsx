@@ -55,11 +55,6 @@ const AddChallengeCard: React.FC<{
     const selectedDate = new Date(time);
     return props.startDate.getTime() < selectedDate.getTime();
   };
-  const filterStartDatePassedTime = (time: any) => {
-    const currentDate = new Date();
-    const selectedDate = new Date(time);
-    return currentDate.getTime() < selectedDate.getTime();
-  };
   return (
     <div className={weraceStyles.addChallenge}>
       <br />
@@ -75,8 +70,6 @@ const AddChallengeCard: React.FC<{
           selectsStart
           startDate={props.startDate}
           endDate={props.endDate}
-          minDate={new Date()}
-          filterTime={filterStartDatePassedTime}
           showTimeSelect
           dateFormat="MMMM d, yyyy h:mm aa"
         />
