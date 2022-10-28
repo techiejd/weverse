@@ -28,7 +28,6 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
   let draftTxData = Array<TxDatum>();
 
   if (message != "") {
-    console.log("entraaaaaaaaaaaaa en mensaje");
     let txMessage: TxMessage = {
       type: messageType,
       text: message,
@@ -38,7 +37,6 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
     }
     draftTxData.push({ type: "message", message: txMessage });
   }
-  console.log("before object entries", draftTxData);
   if (Object.entries(resourcesChange).length > 0) {
     draftTxData.push({ type: "resourcesChange", resourcesChange });
   }
@@ -47,7 +45,6 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
     data: draftTxData,
     createdAt: new Date().toISOString(),
   });
-  console.log("look at meeeeeee", draftTx);
   addDraftTx(draftTx);
 
   res.status(200).end();
