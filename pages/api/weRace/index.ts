@@ -4,24 +4,25 @@ import { addChallenge } from "../../../common/db";
 import { firestore } from "firebase-admin";
 import { identity, pickBy } from "lodash";
 
-export default async function admin(req: NextApiRequest, res: NextApiResponse) {
-  let body = JSON.parse(req.body);
+export default async function vote(req: NextApiRequest, res: NextApiResponse) {
+  let newChallengeData = JSON.parse(req.body);
   const parseDate = (date: string) =>
     firestore.Timestamp.fromDate(new Date(date));
   let newChallenge: Challenge = challenge.parse(
     pickBy(
       {
-        title: body.title,
-        start: parseDate(body.start),
-        end: body.end ? parseDate(body.end) : undefined,
-        hashtags: body.hashtags.length > 0 ? body.hashtags : undefined,
+        title: newChallengeData.title,
+        start: parseDate(newChallengeData.start),
+        end: newChallengeData.end ? parseDate(newChallengeData.end) : undefined,
+        hashtags: newChallengeData.hashtags.length > 0 ? newChallengeData.hashtags : undefined,
       },
       identity
     )
   );
   const challengeId = await addChallenge(newChallenge);
+  console.log(challengeId);
   if (challengeId) {
-    res.status(200).end();
+    res.status(200).send(JSON.stringify({challengeId}));
   } else {
     throw new Error("Cannot write challenge");
   }
