@@ -27,7 +27,12 @@ export const getAllUsersSnapshot = async () => {
 };
 
 export const addChallenge = async (challenge: Challenge) => {
-  return db.collection("challenges").add(challenge);
+  return db
+    .collection("challenges")
+    .add(challenge)
+    .then((challengeDocRef) => {
+      return challengeDocRef.id;
+    });
 };
 
 export const getAllChallengesSnapshot = async () => {
