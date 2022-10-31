@@ -14,15 +14,17 @@ export default async function vote(req: NextApiRequest, res: NextApiResponse) {
         title: newChallengeData.title,
         start: parseDate(newChallengeData.start),
         end: newChallengeData.end ? parseDate(newChallengeData.end) : undefined,
-        hashtags: newChallengeData.hashtags.length > 0 ? newChallengeData.hashtags : undefined,
+        hashtags:
+          newChallengeData.hashtags.length > 0
+            ? newChallengeData.hashtags
+            : undefined,
       },
       identity
     )
   );
   const challengeId = await addChallenge(newChallenge);
-  console.log(challengeId);
   if (challengeId) {
-    res.status(200).send(JSON.stringify({challengeId}));
+    res.status(200).send(JSON.stringify({ challengeId }));
   } else {
     throw new Error("Cannot write challenge");
   }

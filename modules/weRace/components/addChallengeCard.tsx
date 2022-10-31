@@ -9,9 +9,7 @@ import { challenge } from "../../sofia/schemas";
 import { challengeData, ChallengeData } from "../../db/schemas";
 
 const AddChallengeCard: React.FC<{
-  addNewChallenge: React.Dispatch<
-    React.SetStateAction<ChallengeData | undefined>
-  >;
+  addNewChallenge: (challenge: ChallengeData) => void;
 }> = (props) => {
   const [inputState, setInputState] = useState<
     "closed" | "editing" | "waiting"
