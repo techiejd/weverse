@@ -28,13 +28,15 @@ export const userData = z.object({
 export type UserData = z.infer<typeof userData>;
 
 export const challengeData = z.object({
-  start: z.string(), // firestore.Timestamp
+  start: z.string(), // ISO string
   end: z.string().optional(),
   hashtags: z.string().array().optional(),
   title: z.string(),
   id: z.string(),
 });
 
+// TODO(jimenez1917): Remove all references of sofia/schemas in front end.
+// Or move the timestamp info somewhere else.
 export type ChallengeData = z.infer<typeof challengeData>;
 
 export const resourceEnum = z.nativeEnum(sofi.Resource);

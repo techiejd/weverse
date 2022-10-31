@@ -1,6 +1,6 @@
 import type { GetServerSideProps, NextPage } from "next";
 
-import React from "react";
+import React, { useState } from "react";
 import styles from "../../styles/Home.module.css";
 import { getAllChallengesSnapshot } from "../../common/db";
 import { challengeData, ChallengeData } from "../../modules/db/schemas";
@@ -9,6 +9,8 @@ import cardStyles from "../../styles/card.module.css";
 import { Card, CardContent, Grid } from "@mui/material";
 import { pickBy, identity } from "lodash";
 import Link from "next/link";
+
+import AddChallengeCard from "../../modules/weRace/components/addChallengeCard";
 
 export const getServerSideProps: GetServerSideProps = (context) => {
   return getAllChallengesSnapshot().then(async (challengesSnapshot) => {
@@ -36,24 +38,31 @@ export const getServerSideProps: GetServerSideProps = (context) => {
   });
 };
 
-const AllChallege: NextPage<{
+const AllChallenges: NextPage<{
   challengeData: Array<ChallengeData>;
 }> = (props) => {
+  const [challenges, setChallenges] = useState<Array<ChallengeData>>(
+    props.challengeData
+  );
+
+  const addNewChallenge = (challenge: ChallengeData) => {
+    setChallenges([challenge, ...challenges]);
+  };
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
         <div className={cardStyles.vote}>
           <h1> WeRaces</h1>
-          <button disabled={true}> Add New Race</button>
-          {props.challengeData.map((challenge, i) => (
-            <Link key={i} href={`/weRace/${challenge.id}`}>
+          <AddChallengeCard addNewChallenge={addNewChallenge} />
+          {challenges.map((challenge) => (
+            <Link key={challenge.id} href={`./weRace/${challenge.id}`}>
               <Grid
                 container
                 spacing={0}
                 direction="column"
                 textAlign="center"
                 justifyContent="center"
-                key={i}
               >
                 <Card
                   sx={{ maxWidth: 700, mt: 5 }}
@@ -66,13 +75,22 @@ const AllChallege: NextPage<{
                   }}
                 >
                   <CardContent>
-                    Title: {challenge.title}
-                    <br />
-                    Start: {challenge.start}
-                    <br />
-                    End: {challenge.end}
-                    <br />
-                    Hashtags: {challenge.hashtags}
+                    <>
+                      Title: {challenge.title}
+                      <br />
+                      Start: {challenge.start}
+                      <br />
+                      End: {challenge.end}
+                      <br />
+                      Hashtags:
+                      {challenge.hashtags ? (
+                        Object.values(challenge.hashtags).map((hashtag, j) => (
+                          <p key={j}>{hashtag}</p>
+                        ))
+                      ) : (
+                        <p>Sin Hashtags</p>
+                      )}
+                    </>
                   </CardContent>
                 </Card>
               </Grid>
@@ -84,4 +102,4 @@ const AllChallege: NextPage<{
   );
 };
 
-export default AllChallege;
+export default AllChallenges;
