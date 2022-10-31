@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import styles from "../../styles/Home.module.css";
 import { getAllChallengesSnapshot } from "../../common/db";
 import { challengeData, ChallengeData } from "../../modules/db/schemas";
-import votestyles from "../../styles/vote.module.css";
+import { logger } from "../../common/logger";
+import cardStyles from "../../styles/card.module.css";
 import { Card, CardContent, Grid } from "@mui/material";
 import { pickBy, identity } from "lodash";
 import Link from "next/link";
@@ -51,11 +52,11 @@ const AllChallenges: NextPage<{
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <div className={votestyles.vote}>
+        <div className={cardStyles.vote}>
           <h1> WeRaces</h1>
           <AddChallengeCard addNewChallenge={addNewChallenge} />
           {challenges.map((challenge) => (
-            <Link key={challenge.id} href={`./werace/${challenge.id}`}>
+            <Link key={challenge.id} href={`./weRace/${challenge.id}`}>
               <Grid
                 container
                 spacing={0}

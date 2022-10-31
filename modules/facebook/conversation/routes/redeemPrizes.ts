@@ -72,7 +72,7 @@ Sofia se comunicará contigo para ayudarte redimir.`,
 
 const confirmTransaction = (ween:number,
     cost:number,
-    service:string) => ({
+    service:string) : schemas.Messenger.Message => ({
   attachment: {
     type: 'template',
     payload: {

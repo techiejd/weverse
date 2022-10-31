@@ -73,7 +73,7 @@ export default async function admin(
       const messengerMessage : fbSchemas.Messenger.Message = conversationUtils.makeMessage(
         templatedMessage,
         templatedButtons,
-        [{title: "Recuerdame después.", payload: `Remind.Me..${user.psid}.${internalMessage}`}]);
+        [{title: "Recuerdame después.", payload: `Remind.Me..${user.psid}.${JSON.stringify(internalMessage)}`}]);
 
       return Promise.resolve(messengerMessage);
     }
