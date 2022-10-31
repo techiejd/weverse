@@ -30,9 +30,16 @@ const Search: NextPage<{
   const processUserNameQueryInput = async (e: MouseEvent) => {
     e.preventDefault();
 
-    const userNameQueryFilter = makeUserNameQueryFilter(
-      userNameQueryInput.split("\n")
-    );
+    let userNamesWithWhiteSpace = userNameQueryInput.split("\n");
+    let userNames = userNamesWithWhiteSpace.reduce((prev, curr) => {
+      const c = curr.trim();
+      if (c != "") {
+        prev.push(c);
+      }
+      return prev;
+    }, Array<string>());
+
+    const userNameQueryFilter = makeUserNameQueryFilter(userNames);
     const foundUsers = props.userDatas.filter(userNameQueryFilter);
 
     setFoundUsers(foundUsers);
