@@ -58,6 +58,7 @@ const User: NextPage<{
             ? props.challengeData.hashtags
             : "No hashtags"}
           <br />
+          {`http://www.one.tech/weRace/${props.challengeData.id}/vote?psid={user.psid}`}
           <br />
           <>
             <hr />
