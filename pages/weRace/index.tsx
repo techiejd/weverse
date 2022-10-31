@@ -3,11 +3,8 @@ import type { GetServerSideProps, NextPage } from "next";
 import React, { useState } from "react";
 import styles from "../../styles/Home.module.css";
 import { getAllChallengesSnapshot } from "../../common/db";
-import { challengeData } from "../../modules/db/schemas";
-import { logger } from "../../common/logger";
 import cardStyles from "../../styles/card.module.css";
 import { Card, CardContent, Grid } from "@mui/material";
-import { pickBy, identity } from "lodash";
 import Link from "next/link";
 import { Challenge, challenge } from "../../modules/sofia/schemas";
 
@@ -17,7 +14,7 @@ export const getServerSideProps: GetServerSideProps = (context) => {
   return getAllChallengesSnapshot().then(async (challengesSnapshot) => {
     return {
       props: {
-        challengeData: challengesSnapshot.docs.map((challengeSnapshot) => {
+        challenges: challengesSnapshot.docs.map((challengeSnapshot) => {
           return JSON.stringify({
             ...challenge.parse(challengeSnapshot.data()),
             id: challengeSnapshot.id,
@@ -29,11 +26,11 @@ export const getServerSideProps: GetServerSideProps = (context) => {
 };
 
 const AllChallenges: NextPage<{
-  challengeData: Array<string>;
+  challenges: Array<string>;
 }> = (props) => {
-  console.log("props: ", props.challengeData);
+  console.log("props: ", props.challenges);
   const [challenges, setChallenges] = useState<Array<Challenge>>(
-    props.challengeData.map((c) => challenge.parse(JSON.parse(c)))
+    props.challenges.map((c) => challenge.parse(JSON.parse(c)))
   );
 
   const addNewChallenge = (challenge: Challenge) => {
