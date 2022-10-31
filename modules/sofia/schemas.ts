@@ -64,11 +64,17 @@ export const startingUserGameInfo: UserGameInfo = (() => {
   });
 })();
 
+const firestoreDateSchema = z.preprocess((arg) => {
+  if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
+  return (arg as any).toDate(); // It's a firestore.Timestamp.
+}, z.date());
+
 export const challenge = z.object({
   title: z.string(),
-  start: z.any(), // firestore.Timestamp
-  end: z.any().optional(),
+  start: firestoreDateSchema,
+  end: firestoreDateSchema.optional(),
   hashtags: z.string().array().optional(),
+  id: z.string().optional(), // Only used in front end.
 });
 
 export type Challenge = z.infer<typeof challenge>;
