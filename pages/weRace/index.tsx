@@ -3,12 +3,13 @@ import type { GetServerSideProps, NextPage } from "next";
 import React, { useState } from "react";
 import styles from "../../styles/Home.module.css";
 import { getAllChallengesSnapshot } from "../../common/db";
-import { challengeData, ChallengeData } from "../../modules/db/schemas";
+import { challengeData } from "../../modules/db/schemas";
 import { logger } from "../../common/logger";
 import cardStyles from "../../styles/card.module.css";
 import { Card, CardContent, Grid } from "@mui/material";
 import { pickBy, identity } from "lodash";
 import Link from "next/link";
+import { Challenge, challenge } from "../../modules/sofia/schemas";
 
 import AddChallengeCard from "../../modules/weRace/components/addChallengeCard";
 
@@ -17,21 +18,10 @@ export const getServerSideProps: GetServerSideProps = (context) => {
     return {
       props: {
         challengeData: challengesSnapshot.docs.map((challengeSnapshot) => {
-          return challengeData.parse(
-            pickBy(
-              {
-                ...challengeSnapshot.data(),
-                start: new Date(
-                  challengeSnapshot.data().start.toMillis()
-                ).toString(),
-                end: new Date(
-                  challengeSnapshot.data().end?.toMillis()
-                ).toString(),
-                id: challengeSnapshot.id,
-              },
-              identity
-            )
-          );
+          return JSON.stringify({
+            ...challenge.parse(challengeSnapshot.data()),
+            id: challengeSnapshot.id,
+          });
         }),
       },
     };
@@ -39,13 +29,14 @@ export const getServerSideProps: GetServerSideProps = (context) => {
 };
 
 const AllChallenges: NextPage<{
-  challengeData: Array<ChallengeData>;
+  challengeData: Array<string>;
 }> = (props) => {
-  const [challenges, setChallenges] = useState<Array<ChallengeData>>(
-    props.challengeData
+  console.log("props: ", props.challengeData);
+  const [challenges, setChallenges] = useState<Array<Challenge>>(
+    props.challengeData.map((c) => challenge.parse(JSON.parse(c)))
   );
 
-  const addNewChallenge = (challenge: ChallengeData) => {
+  const addNewChallenge = (challenge: Challenge) => {
     setChallenges([challenge, ...challenges]);
   };
 
@@ -78,9 +69,9 @@ const AllChallenges: NextPage<{
                     <>
                       Title: {challenge.title}
                       <br />
-                      Start: {challenge.start}
+                      Start: {challenge.start.toISOString()}
                       <br />
-                      End: {challenge.end}
+                      End: {challenge.end?.toISOString()}
                       <br />
                       Hashtags:
                       {challenge.hashtags ? (
