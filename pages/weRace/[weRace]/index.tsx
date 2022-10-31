@@ -58,6 +58,9 @@ const User: NextPage<{
             ? props.challengeData.hashtags
             : "No hashtags"}
           <br />
+          Escribiendo el "user.psid" dentro de este enlace puede ir a la pagina
+          de votación de dicho usuario: <br />
+          --
           {`http://www.one.tech/weRace/${props.challengeData.id}/vote?psid={user.psid}`}
           <br />
           <>
