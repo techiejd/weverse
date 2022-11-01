@@ -1,36 +1,19 @@
 import type { GetServerSideProps, NextPage } from "next";
 import styles from "../../../styles/Home.module.css";
 import { getChallenge } from "../../../common/db";
-import { ChallengeData, challengeData } from "../../../modules/db/schemas";
 import cardStyles from "../../../styles/card.module.css";
-import { pickBy, identity } from "lodash";
 
-import { useRouter } from "next/router";
-import { Card, CardContent, Grid } from "@mui/material";
-import { MouseEvent } from "react";
 import { count, CountInfo } from "../../../modules/weRace/vote/utils/count";
 import Link from "next/link";
+import { challenge } from "../../../modules/sofia/schemas";
+import { Card, CardContent } from "@mui/material";
 
 export const getServerSideProps: GetServerSideProps = (context) => {
   const weRace = String(context.params?.weRace);
   return getChallenge(weRace).then(async (challengeSnapshot) => {
     return {
       props: {
-        challengeData: challengeData.parse(
-          pickBy(
-            {
-              ...challengeSnapshot.data(),
-              start: new Date(
-                challengeSnapshot.data()?.start.toMillis()
-              ).toString(),
-              end: new Date(
-                challengeSnapshot.data()?.end?.toMillis()
-              ).toString(),
-              id: weRace,
-            },
-            identity
-          )
-        ),
+        challenge: JSON.stringify(challenge.parse(challengeSnapshot.data())),
         countInfo: await count(weRace),
       },
     };
@@ -38,31 +21,28 @@ export const getServerSideProps: GetServerSideProps = (context) => {
 };
 
 const User: NextPage<{
-  challengeData: ChallengeData;
+  challenge: string;
   countInfo: CountInfo;
 }> = (props) => {
+  const weRace = challenge.parse(JSON.parse(props.challenge));
   return (
     <div className={styles.container}>
       <main className={styles.main}>
         <div className={cardStyles.vote}>
-          <h1>{props.challengeData.title}</h1>
+          <h1>{weRace.title}</h1>
           <h2> WeRace</h2>
           <br />
-          Start: {props.challengeData.start}
+          Start: {weRace.start.toISOString()}
           <br />
-          End:{" "}
-          {props.challengeData.end ? props.challengeData.end : "No end date"}
+          End: {weRace.end ? weRace.end.toISOString() : "No end date"}
           <br />
-          Hashtags:{" "}
-          {props.challengeData.hashtags
-            ? props.challengeData.hashtags
-            : "No hashtags"}
+          Hashtags: {weRace.hashtags ? weRace.hashtags : "No hashtags"}
           <br />
           <br />
           Escribiendo el {`"user.psid"`} dentro de este enlace puede ir a la
           pagina de votación de dicho usuario: <br />
           --
-          {`http://www.one.tech/weRace/${props.challengeData.id}/vote?psid=\${user.psid}`}
+          {`http://www.one.tech/weRace/${weRace.id}/vote?psid=\${user.psid}`}
           <br />
           <>
             <hr />

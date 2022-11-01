@@ -1,8 +1,6 @@
-import { start } from "./../../../facebook/conversation/routes/start";
 import {
   getAllUsersSnapshot,
   getUserSnapshot,
-  getChallenge,
 } from "../../../../common/db";
 import { userData } from "../../../db/schemas";
 import * as fbSchemas from "../../../facebook/schemas";

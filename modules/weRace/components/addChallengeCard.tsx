@@ -5,11 +5,10 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { challenge } from "../../sofia/schemas";
-import { challengeData, ChallengeData } from "../../db/schemas";
+import { challenge, Challenge } from "../../sofia/schemas";
 
 const AddChallengeCard: React.FC<{
-  addNewChallenge: (challenge: ChallengeData) => void;
+  addNewChallenge: (challenge: Challenge) => void;
 }> = (props) => {
   const [inputState, setInputState] = useState<
     "closed" | "editing" | "waiting"
@@ -73,7 +72,7 @@ const AddChallengeCard: React.FC<{
       response.json().then((json) => {
         setInputState("closed");
         props.addNewChallenge(
-          challengeData.parse({ ...newChallenge, id: json.challengeId })
+          challenge.parse({ ...newChallenge, id: json.challengeId })
         );
       });
     });
