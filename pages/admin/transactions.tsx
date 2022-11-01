@@ -1,4 +1,6 @@
 import type { NextPage } from "next";
+import styles from "../../styles/Home.module.css";
+/*
 import { FC, useEffect, useReducer, useState } from "react";
 import {
   ChangesInResources,
@@ -6,11 +8,29 @@ import {
   TxMessage,
 } from "../../modules/db/schemas";
 // TODO(jimenez1917): Get correct styles
-import styles from "../../styles/Home.module.css";
 import adminStyles from "../../styles/admin.module.css";
 import Link from "next/link";
-import { getAllTx } from "../../common/db";
+import { getAllTx } from "../../common/db";*/
 
+// Hack cause we leaked this link.
+const Transactions: NextPage = () => {
+  return (
+    <div className={styles.container}>
+      <main className={styles.main}>
+        <h1>Muchas gracias por estar acá</h1>
+        <p>
+          Nuestro amigo Nico ha hecho una prueba contigo y este ⚡1 WEEN lo
+          puedes reclamar con él, te sirve para una cerveza, un café, un té, un
+          chocolate.
+          <br /> Todo esto es negociable hablando con él.
+        </p>
+      </main>
+    </div>
+  );
+};
+
+export default Transactions;
+/*
 // TODO(techiejd): Are these records or transactions?
 export async function getServerSideProps() {
   return getAllTx().then((transactions) => {
@@ -101,3 +121,4 @@ const Transactions: NextPage<{ transactions: Array<Transaction> }> = (
 };
 
 export default Transactions;
+*/
