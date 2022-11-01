@@ -8,7 +8,7 @@ import {getUserSnapshot} from '../../../../common/db';
 import {GroupHandler} from '../../utils';
 import {prettifyJSON} from '../utils';
 
-export const optInMessage = {
+export const optInMessage : schemas.Messenger.Message = {
   'attachment': {
     'type': 'template',
     'payload': {

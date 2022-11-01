@@ -4,8 +4,9 @@ import {LogInEvent} from '../integrations/logIn';
 import {OneWePrivateConversationHandler} from
   './../oneWePrivateConversationHandler';
 import * as notifications from './notifications';
+import * as fbSchemas from "../../schemas";
 
-export const makeLoggingInButton = (recipientId: string) => {
+export const makeLoggingInButton = (recipientId: string) : fbSchemas.Messenger.Message => {
   return {
     attachment: {
       payload: {
@@ -17,7 +18,7 @@ export const makeLoggingInButton = (recipientId: string) => {
           {
             title: 'Dar permisos.',
             type: 'web_url',
-            url: 'https://onewe.tech/create_log_in_request/' + recipientId,
+            url: 'https://onewe.tech/api/logIn/createRequest?psid=' + recipientId,
           },
         ],
       },

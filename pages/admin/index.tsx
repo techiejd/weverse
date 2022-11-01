@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import styles from "../../styles/Home.module.css";
-import votestyles from "../../styles/vote.module.css";
+import cardStyles from "../../styles/card.module.css";
 
 import Link from "next/link";
 
@@ -8,7 +8,7 @@ const Dashboard: NextPage = () => {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <div className={votestyles.vote}>
+        <div className={cardStyles.vote}>
           <h1>Admin Dashboard</h1>
           <h2>Admin</h2>
           <br />

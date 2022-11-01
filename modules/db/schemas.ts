@@ -27,16 +27,6 @@ export const userData = z.object({
 
 export type UserData = z.infer<typeof userData>;
 
-export const challengeData = z.object({
-  start: z.string(), // firestore.Timestamp
-  end: z.string().optional(),
-  hashtags: z.string().array().optional(),
-  title: z.string(),
-  id: z.string(),
-});
-
-export type ChallengeData = z.infer<typeof challengeData>;
-
 export const resourceEnum = z.nativeEnum(sofi.Resource);
 
 // TODO(techiejd): Move to sofia

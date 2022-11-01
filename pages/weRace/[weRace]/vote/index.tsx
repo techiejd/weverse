@@ -20,7 +20,7 @@ import {
   attachment as attachmentSchema,
 } from "../../../../modules/facebook/schemas";
 import VotingCard from "../../../../modules/weRace/vote/components/votingCard";
-import votestyles from "../../../../styles/vote.module.css";
+import cardStyles from "../../../../styles/card.module.css";
 import { logger } from "../../../../common/logger";
 import { getWeRacePosts } from "../../../../modules/weRace/vote/utils/query";
 
@@ -159,7 +159,7 @@ const Vote: NextPage<{
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <div className={votestyles.vote}>
+        <div className={cardStyles.vote}>
           <h1> Apreciemos estas publicaciones!</h1>
           {candidates.map((can, i) => (
             <Grid
@@ -184,8 +184,8 @@ const Vote: NextPage<{
           ))}
         </div>
         <button
-          id={votestyles.mybutton}
-          className={votestyles.buttonFixed}
+          id={cardStyles.mybutton}
+          className={cardStyles.buttonFixed}
           onClick={submitVotes}
           disabled={!canVote}
         >

@@ -1,6 +1,5 @@
 import * as schemas from '../schemas';
 import * as notifications from './routes/notifications';
-// import * as dialogflow from '@google-cloud/dialogflow';
 import * as logInRoutes from './routes/logIn';
 import * as defaultRoutes from './routes/default';
 import {consultCompetition} from './routes/consultCompetition';
@@ -48,6 +47,13 @@ export class OneWeManager {
   private getRouteFromMessage = async (
       messengerEvent: schemas.Messenger.Event) :
      Promise<[string, Record<string, unknown>]> => {
+    if (messengerEvent.message?.quick_reply) {
+      messengerEvent.postback = {
+        payload: messengerEvent.message!.quick_reply!.payload,
+        title: String(messengerEvent.message!.text)
+      }
+      return this.getRouteFromPostback(messengerEvent);
+    }
     const params = {'senderId': messengerEvent.sender.id,
       'Admin': {
         message: messengerEvent.message!.text,
@@ -55,26 +61,6 @@ export class OneWeManager {
     };
     return ['Default.Fallback', params];
   };
-
-  // TODO(techiejd): Wow we really going full buttons?
-  // eslint-disable-next-line valid-jsdoc
-  /* private getRouteFromMessage = async (
-      messengerEvent: schemas.Messenger.Event) :
-       Promise<[string, Record<string, string>]> => {
-    const params = {'senderId': messengerEvent.sender.id};
-    if (messengerEvent.message!.quick_reply) {
-      return [messengerEvent.message!.quick_reply.payload, params];
-    } else if (messengerEvent.message!.text) {
-      const route = await this.getIntentFromNLP(
-          messengerEvent.message!.text, messengerEvent.sender.id);
-      if (route) {
-        return [route, params];
-      }
-    }
-    functions.logger.error(
-        `Got to a message we can't handle: `, messengerEvent.message);
-    return ['Default.Fallback', params];
-  }; */
 
   // eslint-disable-next-line valid-jsdoc
   private getRouteFromOptin = (
@@ -86,27 +72,6 @@ export class OneWeManager {
         senderId: messengerEvent.sender.id,
       }];
   };
-
-  // eslint-disable-next-line valid-jsdoc
-  /* private getIntentFromNLP = async (text: string, senderId: string) => {
-    const sessionClient = new dialogflow.SessionsClient();
-    const sessionPath = sessionClient.projectAgentSessionPath(
-        String(process.env.DF_PROJECT_ID),
-        senderId,
-    );
-    const request = {
-      session: sessionPath,
-      queryInput: {
-        text: {
-          text: text,
-          languageCode: 'es',
-        },
-      },
-    };
-
-    const fullResponse = await sessionClient.detectIntent(request);
-    return fullResponse[0].queryResult?.intent?.displayName;
-  };*/
 
   /**
    *

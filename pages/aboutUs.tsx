@@ -72,10 +72,8 @@ const AboutUs: NextPage = () => {
               </div>
               <p className={aboutUsStyle.mision}>LA FILOSOFÍA DE ONEWE</p>
               <p className={aboutUsStyle.seccionPFilosofia}>
-                Descentralizado es siempre mejor que centralizado.
-                <br />
-                <br /> La comunidad es una forma comprobada desde tiempos
-                milenarios de organización de las personas.
+                La comunidad es una forma comprobada desde tiempos milenarios de
+                organización de las personas.
                 <br />
                 <br /> Creemos que las comunidades son esencialmente buenas.
                 <br />
@@ -87,8 +85,7 @@ const AboutUs: NextPage = () => {
                 <br /> <br />
                 Reconocemos y respetamos a cada comunidad como única.
                 <br />
-                <br /> El capitalismo se puede y debe usar para el bienestar de
-                todos.
+                <br /> When there’s abundance, cooperation is the best system.
                 <br />
               </p>
             </div>
@@ -103,39 +100,14 @@ const AboutUs: NextPage = () => {
               camino flexible y una red para implementar el capitalismo comunal.
             </p>
           </div>
-          <div className={aboutUsStyle.threeColumns}>
-            <div>
-              <img
-                className={aboutUsStyle.imgOn3}
-                src="/iStock-935705246.jpg"
-              />
-              <p className={aboutUsStyle.mision}>BLOCKCHAIN</p>
-              <p className={aboutUsStyle.seccionPThreeColumns}>
-                Para permitir la cooperación y desarrollo descentralizado
-                captando el valor del impacto social e innovación.
-              </p>
-            </div>
-            <div>
-              <img
-                className={aboutUsStyle.imgOn3}
-                src="/iStock-1188009561-1.jpg"
-              />
-              <p className={aboutUsStyle.mision}>
-                CONTRATOS
-                <br /> INTELIGENTES
-              </p>
-              <p className={aboutUsStyle.seccionPThreeColumns}>
-                Crear apoyo mutuo. Permitiendo la toma de decisiones más
-                ecuánimes para todos.
-              </p>
-            </div>
+          <div className={aboutUsStyle.tools}>
             <div>
               <img
                 className={aboutUsStyle.imgOn3}
                 src="/iStock-667434682.jpg"
               />
               <p className={aboutUsStyle.mision}>
-                USTEDES A CADA
+                CON USTEDES A CADA
                 <br /> PASO
               </p>
               <p className={aboutUsStyle.seccionPThreeColumns}>
