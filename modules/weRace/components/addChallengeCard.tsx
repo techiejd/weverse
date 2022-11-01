@@ -101,6 +101,14 @@ const AddChallengeCard: React.FC<{
     const selectedDate = new Date(time);
     return startDate.getTime() < selectedDate.getTime();
   };
+  const clearInputs = () => {
+    setInputState("closed");
+    setStartDate(new Date());
+    setEndDate(new Date());
+    setTitle("");
+    setInputHashtag("");
+    setHashtags([]);
+  };
   return (
     <>
       {inputState == "closed" ? (
@@ -193,7 +201,7 @@ const AddChallengeCard: React.FC<{
               ))}
               <br />
               <button onClick={processAddChallenge}>Guardar</button>
-              <button onClick={() => setInputState("closed")}>Cancelar</button>
+              <button onClick={clearInputs}>Cancelar</button>
             </div>
           )}
         </>
