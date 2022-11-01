@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 import { getApp, initializeApp } from "firebase-admin/app";
-import { Transaction } from "../modules/db/schemas";
+import { DraftTransaction, Transaction } from "../modules/db/schemas";
 import { Challenge, startingUserGameInfo } from "../modules/sofia/schemas";
 import { logger } from "./logger";
 
@@ -97,6 +97,21 @@ export const getAllTx = () => {
     });
 };
 
-export const addDraftTx = async (draftTx: Transaction) => {
-  return db.collection("draftTransactions").add(draftTx);
+export const addDraftTx = async (draftTx: DraftTransaction) => {
+  if (draftTx.route == undefined) {
+    db.collection("draftTransactions")
+      .add(draftTx)
+      .then((res) => {
+        let route = res.id;
+        draftTx.route = route;
+        try {
+          db.collection("draftTransactions").doc(route).set(draftTx);
+        } catch (err: any) {
+          throw new Error(err);
+        }
+      });
+  } else {
+    db.collection("draftTransactions").add(draftTx);
+  }
+  return;
 };

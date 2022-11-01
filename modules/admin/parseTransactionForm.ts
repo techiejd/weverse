@@ -26,6 +26,7 @@ export const parseTransactionForm = async (
   messageType: MessageType;
   resourcesChange: ChangesInResources;
   usersOfInterest: Array<string> | undefined;
+  route: string | undefined;
 }> => {
   const form = new formidable.IncomingForm({ multiples: true });
   const [fields, files] = await parseForm(req, form);
@@ -42,5 +43,6 @@ export const parseTransactionForm = async (
     usersOfInterest: fields["users"]
       ? JSON.parse(String(fields["users"]))
       : undefined,
+    route: fields["route"] ? String(fields["route"]) : undefined,
   };
 };

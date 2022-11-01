@@ -34,7 +34,8 @@ const DraftTransaction: NextPage<{ admin: UserData }> = (props) => {
     {}
   );
   const [buttonInfos, setButtonInfos] = useState<Array<ButtonInfo>>([]);
-  const { register, handleSubmit } = useForm();
+  const [route, setRoute] = useState<string>("");
+  const { handleSubmit } = useForm();
   const router = useRouter();
 
   const onSubmit = async () => {
@@ -44,6 +45,7 @@ const DraftTransaction: NextPage<{ admin: UserData }> = (props) => {
       body.append("message", inputMessage);
       body.append("buttons", JSON.stringify(buttonInfos));
       body.append("resourcesChange", JSON.stringify(resourcesChange));
+      body.append("route", route);
       return body;
     })();
     const response = fetch("/api/admin/draftTransaction", {
@@ -72,6 +74,8 @@ const DraftTransaction: NextPage<{ admin: UserData }> = (props) => {
               setInputMessage={setInputMessage}
               buttonInfos={buttonInfos}
               setButtonInfos={setButtonInfos}
+              route={route}
+              setRoute={setRoute}
             />
             <button type="submit" className={styles.button}>
               Guardar

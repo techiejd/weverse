@@ -1,13 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import formidable from "formidable";
-import { logger } from "../../../common/logger";
-import * as conversationUtils from "../../../modules/facebook/conversation/utils";
 import {
-  changesInResources,
-  ChangesInResources,
   draftTransaction,
   TxDatum,
   TxMessage,
+  draftTransactionExtended,
 } from "../../../modules/db/schemas";
 import { addDraftTx } from "../../../common/db";
 import { parseTransactionForm } from "../../../modules/admin/parseTransactionForm";
@@ -20,11 +16,8 @@ export const config = {
 };
 
 export default async function admin(req: NextApiRequest, res: NextApiResponse) {
-  const { message, buttons, messageType, resourcesChange } =
+  const { message, buttons, messageType, resourcesChange, route } =
     await parseTransactionForm(req);
-
-  console.log("message2: ", message);
-
   let draftTxData = Array<TxDatum>();
 
   if (message != "") {
@@ -40,11 +33,19 @@ export default async function admin(req: NextApiRequest, res: NextApiResponse) {
   if (Object.entries(resourcesChange).length > 0) {
     draftTxData.push({ type: "resourcesChange", resourcesChange });
   }
-
-  const draftTx = draftTransaction.parse({
-    data: draftTxData,
-    createdAt: new Date().toISOString(),
-  });
+  let draftTx;
+  if (route == undefined) {
+    draftTx = draftTransaction.parse({
+      data: draftTxData,
+      createdAt: new Date().toISOString(),
+    });
+  } else {
+    draftTx = draftTransactionExtended.parse({
+      data: draftTxData,
+      createdAt: new Date().toISOString(),
+      route: route,
+    });
+  }
   addDraftTx(draftTx);
 
   res.status(200).end();

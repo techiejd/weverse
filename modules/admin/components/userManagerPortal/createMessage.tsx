@@ -25,8 +25,11 @@ export const CreateMessage: FC<{
   setInputMessage: Dispatch<SetStateAction<string>>;
   buttonInfos: Array<ButtonInfo>;
   setButtonInfos: Dispatch<SetStateAction<Array<ButtonInfo>>>;
+  route: string;
+  setRoute: Dispatch<SetStateAction<string>>;
 }> = (props) => {
   const [templatedMessage, setTemplatedMessage] = useState<string>("");
+  const [templatedRoute, setTemplatedRoute] = useState<string>("");
   const [templatedButtons, setTemplatedButtons] = useState<Array<ButtonInfo>>(
     []
   );
@@ -39,6 +42,7 @@ export const CreateMessage: FC<{
 
     const templater = utils.Notify.getTemplaters(props.userForTemplating);
     setTemplatedMessage(templater.templateBody(props.inputMessage));
+    setTemplatedRoute(templater.templateRoute(props.route));
     setTemplatedButtons(props.buttonInfos.map(templater.templateButton));
   };
 
@@ -95,6 +99,14 @@ export const CreateMessage: FC<{
         })}
       />
       <br />
+      <label htmlFor="route">Route: </label>
+      <input
+        type="text"
+        id="route"
+        placeholder="route..."
+        onChange={(e) => props.setRoute(e.target.value)}
+      />
+      <br />
       <br />
       <FileUploader
         selectedFiles={selectedFiles}
@@ -128,6 +140,16 @@ export const CreateMessage: FC<{
       {templatedMessage ? (
         <>
           <h1>Message:</h1> {templatedMessage}
+          <br />
+          {templatedRoute ? (
+            <>
+              <h1>Route:</h1> {templatedRoute}
+            </>
+          ) : (
+            <>
+              <h1>Route:</h1> No hay ruta especifica, se creara con el ID
+            </>
+          )}
         </>
       ) : (
         <></>
