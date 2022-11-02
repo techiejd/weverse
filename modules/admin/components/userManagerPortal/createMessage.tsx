@@ -29,6 +29,7 @@ export const CreateMessage: FC<{
   setRoute: Dispatch<SetStateAction<string>>;
 }> = (props) => {
   const [templatedMessage, setTemplatedMessage] = useState<string>("");
+  //TODO(techiejd):fixed template of Route
   const [templatedRoute, setTemplatedRoute] = useState<string>("");
   const [templatedButtons, setTemplatedButtons] = useState<Array<ButtonInfo>>(
     []

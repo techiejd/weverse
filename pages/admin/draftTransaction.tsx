@@ -61,7 +61,9 @@ const DraftTransaction: NextPage<{ admin: UserData }> = (props) => {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1 className={styles.title}>Actuar como Sofí : {props.admin.name}</h1>
+        <h1 className={styles.title}>
+          Guardar borrador de transaccion : {props.admin.name}
+        </h1>
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <UserManagerPortal

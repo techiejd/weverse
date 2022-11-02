@@ -102,16 +102,9 @@ export const addDraftTx = async (draftTx: DraftTransaction) => {
     db.collection("draftTransactions")
       .add(draftTx)
       .then((res) => {
-        let route = res.id;
-        draftTx.route = route;
-        try {
-          db.collection("draftTransactions").doc(route).set(draftTx);
-        } catch (err: any) {
-          throw new Error(err);
-        }
+        return res.parent.doc(res.id).update({ route: res.id });
       });
   } else {
-    db.collection("draftTransactions").add(draftTx);
+    return db.collection("draftTransactions").add(draftTx);
   }
-  return;
 };
