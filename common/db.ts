@@ -101,9 +101,7 @@ export const addDraftTx = async (draftTx: DraftTransaction) => {
   if (draftTx.route == undefined) {
     db.collection("draftTransactions")
       .add(draftTx)
-      .then((res) => {
-        return res.parent.doc(res.id).update({ route: res.id });
-      });
+      .then((ref) => ref.update({ route: ref.id }));
   } else {
     return db.collection("draftTransactions").add(draftTx);
   }
