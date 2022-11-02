@@ -36,10 +36,14 @@ export const count = async (weRace: string): Promise<CountInfo> => {
 
   const fillData = getAllUsersSnapshot().then((userSnapshots) => {
     for (const userDoc of userSnapshots.docs) {
-      const user = userDoc.data();
+      const user = userData.parse(userDoc.data());
       if (user.challenges && user.challenges[weRace]) {
-        const userVotes: Record<string, number> =
-          user.challenges[weRace]["votes"];
+        const userVotes =
+          user.challenges[weRace].votes;
+        // TODO(techiejd): challenges -> missions task - https://www.notion.so/onewe-weverse/Challenges-Missions-6823a29e180c4584bdb22c7fa23f5fcb
+        if (!userVotes) {
+          return Promise.resolve();
+        }
         const totalVotes = Object.values(userVotes).reduce((a, b) => a + b);
         if (totalVotes <= maxVotesAllowed) {
           Object.entries(userVotes).forEach(
