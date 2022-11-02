@@ -78,3 +78,11 @@ export const transaction = z.object({
 });
 
 export type Transaction = z.infer<typeof transaction>;
+
+export const draftTransaction = transaction.partial();
+
+export const draftTransactionExtended = draftTransaction.extend({
+  route: z.string().optional(),
+});
+
+export type DraftTransaction = z.infer<typeof draftTransactionExtended>;

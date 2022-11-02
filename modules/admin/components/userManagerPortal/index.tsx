@@ -15,6 +15,8 @@ export const UserManagerPortal: FC<{
   setInputMessage: Dispatch<SetStateAction<string>>;
   buttonInfos: Array<ButtonInfo>;
   setButtonInfos: Dispatch<SetStateAction<Array<ButtonInfo>>>;
+  route: string;
+  setRoute: Dispatch<SetStateAction<string>>;
 }> = (props) => {
   return (
     <>
@@ -30,6 +32,8 @@ export const UserManagerPortal: FC<{
         setInputMessage={props.setInputMessage}
         buttonInfos={props.buttonInfos}
         setButtonInfos={props.setButtonInfos}
+        route={props.route}
+        setRoute={props.setRoute}
       />
     </>
   );

@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 import { getApp, initializeApp } from "firebase-admin/app";
-import { Transaction } from "../modules/db/schemas";
+import { DraftTransaction, Transaction } from "../modules/db/schemas";
 import { Challenge, startingUserGameInfo } from "../modules/sofia/schemas";
 import { logger } from "./logger";
 
@@ -13,15 +13,25 @@ const db = (() => {
   return admin.firestore();
 })();
 
-export const addUser = async ({asid, name, psid, token}: {asid: string, name: string, psid:string, token: string}) => {
-  return db.collection('users').add({
+export const addUser = async ({
+  asid,
+  name,
+  psid,
+  token,
+}: {
+  asid: string;
+  name: string;
+  psid: string;
+  token: string;
+}) => {
+  return db.collection("users").add({
     asid: asid,
     name: name,
     psid: psid,
     token: token,
     gameInfo: startingUserGameInfo,
-  })
-}
+  });
+};
 
 export const getUserSnapshot = async (psid: string) => {
   const snapshot = await db.collection("users").where("psid", "==", psid).get();
@@ -85,4 +95,14 @@ export const getAllTx = () => {
         transactionSnapshot.data()
       );
     });
+};
+
+export const addDraftTx = async (draftTx: DraftTransaction) => {
+  if (draftTx.route == undefined) {
+    db.collection("draftTransactions")
+      .add(draftTx)
+      .then((ref) => ref.update({ route: ref.id }));
+  } else {
+    return db.collection("draftTransactions").add(draftTx);
+  }
 };
