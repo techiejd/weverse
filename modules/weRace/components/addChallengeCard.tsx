@@ -56,11 +56,7 @@ const AddChallengeCard: React.FC<{
     });
 
     setInputState("waiting");
-    setStartDate(new Date());
-    setEndDate(new Date());
-    setTitle("");
-    setInputHashtag("");
-    setHashtags([]);
+    clearInputs();
 
     fetch("/api/weRace", {
       method: "POST",
@@ -102,12 +98,15 @@ const AddChallengeCard: React.FC<{
     return startDate.getTime() < selectedDate.getTime();
   };
   const clearInputs = () => {
-    setInputState("closed");
     setStartDate(new Date());
     setEndDate(new Date());
     setTitle("");
     setInputHashtag("");
     setHashtags([]);
+  };
+  const processCancelAddChallenge = () => {
+    setInputState("closed");
+    clearInputs();
   };
   return (
     <>
@@ -201,7 +200,7 @@ const AddChallengeCard: React.FC<{
               ))}
               <br />
               <button onClick={processAddChallenge}>Guardar</button>
-              <button onClick={clearInputs}>Cancelar</button>
+              <button onClick={processCancelAddChallenge}>Cancelar</button>
             </div>
           )}
         </>
