@@ -11,6 +11,12 @@ const resources = z.object({
   [sofi.Resource.VipPass]: z.number(),
 });
 
+// TODO(techiejd): challenges -> missions task - https://www.notion.so/onewe-weverse/Challenges-Missions-6823a29e180c4584bdb22c7fa23f5fcb
+const challenge = z.object({
+  votes: z.record(z.number()).optional(),
+  lie: z.number().optional(),
+})
+
 export const userData = z.object({
   name: z.string(),
   psid: z.string(),
@@ -23,6 +29,7 @@ export const userData = z.object({
     resources: resources,
   }),
   asid: z.string(),
+  challenges: z.record(challenge).optional()
 });
 
 export type UserData = z.infer<typeof userData>;
