@@ -10,6 +10,11 @@ import styles from "../../styles/Home.module.css";
 import adminStyles from "../../styles/admin.module.css";
 import Link from "next/link";
 import { getAllTx } from "../../common/db";
+import {
+  getDataByType,
+  getMessage,
+  getResourcesChange,
+} from "../../modules/admin/utils";
 
 // TODO(techiejd): Are these records or transactions?
 export async function getServerSideProps() {
@@ -21,17 +26,6 @@ export async function getServerSideProps() {
     };
   });
 }
-
-const getDataByType = (tx: Transaction, type: string) =>
-  tx.data.find((datum) => datum.type == type);
-const getMessage = (tx: Transaction) =>
-  (getDataByType(tx, "message") as { message: TxMessage }).message;
-const getResourcesChange = (tx: Transaction) =>
-  (
-    getDataByType(tx, "resourcesChange") as {
-      resourcesChange: ChangesInResources;
-    }
-  ).resourcesChange;
 
 const Transactions: NextPage<{ transactions: Array<Transaction> }> = (
   props

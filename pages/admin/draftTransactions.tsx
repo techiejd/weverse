@@ -1,13 +1,14 @@
 import type { NextPage } from "next";
 import { useState } from "react";
-import {
-  ChangesInResources,
-  DraftTransaction,
-  TxMessage,
-} from "../../modules/db/schemas";
+import { DraftTransaction } from "../../modules/db/schemas";
 import styles from "../../styles/Home.module.css";
 import adminStyles from "../../styles/admin.module.css";
 import { getAllDraftTx } from "../../common/db";
+import {
+  getDataByType,
+  getMessage,
+  getResourcesChange,
+} from "../../modules/admin/utils";
 
 export async function getServerSideProps() {
   return getAllDraftTx().then((draftTransactions) => {
@@ -18,16 +19,6 @@ export async function getServerSideProps() {
     };
   });
 }
-const getDataByType = (tx: DraftTransaction, type: string) =>
-  tx.data?.find((datum) => datum.type == type);
-const getMessage = (tx: DraftTransaction) =>
-  (getDataByType(tx, "message") as { message: TxMessage }).message;
-const getResourcesChange = (tx: DraftTransaction) =>
-  (
-    getDataByType(tx, "resourcesChange") as {
-      resourcesChange: ChangesInResources;
-    }
-  ).resourcesChange;
 
 const draftTransactions: NextPage<{
   draftTransactions: Array<DraftTransaction>;
@@ -36,11 +27,8 @@ const draftTransactions: NextPage<{
     Array<DraftTransaction>
   >(props.draftTransactions);
   const processDeleteDraftTransactions = (id: string) => {
-    console.log("id", id);
-    let body = id;
-    fetch("/api/admin/deletedraftTransaction", {
-      method: "POST",
-      body: body,
+    fetch(`/api/admin/draftTransactions?id=${id}`, {
+      method: "DELETE",
     }).then(() => {
       setDraftTransactions(
         draftTransactions.filter((transaction) => transaction.id !== id)
