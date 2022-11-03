@@ -14,3 +14,10 @@
   border-radius: 15px;
   padding: 15px;
 }
+.deleteButton {
+  background-color: red;
+  text-align: center;
+  line-height: 2em;
+  margin-left: 33%;
+  width: 100px;
+}
