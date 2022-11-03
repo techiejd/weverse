@@ -40,7 +40,7 @@ const Dashboard: NextPage = () => {
           <>
             <hr />
             <h3>Otros</h3>
-            <Link href={`/werace`}>
+            <Link href={`/weRace`}>
               <a target="_blank">
                 <li>
                   <b>WERACE: </b> Visualización de las WeRaces hechas
