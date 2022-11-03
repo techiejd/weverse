@@ -16,6 +16,7 @@ import {
   getMessage,
   getResourcesChange,
 } from "../../modules/admin/utils";
+*/
 
 // Hack cause we leaked this link.
 const Transactions: NextPage = () => {
