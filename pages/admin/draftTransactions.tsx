@@ -1,82 +1,52 @@
 import type { NextPage } from "next";
+import { useState } from "react";
+import { DraftTransaction } from "../../modules/db/schemas";
 import styles from "../../styles/Home.module.css";
-/*
-import { FC, useEffect, useReducer, useState } from "react";
-import {
-  ChangesInResources,
-  Transaction,
-  TxMessage,
-} from "../../modules/db/schemas";
-// TODO(jimenez1917): Get correct styles
 import adminStyles from "../../styles/admin.module.css";
-import Link from "next/link";
-import { getAllTx } from "../../common/db";
+import { getAllDraftTx } from "../../common/db";
 import {
   getDataByType,
   getMessage,
   getResourcesChange,
 } from "../../modules/admin/utils";
 
-// Hack cause we leaked this link.
-const Transactions: NextPage = () => {
-  return (
-    <div className={styles.container}>
-      <main className={styles.main}>
-        <h1>Muchas gracias por estar acá</h1>
-        <p>
-          Nuestro amigo Nico ha hecho una prueba contigo y este ⚡1 WEEN lo
-          puedes reclamar con él, te sirve para una cerveza, un café, un té, un
-          chocolate.
-          <br /> Todo esto es negociable hablando con él.
-        </p>
-      </main>
-    </div>
-  );
-};
-
-export default Transactions;
-/*
-// TODO(techiejd): Are these records or transactions?
 export async function getServerSideProps() {
-  return getAllTx().then((transactions) => {
+  return getAllDraftTx().then((draftTransactions) => {
     return {
       props: {
-        transactions: transactions,
+        draftTransactions: draftTransactions,
       },
     };
   });
 }
 
-const Transactions: NextPage<{ transactions: Array<Transaction> }> = (
-  props
-) => {
+const draftTransactions: NextPage<{
+  draftTransactions: Array<DraftTransaction>;
+}> = (props) => {
+  const [draftTransactions, setDraftTransactions] = useState<
+    Array<DraftTransaction>
+  >(props.draftTransactions);
+  const processDeleteDraftTransactions = (id: string) => {
+    fetch(`/api/admin/draftTransactions?id=${id}`, {
+      method: "DELETE",
+    }).then(() => {
+      setDraftTransactions(
+        draftTransactions.filter((transaction) => transaction.id !== id)
+      );
+    });
+  };
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <h1>Admin Transactions</h1>
-        {props.transactions.map((tx, i) => (
+        <h1>Admin DraftTransactions</h1>
+        {draftTransactions.map((tx, i) => (
           <div className={adminStyles.boxTransactions} key={i}>
-            <p>
-              <b>From: </b> 🧞‍♀️({tx.from.name}) →
-            </p>
-            <p>
-              <b>To: </b>
-            </p>
-            {tx.to.map((user, i) => (
-              <div key={i}>
-                <Link href={`./user/${user.id}`}>
-                  <a>
-                    {user.id}: {user.name}
-                  </a>
-                </Link>
-              </div>
-            ))}
             {getDataByType(tx, "message") == undefined ? (
               <></>
             ) : (
               <div>
                 <h2>Message</h2>
-                <p>Type: {getMessage(tx).type}</p>
+                <p>Type: {getMessage(tx).type} </p>
                 <p>{getMessage(tx).text}</p>
                 {getMessage(tx).buttons?.map((buttonInfo, i) => (
                   <div key={i}>
@@ -107,6 +77,15 @@ const Transactions: NextPage<{ transactions: Array<Transaction> }> = (
               <b>Created At: </b>
               {tx.createdAt}
             </p>
+            <p>
+              <b>Route: </b> {tx.route}
+            </p>
+            <button
+              className={adminStyles.deleteButton}
+              onClick={() => processDeleteDraftTransactions(String(tx.id))}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </main>
@@ -114,5 +93,4 @@ const Transactions: NextPage<{ transactions: Array<Transaction> }> = (
   );
 };
 
-export default Transactions;
-*/
+export default draftTransactions;

@@ -48,7 +48,7 @@ const DraftTransaction: NextPage<{ admin: UserData }> = (props) => {
       body.append("route", route);
       return body;
     })();
-    const response = fetch("/api/admin/draftTransaction", {
+    const response = fetch("/api/admin/draftTransactions", {
       method: "POST",
       body: body,
     });

@@ -97,6 +97,20 @@ export const getAllTx = () => {
     });
 };
 
+export const getAllDraftTx = () => {
+  return db
+    .collection("draftTransactions")
+    .get()
+    .then((draftTransactionsSnapshots) => {
+      return draftTransactionsSnapshots.docs.map(
+        (draftTransactionsSnapshot) => ({
+          ...draftTransactionsSnapshot.data(),
+          id: draftTransactionsSnapshot.id,
+        })
+      );
+    });
+};
+
 export const addDraftTx = async (draftTx: DraftTransaction) => {
   if (draftTx.route == undefined) {
     db.collection("draftTransactions")
@@ -105,4 +119,8 @@ export const addDraftTx = async (draftTx: DraftTransaction) => {
   } else {
     return db.collection("draftTransactions").add(draftTx);
   }
+};
+
+export const deleteDraftTxById = async (id: string) => {
+  return db.collection("draftTransactions").doc(id).delete();
 };
