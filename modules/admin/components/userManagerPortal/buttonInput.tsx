@@ -7,13 +7,15 @@ const ButtonInput: React.FC<{
   setButtonInfos: React.Dispatch<React.SetStateAction<Array<ButtonInfo>>>;
 }> = (props) => {
   const [title, setTitle] = useState<string>("");
-  const [target, setTarget] = useState<"Url" | "Payload">("Url");
+  const [target, setTarget] = useState<"Url" | "Payload" | "Route">("Url");
   const [route, setRoute] = useState<string>("");
 
   const getUrlRadio = () =>
     document.getElementById(`url${props.id}`) as HTMLInputElement;
   const getPayloadRadio = () =>
     document.getElementById(`payload${props.id}`) as HTMLInputElement;
+  const getRouteRadio = () =>
+    document.getElementById(`route${props.id}`) as HTMLInputElement;
 
   useEffect(() => {
     buttonInfoUpdated();
@@ -25,10 +27,17 @@ const ButtonInput: React.FC<{
 
   const urlRadioClicked = (event: ChangeEvent<HTMLInputElement>) => {
     getPayloadRadio().checked = false;
+    getRouteRadio().checked = false;
     setTarget("Url");
   };
   const payloadRadioClicked = (event: ChangeEvent<HTMLInputElement>) => {
     getUrlRadio().checked = false;
+    getRouteRadio().checked = false;
+    setTarget("Payload");
+  };
+  const routeRadioClicked = (event: ChangeEvent<HTMLInputElement>) => {
+    getUrlRadio().checked = false;
+    getPayloadRadio().checked = false;
     setTarget("Payload");
   };
 
@@ -55,6 +64,12 @@ const ButtonInput: React.FC<{
         type="radio"
         id={`payload${props.id}`}
         onChange={payloadRadioClicked}
+      />
+      <label htmlFor={`route${props.id}`}>Route</label>
+      <input
+        type="radio"
+        id={`route${props.id}`}
+        onChange={routeRadioClicked}
       />
       <br />
       <br />

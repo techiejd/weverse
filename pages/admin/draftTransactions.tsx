@@ -9,6 +9,7 @@ import {
   getMessage,
   getResourcesChange,
 } from "../../modules/admin/utils";
+import Link from "next/link";
 
 export async function getServerSideProps() {
   return getAllDraftTx().then((draftTransactions) => {
@@ -39,47 +40,58 @@ const draftTransactions: NextPage<{
     <div className={styles.container}>
       <main className={styles.main}>
         <h1>Admin DraftTransactions</h1>
+        <Link href={"/admin/draftTransaction"}>
+          <button>Add new draftTransaction</button>
+        </Link>
+        <br />
         {draftTransactions.map((tx, i) => (
           <div className={adminStyles.boxTransactions} key={i}>
-            {getDataByType(tx, "message") == undefined ? (
-              <></>
-            ) : (
+            <Link href={`/admin/draftTransaction/${tx.id}`}>
               <div>
-                <h2>Message</h2>
-                <p>Type: {getMessage(tx).type} </p>
-                <p>{getMessage(tx).text}</p>
-                {getMessage(tx).buttons?.map((buttonInfo, i) => (
-                  <div key={i}>
-                    <h3>Button {i}</h3>
-                    <p>{buttonInfo.title}</p>
-                    <p>
-                      {buttonInfo.url ? buttonInfo.url : buttonInfo.payload}
-                    </p>
+                {getDataByType(tx, "message") == undefined ? (
+                  <></>
+                ) : (
+                  <div>
+                    <h2>Message</h2>
+                    <p>Type: {getMessage(tx).type} </p>
+                    <p>{getMessage(tx).text}</p>
+                    {getMessage(tx).buttons?.map((buttonInfo, i) => (
+                      <div key={i}>
+                        <h3>Button {i}</h3>
+                        <p>{buttonInfo.title}</p>
+                        <p>
+                          {buttonInfo.url ? buttonInfo.url : buttonInfo.payload}
+                        </p>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
+                {getDataByType(tx, "resourcesChange") == undefined ? (
+                  <></>
+                ) : (
+                  <ul>
+                    {Object.entries(getResourcesChange(tx)).map(
+                      (resource, i) => (
+                        <li key={i}>
+                          <div>
+                            {resource}
+                            <hr />
+                          </div>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                )}
+                <p>
+                  <b>Created At: </b>
+                  {tx.createdAt}
+                </p>
+                <p>
+                  <b>Route: </b> {tx.route}
+                </p>
               </div>
-            )}
-            {getDataByType(tx, "resourcesChange") == undefined ? (
-              <></>
-            ) : (
-              <ul>
-                {Object.entries(getResourcesChange(tx)).map((resource, i) => (
-                  <li key={i}>
-                    <div>
-                      {resource}
-                      <hr />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-            <p>
-              <b>Created At: </b>
-              {tx.createdAt}
-            </p>
-            <p>
-              <b>Route: </b> {tx.route}
-            </p>
+            </Link>
+
             <button
               className={adminStyles.deleteButton}
               onClick={() => processDeleteDraftTransactions(String(tx.id))}

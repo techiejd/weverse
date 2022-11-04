@@ -1,19 +1,19 @@
 import type { NextPage } from "next";
-import styles from "../../styles/Home.module.css";
+import styles from "../../../styles/Home.module.css";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import { getUserSnapshot } from "../../common/db";
+import { getUserSnapshot } from "../../../common/db";
 import {
   ChangesInResources,
   userData,
   UserData,
-} from "../../modules/db/schemas";
+} from "../../../modules/db/schemas";
 import React, { useState } from "react";
-import { UserManagerPortal } from "../../modules/admin/components/userManagerPortal";
+import { UserManagerPortal } from "../../../modules/admin/components/userManagerPortal";
 import {
   ButtonInfo,
   MessageType,
-} from "../../modules/facebook/conversation/utils";
+} from "../../../modules/facebook/conversation/utils";
 
 export async function getServerSideProps() {
   return getUserSnapshot(String(process.env.ADMIN_ID)).then(
@@ -35,10 +35,13 @@ const DraftTransaction: NextPage<{ admin: UserData }> = (props) => {
   );
   const [buttonInfos, setButtonInfos] = useState<Array<ButtonInfo>>([]);
   const [route, setRoute] = useState<string>("");
+  const [disabledSubmitButton, setDisabledSubmitButton] =
+    useState<boolean>(false);
   const { handleSubmit } = useForm();
   const router = useRouter();
 
   const onSubmit = async () => {
+    setDisabledSubmitButton(true);
     const body = ((): FormData => {
       const body = new FormData();
       body.append("messageType", messageType);
@@ -48,12 +51,12 @@ const DraftTransaction: NextPage<{ admin: UserData }> = (props) => {
       body.append("route", route);
       return body;
     })();
-    const response = fetch("/api/admin/draftTransactions", {
+    fetch("/api/admin/draftTransactions", {
       method: "POST",
       body: body,
+    }).then(() => {
+      router.push("/admin/draftTransactions");
     });
-
-    // router.push("/admin/success");
 
     return true;
   };
@@ -79,7 +82,11 @@ const DraftTransaction: NextPage<{ admin: UserData }> = (props) => {
               route={route}
               setRoute={setRoute}
             />
-            <button type="submit" className={styles.button}>
+            <button
+              type="submit"
+              className={styles.button}
+              disabled={disabledSubmitButton}
+            >
               Guardar
             </button>
           </form>

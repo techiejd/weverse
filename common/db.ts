@@ -124,3 +124,7 @@ export const addDraftTx = async (draftTx: DraftTransaction) => {
 export const deleteDraftTxById = async (id: string) => {
   return db.collection("draftTransactions").doc(id).delete();
 };
+
+export const getDraftTxById = async (id: string) => {
+  return db.collection("draftTransactions").doc(id).get();
+};
