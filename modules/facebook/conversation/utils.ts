@@ -13,6 +13,7 @@ export const buttonInfo = z.object({
   title: z.string(),
   payload: z.string().optional(),
   url: z.string().optional(),
+  route: z.string().optional(),
 });
 export type ButtonInfo = z.infer<typeof buttonInfo>;
 

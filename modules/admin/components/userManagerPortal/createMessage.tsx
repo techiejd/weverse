@@ -69,7 +69,7 @@ export const CreateMessage: FC<{
   const getResponseRadio = () =>
     document.getElementById("Response") as HTMLInputElement;
   useEffect(() => {
-    getNotifyRadio().checked = true;
+    getResponseRadio().checked = true;
   }, []);
 
   const notifyRadioClicked = (event: ChangeEvent<HTMLInputElement>) => {
@@ -85,10 +85,10 @@ export const CreateMessage: FC<{
   return (
     <div>
       <hr />
-      <label htmlFor="Notify">NOTIFY</label>
-      <input type="radio" id="Notify" onChange={notifyRadioClicked} />
       <label htmlFor="Response">RESPONSE</label>
       <input type="radio" id="Response" onChange={responseRadioClicked} />
+      <label htmlFor="Notify">NOTIFY</label>
+      <input type="radio" id="Notify" onChange={notifyRadioClicked} />
       <br />
       <h2>Message:</h2>
       <textarea
