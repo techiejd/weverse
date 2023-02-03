@@ -18,7 +18,7 @@ const VotingPortal = () => {
       }}
     >
       {Array.from({ length: 20 }, (_, index) => (
-        <Stack direction="row" sx={{ width: "100vw" }}>
+        <Stack key={index} direction="row" sx={{ width: "100vw" }}>
           <VotingCard
             votingState={votingState}
             voteDispatch={votingDispatch}
