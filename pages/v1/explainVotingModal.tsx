@@ -5,7 +5,7 @@ const ExplainVotingModal = () => {
   return (
     <Box>
       <ExplainExchangeModal
-        emoji="👛"
+        emoji="👛 -> 🗳️"
         label="¡Vota!"
         explanation="Elige proyectos y causas que te conmuevan. Cada elección cuenta, así que elige bien."
         leftSide={{ emoji: "👛", label: "10.000 LKS" }}

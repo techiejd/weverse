@@ -5,7 +5,7 @@ const ChooseInterestsModal = () => {
   return (
     <Box>
       <ExplainExchangeModal
-        emoji="❤️‍🔥"
+        emoji="❤️‍🔥 -> 🎯"
         label="Escoges tus intereses"
         explanation="Elige tus intereses para mostrarte los impactos sociales que a ti te
         mueven"
