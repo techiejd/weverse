@@ -1,6 +1,8 @@
-import { AppBar, Stack, Toolbar, Typography } from "@mui/material";
+import { AppBar, Toolbar, Typography } from "@mui/material";
+import * as HeaderContext from "../context/header";
 
 export const Header = () => {
+  const headerStateContext = HeaderContext.useHeaderState();
   return (
     <AppBar position="sticky">
       <Toolbar>
@@ -23,7 +25,9 @@ export const Header = () => {
             padding: 1,
           }}
         >
-          👛 10,000
+          {headerStateContext
+            ? `${headerStateContext.exchangeInfo.prepend} ${headerStateContext.exchangeInfo.allowance}`
+            : "=("}
         </Typography>
       </Toolbar>
     </AppBar>

@@ -1,4 +1,8 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
+import {
+  useHeaderState,
+  useSetHeaderContext,
+} from "../../../../common/context/header";
 
 export enum VotingActionType {
   increment = "increment",
@@ -11,38 +15,11 @@ export interface VotingAction {
 }
 
 export interface VotingState {
-  allowance: Number;
-  incrementDisabled: boolean;
-  prepend: String;
-  step: number;
+  allowance: number;
+  allowanceMax: number;
+  prepend: string;
+  cost: number;
   numVotesByCandidateId: Record<string, number>;
-}
-
-export function voteReducer(state: VotingState, action: VotingAction) {
-  switch (action.type) {
-    case VotingActionType.increment: {
-      const newNumVotes = state.numVotesByCandidateId[action.candidateId]
-        ? state.numVotesByCandidateId[action.candidateId] + 1
-        : 1;
-      return {
-        ...state,
-        numVotesByCandidateId: {
-          ...state.numVotesByCandidateId,
-          [action.candidateId]: newNumVotes,
-        },
-      };
-    }
-    case VotingActionType.decrement: {
-      const newNumVotes = state.numVotesByCandidateId[action.candidateId] - 1;
-      return {
-        ...state,
-        numVotesByCandidateId: {
-          ...state.numVotesByCandidateId,
-          [action.candidateId]: newNumVotes,
-        },
-      };
-    }
-  }
 }
 
 const VotingContext = createContext<VotingState | undefined>(undefined);
@@ -55,7 +32,54 @@ const VotingProvider: React.FC<{
   children: JSX.Element;
   initialState: VotingState;
 }> = ({ children, initialState }) => {
+  const setHeaderState = useSetHeaderContext();
+  const headerState = useHeaderState();
+
+  function voteReducer(state: VotingState, action: VotingAction) {
+    let newNumVotes, newAllowance;
+    console.log(state);
+    switch (action.type) {
+      case VotingActionType.increment: {
+        if (state.allowance == 0) return state;
+        newNumVotes = state.numVotesByCandidateId[action.candidateId]
+          ? state.numVotesByCandidateId[action.candidateId] + 1
+          : 1;
+        newAllowance = state.allowance - state.cost;
+        break;
+      }
+      case VotingActionType.decrement: {
+        if (state.allowance == state.allowanceMax) return state;
+        newNumVotes = state.numVotesByCandidateId[action.candidateId] - 1;
+        newAllowance = state.allowance + state.cost;
+        break;
+      }
+    }
+    return {
+      ...state,
+      allowance: newAllowance,
+      numVotesByCandidateId: {
+        ...state.numVotesByCandidateId,
+        [action.candidateId]: newNumVotes,
+      },
+    };
+  }
+
   const [votingState, votingReducer] = useReducer(voteReducer, initialState);
+
+  useEffect(() => {
+    console.log("hello");
+    if (setHeaderState) {
+      console.log("there");
+      setHeaderState({
+        ...headerState,
+        exchangeInfo: {
+          prepend: votingState.prepend,
+          allowance: String(votingState.allowance),
+        },
+      });
+    }
+  }, [setHeaderState, votingState]);
+
   return (
     <VotingContext.Provider value={votingState}>
       <VotingDispatchContext.Provider value={votingReducer}>

@@ -21,17 +21,17 @@ const WeRace = () => {
         rightSide={{ emoji: "🎯", label: "1 Elección" }}
       />
       <VotingProvider
-        initialState={Object({
+        initialState={{
           allowance: 5,
-          incrementDisabled: false,
+          allowanceMax: 5,
           prepend: "❤️‍🔥",
-          step: 1,
+          cost: 1,
           numVotesByCandidateId: {},
-        })}
+        }}
       >
         <Stack mx={2} mb={1}>
           <PillBoxMessage>
-            Vota 🗳️ impactos sociales de tu interés.
+            Agrega ❤️‍🔥 a temas sociales de tu interés.
           </PillBoxMessage>
           <Grid container spacing={1}>
             {Array(32)

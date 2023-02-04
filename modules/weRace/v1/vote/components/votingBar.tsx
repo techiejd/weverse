@@ -20,19 +20,36 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
   const votingState = useVotingState();
   const votingDispatch = useVotingDispatch();
   const prepend = votingState ? votingState.prepend : "";
+
   const [count, setCount] = useState(
     votingState?.numVotesByCandidateId[id]
       ? votingState?.numVotesByCandidateId[id]
       : 0
   );
+  const [disabledDecrement, setDisabledDecrement] = useState(count == 0);
+  const [disabledIncrement, setDisabledIncrement] = useState(
+    votingState?.allowance == 0
+  );
+
   useEffect(() => {
-    if (votingState?.numVotesByCandidateId[id]) {
+    if (
+      votingState?.numVotesByCandidateId &&
+      votingState?.numVotesByCandidateId[id] != count
+    ) {
       setCount(votingState?.numVotesByCandidateId[id]);
     }
   }, [
+    count,
     votingState?.numVotesByCandidateId,
     votingState?.numVotesByCandidateId[id],
   ]);
+  useEffect(() => {
+    setDisabledIncrement(votingState?.allowance == 0);
+  }, [votingState?.allowance]);
+  useEffect(() => {
+    setDisabledDecrement(count == 0);
+  }, [count]);
+
   return (
     <Stack
       sx={[
@@ -61,6 +78,7 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
             });
           }
         }}
+        disabled={disabledDecrement}
       >
         <RemoveIcon sx={{ fontSize: "21px" }}></RemoveIcon>
       </ButtonBase>
@@ -92,6 +110,7 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
             });
           }
         }}
+        disabled={disabledIncrement}
       >
         <AddIcon sx={{ fontSize: "21px" }}></AddIcon>
       </ButtonBase>
