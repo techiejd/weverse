@@ -1,8 +1,38 @@
-import { Box, Stack, SxProps, Theme, Typography } from "@mui/material";
+import {
+  Box,
+  ButtonBase,
+  Stack,
+  SxProps,
+  Theme,
+  Typography,
+} from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import {
+  useVotingDispatch,
+  useVotingState,
+  VotingActionType,
+} from "../context";
+import { useEffect, useState } from "react";
 
 export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
+  const id: string = "TRUST";
+  const votingState = useVotingState();
+  const votingDispatch = useVotingDispatch();
+  const prepend = votingState ? votingState.prepend : "";
+  const [count, setCount] = useState(
+    votingState?.numVotesByCandidateId[id]
+      ? votingState?.numVotesByCandidateId[id]
+      : 0
+  );
+  useEffect(() => {
+    if (votingState?.numVotesByCandidateId[id]) {
+      setCount(votingState?.numVotesByCandidateId[id]);
+    }
+  }, [
+    votingState?.numVotesByCandidateId,
+    votingState?.numVotesByCandidateId[id],
+  ]);
   return (
     <Stack
       sx={[
@@ -15,7 +45,7 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
       ]}
       direction="row"
     >
-      <Box
+      <ButtonBase
         sx={{
           backgroundColor: "green",
           flexGrow: 1,
@@ -23,9 +53,17 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
           justifyContent: "center",
           alignItems: "center",
         }}
+        onClick={() => {
+          if (votingDispatch) {
+            votingDispatch({
+              type: VotingActionType.decrement,
+              candidateId: id,
+            });
+          }
+        }}
       >
         <RemoveIcon sx={{ fontSize: "21px" }}></RemoveIcon>
-      </Box>
+      </ButtonBase>
       <Box
         sx={{
           flexGrow: 1,
@@ -34,9 +72,11 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
           alignItems: "center",
         }}
       >
-        <Typography sx={{ fontSize: "14px" }}>5</Typography>
+        <Typography sx={{ fontSize: "14px" }}>
+          {prepend} {count}
+        </Typography>
       </Box>
-      <Box
+      <ButtonBase
         sx={{
           backgroundColor: "yellow",
           flexGrow: 1,
@@ -44,9 +84,17 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
           justifyContent: "center",
           alignItems: "center",
         }}
+        onClick={() => {
+          if (votingDispatch) {
+            votingDispatch({
+              type: VotingActionType.increment,
+              candidateId: id,
+            });
+          }
+        }}
       >
         <AddIcon sx={{ fontSize: "21px" }}></AddIcon>
-      </Box>
+      </ButtonBase>
     </Stack>
   );
 };

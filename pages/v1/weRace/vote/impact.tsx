@@ -1,5 +1,5 @@
 import { Box, Divider, Stack, Typography } from "@mui/material";
-import { CandidateBox } from "../../modules/weRace/v1/vote/components/candidateBox";
+import { CandidateBox } from "../../../../modules/weRace/v1/vote/components/candidateBox";
 
 const ExplanationBox = (props: { title: string; text: string }) => {
   return (

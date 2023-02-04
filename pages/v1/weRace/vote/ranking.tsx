@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { PillBoxMessage } from "../../modules/weRace/v1/vote/components/pillBoxMessage";
-import { VotingBar } from "../../modules/weRace/v1/vote/components/votingBar";
+import { PillBoxMessage } from "../../../../modules/weRace/v1/vote/components/pillBoxMessage";
+import { VotingBar } from "../../../../modules/weRace/v1/vote/components/votingBar";
 
 const CandidateRankingCard = () => {
   return (

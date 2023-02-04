@@ -1,6 +1,6 @@
 import { Box, Divider, Grid, Stack, Typography } from "@mui/material";
-import { CandidateBox } from "../../modules/weRace/v1/vote/components/candidateBox";
-import { PillBoxMessage } from "../../modules/weRace/v1/vote/components/pillBoxMessage";
+import { CandidateBox } from "../../../../modules/weRace/v1/vote/components/candidateBox";
+import { PillBoxMessage } from "../../../../modules/weRace/v1/vote/components/pillBoxMessage";
 
 const WeRace = () => {
   return (

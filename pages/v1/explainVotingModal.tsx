@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
-import { ExplainExchangeModal } from "../../modules/weRace/v1/vote/components/explainExchangeModal";
+import { ExplainExchangeBox } from "../../modules/weRace/v1/vote/components/explainExchangeModal";
 
 const ExplainVotingModal = () => {
   return (
     <Box>
-      <ExplainExchangeModal
+      <ExplainExchangeBox
         emoji="👛 -> 🗳️"
         label="¡Vota!"
         explanation="Elige proyectos y causas que te conmuevan. Cada elección cuenta, así que elige bien."

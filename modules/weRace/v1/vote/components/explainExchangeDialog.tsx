@@ -1,7 +1,7 @@
-import { Stack, Typography } from "@mui/material";
+import { Dialog, Stack, Typography } from "@mui/material";
 export type SimpleEmojiProps = { emoji: string; label: string };
 
-const SimpleEmojiLabel = (props: SimpleEmojiProps) => {
+export const SimpleEmojiLabel = (props: SimpleEmojiProps) => {
   return (
     <Stack
       sx={{
@@ -14,21 +14,30 @@ const SimpleEmojiLabel = (props: SimpleEmojiProps) => {
   );
 };
 
-export const ExplainExchangeModal = (props: {
+const ExplainExchangeDialog = (props: {
+  open: boolean;
+  onClose: () => void;
   emoji: string;
   label: string;
   explanation: string;
   leftSide: SimpleEmojiProps;
   rightSide: SimpleEmojiProps;
-}) => {
-  return (
+}) => (
+  <Dialog
+    open={props.open}
+    onClose={props.onClose}
+    PaperProps={{
+      style: {
+        backgroundColor: "purple",
+        borderRadius: 4,
+      },
+    }}
+  >
     <Stack
       sx={{
-        backgroundColor: "purple",
         width: "248px",
         height: "343px",
         alignItems: "center",
-        borderRadius: 4,
         justifyContent: "space-around",
         p: 1,
       }}
@@ -50,5 +59,7 @@ export const ExplainExchangeModal = (props: {
       </Stack>
       <Typography>CONTINUE</Typography>
     </Stack>
-  );
-};
+  </Dialog>
+);
+
+export default ExplainExchangeDialog;
