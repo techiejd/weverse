@@ -8,18 +8,18 @@ import {
 } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import { useEffect, useState } from "react";
 import {
   useVotingDispatch,
   useVotingState,
   VotingActionType,
-} from "../context";
-import { useEffect, useState } from "react";
+} from "../../../context";
 
 export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
   const id: string = "TRUST";
   const votingState = useVotingState();
   const votingDispatch = useVotingDispatch();
-  const prepend = votingState ? votingState.prepend : "";
+  const votingPrepend = votingState ? votingState.votingPrepend : "";
 
   const [count, setCount] = useState(
     votingState?.numVotesByCandidateId[id]
@@ -91,7 +91,7 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
         }}
       >
         <Typography sx={{ fontSize: "14px" }}>
-          {prepend} {count}
+          {votingPrepend} {count}
         </Typography>
       </Box>
       <ButtonBase

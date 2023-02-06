@@ -1,5 +1,4 @@
 import { Box, Divider, Stack, Typography } from "@mui/material";
-import { CandidateBox } from "../../../../modules/weRace/v1/vote/components/candidateBox";
 
 const ExplanationBox = (props: { title: string; text: string }) => {
   return (
@@ -38,7 +37,7 @@ const Impact = () => {
           🏁 #3
         </Typography>
       </Box>
-      <CandidateBox height="406px" />
+      <ComparativeCard height="406px" />
       <ExplanationBox title="📍 Ubicación" text="Quibdó, Chocó" />
       <ExplanationBox title="📸 Reportero" text="Carlos Mario" />
       <ExplanationBox

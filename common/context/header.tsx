@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 
 export interface HeaderState {
   exchangeInfo: {
-    prepend: string;
+    allowancePrepend: string;
     allowance: string;
   };
 }
@@ -18,7 +18,7 @@ const HeaderStateProvider: React.FC<{
 }> = ({ children }) => {
   const [headerState, setHeaderState] = useState({
     exchangeInfo: {
-      prepend: "",
+      allowancePrepend: "",
       allowance: "",
     },
   });

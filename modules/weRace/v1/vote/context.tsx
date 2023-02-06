@@ -9,18 +9,19 @@ export enum VotingActionType {
   decrement = "decrement",
 }
 
-export interface VotingAction {
+export type VotingAction = {
   type: VotingActionType;
   candidateId: string;
-}
+};
 
-export interface VotingState {
+export type VotingState = {
   allowance: number;
   allowanceMax: number;
-  prepend: string;
+  allowancePrepend: string;
   cost: number;
   numVotesByCandidateId: Record<string, number>;
-}
+  votingPrepend: string;
+};
 
 const VotingContext = createContext<VotingState | undefined>(undefined);
 
@@ -73,7 +74,7 @@ const VotingProvider: React.FC<{
       setHeaderState({
         ...headerState,
         exchangeInfo: {
-          prepend: votingState.prepend,
+          allowancePrepend: votingState.allowancePrepend,
           allowance: String(votingState.allowance),
         },
       });

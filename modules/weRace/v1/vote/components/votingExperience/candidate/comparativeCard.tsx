@@ -1,7 +1,7 @@
 import { Stack, Box, Typography } from "@mui/material";
 import { VotingBar } from "./votingBar";
 
-export const CandidateBox = (props: {
+export const ComparativeCard = (props: {
   mediaTitle?: string;
   height: string;
 }) => {

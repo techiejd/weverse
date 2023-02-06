@@ -26,7 +26,7 @@ export const Header = () => {
           }}
         >
           {headerStateContext
-            ? `${headerStateContext.exchangeInfo.prepend} ${headerStateContext.exchangeInfo.allowance}`
+            ? `${headerStateContext.exchangeInfo.allowancePrepend} ${headerStateContext.exchangeInfo.allowance}`
             : "=("}
         </Typography>
       </Toolbar>

@@ -1,71 +1,33 @@
-import { Box, Stack, Typography } from "@mui/material";
-import { PillBoxMessage } from "../../../../modules/weRace/v1/vote/components/pillBoxMessage";
-import { VotingBar } from "../../../../modules/weRace/v1/vote/components/votingBar";
+import RankedVotingExperience from "../../../../modules/weRace/v1/vote/components/votingExperience/rankedVotingExperience";
 
-const CandidateRankingCard = () => {
-  return (
-    <Stack
-      sx={{
-        backgroundColor: "red",
-        height: 88,
-        marginLeft: 2,
-        marginRight: 2,
-        marginTop: 1,
-        marginBottom: 1,
-        p: 1,
-        alignItems: "center",
-        justifyContent: "space-between",
-      }}
-      direction="row"
-      spacing={1}
-    >
-      <Box
-        sx={{
-          backgroundColor: "green",
-          height: "72px",
-          width: "100px",
-        }}
-      ></Box>
-      <Stack
-        sx={{ backgroundColor: "yellow", alignItems: "center" }}
-        flexGrow={1}
-      >
-        <Typography>Impact</Typography>
-        <Typography>1234 Votes</Typography>
-        <VotingBar
-          sx={{
-            height: "20px",
-            width: "104px",
-          }}
-        ></VotingBar>
-      </Stack>
-      <Stack
-        sx={{
-          backgroundColor: "blue",
-          height: "100%",
-          justifyContent: "space-between",
-        }}
-      >
-        <Typography># 11234</Typography>
-        <Typography sx={{ marginLeft: "auto" }}>🗳️</Typography>
-      </Stack>
-    </Stack>
-  );
+const rankedVotingExperienceInfo = {
+  explainExchangeDialog: {
+    emoji: "🥇 👀",
+    label: "¡Voten juntos en vivo!",
+    explanation: `Te dimos 3.000 LKS más por haber votado y 2.000 LKS más por haber hecho Log-In.`,
+    leftSide: { emoji: "👛", label: "10.000 LKS" },
+    rightSide: { emoji: "🗳️", label: "1 Voto" },
+  },
+  votingInfo: {
+    allowance: 10000,
+    allowanceMax: 10000,
+    allowancePrepend: "👛",
+    cost: 1000,
+    numVotesByCandidateId: {},
+    candidates: Array(32)
+      .fill(0)
+      .map((value, index) => {
+        return {
+          mediaTitle: `Candidate-${index}`,
+        };
+      }),
+    votingPrompt: "Revisa el ranking y decide si cambiar tus votos.",
+    votingPrepend: "🗳️",
+  },
 };
 
-const WeRank = () => {
-  return (
-    <Stack>
-      <PillBoxMessage>
-        Revisa el ranking y decide si cambiar tus votos.
-      </PillBoxMessage>
-      {Array(32)
-        .fill(0)
-        .map((el, i) => (
-          <CandidateRankingCard key={i} />
-        ))}
-    </Stack>
-  );
+const IndividualVoting = () => {
+  return <RankedVotingExperience {...rankedVotingExperienceInfo} />;
 };
 
-export default WeRank;
+export default IndividualVoting;
