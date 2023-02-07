@@ -1,3 +1,4 @@
+import { assert } from "console";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import {
   useHeaderState,
@@ -5,13 +6,15 @@ import {
 } from "../../../../common/context/header";
 
 export enum VotingActionType {
-  increment = "increment",
-  decrement = "decrement",
+  vote = "vote",
+  get = "get",
 }
 
 export type VotingAction = {
   type: VotingActionType;
-  candidateId: string;
+  candidateId?: string;
+  filteredOnMyVotes?: boolean;
+  voteDirection?: "increment" | "decrement";
 };
 
 export type VotingState = {
@@ -21,6 +24,7 @@ export type VotingState = {
   cost: number;
   numVotesByCandidateId: Record<string, number>;
   votingPrepend: string;
+  filteredOnMyVotes?: boolean;
 };
 
 const VotingContext = createContext<VotingState | undefined>(undefined);
@@ -37,40 +41,48 @@ const VotingProvider: React.FC<{
   const headerState = useHeaderState();
 
   function voteReducer(state: VotingState, action: VotingAction) {
-    let newNumVotes, newAllowance;
-    console.log(state);
     switch (action.type) {
-      case VotingActionType.increment: {
-        if (state.allowance == 0) return state;
-        newNumVotes = state.numVotesByCandidateId[action.candidateId]
-          ? state.numVotesByCandidateId[action.candidateId] + 1
-          : 1;
-        newAllowance = state.allowance - state.cost;
-        break;
+      case VotingActionType.vote: {
+        let newNumVotes: number, newAllowance: number;
+        switch (action.voteDirection!) {
+          case "increment": {
+            if (state.allowance == 0) return state;
+            newNumVotes = state.numVotesByCandidateId[action.candidateId!]
+              ? state.numVotesByCandidateId[action.candidateId!] + 1
+              : 1;
+            newAllowance = state.allowance - state.cost;
+            break;
+          }
+          case "decrement": {
+            if (state.allowance == state.allowanceMax) return state;
+            newNumVotes = state.numVotesByCandidateId[action.candidateId!] - 1;
+            newAllowance = state.allowance + state.cost;
+            break;
+          }
+        }
+        return {
+          ...state,
+          allowance: newAllowance,
+          numVotesByCandidateId: {
+            ...state.numVotesByCandidateId,
+            [action.candidateId!]: newNumVotes,
+          },
+        };
       }
-      case VotingActionType.decrement: {
-        if (state.allowance == state.allowanceMax) return state;
-        newNumVotes = state.numVotesByCandidateId[action.candidateId] - 1;
-        newAllowance = state.allowance + state.cost;
-        break;
+      case VotingActionType.get: {
+        console.log(action.filteredOnMyVotes);
+        return {
+          ...state,
+          filteredOnMyVotes: action.filteredOnMyVotes,
+        };
       }
     }
-    return {
-      ...state,
-      allowance: newAllowance,
-      numVotesByCandidateId: {
-        ...state.numVotesByCandidateId,
-        [action.candidateId]: newNumVotes,
-      },
-    };
   }
 
   const [votingState, votingReducer] = useReducer(voteReducer, initialState);
 
   useEffect(() => {
-    console.log("hello");
     if (setHeaderState) {
-      console.log("there");
       setHeaderState({
         ...headerState,
         exchangeInfo: {

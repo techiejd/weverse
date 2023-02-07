@@ -73,8 +73,9 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
         onClick={() => {
           if (votingDispatch) {
             votingDispatch({
-              type: VotingActionType.decrement,
+              type: VotingActionType.vote,
               candidateId: id,
+              voteDirection: "decrement",
             });
           }
         }}
@@ -105,8 +106,9 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
         onClick={() => {
           if (votingDispatch) {
             votingDispatch({
-              type: VotingActionType.increment,
+              type: VotingActionType.vote,
               candidateId: id,
+              voteDirection: "increment",
             });
           }
         }}

@@ -2,11 +2,10 @@ import { AppBar, Tab, Tabs, Typography } from "@mui/material";
 import Link from "next/link";
 import {
   JSXElementConstructor,
+  PropsWithChildren,
   ReactElement,
   SyntheticEvent,
-  useState,
 } from "react";
-import * as FooterContext from "../context/footer";
 
 interface LinkTabProps {
   label: string;
@@ -21,26 +20,7 @@ function LinkTab(props: LinkTabProps) {
     </Link>
   );
 }
-
-export const Footer = () => {
-  const [value, setValue] = useState(0);
-  const footerStateContext = FooterContext.useFooterState();
-
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
-  return (
-    <AppBar
-      position="fixed"
-      sx={{
-        backgroundColor: "pink",
-        height: "72px",
-        top: "auto",
-        bottom: 0,
-      }}
-    >
-      <Tabs centered value={value} onChange={handleChange}>
-        <LinkTab
+/**<LinkTab
           icon={<Typography>🏁</Typography>}
           label="WeRace"
           href={
@@ -53,7 +33,26 @@ export const Footer = () => {
           icon={<Typography>🗳️</Typography>}
           label="Mis Votos"
           href="/v1/weRace"
-        />
+        /> */
+
+export const Footer = (
+  props: PropsWithChildren<{
+    value: number;
+    handleChange: (event: SyntheticEvent, newValue: number) => void;
+  }>
+) => {
+  return (
+    <AppBar
+      position="fixed"
+      sx={{
+        backgroundColor: "pink",
+        height: "72px",
+        top: "auto",
+        bottom: 0,
+      }}
+    >
+      <Tabs centered value={props.value} onChange={props.handleChange}>
+        {props.children}
       </Tabs>
     </AppBar>
   );

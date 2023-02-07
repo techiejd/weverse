@@ -28,7 +28,6 @@ export const getServerSideProps: GetServerSideProps = (context) => {
 const AllChallenges: NextPage<{
   challenges: Array<string>;
 }> = (props) => {
-  console.log("props: ", props.challenges);
   const [challenges, setChallenges] = useState<Array<Challenge>>(
     props.challenges.map((c) => challenge.parse(JSON.parse(c)))
   );

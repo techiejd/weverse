@@ -1,4 +1,5 @@
 import { Box, Divider, Stack, Typography } from "@mui/material";
+import { ComparativeCard } from "../../../../modules/weRace/v1/vote/components/votingExperience/candidate/comparativeCard";
 
 const ExplanationBox = (props: { title: string; text: string }) => {
   return (
