@@ -1,4 +1,5 @@
 import { Grid } from "@mui/material";
+import { useVotingState } from "../../context";
 import { ComparativeCard } from "./candidate/comparativeCard";
 import VotingExperience, {
   CandidatesById,
@@ -6,13 +7,24 @@ import VotingExperience, {
 } from "./votingExperience";
 
 const ComparativeContent = ({ candidates }: { candidates: CandidatesById }) => {
+  const votingState = useVotingState();
   return (
     <Grid container spacing={1}>
-      {Object.entries(candidates).map(([id, candidate], i) => (
-        <Grid item sm={6} md={4} lg={2} xl={1} key={i}>
-          <ComparativeCard candidate={candidate} height="277px" />
-        </Grid>
-      ))}
+      {Object.entries(candidates)
+        .filter(([id, candidate]) => {
+          if (votingState) {
+            if (!votingState.filteredOnMyVotes) {
+              return true;
+            }
+            return votingState.numVotesByCandidateId[id] > 0;
+          }
+          return true;
+        })
+        .map(([id, candidate], i) => (
+          <Grid item sm={6} md={4} lg={2} xl={1} key={i}>
+            <ComparativeCard candidate={candidate} height="277px" />
+          </Grid>
+        ))}
     </Grid>
   );
 };

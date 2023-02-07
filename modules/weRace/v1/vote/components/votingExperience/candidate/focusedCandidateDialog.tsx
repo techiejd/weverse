@@ -114,6 +114,7 @@ const FocusedCandidateDialog = () => {
               height: "48px",
               width: "144px",
             }}
+            candidateId={votingState!.focusedCandidate!}
           ></VotingBar>
         </Box>
       </DialogActions>

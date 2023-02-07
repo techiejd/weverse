@@ -52,6 +52,7 @@ const CandidateRankingCard = (props: { candidate: Candidate }) => {
             height: "20px",
             width: "104px",
           }}
+          candidateId={props.candidate.id}
         ></VotingBar>
       </Stack>
       <Stack

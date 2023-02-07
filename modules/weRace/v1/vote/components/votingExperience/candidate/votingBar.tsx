@@ -15,15 +15,20 @@ import {
   VotingActionType,
 } from "../../../context";
 
-export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
-  const id: string = "TRUST";
+export const VotingBar = ({
+  candidateId,
+  sx = [],
+}: {
+  candidateId: string;
+  sx?: SxProps<Theme>;
+}) => {
   const votingState = useVotingState();
   const votingDispatch = useVotingDispatch();
   const votingPrepend = votingState ? votingState.votingPrepend : "";
 
   const [count, setCount] = useState(
-    votingState?.numVotesByCandidateId[id]
-      ? votingState?.numVotesByCandidateId[id]
+    votingState?.numVotesByCandidateId[candidateId]
+      ? votingState?.numVotesByCandidateId[candidateId]
       : 0
   );
   const [disabledDecrement, setDisabledDecrement] = useState(count == 0);
@@ -34,14 +39,14 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
   useEffect(() => {
     if (
       votingState?.numVotesByCandidateId &&
-      votingState?.numVotesByCandidateId[id] != count
+      votingState?.numVotesByCandidateId[candidateId] != count
     ) {
-      setCount(votingState?.numVotesByCandidateId[id]);
+      setCount(votingState?.numVotesByCandidateId[candidateId]);
     }
   }, [
     count,
     votingState?.numVotesByCandidateId,
-    votingState?.numVotesByCandidateId[id],
+    votingState?.numVotesByCandidateId[candidateId],
   ]);
   useEffect(() => {
     setDisabledIncrement(votingState?.allowance == 0);
@@ -75,7 +80,7 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
           if (votingDispatch) {
             votingDispatch({
               type: VotingActionType.vote,
-              candidateId: id,
+              candidateId: candidateId,
               voteDirection: "decrement",
             });
           }
@@ -108,7 +113,7 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
           if (votingDispatch) {
             votingDispatch({
               type: VotingActionType.vote,
-              candidateId: id,
+              candidateId: candidateId,
               voteDirection: "increment",
             });
           }

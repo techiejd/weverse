@@ -1,15 +1,5 @@
-import {
-  Stack,
-  Box,
-  Typography,
-  CardActionArea,
-  ButtonBase,
-} from "@mui/material";
-import {
-  useVotingDispatch,
-  useVotingState,
-  VotingActionType,
-} from "../../../context";
+import { Stack, Box, Typography } from "@mui/material";
+import { useVotingDispatch, VotingActionType } from "../../../context";
 import { Candidate } from "../votingExperience";
 import { VotingBar } from "./votingBar";
 
@@ -17,9 +7,7 @@ export const ComparativeCard = (props: {
   candidate: Candidate;
   height: string;
 }) => {
-  const votingState = useVotingState();
   const votingDispatch = useVotingDispatch();
-  /** */
   return (
     <Stack spacing={1} sx={{ alignItems: "center" }}>
       <Box
@@ -59,6 +47,7 @@ export const ComparativeCard = (props: {
           height: "48px",
           width: "144px",
         }}
+        candidateId={props.candidate.id}
       ></VotingBar>
     </Stack>
   );
