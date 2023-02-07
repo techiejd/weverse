@@ -1,4 +1,5 @@
 import { Stack } from "@mui/material";
+import { useVotingState } from "../../context";
 import CandidateRankingCard from "./candidate/rankingCard";
 import VotingExperience, {
   CandidatesById,
@@ -6,11 +7,22 @@ import VotingExperience, {
 } from "./votingExperience";
 
 const RankedContent = ({ candidates }: { candidates: CandidatesById }) => {
+  const votingState = useVotingState();
   return (
     <Stack>
-      {Object.entries(candidates).map(([id, candidate], i) => (
-        <CandidateRankingCard candidate={candidate} key={i} />
-      ))}
+      {Object.entries(candidates)
+        .filter(([id, candidate]) => {
+          if (votingState) {
+            if (!votingState.filteredOnMyVotes) {
+              return true;
+            }
+            return votingState.numVotesByCandidateId[id] > 0;
+          }
+          return true;
+        })
+        .map(([id, candidate], i) => (
+          <CandidateRankingCard candidate={candidate} key={i} />
+        ))}
     </Stack>
   );
 };

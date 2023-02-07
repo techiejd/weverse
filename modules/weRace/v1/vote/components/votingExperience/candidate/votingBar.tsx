@@ -31,7 +31,6 @@ export const VotingBar = ({
       ? votingState?.numVotesByCandidateId[candidateId]
       : 0
   );
-  console.log(`${candidateId}: ${count}`);
   const [disabledDecrement, setDisabledDecrement] = useState(count == 0);
   const [disabledIncrement, setDisabledIncrement] = useState(
     votingState?.allowance == 0
