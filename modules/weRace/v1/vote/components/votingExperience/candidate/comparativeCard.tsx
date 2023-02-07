@@ -1,10 +1,25 @@
-import { Stack, Box, Typography } from "@mui/material";
+import {
+  Stack,
+  Box,
+  Typography,
+  CardActionArea,
+  ButtonBase,
+} from "@mui/material";
+import {
+  useVotingDispatch,
+  useVotingState,
+  VotingActionType,
+} from "../../../context";
+import { Candidate } from "../votingExperience";
 import { VotingBar } from "./votingBar";
 
 export const ComparativeCard = (props: {
-  mediaTitle?: string;
+  candidate: Candidate;
   height: string;
 }) => {
+  const votingState = useVotingState();
+  const votingDispatch = useVotingDispatch();
+  /** */
   return (
     <Stack spacing={1} sx={{ alignItems: "center" }}>
       <Box
@@ -17,21 +32,27 @@ export const ComparativeCard = (props: {
           width: "100%",
           overflow: "hidden",
         }}
+        onClick={() => {
+          if (votingDispatch) {
+            votingDispatch({
+              type: VotingActionType.get,
+              candidateId: props.candidate.id,
+            });
+          }
+        }}
       >
         <Box sx={{ backgroundColor: "yellow", flexGrow: 7 }}></Box>
-        {props.mediaTitle && (
-          <Box
-            sx={{
-              backgroundColor: "Blue",
-              flexGrow: 1,
-              alignItems: "center",
-              display: "flex",
-              paddingLeft: 1,
-            }}
-          >
-            <Typography fontSize="20px">{props.mediaTitle}</Typography>
-          </Box>
-        )}
+        <Box
+          sx={{
+            backgroundColor: "Blue",
+            flexGrow: 1,
+            alignItems: "center",
+            display: "flex",
+            paddingLeft: 1,
+          }}
+        >
+          <Typography fontSize="20px">{props.candidate.title}</Typography>
+        </Box>
       </Box>
       <VotingBar
         sx={{

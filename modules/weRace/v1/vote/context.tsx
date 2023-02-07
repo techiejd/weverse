@@ -1,9 +1,9 @@
-import { assert } from "console";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import {
   useHeaderState,
   useSetHeaderContext,
 } from "../../../../common/context/header";
+import { CandidatesById } from "./components/votingExperience/votingExperience";
 
 export enum VotingActionType {
   vote = "vote",
@@ -25,6 +25,8 @@ export type VotingState = {
   numVotesByCandidateId: Record<string, number>;
   votingPrepend: string;
   filteredOnMyVotes?: boolean;
+  focusedCandidate?: string;
+  candidates: CandidatesById;
 };
 
 const VotingContext = createContext<VotingState | undefined>(undefined);
@@ -70,9 +72,9 @@ const VotingProvider: React.FC<{
         };
       }
       case VotingActionType.get: {
-        console.log(action.filteredOnMyVotes);
         return {
           ...state,
+          focusedCandidate: action.candidateId,
           filteredOnMyVotes: action.filteredOnMyVotes,
         };
       }

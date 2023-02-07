@@ -61,6 +61,7 @@ export const VotingBar = ({ sx = [] }: { sx?: SxProps<Theme> }) => {
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
       direction="row"
+      onClick={(e) => e.stopPropagation()}
     >
       <ButtonBase
         sx={{

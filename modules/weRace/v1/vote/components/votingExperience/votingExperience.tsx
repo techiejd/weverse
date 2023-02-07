@@ -2,11 +2,15 @@ import { Stack, Tab, Typography } from "@mui/material";
 import { PropsWithChildren, SyntheticEvent, useState } from "react";
 import { Footer } from "../../../../../../common/components/footer";
 import VotingProvider from "../../context";
+import FocusedCandidateDialog from "./candidate/focusedCandidateDialog";
 import ExplainExchangeDialog, {
   SimpleEmojiProps,
 } from "./explainExchangeDialog";
 import { PillBoxMessage } from "./pillBoxMessage";
 import VoteFilter from "./voteFilter";
+
+export type Candidate = { title: string; id: string };
+export type CandidatesById = Record<string, Candidate>;
 
 type VotingInfo = {
   allowance: number;
@@ -14,10 +18,11 @@ type VotingInfo = {
   allowancePrepend: string;
   cost: number;
   numVotesByCandidateId: Record<string, number>;
-  candidates: [{ mediaTitle: string }];
+  candidates: CandidatesById;
   filteredOnMyVotes?: boolean;
   votingPrompt: string;
   votingPrepend: string;
+  focusedCandidate?: string;
 };
 
 export type VotingExperienceInfo = {
@@ -34,11 +39,14 @@ export type VotingExperienceInfo = {
 const VotingPortal = (props: PropsWithChildren<VotingInfo>) => {
   return (
     <VotingProvider initialState={props}>
-      <Stack mx={2} mb={1}>
-        <PillBoxMessage>{props.votingPrompt}</PillBoxMessage>
-        {props.children}
-        <VoteFilter />
-      </Stack>
+      <div>
+        <FocusedCandidateDialog />
+        <Stack mx={2} mb={1}>
+          <PillBoxMessage>{props.votingPrompt}</PillBoxMessage>
+          {props.children}
+          <VoteFilter />
+        </Stack>
+      </div>
     </VotingProvider>
   );
 };

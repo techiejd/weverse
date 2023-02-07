@@ -14,13 +14,19 @@ const rankedVotingExperienceInfo = {
     allowancePrepend: "👛",
     cost: 1000,
     numVotesByCandidateId: {},
-    candidates: Array(32)
-      .fill(0)
-      .map((value, index) => {
-        return {
-          mediaTitle: `Candidate-${index}`,
-        };
-      }),
+    candidates: Object.fromEntries(
+      Array(32)
+        .fill(0)
+        .map((value, index) => {
+          return [
+            index,
+            {
+              title: `Candidate-${index}`,
+              id: String(index),
+            },
+          ];
+        })
+    ),
     votingPrompt: "Revisa el ranking y decide si cambiar tus votos.",
     votingPrepend: "🗳️",
   },

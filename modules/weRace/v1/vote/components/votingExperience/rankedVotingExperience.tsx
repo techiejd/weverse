@@ -1,16 +1,15 @@
 import { Stack } from "@mui/material";
 import CandidateRankingCard from "./candidate/rankingCard";
-import VotingExperience, { VotingExperienceInfo } from "./votingExperience";
+import VotingExperience, {
+  CandidatesById,
+  VotingExperienceInfo,
+} from "./votingExperience";
 
-const RankedContent = ({
-  candidates,
-}: {
-  candidates: [{ mediaTitle: string }];
-}) => {
+const RankedContent = ({ candidates }: { candidates: CandidatesById }) => {
   return (
     <Stack>
-      {candidates.map((el, i) => (
-        <CandidateRankingCard key={i} />
+      {Object.entries(candidates).map(([id, candidate], i) => (
+        <CandidateRankingCard candidate={candidate} key={i} />
       ))}
     </Stack>
   );

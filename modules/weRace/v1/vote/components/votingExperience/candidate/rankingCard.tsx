@@ -1,7 +1,15 @@
 import { Box, Stack, Typography } from "@mui/material";
+import {
+  useVotingDispatch,
+  useVotingState,
+  VotingActionType,
+} from "../../../context";
+import { Candidate } from "../votingExperience";
 import { VotingBar } from "./votingBar";
 
-const CandidateRankingCard = () => {
+const CandidateRankingCard = (props: { candidate: Candidate }) => {
+  const votingState = useVotingState();
+  const votingDispatch = useVotingDispatch();
   return (
     <Stack
       sx={{
@@ -17,6 +25,14 @@ const CandidateRankingCard = () => {
       }}
       direction="row"
       spacing={1}
+      onClick={() => {
+        if (votingDispatch) {
+          votingDispatch({
+            type: VotingActionType.get,
+            candidateId: props.candidate.id,
+          });
+        }
+      }}
     >
       <Box
         sx={{
@@ -29,7 +45,7 @@ const CandidateRankingCard = () => {
         sx={{ backgroundColor: "yellow", alignItems: "center" }}
         flexGrow={1}
       >
-        <Typography>Impact</Typography>
+        <Typography>{props.candidate.title}</Typography>
         <Typography>1234 Votes</Typography>
         <VotingBar
           sx={{

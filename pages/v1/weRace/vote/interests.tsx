@@ -15,13 +15,19 @@ const interestsVotingExperienceInfo = {
     allowancePrepend: "❤️‍🔥",
     cost: 1,
     numVotesByCandidateId: {},
-    candidates: Array(32)
-      .fill(0)
-      .map((value, index) => {
-        return {
-          mediaTitle: `Candidate-${index}`,
-        };
-      }),
+    candidates: Object.fromEntries(
+      Array(32)
+        .fill(0)
+        .map((value, index) => {
+          return [
+            index,
+            {
+              title: `Candidate-${index}`,
+              id: String(index),
+            },
+          ];
+        })
+    ),
     votingPrompt: "Agrega ❤️‍🔥 a temas sociales de tu interés.",
     votingPrepend: "🗳️",
   },

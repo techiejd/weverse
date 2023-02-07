@@ -1,17 +1,16 @@
 import { Grid } from "@mui/material";
 import { ComparativeCard } from "./candidate/comparativeCard";
-import VotingExperience, { VotingExperienceInfo } from "./votingExperience";
+import VotingExperience, {
+  CandidatesById,
+  VotingExperienceInfo,
+} from "./votingExperience";
 
-const ComparativeContent = ({
-  candidates,
-}: {
-  candidates: [{ mediaTitle: string }];
-}) => {
+const ComparativeContent = ({ candidates }: { candidates: CandidatesById }) => {
   return (
     <Grid container spacing={1}>
-      {candidates.map((candidate, i) => (
+      {Object.entries(candidates).map(([id, candidate], i) => (
         <Grid item sm={6} md={4} lg={2} xl={1} key={i}>
-          <ComparativeCard mediaTitle={candidate.mediaTitle} height="277px" />
+          <ComparativeCard candidate={candidate} height="277px" />
         </Grid>
       ))}
     </Grid>

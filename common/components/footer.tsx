@@ -1,39 +1,5 @@
-import { AppBar, Tab, Tabs, Typography } from "@mui/material";
-import Link from "next/link";
-import {
-  JSXElementConstructor,
-  PropsWithChildren,
-  ReactElement,
-  SyntheticEvent,
-} from "react";
-
-interface LinkTabProps {
-  label: string;
-  href: string;
-  icon: string | ReactElement<any, string | JSXElementConstructor<any>>;
-}
-
-function LinkTab(props: LinkTabProps) {
-  return (
-    <Link href={props.href}>
-      <Tab component="a" {...props} />
-    </Link>
-  );
-}
-/**<LinkTab
-          icon={<Typography>🏁</Typography>}
-          label="WeRace"
-          href={
-            footerStateContext
-              ? footerStateContext.navigationLinks.weRace
-              : "/v1/weRace"
-          }
-        />
-        <LinkTab
-          icon={<Typography>🗳️</Typography>}
-          label="Mis Votos"
-          href="/v1/weRace"
-        /> */
+import { AppBar, Tabs } from "@mui/material";
+import { PropsWithChildren, SyntheticEvent } from "react";
 
 export const Footer = (
   props: PropsWithChildren<{
