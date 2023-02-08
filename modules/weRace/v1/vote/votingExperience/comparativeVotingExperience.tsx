@@ -31,7 +31,7 @@ const ComparativeContent = ({ candidates }: { candidates: CandidatesById }) => {
 
 const ComparativeVotingExperience = (props: VotingExperienceInfo) => (
   <VotingExperience {...props}>
-    <ComparativeContent candidates={props.votingInfo.candidates} />
+    <ComparativeContent candidates={props.votingState.candidates} />
   </VotingExperience>
 );
 

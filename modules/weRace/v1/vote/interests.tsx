@@ -2,15 +2,18 @@ import { ComparativeVotingExperience } from "../../../../modules/weRace/v1/vote/
 import { VotingExperience } from "./context";
 
 const interestsVotingExperienceInfo = {
-  explainExchangeDialog: {
-    emoji: "❤️‍🔥",
-    label: "Escoges tus intereses",
-    explanation:
-      "Elige tus intereses para mostrarte los impactos sociales que a ti te mueven",
-    leftSide: { emoji: "❤️‍🔥", label: "1 Interes" },
-    rightSide: { emoji: "🎯", label: "1 Elección" },
+  explainExchange: {
+    dialog: {
+      emoji: "❤️‍🔥",
+      label: "Escoges tus intereses",
+      explanation:
+        "Elige tus intereses para mostrarte los impactos sociales que a ti te mueven",
+      leftSide: { emoji: "❤️‍🔥", label: "1 Interes" },
+      rightSide: { emoji: "🎯", label: "1 Elección" },
+    },
+    prompt: "Agrega ❤️‍🔥 a temas sociales de tu interés.",
   },
-  votingInfo: {
+  votingState: {
     experienceName: "interests" as VotingExperience,
     allowance: 5,
     allowanceMax: 5,
@@ -30,7 +33,6 @@ const interestsVotingExperienceInfo = {
           ];
         })
     ),
-    votingPrompt: "Agrega ❤️‍🔥 a temas sociales de tu interés.",
     votingPrepend: "🗳️",
   },
 };

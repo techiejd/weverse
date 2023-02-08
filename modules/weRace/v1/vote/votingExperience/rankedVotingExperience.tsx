@@ -30,7 +30,7 @@ const RankedContent = ({ candidates }: { candidates: CandidatesById }) => {
 const RankedVotingExperience = (props: VotingExperienceInfo) => {
   return (
     <VotingExperience {...props}>
-      <RankedContent candidates={props.votingInfo.candidates} />
+      <RankedContent candidates={props.votingState.candidates} />
     </VotingExperience>
   );
 };
