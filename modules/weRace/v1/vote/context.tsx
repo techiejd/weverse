@@ -33,7 +33,6 @@ const weRaceReducer = (
   state: WeRaceVoteState,
   action: WeRaceVoteAction
 ): WeRaceVoteState => {
-  console.log(action);
   return state.votes
     ? weRaceVoteState.parse({
         votes: { ...state.votes, [action.votingExperience]: action.votes },

@@ -40,8 +40,11 @@ export const VotingBar = ({
       votingState?.votes[candidateId] != count
     ) {
       setCount(votingState?.votes[candidateId]);
+    } else {
+      setCount(0);
     }
-  }, [count, votingState?.votes, votingState?.votes[candidateId], candidateId]);
+    //TODO(techiejd): Maybe use a reducer since count should not be captured.
+  }, [votingState?.votes, votingState?.votes[candidateId], candidateId]);
   useEffect(() => {
     setDisabledIncrement(votingState?.allowance == 0);
   }, [votingState?.allowance]);
