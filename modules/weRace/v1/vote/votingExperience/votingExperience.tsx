@@ -8,7 +8,7 @@ import { PillBoxMessage } from "./components/pillBoxMessage";
 import VoteFilter from "./components/voteFilter";
 import VotingProvider, { VotingState } from "./context";
 
-export type Candidate = { title: string; id: string };
+export type Candidate = { title: string; id: string; sum?: number };
 export type CandidatesById = Record<string, Candidate>;
 
 export type VotingExperienceInfo = {

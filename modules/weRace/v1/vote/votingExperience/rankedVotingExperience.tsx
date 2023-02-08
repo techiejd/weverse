@@ -6,11 +6,11 @@ import VotingExperience, {
   VotingExperienceInfo,
 } from "./votingExperience";
 
-const RankedContent = ({ candidates }: { candidates: CandidatesById }) => {
+const RankedContent = () => {
   const votingState = useVotingState();
   return (
     <Stack>
-      {Object.entries(candidates)
+      {Object.entries(votingState!.candidates)
         .filter(([id, candidate]) => {
           if (votingState) {
             if (!votingState.filteredOnMyVotes) {
@@ -20,8 +20,29 @@ const RankedContent = ({ candidates }: { candidates: CandidatesById }) => {
           }
           return true;
         })
+        .sort(([idA, candidateA], [idB, candidateB]) => {
+          console.log("sorting");
+          // Sum higher = first
+          console.log(candidateA.sum);
+          console.log(candidateB.sum);
+          if (candidateA.sum == undefined) {
+            if (candidateB.sum == undefined) {
+              return 0;
+            }
+            return 1;
+          }
+          if (candidateB.sum == undefined) {
+            return -1;
+          }
+          return candidateB.sum - candidateA.sum;
+        })
         .map(([id, candidate], i) => (
-          <CandidateRankingCard candidate={candidate} key={i} />
+          <CandidateRankingCard
+            candidate={candidate}
+            key={i}
+            rank={i + 1}
+            sum={candidate.sum ? candidate.sum : 0}
+          />
         ))}
     </Stack>
   );
@@ -30,7 +51,7 @@ const RankedContent = ({ candidates }: { candidates: CandidatesById }) => {
 const RankedVotingExperience = (props: VotingExperienceInfo) => {
   return (
     <VotingExperience {...props}>
-      <RankedContent candidates={props.votingState.candidates} />
+      <RankedContent />
     </VotingExperience>
   );
 };

@@ -1,0 +1,89 @@
+[debug] [2023-02-08T18:25:35.775Z] ----------------------------------------------------------------------
+[debug] [2023-02-08T18:25:35.776Z] Command:       /usr/local/bin/node /usr/local/bin/firebase emulators:start
+[debug] [2023-02-08T18:25:35.777Z] CLI Version:   11.4.2
+[debug] [2023-02-08T18:25:35.777Z] Platform:      darwin
+[debug] [2023-02-08T18:25:35.777Z] Node Version:  v16.14.0
+[debug] [2023-02-08T18:25:35.778Z] Time:          Wed Feb 08 2023 13:25:35 GMT-0500 (Colombia Standard Time)
+[debug] [2023-02-08T18:25:35.779Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-02-08T18:25:35.828Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-02-08T18:25:35.829Z] > authorizing via signed-in user (jd@commonsys.co)
+[debug] [2023-02-08T18:25:35.987Z] java version "12.0.2" 2019-07-16
+
+[debug] [2023-02-08T18:25:35.988Z] Java(TM) SE Runtime Environment (build 12.0.2+10)
+Java HotSpot(TM) 64-Bit Server VM (build 12.0.2+10, mixed mode, sharing)
+
+[debug] [2023-02-08T18:25:35.992Z] Parsed Java major version: 12
+[info] i  emulators: Starting emulators: auth, database, hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, database, hosting"}}
+[debug] [2023-02-08T18:25:36.004Z] [hub] writing locator at /var/folders/st/tcsgfgmj63n9l5kj1cd_4ttm0000gn/T/hub-newagent-tgma.json
+[debug] [2023-02-08T18:25:36.012Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/newagent-tgma [none]
+[debug] [2023-02-08T18:25:36.503Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/newagent-tgma 200
+[debug] [2023-02-08T18:25:36.503Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/newagent-tgma {"projectId":"newagent-tgma","projectNumber":"1020984737164","displayName":"newagent-tgma","name":"projects/newagent-tgma","resources":{"hostingSite":"newagent-tgma","realtimeDatabaseInstance":"newagent-tgma-default-rtdb","storageBucket":"newagent-tgma.appspot.com","locationId":"us-central"},"state":"ACTIVE","etag":"1_380bb426-067a-46f2-8606-abdd4a8b4d69"}
+[debug] [2023-02-08T18:25:36.504Z] database rules config:  [{"instance":"newagent-tgma-default-rtdb","rules":"/Users/juandominguez/development/weverse/database.rules.json"}]
+[debug] [2023-02-08T18:25:36.506Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2023-02-08T18:25:36.506Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2023-02-08T18:25:36.507Z] Ignoring unsupported arg: rules {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: rules"}}
+[debug] [2023-02-08T18:25:36.507Z] Starting Database Emulator with command {"binary":"java","args":["-Duser.language=en","-jar","/Users/juandominguez/.cache/firebase/emulators/firebase-database-emulator-v4.8.0.jar","--host","localhost","--port",9000],"optionalArgs":["port","host","functions_emulator_port","functions_emulator_host"],"joinArgs":false} {"metadata":{"emulator":{"name":"database"},"message":"Starting Database Emulator with command {\"binary\":\"java\",\"args\":[\"-Duser.language=en\",\"-jar\",\"/Users/juandominguez/.cache/firebase/emulators/firebase-database-emulator-v4.8.0.jar\",\"--host\",\"localhost\",\"--port\",9000],\"optionalArgs\":[\"port\",\"host\",\"functions_emulator_port\",\"functions_emulator_host\"],\"joinArgs\":false}"}}
+[info] i  database: Database Emulator logging to database-debug.log {"metadata":{"emulator":{"name":"database"},"message":"Database Emulator logging to \u001b[1mdatabase-debug.log\u001b[22m"}}
+[debug] [2023-02-08T18:25:37.422Z] WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by io.netty.util.internal.ReflectionUtil (file:/Users/juandominguez/.cache/firebase/emulators/firebase-database-emulator-v4.8.0.jar) to field sun.nio.ch.SelectorImpl.selectedKeys
+WARNING: Please consider reporting this to the maintainers of io.netty.util.internal.ReflectionUtil
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+ {"metadata":{"emulator":{"name":"database"},"message":"WARNING: An illegal reflective access operation has occurred\nWARNING: Illegal reflective access by io.netty.util.internal.ReflectionUtil (file:/Users/juandominguez/.cache/firebase/emulators/firebase-database-emulator-v4.8.0.jar) to field sun.nio.ch.SelectorImpl.selectedKeys\nWARNING: Please consider reporting this to the maintainers of io.netty.util.internal.ReflectionUtil\nWARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations\nWARNING: All illegal access operations will be denied in a future release\n"}}
+[debug] [2023-02-08T18:25:38.299Z] 13:25:38.298 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+ {"metadata":{"emulator":{"name":"database"},"message":"13:25:38.298 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started\n"}}
+[debug] [2023-02-08T18:25:38.530Z] 13:25:38.529 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
+ {"metadata":{"emulator":{"name":"database"},"message":"13:25:38.529 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000\n"}}
+[debug] [2023-02-08T18:25:45.610Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/newagent-tgma/sites 
+[debug] [2023-02-08T18:25:46.458Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/newagent-tgma/sites 200
+[debug] [2023-02-08T18:25:46.458Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/newagent-tgma/sites {"sites":[{"name":"projects/newagent-tgma/sites/newagent-tgma","defaultUrl":"https://newagent-tgma.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2023-02-08T18:25:46.459Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/newagent-tgma/webApps/-/config [none]
+[debug] [2023-02-08T18:25:46.917Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/newagent-tgma/webApps/-/config 200
+[debug] [2023-02-08T18:25:46.917Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/newagent-tgma/webApps/-/config {"projectId":"newagent-tgma","databaseURL":"https://newagent-tgma-default-rtdb.firebaseio.com","storageBucket":"newagent-tgma.appspot.com","locationId":"us-central","apiKey":"AIzaSyAD29PK43j8TX_bvJdOcINxGheRsEXMlCg","authDomain":"newagent-tgma.firebaseapp.com","messagingSenderId":"1020984737164"}
+[info] i  hosting: Serving hosting files from: public {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mpublic\u001b[22m"}}
+[info] ✔  hosting: Local server: http://localhost:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://localhost:5000\u001b[22m\u001b[24m"}}
+[debug] [2023-02-08T18:25:47.300Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2023-02-08T18:25:47.300Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2023-02-08T18:25:47.300Z] Starting Emulator UI with command {"binary":"node","args":["/Users/juandominguez/.cache/firebase/emulators/ui-v1.8.1/server/server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/Users/juandominguez/.cache/firebase/emulators/ui-v1.8.1/server/server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2023-02-08T18:25:47.415Z] Web / API server started at localhost:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at localhost:4000\n"}}
+[debug] [2023-02-08T18:25:47.567Z] >>> [apiv2][query] PUT http://localhost:9000/.settings/rules.json ns=newagent-tgma-default-rtdb
+[debug] [2023-02-08T18:25:47.567Z] >>> [apiv2][body] PUT http://localhost:9000/.settings/rules.json "{\n  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */\n  \"rules\": {\n    \".read\": false,\n    \".write\": false\n  }\n}"
+[debug] [2023-02-08T18:25:47.953Z] 13:25:47.953 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.NamespaceActor - newagent-tgma-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 211ms, init: 0ms
+ {"metadata":{"emulator":{"name":"database"},"message":"13:25:47.953 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.NamespaceActor - newagent-tgma-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 211ms, init: 0ms\n"}}
+[debug] [2023-02-08T18:25:48.041Z] 13:25:48.040 [NamespaceSystem-blocking-namespace-operation-dispatcher-6:newagent-tgma-default-rtdb$1209487382:] INFO com.firebase.core.namespace.StateManager - Namespace newagent-tgma-default-rtdb status Active to Active
+ {"metadata":{"emulator":{"name":"database"},"message":"13:25:48.040 [NamespaceSystem-blocking-namespace-operation-dispatcher-6:newagent-tgma-default-rtdb$1209487382:] INFO com.firebase.core.namespace.StateManager - Namespace newagent-tgma-default-rtdb status Active to Active\n"}}
+[debug] [2023-02-08T18:25:48.072Z] <<< [apiv2][status] PUT http://localhost:9000/.settings/rules.json 200
+[debug] [2023-02-08T18:25:48.073Z] <<< [apiv2][body] PUT http://localhost:9000/.settings/rules.json {"status":"ok"}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://localhost:4000                │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI            │
+├────────────────┼────────────────┼────────────────────────────────┤
+│ Authentication │ localhost:9099 │ http://localhost:4000/auth     │
+├────────────────┼────────────────┼────────────────────────────────┤
+│ Database       │ localhost:9000 │ http://localhost:4000/database │
+├────────────────┼────────────────┼────────────────────────────────┤
+│ Hosting        │ localhost:5000 │ n/a                            │
+└────────────────┴────────────────┴────────────────────────────────┘
+  Emulator Hub running at localhost:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2023-02-08T18:29:15.833Z] 13:29:15.833 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.NamespaceActor - newagent-tgma successfully activated FBKV (SurveyIdle(0)) wait: 3ms, init: 0ms
+ {"metadata":{"emulator":{"name":"database"},"message":"13:29:15.833 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.NamespaceActor - newagent-tgma successfully activated FBKV (SurveyIdle(0)) wait: 3ms, init: 0ms\n"}}
+[info] i  database: Change detected, updating rules for newagent-tgma-default-rtdb... {"metadata":{"emulator":{"name":"database"},"message":"Change detected, updating rules for newagent-tgma-default-rtdb..."}}
+[debug] [2023-02-08T21:36:11.308Z] >>> [apiv2][query] PUT http://localhost:9000/.settings/rules.json ns=newagent-tgma-default-rtdb
+[debug] [2023-02-08T21:36:11.309Z] >>> [apiv2][body] PUT http://localhost:9000/.settings/rules.json "{\n  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */\n  \"rules\": {\n    \".read\": true,\n    \".write\": true\n  }\n}"
+[debug] [2023-02-08T21:36:11.756Z] 16:36:11.722 [NamespaceSystem-blocking-namespace-operation-dispatcher-214:newagent-tgma-default-rtdb$1692409510:] INFO com.firebase.core.namespace.StateManager - Namespace newagent-tgma-default-rtdb status Active to Active
+ {"metadata":{"emulator":{"name":"database"},"message":"16:36:11.722 [NamespaceSystem-blocking-namespace-operation-dispatcher-214:newagent-tgma-default-rtdb$1692409510:] INFO com.firebase.core.namespace.StateManager - Namespace newagent-tgma-default-rtdb status Active to Active\n"}}
+[debug] [2023-02-08T21:36:11.768Z] <<< [apiv2][status] PUT http://localhost:9000/.settings/rules.json 200
+[debug] [2023-02-08T21:36:11.770Z] <<< [apiv2][body] PUT http://localhost:9000/.settings/rules.json {"status":"ok"}
+[info] ✔  database: Rules updated. {"metadata":{"emulator":{"name":"database"},"message":"Rules updated."}}

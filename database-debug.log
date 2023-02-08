@@ -1,0 +1,11 @@
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by io.netty.util.internal.ReflectionUtil (file:/Users/juandominguez/.cache/firebase/emulators/firebase-database-emulator-v4.8.0.jar) to field sun.nio.ch.SelectorImpl.selectedKeys
+WARNING: Please consider reporting this to the maintainers of io.netty.util.internal.ReflectionUtil
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+13:25:38.298 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+13:25:38.529 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
+13:25:47.953 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.NamespaceActor - newagent-tgma-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 211ms, init: 0ms
+13:25:48.040 [NamespaceSystem-blocking-namespace-operation-dispatcher-6:newagent-tgma-default-rtdb$1209487382:] INFO com.firebase.core.namespace.StateManager - Namespace newagent-tgma-default-rtdb status Active to Active
+13:29:15.833 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.NamespaceActor - newagent-tgma successfully activated FBKV (SurveyIdle(0)) wait: 3ms, init: 0ms
+16:36:11.722 [NamespaceSystem-blocking-namespace-operation-dispatcher-214:newagent-tgma-default-rtdb$1692409510:] INFO com.firebase.core.namespace.StateManager - Namespace newagent-tgma-default-rtdb status Active to Active

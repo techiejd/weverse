@@ -1,5 +1,4 @@
 import { createContext, useContext, Dispatch, useReducer } from "react";
-
 import { z } from "zod";
 
 const numVotesByCandidateId = z.record(z.number());

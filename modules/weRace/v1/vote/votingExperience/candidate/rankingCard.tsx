@@ -4,7 +4,11 @@ import { Candidate } from "../votingExperience";
 import CandidateVideo from "./candidateVideo";
 import { VotingBar } from "./votingBar";
 
-const CandidateRankingCard = (props: { candidate: Candidate }) => {
+const CandidateRankingCard = (props: {
+  candidate: Candidate;
+  rank: number;
+  sum: number;
+}) => {
   const votingDispatch = useVotingDispatch();
 
   return (
@@ -46,7 +50,7 @@ const CandidateRankingCard = (props: { candidate: Candidate }) => {
         flexGrow={1}
       >
         <Typography>{props.candidate.title}</Typography>
-        <Typography>1234 Votes</Typography>
+        <Typography>{props.sum}</Typography>
         <VotingBar
           sx={{
             height: "20px",
@@ -62,7 +66,7 @@ const CandidateRankingCard = (props: { candidate: Candidate }) => {
           justifyContent: "space-between",
         }}
       >
-        <Typography># 11234</Typography>
+        <Typography># {props.rank}</Typography>
         <Typography sx={{ marginLeft: "auto" }}>🗳️</Typography>
       </Stack>
     </Stack>

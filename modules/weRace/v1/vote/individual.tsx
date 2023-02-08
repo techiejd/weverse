@@ -15,7 +15,7 @@ const individualVotingExperienceInfo = {
   },
   votingState: {
     experienceName: "individual" as VotingExperience,
-    allowance: 10000,
+    allowance: 5000,
     allowanceMax: 10000,
     allowancePrepend: "👛",
     value: 1000,

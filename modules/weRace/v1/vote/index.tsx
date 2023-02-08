@@ -8,7 +8,11 @@ const ImpactsVoting = () => {
   const voteState = useWeRaceVoteState();
   return (
     <Box>
-      {voteState?.votes?.individual ? <RankingVoting /> : <IndividualVoting />}
+      {voteState?.votes?.individual ? (
+        <RankingVoting votes={voteState.votes.individual} />
+      ) : (
+        <IndividualVoting />
+      )}
     </Box>
   );
 };

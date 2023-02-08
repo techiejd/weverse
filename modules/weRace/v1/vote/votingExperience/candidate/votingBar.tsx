@@ -35,10 +35,7 @@ export const VotingBar = ({
   );
 
   useEffect(() => {
-    if (
-      votingState?.votes[candidateId] &&
-      votingState?.votes[candidateId] != count
-    ) {
+    if (votingState?.votes[candidateId]) {
       setCount(votingState?.votes[candidateId]);
     } else {
       setCount(0);
