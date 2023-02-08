@@ -6,7 +6,7 @@ import ExplainExchangeDialog, {
 } from "./components/explainExchangeDialog";
 import { PillBoxMessage } from "./components/pillBoxMessage";
 import VoteFilter from "./components/voteFilter";
-import VotingProvider from "./context";
+import VotingProvider, { VotingState } from "./context";
 
 export type Candidate = { title: string; id: string };
 export type CandidatesById = Record<string, Candidate>;
