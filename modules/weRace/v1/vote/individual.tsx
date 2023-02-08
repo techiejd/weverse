@@ -1,4 +1,5 @@
 import { ComparativeVotingExperience } from "../../../../modules/weRace/v1/vote/votingExperience";
+import { VotingExperience } from "./context";
 
 const individualVotingExperienceInfo = {
   explainExchangeDialog: {
@@ -10,11 +11,12 @@ const individualVotingExperienceInfo = {
     rightSide: { emoji: "🗳️", label: "1 Voto" },
   },
   votingInfo: {
+    experienceName: "individual" as VotingExperience,
     allowance: 10000,
     allowanceMax: 10000,
     allowancePrepend: "👛",
-    cost: 1000,
-    numVotesByCandidateId: {},
+    value: 1000,
+    votes: {},
     candidates: Object.fromEntries(
       Array(32)
         .fill(0)

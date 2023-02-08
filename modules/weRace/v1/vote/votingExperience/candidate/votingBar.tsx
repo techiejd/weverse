@@ -27,9 +27,7 @@ export const VotingBar = ({
   const votingPrepend = votingState ? votingState.votingPrepend : "";
 
   const [count, setCount] = useState(
-    votingState?.numVotesByCandidateId[candidateId]
-      ? votingState?.numVotesByCandidateId[candidateId]
-      : 0
+    votingState?.votes[candidateId] ? votingState?.votes[candidateId] : 0
   );
   const [disabledDecrement, setDisabledDecrement] = useState(count == 0);
   const [disabledIncrement, setDisabledIncrement] = useState(
@@ -38,17 +36,12 @@ export const VotingBar = ({
 
   useEffect(() => {
     if (
-      votingState?.numVotesByCandidateId[candidateId] &&
-      votingState?.numVotesByCandidateId[candidateId] != count
+      votingState?.votes[candidateId] &&
+      votingState?.votes[candidateId] != count
     ) {
-      setCount(votingState?.numVotesByCandidateId[candidateId]);
+      setCount(votingState?.votes[candidateId]);
     }
-  }, [
-    count,
-    votingState?.numVotesByCandidateId,
-    votingState?.numVotesByCandidateId[candidateId],
-    candidateId,
-  ]);
+  }, [count, votingState?.votes, votingState?.votes[candidateId], candidateId]);
   useEffect(() => {
     setDisabledIncrement(votingState?.allowance == 0);
   }, [votingState?.allowance]);

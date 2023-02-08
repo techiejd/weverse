@@ -1,4 +1,5 @@
 import { RankedVotingExperience } from "../../../../modules/weRace/v1/vote/votingExperience";
+import { VotingExperience } from "./context";
 
 const rankedVotingExperienceInfo = {
   explainExchangeDialog: {
@@ -9,11 +10,12 @@ const rankedVotingExperienceInfo = {
     rightSide: { emoji: "🗳️", label: "1 Voto" },
   },
   votingInfo: {
+    experienceName: "ranking" as VotingExperience,
     allowance: 10000,
     allowanceMax: 10000,
     allowancePrepend: "👛",
-    cost: 1000,
-    numVotesByCandidateId: {},
+    value: 1000,
+    votes: {},
     candidates: Object.fromEntries(
       Array(32)
         .fill(0)
@@ -32,8 +34,8 @@ const rankedVotingExperienceInfo = {
   },
 };
 
-const IndividualVoting = () => {
+const RankingVoting = () => {
   return <RankedVotingExperience {...rankedVotingExperienceInfo} />;
 };
 
-export default IndividualVoting;
+export default RankingVoting;

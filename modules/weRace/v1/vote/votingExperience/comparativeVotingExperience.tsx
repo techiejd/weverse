@@ -16,7 +16,7 @@ const ComparativeContent = ({ candidates }: { candidates: CandidatesById }) => {
             if (!votingState.filteredOnMyVotes) {
               return true;
             }
-            return votingState.numVotesByCandidateId[id] > 0;
+            return votingState.votes[id] > 0;
           }
           return true;
         })

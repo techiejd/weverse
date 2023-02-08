@@ -1,8 +1,15 @@
 import { Box } from "@mui/material";
+import WeRaceVote from "../../../../modules/weRace/v1/vote";
+import WeRaceVoteProvider from "../../../../modules/weRace/v1/vote/context";
 
 const Vote = () => {
-  const interests = {};
-  return <Box></Box>;
+  return (
+    <Box>
+      <WeRaceVoteProvider>
+        <WeRaceVote />
+      </WeRaceVoteProvider>
+    </Box>
+  );
 };
 
 export default Vote;

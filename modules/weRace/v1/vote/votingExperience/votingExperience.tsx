@@ -1,5 +1,9 @@
 import { Stack } from "@mui/material";
 import { PropsWithChildren } from "react";
+import {
+  NumVotesByCandidateId,
+  VotingExperience as VotingExperienceNames,
+} from "../context";
 import FocusedCandidateDialog from "./candidate/focusedCandidateDialog";
 import ExplainExchangeDialog, {
   SimpleEmojiProps,
@@ -15,13 +19,14 @@ type VotingInfo = {
   allowance: number;
   allowanceMax: number;
   allowancePrepend: string;
-  cost: number;
-  numVotesByCandidateId: Record<string, number>;
+  value: number;
+  votes: NumVotesByCandidateId;
   candidates: CandidatesById;
   filteredOnMyVotes?: boolean;
   votingPrompt: string;
   votingPrepend: string;
   focusedCandidate?: string;
+  experienceName: VotingExperienceNames;
 };
 
 export type VotingExperienceInfo = {

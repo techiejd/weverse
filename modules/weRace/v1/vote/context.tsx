@@ -1,32 +1,55 @@
-import { createContext, useReducer, useEffect, useContext } from "react";
+import { createContext, useContext, Dispatch, useReducer } from "react";
 
-// TODO(techiejd): Find out what can be modularized away from VotingExperience/ and into Vote/
+import { z } from "zod";
 
-export type WeRaceVoteState = {
-  allowance: number;
-  allowanceMax: number;
-  allowancePrepend: string;
-  cost: number;
-  numVotesByCandidateId: Record<string, number>;
-  votingPrepend: string;
-  filteredOnMyVotes?: boolean;
-  focusedCandidate?: string;
-  candidates: CandidatesById;
+const numVotesByCandidateId = z.record(z.number());
+export type NumVotesByCandidateId = z.infer<typeof numVotesByCandidateId>;
+
+const votingExperience = z.enum(["interests", "individual", "ranking"]);
+export type VotingExperience = z.infer<typeof votingExperience>;
+
+const weRaceVoteState = z.object({
+  votes: z.record(votingExperience, numVotesByCandidateId).optional(),
+});
+export type WeRaceVoteState = z.infer<typeof weRaceVoteState>;
+
+export enum WeRaceVoteActionType {
+  expendedAllowance = "expendedAllowance",
+}
+
+export type WeRaceVoteAction = {
+  type: WeRaceVoteActionType;
+  votingExperience: VotingExperience;
+  votes: NumVotesByCandidateId;
 };
 
 const WeRaceVoteContext = createContext<WeRaceVoteState | undefined>(undefined);
 
 const WeRaceVoteDispatchContext = createContext<
-  React.Dispatch<VotingAction> | undefined
+  Dispatch<WeRaceVoteAction> | undefined
 >(undefined);
+
+const weRaceReducer = (
+  state: WeRaceVoteState,
+  action: WeRaceVoteAction
+): WeRaceVoteState => {
+  console.log(action);
+  return state.votes
+    ? weRaceVoteState.parse({
+        votes: { ...state.votes, [action.votingExperience]: action.votes },
+      })
+    : weRaceVoteState.parse({
+        votes: { [action.votingExperience]: action.votes },
+      });
+};
 
 const WeRaceVoteProvider: React.FC<{
   children: JSX.Element;
-  initialState: WeRaceVoteState;
-}> = ({ children, initialState }) => {
+}> = ({ children }) => {
+  const [weRaceVoteState, weRaceVoteReduce] = useReducer(weRaceReducer, {});
   return (
-    <WeRaceVoteContext.Provider value={votingState}>
-      <WeRaceVoteDispatchContext.Provider value={votingReducer}>
+    <WeRaceVoteContext.Provider value={weRaceVoteState}>
+      <WeRaceVoteDispatchContext.Provider value={weRaceVoteReduce}>
         {children}
       </WeRaceVoteDispatchContext.Provider>
     </WeRaceVoteContext.Provider>
