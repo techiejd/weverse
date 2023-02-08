@@ -1,15 +1,12 @@
 import { Box, Stack, Typography } from "@mui/material";
-import {
-  useVotingDispatch,
-  useVotingState,
-  VotingActionType,
-} from "../../../context";
+import { useVotingDispatch, VotingActionType } from "../../../context";
 import { Candidate } from "../votingExperience";
+import CandidateVideo from "./candidateVideo";
 import { VotingBar } from "./votingBar";
 
 const CandidateRankingCard = (props: { candidate: Candidate }) => {
-  const votingState = useVotingState();
   const votingDispatch = useVotingDispatch();
+
   return (
     <Stack
       sx={{
@@ -40,7 +37,10 @@ const CandidateRankingCard = (props: { candidate: Candidate }) => {
           height: "72px",
           width: "100px",
         }}
-      ></Box>
+      >
+        <CandidateVideo threshold={0.2} />
+      </Box>
+
       <Stack
         sx={{ backgroundColor: "yellow", alignItems: "center" }}
         flexGrow={1}

@@ -16,6 +16,7 @@ import {
 } from "../../../context";
 import { VotingBar } from "./votingBar";
 import CloseIcon from "@mui/icons-material/Close";
+import CandidateVideo from "./candidateVideo";
 
 const ExplanationBox = (props: { title: string; text: string }) => {
   return (
@@ -43,13 +44,20 @@ const Impact = () => {
     <Stack divider={<Divider flexItem />} spacing={2}>
       <Box
         sx={{
-          backgroundColor: "red",
+          backgroundColor: "aqua",
           borderRadius: 4,
           height: "406px",
           width: "100%",
-          overflow: "hidden",
         }}
-      ></Box>
+      >
+        <CandidateVideo
+          threshold={0.9}
+          muted={false}
+          controls
+          controlsList="play volume fullscreen nodownload noplaybackrate notimeline"
+          disablePictureInPicture
+        />
+      </Box>
       <ExplanationBox title="📍 Ubicación" text="Quibdó, Chocó" />
       <ExplanationBox title="📸 Reportero" text="Carlos Mario" />
       <ExplanationBox

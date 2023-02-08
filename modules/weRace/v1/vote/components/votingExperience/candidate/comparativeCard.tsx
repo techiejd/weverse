@@ -1,6 +1,7 @@
 import { Stack, Box, Typography } from "@mui/material";
 import { useVotingDispatch, VotingActionType } from "../../../context";
 import { Candidate } from "../votingExperience";
+import CandidateVideo from "./candidateVideo";
 import { VotingBar } from "./votingBar";
 
 export const ComparativeCard = (props: {
@@ -8,6 +9,8 @@ export const ComparativeCard = (props: {
   height: string;
 }) => {
   const votingDispatch = useVotingDispatch();
+  // threshold: 0.9,
+
   return (
     <Stack spacing={1} sx={{ alignItems: "center" }}>
       <Box
@@ -29,7 +32,13 @@ export const ComparativeCard = (props: {
           }
         }}
       >
-        <Box sx={{ backgroundColor: "yellow", flexGrow: 7 }}></Box>
+        <Box
+          sx={{
+            flexGrow: 7,
+          }}
+        >
+          <CandidateVideo threshold={0.9} />
+        </Box>
         <Box
           sx={{
             backgroundColor: "Blue",
