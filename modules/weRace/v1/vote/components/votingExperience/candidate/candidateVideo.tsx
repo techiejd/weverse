@@ -66,6 +66,7 @@ const CandidateVideo = ({
         controls={props.controls}
         controlsList={props.controlsList}
         disablePictureInPicture={disablePictureInPicture}
+        loop
       >
         <source src="/ana14s.mp4" type="video/mp4" />
       </video>
