@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
-import { useVotingState } from "../../context";
 import { ComparativeCard } from "./candidate/comparativeCard";
+import { useVotingState } from "./context";
 import VotingExperience, {
   CandidatesById,
   VotingExperienceInfo,

@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { useVotingDispatch, VotingActionType } from "../../../context";
+import { useVotingDispatch, VotingActionType } from "../context";
 import { Candidate } from "../votingExperience";
 import CandidateVideo from "./candidateVideo";
 import { VotingBar } from "./votingBar";

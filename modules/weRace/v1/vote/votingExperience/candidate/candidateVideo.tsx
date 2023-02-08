@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import useElementOnScreen from "../../../../../../../common/context/useElementOnScreen";
+import useElementOnScreen from "../../../../../../common/context/useElementOnScreen";
 
 export type VideoProps = {
   muted?: boolean;

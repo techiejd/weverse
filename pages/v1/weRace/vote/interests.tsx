@@ -1,4 +1,4 @@
-import { ComparativeVotingExperience } from "../../../../modules/weRace/v1/vote/components/votingExperience";
+import { ComparativeVotingExperience } from "../../../../modules/weRace/v1/vote/votingExperience";
 
 const interestsVotingExperienceInfo = {
   explainExchangeDialog: {

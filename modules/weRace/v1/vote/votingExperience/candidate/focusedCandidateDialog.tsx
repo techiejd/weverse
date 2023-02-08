@@ -10,10 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import {
-  useVotingDispatch,
   useVotingState,
+  useVotingDispatch,
   VotingActionType,
-} from "../../../context";
+} from "../context";
 import { VotingBar } from "./votingBar";
 import CloseIcon from "@mui/icons-material/Close";
 import CandidateVideo from "./candidateVideo";

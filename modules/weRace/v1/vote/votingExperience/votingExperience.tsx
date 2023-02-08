@@ -1,13 +1,12 @@
-import { Stack, Tab, Typography } from "@mui/material";
-import { PropsWithChildren, SyntheticEvent, useState } from "react";
-import { Footer } from "../../../../../../common/components/footer";
-import VotingProvider from "../../context";
+import { Stack } from "@mui/material";
+import { PropsWithChildren } from "react";
 import FocusedCandidateDialog from "./candidate/focusedCandidateDialog";
 import ExplainExchangeDialog, {
   SimpleEmojiProps,
-} from "./explainExchangeDialog";
-import { PillBoxMessage } from "./pillBoxMessage";
-import VoteFilter from "./voteFilter";
+} from "./components/explainExchangeDialog";
+import { PillBoxMessage } from "./components/pillBoxMessage";
+import VoteFilter from "./components/voteFilter";
+import VotingProvider from "./context";
 
 export type Candidate = { title: string; id: string };
 export type CandidatesById = Record<string, Candidate>;

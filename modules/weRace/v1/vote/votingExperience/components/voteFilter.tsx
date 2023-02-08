@@ -1,11 +1,11 @@
 import { Tab, Typography } from "@mui/material";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent } from "react";
 import { Footer } from "../../../../../../common/components/footer";
 import {
-  useVotingDispatch,
   useVotingState,
+  useVotingDispatch,
   VotingActionType,
-} from "../../context";
+} from "../context";
 
 const VoteFilter = () => {
   const votingState = useVotingState();

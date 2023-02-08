@@ -1,4 +1,4 @@
-import RankedVotingExperience from "../../../../modules/weRace/v1/vote/components/votingExperience/rankedVotingExperience";
+import { RankedVotingExperience } from "../../../../modules/weRace/v1/vote/votingExperience";
 
 const rankedVotingExperienceInfo = {
   explainExchangeDialog: {

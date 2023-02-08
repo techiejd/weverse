@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useReducer, useEffect, useContext } from "react";
 import {
-  useHeaderState,
   useSetHeaderContext,
-} from "../../../../common/context/header";
-import { CandidatesById } from "./components/votingExperience/votingExperience";
+  useHeaderState,
+} from "../../../../../common/context/header";
+import { CandidatesById } from "./votingExperience";
 
 export enum VotingActionType {
   vote = "vote",

@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
-import { useVotingState } from "../../context";
 import CandidateRankingCard from "./candidate/rankingCard";
+import { useVotingState } from "./context";
 import VotingExperience, {
   CandidatesById,
   VotingExperienceInfo,

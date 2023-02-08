@@ -1,19 +1,19 @@
 import {
-  Box,
-  ButtonBase,
-  Stack,
   SxProps,
-  Theme,
+  Stack,
+  ButtonBase,
+  Box,
   Typography,
+  Theme,
 } from "@mui/material";
+import { useState, useEffect } from "react";
+import {
+  useVotingState,
+  useVotingDispatch,
+  VotingActionType,
+} from "../context";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
-import { useEffect, useState } from "react";
-import {
-  useVotingDispatch,
-  useVotingState,
-  VotingActionType,
-} from "../../../context";
 
 export const VotingBar = ({
   candidateId,
