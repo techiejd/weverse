@@ -30,7 +30,6 @@ const ExplainExchangeDialog = (props: {
       onClose={closeExplanation}
       PaperProps={{
         style: {
-          backgroundColor: "purple",
           borderRadius: 4,
         },
       }}
@@ -51,7 +50,6 @@ const ExplainExchangeDialog = (props: {
           direction="row"
           spacing={1}
           sx={{
-            backgroundColor: "brown",
             alignItems: "center",
           }}
         >

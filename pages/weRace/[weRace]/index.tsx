@@ -74,7 +74,6 @@ const User: NextPage<{
                 sx={{ maxWidth: 700, mt: 5 }}
                 variant="outlined"
                 style={{
-                  backgroundColor: "black",
                   color: "white",
                   borderColor: "white",
                   borderRadius: "15px",

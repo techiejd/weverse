@@ -53,7 +53,6 @@ export const VotingBar = ({
     <Stack
       sx={[
         {
-          backgroundColor: "red",
           borderRadius: 4,
           overflow: "hidden",
         },
@@ -64,7 +63,6 @@ export const VotingBar = ({
     >
       <ButtonBase
         sx={{
-          backgroundColor: "green",
           flexGrow: 1,
           display: "flex",
           justifyContent: "center",
@@ -97,7 +95,6 @@ export const VotingBar = ({
       </Box>
       <ButtonBase
         sx={{
-          backgroundColor: "yellow",
           flexGrow: 1,
           display: "flex",
           justifyContent: "center",

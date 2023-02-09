@@ -11,7 +11,6 @@ export const Footer = (
     <AppBar
       position="fixed"
       sx={{
-        backgroundColor: "pink",
         height: "72px",
         top: "auto",
         bottom: 0,

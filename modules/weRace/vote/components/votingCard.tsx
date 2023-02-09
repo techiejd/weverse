@@ -116,7 +116,6 @@ const VotingCard: React.FC<{
       sx={{ maxWidth: 700, mt: 5 }}
       variant="outlined"
       style={{
-        backgroundColor: "black",
         color: "white",
         borderColor: "white",
         borderRadius: "15px",
@@ -150,7 +149,7 @@ const VotingCard: React.FC<{
             disabled={decrementButtonDisabled}
             style={{
               borderRadius: 15,
-              backgroundColor: "grey",
+
               marginRight: "15px",
               fontSize: "10px",
             }}
@@ -164,7 +163,7 @@ const VotingCard: React.FC<{
           disabled={props.incrementButtonsDisabled}
           style={{
             borderRadius: 15,
-            backgroundColor: "grey",
+
             marginLeft: "15px",
             fontSize: "10px",
           }}

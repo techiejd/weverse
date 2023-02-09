@@ -14,7 +14,6 @@ const CandidateRankingCard = (props: {
   return (
     <Stack
       sx={{
-        backgroundColor: "red",
         height: 88,
         marginLeft: 2,
         marginRight: 2,
@@ -37,7 +36,6 @@ const CandidateRankingCard = (props: {
     >
       <Box
         sx={{
-          backgroundColor: "green",
           height: "72px",
           width: "100px",
         }}
@@ -45,10 +43,7 @@ const CandidateRankingCard = (props: {
         <CandidateVideo threshold={0.2} />
       </Box>
 
-      <Stack
-        sx={{ backgroundColor: "yellow", alignItems: "center" }}
-        flexGrow={1}
-      >
+      <Stack sx={{ alignItems: "center" }} flexGrow={1}>
         <Typography>{props.candidate.title}</Typography>
         <Typography>{props.sum}</Typography>
         <VotingBar
@@ -61,7 +56,6 @@ const CandidateRankingCard = (props: {
       </Stack>
       <Stack
         sx={{
-          backgroundColor: "blue",
           height: "100%",
           justifyContent: "space-between",
         }}

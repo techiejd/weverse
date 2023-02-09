@@ -15,7 +15,6 @@ export const ComparativeCard = (props: {
     <Stack spacing={1} sx={{ alignItems: "center" }}>
       <Box
         sx={{
-          backgroundColor: "red",
           borderRadius: 4,
           height: props.height,
           display: "flex",
@@ -41,7 +40,6 @@ export const ComparativeCard = (props: {
         </Box>
         <Box
           sx={{
-            backgroundColor: "Blue",
             flexGrow: 1,
             alignItems: "center",
             display: "flex",

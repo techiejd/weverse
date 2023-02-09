@@ -44,7 +44,6 @@ const Impact = () => {
     <Stack divider={<Divider flexItem />} spacing={2}>
       <Box
         sx={{
-          backgroundColor: "aqua",
           borderRadius: 4,
           height: "406px",
           width: "100%",
