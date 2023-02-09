@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { ref, set } from "firebase/database";
 import { useEffect } from "react";
 import {
   useAppState,
@@ -27,6 +28,15 @@ const ImpactsVoting = () => {
       });
     }
   }, [voteState?.votes?.individual, appState, setAppState]);
+
+  useEffect(() => {
+    if (appState?.user && voteState?.votes?.interests) {
+      set(
+        ref(appState.db, `/users/${appState.user.id}/interests`),
+        voteState?.votes?.interests
+      );
+    }
+  }, [voteState?.votes?.interests, appState?.user, appState?.db]);
 
   return (
     <Box>
