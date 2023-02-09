@@ -1,8 +1,15 @@
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box } from "@mui/material";
+import { useEffect } from "react";
+import { useAppState, useSetAppState } from "../context/appState";
 import * as HeaderContext from "../context/header";
 
 export const Header = () => {
   const headerStateContext = HeaderContext.useHeaderState();
+  const appState = useAppState();
+  useEffect(() => {
+    console.log(appState);
+  }, [appState]);
+  const setAppState = useSetAppState();
   return (
     <AppBar position="sticky">
       <Toolbar>
@@ -14,8 +21,13 @@ export const Header = () => {
           sx={{
             mr: 1,
           }}
+          onClick={() => {
+            if (appState && appState?.user == undefined && setAppState) {
+              setAppState({ ...appState, requestLogIn: true });
+            }
+          }}
         >
-          LOGIN
+          {appState?.user ? appState.user.name : "LOGIN"}
         </Typography>
         <Typography
           sx={{

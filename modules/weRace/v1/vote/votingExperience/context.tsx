@@ -1,12 +1,4 @@
-import {
-  getDatabase,
-  connectDatabaseEmulator,
-  ref,
-  runTransaction,
-  onValue,
-} from "firebase/database";
-
-import { initializeApp } from "firebase/app";
+import { ref, runTransaction, onValue } from "firebase/database";
 
 import {
   createContext,
@@ -15,6 +7,7 @@ import {
   useContext,
   Dispatch,
 } from "react";
+import { useAppState } from "../../../../../common/context/appState";
 import {
   useSetHeaderContext,
   useHeaderState,
@@ -26,21 +19,6 @@ import {
   WeRaceVoteActionType,
 } from "../context";
 import { CandidatesById } from "./votingExperience";
-
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_REACT_APP_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_REACT_APP_AUTH_DOMAIN,
-  databaseURL: process.env.NEXT_PUBLIC_REACT_APP_DATABASE_URL,
-  projectId: process.env.NEXT_PUBLIC_REACT_APP_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_REACT_APP_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_REACT_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_REACT_APP_MEASUREMENT_ID,
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-connectDatabaseEmulator(db, "localhost", 9000);
 
 export enum VotingActionType {
   vote = "vote",
@@ -79,9 +57,11 @@ const VotingProvider: React.FC<{
   children: JSX.Element;
   initialState: VotingState;
 }> = ({ children, initialState }) => {
-  //TODO(techijd): Move this header stuff out of here and into WeRaceVote
+  //TODO(techijd): Move this header stuff out of here and into WeRaceVote or App Context
   const setHeaderState = useSetHeaderContext();
   const headerState = useHeaderState();
+
+  const appState = useAppState();
 
   const weRaceVoteDispatch = useWeRaceVoteDispatch();
 
@@ -171,16 +151,22 @@ const VotingProvider: React.FC<{
   ]);
 
   useEffect(() => {
-    console.log("In here!");
-    if (votingState.experienceName == "ranking") {
-      console.log("Hereee tooo");
+    if (votingState.experienceName == "ranking" && appState?.user) {
+      // TODO(techiejd): Modularize the ranking logic
       Object.entries(votingState.votes).forEach(([candidateId, votes]) => {
-        const candidateRef = ref(db, `/${candidateId}/`);
+        const candidateRef = ref(appState.db, `candidates/${candidateId}/`);
         runTransaction(candidateRef, (candidate) => {
-          return {
-            sum: votes,
-            jd: votes,
-          };
+          if (!candidate) {
+            return {
+              sum: votes,
+              [`${appState.user?.id}`]: votes,
+            };
+          }
+          const prevVotes = candidate[`${appState.user?.id}`]
+            ? candidate[`${appState.user?.id}`]
+            : 0;
+          const newSum = candidate.sum - prevVotes + votes;
+          return { sum: newSum, [`${appState.user?.id}`]: votes };
         });
       });
     }
@@ -188,10 +174,10 @@ const VotingProvider: React.FC<{
 
   useEffect(() => {
     console.log("Is there a change?");
-    if (votingState.experienceName == "ranking") {
+    if (votingState.experienceName == "ranking" && appState) {
       Object.entries(votingState.candidates).forEach(([id, candidate]) => {
         console.log(candidate);
-        const candidateSumRef = ref(db, `/${id}/sum`);
+        const candidateSumRef = ref(appState.db, `candidates/${id}/sum`);
         onValue(candidateSumRef, (snapshot) => {
           const sum = snapshot.val() ? snapshot.val() : undefined;
           votingReducer({
@@ -215,20 +201,6 @@ const VotingProvider: React.FC<{
       });
     }
   }, [setHeaderState, votingState]);
-
-  /**useEffect(() => {
-    if (initialState.experienceName == "ranking") {
-      Object.entries(initialState.votes).forEach(([candidateId, votes]) => {
-        const candidateRef = ref(db, `/${candidateId}/`);
-        runTransaction(candidateRef, (candidate) => {
-          return {
-            sum: votes,
-            jd: votes,
-          };
-        });
-      });
-    }
-  });*/
 
   return (
     <VotingContext.Provider value={votingState}>

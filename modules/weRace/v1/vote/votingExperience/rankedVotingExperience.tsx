@@ -1,10 +1,7 @@
 import { Stack } from "@mui/material";
 import CandidateRankingCard from "./candidate/rankingCard";
 import { useVotingState } from "./context";
-import VotingExperience, {
-  CandidatesById,
-  VotingExperienceInfo,
-} from "./votingExperience";
+import VotingExperience, { VotingExperienceInfo } from "./votingExperience";
 
 const RankedContent = () => {
   const votingState = useVotingState();

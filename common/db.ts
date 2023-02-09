@@ -4,6 +4,8 @@ import { DraftTransaction, Transaction } from "../modules/db/schemas";
 import { Challenge, startingUserGameInfo } from "../modules/sofia/schemas";
 import { logger } from "./logger";
 
+// TODO(techiejd): Bomb the shit out of all the v0 stuff.
+
 const db = (() => {
   try {
     getApp();
