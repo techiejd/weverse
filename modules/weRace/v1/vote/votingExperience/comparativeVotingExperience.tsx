@@ -45,7 +45,6 @@ const ComparativeContent = ({
           return true;
         })
         .filter(([id, candidate]) => {
-          console.log(filterOnInterests);
           // Filtering on my interests
           if (filterOnInterests.length == 0) return true;
           return filterOnInterests.some((interest) =>
