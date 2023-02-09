@@ -1,5 +1,6 @@
 import { RankedVotingExperience } from "../../../../modules/weRace/v1/vote/votingExperience";
 import { NumVotesByCandidateId, VotingExperience } from "./context";
+import { impacts } from "./hardcoded";
 
 const partialRankedVotingExperienceInfo = {
   explainExchange: {
@@ -19,17 +20,7 @@ const partialRankedVotingExperienceInfo = {
     allowancePrepend: "👛",
     value: 1000,
     candidates: Object.fromEntries(
-      Array(32)
-        .fill(0)
-        .map((value, index) => {
-          return [
-            index,
-            {
-              title: `Candidate-${index}`,
-              id: String(index),
-            },
-          ];
-        })
+      impacts.map((impact) => [impact.id, impact])
     ),
     votingPrepend: "🗳️",
   },

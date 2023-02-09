@@ -1,4 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
+import { useEffect } from "react";
 import {
   useVotingDispatch,
   useVotingState,
@@ -14,6 +15,16 @@ const CandidateRankingCard = (props: {
 }) => {
   const votingDispatch = useVotingDispatch();
   const votingState = useVotingState();
+
+  useEffect(() => {
+    if (votingDispatch) {
+      votingDispatch({
+        type: VotingActionType.updateRank,
+        candidateId: props.candidate.id,
+        candidateRank: props.rank,
+      });
+    }
+  }, [props.rank]);
 
   return (
     <Stack
@@ -44,11 +55,11 @@ const CandidateRankingCard = (props: {
           width: "100px",
         }}
       >
-        <CandidateVideo threshold={0.2} />
+        <CandidateVideo threshold={0.2} src={props.candidate.video} />
       </Box>
 
       <Stack sx={{ alignItems: "center" }} flexGrow={1}>
-        <Typography>{props.candidate.title}</Typography>
+        <Typography fontSize={"12px"}>{props.candidate.name}</Typography>
         <Typography>{props.candidate.sum}</Typography>
         <VotingBar
           sx={{

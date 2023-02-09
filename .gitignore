@@ -38,3 +38,6 @@ next-env.d.ts
 # ignore all json that start with newagent,
 # since they tend to be credential files.
 newagent*.json
+
+# Everything under public
+public/*

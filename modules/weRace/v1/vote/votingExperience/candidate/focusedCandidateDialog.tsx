@@ -17,6 +17,7 @@ import {
 import { VotingBar } from "./votingBar";
 import CloseIcon from "@mui/icons-material/Close";
 import CandidateVideo from "./candidateVideo";
+import { Candidate } from "../votingExperience";
 
 const ExplanationBox = (props: { title: string; text: string }) => {
   return (
@@ -39,7 +40,7 @@ const ExplanationBox = (props: { title: string; text: string }) => {
   );
 };
 
-const Impact = () => {
+const Impact = (props: Candidate) => {
   return (
     <Stack divider={<Divider flexItem />} spacing={2}>
       <Box
@@ -55,14 +56,18 @@ const Impact = () => {
           controls
           controlsList="play volume fullscreen nodownload noplaybackrate notimeline"
           disablePictureInPicture
+          src={props.video}
         />
       </Box>
-      <ExplanationBox title="📍 Ubicación" text="Quibdó, Chocó" />
-      <ExplanationBox title="📸 Reportero" text="Carlos Mario" />
-      <ExplanationBox
-        title="✨ Áreas de impacto"
-        text="Conservación - Igualdad de género - pobreza"
-      />
+      {props.location && (
+        <ExplanationBox title="📍 Ubicación" text={props.location} />
+      )}
+      {props.reporter && (
+        <ExplanationBox title="📸 Reportero" text={props.reporter} />
+      )}
+      {props.tags && (
+        <ExplanationBox title="✨ Áreas de impacto" text={props.tags} />
+      )}
     </Stack>
   );
 };
@@ -94,17 +99,24 @@ const FocusedCandidateDialog = () => {
           <Box>
             <Typography
               sx={{
-                fontSize: "34px",
+                fontSize: "18px",
               }}
             >
               {
                 votingState?.candidates[String(votingState?.focusedCandidate)]
-                  ?.title
+                  ?.name
               }
             </Typography>
-            <Typography variant="h3" sx={{ fontSize: "20px" }}>
-              🏁 #3
-            </Typography>
+            {votingState?.candidates[String(votingState?.focusedCandidate)]
+              ?.rank && (
+              <Typography variant="h3" sx={{ fontSize: "14px" }}>
+                🏁 #{" "}
+                {
+                  votingState?.candidates[String(votingState?.focusedCandidate)]
+                    ?.rank
+                }
+              </Typography>
+            )}
           </Box>
           <IconButton onClick={closeCandidate}>
             <CloseIcon />
@@ -112,7 +124,11 @@ const FocusedCandidateDialog = () => {
         </Stack>
       </DialogTitle>
       <DialogContent dividers>
-        <Impact />
+        {votingState?.candidates[String(votingState?.focusedCandidate)] && (
+          <Impact
+            {...votingState?.candidates[String(votingState?.focusedCandidate)]}
+          />
+        )}
       </DialogContent>
       <DialogActions sx={{}}>
         <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>

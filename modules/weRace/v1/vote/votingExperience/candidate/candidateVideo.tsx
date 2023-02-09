@@ -5,6 +5,7 @@ import useElementOnScreen from "../../../../../../common/context/useElementOnScr
 export type VideoProps = {
   muted?: boolean;
   threshold: number;
+  src: string;
   controls?: boolean;
   controlsList?: string;
   disablePictureInPicture?: boolean;
@@ -67,7 +68,7 @@ const CandidateVideo = ({
         disablePictureInPicture={disablePictureInPicture}
         loop
       >
-        <source src="/ana14s.mp4" type="video/mp4" />
+        <source src={props.src} type="video/mp4" />
       </video>
     </Box>
   );

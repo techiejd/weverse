@@ -24,12 +24,14 @@ export enum VotingActionType {
   vote = "vote",
   get = "get",
   updateSum = "updateSum",
+  updateRank = "updateRank",
 }
 
 export type VotingAction = {
   type: VotingActionType;
   candidateId?: string;
   candidateSum?: number;
+  candidateRank?: number;
   filteredOnMyVotes?: boolean;
   voteDirection?: "increment" | "decrement";
 };
@@ -104,8 +106,7 @@ const VotingProvider: React.FC<{
       }
 
       case VotingActionType.updateSum: {
-        console.log("Updaing sum");
-        console.log({
+        return {
           ...state,
           candidates: {
             ...state.candidates,
@@ -114,14 +115,17 @@ const VotingProvider: React.FC<{
               sum: action.candidateSum!,
             },
           },
-        });
+        };
+      }
+      case VotingActionType.updateRank: {
+        //TODO(techiejd): Merge these two updates together
         return {
           ...state,
           candidates: {
             ...state.candidates,
             [action.candidateId!]: {
               ...state.candidates[action.candidateId!],
-              sum: action.candidateSum!,
+              rank: action.candidateRank!,
             },
           },
         };

@@ -36,7 +36,7 @@ export const ComparativeCard = (props: {
             flexGrow: 7,
           }}
         >
-          <CandidateVideo threshold={0.9} />
+          <CandidateVideo threshold={0.9} src={props.candidate.video} />
         </Box>
         <Box
           sx={{
@@ -46,7 +46,9 @@ export const ComparativeCard = (props: {
             paddingLeft: 1,
           }}
         >
-          <Typography fontSize="20px">{props.candidate.title}</Typography>
+          <Typography fontSize="12px" width="40vw">
+            {props.candidate.name}
+          </Typography>
         </Box>
       </Box>
       <VotingBar

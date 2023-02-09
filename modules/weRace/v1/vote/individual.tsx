@@ -1,5 +1,6 @@
 import { ComparativeVotingExperience } from "../../../../modules/weRace/v1/vote/votingExperience";
 import { VotingExperience } from "./context";
+import { impacts } from "./hardcoded";
 
 const individualVotingExperienceInfo = {
   explainExchange: {
@@ -21,17 +22,7 @@ const individualVotingExperienceInfo = {
     value: 1000,
     votes: {},
     candidates: Object.fromEntries(
-      Array(32)
-        .fill(0)
-        .map((value, index) => {
-          return [
-            index,
-            {
-              title: `Candidate-${index}`,
-              id: String(index),
-            },
-          ];
-        })
+      impacts.map((impact) => [impact.id, impact])
     ),
     votingPrepend: "🗳️",
   },
