@@ -177,10 +177,8 @@ const VotingProvider: React.FC<{
   }, [votingState.votes, votingState.experienceName]);
 
   useEffect(() => {
-    console.log("Is there a change?");
     if (votingState.experienceName == "ranking" && appState) {
       Object.entries(votingState.candidates).forEach(([id, candidate]) => {
-        console.log(candidate);
         const candidateSumRef = ref(appState.db, `candidates/${id}/sum`);
         onValue(candidateSumRef, (snapshot) => {
           const sum = snapshot.val() ? snapshot.val() : undefined;

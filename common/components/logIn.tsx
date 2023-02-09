@@ -24,10 +24,6 @@ export const LogInDialog = () => {
   const appState = useAppState();
   const setAppState = useSetAppState();
 
-  useEffect(() => {
-    console.log(phoneNumberIn);
-  }, [phoneNumberIn]);
-
   const onLogIn = () => {
     if (name.length == 0) {
       setNameError(true);
