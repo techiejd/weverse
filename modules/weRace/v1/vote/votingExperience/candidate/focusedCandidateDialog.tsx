@@ -68,6 +68,9 @@ const Impact = (props: Candidate) => {
       {props.tags && (
         <ExplanationBox title="✨ Áreas de impacto" text={props.tags} />
       )}
+      {props.summary && (
+        <ExplanationBox title="📝 Summary" text={props.summary} />
+      )}
     </Stack>
   );
 };

@@ -9,11 +9,13 @@ export type VideoProps = {
   controls?: boolean;
   controlsList?: string;
   disablePictureInPicture?: boolean;
+  playsInline?: boolean;
 };
 
 const CandidateVideo = ({
   muted = true,
   disablePictureInPicture = true,
+  playsInline = true,
   ...props
 }: VideoProps) => {
   const [playing, setPlaying] = useState(false);
@@ -67,6 +69,7 @@ const CandidateVideo = ({
         controlsList={props.controlsList}
         disablePictureInPicture={disablePictureInPicture}
         loop
+        playsInline={playsInline}
       >
         <source src={props.src} type="video/mp4" />
       </video>
