@@ -15,8 +15,8 @@ export const UserManagerPortal: FC<{
   setInputMessage: Dispatch<SetStateAction<string>>;
   buttonInfos: Array<ButtonInfo>;
   setButtonInfos: Dispatch<SetStateAction<Array<ButtonInfo>>>;
-  route: string;
-  setRoute: Dispatch<SetStateAction<string>>;
+  route?: string;
+  setRoute?: Dispatch<SetStateAction<string>>;
 }> = (props) => {
   return (
     <>

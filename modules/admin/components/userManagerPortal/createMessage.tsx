@@ -25,8 +25,8 @@ export const CreateMessage: FC<{
   setInputMessage: Dispatch<SetStateAction<string>>;
   buttonInfos: Array<ButtonInfo>;
   setButtonInfos: Dispatch<SetStateAction<Array<ButtonInfo>>>;
-  route: string;
-  setRoute: Dispatch<SetStateAction<string>>;
+  route?: string;
+  setRoute?: Dispatch<SetStateAction<string>>;
 }> = (props) => {
   const [templatedMessage, setTemplatedMessage] = useState<string>("");
   //TODO(techiejd):fixed template of Route
@@ -43,7 +43,7 @@ export const CreateMessage: FC<{
 
     const templater = utils.Notify.getTemplaters(props.userForTemplating);
     setTemplatedMessage(templater.templateBody(props.inputMessage));
-    setTemplatedRoute(templater.templateRoute(props.route));
+    setTemplatedRoute(templater.templateRoute(props.route ? props.route : ""));
     setTemplatedButtons(props.buttonInfos.map(templater.templateButton));
   };
 
@@ -105,7 +105,11 @@ export const CreateMessage: FC<{
         type="text"
         id="route"
         placeholder="route..."
-        onChange={(e) => props.setRoute(e.target.value)}
+        onChange={(e) => {
+          if (props.setRoute) {
+            props.setRoute(e.target.value);
+          }
+        }}
       />
       <br />
       <br />

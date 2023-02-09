@@ -41,3 +41,6 @@ newagent*.json
 
 # Everything under public
 public/*
+
+# Ignore firebase automoatic hosting stuff
+.firebase/
