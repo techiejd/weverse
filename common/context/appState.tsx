@@ -37,7 +37,6 @@ const db = (() => {
   });
 
   const db = getDatabase(app);
-  connectDatabaseEmulator(db, "localhost", 9000);
   return db;
 })();
 
