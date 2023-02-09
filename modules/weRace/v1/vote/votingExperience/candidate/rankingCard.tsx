@@ -1,5 +1,9 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { useVotingDispatch, VotingActionType } from "../context";
+import {
+  useVotingDispatch,
+  useVotingState,
+  VotingActionType,
+} from "../context";
 import { Candidate } from "../votingExperience";
 import CandidateVideo from "./candidateVideo";
 import { VotingBar } from "./votingBar";
@@ -7,9 +11,9 @@ import { VotingBar } from "./votingBar";
 const CandidateRankingCard = (props: {
   candidate: Candidate;
   rank: number;
-  sum: number;
 }) => {
   const votingDispatch = useVotingDispatch();
+  const votingState = useVotingState();
 
   return (
     <Stack
@@ -45,7 +49,7 @@ const CandidateRankingCard = (props: {
 
       <Stack sx={{ alignItems: "center" }} flexGrow={1}>
         <Typography>{props.candidate.title}</Typography>
-        <Typography>{props.sum}</Typography>
+        <Typography>{props.candidate.sum}</Typography>
         <VotingBar
           sx={{
             height: "20px",
@@ -61,7 +65,9 @@ const CandidateRankingCard = (props: {
         }}
       >
         <Typography># {props.rank}</Typography>
-        <Typography sx={{ marginLeft: "auto" }}>🗳️</Typography>
+        {votingState?.votes[props.candidate.id] && (
+          <Typography sx={{ marginLeft: "auto" }}>🗳️</Typography>
+        )}
       </Stack>
     </Stack>
   );

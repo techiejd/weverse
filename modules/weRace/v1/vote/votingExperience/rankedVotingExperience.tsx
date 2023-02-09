@@ -37,12 +37,7 @@ const RankedContent = () => {
           return candidateB.sum - candidateA.sum;
         })
         .map(([id, candidate], i) => (
-          <CandidateRankingCard
-            candidate={candidate}
-            key={i}
-            rank={i + 1}
-            sum={candidate.sum ? candidate.sum : 0}
-          />
+          <CandidateRankingCard candidate={candidate} key={i} rank={i + 1} />
         ))}
     </Stack>
   );
