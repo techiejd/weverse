@@ -20,6 +20,8 @@ const ComparativeContent = ({
   const [randomizedCandidates, setRandomizedCandidates] = useState(
     Object.entries(candidates)
   );
+  /*
+  TODO(techiejd): Look into randomizing bug or removing feature.
   useEffect(() => {
     // Randomizing - https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
     setRandomizedCandidates((r) =>
@@ -28,7 +30,7 @@ const ComparativeContent = ({
         .sort((a, b) => a.sort - b.sort)
         .map(({ value }) => value)
     );
-  }, [candidates]);
+  }, [candidates]);*/
   return (
     <Grid container spacing={1}>
       {randomizedCandidates

@@ -18,7 +18,7 @@ export const tags : Candidate[] = [{
 },
 {
   name: "medio ambiente",
-  video: "/Matruska_editado.mp4",
+  video: "/ssstik.io_1675963488084.mp4",
   id: "medio ambiente",
   summary: "El medio ambiente natural (también escrito medioambiente)1​ o entorno natural es el conjunto de componentes físicos, químicos y biológicos externos con los que interactúan los seres vivos."
 },
@@ -33,9 +33,75 @@ export const tags : Candidate[] = [{
   video: "/290949210_564075998458185_1644293325758289751_n.mp4",
   id: "equidad de género",
   summary: "La igualdad de género implica que todas las personas tengan los mismos derechos, recursos y oportunidades independientemente de su identidad de género y sean tratadas con el mismo respeto en todos los aspectos de la vida cotidiana: trabajo, salud, educación."
-}];
+},
+{
+  name: "innovación",
+  video: "/ssstik.io_1675963266080.mp4",
+  id: "innovación",
+  summary: ""
+},
+{
+  name: "sostenibilidad",
+  video: "/ssstik.io_1675963399518.mp4",
+  id: "sostenibilidad",
+  summary: ""
+},
+{
+  name: "arte",
+  video: "/microemprezasTrimmed.mp4",
+  id: "arte",
+  summary: ""
+},
+];
 
 export const impacts : Candidate[] = [{
+  "video": "/ssstik.io_1675963266080.mp4",
+  "tags": "innovación",
+  "name": "Licencias de Conducir para sordos",
+  id: "Licencias de Conducir para sordos",
+  "location": "Bogotá D.C.",
+  "reporter": "Carlos Mario",
+},
+{
+  "video": "/ssstik.io_1675963399518.mp4",
+  "tags": "medio ambiente, sostenibilidad",
+  "name": "wunuecomobiliario",
+  "id": "wunuecomobiliario",
+  "reporter": "Carlos Mario",
+},
+{
+  "video": "/ssstik.io_1675963445726.mp4",
+  "tags": "educación, innovación, pobreza",
+  "name": "fundautonoma",
+  "id": "fundautonoma",
+  "location": "Cali",
+  "reporter": "Carlos Mario",
+},
+{
+  "video": "/ssstik.io_1675963488084.mp4",
+  "tags": "innovación, medio ambiente, sostenibilidad",
+  "name": "Enacol",
+  "id": "Enacol",
+  "location": "Popayan",
+  "reporter": "Carlos Mario",
+},
+{
+  "video": "/y2mate.com_-_Voluntarios_UdeM__CONCENOS_360p.mp4",
+  "tags": "educación",
+  "name": "udemvoluntarios",
+  id: "udemvoluntarios",
+  "location": "Medellin",
+  "reporter": "Yuly Espitia",
+},
+{
+  "video": "/SemillaSana_Cariba_-_Escuela_Naturaleza.mp4",
+  "tags": "educación, sostenibilidad",
+  "name": "semillasanacariba",
+  id: "semillasanacariba",
+  "location": "San Rafael Antioquia",
+  "reporter": "Yuly Espitia",
+},
+{
   name: "Social Impact Ayende",
   video: "/socialImpactVid1.mp4",
   id: "Social Impact Ayende",
@@ -43,6 +109,29 @@ export const impacts : Candidate[] = [{
   tags: "educación, pobreza",
   location: "Ayende",
   reporter: "JD",
+},{
+  "video": "/fundacionJuanfe.mp4",
+  "tags": "equidad de género, pobreza",
+  "name": "Fundacon Juanfe",
+  id: "Fundacon Juanfe",
+  "location": "Cartagena",
+  "reporter": "JD",
+},
+{
+  "video": "/microemprezasTrimmed.mp4",
+  "tags": "arte",
+  "name": "Microemprezas de Colombia",
+  id: "Microemprezas de Colombia",
+  "location": "Antioquia",
+  "reporter": "JD",
+},
+{
+  "video": "/spanishSchoolFood.mp4",
+  "tags": "alimentacion",
+  "name": "Centro Catalina",
+  id: "Centro Catalina",
+  "location": "Cartagena",
+  "reporter": "JD",
 },{
   name: "Matruska Catlovers",
   video: "/Matruska_editado.mp4",
@@ -71,5 +160,6 @@ export const impacts : Candidate[] = [{
   tags: "derechos humanos, equidad de género, medio ambiente, sostenibilidad",
   location: "Medellin",
   reporter: "Ana",
-}];
+},
+];
 

@@ -17,7 +17,7 @@ export type Candidate = {
   tags?: string;
   location?: string;
   sum?: number;
-  reporter?: "Ana" | "JD";
+  reporter?: "Ana" | "JD" | "Carlos Mario" | "Yuly Espitia";
 };
 
 export type CandidatesById = Record<string, Candidate>;

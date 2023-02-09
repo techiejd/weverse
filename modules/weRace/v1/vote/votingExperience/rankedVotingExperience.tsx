@@ -18,10 +18,7 @@ const RankedContent = () => {
           return true;
         })
         .sort(([idA, candidateA], [idB, candidateB]) => {
-          console.log("sorting");
           // Sum higher = first
-          console.log(candidateA.sum);
-          console.log(candidateB.sum);
           if (candidateA.sum == undefined) {
             if (candidateB.sum == undefined) {
               return 0;
