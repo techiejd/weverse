@@ -8,7 +8,7 @@ const partialRankedVotingExperienceInfo = {
       emoji: "🥇 👀",
       label: "¡Voten juntos en vivo!",
       explanation: `Te dimos 3.000 LKS más por haber votado y 2.000 LKS más por haber hecho Log-In.`,
-      leftSide: { emoji: "👛", label: "10.000 LKS" },
+      leftSide: { emoji: "👛", label: "1.000 LKS" },
       rightSide: { emoji: "🗳️", label: "1 Voto" },
     },
     prompt: "Revisa el ranking y decide si cambiar tus votos.",

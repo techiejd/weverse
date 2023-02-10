@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { ref, set } from "firebase/database";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import {
   useAppState,
   useSetAppState,
@@ -18,16 +18,19 @@ const ImpactsVoting = () => {
   useEffect(() => {
     if (
       voteState?.votes?.individual &&
-      appState &&
       appState?.user == undefined &&
       setAppState
     ) {
-      setAppState({
-        ...appState,
-        requestLogIn: true,
-      });
+      setAppState((a) =>
+        a
+          ? {
+              ...a,
+              requestLogIn: true,
+            }
+          : undefined
+      );
     }
-  }, [voteState?.votes?.individual, appState, setAppState]);
+  }, [appState?.user, setAppState, voteState?.votes?.individual]);
 
   useEffect(() => {
     if (appState?.user && voteState?.votes?.interests) {

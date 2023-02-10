@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { child, push, ref, update } from "firebase/database";
 import { MuiTelInput, MuiTelInputInfo } from "mui-tel-input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAppState, useSetAppState } from "../context/appState";
 
 export const LogInDialog = () => {

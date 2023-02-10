@@ -9,7 +9,7 @@ const individualVotingExperienceInfo = {
       label: "¡Vota!",
       explanation:
         "Elige proyectos y causas que te conmuevan. Cada elección cuenta, así que elige bien.",
-      leftSide: { emoji: "👛", label: "10.000 LKS" },
+      leftSide: { emoji: "👛", label: "1.000 LKS" },
       rightSide: { emoji: "🗳️", label: "1 Voto" },
     },
     prompt: "Vota 🗳️ impactos sociales de tu interés.",
