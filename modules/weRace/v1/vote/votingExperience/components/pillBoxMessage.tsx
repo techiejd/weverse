@@ -5,13 +5,13 @@ export const PillBoxMessage = (props: { children: string }) => {
     <Box alignItems="center">
       <Typography
         sx={{
-          border: 1,
           borderRadius: 10,
           fontSize: "14px",
           marginTop: 1,
           marginBottom: 1,
           marginLeft: 2,
           marginRight: 2,
+          backgroundColor: "background.paper",
         }}
         align="center"
       >

@@ -1,4 +1,4 @@
-import { Stack, Box, Typography } from "@mui/material";
+import { Stack, Box, Typography, Paper } from "@mui/material";
 import { useVotingDispatch, VotingActionType } from "../context";
 import { Candidate } from "../votingExperience";
 import CandidateMedia from "./candidateMedia";
@@ -13,7 +13,7 @@ export const ComparativeCard = (props: {
 
   return (
     <Stack spacing={1} sx={{ alignItems: "center" }}>
-      <Box
+      <Paper
         sx={{
           borderRadius: 4,
           height: props.height,
@@ -59,7 +59,7 @@ export const ComparativeCard = (props: {
             {props.candidate.name}
           </Typography>
         </Box>
-      </Box>
+      </Paper>
       <VotingBar
         sx={{
           height: "48px",

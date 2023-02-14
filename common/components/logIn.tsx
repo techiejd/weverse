@@ -96,10 +96,16 @@ export const LogInDialog = () => {
           error={nameError}
           autoFocus
           margin="dense"
-          label="Name"
+          label="Nombre"
           fullWidth
           variant="standard"
           onChange={(e) => setName(e.target.value)}
+          InputLabelProps={{
+            sx: {
+              color: "secondary.main",
+            },
+          }}
+          color="secondary"
         />
         <MuiTelInput
           defaultCountry="CO"
@@ -107,10 +113,24 @@ export const LogInDialog = () => {
           value={phoneNumberIn}
           error={phoneNumberError}
           onChange={onPhoneNumberChange}
+          sx={{ color: "secondary.main" }}
+          InputLabelProps={{
+            sx: {
+              color: "secondary.main",
+            },
+          }}
+          InputProps={{
+            sx: {
+              color: "secondary.main",
+            },
+          }}
+          color="secondary"
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onLogIn}>LOGIN</Button>
+        <Button onClick={onLogIn} sx={{ color: "secondary.main" }}>
+          LOGIN
+        </Button>
       </DialogActions>
     </Dialog>
   );

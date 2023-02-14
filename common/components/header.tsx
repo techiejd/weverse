@@ -16,6 +16,7 @@ export const Header = () => {
         <Typography
           sx={{
             mr: 1,
+            color: "secondary.main",
           }}
           onClick={() => {
             if (appState && appState?.user == undefined && setAppState) {
@@ -31,6 +32,7 @@ export const Header = () => {
             border: 1,
             borderRadius: 1,
             padding: 1,
+            borderColor: "secondary.main",
           }}
         >
           {headerStateContext

@@ -54,6 +54,7 @@ const CandidateVideo = ({
         height: "100%",
         overflow: "hidden",
         position: "relative",
+        backgroundColor: "#E6E6E6",
       }}
     >
       <video
@@ -91,6 +92,7 @@ const CandidateImage = ({ src }: ImageProps) => {
         backgroundPosition: "center",
         height: "100%",
         width: "100%",
+        backgroundColor: "#E6E6E6",
       }}
     />
   );

@@ -131,7 +131,7 @@ const FocusedCandidateDialog = () => {
             )}
           </Box>
           <IconButton onClick={closeCandidate}>
-            <CloseIcon />
+            <CloseIcon color="secondary" />
           </IconButton>
         </Stack>
       </DialogTitle>

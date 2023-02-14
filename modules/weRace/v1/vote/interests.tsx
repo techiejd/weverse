@@ -22,7 +22,7 @@ const interestsVotingExperienceInfo = {
     value: 1,
     votes: {},
     candidates: Object.fromEntries(tags.map((tag) => [tag.id, tag])),
-    votingPrepend: "🗳️",
+    votingPrepend: "🎯",
   },
 };
 

@@ -58,7 +58,14 @@ const ExplainExchangeDialog = (props: {
           <Typography>=</Typography>
           <SimpleEmojiLabel {...props.rightSide} />
         </Stack>
-        <Typography onClick={closeExplanation}>CONTINUE</Typography>
+        <Typography
+          onClick={closeExplanation}
+          sx={{
+            color: "secondary.main",
+          }}
+        >
+          CONTINUE
+        </Typography>
       </Stack>
     </Dialog>
   );

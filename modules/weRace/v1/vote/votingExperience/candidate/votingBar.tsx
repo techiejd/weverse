@@ -67,6 +67,7 @@ export const VotingBar = ({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          backgroundColor: "secondary.main",
         }}
         onClick={() => {
           if (votingDispatch) {
@@ -99,6 +100,7 @@ export const VotingBar = ({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          backgroundColor: "secondary.main",
         }}
         onClick={() => {
           if (votingDispatch) {
