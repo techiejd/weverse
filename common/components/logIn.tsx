@@ -84,6 +84,7 @@ export const LogInDialog = () => {
           borderRadius: 4,
         },
       }}
+      disableEnforceFocus
     >
       <DialogTitle>Subscribe</DialogTitle>
       <DialogContent>

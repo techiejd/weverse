@@ -6,7 +6,7 @@ import {
   VotingActionType,
 } from "../context";
 import { Candidate } from "../votingExperience";
-import CandidateVideo from "./candidateVideo";
+import CandidateMedia from "./candidateMedia";
 import { VotingBar } from "./votingBar";
 
 const CandidateRankingCard = (props: {
@@ -55,7 +55,7 @@ const CandidateRankingCard = (props: {
           width: "100px",
         }}
       >
-        <CandidateVideo threshold={0.2} src={props.candidate.video} />
+        <CandidateMedia threshold={0.2} src={props.candidate.video} />
       </Box>
 
       <Stack sx={{ alignItems: "center" }} flexGrow={1}>

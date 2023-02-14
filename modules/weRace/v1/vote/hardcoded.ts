@@ -2,55 +2,55 @@ import { Candidate } from "./votingExperience/votingExperience";
 
 export const tags : Candidate[] = [{
   name: "educación",
-  video: "/socialImpactVid1.mp4",
   id: "educación",
   summary: "La educación es el proceso de facilitar el refinamiento de habilidades o capacidades propias del individuo, mediante el aprendizaje o la construcción de conocimientos, así como también de las virtudes, creencias, hábitos, u otras características del ser.",
+  image: "/education.png",
 },{
   name: "pobreza",
-  video: "/270938586_288844089880350_2858159326174318295_n.mp4",
   id: "pobreza",
   summary: "La pobreza es una situación en la cual no es posible satisfacer las necesidades físicas y psicológicas básicas de una persona, por falta de recursos como la alimentación, la vivienda, la educación, la asistencia sanitaria, el agua potable o la electricidad.",
+  image: "/poverty.png",
 },{
   name: "conservación",
-  video: "/Matruska_editado.mp4",
   id: "conservación",
   summary: "Los términos conservación ambiental, conservación de las especies, conservación de la naturaleza y protección de la naturaleza son algunos de los nombres con los que se conoce el objetivo común de las distintas formas de preservación de la naturaleza, el medio ambiente o, sobre todo, algunas de sus partes: la flora y la fauna, las distintas especies, los distintos ecosistemas, valores paisajísticos, entre otros.",
+  image: "/conservation.png",
 },
 {
   name: "medio ambiente",
-  video: "/ssstik.io_1675963488084.mp4",
   id: "medio ambiente",
-  summary: "El medio ambiente natural (también escrito medioambiente)1​ o entorno natural es el conjunto de componentes físicos, químicos y biológicos externos con los que interactúan los seres vivos."
+  summary: "El medio ambiente natural (también escrito medioambiente)1​ o entorno natural es el conjunto de componentes físicos, químicos y biológicos externos con los que interactúan los seres vivos.",
+  image: "/environment.png",
 },
 {
   name: "derechos humanos",
-  video: "/301089877_1014457659251187_4747702818043067632_n.mp4",
   id: "derechos humanos",
-  summary: "Los derechos humanos, abreviado como DD. HH., son aquellos «instrumentos fundamentados en la dignidad humana que permiten a las personas alcanzar su plena autorrealización»."
+  summary: "Los derechos humanos, abreviado como DD. HH., son aquellos «instrumentos fundamentados en la dignidad humana que permiten a las personas alcanzar su plena autorrealización».",
+  image: "/humanRights.png"
 },
 {
   name: "equidad de género",
-  video: "/290949210_564075998458185_1644293325758289751_n.mp4",
   id: "equidad de género",
-  summary: "La igualdad de género implica que todas las personas tengan los mismos derechos, recursos y oportunidades independientemente de su identidad de género y sean tratadas con el mismo respeto en todos los aspectos de la vida cotidiana: trabajo, salud, educación."
+  summary: "La igualdad de género implica que todas las personas tengan los mismos derechos, recursos y oportunidades independientemente de su identidad de género y sean tratadas con el mismo respeto en todos los aspectos de la vida cotidiana: trabajo, salud, educación.",
+  image: "/gender.png"
 },
 {
   name: "innovación",
-  video: "/ssstik.io_1675963266080.mp4",
   id: "innovación",
-  summary: ""
+  summary: "Innovación es un proceso que introduce novedades y que se refiere a modificar elementos ya existentes con el fin de mejorarlos, aunque también es posible en la implementación de elementos totalmente nuevos.",
+  image: "/innovation.png",
 },
 {
   name: "sostenibilidad",
-  video: "/ssstik.io_1675963399518.mp4",
   id: "sostenibilidad",
-  summary: ""
+  summary: "En ecología, sostenibilidad o sustentabilidad describe cómo los sistemas biológicos se mantienen productivos con el transcurso del tiempo. Se refiere al equilibrio de una especie con los recursos de su entorno.",
+  image: "/sustainability.png"
 },
 {
   name: "arte",
-  video: "/microemprezasTrimmed.mp4",
   id: "arte",
-  summary: ""
+  summary: "El arte es entendido generalmente como cualquier actividad o producto realizado con una finalidad estética y también comunicativa, mediante la cual se expresan ideas, emociones y, en general, una visión del mundo, a través de diversos recursos, como los plásticos, lingüísticos, sonoros, corporales y mixtos.",
+  image: "/art.png"
 },
 ];
 

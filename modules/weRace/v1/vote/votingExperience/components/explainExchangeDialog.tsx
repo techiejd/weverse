@@ -33,6 +33,7 @@ const ExplainExchangeDialog = (props: {
           borderRadius: 4,
         },
       }}
+      disableEnforceFocus
     >
       <Stack
         sx={{

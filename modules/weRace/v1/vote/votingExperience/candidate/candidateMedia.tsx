@@ -12,6 +12,10 @@ export type VideoProps = {
   playsInline?: boolean;
 };
 
+export type ImageProps = {
+  src: string;
+};
+
 const CandidateVideo = ({
   muted = true,
   disablePictureInPicture = true,
@@ -77,4 +81,27 @@ const CandidateVideo = ({
   );
 };
 
-export default CandidateVideo;
+const CandidateImage = ({ src }: ImageProps) => {
+  return (
+    <div
+      style={{
+        backgroundImage: `url(${src})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        height: "100%",
+        width: "100%",
+      }}
+    />
+  );
+};
+
+const CandidateMedia = (props: { video?: VideoProps; image?: ImageProps }) => {
+  return props.video ? (
+    <CandidateVideo {...props.video} />
+  ) : (
+    <CandidateImage {...props.image!} />
+  );
+};
+
+export default CandidateMedia;

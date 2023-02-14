@@ -1,5 +1,6 @@
 import {
   Box,
+  CardMedia,
   Dialog,
   DialogActions,
   DialogContent,
@@ -16,7 +17,7 @@ import {
 } from "../context";
 import { VotingBar } from "./votingBar";
 import CloseIcon from "@mui/icons-material/Close";
-import CandidateVideo from "./candidateVideo";
+import CandidateMedia from "./candidateMedia";
 import { Candidate } from "../votingExperience";
 
 const ExplanationBox = (props: { title: string; text: string }) => {
@@ -50,14 +51,21 @@ const Impact = (props: Candidate) => {
           width: "100%",
         }}
       >
-        <CandidateVideo
-          threshold={0.9}
-          muted={false}
-          controls
-          controlsList="play volume fullscreen nodownload noplaybackrate notimeline"
-          disablePictureInPicture
-          src={props.video}
-        />
+        {props.video ? (
+          <CandidateMedia
+            video={{
+              threshold: 0.9,
+              muted: false,
+              controls: true,
+              controlsList:
+                "play volume fullscreen nodownload noplaybackrate notimeline",
+              disablePictureInPicture: true,
+              src: props.video,
+            }}
+          />
+        ) : (
+          <CandidateMedia image={{ src: props.image! }} />
+        )}
       </Box>
       {props.location && (
         <ExplanationBox title="📍 Ubicación" text={props.location} />
@@ -93,6 +101,7 @@ const FocusedCandidateDialog = () => {
       open={votingState?.focusedCandidate != undefined}
       onClose={closeCandidate}
       scroll="paper"
+      disableEnforceFocus
     >
       <DialogTitle>
         <Stack

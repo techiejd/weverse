@@ -12,7 +12,8 @@ export type Candidate = {
   rank?: number;
   name: string;
   id: string;
-  video: string;
+  video?: string;
+  image?: string;
   summary?: string;
   tags?: string;
   location?: string;
