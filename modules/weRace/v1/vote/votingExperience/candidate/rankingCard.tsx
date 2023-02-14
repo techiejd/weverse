@@ -55,7 +55,9 @@ const CandidateRankingCard = (props: {
           width: "100px",
         }}
       >
-        <CandidateMedia threshold={0.2} src={props.candidate.video} />
+        <CandidateMedia
+          video={{ threshold: 0.2, src: props.candidate.video! }}
+        />
       </Box>
 
       <Stack sx={{ alignItems: "center" }} flexGrow={1}>
