@@ -44,3 +44,4 @@ public/*
 
 # Ignore firebase automoatic hosting stuff
 .firebase/
+firebase-debug.log
