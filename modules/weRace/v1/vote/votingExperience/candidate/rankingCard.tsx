@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Divider, Stack, Typography } from "@mui/material";
 import { useEffect } from "react";
 import {
   useVotingDispatch,
@@ -30,11 +30,6 @@ const CandidateRankingCard = (props: {
     <Stack
       sx={{
         height: 88,
-        marginLeft: 2,
-        marginRight: 2,
-        marginTop: 1,
-        marginBottom: 1,
-        p: 1,
         alignItems: "center",
         justifyContent: "space-between",
       }}
@@ -48,20 +43,33 @@ const CandidateRankingCard = (props: {
           });
         }
       }}
+      divider={<Divider />}
     >
-      <Box
-        sx={{
-          height: "72px",
-          width: "100px",
-        }}
-      >
-        <CandidateMedia
-          video={{ threshold: 0.2, src: props.candidate.video! }}
-        />
+      <Box flexGrow={1}>
+        <Box
+          sx={{
+            height: "72px",
+            width: "100px",
+          }}
+        >
+          <CandidateMedia
+            video={{ threshold: 0.2, src: props.candidate.video! }}
+          />
+        </Box>
       </Box>
-
-      <Stack sx={{ alignItems: "center" }} flexGrow={1}>
-        <Typography fontSize={"12px"}>{props.candidate.name}</Typography>
+      <Stack
+        sx={{
+          alignItems: "center",
+          textOverflow: "ellipsis",
+          overflow: "hidden",
+          minWidth: "0px",
+          width: "100%",
+        }}
+        flexGrow={2}
+      >
+        <Typography fontSize={"12px"} alignSelf={"start"}>
+          {props.candidate.name}
+        </Typography>
         <Typography>{props.candidate.sum}</Typography>
         <VotingBar
           sx={{
@@ -71,17 +79,23 @@ const CandidateRankingCard = (props: {
           candidateId={props.candidate.id}
         ></VotingBar>
       </Stack>
-      <Stack
-        sx={{
-          height: "100%",
-          justifyContent: "space-between",
-        }}
-      >
-        <Typography># {props.rank}</Typography>
-        {votingState?.votes[props.candidate.id] && (
-          <Typography sx={{ marginLeft: "auto" }}>🗳️</Typography>
-        )}
-      </Stack>
+
+      <Box>
+        <Stack
+          sx={{
+            height: "100%",
+            justifyContent: "space-between",
+            alignItems: "end",
+            overflow: "hidden",
+          }}
+          flexGrow={1}
+        >
+          <Typography noWrap># {props.rank}</Typography>
+          {votingState?.votes[props.candidate.id] && (
+            <Typography sx={{ marginLeft: "auto" }}>🗳️</Typography>
+          )}
+        </Stack>
+      </Box>
     </Stack>
   );
 };
