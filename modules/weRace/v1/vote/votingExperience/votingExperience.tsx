@@ -9,7 +9,7 @@ import { PillBoxMessage } from "./components/pillBoxMessage";
 import VoteFilter from "./components/voteFilter";
 import VotingProvider, { VotingState } from "./context";
 
-const reporter = z.enum(["Ana", "JD", "Carlos Mario", "Yuly Espitia"]);
+const reporter = z.enum(["Ana", "JD", "Carlos Mario", "Yuly Espitia", "Nico"]);
 export type Reporter = z.infer<typeof reporter>;
 
 const candidate = z.object({

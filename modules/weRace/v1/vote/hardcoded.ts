@@ -52,6 +52,12 @@ export const tags : Candidate[] = [{
   summary: "El arte es entendido generalmente como cualquier actividad o producto realizado con una finalidad estética y también comunicativa, mediante la cual se expresan ideas, emociones y, en general, una visión del mundo, a través de diversos recursos, como los plásticos, lingüísticos, sonoros, corporales y mixtos.",
   image: "/art.png"
 },
+{
+  name: "Salud",
+  id: "salud",
+  summary: "La salud es un estado de bienestar o de equilibrio que puede ser visto a nivel subjetivo (un ser humano asume como aceptable el estado general en el que se encuentra) o a nivel objetivo (se constata la ausencia de enfermedades o de factores dañinos en el sujeto en cuestión).",
+  image: "/health.png"
+},
 ];
 
 export const impacts : Candidate[] = [{
@@ -61,6 +67,7 @@ export const impacts : Candidate[] = [{
   id: "Licencias de Conducir para sordos",
   "location": "Bogotá D.C.",
   "reporter": "Carlos Mario",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
 },
 {
   "video": "/ssstik.io_1675963399518.mp4",
@@ -68,6 +75,7 @@ export const impacts : Candidate[] = [{
   "name": "wunuecomobiliario",
   "id": "wunuecomobiliario",
   "reporter": "Carlos Mario",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
 },
 {
   "video": "/ssstik.io_1675963445726.mp4",
@@ -76,6 +84,7 @@ export const impacts : Candidate[] = [{
   "id": "fundautonoma",
   "location": "Cali",
   "reporter": "Carlos Mario",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
 },
 {
   "video": "/ssstik.io_1675963488084.mp4",
@@ -84,6 +93,7 @@ export const impacts : Candidate[] = [{
   "id": "Enacol",
   "location": "Popayan",
   "reporter": "Carlos Mario",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
 },
 {
   "video": "/y2mate.com_-_Voluntarios_UdeM__CONCENOS_360p.mp4",
@@ -92,6 +102,7 @@ export const impacts : Candidate[] = [{
   id: "udemvoluntarios",
   "location": "Medellin",
   "reporter": "Yuly Espitia",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
 },
 {
   "video": "/SemillaSana_Cariba_-_Escuela_Naturaleza.mp4",
@@ -100,6 +111,7 @@ export const impacts : Candidate[] = [{
   id: "semillasanacariba",
   "location": "San Rafael Antioquia",
   "reporter": "Yuly Espitia",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
 },
 {
   name: "Social Impact Ayende",
@@ -116,6 +128,7 @@ export const impacts : Candidate[] = [{
   id: "Fundacon Juanfe",
   "location": "Cartagena",
   "reporter": "JD",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
 },
 {
   "video": "/microemprezasTrimmed.mp4",
@@ -124,6 +137,7 @@ export const impacts : Candidate[] = [{
   id: "Microemprezas de Colombia",
   "location": "Antioquia",
   "reporter": "JD",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
 },
 {
   "video": "/spanishSchoolFood.mp4",
@@ -132,6 +146,7 @@ export const impacts : Candidate[] = [{
   id: "Centro Catalina",
   "location": "Cartagena",
   "reporter": "JD",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
 },{
   name: "Matruska Catlovers",
   video: "/Matruska_editado.mp4",
@@ -139,6 +154,7 @@ export const impacts : Candidate[] = [{
   tags: "conservación, medio ambiente",
   location: "Medellin",
   reporter: "Ana",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
 },{
   name: "Chocolate Pal Compa de la Calle",
   video: "/270938586_288844089880350_2858159326174318295_n.mp4",
@@ -146,6 +162,7 @@ export const impacts : Candidate[] = [{
   tags: "derechos humanos, pobreza",
   location: "Medellin",
   reporter: "Ana",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
 },{
   name: "Agencia Social - Apoyo a barrio de Bello Antiquia",
   video: "/301089877_1014457659251187_4747702818043067632_n.mp4",
@@ -160,6 +177,25 @@ export const impacts : Candidate[] = [{
   tags: "derechos humanos, equidad de género, medio ambiente, sostenibilidad",
   location: "Medellin",
   reporter: "Ana",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
+},
+{
+  name: "Zuelly Martinez",
+  video: "/zuelly.mov",
+  id: "Zuelly Martinez",
+  tags: "salud",
+  location: "Medellin",
+  reporter: "Nico",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
+},
+{
+  name: "Yesica Giraldo",
+  video: "/yesica.mov",
+  id: "Yesica Giraldo",
+  tags: "medio ambiente, sostenibilidad, conservación",
+  location: "Medellin",
+  reporter: "Nico",
+  summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum risus neque, id vehicula turpis convallis ac. Vestibulum tincidunt bibendum sapien, vitae consequat urna. ",
 },
 ];
 
