@@ -1,5 +1,6 @@
 import { Stack } from "@mui/material";
 import { PropsWithChildren } from "react";
+import { z } from "zod";
 import FocusedCandidateDialog from "./candidate/focusedCandidateDialog";
 import ExplainExchangeDialog, {
   SimpleEmojiProps,
@@ -8,22 +9,25 @@ import { PillBoxMessage } from "./components/pillBoxMessage";
 import VoteFilter from "./components/voteFilter";
 import VotingProvider, { VotingState } from "./context";
 
-export type Reporter = "Ana" | "JD" | "Carlos Mario" | "Yuly Espitia";
+const reporter = z.enum(["Ana", "JD", "Carlos Mario", "Yuly Espitia"]);
+export type Reporter = z.infer<typeof reporter>;
 
-export type Candidate = {
-  rank?: number;
-  name: string;
-  id: string;
-  video?: string;
-  image?: string;
-  summary?: string;
-  tags?: string;
-  location?: string;
-  sum?: number;
-  reporter?: Reporter;
-};
+const candidate = z.object({
+  rank: z.number().optional(),
+  name: z.string(),
+  id: z.string(),
+  video: z.string().optional(),
+  image: z.string().optional(),
+  summary: z.string().optional(),
+  tags: z.string().optional(),
+  location: z.string().optional(),
+  sum: z.number().optional(),
+  reporter: reporter.optional(),
+});
+export type Candidate = z.infer<typeof candidate>;
 
-export type CandidatesById = Record<string, Candidate>;
+export const candidatesById = z.record(candidate);
+export type CandidatesById = z.infer<typeof candidatesById>;
 
 export type VotingExperienceInfo = {
   explainExchange: {

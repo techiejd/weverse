@@ -7,19 +7,25 @@ export type NumVotesByCandidateId = z.infer<typeof numVotesByCandidateId>;
 const votingExperience = z.enum(["interests", "individual", "ranking"]);
 export type VotingExperience = z.infer<typeof votingExperience>;
 
+const ended = z.object({ votes: numVotesByCandidateId }).optional();
+type Ended = z.infer<typeof ended>;
+
 const weRaceVoteState = z.object({
   votes: z.record(votingExperience, numVotesByCandidateId).optional(),
+  ended: ended,
 });
 export type WeRaceVoteState = z.infer<typeof weRaceVoteState>;
 
 export enum WeRaceVoteActionType {
   expendedAllowance = "expendedAllowance",
+  ended = "ended",
 }
 
 export type WeRaceVoteAction = {
   type: WeRaceVoteActionType;
-  votingExperience: VotingExperience;
-  votes: NumVotesByCandidateId;
+  votingExperience?: VotingExperience;
+  votes?: NumVotesByCandidateId;
+  ended?: Ended;
 };
 
 const WeRaceVoteContext = createContext<WeRaceVoteState | undefined>(undefined);
@@ -32,13 +38,21 @@ const weRaceReducer = (
   state: WeRaceVoteState,
   action: WeRaceVoteAction
 ): WeRaceVoteState => {
-  return state.votes
-    ? weRaceVoteState.parse({
-        votes: { ...state.votes, [action.votingExperience]: action.votes },
-      })
-    : weRaceVoteState.parse({
-        votes: { [action.votingExperience]: action.votes },
-      });
+  switch (action.type) {
+    case WeRaceVoteActionType.expendedAllowance:
+      const votingExperience = action.votingExperience!;
+      return state.votes
+        ? weRaceVoteState.parse({
+            ...state,
+            votes: { ...state.votes, [votingExperience]: action.votes },
+          })
+        : weRaceVoteState.parse({
+            ...state,
+            votes: { [votingExperience]: action.votes },
+          });
+    case WeRaceVoteActionType.ended:
+      return { ...state, ended: action.ended };
+  }
 };
 
 const WeRaceVoteProvider: React.FC<{

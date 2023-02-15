@@ -25,7 +25,6 @@ export enum VotingActionType {
   get = "get",
   updateSum = "updateSum",
   updateRank = "updateRank",
-  updateEnded = "updateEnded",
 }
 
 export type VotingAction = {
@@ -35,7 +34,6 @@ export type VotingAction = {
   candidateRank?: number;
   filteredOnMyVotes?: boolean;
   voteDirection?: "increment" | "decrement";
-  ended?: boolean;
 };
 
 export type VotingState = {
@@ -49,7 +47,6 @@ export type VotingState = {
   focusedCandidate?: string;
   candidates: CandidatesById;
   experienceName: VotingExperience;
-  ended?: boolean;
 };
 
 const VotingContext = createContext<VotingState | undefined>(undefined);
@@ -133,12 +130,6 @@ const VotingProvider: React.FC<{
           },
         };
       }
-      case VotingActionType.updateEnded: {
-        return {
-          ...state,
-          ended: action.ended,
-        };
-      }
     }
   }
 
@@ -196,17 +187,6 @@ const VotingProvider: React.FC<{
             candidateId: id,
             candidateSum: sum,
           });
-        });
-      });
-    }
-
-    if (appState) {
-      const endedRef = ref(appState.db, "ended");
-      onValue(endedRef, (snapshot) => {
-        const ended = snapshot.val() ? snapshot.val() : undefined;
-        votingReducer({
-          type: VotingActionType.updateEnded,
-          ended: ended,
         });
       });
     }
