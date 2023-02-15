@@ -8,6 +8,8 @@ import { PillBoxMessage } from "./components/pillBoxMessage";
 import VoteFilter from "./components/voteFilter";
 import VotingProvider, { VotingState } from "./context";
 
+export type Reporter = "Ana" | "JD" | "Carlos Mario" | "Yuly Espitia";
+
 export type Candidate = {
   rank?: number;
   name: string;
@@ -18,7 +20,7 @@ export type Candidate = {
   tags?: string;
   location?: string;
   sum?: number;
-  reporter?: "Ana" | "JD" | "Carlos Mario" | "Yuly Espitia";
+  reporter?: Reporter;
 };
 
 export type CandidatesById = Record<string, Candidate>;
