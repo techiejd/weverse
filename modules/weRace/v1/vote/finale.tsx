@@ -1,10 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
-import { useVotingState } from "../../../../modules/weRace/v1/vote/votingExperience/context";
-import {
-  Candidate,
-  Reporter,
-} from "../../../../modules/weRace/v1/vote/votingExperience/votingExperience";
+import { useVotingState } from "./votingExperience/context";
+import { Candidate, Reporter } from "./votingExperience/votingExperience";
 import board from "../../../../public/board.jpeg";
 type ReporterScore = {
   totalVotes: number;
