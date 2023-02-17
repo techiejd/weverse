@@ -51,8 +51,8 @@ const ComparativeContent = ({
             candidate.tags?.match(interest)
           );
         })
-        .map(([id, candidate], i) => (
-          <Grid item sm={6} md={4} lg={2} xl={1} key={i}>
+        .map(([id, candidate]) => (
+          <Grid item sm={6} md={4} lg={2} xl={1} key={id}>
             <ComparativeCard candidate={candidate} height="277px" />
           </Grid>
         ))}
