@@ -2,6 +2,9 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import Layout from "../common/components/layout";
+import initAuth from "../common/context/firebase/initAuth";
+
+initAuth();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
