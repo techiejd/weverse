@@ -80,7 +80,7 @@ const SignIn = () => {
 const GoOn = () => {
   return (
     <Box>
-      <Typography>You're logged in.</Typography>
+      <Typography>{"You're logged in."}</Typography>
       <Link href="/">
         <Typography
           sx={{
