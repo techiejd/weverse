@@ -11,12 +11,13 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { Candidate, Reporter } from "./votingExperience/votingExperience";
-import board from "../../../../public/board.jpeg";
+import board from "../../public/board.jpeg";
 import { useWeRaceVoteState } from "./context";
 import { useMemo, useState } from "react";
 import { impacts } from "./hardcoded";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import { logger } from "../../common/utils/logger";
 type ReporterScore = {
   totalVotes: number;
   candidates: {

@@ -1,6 +1,6 @@
-import { ComparativeVotingExperience } from "../../../../modules/weRace/v1/vote/votingExperience";
 import { VotingExperience } from "./context";
 import { tags } from "./hardcoded";
+import { ComparativeVotingExperience } from "./votingExperience";
 
 const interestsVotingExperienceInfo = {
   explainExchange: {

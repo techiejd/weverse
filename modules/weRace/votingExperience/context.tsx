@@ -7,11 +7,6 @@ import {
   useContext,
   Dispatch,
 } from "react";
-import { useAppState } from "../../../../../common/context/appState";
-import {
-  useSetHeaderContext,
-  useHeaderState,
-} from "../../../../../common/context/header";
 import {
   NumVotesByCandidateId,
   useWeRaceVoteDispatch,
@@ -19,6 +14,11 @@ import {
   WeRaceVoteActionType,
 } from "../context";
 import { CandidatesById } from "./votingExperience";
+import { useAppState } from "../../../common/context/appState";
+import {
+  useSetHeaderContext,
+  useHeaderState,
+} from "../../../common/context/header";
 
 export enum VotingActionType {
   vote = "vote",

@@ -12,6 +12,7 @@ import IndividualVoting from "./individual";
 import InterestsVoting from "./interests";
 import RankingVoting from "./ranking";
 import { useAppState, useSetAppState } from "../../common/context/appState";
+import { logger } from "../../common/utils/logger";
 
 const ImpactsVoting = () => {
   const voteState = useWeRaceVoteState();

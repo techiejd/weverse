@@ -1,6 +1,5 @@
 import { Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useAppState } from "../../../../../common/context/appState";
 import { useWeRaceVoteState } from "../context";
 import { ComparativeCard } from "./candidate/comparativeCard";
 import { useVotingState } from "./context";

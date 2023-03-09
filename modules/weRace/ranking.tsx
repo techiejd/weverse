@@ -1,6 +1,6 @@
-import { RankedVotingExperience } from "../../../../modules/weRace/v1/vote/votingExperience";
 import { NumVotesByCandidateId, VotingExperience } from "./context";
 import { impacts } from "./hardcoded";
+import { RankedVotingExperience } from "./votingExperience";
 
 const partialRankedVotingExperienceInfo = {
   explainExchange: {

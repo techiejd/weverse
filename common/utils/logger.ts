@@ -1,3 +1,1 @@
-import {pino} from "pino"
-
-export const logger = pino({});
+export const logger = require('pino')({browser: {asObject: true}})
