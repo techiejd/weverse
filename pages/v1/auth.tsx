@@ -1,66 +1,21 @@
-/*import { Box } from "@mui/material";
-import { PhoneAuthProvider } from "firebase/auth";
-import { auth } from "firebaseui";
-import { useAuthUser, withAuthUserTokenSSR } from "next-firebase-auth";
-import { app } from "../../common/context/firebase";
-import StyledFirebaseAuth from "../../common/context/firebase/StyledFirebaseAuth";
-
-const uiConfig: auth.Config = {
-  signInOptions: [PhoneAuthProvider.PROVIDER_ID],
-  signInFlow: "popup",
-  signInSuccessUrl: "/",
-  credentialHelper: "none",
-  callbacks: {
-    // https://github.com/firebase/firebaseui-web#signinsuccesswithauthresultauthresult-redirecturl
-    signInSuccessWithAuthResult: () =>
-      // Don't automatically redirect. We handle redirects using
-      // `next-firebase-auth`.
-      false,
-  },
-};
-
-const Auth = () => {
-  return (
-    <Box>
-      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={app.auth()} />
-    </Box>
-  );
-};
-
-export const getServerSideProps = withAuthUserTokenSSR()(
-  async ({ AuthUser, ...props }) => {
-    const token = await AuthUser.getIdToken();
-    console.log(token);
-    console.log(AuthUser);
-    return {
-      props: {},
-    };
-  }
-);
-
-export default Auth;
-*/
-
 import React, { useEffect, useState } from "react";
 import {
   withAuthUser,
   withAuthUserTokenSSR,
-  AuthAction,
+  useAuthUser,
 } from "next-firebase-auth";
 import { PhoneAuthProvider } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import StyledFirebaseAuth from "../../common/context/firebase/StyledFirebaseAuth";
+import { useRouter } from "next/router";
+import { z } from "zod";
+import { Box, Button, Typography } from "@mui/material";
+import Link from "next/link";
 
 const firebaseAuthConfig = {
-  signInFlow: "popup",
   // Auth providers
   // https://github.com/firebase/firebaseui-web#configure-oauth-providers
-  signInOptions: [
-    {
-      provider: PhoneAuthProvider.PROVIDER_ID,
-      requireDisplayName: true,
-    },
-  ],
+  signInOptions: [PhoneAuthProvider.PROVIDER_ID],
   signInSuccessUrl: "/",
   credentialHelper: "none",
   callbacks: {
@@ -71,6 +26,10 @@ const firebaseAuthConfig = {
       false,
   },
 };
+
+const authQuery = z.object({
+  destination: z.string().optional(),
+});
 
 const FirebaseAuth = () => {
   // Do not SSR FirebaseUI, because it is not supported.
@@ -104,15 +63,12 @@ const styles = {
   },
 };
 
-const Auth = () => {
+const SignIn = () => {
   return (
     <div style={styles.content}>
       <h3>Sign in</h3>
       <div style={styles.textContainer}>
-        <p>
-          This auth page is <b>not</b> static. It will server-side redirect to
-          the app if the user is already authenticated.
-        </p>
+        <p></p>
       </div>
       <div>
         <FirebaseAuth />
@@ -121,10 +77,37 @@ const Auth = () => {
   );
 };
 
-export const getServerSideProps = withAuthUserTokenSSR({
-  whenAuthed: AuthAction.REDIRECT_TO_APP,
-})();
+const GoOn = () => {
+  return (
+    <Box>
+      <Typography>You're logged in.</Typography>
+      <Link href="/">
+        <Typography
+          sx={{
+            mr: 1,
+            color: "secondary.main",
+          }}
+        >
+          Go Home
+        </Typography>
+      </Link>
+    </Box>
+  );
+};
 
-export default withAuthUser({
-  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-})(Auth);
+const Auth = () => {
+  const authUser = useAuthUser();
+  const router = useRouter();
+  useEffect(() => {
+    const destination = authQuery.parse(router.query).destination;
+    if (authUser.id != null && destination) {
+      router.push(destination);
+    }
+  }, [authUser, router]);
+
+  return <Box>{authUser.id ? <GoOn /> : <SignIn />}</Box>;
+};
+
+export const getServerSideProps = withAuthUserTokenSSR({})();
+
+export default withAuthUser()(Auth);

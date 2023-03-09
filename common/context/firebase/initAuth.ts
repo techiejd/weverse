@@ -1,19 +1,23 @@
-// ./initAuth.js
+import { GetServerSidePropsContext } from 'next';
 import { init } from 'next-firebase-auth';
+import { ParsedUrlQuery } from 'querystring';
 import { creds } from '.';
 
 const initAuth = () => {
   init({
-    debug: true,
-    authPageURL: '/v1/auth',
-    appPageURL: '/',
+    authPageURL: ({ctx}: {
+      ctx: GetServerSidePropsContext<ParsedUrlQuery>
+    }) => {
+      return ctx.resolvedUrl ? `/v1/auth?destination=${ctx.resolvedUrl}` : `/v1/auth`;
+    },
+    appPageURL: "/v1/weRace/vote",
     loginAPIEndpoint: '/api/logIn',
     logoutAPIEndpoint: '/api/logout',
     onLoginRequestError: (err) => {
-      console.error(err)
+      console.error("onLoginRequestError:", err)
     },
     onLogoutRequestError: (err) => {
-      console.error(err)
+      console.error("onLogoutRequestError:", err)
     },
     // Use application default credentials (takes precedence over firebaseAdminInitConfig if set)
     useFirebaseAdminDefaultCredential: true,
@@ -35,10 +39,10 @@ const initAuth = () => {
       signed: true,
     },
     onVerifyTokenError: (err) => {
-      console.error(err)
+      console.error("onVerifyTokenError: ", err);
     },
     onTokenRefreshError: (err) => {
-      console.error(err)
+      console.error("onTokenRefreshError: ", err)
     },
   })
 }
