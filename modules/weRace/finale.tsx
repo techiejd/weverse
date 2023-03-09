@@ -17,6 +17,7 @@ import { useMemo, useState } from "react";
 import { impacts } from "./hardcoded";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import { logger } from "../../common/logger";
 type ReporterScore = {
   totalVotes: number;
   candidates: {
@@ -28,8 +29,8 @@ const countVotes = (
   acc: Record<Reporter, ReporterScore | undefined>,
   curCandidate: Candidate
 ) => {
-  console.log(acc);
-  console.log(curCandidate);
+  logger.info(acc);
+  logger.info(curCandidate);
   const sumVotes = curCandidate.sum ? curCandidate.sum : 0;
   if (curCandidate.reporter) {
     return acc[curCandidate.reporter]
@@ -142,7 +143,7 @@ const Finale = () => {
           const impactVotes = weRaceVoteState?.ended?.votes[impact.id]
             ? weRaceVoteState?.ended?.votes[impact.id]
             : 0;
-          console.log(impactVotes);
+          logger.info(impactVotes);
           const prevReporterScore = acc[reporter];
           const prevVotes = prevReporterScore
             ? prevReporterScore.totalVotes

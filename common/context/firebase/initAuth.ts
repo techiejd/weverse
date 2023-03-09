@@ -2,6 +2,7 @@ import { GetServerSidePropsContext } from 'next';
 import { init } from 'next-firebase-auth';
 import { ParsedUrlQuery } from 'querystring';
 import { creds } from '.';
+import { logger } from '../../logger';
 
 const initAuth = () => {
   init({
@@ -14,10 +15,10 @@ const initAuth = () => {
     loginAPIEndpoint: '/api/logIn',
     logoutAPIEndpoint: '/api/logout',
     onLoginRequestError: (err) => {
-      console.error("onLoginRequestError:", err)
+      logger.error("onLoginRequestError:", err)
     },
     onLogoutRequestError: (err) => {
-      console.error("onLogoutRequestError:", err)
+      logger.error("onLogoutRequestError:", err)
     },
     // Use application default credentials (takes precedence over firebaseAdminInitConfig if set)
     useFirebaseAdminDefaultCredential: true,
@@ -39,10 +40,10 @@ const initAuth = () => {
       signed: true,
     },
     onVerifyTokenError: (err) => {
-      console.error("onVerifyTokenError: ", err);
+      logger.error("onVerifyTokenError: ", err);
     },
     onTokenRefreshError: (err) => {
-      console.error("onTokenRefreshError: ", err)
+      logger.error("onTokenRefreshError: ", err)
     },
   })
 }

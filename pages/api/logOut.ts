@@ -1,14 +1,15 @@
-// ./pages/api/login
+// ./pages/api/logout
 import { NextApiRequest, NextApiResponse } from 'next';
-import { setAuthCookies } from 'next-firebase-auth'
-import initAuth from '../../../common/context/firebase/initAuth'
+import { unsetAuthCookies } from 'next-firebase-auth'
+import initAuth from '../../common/context/firebase/initAuth'
+import { logger } from '../../common/logger';
 
 initAuth()
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log("Ayo logging in!");
+  logger.info("Ayo logging out!");
   try {
-    await setAuthCookies(req, res)
+    await unsetAuthCookies(req, res)
   } catch (e) {
     return res.status(500).json({ error: 'Unexpected error.' })
   }

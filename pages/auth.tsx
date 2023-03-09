@@ -6,11 +6,11 @@ import {
 } from "next-firebase-auth";
 import { PhoneAuthProvider } from "firebase/auth";
 import firebase from "firebase/compat/app";
-import StyledFirebaseAuth from "../../common/context/firebase/StyledFirebaseAuth";
 import { useRouter } from "next/router";
 import { z } from "zod";
 import { Box, Button, Typography } from "@mui/material";
 import Link from "next/link";
+import StyledFirebaseAuth from "../common/context/firebase/StyledFirebaseAuth";
 
 const firebaseAuthConfig = {
   // Auth providers

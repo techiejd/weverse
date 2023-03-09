@@ -1,11 +1,7 @@
 import { Box } from "@mui/material";
-import { child, get, onValue, ref, set } from "firebase/database";
-import { useCallback, useEffect } from "react";
+import { get, onValue, ref, set } from "firebase/database";
+import { useEffect } from "react";
 import { z } from "zod";
-import {
-  useAppState,
-  useSetAppState,
-} from "../../../../common/context/appState";
 import {
   useWeRaceVoteDispatch,
   useWeRaceVoteState,
@@ -15,6 +11,8 @@ import Finale from "./finale";
 import IndividualVoting from "./individual";
 import InterestsVoting from "./interests";
 import RankingVoting from "./ranking";
+import { logger } from "../../common/logger";
+import { useAppState, useSetAppState } from "../../common/context/appState";
 
 const ImpactsVoting = () => {
   const voteState = useWeRaceVoteState();
@@ -76,7 +74,7 @@ const WeRaceVote = () => {
             const candidatesNestedSum = dBcandidates.parse(snapshot.val());
             const votes = Object.entries(candidatesNestedSum).reduce(
               (acc, currCan) => {
-                console.log(acc);
+                logger.info(acc);
                 return { ...acc, [currCan[0]]: currCan[1].sum };
               },
               {}
