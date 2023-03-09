@@ -8,9 +8,9 @@ import { PhoneAuthProvider } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import { useRouter } from "next/router";
 import { z } from "zod";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Link from "next/link";
-import StyledFirebaseAuth from "../common/context/firebase/StyledFirebaseAuth";
+import StyledFirebaseAuth from "../modules/auth/StyledFirebaseAuth";
 
 const firebaseAuthConfig = {
   // Auth providers

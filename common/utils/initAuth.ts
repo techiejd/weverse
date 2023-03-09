@@ -1,8 +1,8 @@
 import { GetServerSidePropsContext } from 'next';
 import { init } from 'next-firebase-auth';
 import { ParsedUrlQuery } from 'querystring';
-import { creds } from '.';
-import { logger } from '../../logger';
+import { logger } from './logger';
+import { creds } from './firebase';
 
 const initAuth = () => {
   init({
@@ -12,8 +12,8 @@ const initAuth = () => {
       return ctx.resolvedUrl ? `/v1/auth?destination=${ctx.resolvedUrl}` : `/v1/auth`;
     },
     appPageURL: "/v1/weRace/vote",
-    loginAPIEndpoint: '/api/logIn',
-    logoutAPIEndpoint: '/api/logout',
+    loginAPIEndpoint: '/api/auth/logIn',
+    logoutAPIEndpoint: '/api/auth/logOut',
     onLoginRequestError: (err) => {
       logger.error("onLoginRequestError:", err)
     },

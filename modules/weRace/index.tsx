@@ -11,7 +11,6 @@ import Finale from "./finale";
 import IndividualVoting from "./individual";
 import InterestsVoting from "./interests";
 import RankingVoting from "./ranking";
-import { logger } from "../../common/logger";
 import { useAppState, useSetAppState } from "../../common/context/appState";
 
 const ImpactsVoting = () => {

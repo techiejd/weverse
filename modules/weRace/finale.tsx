@@ -17,7 +17,6 @@ import { useMemo, useState } from "react";
 import { impacts } from "./hardcoded";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { logger } from "../../common/logger";
 type ReporterScore = {
   totalVotes: number;
   candidates: {
