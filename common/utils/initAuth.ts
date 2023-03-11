@@ -11,7 +11,7 @@ const initAuth = () => {
     }) => {
       return ctx.resolvedUrl ? `/v1/auth?destination=${ctx.resolvedUrl}` : `/v1/auth`;
     },
-    appPageURL: "/v1/weRace/vote",
+    appPageURL: "/",
     loginAPIEndpoint: '/api/auth/logIn',
     logoutAPIEndpoint: '/api/auth/logOut',
     onLoginRequestError: (err) => {

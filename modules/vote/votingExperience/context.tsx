@@ -9,9 +9,9 @@ import {
 } from "react";
 import {
   NumVotesByCandidateId,
-  useWeRaceVoteDispatch,
+  useVoteDispatch,
   VotingExperience,
-  WeRaceVoteActionType,
+  VoteActionType,
 } from "../context";
 import { CandidatesById } from "./votingExperience";
 import { useAppState } from "../../../common/context/appState";
@@ -59,13 +59,13 @@ const VotingProvider: React.FC<{
   children: JSX.Element;
   initialState: VotingState;
 }> = ({ children, initialState }) => {
-  //TODO(techijd): Move this header stuff out of here and into WeRaceVote or App Context
+  //TODO(techijd): Move this header stuff out of here and into Vote or App Context
   const setHeaderState = useSetHeaderContext();
   const headerState = useHeaderState();
 
   const appState = useAppState();
 
-  const weRaceVoteDispatch = useWeRaceVoteDispatch();
+  const voteDispatch = useVoteDispatch();
 
   function voteReducer(state: VotingState, action: VotingAction): VotingState {
     switch (action.type) {
@@ -140,16 +140,16 @@ const VotingProvider: React.FC<{
     );
 
   useEffect(() => {
-    if (votingState.allowance == 0 && weRaceVoteDispatch) {
-      weRaceVoteDispatch({
-        type: WeRaceVoteActionType.expendedAllowance,
+    if (votingState.allowance == 0 && voteDispatch) {
+      voteDispatch({
+        type: VoteActionType.expendedAllowance,
         votingExperience: votingState.experienceName,
         votes: votingState.votes,
       });
     }
   }, [
     votingState.votes,
-    weRaceVoteDispatch,
+    voteDispatch,
     votingState.allowance,
     votingState.experienceName,
   ]);

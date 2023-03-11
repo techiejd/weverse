@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useWeRaceVoteState } from "../context";
+import { useVoteState } from "../context";
 import { ComparativeCard } from "./candidate/comparativeCard";
 import { useVotingState } from "./context";
 import VotingExperience, {
@@ -62,7 +62,7 @@ const ComparativeContent = ({
 const ComparativeVotingExperience = (props: VotingExperienceInfo) => {
   //TODO(techiejd): Do setting of interests somewhere else
   const [interests, setInterests] = useState<string[]>([]);
-  const voteState = useWeRaceVoteState();
+  const voteState = useVoteState();
 
   useEffect(() => {
     if (voteState?.votes?.interests) {

@@ -12,7 +12,7 @@ import {
 import Image from "next/image";
 import { Candidate, Reporter } from "./votingExperience/votingExperience";
 import board from "../../public/board.jpeg";
-import { useWeRaceVoteState } from "./context";
+import { useVoteState } from "./context";
 import { useMemo, useState } from "react";
 import { impacts } from "./hardcoded";
 import ExpandLess from "@mui/icons-material/ExpandLess";
@@ -134,14 +134,14 @@ const ReporterListItem = (props: {
 };
 
 const Finale = () => {
-  const weRaceVoteState = useWeRaceVoteState();
+  const voteState = useVoteState();
   const reporterScores: [string, ReporterScore][] = useMemo(() => {
-    if (weRaceVoteState?.ended) {
+    if (voteState?.ended) {
       const reporterScores = Object.entries(
         impacts.reduce((acc, impact) => {
           const reporter = impact.reporter!;
-          const impactVotes = weRaceVoteState?.ended?.votes[impact.id]
-            ? weRaceVoteState?.ended?.votes[impact.id]
+          const impactVotes = voteState?.ended?.votes[impact.id]
+            ? voteState?.ended?.votes[impact.id]
             : 0;
           logger.info(impactVotes);
           const prevReporterScore = acc[reporter];
@@ -167,12 +167,12 @@ const Finale = () => {
         score ? score : { totalVotes: 0, candidates: [] },
       ]);
     } else return [];
-  }, [weRaceVoteState?.ended]);
+  }, [voteState?.ended]);
 
   return (
     <Box>
       <Typography variant="h1" fontSize={"40px"}>
-        WeRace has concluded!
+        Voting has concluded!
       </Typography>
       <br />
       <Typography variant="h2" fontSize={"32px"}>

@@ -29,7 +29,7 @@ const VoteFilter = () => {
       )}
       handleChange={handleFilterChange}
     >
-      <Tab icon={<Typography>🏁</Typography>} label="WeRace" />
+      <Tab icon={<Typography>🏁</Typography>} label="Votar" />
       <Tab icon={<Typography>🗳️</Typography>} label="Mis Votos" />
     </Footer>
   );

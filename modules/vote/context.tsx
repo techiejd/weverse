@@ -10,70 +10,67 @@ export type VotingExperience = z.infer<typeof votingExperience>;
 const ended = z.object({ votes: numVotesByCandidateId }).optional();
 type Ended = z.infer<typeof ended>;
 
-const weRaceVoteState = z.object({
+const voteState = z.object({
   votes: z.record(votingExperience, numVotesByCandidateId).optional(),
   ended: ended,
 });
-export type WeRaceVoteState = z.infer<typeof weRaceVoteState>;
+export type VoteState = z.infer<typeof voteState>;
 
-export enum WeRaceVoteActionType {
+export enum VoteActionType {
   expendedAllowance = "expendedAllowance",
   ended = "ended",
 }
 
-export type WeRaceVoteAction = {
-  type: WeRaceVoteActionType;
+export type VoteAction = {
+  type: VoteActionType;
   votingExperience?: VotingExperience;
   votes?: NumVotesByCandidateId;
   ended?: Ended;
 };
 
-const WeRaceVoteContext = createContext<WeRaceVoteState | undefined>(undefined);
+const VoteContext = createContext<VoteState | undefined>(undefined);
 
-const WeRaceVoteDispatchContext = createContext<
-  Dispatch<WeRaceVoteAction> | undefined
->(undefined);
+const VoteDispatchContext = createContext<Dispatch<VoteAction> | undefined>(
+  undefined
+);
 
-const weRaceReducer = (
-  state: WeRaceVoteState,
-  action: WeRaceVoteAction
-): WeRaceVoteState => {
+const voteReducer = (state: VoteState, action: VoteAction): VoteState => {
   switch (action.type) {
-    case WeRaceVoteActionType.expendedAllowance:
+    case VoteActionType.expendedAllowance:
       const votingExperience = action.votingExperience!;
       return state.votes
-        ? weRaceVoteState.parse({
+        ? voteState.parse({
             ...state,
             votes: { ...state.votes, [votingExperience]: action.votes },
           })
-        : weRaceVoteState.parse({
+        : voteState.parse({
             ...state,
             votes: { [votingExperience]: action.votes },
           });
-    case WeRaceVoteActionType.ended:
+    case VoteActionType.ended:
       return { ...state, ended: action.ended };
   }
 };
 
-const WeRaceVoteProvider: React.FC<{
+const VoteProvider: React.FC<{
   children: JSX.Element;
 }> = ({ children }) => {
-  const [weRaceVoteState, weRaceVoteReduce] = useReducer(weRaceReducer, {});
+  const [voteState, voteReduce] = useReducer(voteReducer, {});
   return (
-    <WeRaceVoteContext.Provider value={weRaceVoteState}>
-      <WeRaceVoteDispatchContext.Provider value={weRaceVoteReduce}>
+    <VoteContext.Provider value={voteState}>
+      <VoteDispatchContext.Provider value={voteReduce}>
         {children}
-      </WeRaceVoteDispatchContext.Provider>
-    </WeRaceVoteContext.Provider>
+      </VoteDispatchContext.Provider>
+    </VoteContext.Provider>
   );
 };
 
-export function useWeRaceVoteState() {
-  return useContext(WeRaceVoteContext);
+export function useVoteState() {
+  return useContext(VoteContext);
 }
 
-export function useWeRaceVoteDispatch() {
-  return useContext(WeRaceVoteDispatchContext);
+export function useVoteDispatch() {
+  return useContext(VoteDispatchContext);
 }
 
-export default WeRaceVoteProvider;
+export default VoteProvider;

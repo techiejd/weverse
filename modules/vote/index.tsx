@@ -2,11 +2,7 @@ import { Box } from "@mui/material";
 import { get, onValue, ref, set } from "firebase/database";
 import { useEffect } from "react";
 import { z } from "zod";
-import {
-  useWeRaceVoteDispatch,
-  useWeRaceVoteState,
-  WeRaceVoteActionType,
-} from "./context";
+import { useVoteDispatch, useVoteState, VoteActionType } from "./context";
 import Finale from "./finale";
 import IndividualVoting from "./individual";
 import InterestsVoting from "./interests";
@@ -15,7 +11,7 @@ import { useAppState, useSetAppState } from "../../common/context/appState";
 import { logger } from "../../common/utils/logger";
 
 const ImpactsVoting = () => {
-  const voteState = useWeRaceVoteState();
+  const voteState = useVoteState();
   const appState = useAppState();
   const setAppState = useSetAppState();
 
@@ -58,9 +54,9 @@ const ImpactsVoting = () => {
 
 const dBcandidates = z.record(z.object({ sum: z.number() }));
 
-const WeRaceVote = () => {
-  const voteState = useWeRaceVoteState();
-  const weRaceVoteDispatch = useWeRaceVoteDispatch();
+const Vote = () => {
+  const voteState = useVoteState();
+  const voteDispatch = useVoteDispatch();
   const appState = useAppState();
 
   useEffect(() => {
@@ -68,7 +64,7 @@ const WeRaceVote = () => {
       const endedRef = ref(appState.db, "ended");
       onValue(endedRef, (snapshot) => {
         const ended = snapshot.val() ? snapshot.val() : undefined;
-        if (weRaceVoteDispatch) {
+        if (voteDispatch) {
           const candidatesRef = ref(appState.db, "candidates");
           get(candidatesRef).then((snapshot) => {
             const candidatesNestedSum = dBcandidates.parse(snapshot.val());
@@ -79,15 +75,15 @@ const WeRaceVote = () => {
               },
               {}
             );
-            weRaceVoteDispatch({
-              type: WeRaceVoteActionType.ended,
+            voteDispatch({
+              type: VoteActionType.ended,
               ended: ended ? { votes: votes } : undefined,
             });
           });
         }
       });
     }
-  }, [appState, weRaceVoteDispatch]);
+  }, [appState, voteDispatch]);
 
   return (
     <Box>
@@ -104,4 +100,4 @@ const WeRaceVote = () => {
   );
 };
 
-export default WeRaceVote;
+export default Vote;
