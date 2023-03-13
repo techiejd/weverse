@@ -1,4 +1,6 @@
-import { createTheme } from "@mui/material";
+import { LinkProps, createTheme } from "@mui/material";
+import { Ref, forwardRef } from "react";
+import Link from "next/link";
 
 const colors = {
   accented: "#BB86FC",
@@ -6,6 +8,14 @@ const colors = {
   background: "#121212",
   text: "#FFFFFF",
 };
+
+const LinkBehavior = forwardRef(function LinkBehaviour(
+  props: { href: URL },
+  ref: Ref<HTMLAnchorElement> | undefined
+) {
+  const { href, ...other } = props;
+  return <Link href={href} ref={ref} {...other} />;
+});
 
 const theme = createTheme({
   components: {
@@ -23,6 +33,16 @@ const theme = createTheme({
         indicator: {
           backgroundColor: colors.accented,
         },
+      },
+    },
+    MuiLink: {
+      defaultProps: {
+        component: LinkBehavior,
+      } as LinkProps,
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        LinkComponent: LinkBehavior,
       },
     },
   },

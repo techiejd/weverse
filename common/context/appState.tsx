@@ -20,7 +20,6 @@ export type User = {
 
 export type AppState = {
   user?: User;
-  requestLogIn: boolean;
   db: Database;
 };
 
@@ -51,7 +50,6 @@ const AppStateProvider: React.FC<{
 }> = ({ children }) => {
   const [appState, setAppState] = useState<AppState | undefined>({
     db: db,
-    requestLogIn: false,
   });
   return (
     <AppContext.Provider value={appState}>

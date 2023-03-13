@@ -16,23 +16,6 @@ const ImpactsVoting = () => {
   const setAppState = useSetAppState();
 
   useEffect(() => {
-    if (
-      voteState?.votes?.individual &&
-      appState?.user == undefined &&
-      setAppState
-    ) {
-      setAppState((a) =>
-        a
-          ? {
-              ...a,
-              requestLogIn: true,
-            }
-          : undefined
-      );
-    }
-  }, [appState?.user, setAppState, voteState?.votes?.individual]);
-
-  useEffect(() => {
     if (appState?.user && voteState?.votes?.interests) {
       set(
         ref(appState.db, `/users/${appState.user.id}/interests`),

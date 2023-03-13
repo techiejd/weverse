@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import { AppBar, Link, Toolbar, Typography } from "@mui/material";
 import { useAppState, useSetAppState } from "../context/appState";
 import * as HeaderContext from "../context/header";
 
@@ -18,13 +18,12 @@ export const Header = () => {
             mr: 1,
             color: "secondary.main",
           }}
-          onClick={() => {
-            if (appState && appState?.user == undefined && setAppState) {
-              setAppState({ ...appState, requestLogIn: true });
-            }
-          }}
         >
-          {appState?.user ? appState.user.name : "LOGIN"}
+          {appState?.user ? (
+            appState.user.name
+          ) : (
+            <Link href={"/auth"}>LOGIN</Link>
+          )}
         </Typography>
         <Typography
           sx={{
