@@ -1,9 +1,12 @@
 import { AppBar, Link, Toolbar, Typography } from "@mui/material";
 import * as HeaderContext from "../context/header";
 import { useAuthUser } from "next-firebase-auth";
+import { useRouter } from "next/router";
 
 export const Header = () => {
   const authUser = useAuthUser();
+  const router = useRouter();
+  // TODO(techiejd): look into removing header context and modularizing the header.
   const headerStateContext = HeaderContext.useHeaderState();
   return (
     <AppBar position="sticky">
@@ -25,7 +28,7 @@ export const Header = () => {
               <Link href={"/user/registration/personal"}>Register</Link>
             )
           ) : (
-            <Link href={"/auth"}>LOGIN</Link>
+            <Link href={`/auth?destination=${router.pathname}`}>LOGIN</Link>
           )}
         </Typography>
         <Typography
