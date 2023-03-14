@@ -15,10 +15,10 @@ const initAuth = () => {
     loginAPIEndpoint: '/api/auth/logIn',
     logoutAPIEndpoint: '/api/auth/logOut',
     onLoginRequestError: (err) => {
-      logger.error("onLoginRequestError:", err)
+      logger.error(`onLoginRequestError: ${err}`)
     },
     onLogoutRequestError: (err) => {
-      logger.error("onLogoutRequestError:", err)
+      logger.error(`onLogoutRequestError: ${err}`)
     },
     // Use application default credentials (takes precedence over firebaseAdminInitConfig if set)
     useFirebaseAdminDefaultCredential: true,
@@ -40,10 +40,10 @@ const initAuth = () => {
       signed: true,
     },
     onVerifyTokenError: (err) => {
-      logger.error("onVerifyTokenError: ", err);
+      logger.error(`onVerifyTokenError: ${err}`);
     },
     onTokenRefreshError: (err) => {
-      logger.error("onTokenRefreshError: ", err)
+      logger.error(`onTokenRefreshError: ${err}`)
     },
   })
 }
