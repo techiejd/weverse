@@ -1,12 +1,13 @@
 import { Box, CssBaseline } from "@mui/material";
-import { ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import AppStateProvider from "../context/appState";
 import HeaderStateProvider from "../context/header";
 import { Header } from "./header";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
+import { withAuthUser } from "next-firebase-auth";
 
-export default function Layout({ children }: { children: ReactNode }) {
+const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
@@ -21,4 +22,6 @@ export default function Layout({ children }: { children: ReactNode }) {
       </CssBaseline>
     </ThemeProvider>
   );
-}
+};
+
+export default withAuthUser<{ children: ReactNode }>({})(Layout);

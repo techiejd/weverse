@@ -1,11 +1,10 @@
 import { AppBar, Link, Toolbar, Typography } from "@mui/material";
-import { useAppState, useSetAppState } from "../context/appState";
 import * as HeaderContext from "../context/header";
+import { useAuthUser } from "next-firebase-auth";
 
 export const Header = () => {
+  const authUser = useAuthUser();
   const headerStateContext = HeaderContext.useHeaderState();
-  const appState = useAppState();
-  const setAppState = useSetAppState();
   return (
     <AppBar position="sticky">
       <Toolbar>
@@ -19,8 +18,12 @@ export const Header = () => {
             color: "secondary.main",
           }}
         >
-          {appState?.user ? (
-            appState.user.name
+          {authUser.id ? (
+            authUser.displayName ? (
+              authUser.displayName
+            ) : (
+              <Link href={"/user/registration/personal"}>Register</Link>
+            )
           ) : (
             <Link href={"/auth"}>LOGIN</Link>
           )}

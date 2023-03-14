@@ -13,7 +13,6 @@ import { logger } from "../../common/utils/logger";
 const ImpactsVoting = () => {
   const voteState = useVoteState();
   const appState = useAppState();
-  const setAppState = useSetAppState();
 
   useEffect(() => {
     if (appState?.user && voteState?.votes?.interests) {
@@ -72,11 +71,14 @@ const Vote = () => {
     <Box>
       {voteState?.votes?.interests ? (
         voteState?.ended ? (
+          // This should be vote/ after finish
           <Finale />
         ) : (
+          // This should be vote/ before finish
           <ImpactsVoting />
         )
       ) : (
+        // This should be registration/interests
         <InterestsVoting />
       )}
     </Box>

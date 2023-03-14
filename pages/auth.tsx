@@ -95,7 +95,7 @@ const GoOn = () => {
   );
 };
 
-const Auth = () => {
+const Auth = (props: { signedIn: boolean }) => {
   const authUser = useAuthUser();
   const router = useRouter();
   useEffect(() => {
@@ -105,9 +105,17 @@ const Auth = () => {
     }
   }, [authUser, router]);
 
-  return <Box>{authUser.id ? <GoOn /> : <SignIn />}</Box>;
+  return <Box>{props.signedIn || authUser.id ? <GoOn /> : <SignIn />}</Box>;
 };
 
-export const getServerSideProps = withAuthUserTokenSSR({})();
+export const getServerSideProps = withAuthUserTokenSSR({})(
+  async ({ AuthUser }) => {
+    return {
+      props: {
+        signedIn: AuthUser.id != null,
+      },
+    };
+  }
+);
 
-export default withAuthUser()(Auth);
+export default withAuthUser<{ signedIn: boolean }>()(Auth);
