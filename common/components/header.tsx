@@ -1,7 +1,8 @@
-import { AppBar, Link, Toolbar, Typography } from "@mui/material";
+import { AppBar, IconButton, Link, Toolbar, Typography } from "@mui/material";
 import * as HeaderContext from "../context/header";
 import { useAuthUser } from "next-firebase-auth";
 import { useRouter } from "next/router";
+import MenuIcon from "@mui/icons-material/Menu";
 
 export const Header = () => {
   const authUser = useAuthUser();
@@ -11,8 +12,12 @@ export const Header = () => {
   return (
     <AppBar position="sticky">
       <Toolbar>
+        <IconButton>
+          <MenuIcon />
+        </IconButton>
+        <div style={{ flexGrow: 1 }}></div>
         <Typography fontSize={"16px"} noWrap>
-          🪐 <b>We</b>Verse
+          🔏 PoSI
         </Typography>
         <div style={{ flexGrow: 1 }}></div>
         <Typography
