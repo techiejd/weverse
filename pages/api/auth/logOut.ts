@@ -1,4 +1,3 @@
-// ./pages/api/logout
 import { NextApiRequest, NextApiResponse } from 'next';
 import { unsetAuthCookies } from 'next-firebase-auth'
 import initAuth from '../../../common/utils/initAuth';
