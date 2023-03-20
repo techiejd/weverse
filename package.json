@@ -25,6 +25,7 @@
     "pino-pretty": "^9.1.1",
     "react": "18.2.0",
     "react-hook-form": "^7.36.1",
+    "react-mui-fileuploader": "^0.5.2",
     "zod": "^3.18.0"
   },
   "devDependencies": {
