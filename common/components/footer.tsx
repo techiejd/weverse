@@ -4,7 +4,7 @@ import { PropsWithChildren, SyntheticEvent } from "react";
 export const Footer = (
   props: PropsWithChildren<{
     value: number;
-    handleChange: (event: SyntheticEvent, newValue: number) => void;
+    handleChange?: (event: SyntheticEvent, newValue: number) => void;
   }>
 ) => {
   return (

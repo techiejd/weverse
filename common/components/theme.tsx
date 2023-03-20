@@ -1,5 +1,5 @@
 import { LinkProps, createTheme } from "@mui/material";
-import { Ref, forwardRef } from "react";
+import { ReactNode, Ref, forwardRef } from "react";
 import Link from "next/link";
 
 const colors = {
@@ -10,11 +10,17 @@ const colors = {
 };
 
 const LinkBehavior = forwardRef(function LinkBehaviour(
-  props: { href: URL },
+  props: { href: URL; children: ReactNode },
   ref: Ref<HTMLAnchorElement> | undefined
 ) {
-  const { href, ...other } = props;
-  return <Link href={href} ref={ref} {...other} />;
+  const { href, children, ...other } = props;
+  return (
+    <Link href={href} passHref>
+      <a ref={ref} {...other}>
+        {children}
+      </a>
+    </Link>
+  );
 });
 
 const theme = createTheme({
