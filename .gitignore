@@ -35,9 +35,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# ignore all json that start with newagent,
+# ignore all json that start with weverse,
 # since they tend to be credential files.
-newagent*.json
+weverse*.json
 
 # Everything under public
 public/*
