@@ -1,8 +1,10 @@
 import { Button, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import CitySearchInput from "../../modules/posi/CitySearchInput";
-import TagsInput from "../../modules/posi/tagsInput";
-import FileInput from "../../modules/posi/fileInput";
+import {
+  CitySearchInput,
+  TagsInput,
+  FileInput,
+} from "../../modules/posi/input";
 
 const PosiForm = () => {
   const [video, setVideo] = useState<File | undefined>();
