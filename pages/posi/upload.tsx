@@ -45,7 +45,7 @@ const PosiForm = () => {
         <Section label="¿Donde fue?">
           <CitySearchInput />
         </Section>
-        <Section label="¿Cuando fue?">
+        <Section label="¿De cúando a cúando?">
           <DateRangeInput />
         </Section>
         <Section label="Mostramelo pues">

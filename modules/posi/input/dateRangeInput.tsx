@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import moment from "moment";
-import { DateRange } from "react-date-range";
+import { DateRange, RangeKeyDict } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 
@@ -35,11 +35,10 @@ export default class DateRangeInput extends React.Component {
   };
 
   onPopoverClose = (e, reason) => {
-    console.log(reason);
     this.setState({ displayCalendar: false, anchorEl: null });
   };
 
-  onSelectDateRanges = ({ selection }) => {
+  onSelectDateRanges: (rangesByKey: RangeKeyDict) => void = ({ selection }) => {
     let { startDate, endDate } = selection;
 
     startDate = moment(startDate);
@@ -71,7 +70,7 @@ export default class DateRangeInput extends React.Component {
     return (
       <div>
         <TextField
-          label="Date Time Picker"
+          label={`${this.dateFormat} - ${this.dateFormat}`}
           fullWidth={true}
           value={this.state.inputValue}
           InputProps={{
@@ -82,8 +81,12 @@ export default class DateRangeInput extends React.Component {
                 </IconButton>
               </InputAdornment>
             ),
+            readOnly: true,
           }}
           onChange={this.onInputChange}
+          onClick={(e) => {
+            this.setState({ displayCalendar: true, anchorEl: e.currentTarget });
+          }}
         />
         <Popover
           open={this.state.displayCalendar}
@@ -108,13 +111,11 @@ export default class DateRangeInput extends React.Component {
                 },
               ]}
               onChange={this.onSelectDateRanges}
-              staticRanges={undefined}
-              inputRanges={undefined}
               maxDate={new Date()}
+              minDate={
+                new Date(new Date().setFullYear(new Date().getFullYear() - 1))
+              }
               showMonthAndYearPickers={true}
-              moveRangeOnFirstSelection={false}
-              showDateDisplay={false}
-              scroll={{ enabled: true }}
             />
           </Box>
         </Popover>
