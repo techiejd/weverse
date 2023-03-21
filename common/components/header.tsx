@@ -10,20 +10,19 @@ export const Header = () => {
   // TODO(techiejd): look into removing header context and modularizing the header.
   const headerStateContext = HeaderContext.useHeaderState();
   return (
-    <AppBar position="sticky">
+    <AppBar position="static">
       <Toolbar>
         <IconButton>
           <MenuIcon />
         </IconButton>
         <div style={{ flexGrow: 1 }}></div>
         <Typography fontSize={"16px"} noWrap>
-          🔏 PoSI
+          🪐<b>We</b>Verse
         </Typography>
         <div style={{ flexGrow: 1 }}></div>
         <Typography
           sx={{
             mr: 1,
-            color: "secondary.main",
           }}
         >
           {authUser.id ? (

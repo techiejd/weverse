@@ -15,7 +15,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
           <HeaderStateProvider>
             <Header />
             <main>
-              <Box pb={"72px"}>{children}</Box>
+              <Box>{children}</Box>
             </main>
           </HeaderStateProvider>
         </AppStateProvider>
