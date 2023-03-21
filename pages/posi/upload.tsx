@@ -5,6 +5,7 @@ import {
   TagsInput,
   FileInput,
 } from "../../modules/posi/input";
+import DateRangeInput from "../../modules/posi/input/dateRangeInput";
 
 const PosiForm = () => {
   const [video, setVideo] = useState<File | undefined>();
@@ -21,6 +22,7 @@ const PosiForm = () => {
       />
       <TagsInput />
       <CitySearchInput />
+      <DateRangeInput />
       <FileInput
         file={video}
         setFile={setVideo}
