@@ -3,7 +3,7 @@ import ImpactPage, { PageTypes } from "../../modules/posi/impactPage";
 
 const Comments = () => {
   return (
-    <ImpactPage type={PageTypes.about}>
+    <ImpactPage type={PageTypes.comments}>
       <Box>Comments</Box>
     </ImpactPage>
   );

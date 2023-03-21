@@ -3,7 +3,7 @@ import ImpactPage, { PageTypes } from "../../modules/posi/impactPage";
 
 const Evidence = () => {
   return (
-    <ImpactPage type={PageTypes.about}>
+    <ImpactPage type={PageTypes.evidence}>
       <Box>Evidence</Box>
     </ImpactPage>
   );
