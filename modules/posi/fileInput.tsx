@@ -71,7 +71,7 @@ const FileInput = ({
             accept: accept == "video" ? "video/mp4" : "image/jpeg, image/jpg",
           },
         }}
-        error
+        error={error != ""}
       />
       {file && (
         <CardMedia
