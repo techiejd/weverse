@@ -2,6 +2,7 @@ import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import CitySearchInput from "../../modules/posi/CitySearchInput";
 import SingleVideoInput from "../../modules/posi/singleVideoInput";
+import TagsInput from "../../modules/posi/tagsInput";
 
 const PosiForm = () => {
   const [video, setVideo] = useState<File | undefined>();
@@ -15,6 +16,7 @@ const PosiForm = () => {
         margin="normal"
         inputProps={{ maxLength: 100 }}
       />
+      <TagsInput />
       <CitySearchInput />
       <SingleVideoInput video={video} setVideo={setVideo} />
       <TextField
