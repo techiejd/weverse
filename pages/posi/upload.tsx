@@ -23,7 +23,7 @@ const Section = ({
   children: ReactNode;
 }) => {
   return (
-    <Box>
+    <Box width="100%">
       <Typography variant="h2">{label}:</Typography>
       {children}
     </Box>
@@ -36,7 +36,13 @@ const PosiForm = () => {
 
   return (
     <form action="/api/posi">
-      <Stack spacing={2} margin={2} divider={<Divider flexItem />}>
+      <Stack
+        spacing={2}
+        margin={2}
+        divider={<Divider flexItem />}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+      >
         <Typography variant="h1">Publica tu Impacto 🪧</Typography>
         <Section label="Dimelo Rapido">
           <TextField

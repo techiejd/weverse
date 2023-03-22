@@ -1,4 +1,4 @@
-import { Box, Typography, TextField, Slider } from "@mui/material";
+import { Box, Typography, TextField, Slider, Stack } from "@mui/material";
 import { useState, ChangeEvent } from "react";
 
 const ImpactedPersonsInput = () => {
@@ -41,18 +41,22 @@ const ImpactedPersonsInput = () => {
   }
 
   return (
-    <Box>
+    <Stack spacing={2} margin={2} justifyContent={"space-between"}>
       <Typography variant="h3">¿Cuantas personas fueron impactadas?</Typography>
       <TextField
         label="XXX personas"
         type="number"
         value={numImpacted}
         onChange={processNumImpacted}
+        sx={{ width: 200 }}
       />
       <Typography variant="h3">¿Qué nivel de impacto les tuviste?</Typography>
-      <Box sx={{ width: 300 }}>
+      <Box sx={{ width: 300 }} alignSelf={"center"}>
         <Typography>Yo le cambie para lo mejor a estas personas: </Typography>
         <Slider
+          sx={{
+            mt: 3,
+          }}
           defaultValue={1}
           valueLabelFormat={valueLabelFormat}
           valueLabelDisplay="auto"
@@ -63,7 +67,7 @@ const ImpactedPersonsInput = () => {
         />
       </Box>
       <Typography variant="h3">
-        En una frase ¿cómo identificar a esta gente (125 caracteres)?
+        En una frase ¿cómo identificar a esta gente? (125 caracteres)
       </Typography>
       <TextField
         fullWidth
@@ -72,7 +76,7 @@ const ImpactedPersonsInput = () => {
         margin="normal"
         inputProps={{ maxLength: 125 }}
       />
-    </Box>
+    </Stack>
   );
 };
 
