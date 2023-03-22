@@ -1,4 +1,11 @@
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { ReactNode, useState } from "react";
 import {
   CitySearchInput,
@@ -28,8 +35,8 @@ const PosiForm = () => {
 
   return (
     <form action="/api/posi">
-      <Stack spacing={2} margin={2}>
-        <Typography variant="h1">🔏: Suba tu PoSI</Typography>
+      <Stack spacing={2} margin={2} divider={<Divider flexItem />}>
+        <Typography variant="h1">Publica tu Impacto 🪧</Typography>
         <Section label="Dimelo Rapido">
           <TextField
             fullWidth
@@ -75,8 +82,8 @@ const PosiForm = () => {
             inputProps={{ maxLength: 1000 }}
           />
         </Section>
-        <Button variant="contained" sx={{ mt: 3 }} type="submit">
-          Firmar & Subir
+        <Button variant="outlined" sx={{ mt: 3 }} type="submit">
+          Publicar
         </Button>
       </Stack>
     </form>
