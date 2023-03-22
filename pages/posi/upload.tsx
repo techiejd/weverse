@@ -13,6 +13,7 @@ import {
   FileInput,
 } from "../../modules/posi/input";
 import DateRangeInput from "../../modules/posi/input/dateRangeInput";
+import ImpactedPersonsInput from "../../modules/posi/input/impactedPersonsInput";
 
 const Section = ({
   label,
@@ -45,6 +46,9 @@ const PosiForm = () => {
             margin="normal"
             inputProps={{ maxLength: 100 }}
           />
+        </Section>
+        <Section label="Contame sobre las personas impactadas">
+          <ImpactedPersonsInput />
         </Section>
         <Section label="Etiquetamelo por favor">
           <TagsInput />
