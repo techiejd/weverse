@@ -44,7 +44,22 @@ const PosiForm = () => {
         alignItems={"center"}
         justifyContent={"space-between"}
       >
-        <Typography variant="h1">Publica tu Impacto 🪧</Typography>
+        <Box width="100%">
+          <Typography variant="h1">Publica tu Impacto 🪧</Typography>
+          <Typography>¡Bienvenido!</Typography>
+          <Typography>
+            Estamos creando un escenario donde puedes poner tu impacto en un
+            pedestal.
+          </Typography>
+          <Typography>
+            Tu audiencia son fanaticos del impacto social que aman los datos.
+            Buscan aprender sobre tu impacto para encontrar a quién apoyar.
+          </Typography>
+          <Typography>
+            Gracias por tu impacto valiente. Por favor,{" "}
+            <b>¡presumame el impacto!</b>
+          </Typography>
+        </Box>
         <Section label="Dimelo Rapido">
           <TextField
             fullWidth
@@ -84,7 +99,19 @@ const PosiForm = () => {
             label="Resumen (1000 caracteres)"
             name="summary"
             multiline
+            minRows={3}
             inputProps={{ maxLength: 1000 }}
+          />
+        </Section>
+        <Section label="¿Cómo apoyarte con este impacto?">
+          <TextField
+            fullWidth
+            label="Se especifico."
+            name="summary"
+            multiline
+            minRows={2}
+            inputProps={{ maxLength: 1000 }}
+            helperText="Se especifico. Si estan listos para recibir dinero, por favor indique la forma de pago con detalles. Si estan listos para recibir voluntariados o hablar con los medios, por favor indique cómo ponerse en contacto con detalles."
           />
         </Section>
         <Button variant="outlined" sx={{ mt: 3 }} type="submit">
