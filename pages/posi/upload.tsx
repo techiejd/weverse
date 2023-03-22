@@ -14,6 +14,7 @@ import {
 } from "../../modules/posi/input";
 import DateRangeInput from "../../modules/posi/input/dateRangeInput";
 import ImpactedPersonsInput from "../../modules/posi/input/impactedPersonsInput";
+import MakerInput from "../../modules/posi/input/makerInput";
 
 const Section = ({
   label,
@@ -32,7 +33,7 @@ const Section = ({
 
 const PosiForm = () => {
   const [video, setVideo] = useState<File | undefined>();
-  const [img, setImg] = useState<File | undefined>();
+  const [makerImg, setMakerImg] = useState<File | undefined>();
 
   return (
     <form action="/api/posi">
@@ -75,13 +76,7 @@ const PosiForm = () => {
           />
         </Section>
         <Section label="¿Quien fue?">
-          <Typography>Organization</Typography>
-          <FileInput
-            file={img}
-            setFile={setImg}
-            maxFileSize={1048576 /** 1MB */}
-            accept={"img"}
-          />
+          <MakerInput img={makerImg} setImg={setMakerImg} />
         </Section>
         <Section label="Ahora sí, cuentemelo bien">
           <TextField
