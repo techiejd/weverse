@@ -15,6 +15,7 @@ import {
 import DateRangeInput from "../../modules/posi/input/dateRangeInput";
 import ImpactedPersonsInput from "../../modules/posi/input/impactedPersonsInput";
 import MakerInput from "../../modules/posi/input/makerInput";
+import { z } from "zod";
 
 const Section = ({
   label,
@@ -31,12 +32,50 @@ const Section = ({
   );
 };
 
+const impactQualifierLevel = z.enum(["hour", "day", "week", "year", "life"]);
+
+// TODO(techiejd): Check all urls are with our hosting.
+const formUrl = z.string().url();
+const makerBase = z.object({ pic: formUrl, name: z.string().min(1) });
+const makerType = z.enum(["individual", "organization"]);
+const individual = makerBase.extend({
+  type: z.literal(makerType.enum.individual),
+});
+const organization = makerBase.extend({
+  type: z.literal(makerType.enum.organization),
+});
+const maker = z.discriminatedUnion("type", [individual, organization]);
+
+const posiFormData = z.object({
+  summary: z.string().min(5).max(100),
+  impactedPeople: z.object({
+    amount: z.number().int().nonnegative(),
+    level: impactQualifierLevel,
+    howToIdentify: z.string().min(5).max(125),
+  }),
+  tags: z.string().array(),
+  location: z.string(),
+  dates: z.object({ start: z.date(), end: z.date() }),
+  video: formUrl,
+  maker: maker,
+  about: z.string().min(5).max(1000),
+  howToSupport: z.string().min(5).max(1000),
+});
+
 const PosiForm = () => {
   const [video, setVideo] = useState<File | undefined>();
   const [makerImg, setMakerImg] = useState<File | undefined>();
+  const partialPosiFormData = posiFormData.deepPartial();
+  type PartialPosiFormData = z.infer<typeof partialPosiFormData>;
+  const [formData, setFormData] = useState<PartialPosiFormData>({});
 
   return (
-    <form action="/api/posi">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        console.log(JSON.stringify(posiFormData.safeParse(formData)));
+      }}
+    >
       <Stack
         spacing={2}
         margin={2}

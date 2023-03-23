@@ -44,6 +44,7 @@ const ImpactedPersonsInput = () => {
     <Stack spacing={2} margin={2} justifyContent={"space-between"}>
       <Typography variant="h3">¿Cuantas personas fueron impactadas?</Typography>
       <TextField
+        required
         label="XXX personas"
         type="number"
         value={numImpacted}

@@ -44,6 +44,11 @@ export const configuration = {
         LinkComponent: LinkBehavior,
       },
     },
+    MuiInputLabel: {
+      defaultProps: {
+        required: false,
+      },
+    },
   },
   typography: {
     h1: {
