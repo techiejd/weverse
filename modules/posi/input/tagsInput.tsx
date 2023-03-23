@@ -7,7 +7,7 @@ import {
   SyntheticEvent,
   useState,
 } from "react";
-import { Box, IconButton, InputAdornment } from "@mui/material";
+import { Box, IconButton, InputAdornment, Stack } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { z } from "zod";
 
@@ -25,10 +25,12 @@ const SearchTagsInput = ({
   const tagFromAdditionPrompt = (input: string) => {
     return input.replace(additionPrompt, "").slice(2, -1); // remove ` "` and `"` from front and back.
   };
-
   const filter = createFilterOptions<Tag>();
+  const [inputValue, setInputValue] = useState<string>("");
+
   const onUserSelectedAnOption = (event: SyntheticEvent, value: any) => {
     if (value == null) return;
+
     const currInput = z.string().parse(value).trim();
     const tagInfo = currInput.startsWith(additionPrompt)
       ? {
@@ -41,16 +43,21 @@ const SearchTagsInput = ({
       const tagInfoAlreadyIn = tagInfos.some((val) => val.tag == tagInfo.tag);
       return tagInfoAlreadyIn ? tagInfos : [...tagInfos, tagInfo];
     });
+    setInputValue("");
   };
 
-  const [inputValue, setInputValue] = useState<string>("");
   const onUserTyping = (event: SyntheticEvent, value: string) => {
+    if (event == null) {
+      // The user pressed enter.
+      return;
+    }
     const almostAllNotOKTagChars = /[^\w\s]/gi;
     const scrubbedTag = value
       .toLowerCase()
       .trimStart()
       .replace(almostAllNotOKTagChars, "")
       .replace("_", "");
+
     setInputValue(scrubbedTag);
   };
   return (
@@ -58,6 +65,7 @@ const SearchTagsInput = ({
       onChange={onUserSelectedAnOption}
       onInputChange={onUserTyping}
       inputValue={inputValue}
+      autoHighlight={true}
       filterOptions={(options, params) => {
         const filtered = filter(options, params);
 
@@ -119,7 +127,11 @@ const TagInfoInputValue = ({
       value={info.tag}
       InputProps={{
         readOnly: true,
-        startAdornment: <InputAdornment position="start">#</InputAdornment>,
+        startAdornment: (
+          <InputAdornment position="start">
+            {info.addition && "Agregando: "}#
+          </InputAdornment>
+        ),
         endAdornment: (
           <InputAdornment position="end">
             <IconButton onClick={closeTag}>
@@ -135,14 +147,16 @@ const TagInfoInputValue = ({
 export default function TagsInput() {
   const [tagInfos, setTagInfos] = useState<TagInfo[]>([]);
   return (
-    <Box>
-      {tagInfos.map((tag, i) => {
-        return (
-          <TagInfoInputValue info={tag} setTagInfos={setTagInfos} key={i} />
-        );
-      })}
+    <Stack margin={2} spacing={2}>
+      <Box>
+        {tagInfos.map((tag, i) => {
+          return (
+            <TagInfoInputValue info={tag} setTagInfos={setTagInfos} key={i} />
+          );
+        })}
+      </Box>
       <SearchTagsInput setTagInfos={setTagInfos} />
-    </Box>
+    </Stack>
   );
 }
 
