@@ -29,7 +29,7 @@ const SearchTagsInput = ({
   const filter = createFilterOptions<Tag>();
   const onUserSelectedAnOption = (event: SyntheticEvent, value: any) => {
     if (value == null) return;
-    const currInput = z.string().parse(value);
+    const currInput = z.string().parse(value).trim();
     const tagInfo = currInput.startsWith(additionPrompt)
       ? {
           addition: true,
@@ -42,9 +42,22 @@ const SearchTagsInput = ({
       return tagInfoAlreadyIn ? tagInfos : [...tagInfos, tagInfo];
     });
   };
+
+  const [inputValue, setInputValue] = useState<string>("");
+  const onUserTyping = (event: SyntheticEvent, value: string) => {
+    const almostAllNotOKTagChars = /[^\w\s]/gi;
+    const scrubbedTag = value
+      .toLowerCase()
+      .trimStart()
+      .replace(almostAllNotOKTagChars, "")
+      .replace("_", "");
+    setInputValue(scrubbedTag);
+  };
   return (
     <Autocomplete
       onChange={onUserSelectedAnOption}
+      onInputChange={onUserTyping}
+      inputValue={inputValue}
       filterOptions={(options, params) => {
         const filtered = filter(options, params);
 
@@ -69,7 +82,7 @@ const SearchTagsInput = ({
         <TextField
           {...params}
           label="Elija las etiquetas del impacto."
-          helperText="Mínimo de una etiqueta. Agregue su propia etiqueta si no ve la que desea."
+          helperText="Mínimo de una etiqueta. Agregue su propia etiqueta si no ve la que desea. Solo se puede de 'a' a 'z', de 0 a 9 y ' '."
           InputProps={{
             ...params.InputProps,
             startAdornment: (
