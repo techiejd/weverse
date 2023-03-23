@@ -16,7 +16,7 @@ const LinkBehavior = forwardRef(function LinkBehaviour(
   );
 });
 
-const theme = createTheme({
+export const configuration = {
   components: {
     MuiTab: {
       styleOverrides: {
@@ -56,6 +56,4 @@ const theme = createTheme({
       fontSize: "1.5rem",
     },
   },
-});
-
-export default theme;
+};

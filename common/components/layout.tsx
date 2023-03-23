@@ -1,13 +1,28 @@
-import { Box, CssBaseline } from "@mui/material";
-import { FC, ReactNode } from "react";
+import { Box, CssBaseline, useMediaQuery } from "@mui/material";
+import { FC, ReactNode, useMemo } from "react";
 import AppStateProvider from "../context/appState";
 import HeaderStateProvider from "../context/header";
 import { Header } from "./header";
-import { ThemeProvider } from "@mui/material/styles";
-import theme from "./theme";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { configuration } from "./theme";
 import { withAuthUser } from "next-firebase-auth";
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+
+  const theme = useMemo(
+    () =>
+      createTheme(
+        {
+          palette: {
+            mode: prefersDarkMode ? "dark" : "light",
+          },
+        },
+        configuration
+      ),
+    [prefersDarkMode]
+  );
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
