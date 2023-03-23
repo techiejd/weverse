@@ -16,25 +16,25 @@ const OrganizationTypeInput = () => {
   return (
     <FormControl>
       <FormLabel>Tipo de la organización.</FormLabel>
-      <RadioGroup>
+      <RadioGroup name="chooseOrganizationType">
         <FormControlLabel
           value="non-profit"
-          control={<Radio />}
+          control={<Radio required />}
           label="Fundación u Otra ONG"
         />
         <FormControlLabel
           value="religious"
-          control={<Radio />}
+          control={<Radio required />}
           label="Organización Religiosa"
         />
         <FormControlLabel
           value="governmental"
-          control={<Radio />}
+          control={<Radio required />}
           label="Organización Gubermental"
         />
         <FormControlLabel
           value="volunteers"
-          control={<Radio />}
+          control={<Radio required />}
           label="Voluntarios u Otro No Asociados"
         />
       </RadioGroup>
@@ -69,6 +69,7 @@ const DetailedInput = ({
       <Typography variant="h3">{askForInfoMsg}</Typography>
       {type == "organization" && <OrganizationTypeInput />}
       <TextField
+        required
         fullWidth
         label={`${nameLabel} (75 caracteres)`}
         name="maker-name"
@@ -77,6 +78,7 @@ const DetailedInput = ({
       />
       <Typography>{askForImage}</Typography>
       <FileInput
+        required
         file={img}
         setFile={setImg}
         maxFileSize={1048576 /** 1MB */}
@@ -103,15 +105,15 @@ const MakerInput = ({
     <Stack>
       <FormControl>
         <FormLabel>Maker</FormLabel>
-        <RadioGroup row onChange={makerChange}>
+        <RadioGroup name="chooseMakerType" row onChange={makerChange}>
           <FormControlLabel
             value="individual"
-            control={<Radio />}
+            control={<Radio required />}
             label="Individual"
           />
           <FormControlLabel
             value="organization"
-            control={<Radio />}
+            control={<Radio required />}
             label="Organization"
           />
         </RadioGroup>

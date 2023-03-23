@@ -12,12 +12,14 @@ function humanFileSize(size: number) {
 
 // Only supports single file atm
 const FileInput = ({
+  required = false,
   file,
   setFile,
   minFileSize,
   maxFileSize,
   accept,
 }: {
+  required?: boolean;
   file: File | undefined;
   setFile: Dispatch<SetStateAction<File | undefined>>;
   minFileSize?: number;
@@ -72,6 +74,7 @@ const FileInput = ({
           },
         }}
         error={error != ""}
+        required={required}
       />
       {file && (
         <CardMedia

@@ -101,6 +101,7 @@ const PosiForm = () => {
         </Box>
         <Section label="Dimelo Rapido">
           <TextField
+            required
             fullWidth
             label="En una frase, ¿cuál fue tu impacto? (100 caracteres)"
             name="title"
@@ -122,6 +123,7 @@ const PosiForm = () => {
         </Section>
         <Section label="Mostramelo pues">
           <FileInput
+            required
             file={video}
             setFile={setVideo}
             minFileSize={1048576 /** 1MB */}
@@ -132,7 +134,7 @@ const PosiForm = () => {
         <Section label="¿Quien fue?">
           <MakerInput img={makerImg} setImg={setMakerImg} />
         </Section>
-        <Section label="Ahora sí, cuentemelo bien">
+        <Section label="Ahora sí, cuentemelo bien (opcional)">
           <TextField
             fullWidth
             label="Resumen (1000 caracteres)"
@@ -144,6 +146,7 @@ const PosiForm = () => {
         </Section>
         <Section label="¿Cómo apoyarte con este impacto?">
           <TextField
+            required
             fullWidth
             label="Se especifico."
             name="summary"
