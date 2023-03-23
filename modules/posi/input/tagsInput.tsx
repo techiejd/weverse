@@ -1,6 +1,12 @@
 import TextField from "@mui/material/TextField";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-import { Dispatch, SetStateAction, SyntheticEvent, useState } from "react";
+import {
+  Dispatch,
+  MouseEvent,
+  SetStateAction,
+  SyntheticEvent,
+  useState,
+} from "react";
 import { Box, IconButton, InputAdornment } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { z } from "zod";
@@ -79,7 +85,22 @@ const SearchTagsInput = ({
   );
 };
 
-const TagInfoInputValue = ({ info }: { info: TagInfo }) => {
+const TagInfoInputValue = ({
+  info,
+  setTagInfos,
+}: {
+  info: TagInfo;
+  setTagInfos: Dispatch<SetStateAction<TagInfo[]>>;
+}) => {
+  const closeTag = (e: MouseEvent) => {
+    setTagInfos((tagInfos) => {
+      const indexOfThis = tagInfos.findIndex((tI) => tI.tag == info.tag);
+      tagInfos.splice(indexOfThis, 1);
+      // Must be spread out to re-render
+      // See https://stackoverflow.com/questions/56266575/why-is-usestate-not-triggering-re-render
+      return [...tagInfos];
+    });
+  };
   return (
     <TextField
       value={info.tag}
@@ -88,7 +109,7 @@ const TagInfoInputValue = ({ info }: { info: TagInfo }) => {
         startAdornment: <InputAdornment position="start">#</InputAdornment>,
         endAdornment: (
           <InputAdornment position="end">
-            <IconButton>
+            <IconButton onClick={closeTag}>
               <CloseIcon />
             </IconButton>
           </InputAdornment>
@@ -102,8 +123,10 @@ export default function TagsInput() {
   const [tagInfos, setTagInfos] = useState<TagInfo[]>([]);
   return (
     <Box>
-      {Array.from(tagInfos).map((tag, i) => {
-        return <TagInfoInputValue info={tag} key={i} />;
+      {tagInfos.map((tag, i) => {
+        return (
+          <TagInfoInputValue info={tag} setTagInfos={setTagInfos} key={i} />
+        );
       })}
       <SearchTagsInput setTagInfos={setTagInfos} />
     </Box>
