@@ -47,8 +47,8 @@ const SearchTagsInput = ({
   };
 
   const onUserTyping = (event: SyntheticEvent, value: string) => {
-    if (event == null) {
-      // The user pressed enter.
+    if (event == null || event.type != "change") {
+      // The user didn't type.
       return;
     }
     const almostAllNotOKTagChars = /[^\w\s]/gi;
