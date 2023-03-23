@@ -142,6 +142,7 @@ const PosiForm = () => {
             multiline
             minRows={3}
             inputProps={{ maxLength: 1000 }}
+            helperText="Este es tu lugar para dar todo el detalle de tu impacto."
           />
         </Section>
         <Section label="¿Cómo apoyarte con este impacto?">
