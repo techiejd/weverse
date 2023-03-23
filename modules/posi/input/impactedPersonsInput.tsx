@@ -2,7 +2,7 @@ import { Box, Typography, TextField, Slider, Stack } from "@mui/material";
 import { useState, ChangeEvent } from "react";
 
 const ImpactedPersonsInput = () => {
-  const [numImpacted, setNumImpacted] = useState<number | undefined>();
+  const [numImpacted, setNumImpacted] = useState<number | "">("");
   const processNumImpacted = (e: ChangeEvent<HTMLInputElement>) => {
     const result = e.target.value.replace(/\D/g, "");
 
@@ -71,6 +71,7 @@ const ImpactedPersonsInput = () => {
         En una frase ¿cómo identificar a esta gente? (125 caracteres)
       </Typography>
       <TextField
+        required
         fullWidth
         label="Ej: Hablale a cualquiera de la clase 2023 del colegio San Ignacio en el barrio Laureles."
         name="impactedPersons-identification"
