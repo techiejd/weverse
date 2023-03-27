@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   CitySearchInput,
   TagsInput,
@@ -22,6 +22,8 @@ import {
   posiFormData,
 } from "../../modules/posi/input/context";
 import ImpactVideoInput from "../../modules/posi/input/impactVideoInput";
+import SummaryInput from "../../modules/posi/input/SummaryInput";
+import HowToSupportInput from "../../modules/posi/input/HowToSupportInput";
 
 const Section = ({
   label,
@@ -40,7 +42,6 @@ const Section = ({
 
 const PosiForm = () => {
   const [formData, setFormData] = useState<PartialPosiFormData>({});
-
   return (
     <form
       onSubmit={(e) => {
@@ -76,20 +77,10 @@ const PosiForm = () => {
               </Typography>
             </Box>
             <Section label="Dimelo Rapido">
-              <TextField
-                required
-                fullWidth
-                label="En una frase, ¿cuál fue tu impacto? (100 caracteres)"
-                name="title"
-                margin="normal"
-                inputProps={{ maxLength: 100 }}
-                value={formData.summary}
-                onChange={(e) => {
-                  setFormData((fD) => {
-                    return { ...fD, summary: e.target.value };
-                  });
-                }}
-              />
+              <SummaryInput />
+            </Section>
+            <Section label="¿Cómo apoyarte con este impacto?">
+              <HowToSupportInput />
             </Section>
             <Section label="Contame sobre las personas impactadas">
               <ImpactedPersonsInput />
@@ -118,18 +109,6 @@ const PosiForm = () => {
                 minRows={3}
                 inputProps={{ maxLength: 1000 }}
                 helperText="Este es tu lugar para dar todo el detalle de tu impacto."
-              />
-            </Section>
-            <Section label="¿Cómo apoyarte con este impacto?">
-              <TextField
-                required
-                fullWidth
-                label="Se especifico."
-                name="summary"
-                multiline
-                minRows={2}
-                inputProps={{ maxLength: 1000 }}
-                helperText="Se especifico. Si estan listos para recibir dinero, por favor indique la forma de pago con detalles. Si estan listos para recibir voluntariados o hablar con los medios, por favor indique cómo ponerse en contacto con detalles."
               />
             </Section>
             <Button

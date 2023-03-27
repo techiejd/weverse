@@ -53,10 +53,10 @@ const DetailedInput = ({ type }: { type: "individual" | "organization" }) => {
   const [imgUrl, setImgUrl] = useState<string | undefined | "loading">(
     undefined
   );
+  const [nameInput, setNameInput] = useState("");
   const [formData, setFormData] = useFormData();
   useEffect(() => {
     if (setFormData) {
-      const urlOrUndefined = imgUrl == "loading" ? undefined : imgUrl;
       setFormData((fD) => ({
         ...fD,
         maker: {
@@ -66,6 +66,18 @@ const DetailedInput = ({ type }: { type: "individual" | "organization" }) => {
       }));
     }
   }, [imgUrl, setFormData]);
+
+  useEffect(() => {
+    if (setFormData) {
+      setFormData((fD) => ({
+        ...fD,
+        maker: {
+          ...fD.maker,
+          name: nameInput,
+        },
+      }));
+    }
+  }, [nameInput, setFormData]);
 
   const askForInfoMsg =
     type == "individual"
@@ -91,6 +103,10 @@ const DetailedInput = ({ type }: { type: "individual" | "organization" }) => {
         name="maker-name"
         margin="normal"
         inputProps={{ maxLength: 75 }}
+        value={nameInput}
+        onChange={(e) => {
+          setNameInput(e.target.value);
+        }}
       />
       <Typography>{askForImage}</Typography>
       <FileInput
@@ -107,9 +123,21 @@ const MakerInput = () => {
   const [makerType, setMakerType] = useState<
     "individual" | "organization" | undefined
   >();
+  const [formData, setFormData] = useFormData();
   const makerChange = (e: ChangeEvent<HTMLInputElement>, value: string) => {
-    setMakerType(value as "individual" | "organization");
+    const type = value as "individual" | "organization";
+    setMakerType(type);
+    if (setFormData) {
+      setFormData((fD) => ({
+        ...fD,
+        maker: {
+          ...fD.maker,
+          type: type,
+        },
+      }));
+    }
   };
+
   return (
     <Stack>
       <FormControl>
