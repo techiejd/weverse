@@ -7,7 +7,6 @@ const ImpactVideoInput = () => {
   const [formData, setFormData] = useFormData();
   useEffect(() => {
     if (setFormData) {
-      const urlOrUndefined = videoUrl == "loading" ? undefined : videoUrl;
       setFormData((fD) => ({
         ...fD,
         video: videoUrl,

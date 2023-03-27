@@ -1,15 +1,22 @@
-import { Box, Typography, Input, CardMedia } from "@mui/material";
 import {
-  Dispatch,
-  SetStateAction,
-  useState,
-  ChangeEvent,
-  useEffect,
-  useReducer,
-} from "react";
+  Box,
+  Typography,
+  Input,
+  CardMedia,
+  CircularProgress,
+} from "@mui/material";
+import { Dispatch, SetStateAction, useState, ChangeEvent } from "react";
 import { useAppState } from "../../../common/context/appState";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+  UploadTask,
+  deleteObject,
+} from "firebase/storage";
 import { v4 } from "uuid";
+
+/** TODO(techiejd): Log errors and state in our servers */
 
 function humanFileSize(size: number) {
   var i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
@@ -36,28 +43,31 @@ const FileInput = ({
 }) => {
   const appState = useAppState();
 
-  const [file, setFile] = useState<File | undefined>();
+  const [uploadTask, setUploadTask] = useState<UploadTask | undefined>();
+  const [file, setFile] = useState<File | undefined | "loading">();
   const [error, setError] = useState("");
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     setError("");
-    console.log("Ayo1");
-    if (e.target.files) {
-      if (file) {
-        // TODO(techiejd): what's the best experience here?
-        // Is it just return? or should we delete the one prior?
-        return;
+    if (file != undefined) {
+      if (uploadTask) {
+        switch (uploadTask.snapshot.state) {
+          case "success":
+            deleteObject(uploadTask.snapshot.ref);
+            break;
+          default:
+            uploadTask.cancel();
+        }
       }
-      console.log("Ayo2");
-
+      setFile(undefined);
+    }
+    if (e.target.files && e.target.files[0]) {
       const f = e.target.files[0];
 
       if (
         (minFileSize && f.size < minFileSize) ||
         (maxFileSize && f.size > maxFileSize)
       ) {
-        console.log("Ayo3");
-        //TODO(techiejd): Same thing here. Is this really best?
         setFile(undefined);
         setFileUrl(undefined);
         e.target.value = "";
@@ -72,36 +82,25 @@ const FileInput = ({
         );
       }
 
-      console.log("Ayo4");
-
       const uploadFileAndSetFileUrl = async () => {
-        console.log("Ayo5");
         if (appState) {
-          console.log("Ayo6");
           const fileRef = ref(appState.storage, v4());
-          console.log("FileRef: ", fileRef);
-          uploadBytes(fileRef, f)
-            .then((uploadResult) => {
-              getDownloadURL(uploadResult.ref)
-                .then((fileUrl) => {
-                  console.log("All good chief");
-                  console.log(fileUrl);
-                  setFileUrl(fileUrl);
-                })
-                .catch((error) => {
-                  console.log("Error in getDownloadURL");
-                  console.log(error);
-                });
-            })
-            .catch((error) => {
-              console.log("error in uploadBytes");
-              console.log(error);
-            });
+          const newUploadTask = uploadBytesResumable(fileRef, f, {
+            customMetadata: { impactId: "" },
+          });
+          setUploadTask(newUploadTask);
+          newUploadTask.on("state_changed", {
+            complete: () => {
+              (async () => {
+                setFileUrl(await getDownloadURL(newUploadTask.snapshot.ref));
+                setFile(f);
+              })();
+            },
+          });
         }
       };
+      setFile("loading");
       uploadFileAndSetFileUrl();
-
-      setFile(f);
     }
   };
 
@@ -121,16 +120,19 @@ const FileInput = ({
         error={error != ""}
         required={required}
       />
-      {file && (
-        <CardMedia
-          sx={{
-            height: 200,
-            width: 200,
-          }}
-          component={accept}
-          image={URL.createObjectURL(file)}
-        />
-      )}
+      {file != undefined &&
+        (file == "loading" ? (
+          <CircularProgress />
+        ) : (
+          <CardMedia
+            sx={{
+              height: 200,
+              width: 200,
+            }}
+            component={accept}
+            image={URL.createObjectURL(file as File)}
+          />
+        ))}
     </Box>
   );
 };
