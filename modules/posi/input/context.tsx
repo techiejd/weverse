@@ -74,7 +74,7 @@ export const posiFormData = z.object({
   dates: z.object({ start: z.date(), end: z.date() }),
   video: formUrl,
   maker: maker,
-  about: z.string().min(5).max(1000),
+  about: z.string().min(5).max(1000).optional(),
   howToSupport: z.string().min(5).max(1000),
 });
 

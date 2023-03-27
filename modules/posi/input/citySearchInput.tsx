@@ -7,19 +7,14 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { Component, useState } from "react";
-import PlacesAutocomplete, {
-  Suggestion,
-  geocodeByAddress,
-  getLatLng,
-} from "react-places-autocomplete";
+import { useState } from "react";
+import PlacesAutocomplete, { Suggestion } from "react-places-autocomplete";
 import { useFormData } from "./context";
 
 const CitySearchInput = () => {
   const [formData, setFormData] = useFormData();
   const [query, setQuery] = useState("");
   const handleInputChange = (query: string) => {
-    console.log("handleInputChange");
     setQuery(query);
   };
 
@@ -86,7 +81,7 @@ const CitySearchInput = () => {
             <List sx={{ width: "100%" }}>
               {loading && <Typography>Loading...</Typography>}
               {suggestions.map((suggestion, i) => (
-                <ListItem key={i}>
+                <ListItem key={i} {...getSuggestionItemProps(suggestion)}>
                   <ListItemButton selected={suggestion.active}>
                     <ListItemText
                       primary={suggestion.formattedSuggestion.mainText}

@@ -20,6 +20,7 @@ const ImpactVideoInput = () => {
       minFileSize={1048576 /** 1MB */}
       maxFileSize={2147483648 /** 2GB */}
       accept={"video"}
+      metadata={{ impactId: "" }}
     />
   );
 };

@@ -114,6 +114,7 @@ const DetailedInput = ({ type }: { type: "individual" | "organization" }) => {
         setFileUrl={setImgUrl}
         maxFileSize={1048576 /** 1MB */}
         accept={"img"}
+        metadata={{ makerId: "" }}
       />
     </Stack>
   );

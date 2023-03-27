@@ -82,7 +82,6 @@ const DateRangeInput = () => {
   };
 
   const onSelectDateRanges = ({ selection }: RangeKeyDict) => {
-    console.log("AYOOO");
     const { startDate: startDateSelection, endDate: endDateSelection } =
       selection;
 

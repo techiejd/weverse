@@ -34,12 +34,14 @@ const FileInput = ({
   minFileSize,
   maxFileSize,
   accept,
+  metadata = {},
 }: {
   required?: boolean;
   setFileUrl: Dispatch<SetStateAction<string | undefined | "loading">>;
   minFileSize?: number;
   maxFileSize?: number;
   accept: "video" | "img";
+  metadata?: Record<string, string>;
 }) => {
   const appState = useAppState();
 
@@ -86,7 +88,7 @@ const FileInput = ({
         if (appState) {
           const fileRef = ref(appState.storage, v4());
           const newUploadTask = uploadBytesResumable(fileRef, f, {
-            customMetadata: { impactId: "" },
+            customMetadata: metadata,
           });
           setUploadTask(newUploadTask);
           newUploadTask.on("state_changed", {

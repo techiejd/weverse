@@ -46,7 +46,6 @@ const PosiForm = () => {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        console.log("In here yo");
         console.log(JSON.stringify(posiFormData.safeParse(formData)));
       }}
     >
