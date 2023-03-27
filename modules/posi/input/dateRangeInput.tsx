@@ -99,6 +99,7 @@ const DateRangeInput = () => {
     if (startDate) inputValue += moment(startDate).format(dateFormat);
     if (endDate) inputValue += " - " + moment(endDate).format(dateFormat);
 
+    console.log("In Here");
     setState((s) => ({
       ...s,
       fromDate: startDate,
@@ -131,6 +132,7 @@ const DateRangeInput = () => {
             </InputAdornment>
           ),
           readOnly: true,
+          required: true,
         }}
         onChange={onInputChange}
         onClick={(e) => {

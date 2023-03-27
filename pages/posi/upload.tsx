@@ -24,6 +24,7 @@ import {
 import ImpactVideoInput from "../../modules/posi/input/impactVideoInput";
 import SummaryInput from "../../modules/posi/input/SummaryInput";
 import HowToSupportInput from "../../modules/posi/input/HowToSupportInput";
+import AboutInput from "../../modules/posi/input/aboutInput";
 
 const Section = ({
   label,
@@ -100,15 +101,7 @@ const PosiForm = () => {
               <MakerInput />
             </Section>
             <Section label="Ahora sí, cuentemelo bien (opcional)">
-              <TextField
-                fullWidth
-                label="Resumen (1000 caracteres)"
-                name="summary"
-                multiline
-                minRows={3}
-                inputProps={{ maxLength: 1000 }}
-                helperText="Este es tu lugar para dar todo el detalle de tu impacto."
-              />
+              <AboutInput />
             </Section>
             <Button
               variant="outlined"

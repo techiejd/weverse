@@ -54,6 +54,7 @@ const CitySearchInput = () => {
           <Box>
             <Input
               {...getInputProps({
+                required: true,
                 placeholder: "Buscar ubicaciones ...",
                 onBlur: (e) => {
                   if (
