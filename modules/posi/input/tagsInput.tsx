@@ -5,11 +5,13 @@ import {
   MouseEvent,
   SetStateAction,
   SyntheticEvent,
+  useEffect,
   useState,
 } from "react";
 import { Box, IconButton, InputAdornment, Stack } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { z } from "zod";
+import { useFormData } from "./context";
 
 const tag = z.string();
 type Tag = z.infer<typeof tag>;
@@ -145,7 +147,17 @@ const TagInfoInputValue = ({
 };
 
 export default function TagsInput() {
+  const [formData, setFormData] = useFormData();
   const [tagInfos, setTagInfos] = useState<TagInfo[]>([]);
+
+  useEffect(() => {
+    if (setFormData) {
+      setFormData((fD) => ({
+        ...fD,
+        tags: tagInfos.map((tI) => tI.tag),
+      }));
+    }
+  }, [tagInfos, setFormData]);
   return (
     <Stack margin={2} spacing={2}>
       <Box>

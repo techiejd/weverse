@@ -1,12 +1,26 @@
 import { Box, Typography, TextField, Slider, Stack } from "@mui/material";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
+import {
+  ImpactQualifierLevel,
+  impactQualifierLevel,
+  useFormData,
+} from "./context";
 
 const ImpactedPersonsInput = () => {
-  const [numImpacted, setNumImpacted] = useState<number | "">("");
+  const defaultLevel = ImpactQualifierLevel.hour;
+  const [formData, setFormData] = useFormData();
   const processNumImpacted = (e: ChangeEvent<HTMLInputElement>) => {
     const result = e.target.value.replace(/\D/g, "");
 
-    setNumImpacted(Number(result));
+    if (setFormData) {
+      setFormData((fD) => ({
+        ...fD,
+        impactedPeople: {
+          ...fD.impactedPeople,
+          amount: Number(result),
+        },
+      }));
+    }
   };
 
   const marks = [
@@ -40,6 +54,44 @@ const ImpactedPersonsInput = () => {
     return value2Explanation[value as 1 | 2 | 3 | 5 | 8];
   }
 
+  const setLevel = (newLevel: number) => {
+    if (setFormData) {
+      // For when setFormData comes alive
+      setFormData((fD) => ({
+        ...fD,
+        impactedPeople: {
+          ...fD.impactedPeople,
+          level: impactQualifierLevel.parse(newLevel),
+        },
+      }));
+    }
+  };
+  useEffect(() => {
+    if (setFormData) {
+      setFormData((fD) => ({
+        ...fD,
+        impactedPeople: {
+          ...fD.impactedPeople,
+          level: fD.impactedPeople?.level
+            ? fD.impactedPeople.level
+            : defaultLevel,
+        },
+      }));
+    }
+  }, [defaultLevel, setFormData]); // For when setFormData comes alive
+
+  const setHowToId = (input: string) => {
+    if (setFormData) {
+      setFormData((fD) => ({
+        ...fD,
+        impactedPeople: {
+          ...fD.impactedPeople,
+          howToIdentify: input,
+        },
+      }));
+    }
+  };
+
   return (
     <Stack spacing={2} margin={2} justifyContent={"space-between"}>
       <Typography variant="h3">¿Cuantas personas fueron impactadas?</Typography>
@@ -47,9 +99,11 @@ const ImpactedPersonsInput = () => {
         required
         label="XXX personas"
         type="number"
-        value={numImpacted}
         onChange={processNumImpacted}
         sx={{ width: 200 }}
+        value={
+          formData.impactedPeople?.amount ? formData.impactedPeople.amount : ""
+        }
       />
       <Typography variant="h3">¿Qué nivel de impacto les tuviste?</Typography>
       <Box sx={{ width: 300 }} alignSelf={"center"}>
@@ -58,13 +112,21 @@ const ImpactedPersonsInput = () => {
           sx={{
             mt: 3,
           }}
-          defaultValue={1}
+          defaultValue={defaultLevel}
           valueLabelFormat={valueLabelFormat}
           valueLabelDisplay="auto"
           step={null}
           marks={marks}
           min={1}
           max={8}
+          value={
+            formData.impactedPeople?.level
+              ? formData.impactedPeople.level
+              : ImpactQualifierLevel.hour
+          }
+          onChange={(e, val) => {
+            setLevel(val as number);
+          }}
         />
       </Box>
       <Typography variant="h3">
@@ -77,6 +139,14 @@ const ImpactedPersonsInput = () => {
         name="impactedPersons-identification"
         margin="normal"
         inputProps={{ maxLength: 125 }}
+        value={
+          formData.impactedPeople?.howToIdentify
+            ? formData.impactedPeople.howToIdentify
+            : ""
+        }
+        onChange={(e) => {
+          setHowToId(e.target.value);
+        }}
       />
     </Stack>
   );

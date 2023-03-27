@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import {
   Box,
   TextField,
@@ -7,119 +7,174 @@ import {
   IconButton,
 } from "@mui/material";
 import DateRangeIcon from "@mui/icons-material/DateRange";
-import moment from "moment";
+import moment, { now } from "moment";
 import { DateRange, RangeKeyDict } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
+import { useFormData } from "./context";
 
-export default class DateRangeInput extends React.Component {
-  dateFormat = "DD/MM/YYYY";
-
-  state = {
+const DateRangeInput = () => {
+  const [formData, setFormData] = useFormData();
+  const dateFormat = "DD/MM/YYYY";
+  const [state, setState] = useState<{
+    displayCalendar: boolean;
+    inputValue: string;
+    anchorEl: HTMLDivElement | HTMLButtonElement | null;
+    fromDate: Date | undefined;
+    toDate: Date | undefined;
+  }>({
     displayCalendar: false,
     inputValue: "",
     anchorEl: null,
-    fromDate: undefined,
-    toDate: undefined,
+    fromDate: moment().toDate(),
+    toDate: moment().toDate(),
+  });
+
+  useEffect(() => {
+    if (
+      formData.dates &&
+      (formData.dates.start != state.fromDate ||
+        formData.dates.end != state.toDate)
+    ) {
+      setState((s) => {
+        return {
+          ...s,
+          fromDate: formData.dates!.start,
+          toDate: formData.dates!.end,
+        };
+      });
+    }
+  }, [state.fromDate, state.toDate, setState, formData.dates]); // For when form data kicks in
+
+  const onAdornmentClick = (e: MouseEvent<HTMLButtonElement>) => {
+    setState((s) => ({
+      ...s,
+      displayCalendar: true,
+      anchorEl: e.currentTarget,
+    }));
   };
 
-  onAdornmentClick = (e) => {
-    this.setState({ displayCalendar: true, anchorEl: e.currentTarget });
-  };
+  const processInputValue = (value: string) => {
+    const [fromDateString, toDateString] = value
+      .split("-")
+      .map((elm) => elm.trim());
 
-  onInputChange = (e) => {
-    const inputValue = e.target.value;
-    const { fromDate, toDate } = this.processInputValue(inputValue);
+    const fromDateMoment = moment(fromDateString, dateFormat);
+    const fromDate = fromDateMoment.isValid()
+      ? fromDateMoment.toDate()
+      : undefined;
 
-    this.setState({ inputValue, fromDate, toDate });
-  };
-
-  onPopoverClose = (e, reason) => {
-    this.setState({ displayCalendar: false, anchorEl: null });
-  };
-
-  onSelectDateRanges: (rangesByKey: RangeKeyDict) => void = ({ selection }) => {
-    let { startDate, endDate } = selection;
-
-    startDate = moment(startDate);
-    startDate = startDate.isValid() ? startDate.toDate() : undefined;
-
-    endDate = moment(endDate);
-    endDate = endDate.isValid() ? endDate.toDate() : undefined;
-
-    let inputValue = "";
-    if (startDate) inputValue += moment(startDate).format(this.dateFormat);
-    if (endDate) inputValue += " - " + moment(endDate).format(this.dateFormat);
-
-    this.setState({ fromDate: startDate, toDate: endDate, inputValue });
-  };
-
-  processInputValue(value) {
-    let [fromDate, toDate] = value.split("-").map((elm) => elm.trim());
-
-    fromDate = moment(fromDate, this.dateFormat);
-    fromDate = fromDate.isValid() ? fromDate.toDate() : undefined;
-
-    toDate = moment(toDate, this.dateFormat);
-    toDate = toDate.isValid() ? toDate.toDate() : undefined;
+    const toDateMoment = moment(toDateString, dateFormat);
+    const toDate = toDateMoment.isValid() ? toDateMoment.toDate() : undefined;
 
     return { fromDate, toDate };
-  }
+  };
 
-  render() {
-    return (
-      <div>
-        <TextField
-          label={`${this.dateFormat} - ${this.dateFormat}`}
-          fullWidth={true}
-          value={this.state.inputValue}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={this.onAdornmentClick}>
-                  <DateRangeIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-            readOnly: true,
-          }}
-          onChange={this.onInputChange}
-          onClick={(e) => {
-            this.setState({ displayCalendar: true, anchorEl: e.currentTarget });
-          }}
-        />
-        <Popover
-          open={this.state.displayCalendar}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
-          onClose={this.onPopoverClose}
-        >
-          <Box>
-            <DateRange
-              ranges={[
-                {
-                  startDate: this.state.fromDate,
-                  endDate: this.state.toDate,
-                  key: "selection",
-                },
-              ]}
-              onChange={this.onSelectDateRanges}
-              maxDate={new Date()}
-              minDate={
-                new Date(new Date().setFullYear(new Date().getFullYear() - 1))
-              }
-              showMonthAndYearPickers={true}
-            />
-          </Box>
-        </Popover>
-      </div>
-    );
-  }
-}
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const { fromDate, toDate } = processInputValue(inputValue);
+
+    setState((s) => ({ ...s, inputValue, fromDate, toDate }));
+  };
+
+  const onPopoverClose = () => {
+    setState((s) => ({ ...s, displayCalendar: false, anchorEl: null }));
+  };
+
+  const onSelectDateRanges = ({ selection }: RangeKeyDict) => {
+    console.log("AYOOO");
+    const { startDate: startDateSelection, endDate: endDateSelection } =
+      selection;
+
+    const startDateMoment = moment(startDateSelection);
+    const startDate = startDateMoment.isValid()
+      ? startDateMoment.toDate()
+      : undefined;
+
+    const endDateMoment = moment(endDateSelection);
+    const endDate = endDateMoment.isValid()
+      ? endDateMoment.toDate()
+      : undefined;
+
+    let inputValue = "";
+    if (startDate) inputValue += moment(startDate).format(dateFormat);
+    if (endDate) inputValue += " - " + moment(endDate).format(dateFormat);
+
+    setState((s) => ({
+      ...s,
+      fromDate: startDate,
+      toDate: endDate,
+      inputValue,
+    }));
+
+    if (setFormData)
+      setFormData((s) => ({
+        ...s,
+        dates: {
+          start: startDate,
+          end: endDate,
+        },
+      }));
+  };
+
+  return (
+    <div>
+      <TextField
+        label={`${dateFormat} - ${dateFormat}`}
+        fullWidth={true}
+        value={state.inputValue}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={onAdornmentClick}>
+                <DateRangeIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+          readOnly: true,
+        }}
+        onChange={onInputChange}
+        onClick={(e) => {
+          setState((s) => ({
+            ...s,
+            displayCalendar: true,
+            anchorEl: e.currentTarget,
+          }));
+        }}
+      />
+      <Popover
+        open={state.displayCalendar}
+        anchorEl={state.anchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        onClose={onPopoverClose}
+      >
+        <Box>
+          <DateRange
+            ranges={[
+              {
+                startDate: state.fromDate,
+                endDate: state.toDate,
+                key: "selection",
+              },
+            ]}
+            onChange={onSelectDateRanges}
+            maxDate={new Date()}
+            minDate={
+              new Date(new Date().setFullYear(new Date().getFullYear() - 1))
+            }
+            showMonthAndYearPickers={true}
+          />
+        </Box>
+      </Popover>
+    </div>
+  );
+};
+
+export default DateRangeInput;

@@ -10,7 +10,14 @@ import {
   Typography,
 } from "@mui/material";
 import FileInput from "./fileInput";
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
+import { useFormData } from "./context";
 
 const OrganizationTypeInput = () => {
   return (
@@ -42,15 +49,24 @@ const OrganizationTypeInput = () => {
   );
 };
 
-const DetailedInput = ({
-  img,
-  setImg,
-  type,
-}: {
-  img: File | undefined;
-  setImg: Dispatch<SetStateAction<File | undefined>>;
-  type: "individual" | "organization";
-}) => {
+const DetailedInput = ({ type }: { type: "individual" | "organization" }) => {
+  const [imgUrl, setImgUrl] = useState<string | undefined | "loading">(
+    undefined
+  );
+  const [formData, setFormData] = useFormData();
+  useEffect(() => {
+    if (setFormData) {
+      const urlOrUndefined = imgUrl == "loading" ? undefined : imgUrl;
+      setFormData((fD) => ({
+        ...fD,
+        maker: {
+          ...fD.maker,
+          pic: imgUrl,
+        },
+      }));
+    }
+  }, [imgUrl, setFormData]);
+
   const askForInfoMsg =
     type == "individual"
       ? "Cuéntame sobre ti"
@@ -79,8 +95,7 @@ const DetailedInput = ({
       <Typography>{askForImage}</Typography>
       <FileInput
         required
-        file={img}
-        setFile={setImg}
+        setFileUrl={setImgUrl}
         maxFileSize={1048576 /** 1MB */}
         accept={"img"}
       />
@@ -88,13 +103,7 @@ const DetailedInput = ({
   );
 };
 
-const MakerInput = ({
-  img,
-  setImg,
-}: {
-  img: File | undefined;
-  setImg: Dispatch<SetStateAction<File | undefined>>;
-}) => {
+const MakerInput = () => {
   const [makerType, setMakerType] = useState<
     "individual" | "organization" | undefined
   >();
@@ -118,9 +127,7 @@ const MakerInput = ({
           />
         </RadioGroup>
       </FormControl>
-      {makerType && (
-        <DetailedInput img={img} setImg={setImg} type={makerType} />
-      )}
+      {makerType && <DetailedInput type={makerType} />}
     </Stack>
   );
 };

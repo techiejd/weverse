@@ -3,6 +3,7 @@ import {
   Database,
   getDatabase,
 } from "firebase/database";
+import { getStorage, FirebaseStorage } from "firebase/storage";
 import {
   createContext,
   Dispatch,
@@ -21,11 +22,17 @@ export type User = {
 export type AppState = {
   user?: User;
   db: Database;
+  storage: FirebaseStorage;
 };
 
 const db = (() => {
   const db = getDatabase(app);
   return db;
+})();
+
+const storage = (() => {
+  const storage = getStorage(app);
+  return storage;
 })();
 
 const AppContext = createContext<AppState | undefined>(undefined);
@@ -39,6 +46,7 @@ const AppStateProvider: React.FC<{
 }> = ({ children }) => {
   const [appState, setAppState] = useState<AppState | undefined>({
     db: db,
+    storage: storage,
   });
   return (
     <AppContext.Provider value={appState}>
