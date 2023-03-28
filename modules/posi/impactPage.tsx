@@ -1,4 +1,11 @@
-import { Box, Tab, Typography } from "@mui/material";
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  Box,
+  Paper,
+  Tab,
+  Typography,
+} from "@mui/material";
 import { Footer } from "../../common/components/footer";
 import { z } from "zod";
 import { ReactNode } from "react";
@@ -25,18 +32,39 @@ function EmojiTab(props: LinkTabProps) {
 
 const NavigationFooter = (props: { value: number }) => {
   return (
-    <Footer value={props.value}>
-      <EmojiTab emoji="ℹ️" href="/posi/about" label="Sobre" />
-      <EmojiTab emoji="🤳" href="/posi/testimonials" label="Testimoniales" />
-      <EmojiTab emoji="👁️‍🗨️" href="/posi/evidence" label="Evidencia" />
-      <EmojiTab emoji="💬" href="/posi/comments" label="Comentarios" />
-    </Footer>
+    <Paper
+      sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+      elevation={3}
+    >
+      <BottomNavigation showLabels value={props.value}>
+        <BottomNavigationAction
+          icon={<Typography>{"ℹ️"}</Typography>}
+          href="/posi/about"
+          label="Sobre"
+        />
+        <BottomNavigationAction
+          icon={<Typography>{"🤳"}</Typography>}
+          href="/posi/testimonials"
+          label="Testimoniales"
+        />
+        <BottomNavigationAction
+          icon={<Typography>{"👁️‍🗨️"}</Typography>}
+          href="/posi/evidence"
+          label="Evidencia"
+        />
+        <BottomNavigationAction
+          icon={<Typography>{"💬"}</Typography>}
+          href="/posi/comments"
+          label="Comentarios"
+        />
+      </BottomNavigation>
+    </Paper>
   );
 };
 
 const ImpactPage = (props: { type: Types; children: ReactNode }) => {
   return (
-    <Box>
+    <Box sx={{ pb: 7 }}>
       {props.children}
       <NavigationFooter value={props.type} />
     </Box>
