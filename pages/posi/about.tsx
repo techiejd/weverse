@@ -17,11 +17,7 @@ import {
   Handshake,
   Share,
 } from "@mui/icons-material";
-import { useRef } from "react";
-import {
-  ImpactPageContext,
-  useImpactPageContext,
-} from "../../modules/posi/impactPage/context";
+import { useImpactPageContext } from "../../modules/posi/impactPage/context";
 
 const Tags = () => {
   return (
@@ -184,7 +180,7 @@ const About = () => {
     <ImpactPage
       type={PageTypes.about}
       path={"localhost"}
-      description={`Aprenda sobre este impacto: ${posiData.summary}`}
+      description={`${posiData.summary}`}
     >
       <AboutContent />
     </ImpactPage>

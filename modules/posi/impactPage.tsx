@@ -3,10 +3,8 @@ import {
   BottomNavigationAction,
   Box,
   Paper,
-  Tab,
   Typography,
 } from "@mui/material";
-import { Footer } from "../../common/components/footer";
 import { z } from "zod";
 import { ReactNode } from "react";
 import ImpactPageProvider from "./impactPage/context";
@@ -21,14 +19,19 @@ export enum PageTypes {
 const Types = z.nativeEnum(PageTypes);
 export type Types = z.infer<typeof Types>;
 
-interface LinkTabProps {
+interface EmojiNavigationActionProps {
   label: string;
   href: string;
   emoji: string;
 }
 
-function EmojiTab(props: LinkTabProps) {
-  return <Tab icon={<Typography>{props.emoji}</Typography>} {...props} />;
+function EmojiNavigationAction(props: EmojiNavigationActionProps) {
+  return (
+    <BottomNavigationAction
+      icon={<Typography>{props.emoji}</Typography>}
+      {...props}
+    />
+  );
 }
 
 const NavigationFooter = (props: { value: number }) => {
@@ -38,23 +41,19 @@ const NavigationFooter = (props: { value: number }) => {
       elevation={3}
     >
       <BottomNavigation showLabels value={props.value}>
-        <BottomNavigationAction
-          icon={<Typography>{"ℹ️"}</Typography>}
-          href="/posi/about"
-          label="Sobre"
-        />
-        <BottomNavigationAction
-          icon={<Typography>{"🤳"}</Typography>}
+        <EmojiNavigationAction emoji={"ℹ️"} href="/posi/about" label="Sobre" />
+        <EmojiNavigationAction
+          emoji={"🤳"}
           href="/posi/testimonials"
           label="Testimoniales"
         />
-        <BottomNavigationAction
-          icon={<Typography>{"👁️‍🗨️"}</Typography>}
+        <EmojiNavigationAction
+          emoji={"👁️‍🗨️"}
           href="/posi/evidence"
           label="Evidencia"
         />
-        <BottomNavigationAction
-          icon={<Typography>{"💬"}</Typography>}
+        <EmojiNavigationAction
+          emoji={"💬"}
           href="/posi/comments"
           label="Comentarios"
         />
@@ -67,13 +66,15 @@ const ImpactPage = (props: {
   type: Types;
   path: string;
   description?: string;
+  title?: string;
   children: ReactNode;
 }) => {
   return (
     <Box sx={{ pb: 7 }}>
       <ImpactPageProvider
-        text={props.description ? props.description : "OneWe Share Link."}
+        text={props.description}
         url={props.path}
+        title={props.title ? props.title : "OneWe Share Link."}
       >
         {props.children}
         <NavigationFooter value={props.type} />

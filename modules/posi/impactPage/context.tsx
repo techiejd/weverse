@@ -13,11 +13,13 @@ export const ImpactPageContext = createContext<
 >(undefined);
 
 const ImpactPageProvider = ({
+  title,
   text,
   url,
   children,
 }: {
-  text: string;
+  title?: string;
+  text?: string;
   url: string;
   children: ReactNode;
 }) => {
@@ -29,8 +31,9 @@ const ImpactPageProvider = ({
     <ImpactPageContext.Provider value={{ launchShare: launchWebSharePortal }}>
       <RWebShare
         data={{
-          text: "Like humans, flamingos make friends for life",
-          url: "https://on.natgeo.com/2zHaNup",
+          title: title,
+          text: text,
+          url: url,
         }}
         onClick={() => console.log("shared successfully!")}
       >
