@@ -9,6 +9,7 @@ import {
 import { Footer } from "../../common/components/footer";
 import { z } from "zod";
 import { ReactNode } from "react";
+import ImpactPageProvider from "./impactPage/context";
 
 export enum PageTypes {
   about,
@@ -62,11 +63,21 @@ const NavigationFooter = (props: { value: number }) => {
   );
 };
 
-const ImpactPage = (props: { type: Types; children: ReactNode }) => {
+const ImpactPage = (props: {
+  type: Types;
+  path: string;
+  description?: string;
+  children: ReactNode;
+}) => {
   return (
     <Box sx={{ pb: 7 }}>
-      {props.children}
-      <NavigationFooter value={props.type} />
+      <ImpactPageProvider
+        text={props.description ? props.description : "OneWe Share Link."}
+        url={props.path}
+      >
+        {props.children}
+        <NavigationFooter value={props.type} />
+      </ImpactPageProvider>
     </Box>
   );
 };

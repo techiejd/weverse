@@ -1,7 +1,28 @@
-import { Box, List, ListItem, Typography, Stack, Card } from "@mui/material";
+import {
+  Box,
+  List,
+  ListItem,
+  Typography,
+  Stack,
+  Card,
+  SpeedDial,
+  SpeedDialAction,
+} from "@mui/material";
 import ImpactPage, { PageTypes } from "../../modules/posi/impactPage";
 import CandidateMedia from "../../modules/vote/votingExperience/candidate/candidateMedia";
 import { posiFormData } from "../../modules/posi/input/context";
+import {
+  CardGiftcard,
+  ConnectWithoutContact,
+  Handshake,
+  Share,
+} from "@mui/icons-material";
+import { useRef } from "react";
+import { useWebSharePortal } from "../../modules/posi/impactPage/WebSharePortal";
+import {
+  ImpactPageContext,
+  useImpactPageContext,
+} from "../../modules/posi/impactPage/context";
 
 const Tags = () => {
   return (
@@ -87,15 +108,32 @@ const posiData = posiFormData.parse({
   howToSupport: "adsfadf",
 });
 
-const About = () => {
+const AboutContent = () => {
+  const impactPageContext = useImpactPageContext();
+  const actions = [
+    // It renders in backwards order lmao.
+    { icon: <CardGiftcard />, name: "Financiar" },
+    {
+      icon: <ConnectWithoutContact />,
+      name: "Conectar",
+    },
+    {
+      icon: <Share />,
+      name: "Compartir",
+      onClick: () => {
+        impactPageContext?.launchShare();
+      },
+    },
+  ];
   return (
-    <ImpactPage type={PageTypes.about}>
+    <Box>
+      <Typography color={"black"}></Typography>
       <Stack>
         <Typography variant="h1">{posiData.summary}</Typography>
         <Card
           sx={{
             borderRadius: 4,
-            height: "406px",
+            height: "50vh",
             width: "100%",
           }}
         >
@@ -112,6 +150,44 @@ const About = () => {
           />
         </Card>
       </Stack>
+      <SpeedDial
+        ariaLabel="Support"
+        sx={{
+          position: "fixed",
+          bottom: 64,
+          right: 16,
+        }}
+        icon={
+          <div>
+            <Handshake />
+            <Typography fontSize={8} mt={-1}>
+              Soportar
+            </Typography>
+          </div>
+        }
+      >
+        {actions.map((action) => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+            tooltipOpen
+            onClick={action.onClick}
+          />
+        ))}
+      </SpeedDial>
+    </Box>
+  );
+};
+
+const About = () => {
+  return (
+    <ImpactPage
+      type={PageTypes.about}
+      path={"localhost"}
+      description={`Aprenda sobre este impacto: ${posiData.summary}`}
+    >
+      <AboutContent />
     </ImpactPage>
   );
 };

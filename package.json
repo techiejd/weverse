@@ -30,6 +30,7 @@
     "react-hook-form": "^7.36.1",
     "react-mui-fileuploader": "^0.5.2",
     "react-places-autocomplete": "^7.3.0",
+    "react-web-share": "^2.0.2",
     "uuid": "^9.0.0",
     "zod": "^3.18.0"
   },
