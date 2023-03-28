@@ -37,7 +37,6 @@ const NavigationFooter = (props: { value: number }) => {
 const ImpactPage = (props: { type: Types; children: ReactNode }) => {
   return (
     <Box>
-      <Typography variant="h1">Empowered 20 Women Through Boxing.</Typography>
       {props.children}
       <NavigationFooter value={props.type} />
     </Box>

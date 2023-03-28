@@ -7,7 +7,7 @@ import {
   IconButton,
 } from "@mui/material";
 import DateRangeIcon from "@mui/icons-material/DateRange";
-import moment, { now } from "moment";
+import moment from "moment";
 import { DateRange, RangeKeyDict } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -118,7 +118,7 @@ const DateRangeInput = () => {
   };
 
   return (
-    <div>
+    <Box>
       <TextField
         label={`${dateFormat} - ${dateFormat}`}
         fullWidth={true}
@@ -132,7 +132,6 @@ const DateRangeInput = () => {
             </InputAdornment>
           ),
           readOnly: true,
-          required: true,
         }}
         onChange={onInputChange}
         onClick={(e) => {
@@ -174,7 +173,7 @@ const DateRangeInput = () => {
           />
         </Box>
       </Popover>
-    </div>
+    </Box>
   );
 };
 

@@ -82,6 +82,7 @@ const FileInput = ({
                 maxFileSize ? maxFileSize : 0
               )}.`
         );
+        return;
       }
 
       const uploadFileAndSetFileUrl = async () => {
