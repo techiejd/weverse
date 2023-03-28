@@ -1,10 +1,10 @@
-import { Box } from "@mui/material";
 import ImpactPage, { PageTypes } from "../../modules/posi/impactPage";
+import UnderConstruction from "../../modules/posi/underConstruction";
 
 const Comments = () => {
   return (
-    <ImpactPage type={PageTypes.comments}>
-      <Box>Comments</Box>
+    <ImpactPage type={PageTypes.comments} path="localhost">
+      <UnderConstruction />
     </ImpactPage>
   );
 };
