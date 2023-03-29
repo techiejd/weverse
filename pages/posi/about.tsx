@@ -10,6 +10,8 @@ import {
   Divider,
   CardHeader,
   CardContent,
+  Paper,
+  Avatar,
 } from "@mui/material";
 import ImpactPage, { PageTypes } from "../../modules/posi/impactPage";
 import CandidateMedia from "../../modules/vote/votingExperience/candidate/candidateMedia";
@@ -118,27 +120,25 @@ const AboutContent = () => {
   const dateFormat = "DD/MM/YY";
   return (
     <Box>
-      <Typography color={"black"}></Typography>
+      <Box sx={{ boxShadow: 1 }} padding={1}>
+        <Typography variant="h1">{posiData.summary}</Typography>{" "}
+      </Box>
       <Stack divider={<Divider flexItem />} spacing={1} m={1.5}>
-        <Typography variant="h1">{posiData.summary}</Typography>
-        <Box alignItems={"normal"} width={"100%"} display={"flex"}>
-          {posiData.tags.map((tag) => (
-            <PillBoxMessage key={tag} sx={{ m: 1 }}>
-              {tag}
-            </PillBoxMessage>
-          ))}
-        </Box>
+        <Paper>
+          <Box alignItems={"normal"} width={"100%"} display={"flex"}>
+            {posiData.tags.map((tag) => (
+              <PillBoxMessage key={tag} sx={{ m: 1 }}>
+                {tag}
+              </PillBoxMessage>
+            ))}
+          </Box>
+        </Paper>
         <Card>
           <CardHeader
-            title={posiData.location.structuredFormatting.mainText}
-            subheader={posiData.location.structuredFormatting.secondaryText}
+            title={`${posiData.location.structuredFormatting.mainText}`}
+            subheader={`${moment(posiData.dates.start).format(dateFormat)} - 
+            ${moment(posiData.dates.end).format(dateFormat)}`}
           ></CardHeader>
-          <CardContent>
-            <Typography>
-              {`${moment(posiData.dates.start).format(dateFormat)} - 
-              ${moment(posiData.dates.end).format(dateFormat)}`}
-            </Typography>
-          </CardContent>
         </Card>
         <Card
           sx={{
@@ -158,6 +158,19 @@ const AboutContent = () => {
               src: posiData.video,
             }}
           />
+        </Card>
+        <Card>
+          <CardContent>
+            <Stack direction={"row"} alignItems={"center"}>
+              <Avatar src={posiData.maker.pic} />
+              <Typography>{posiData.maker.name}</Typography>
+            </Stack>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent>
+            <Typography>{posiData.about}</Typography>
+          </CardContent>
         </Card>
       </Stack>
       <SpeedDial
