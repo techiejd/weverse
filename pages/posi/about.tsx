@@ -8,6 +8,8 @@ import {
   SpeedDial,
   SpeedDialAction,
   Divider,
+  CardHeader,
+  CardContent,
 } from "@mui/material";
 import ImpactPage, { PageTypes } from "../../modules/posi/impactPage";
 import CandidateMedia from "../../modules/vote/votingExperience/candidate/candidateMedia";
@@ -20,16 +22,7 @@ import {
 } from "@mui/icons-material";
 import { useImpactPageContext } from "../../modules/posi/impactPage/context";
 import { PillBoxMessage } from "../../common/components/pillBoxMessage";
-
-const Tags = () => {
-  return (
-    <List>
-      <ListItem>
-        <Typography>Gender Equality</Typography>
-      </ListItem>
-    </List>
-  );
-};
+import moment from "moment";
 
 const Maker = () => {
   return (
@@ -122,18 +115,31 @@ const AboutContent = () => {
       },
     },
   ];
+  const dateFormat = "DD/MM/YY";
   return (
     <Box>
       <Typography color={"black"}></Typography>
-      <Stack divider={<Divider flexItem />} spacing={1}>
+      <Stack divider={<Divider flexItem />} spacing={1} m={1.5}>
         <Typography variant="h1">{posiData.summary}</Typography>
         <Box alignItems={"normal"} width={"100%"} display={"flex"}>
           {posiData.tags.map((tag) => (
-            <PillBoxMessage key={tag} m={1}>
+            <PillBoxMessage key={tag} sx={{ m: 1 }}>
               {tag}
             </PillBoxMessage>
           ))}
-        </Box> 
+        </Box>
+        <Card>
+          <CardHeader
+            title={posiData.location.structuredFormatting.mainText}
+            subheader={posiData.location.structuredFormatting.secondaryText}
+          ></CardHeader>
+          <CardContent>
+            <Typography>
+              {`${moment(posiData.dates.start).format(dateFormat)} - 
+              ${moment(posiData.dates.end).format(dateFormat)}`}
+            </Typography>
+          </CardContent>
+        </Card>
         <Card
           sx={{
             borderRadius: 4,

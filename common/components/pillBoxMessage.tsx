@@ -1,15 +1,13 @@
-import { Box, BoxProps, Typography } from "@mui/material";
+import { Paper, PaperProps, Typography } from "@mui/material";
 
-export const PillBoxMessage = (props: BoxProps) => {
+export const PillBoxMessage = (props: PaperProps) => {
   const { children, sx, ...others } = props;
   return (
-    <Box
-      alignItems="center"
-      width={"fit-content"}
+    <Paper
       sx={{
         width: "fit-content",
         borderRadius: 10,
-        backgroundColor: "primary.main",
+        backgroundColor: "primary",
         ...sx,
         pb: 0.3,
       }}
@@ -21,9 +19,10 @@ export const PillBoxMessage = (props: BoxProps) => {
           paddingLeft: 2,
           paddingRight: 2,
         }}
+        variant="h3"
       >
         {children}
       </Typography>
-    </Box>
+    </Paper>
   );
 };
