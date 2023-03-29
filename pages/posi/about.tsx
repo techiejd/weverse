@@ -1,7 +1,5 @@
 import {
   Box,
-  List,
-  ListItem,
   Typography,
   Stack,
   Card,
