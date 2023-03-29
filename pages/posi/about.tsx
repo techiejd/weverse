@@ -119,7 +119,9 @@ const AboutContent = () => {
   return (
     <Box>
       <Box sx={{ boxShadow: 1 }} padding={1}>
-        <Typography variant="h1">{posiData.summary}</Typography>{" "}
+        <Typography variant="h1" fontSize={35}>
+          {posiData.summary}
+        </Typography>{" "}
       </Box>
       <Stack divider={<Divider flexItem />} spacing={1} m={1.5}>
         <Paper>
