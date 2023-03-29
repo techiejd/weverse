@@ -5,9 +5,9 @@ import FocusedCandidateDialog from "./candidate/focusedCandidateDialog";
 import ExplainExchangeDialog, {
   SimpleEmojiProps,
 } from "./components/explainExchangeDialog";
-import { PillBoxMessage } from "./components/pillBoxMessage";
 import VoteFilter from "./components/voteFilter";
 import VotingProvider, { VotingState } from "./context";
+import { PillBoxMessage } from "../../../common/components/pillBoxMessage";
 
 const reporter = z.enum(["Ana", "JD", "Carlos Mario", "Yuly Espitia", "Nico"]);
 export type Reporter = z.infer<typeof reporter>;

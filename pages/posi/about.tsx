@@ -7,6 +7,7 @@ import {
   Card,
   SpeedDial,
   SpeedDialAction,
+  Divider,
 } from "@mui/material";
 import ImpactPage, { PageTypes } from "../../modules/posi/impactPage";
 import CandidateMedia from "../../modules/vote/votingExperience/candidate/candidateMedia";
@@ -18,6 +19,7 @@ import {
   Share,
 } from "@mui/icons-material";
 import { useImpactPageContext } from "../../modules/posi/impactPage/context";
+import { PillBoxMessage } from "../../common/components/pillBoxMessage";
 
 const Tags = () => {
   return (
@@ -73,7 +75,7 @@ const Maker = () => {
 const posiData = posiFormData.parse({
   summary: "We taught about AI to and inspired with AI 150 kids.",
   impactedPeople: { amount: 329, level: 2, howToIdentify: "asdfasdf" },
-  tags: ["ambiente"],
+  tags: ["ambiente", "genero"],
   location: {
     id: "ChIJBa0PuN8oRI4RVju1x_x8E0I",
     structuredFormatting: {
@@ -123,8 +125,15 @@ const AboutContent = () => {
   return (
     <Box>
       <Typography color={"black"}></Typography>
-      <Stack>
+      <Stack divider={<Divider flexItem />} spacing={1}>
         <Typography variant="h1">{posiData.summary}</Typography>
+        <Box alignItems={"normal"} width={"100%"} display={"flex"}>
+          {posiData.tags.map((tag) => (
+            <PillBoxMessage key={tag} m={1}>
+              {tag}
+            </PillBoxMessage>
+          ))}
+        </Box> 
         <Card
           sx={{
             borderRadius: 4,
