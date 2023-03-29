@@ -75,7 +75,12 @@ export const posiFormData = z.object({
   video: formUrl,
   maker: maker,
   about: z.string().min(5).max(1000).optional(),
-  howToSupport: z.string().min(5).max(1000),
+  howToSupport: z
+    .object({
+      contact: z.string().max(500).optional(),
+      finance: z.string().max(500).optional(),
+    })
+    .optional(),
 });
 
 const partialPosiFormData = posiFormData.deepPartial();

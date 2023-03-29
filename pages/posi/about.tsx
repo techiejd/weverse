@@ -10,6 +10,12 @@ import {
   CardContent,
   Paper,
   Avatar,
+  Dialog,
+  DialogTitle,
+  DialogContentText,
+  DialogContent,
+  DialogActions,
+  Button,
 } from "@mui/material";
 import ImpactPage, { PageTypes } from "../../modules/posi/impactPage";
 import CandidateMedia from "../../modules/vote/votingExperience/candidate/candidateMedia";
@@ -23,47 +29,8 @@ import {
 import { useImpactPageContext } from "../../modules/posi/impactPage/context";
 import { PillBoxMessage } from "../../common/components/pillBoxMessage";
 import moment from "moment";
-
-const Maker = () => {
-  return (
-    <Box>
-      <Typography> Mi Barrio Mi Sueño</Typography>
-      <Stack
-        direction="row"
-        spacing={1}
-        sx={{
-          height: 88,
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Box flexGrow={1}>
-          <Box
-            sx={{
-              height: "72px",
-              width: "100px",
-            }}
-          >
-            <CandidateMedia video={{ threshold: 0.2, src: "/ana14s.mp4" }} />
-          </Box>
-        </Box>
-        <Stack
-          sx={{
-            alignItems: "center",
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-            minWidth: "0px",
-            width: "100%",
-          }}
-          flexGrow={2}
-        >
-          <Typography>Medellin, Colombia</Typography>
-          <Typography>Foundation</Typography>
-        </Stack>
-      </Stack>
-    </Box>
-  );
-};
+import { Dispatch, SetStateAction, useState } from "react";
+import Linkify from "react-linkify";
 
 const posiData = posiFormData.parse({
   summary: "We taught about AI to and inspired with AI 150 kids.",
@@ -95,26 +62,122 @@ const posiData = posiFormData.parse({
     name: "adfasdf",
   },
   about: "aldkjfalksdjf",
-  howToSupport: "adsfadf",
+  howToSupport: {
+    contact: "Instagram - whatsgoodjd@",
+    finance: "https://paypal.me/jdavid10001",
+  },
 });
 
-const AboutContent = () => {
+const SupportDialog = ({
+  open,
+  setOpen,
+  title,
+  text,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  title: string;
+  text: string;
+}) => {
+  const handleClose = () => setOpen(false);
+  return (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          <Linkify>{text}</Linkify>
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} autoFocus>
+          OK
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const Support = () => {
+  const [connectDialogOpen, setConnectDialogOpen] = useState(false);
+  const [financeDialogOpen, setFinanceDialogOpen] = useState(false);
   const impactPageContext = useImpactPageContext();
-  const actions = [
-    // It renders in backwards order lmao.
-    { icon: <CardGiftcard />, name: "Financiar" },
-    {
-      icon: <ConnectWithoutContact />,
-      name: "Conectar",
-    },
-    {
-      icon: <Share />,
-      name: "Compartir",
-      onClick: () => {
-        impactPageContext?.launchShare();
+  const actions = (() => {
+    const actions = [
+      {
+        icon: <Share />,
+        name: "Compartir",
+        onClick: () => {
+          impactPageContext?.launchShare();
+        },
       },
-    },
-  ];
+    ];
+    // It renders in backwards order lmao.
+    if (posiData.howToSupport?.contact) {
+      actions.unshift({
+        icon: <ConnectWithoutContact />,
+        name: "Conectar",
+        onClick: () => setConnectDialogOpen(true),
+      });
+    }
+    if (posiData.howToSupport?.finance) {
+      actions.unshift({
+        icon: <CardGiftcard />,
+        name: "Financiar",
+        onClick: () => setFinanceDialogOpen(true),
+      });
+    }
+    return actions;
+  })();
+
+  return (
+    <div>
+      {posiData.howToSupport?.finance && (
+        <SupportDialog
+          open={financeDialogOpen}
+          setOpen={setFinanceDialogOpen}
+          title="El o la Maker dice que puede financiarlos de las siguientes maneras:"
+          text={posiData.howToSupport!.finance}
+        />
+      )}
+      {posiData.howToSupport?.contact && (
+        <SupportDialog
+          open={connectDialogOpen}
+          setOpen={setConnectDialogOpen}
+          title="El o la Maker dice que puede financiarlos de las siguientes maneras:"
+          text={posiData.howToSupport!.contact}
+        />
+      )}
+      <SpeedDial
+        ariaLabel="Support"
+        sx={{
+          position: "fixed",
+          bottom: 64,
+          right: 16,
+        }}
+        icon={
+          <div>
+            <Handshake />
+            <Typography fontSize={8} mt={-1}>
+              Soportar
+            </Typography>
+          </div>
+        }
+      >
+        {actions.map((action) => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+            tooltipOpen
+            onClick={action.onClick}
+          />
+        ))}
+      </SpeedDial>
+    </div>
+  );
+};
+
+const AboutContent = () => {
   const dateFormat = "DD/MM/YY";
   return (
     <Box>
@@ -173,32 +236,7 @@ const AboutContent = () => {
           </CardContent>
         </Card>
       </Stack>
-      <SpeedDial
-        ariaLabel="Support"
-        sx={{
-          position: "fixed",
-          bottom: 64,
-          right: 16,
-        }}
-        icon={
-          <div>
-            <Handshake />
-            <Typography fontSize={8} mt={-1}>
-              Soportar
-            </Typography>
-          </div>
-        }
-      >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-            tooltipOpen
-            onClick={action.onClick}
-          />
-        ))}
-      </SpeedDial>
+      <Support />
     </Box>
   );
 };
