@@ -33,7 +33,7 @@
     "react-places-autocomplete": "^7.3.0",
     "react-web-share": "^2.0.2",
     "uuid": "^9.0.0",
-    "zod": "^3.18.0"
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/node": "18.8.2",

@@ -83,6 +83,7 @@ export const posiFormData = z.object({
     .optional(),
 });
 
+export type PosiFormData = z.infer<typeof posiFormData>;
 const partialPosiFormData = posiFormData.deepPartial();
 export type PartialPosiFormData = z.infer<typeof partialPosiFormData>;
 
