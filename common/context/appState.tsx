@@ -4,6 +4,7 @@ import {
   getDatabase,
 } from "firebase/database";
 import { getStorage, FirebaseStorage } from "firebase/storage";
+import { getFirestore, Firestore } from "firebase/firestore";
 import {
   createContext,
   Dispatch,
@@ -20,9 +21,10 @@ export type User = {
 };
 
 export type AppState = {
-  user?: User;
+  user?: User; // TODO(techiejd): Firstly, deprecated. Secondly, I should split responsibility between storage and authentication.
   db: Database;
   storage: FirebaseStorage;
+  firestore: Firestore;
 };
 
 const db = (() => {
@@ -33,6 +35,11 @@ const db = (() => {
 const storage = (() => {
   const storage = getStorage(app);
   return storage;
+})();
+
+const firestore = (() => {
+  const firestore = getFirestore(app);
+  return firestore;
 })();
 
 const AppContext = createContext<AppState | undefined>(undefined);
@@ -47,6 +54,7 @@ const AppStateProvider: React.FC<{
   const [appState, setAppState] = useState<AppState | undefined>({
     db: db,
     storage: storage,
+    firestore: firestore,
   });
   return (
     <AppContext.Provider value={appState}>

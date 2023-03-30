@@ -35,7 +35,9 @@ const ImpactPageProvider = ({
           text: text,
           url: url,
         }}
-        onClick={() => console.log("shared successfully!")}
+        onClick={() => {
+          /** TODO(techiejd): Log that it got shared. */
+        }}
       >
         <div ref={webShareRef}></div>
       </RWebShare>

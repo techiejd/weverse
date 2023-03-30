@@ -1,15 +1,7 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Divider, Stack, Typography } from "@mui/material";
+import { collection, addDoc } from "firebase/firestore";
 import { ReactNode, useState } from "react";
-import {
-  CitySearchInput,
-  TagsInput,
-} from "../../modules/posi/input";
+import { CitySearchInput, TagsInput } from "../../modules/posi/input";
 import DateRangeInput from "../../modules/posi/input/dateRangeInput";
 import ImpactedPersonsInput from "../../modules/posi/input/impactedPersonsInput";
 import MakerInput from "../../modules/posi/input/makerInput";
@@ -23,6 +15,7 @@ import ImpactVideoInput from "../../modules/posi/input/impactVideoInput";
 import SummaryInput from "../../modules/posi/input/SummaryInput";
 import HowToSupportInput from "../../modules/posi/input/HowToSupportInput";
 import AboutInput from "../../modules/posi/input/aboutInput";
+import { useAppState } from "../../common/context/appState";
 
 const Section = ({
   label,
@@ -41,11 +34,18 @@ const Section = ({
 
 const PosiForm = () => {
   const [formData, setFormData] = useState<PartialPosiFormData>({});
+  const appState = useAppState();
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        console.log(JSON.stringify(posiFormData.safeParse(formData)));
+        const usersPosiFormData = posiFormData.parse(formData);
+        if (appState) {
+          await addDoc(
+            collection(appState.firestore, "impacts"),
+            usersPosiFormData
+          );
+        }
       }}
     >
       <PosiFormContext.Provider value={formData}>
@@ -101,12 +101,7 @@ const PosiForm = () => {
             <Section label="Ahora sí, cuentemelo bien (opcional)">
               <AboutInput />
             </Section>
-            <Button
-              variant="outlined"
-              sx={{ mt: 3 }}
-              type="submit"
-              onClick={(e) => console.log(formData)}
-            >
+            <Button variant="outlined" sx={{ mt: 3 }} type="submit">
               Publicar
             </Button>
           </Stack>

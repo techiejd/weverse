@@ -74,7 +74,7 @@ const ImpactPage = (props: {
       <ImpactPageProvider
         text={props.description}
         url={props.path}
-        title={props.title ? props.title : "OneWe Share Link."}
+        title={props.title ? props.title : "OneWe - Proof of Social Impact"}
       >
         {props.children}
         <NavigationFooter value={props.type} />
