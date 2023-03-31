@@ -63,7 +63,7 @@ const posiData = posiFormData.parse({
   },
   about: "aldkjfalksdjf",
   howToSupport: {
-    contact: "Instagram - whatsgoodjd@",
+    contact: "Instagram - whatsgoodjd@ \n Calendar - calendar.google.com",
     finance: "https://paypal.me/jdavid10001",
   },
 });

@@ -18,10 +18,17 @@ import { useAppState } from "../../common/context/appState";
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardMedia sx={{ height: 140 }} image={posiData.video} />
+      <CardMedia
+        component="video"
+        sx={{ height: 140 }}
+        image={posiData.video}
+        autoPlay
+        muted
+        loop
+      />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {posiData.about}
+          {posiData.summary}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Lizards are a widespread group of squamate reptiles, with over 6,000
