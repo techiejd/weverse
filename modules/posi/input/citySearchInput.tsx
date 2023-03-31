@@ -10,6 +10,7 @@ import {
 import { useState } from "react";
 import PlacesAutocomplete, { Suggestion } from "react-places-autocomplete";
 import { useFormData } from "./context";
+import Script from "next/script";
 
 const CitySearchInput = () => {
   const [formData, setFormData] = useFormData();
@@ -38,16 +39,18 @@ const CitySearchInput = () => {
       }));
     }
   };
+
   return (
     <Box>
-      <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOkpsRpjgv8GyDniz5L7pnxoO40arBE38&libraries=places"
+      <Script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOkpsRpjgv8GyDniz5L7pnxoO40arBE38&libraries=places&callback=mapsInitializedForWeVerse"
         async
       />
       <PlacesAutocomplete
         value={query}
         onChange={handleInputChange}
         onSelect={handleSelect}
+        googleCallbackName="mapsInitializedForWeVerse"
         highlightFirstSuggestion
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
@@ -56,12 +59,13 @@ const CitySearchInput = () => {
               {...getInputProps({
                 required: true,
                 placeholder: "Buscar ubicaciones ...",
-                onBlur: (e) => {
+                onBlur: () => {
                   if (
                     formData.location &&
                     formData.location.structuredFormatting?.mainText &&
                     formData.location.structuredFormatting?.secondaryText
                   ) {
+                    // userAlreadySelectedLocation
                     if (
                       !query.includes(
                         formData.location.structuredFormatting?.mainText
@@ -70,9 +74,14 @@ const CitySearchInput = () => {
                         formData.location.structuredFormatting?.secondaryText
                       )
                     ) {
+                      // There is no new selection from google maps.
+                      // Since onBlur, we just reset it to empty.
                       setQuery("");
                     }
+                    // The user has selected from google maps and is just going to onBlur
+                    return;
                   } else {
+                    // Onblur with no selection
                     setQuery("");
                   }
                 },
@@ -81,16 +90,19 @@ const CitySearchInput = () => {
             />
             <List sx={{ width: "100%" }}>
               {loading && <Typography>Loading...</Typography>}
-              {suggestions.map((suggestion, i) => (
-                <ListItem key={i} {...getSuggestionItemProps(suggestion)}>
-                  <ListItemButton selected={suggestion.active}>
-                    <ListItemText
-                      primary={suggestion.formattedSuggestion.mainText}
-                      secondary={suggestion.formattedSuggestion.secondaryText}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
+              {suggestions.map((suggestion) => {
+                const { key, ...others } = getSuggestionItemProps(suggestion);
+                return (
+                  <ListItem key={key} {...others}>
+                    <ListItemButton selected={suggestion.active}>
+                      <ListItemText
+                        primary={suggestion.formattedSuggestion.mainText}
+                        secondary={suggestion.formattedSuggestion.secondaryText}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                );
+              })}
             </List>
           </Box>
         )}
