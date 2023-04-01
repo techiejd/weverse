@@ -5,9 +5,18 @@ export enum ImpactQualifierLevel {
   hour = 1,
   day = 2,
   week = 3,
-  year = 5,
-  life = 8,
+  month = 5,
+  year = 8,
+  life = 13,
 }
+export const levelToColors = {
+  [ImpactQualifierLevel.hour]: "indigo",
+  [ImpactQualifierLevel.day]: "blue",
+  [ImpactQualifierLevel.week]: "green",
+  [ImpactQualifierLevel.month]: "yellow",
+  [ImpactQualifierLevel.year]: "orange",
+  [ImpactQualifierLevel.life]: "red",
+};
 export const impactQualifierLevel = z.nativeEnum(ImpactQualifierLevel);
 
 // TODO(techiejd): Check all urls are with our hosting.
@@ -62,6 +71,14 @@ const location = z.object({
   types: z.string().array(),
 });
 
+const howToSupport = z
+  .object({
+    contact: z.string().max(500).optional(),
+    finance: z.string().max(500).optional(),
+  })
+  .optional();
+export type HowToSupport = z.infer<typeof howToSupport>;
+
 export const posiFormData = z.object({
   summary: z.string().min(5).max(100),
   impactedPeople: z.object({
@@ -75,12 +92,7 @@ export const posiFormData = z.object({
   video: formUrl,
   maker: maker,
   about: z.string().min(5).max(1000).optional(),
-  howToSupport: z
-    .object({
-      contact: z.string().max(500).optional(),
-      finance: z.string().max(500).optional(),
-    })
-    .optional(),
+  howToSupport: howToSupport,
 });
 
 export type PosiFormData = z.infer<typeof posiFormData>;

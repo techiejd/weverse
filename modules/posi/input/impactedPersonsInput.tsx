@@ -39,6 +39,9 @@ const ImpactedPersonsInput = () => {
     },
     {
       value: 8,
+    },
+    {
+      value: 13,
       label: "Grande",
     },
   ];
@@ -48,10 +51,11 @@ const ImpactedPersonsInput = () => {
       1: "la hora",
       2: "el día",
       3: "la semana",
-      5: "el año",
-      8: "la vida",
+      5: "el mes",
+      8: "el año",
+      13: "la vida",
     };
-    return value2Explanation[value as 1 | 2 | 3 | 5 | 8];
+    return value2Explanation[value as 1 | 2 | 3 | 5 | 8 | 13];
   }
 
   const setLevel = (newLevel: number) => {

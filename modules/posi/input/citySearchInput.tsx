@@ -20,7 +20,7 @@ const CitySearchInput = () => {
   };
 
   // NOTE: `placeId` and `suggestion` are null when user hits Enter key with no suggestion item selected.
-  // Also for some reason, their .d.ts doesn't mention the suggestion.
+  // Also for some reason, their .d.ts doesn't mention the suggestion but their github does.
   const handleSelect = (
     selectedQueryResult: string,
     placeID?: string,
