@@ -6,7 +6,6 @@ import {
   Divider,
   CardHeader,
   CardContent,
-  Paper,
   Avatar,
   Icon,
 } from "@mui/material";

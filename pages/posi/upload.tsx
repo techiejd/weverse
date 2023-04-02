@@ -101,7 +101,7 @@ const PosiForm = () => {
             <Section label="Ahora sí, cuentemelo bien (opcional)">
               <AboutInput />
             </Section>
-            <Button variant="outlined" sx={{ mt: 3 }} type="submit">
+            <Button variant="contained" sx={{ mt: 3 }} type="submit">
               Publicar
             </Button>
           </Stack>

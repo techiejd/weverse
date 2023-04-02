@@ -1,4 +1,4 @@
-import { LinkProps, createTheme } from "@mui/material";
+import { LinkProps, Theme } from "@mui/material";
 import { ReactNode, Ref, forwardRef } from "react";
 import Link from "next/link";
 
@@ -18,16 +18,19 @@ const LinkBehavior = forwardRef(function LinkBehaviour(
 
 export const configuration = {
   components: {
-    MuiTab: {
+    MuiBottomNavigationAction: {
       styleOverrides: {
         root: {
-          "&.Mui-selected": {
-            color: "#FFFFFF",
-          },
+          "&.MuiSelected": ({ theme }: { theme: Theme }) => ({
+            backgroundColor: theme.palette.background.default,
+          }),
+        },
+        label: {
+          fontWeight: "bold",
         },
       },
     },
-    MuiTabs: {
+    MuiAutocompletePaper: {
       styleOverrides: {
         indicator: {
           backgroundColor: "#FFFFFF",
@@ -59,6 +62,42 @@ export const configuration = {
     },
     h3: {
       fontSize: "1.5rem",
+    },
+  },
+  palette: {
+    background: {
+      default: "#1d3749",
+      paper: "#4f171d",
+    },
+    primary: {
+      main: "#FBE39E",
+      light: "#FBE7AC",
+      dark: "#FADF90",
+      contrastText: "black",
+    },
+    secondary: {
+      main: "#D4E7DE",
+      light: "#DAEBE3",
+      dark: "#CEE4D9",
+    },
+  },
+};
+const lightMode = {
+  palette: {
+    background: {
+      default: "#B6D0E2",
+      paper: "#eec4c9",
+    },
+    primary: {
+      main: "#FBE39E",
+      light: "#FBE7AC",
+      dark: "#FADF90",
+      contrastText: "black",
+    },
+    secondary: {
+      main: "#D4E7DE",
+      light: "#DAEBE3",
+      dark: "#CEE4D9",
     },
   },
 };

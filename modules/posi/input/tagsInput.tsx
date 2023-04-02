@@ -83,7 +83,6 @@ const SearchTagsInput = ({
       selectOnFocus
       clearOnBlur
       handleHomeEndKeys
-      id="free-solo-with-text-demo"
       options={hardcodedTags}
       renderOption={(props, option) => <li {...props}>{option}</li>}
       sx={{ width: 300 }}
