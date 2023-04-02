@@ -12,22 +12,18 @@ import {
 import ImpactPage, { PageTypes } from "../../modules/posi/impactPage";
 import CandidateMedia from "../../modules/vote/votingExperience/candidate/candidateMedia";
 import {
-  InvestedTimeLevel,
-  levelToColors,
   posiFormData,
 } from "../../modules/posi/input/context";
 import {
-  Assessment,
-  EmojiPeople,
   Info,
   PlayCircle,
   SentimentVerySatisfied,
   Summarize,
-  Timer,
 } from "@mui/icons-material";
 import { PillBoxMessage } from "../../common/components/pillBoxMessage";
 import moment from "moment";
 import Support from "../../modules/posi/impactPage/about/Support";
+import QuickStats from "../../modules/posi/impactPage/QuickStats";
 
 const posiData = posiFormData.parse({
   summary: "We taught about AI to and inspired with AI 150 kids.",
@@ -65,45 +61,6 @@ const posiData = posiFormData.parse({
     finance: "https://paypal.me/jdavid10001",
   },
 });
-
-const QuickStats = ({
-  impactedPeopleAmount,
-  investedTimeLevel,
-}: {
-  impactedPeopleAmount: number;
-  investedTimeLevel: InvestedTimeLevel;
-}) => {
-  //TODO(techiejd): Look into splitting this into different stats.
-  return (
-    <Stack>
-      <Stack direction={"row"} spacing={2}>
-        <Icon>
-          <EmojiPeople />
-        </Icon>
-        <Typography>{impactedPeopleAmount}</Typography>
-      </Stack>
-      <Stack direction={"row"}>
-        <Icon sx={{ mr: 2 }}>
-          <Timer />
-        </Icon>
-        <Box
-          sx={{
-            backgroundColor: levelToColors[investedTimeLevel],
-            width: investedTimeLevel / InvestedTimeLevel.year,
-          }}
-        >
-          <Typography>{InvestedTimeLevel[investedTimeLevel]}</Typography>
-        </Box>
-        <Box
-          sx={{
-            backgroundColor: "grey",
-            width: 1 - investedTimeLevel / InvestedTimeLevel.year,
-          }}
-        ></Box>
-      </Stack>
-    </Stack>
-  );
-};
 
 const AboutContent = () => {
   const dateFormat = "DD/MM/YY";

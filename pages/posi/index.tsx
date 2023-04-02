@@ -5,7 +5,9 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Divider,
   Fab,
+  Rating,
   Stack,
   Typography,
 } from "@mui/material";
@@ -14,6 +16,7 @@ import { useEffect, useState } from "react";
 import { posiFormData, PosiFormData } from "../../modules/posi/input/context";
 import { getDocs, collection } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
+import QuickStats from "../../modules/posi/impactPage/QuickStats";
 
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
   return (
@@ -27,10 +30,28 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
         loop
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography
+          gutterBottom
+          variant="h5"
+          sx={{ textAlign: "justify", textJustify: "inter-word", fontSize: 20 }}
+        >
           {posiData.summary}
         </Typography>
-        
+        <Stack
+          direction={"row"}
+          spacing={2}
+          divider={<Divider orientation="vertical" flexItem />}
+        >
+          <Stack direction={"row"}>
+            <Typography ml={1}>🤳</Typography>
+            <Typography ml={2}>0</Typography>
+          </Stack>
+          <Rating value={null} readOnly />
+        </Stack>
+        <QuickStats
+          impactedPeopleAmount={posiData.impactedPeople.amount}
+          investedTimeLevel={posiData.investedTimeLevel}
+        />
       </CardContent>
       <CardActions>
         <Button size="small" variant="contained">
@@ -80,7 +101,7 @@ const Index = () => {
   return (
     <Box>
       <Stack
-        sx={{ alignItems: "center", justifyContent: "center", mt: 1, mb: 1 }}
+        sx={{ alignItems: "center", justifyContent: "center", m: 1 }}
         spacing={1}
       >
         {impacts.map((impact, i) => (
