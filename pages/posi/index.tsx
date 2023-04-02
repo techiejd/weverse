@@ -99,11 +99,14 @@ const Index = () => {
   }, [appState, setImpacts]);
 
   return (
-    <Box>
+    <Box mb={9}>
       <Stack
         sx={{ alignItems: "center", justifyContent: "center", m: 1 }}
         spacing={1}
       >
+        <Typography variant="h1" justifyContent={"center"}>
+          📺 <b>We</b>Screen
+        </Typography>
         {impacts.map((impact, i) => (
           <ImpactCard key={i} posiData={impact} />
         ))}
@@ -112,7 +115,7 @@ const Index = () => {
         variant="extended"
         sx={{
           position: "fixed",
-          bottom: 24,
+          bottom: 16,
           right: 16,
         }}
         href="/posi/upload"
