@@ -112,7 +112,7 @@ const Index = () => {
         variant="extended"
         sx={{
           position: "fixed",
-          bottom: 64,
+          bottom: 24,
           right: 16,
         }}
         href="/posi/upload"
