@@ -5,13 +5,118 @@ import {
   Popover,
   InputAdornment,
   IconButton,
+  Slider,
+  Typography,
 } from "@mui/material";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import moment from "moment";
 import { DateRange, RangeKeyDict } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { useFormData } from "./context";
+import { InvestedTimeLevel, investedTimeLevel, useFormData } from "./context";
+
+const InvestedTimeLevelInput = () => {
+  const [formData, setFormData] = useFormData();
+  const defaultLevel = InvestedTimeLevel.hour;
+  const marks = [
+    {
+      value: 1,
+      label: "Poquíto",
+    },
+    {
+      value: 2,
+    },
+    {
+      value: 3,
+    },
+    {
+      value: 5,
+    },
+    {
+      value: 8,
+    },
+    {
+      value: 13,
+    },
+    {
+      value: 21,
+    },
+    {
+      value: 34,
+      label: "Grande",
+    },
+  ];
+
+  function valueLabelFormat(value: number) {
+    const value2Explanation = {
+      1: "una hora",
+      2: "un día",
+      3: "una semana",
+      5: "dos semanas",
+      8: "un mes",
+      13: "tres meses",
+      21: "seis meses",
+      34: "un año",
+    };
+    return value2Explanation[value as 1 | 2 | 3 | 5 | 8 | 13 | 21 | 34];
+  }
+
+  useEffect(() => {
+    if (setFormData) {
+      console.log("Ayooo");
+      setFormData((fD) => {
+        console.log(fD);
+        return {
+          ...fD,
+          investedTimeLevel: fD.investedTimeLevel
+            ? fD.investedTimeLevel
+            : defaultLevel,
+        };
+      });
+    }
+  }, [defaultLevel, setFormData]); // For when setFormData comes alive
+
+  const setLevel = (newLevel: number) => {
+    if (setFormData) {
+      // For when setFormData comes alive
+      setFormData((fD) => ({
+        ...fD,
+        // TODO(techiejd): Get this invested time level question out of impacted people. Maybe in tell it to me quick?
+        investedTimeLevel: investedTimeLevel.parse(newLevel),
+      }));
+    }
+  };
+
+  return (
+    <Box>
+      <Typography variant="h3">
+        Qué cantidad de tiempo le invertiste al impacto:{" "}
+      </Typography>
+      <Box alignSelf={"center"} ml={2} mr={2}>
+        <Slider
+          sx={{
+            mt: 3,
+          }}
+          defaultValue={defaultLevel}
+          valueLabelFormat={valueLabelFormat}
+          valueLabelDisplay="auto"
+          step={null}
+          marks={marks}
+          min={1}
+          max={InvestedTimeLevel.year}
+          value={
+            formData.investedTimeLevel
+              ? formData.investedTimeLevel
+              : InvestedTimeLevel.hour
+          }
+          onChange={(e, val) => {
+            setLevel(val as number);
+          }}
+        />
+      </Box>
+    </Box>
+  );
+};
 
 const DateRangeInput = () => {
   const [formData, setFormData] = useFormData();
@@ -118,6 +223,7 @@ const DateRangeInput = () => {
 
   return (
     <Box>
+      <Typography variant="h3">¿De cúando a cúando?: </Typography>
       <TextField
         label={`${dateFormat} - ${dateFormat}`}
         fullWidth={true}
@@ -176,4 +282,13 @@ const DateRangeInput = () => {
   );
 };
 
-export default DateRangeInput;
+const TimeInfoInput = () => {
+  return (
+    <Box>
+      <InvestedTimeLevelInput />
+      <DateRangeInput />
+    </Box>
+  );
+};
+
+export default TimeInfoInput;

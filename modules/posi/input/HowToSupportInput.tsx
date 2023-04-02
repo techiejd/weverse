@@ -31,7 +31,7 @@ const HowToSupportInput = () => {
   return (
     <Stack spacing={2}>
       <Box>
-        <Typography>Cómo ayudarte financialmente:</Typography>
+        <Typography variant="h3">Cómo ayudarte financialmente:</Typography>
         <TextField
           required
           fullWidth
@@ -48,7 +48,9 @@ const HowToSupportInput = () => {
         />
       </Box>
       <Box>
-        <Typography>Cómo contactarte para ayudarte en otras formas:</Typography>
+        <Typography variant="h3">
+          Cómo contactarte para ayudarte en otras formas:
+        </Typography>
         <TextField
           required
           fullWidth

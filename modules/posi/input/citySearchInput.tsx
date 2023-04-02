@@ -90,10 +90,11 @@ const CitySearchInput = () => {
             />
             <List sx={{ width: "100%" }}>
               {loading && <Typography>Loading...</Typography>}
-              {suggestions.map((suggestion) => {
+              {suggestions.map((suggestion, i) => {
                 const { key, ...others } = getSuggestionItemProps(suggestion);
+                // Use placeId for the key and ignore the one by getSuggestionItemPropsy;
                 return (
-                  <ListItem key={key} {...others}>
+                  <ListItem key={suggestion.placeId} {...others}>
                     <ListItemButton selected={suggestion.active}>
                       <ListItemText
                         primary={suggestion.formattedSuggestion.mainText}

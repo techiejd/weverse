@@ -1,13 +1,8 @@
-import { Box, Typography, TextField, Slider, Stack } from "@mui/material";
-import { useState, ChangeEvent, useEffect } from "react";
-import {
-  ImpactQualifierLevel,
-  impactQualifierLevel,
-  useFormData,
-} from "./context";
+import { Typography, TextField, Stack } from "@mui/material";
+import { ChangeEvent } from "react";
+import { useFormData } from "./context";
 
 const ImpactedPersonsInput = () => {
-  const defaultLevel = ImpactQualifierLevel.hour;
   const [formData, setFormData] = useFormData();
   const processNumImpacted = (e: ChangeEvent<HTMLInputElement>) => {
     const result = e.target.value.replace(/\D/g, "");
@@ -22,67 +17,6 @@ const ImpactedPersonsInput = () => {
       }));
     }
   };
-
-  const marks = [
-    {
-      value: 1,
-      label: "Poquíto",
-    },
-    {
-      value: 2,
-    },
-    {
-      value: 3,
-    },
-    {
-      value: 5,
-    },
-    {
-      value: 8,
-    },
-    {
-      value: 13,
-      label: "Grande",
-    },
-  ];
-
-  function valueLabelFormat(value: number) {
-    const value2Explanation = {
-      1: "la hora",
-      2: "el día",
-      3: "la semana",
-      5: "el mes",
-      8: "el año",
-      13: "la vida",
-    };
-    return value2Explanation[value as 1 | 2 | 3 | 5 | 8 | 13];
-  }
-
-  const setLevel = (newLevel: number) => {
-    if (setFormData) {
-      // For when setFormData comes alive
-      setFormData((fD) => ({
-        ...fD,
-        impactedPeople: {
-          ...fD.impactedPeople,
-          level: impactQualifierLevel.parse(newLevel),
-        },
-      }));
-    }
-  };
-  useEffect(() => {
-    if (setFormData) {
-      setFormData((fD) => ({
-        ...fD,
-        impactedPeople: {
-          ...fD.impactedPeople,
-          level: fD.impactedPeople?.level
-            ? fD.impactedPeople.level
-            : defaultLevel,
-        },
-      }));
-    }
-  }, [defaultLevel, setFormData]); // For when setFormData comes alive
 
   const setHowToId = (input: string) => {
     if (setFormData) {
@@ -109,30 +43,6 @@ const ImpactedPersonsInput = () => {
           formData.impactedPeople?.amount ? formData.impactedPeople.amount : ""
         }
       />
-      <Typography variant="h3">¿Qué nivel de impacto les tuviste?</Typography>
-      <Box sx={{ width: 300 }} alignSelf={"center"}>
-        <Typography>Yo le cambie para lo mejor a estas personas: </Typography>
-        <Slider
-          sx={{
-            mt: 3,
-          }}
-          defaultValue={defaultLevel}
-          valueLabelFormat={valueLabelFormat}
-          valueLabelDisplay="auto"
-          step={null}
-          marks={marks}
-          min={1}
-          max={8}
-          value={
-            formData.impactedPeople?.level
-              ? formData.impactedPeople.level
-              : ImpactQualifierLevel.hour
-          }
-          onChange={(e, val) => {
-            setLevel(val as number);
-          }}
-        />
-      </Box>
       <Typography variant="h3">
         En una frase ¿cómo identificar a esta gente? (125 caracteres)
       </Typography>

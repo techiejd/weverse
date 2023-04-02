@@ -2,7 +2,6 @@ import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
 import { ReactNode, useState } from "react";
 import { CitySearchInput, TagsInput } from "../../modules/posi/input";
-import DateRangeInput from "../../modules/posi/input/dateRangeInput";
 import ImpactedPersonsInput from "../../modules/posi/input/impactedPersonsInput";
 import MakerInput from "../../modules/posi/input/makerInput";
 import {
@@ -16,6 +15,7 @@ import SummaryInput from "../../modules/posi/input/SummaryInput";
 import HowToSupportInput from "../../modules/posi/input/HowToSupportInput";
 import AboutInput from "../../modules/posi/input/aboutInput";
 import { useAppState } from "../../common/context/appState";
+import TimeInfoInput from "../../modules/posi/input/timeInfoInput";
 
 const Section = ({
   label,
@@ -39,6 +39,7 @@ const PosiForm = () => {
     <form
       onSubmit={async (e) => {
         e.preventDefault();
+        console.log(formData);
         const usersPosiFormData = posiFormData.parse(formData);
         if (appState) {
           await addDoc(
@@ -89,8 +90,8 @@ const PosiForm = () => {
             <Section label="¿Donde fue?">
               <CitySearchInput />
             </Section>
-            <Section label="¿De cúando a cúando?">
-              <DateRangeInput />
+            <Section label="Cuenteme sobre el esfuerzo">
+              <TimeInfoInput />
             </Section>
             <Section label="Mostramelo pues">
               <ImpactVideoInput />

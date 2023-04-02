@@ -1,23 +1,27 @@
 import { createContext, useContext, Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 
-export enum ImpactQualifierLevel {
+export enum InvestedTimeLevel {
   hour = 1,
   day = 2,
   week = 3,
-  month = 5,
-  year = 8,
-  life = 13,
+  twoWeeks = 5,
+  month = 8,
+  threeMonths = 13,
+  halfYear = 21,
+  year = 34,
 }
 export const levelToColors = {
-  [ImpactQualifierLevel.hour]: "indigo",
-  [ImpactQualifierLevel.day]: "blue",
-  [ImpactQualifierLevel.week]: "green",
-  [ImpactQualifierLevel.month]: "yellow",
-  [ImpactQualifierLevel.year]: "orange",
-  [ImpactQualifierLevel.life]: "red",
+  [InvestedTimeLevel.hour]: "violet",
+  [InvestedTimeLevel.day]: "indigo",
+  [InvestedTimeLevel.week]: "blue",
+  [InvestedTimeLevel.twoWeeks]: "green",
+  [InvestedTimeLevel.month]: "yellow",
+  [InvestedTimeLevel.threeMonths]: "orange",
+  [InvestedTimeLevel.halfYear]: "red",
+  [InvestedTimeLevel.year]: "white",
 };
-export const impactQualifierLevel = z.nativeEnum(ImpactQualifierLevel);
+export const investedTimeLevel = z.nativeEnum(InvestedTimeLevel);
 
 // TODO(techiejd): Check all urls are with our hosting.
 const formUrl = z.string().url();
@@ -83,9 +87,9 @@ export const posiFormData = z.object({
   summary: z.string().min(5).max(100),
   impactedPeople: z.object({
     amount: z.number().int().nonnegative(),
-    level: impactQualifierLevel,
     howToIdentify: z.string().min(5).max(125),
   }),
+  investedTimeLevel: investedTimeLevel,
   tags: z.string().array(),
   location: location,
   dates: z.object({ start: z.date(), end: z.date() }),
