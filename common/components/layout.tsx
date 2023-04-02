@@ -10,18 +10,10 @@ import { withAuthUser } from "next-firebase-auth";
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
-  const theme = useMemo(
-    () =>
-      createTheme(
-        {
-          palette: {
-            mode: prefersDarkMode ? "dark" : "light",
-          },
-        },
-        configuration
-      ),
-    [prefersDarkMode]
-  );
+  const theme = useMemo(() => {
+    console.log(configuration(prefersDarkMode));
+    return createTheme(configuration(prefersDarkMode));
+  }, [prefersDarkMode]);
 
   return (
     <ThemeProvider theme={theme}>

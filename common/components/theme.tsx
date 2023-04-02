@@ -1,4 +1,4 @@
-import { LinkProps, Theme } from "@mui/material";
+import { LinkProps, PaletteMode, Theme } from "@mui/material";
 import { ReactNode, Ref, forwardRef } from "react";
 import Link from "next/link";
 
@@ -8,23 +8,54 @@ const LinkBehavior = forwardRef(function LinkBehaviour(
 ) {
   const { href, children, ...other } = props;
   return (
-    <Link href={href} passHref>
-      <a ref={ref} {...other}>
-        {children}
-      </a>
+    <Link href={href} ref={ref} {...other}>
+      {children}
     </Link>
   );
 });
 
-export const configuration = {
+const darkPalette = {
+  mode: "dark" as PaletteMode,
+  background: {
+    default: "#1d3749",
+    paper: "#4f171d",
+  },
+  primary: {
+    main: "#624a04",
+    light: "#7a5d05",
+    dark: "#493803",
+    contrastText: "white",
+  },
+  secondary: {
+    main: "#254134",
+    light: "#2e5241",
+    dark: "#1c3127",
+  },
+};
+
+const lightPalette = {
+  mode: "light" as PaletteMode,
+  background: {
+    default: "#B6D0E2",
+    paper: "#eec4c9",
+  },
+  primary: {
+    main: "#FBE39E",
+    light: "#FBE7AC",
+    dark: "#FADF90",
+    contrastText: "black",
+  },
+  secondary: {
+    main: "#D4E7DE",
+    light: "#DAEBE3",
+    dark: "#CEE4D9",
+  },
+};
+
+const baseConfiguration = {
   components: {
     MuiBottomNavigationAction: {
       styleOverrides: {
-        root: {
-          "&.MuiSelected": ({ theme }: { theme: Theme }) => ({
-            backgroundColor: theme.palette.background.default,
-          }),
-        },
         label: {
           fontWeight: "bold",
         },
@@ -64,40 +95,45 @@ export const configuration = {
       fontSize: "1.5rem",
     },
   },
-  palette: {
-    background: {
-      default: "#1d3749",
-      paper: "#4f171d",
-    },
-    primary: {
-      main: "#FBE39E",
-      light: "#FBE7AC",
-      dark: "#FADF90",
-      contrastText: "black",
-    },
-    secondary: {
-      main: "#D4E7DE",
-      light: "#DAEBE3",
-      dark: "#CEE4D9",
+};
+
+const lightConfiguration = {
+  ...baseConfiguration,
+  components: {
+    ...baseConfiguration.components,
+    MuiBottomNavigationAction: {
+      ...baseConfiguration.components.MuiBottomNavigationAction,
+      styleOverrides: {
+        ...baseConfiguration.components.MuiBottomNavigationAction
+          .styleOverrides,
+        "&.Mui-selected": {
+          backgroundColor: lightPalette.background.default,
+        },
+      },
     },
   },
+  palette: lightPalette,
 };
-const lightMode = {
-  palette: {
-    background: {
-      default: "#B6D0E2",
-      paper: "#eec4c9",
-    },
-    primary: {
-      main: "#FBE39E",
-      light: "#FBE7AC",
-      dark: "#FADF90",
-      contrastText: "black",
-    },
-    secondary: {
-      main: "#D4E7DE",
-      light: "#DAEBE3",
-      dark: "#CEE4D9",
+
+const darkConfiguration = {
+  ...baseConfiguration,
+  components: {
+    ...baseConfiguration.components,
+    MuiBottomNavigationAction: {
+      ...baseConfiguration.components.MuiBottomNavigationAction,
+      styleOverrides: {
+        ...baseConfiguration.components.MuiBottomNavigationAction
+          .styleOverrides,
+        root: {
+          "&.Mui-selected": {
+            backgroundColor: darkPalette.background.default,
+          },
+        },
+      },
     },
   },
+  palette: darkPalette,
 };
+
+export const configuration = (prefersDarkMode: boolean) =>
+  prefersDarkMode ? darkConfiguration : lightConfiguration;
