@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Card,
+  CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
@@ -22,41 +23,53 @@ import { getDocs, collection } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import QuickStats from "../../modules/posi/impactPage/QuickStats";
 
-const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
+const ImpactCard = ({
+  posiData,
+  id,
+}: {
+  posiData: PosiFormData;
+  id: string;
+}) => {
   return (
     <Card sx={{ width: "100%" }}>
-      <CardMedia
-        component="video"
-        sx={{ height: 180 }}
-        image={posiData.video}
-        autoPlay
-        muted
-        loop
-      />
-      <CardContent>
-        <Typography
-          gutterBottom
-          variant="h5"
-          sx={{ textAlign: "justify", textJustify: "inter-word", fontSize: 18 }}
-        >
-          {posiData.summary}
-        </Typography>
-        <Stack
-          direction={"row"}
-          spacing={2}
-          divider={<Divider orientation="vertical" flexItem />}
-        >
-          <Stack direction={"row"}>
-            <Typography ml={1}>🤳</Typography>
-            <Typography ml={2}>0</Typography>
-          </Stack>
-          <Rating value={null} readOnly />
-        </Stack>
-        <QuickStats
-          impactedPeopleAmount={posiData.impactedPeople.amount}
-          investedTimeLevel={posiData.investedTimeLevel}
+      <CardActionArea href={`/posi/${id}/about`}>
+        <CardMedia
+          component="video"
+          sx={{ height: 180 }}
+          image={posiData.video}
+          autoPlay
+          muted
+          loop
         />
-      </CardContent>
+        <CardContent>
+          <Typography
+            gutterBottom
+            variant="h5"
+            sx={{
+              textAlign: "justify",
+              textJustify: "inter-word",
+              fontSize: 18,
+            }}
+          >
+            {posiData.summary}
+          </Typography>
+          <Stack
+            direction={"row"}
+            spacing={2}
+            divider={<Divider orientation="vertical" flexItem />}
+          >
+            <Stack direction={"row"}>
+              <Typography ml={1}>🤳</Typography>
+              <Typography ml={2}>0</Typography>
+            </Stack>
+            <Rating value={null} readOnly />
+          </Stack>
+          <QuickStats
+            impactedPeopleAmount={posiData.impactedPeople.amount}
+            investedTimeLevel={posiData.investedTimeLevel}
+          />
+        </CardContent>
+      </CardActionArea>
       <CardActions>
         <Button size="small" variant="contained">
           Learn More
@@ -70,7 +83,9 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
 const Index = () => {
   //TODO(techiejd): Decouple the form data input from the impacts db output.
   //For example, maker info can go into a different collection.
-  const [impacts, setImpacts] = useState<PosiFormData[]>([]);
+  const [impactsAndIds, setImpactsAndIds] = useState<[string, PosiFormData][]>(
+    []
+  );
   const appState = useAppState();
   useEffect(() => {
     if (appState) {
@@ -78,10 +93,10 @@ const Index = () => {
         const querySnapshot = await getDocs(
           collection(appState.firestore, "impacts")
         );
-        setImpacts(
+        setImpactsAndIds(
           querySnapshot.docs.map((docSnapshot) => {
             const data = docSnapshot.data();
-            return castFirestoreDocToPosiFormData.parse(data);
+            return [docSnapshot.id, castFirestoreDocToPosiFormData.parse(data)];
           })
         );
         querySnapshot.forEach((doc) => {
@@ -91,7 +106,7 @@ const Index = () => {
       };
       getImpacts();
     }
-  }, [appState, setImpacts]);
+  }, [appState, setImpactsAndIds]);
 
   return (
     <Box mb={9}>
@@ -102,8 +117,8 @@ const Index = () => {
         <Typography variant="h1" justifyContent={"center"}>
           📺 <b>We</b>Screen
         </Typography>
-        {impacts.map((impact, i) => (
-          <ImpactCard key={i} posiData={impact} />
+        {impactsAndIds.map(([id, impact], i) => (
+          <ImpactCard key={i} posiData={impact} id={id} />
         ))}
       </Stack>
       <Fab
