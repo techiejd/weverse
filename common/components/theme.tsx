@@ -66,13 +66,6 @@ const baseConfiguration = {
         },
       },
     },
-    MuiAutocompletePaper: {
-      styleOverrides: {
-        indicator: {
-          backgroundColor: "#FFFFFF",
-        },
-      },
-    },
     MuiLink: {
       defaultProps: {
         component: LinkBehavior,
@@ -104,39 +97,11 @@ const baseConfiguration = {
 
 const lightConfiguration = {
   ...baseConfiguration,
-  components: {
-    ...baseConfiguration.components,
-    MuiBottomNavigationAction: {
-      ...baseConfiguration.components.MuiBottomNavigationAction,
-      styleOverrides: {
-        ...baseConfiguration.components.MuiBottomNavigationAction
-          .styleOverrides,
-        "&.Mui-selected": {
-          backgroundColor: lightPalette.background.default,
-        },
-      },
-    },
-  },
   palette: lightPalette,
 };
 
 const darkConfiguration = {
   ...baseConfiguration,
-  components: {
-    ...baseConfiguration.components,
-    MuiBottomNavigationAction: {
-      ...baseConfiguration.components.MuiBottomNavigationAction,
-      styleOverrides: {
-        ...baseConfiguration.components.MuiBottomNavigationAction
-          .styleOverrides,
-        root: {
-          "&.Mui-selected": {
-            backgroundColor: darkPalette.background.default,
-          },
-        },
-      },
-    },
-  },
   palette: darkPalette,
 };
 
