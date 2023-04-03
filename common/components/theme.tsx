@@ -6,9 +6,9 @@ const LinkBehavior = forwardRef(function LinkBehaviour(
   props: { href: URL; children: ReactNode },
   ref: Ref<HTMLAnchorElement> | undefined
 ) {
-  const { href, children, ...other } = props;
+  const { children, ...other } = props;
   return (
-    <Link href={href} ref={ref} {...other}>
+    <Link ref={ref} {...other}>
       {children}
     </Link>
   );

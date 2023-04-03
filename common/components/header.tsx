@@ -1,8 +1,65 @@
-import { AppBar, IconButton, Link, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Link,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import * as HeaderContext from "../context/header";
 import { useAuthUser } from "next-firebase-auth";
 import { useRouter } from "next/router";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useState } from "react";
+import { Home, Login, PlusOne } from "@mui/icons-material";
+
+export const MenuComponent = () => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const menuOpen = Boolean(anchorEl);
+  return (
+    <Box>
+      <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
+        <MenuIcon />
+      </IconButton>
+      <Menu
+        anchorEl={anchorEl}
+        open={menuOpen}
+        onClose={(e) => setAnchorEl(null)}
+      >
+        <MenuItem href="/">
+          <ListItemIcon>
+            <Home />
+          </ListItemIcon>
+          <ListItemText>Inicio </ListItemText>
+        </MenuItem>
+        <MenuItem href="/posi">
+          <ListItemIcon>
+            <Typography>📺</Typography>
+          </ListItemIcon>
+          <ListItemText>
+            <b>We</b>Screen
+          </ListItemText>
+        </MenuItem>
+        <MenuItem href="/posi/upload">
+          <ListItemIcon>
+            <PlusOne />
+          </ListItemIcon>
+          <ListItemText>Agrega tu impacto!</ListItemText>
+        </MenuItem>
+        <MenuItem href="/auth">
+          <ListItemIcon>
+            <Login />
+          </ListItemIcon>
+          <ListItemText>Log In</ListItemText>
+        </MenuItem>
+      </Menu>
+    </Box>
+  );
+};
 
 export const Header = () => {
   const authUser = useAuthUser();
@@ -12,9 +69,7 @@ export const Header = () => {
   return (
     <AppBar position="static" sx={{ background: "palette.background.paper" }}>
       <Toolbar>
-        <IconButton>
-          <MenuIcon />
-        </IconButton>
+        <MenuComponent />
         <div style={{ flexGrow: 1 }}></div>
         <Typography fontSize={"16px"} noWrap>
           🪐<b>We</b>Verse

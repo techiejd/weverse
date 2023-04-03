@@ -13,7 +13,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
 import {
   castFirestoreDocToPosiFormData,
@@ -22,6 +21,7 @@ import {
 import { getDocs, collection } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import QuickStats from "../../modules/posi/impactPage/QuickStats";
+import { PlusOne } from "@mui/icons-material";
 
 const ImpactCard = ({
   posiData,
@@ -135,7 +135,7 @@ const Index = () => {
         href="/posi/upload"
         color="primary"
       >
-        <AddIcon sx={{ mr: 1 }} />
+        <PlusOne sx={{ mr: 1 }} />
         <Typography>Agrega tu impacto!</Typography>
       </Fab>
     </Box>
