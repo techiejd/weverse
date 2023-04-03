@@ -34,27 +34,31 @@ function EmojiNavigationAction(props: EmojiNavigationActionProps) {
   );
 }
 
-const NavigationFooter = (props: { value: number }) => {
+const NavigationFooter = (props: { value: number; id: string }) => {
   return (
     <Paper
       sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
       elevation={3}
     >
       <BottomNavigation showLabels value={props.value}>
-        <EmojiNavigationAction emoji={"ℹ️"} href="/posi/about" label="Sobre" />
+        <EmojiNavigationAction
+          emoji={"ℹ️"}
+          href={`/posi/${props.id}/about`}
+          label="Sobre"
+        />
         <EmojiNavigationAction
           emoji={"🤳"}
-          href="/posi/testimonials"
+          href={`/posi/${props.id}/testimonials`}
           label="Testimoniales"
         />
         <EmojiNavigationAction
           emoji={"👁️‍🗨️"}
-          href="/posi/evidence"
+          href={`/posi/${props.id}/evidence`}
           label="Evidencia"
         />
         <EmojiNavigationAction
           emoji={"💬"}
-          href="/posi/comments"
+          href={`/posi/${props.id}/comments`}
           label="Comentarios"
         />
       </BottomNavigation>
@@ -63,6 +67,7 @@ const NavigationFooter = (props: { value: number }) => {
 };
 
 const ImpactPage = (props: {
+  id: string;
   type: Types;
   path: string;
   description?: string;
@@ -77,7 +82,7 @@ const ImpactPage = (props: {
         title={props.title ? props.title : "OneWe - Proof of Social Impact"}
       >
         {props.children}
-        <NavigationFooter value={props.type} />
+        <NavigationFooter value={props.type} id={props.id} />
       </ImpactPageProvider>
     </Box>
   );

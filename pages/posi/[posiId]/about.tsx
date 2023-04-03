@@ -34,11 +34,12 @@ const About = () => {
       fetchAndSetPosiData();
     }
   }, [appState, setPosiData, posiId]);
-  return posiData ? (
+  return posiData && posiId ? (
     <ImpactPage
       type={PageTypes.about}
       path={router.asPath}
       description={`${posiData.summary}`}
+      id={String(posiId)}
     >
       <AboutContent {...posiData} />
     </ImpactPage>

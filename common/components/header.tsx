@@ -72,7 +72,9 @@ export const Header = () => {
         <MenuComponent />
         <div style={{ flexGrow: 1 }}></div>
         <Typography fontSize={"16px"} noWrap>
-          🪐<b>We</b>Verse
+          <Link sx={{ all: "unset" }} href="/">
+            🪐<b>We</b>Verse
+          </Link>
         </Typography>
         <div style={{ flexGrow: 1 }}></div>
         <Typography
