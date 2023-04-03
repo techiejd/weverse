@@ -24,10 +24,10 @@ import QuickStats from "../../modules/posi/impactPage/QuickStats";
 
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ width: "100%" }}>
       <CardMedia
         component="video"
-        sx={{ height: 140 }}
+        sx={{ height: 180 }}
         image={posiData.video}
         autoPlay
         muted
@@ -37,7 +37,7 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
         <Typography
           gutterBottom
           variant="h5"
-          sx={{ textAlign: "justify", textJustify: "inter-word", fontSize: 20 }}
+          sx={{ textAlign: "justify", textJustify: "inter-word", fontSize: 18 }}
         >
           {posiData.summary}
         </Typography>
