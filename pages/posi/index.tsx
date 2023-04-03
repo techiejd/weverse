@@ -13,7 +13,11 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
-import { posiFormData, PosiFormData } from "../../modules/posi/input/context";
+import {
+  castFirestoreDocToPosiFormData,
+  posiFormData,
+  PosiFormData,
+} from "../../modules/posi/input/context";
 import { getDocs, collection } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import QuickStats from "../../modules/posi/impactPage/QuickStats";
@@ -77,16 +81,7 @@ const Index = () => {
         setImpacts(
           querySnapshot.docs.map((docSnapshot) => {
             const data = docSnapshot.data();
-            console.log(data.dates);
-            const dataDecoded = {
-              ...data,
-              dates: {
-                start: new Date(data.dates.start.seconds * 1000),
-                end: new Date(data.dates.end.seconds * 1000),
-              },
-            };
-            console.log(dataDecoded.dates.start);
-            return posiFormData.parse(dataDecoded);
+            return castFirestoreDocToPosiFormData.parse(data);
           })
         );
         querySnapshot.forEach((doc) => {

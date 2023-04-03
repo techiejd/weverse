@@ -99,6 +99,18 @@ export const posiFormData = z.object({
   howToSupport: howToSupport,
 });
 
+// TODO(techiejd): Look into a better way of doing this maybe using firestore zod schema
+export const castFirestoreDocToPosiFormData = z.preprocess(
+  (val: any) => ({
+    ...val,
+    dates: {
+      start: new Date(val.dates.start.seconds * 1000),
+      end: new Date(val.dates.end.seconds * 1000),
+    },
+  }),
+  posiFormData
+);
+
 export type PosiFormData = z.infer<typeof posiFormData>;
 const partialPosiFormData = posiFormData.deepPartial();
 export type PartialPosiFormData = z.infer<typeof partialPosiFormData>;

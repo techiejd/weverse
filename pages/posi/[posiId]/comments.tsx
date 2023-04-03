@@ -1,5 +1,5 @@
-import ImpactPage, { PageTypes } from "../../modules/posi/impactPage";
-import UnderConstruction from "../../modules/posi/underConstruction";
+import ImpactPage, { PageTypes } from "../../../modules/posi/impactPage";
+import UnderConstruction from "../../../modules/posi/underConstruction";
 
 const Comments = () => {
   return (
