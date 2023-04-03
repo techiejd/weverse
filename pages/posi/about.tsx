@@ -1,29 +1,6 @@
-import {
-  Box,
-  Typography,
-  Stack,
-  Card,
-  Divider,
-  CardHeader,
-  CardContent,
-  Avatar,
-  Icon,
-} from "@mui/material";
 import ImpactPage, { PageTypes } from "../../modules/posi/impactPage";
-import CandidateMedia from "../../modules/vote/votingExperience/candidate/candidateMedia";
-import {
-  posiFormData,
-} from "../../modules/posi/input/context";
-import {
-  Info,
-  PlayCircle,
-  SentimentVerySatisfied,
-  Summarize,
-} from "@mui/icons-material";
-import { PillBoxMessage } from "../../common/components/pillBoxMessage";
-import moment from "moment";
-import Support from "../../modules/posi/impactPage/about/Support";
-import QuickStats from "../../modules/posi/impactPage/QuickStats";
+import { posiFormData } from "../../modules/posi/input/context";
+import AboutContent from "../../modules/posi/impactPage/about/AboutContent";
 
 const posiData = posiFormData.parse({
   summary: "We taught about AI to and inspired with AI 150 kids.",
@@ -62,126 +39,6 @@ const posiData = posiFormData.parse({
   },
 });
 
-const AboutContent = () => {
-  const dateFormat = "DD/MM/YY";
-  return (
-    <Box>
-      <Box sx={{ boxShadow: 1 }} padding={1}>
-        <Typography
-          variant="h1"
-          fontSize={35}
-          sx={{ textAlign: "justify", textJustify: "inter-word" }}
-        >
-          {posiData.summary}
-        </Typography>{" "}
-      </Box>
-      <Stack divider={<Divider flexItem />} spacing={1} m={1.5}>
-        <Card>
-          <CardHeader
-            avatar={
-              <Icon>
-                <PlayCircle />
-              </Icon>
-            }
-            title={"Video"}
-          />
-          <Box
-            sx={{
-              height: "50vh",
-              width: "100%",
-            }}
-          >
-            <CandidateMedia
-              video={{
-                threshold: 0.9,
-                muted: false,
-                controls: true,
-                controlsList:
-                  "play volume fullscreen nodownload noplaybackrate notimeline",
-                disablePictureInPicture: true,
-                src: posiData.video,
-              }}
-            />
-          </Box>
-        </Card>
-        <Card>
-          <CardHeader
-            avatar={
-              <Icon>
-                <Info />
-              </Icon>
-            }
-            title={"Info Rapída"}
-          />
-          <CardContent>
-            <Stack spacing={2}>
-              <Stack
-                direction={"row"}
-                spacing={2}
-                divider={<Divider orientation="vertical" flexItem />}
-              >
-                <Stack>
-                  <Typography variant="h3">
-                    {posiData.location.structuredFormatting.mainText}
-                  </Typography>
-                  <Typography fontSize={10}>
-                    {posiData.location.structuredFormatting.secondaryText}
-                  </Typography>
-                </Stack>
-                <Typography variant="h3">
-                  {moment(posiData.dates.start).format(dateFormat)} -{" "}
-                  {moment(posiData.dates.end).format(dateFormat)}
-                </Typography>
-              </Stack>
-              <QuickStats
-                impactedPeopleAmount={posiData.impactedPeople.amount}
-                investedTimeLevel={posiData.investedTimeLevel}
-              />
-              <Box alignItems={"normal"} width={"100%"} display={"flex"}>
-                {posiData.tags.map((tag) => (
-                  <PillBoxMessage key={tag} sx={{ m: 1 }}>
-                    #{tag}
-                  </PillBoxMessage>
-                ))}
-              </Box>
-            </Stack>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader
-            avatar={
-              <Icon>
-                <SentimentVerySatisfied />
-              </Icon>
-            }
-            title={"Maker"}
-          />
-          <CardContent>
-            <Stack direction={"row"} alignItems={"center"} spacing={2}>
-              <Avatar src={posiData.maker.pic} />
-              <Typography>{posiData.maker.name}</Typography>
-            </Stack>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader
-            avatar={
-              <Icon>
-                <Summarize />
-              </Icon>
-            }
-            title={"Integro"}
-          />
-          <CardContent>
-            <Typography>{posiData.about}</Typography>
-          </CardContent>
-        </Card>
-      </Stack>
-      <Support howToSupport={posiData.howToSupport} />
-    </Box>
-  );
-};
-
 const About = () => {
   return (
     <ImpactPage
@@ -189,7 +46,7 @@ const About = () => {
       path={"localhost"}
       description={`${posiData.summary}`}
     >
-      <AboutContent />
+      <AboutContent {...posiData} />
     </ImpactPage>
   );
 };
