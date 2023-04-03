@@ -6,6 +6,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  CircularProgress,
   Divider,
   Fab,
   Rating,
@@ -16,7 +17,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
 import {
   castFirestoreDocToPosiFormData,
-  posiFormData,
   PosiFormData,
 } from "../../modules/posi/input/context";
 import { getDocs, collection } from "firebase/firestore";
@@ -117,9 +117,13 @@ const Index = () => {
         <Typography variant="h1" justifyContent={"center"}>
           📺 <b>We</b>Screen
         </Typography>
-        {impactsAndIds.map(([id, impact], i) => (
-          <ImpactCard key={i} posiData={impact} id={id} />
-        ))}
+        {impactsAndIds.length == 0 ? (
+          <CircularProgress />
+        ) : (
+          impactsAndIds.map(([id, impact], i) => (
+            <ImpactCard key={i} posiData={impact} id={id} />
+          ))
+        )}
       </Stack>
       <Fab
         variant="extended"
