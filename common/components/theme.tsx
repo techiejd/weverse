@@ -50,6 +50,11 @@ const lightPalette = {
     light: "#DAEBE3",
     dark: "#CEE4D9",
   },
+  info: {
+    main: "#624a04",
+    light: "#7a5d05",
+    dark: "#493803",
+  },
 };
 
 const baseConfiguration = {

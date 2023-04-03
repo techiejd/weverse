@@ -1,7 +1,6 @@
 import { Box, CssBaseline, useMediaQuery } from "@mui/material";
 import { FC, ReactNode, useMemo } from "react";
 import AppStateProvider from "../context/appState";
-import HeaderStateProvider from "../context/header";
 import { Header } from "./header";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { configuration } from "./theme";
@@ -19,12 +18,10 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
     <ThemeProvider theme={theme}>
       <CssBaseline>
         <AppStateProvider>
-          <HeaderStateProvider>
-            <Header />
-            <main>
-              <Box>{children}</Box>
-            </main>
-          </HeaderStateProvider>
+          <Header />
+          <main>
+            <Box>{children}</Box>
+          </main>
         </AppStateProvider>
       </CssBaseline>
     </ThemeProvider>
