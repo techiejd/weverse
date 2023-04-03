@@ -1,15 +1,15 @@
-import { Box, Link, Typography } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 
 const VotingPortal = () => {
   return (
-    <Box>
-      <Typography>
-        Hey! Sign in and register to participate in the OneWe Awards!
-      </Typography>
-      <Typography>
-        Or take a <Link href="/vote">sneek-peak</Link>.
-      </Typography>
-    </Box>
+    <Stack m={2} spacing={2}>
+      <Button href="/posi" variant="contained">
+        Ver todos los impactos
+      </Button>
+      <Button href="/posi/upload" variant="contained">
+        Sube tu impacto
+      </Button>
+    </Stack>
   );
 };
 

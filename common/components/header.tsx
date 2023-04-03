@@ -67,7 +67,7 @@ export const Header = () => {
   // TODO(techiejd): look into removing header context and modularizing the header.
   const headerStateContext = HeaderContext.useHeaderState();
   return (
-    <AppBar position="static" sx={{ background: "palette.background.paper" }}>
+    <AppBar position="static" color="secondary">
       <Toolbar>
         <MenuComponent />
         <div style={{ flexGrow: 1 }}></div>
