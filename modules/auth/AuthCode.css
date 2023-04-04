@@ -1,0 +1,22 @@
+.authCodeInput {
+  width: 30px;
+  height: 45px;
+  padding: 0;
+  font-size: 24px;
+  text-align: center;
+  margin-right: 6px;
+  text-transform: uppercase;
+  color: #494949;
+  font-family: SF Pro Text, SF Pro Icons, Helvetica Neue, Helvetica, Arial,
+    sans-serif;
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  background: #fff;
+  background-clip: padding-box;
+}
+
+.authCodeInput:focus {
+  appearance: none;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgb(131 192 253 / 50%);
+}

@@ -5,6 +5,7 @@ import {
 } from "firebase/database";
 import { getStorage, FirebaseStorage } from "firebase/storage";
 import { getFirestore, Firestore } from "firebase/firestore";
+import { getAuth, Auth } from "firebase/auth";
 import {
   createContext,
   Dispatch,
@@ -25,8 +26,10 @@ export type AppState = {
   db: Database;
   storage: FirebaseStorage;
   firestore: Firestore;
+  auth: Auth;
 };
 
+//TODO(techijd): In all of these I should check if I'm in prod otherwise use emulator.
 const db = (() => {
   const db = getDatabase(app);
   return db;
@@ -42,6 +45,11 @@ const firestore = (() => {
   return firestore;
 })();
 
+const auth = (() => {
+  const auth = getAuth(app);
+  return auth;
+})();
+
 const AppContext = createContext<AppState | undefined>(undefined);
 
 const SetAppContext = createContext<
@@ -55,6 +63,7 @@ const AppStateProvider: React.FC<{
     db: db,
     storage: storage,
     firestore: firestore,
+    auth: auth,
   });
   return (
     <AppContext.Provider value={appState}>
