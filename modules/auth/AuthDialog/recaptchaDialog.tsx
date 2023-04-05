@@ -38,14 +38,14 @@ const RecaptchaDialog = ({
 
     if (
       appState?.auth &&
-      authDialogState.registerConfirmDialogOpen &&
+      authDialogState.recaptchaDialogOpen &&
       recaptchaContainerReady
     ) {
       const triggerSignInProcess = async () => {
         console.log("here: ", {
           auth: appState.auth,
           pN: authDialogState.phoneNumber,
-          open: authDialogState.registerConfirmDialogOpen,
+          open: authDialogState.recaptchaDialogOpen,
           recaptchaContainerReady,
         });
         console.log("Window: ", window);
@@ -65,7 +65,7 @@ const RecaptchaDialog = ({
           setAuthDialogState((aDS) => ({
             ...aDS,
             recaptchaConfirmationResult: confirmationResult,
-            registerConfirmDialogOpen: false,
+            recaptchaDialogOpen: false,
           }));
         }
       };
@@ -74,7 +74,7 @@ const RecaptchaDialog = ({
   }, [
     appState?.auth,
     authDialogState.phoneNumber,
-    authDialogState.registerConfirmDialogOpen,
+    authDialogState.recaptchaDialogOpen,
     setAuthDialogState,
     recaptchaContainerReady,
   ]);
@@ -82,13 +82,13 @@ const RecaptchaDialog = ({
   console.log("here too: ", {
     auth: appState?.auth,
     pN: authDialogState.phoneNumber,
-    open: authDialogState.registerConfirmDialogOpen,
+    open: authDialogState.recaptchaDialogOpen,
     recaptchaContainerReady,
   });
   console.log(open);
 
   return (
-    <Dialog open={authDialogState.registerConfirmDialogOpen} fullWidth>
+    <Dialog open={authDialogState.recaptchaDialogOpen} fullWidth>
       <DialogTitle>
         Lamentamos tener que preguntar, pero ¿eres un robot?
       </DialogTitle>

@@ -30,7 +30,7 @@ import { Login } from "@mui/icons-material";
 import OtpDialog from "./otpDialog";
 import PhoneInput from "./phoneInput";
 import RecaptchaDialog from "./recaptchaDialog";
-import RegisterConfirmDialog from "./registerConfirmDialog";
+import ConfirmRegistrationDialog from "./confirmRegistrationDialog";
 import { AuthAction, AuthDialogState, prompts } from "./context";
 import MakerInput from "../../posi/input/makerInput";
 import { AppState, useAppState } from "../../../common/context/appState";
@@ -72,7 +72,8 @@ const AuthDialogContent = ({
     isMaker: false,
     authAction: AuthAction.logIn,
     otpDialogOpen: false,
-    registerConfirmDialogOpen: false,
+    recaptchaDialogOpen: false,
+    confirmRegistrationDialogOpen: false,
   });
 
   useEffect(() => {
@@ -141,7 +142,7 @@ const AuthDialogContent = ({
 
     console.log("bruh");
     console.log("Ayo");
-    setAuthDialogState((aDS) => ({ ...aDS, registerConfirmDialogOpen: true }));
+    setAuthDialogState((aDS) => ({ ...aDS, recaptchaDialogOpen: true }));
   };
 
   const onConfirmRegistration = () => {
@@ -180,7 +181,7 @@ const AuthDialogContent = ({
               {prompts[authDialogState.authAction]}
             </Typography>
             {authDialogState.authAction == AuthAction.register && [
-              <RegisterConfirmDialog
+              <ConfirmRegistrationDialog
                 authDialogState={authDialogState}
                 setAuthDialogState={setAuthDialogState}
                 confirm={onConfirmRegistration}

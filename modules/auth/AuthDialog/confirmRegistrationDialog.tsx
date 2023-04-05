@@ -11,7 +11,7 @@ import { Dispatch, SetStateAction } from "react";
 import { Login } from "@mui/icons-material";
 import { AuthDialogState } from "./context";
 
-const RegisterConfirmDialog = ({
+const ConfirmRegistrationDialog = ({
   authDialogState,
   setAuthDialogState,
   confirm,
@@ -21,7 +21,7 @@ const RegisterConfirmDialog = ({
   confirm: () => void;
 }) => {
   return (
-    <Dialog open={authDialogState.registerConfirmDialogOpen}>
+    <Dialog open={authDialogState.confirmRegistrationDialogOpen}>
       <DialogTitle>Por favor revisar la información.</DialogTitle>
       <DialogContent>
         <Typography>
@@ -46,7 +46,7 @@ const RegisterConfirmDialog = ({
           onClick={(e) => {
             setAuthDialogState((aDS) => ({
               ...aDS,
-              registerConfirmDialogOpen: false,
+              confirmRegistrationDialogOpen: false,
             }));
           }}
         >
@@ -66,4 +66,4 @@ const RegisterConfirmDialog = ({
   );
 };
 
-export default RegisterConfirmDialog;
+export default ConfirmRegistrationDialog;

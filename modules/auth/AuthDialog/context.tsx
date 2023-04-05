@@ -26,8 +26,9 @@ export type AuthDialogState = {
   authAction: AuthAction;
   recaptchaConfirmationResult?: ConfirmationResult;
   otpDialogOpen: boolean;
-  registerConfirmDialogOpen: boolean;
-}
+  recaptchaDialogOpen: boolean;
+  confirmRegistrationDialogOpen: boolean;
+};
 
 /**export const AuthDialogContext = createContext<AuthDialogState | undefined>(
   undefined
