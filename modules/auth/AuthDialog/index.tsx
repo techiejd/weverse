@@ -1,5 +1,4 @@
 import React, {
-  ChangeEvent,
   Dispatch,
   SetStateAction,
   useEffect,
@@ -17,10 +16,6 @@ import {
   Button,
   Stack,
   TextField,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  FormHelperText,
   CircularProgress,
 } from "@mui/material";
 
@@ -32,7 +27,6 @@ import PhoneInput from "./phoneInput";
 import RecaptchaDialog from "./recaptchaDialog";
 import ConfirmRegistrationDialog from "./confirmRegistrationDialog";
 import { AuthAction, AuthDialogState, prompts } from "./context";
-import MakerInput from "../../posi/input/makerInput";
 import { AppState, useAppState } from "../../../common/context/appState";
 
 const TabControl = ({
@@ -69,7 +63,6 @@ const AuthDialogContent = ({
   const [authDialogState, setAuthDialogState] = useState<AuthDialogState>({
     phoneNumber: { countryCallingCode: null, nationalNumber: null },
     phoneNumberInputError: false,
-    isMaker: false,
     authAction: AuthAction.logIn,
     otpDialogOpen: false,
     recaptchaDialogOpen: false,
@@ -142,7 +135,17 @@ const AuthDialogContent = ({
 
     console.log("bruh");
     console.log("Ayo");
-    setAuthDialogState((aDS) => ({ ...aDS, recaptchaDialogOpen: true }));
+    switch (authDialogState.authAction) {
+      case AuthAction.logIn: {
+        setAuthDialogState((aDS) => ({ ...aDS, recaptchaDialogOpen: true }));
+      }
+      case AuthAction.register: {
+        setAuthDialogState((aDS) => ({
+          ...aDS,
+          confirmRegistrationDialogOpen: true,
+        }));
+      }
+    }
   };
 
   const onConfirmRegistration = () => {
@@ -161,6 +164,7 @@ const AuthDialogContent = ({
       <form
         onSubmit={async (e) => {
           e.preventDefault();
+          onSubmit();
         }}
       >
         <DialogContent>
@@ -193,33 +197,8 @@ const AuthDialogContent = ({
                 label="¿Cómo te llamas?"
                 key={"register-name"}
               />,
-              <Box pb={2} key={"register-maker"}>
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={authDialogState.isMaker}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                          setAuthDialogState((aDS) => ({
-                            ...aDS,
-                            isMaker: e.target.checked,
-                          }))
-                        }
-                        sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
-                      />
-                    }
-                    label={
-                      <Box>
-                        <Typography fontSize={20}>Soy un Maker.</Typography>
-                      </Box>
-                    }
-                  />
-                  <FormHelperText>
-                    Maker = Creador de impacto social positivo. Debes ser mayor
-                    de edad.
-                  </FormHelperText>
-                </FormGroup>
-                {authDialogState.isMaker && <MakerInput />}
+              <Box key={"register-maker"}>
+                
               </Box>,
             ]}
             <PhoneInput
@@ -240,7 +219,6 @@ const AuthDialogContent = ({
             disabled={loading}
             variant="contained"
             endIcon={<Login />}
-            onClick={onSubmit}
             type="submit"
           >
             {prompts[authDialogState.authAction]}

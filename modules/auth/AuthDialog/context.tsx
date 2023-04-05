@@ -1,6 +1,7 @@
 import { createContext, Dispatch, SetStateAction, useContext } from "react";
 import { z } from "zod";
 import { ConfirmationResult } from "firebase/auth";
+import { formUrl } from "../../../common/context/context";
 
 const phoneNumber = z.object({
   countryCallingCode: z.string().nullable(),
@@ -18,11 +19,20 @@ export const prompts = {
   [AuthAction.register]: "Registrarme",
 };
 
+const makerType = z.enum(["individual", "organization"]);
+const maker = z.object({
+  type: makerType,
+  pic: formUrl,
+  name: z.string().min(1),
+});
+const partialMaker = maker.partial();
+type PartialMaker = z.infer<typeof partialMaker>;
+
 export type AuthDialogState = {
   phoneNumber: PhoneNumber;
   phoneNumberInputError: boolean;
   name?: string;
-  isMaker: boolean;
+  maker?: PartialMaker;
   authAction: AuthAction;
   recaptchaConfirmationResult?: ConfirmationResult;
   otpDialogOpen: boolean;

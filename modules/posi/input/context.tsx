@@ -1,5 +1,6 @@
 import { createContext, useContext, Dispatch, SetStateAction } from "react";
 import { z } from "zod";
+import { formUrl } from "../../../common/context/context";
 
 export enum InvestedTimeLevel {
   hour = 1,
@@ -22,15 +23,6 @@ export const levelToColors = {
   [InvestedTimeLevel.year]: "white",
 };
 export const investedTimeLevel = z.nativeEnum(InvestedTimeLevel);
-
-// TODO(techiejd): Check all urls are with our hosting.
-const formUrl = z.string().url();
-const makerType = z.enum(["individual", "organization"]);
-const maker = z.object({
-  type: makerType,
-  pic: formUrl,
-  name: z.string().min(1),
-});
 
 // related to
 /// <reference types="google.maps" />
@@ -94,7 +86,6 @@ export const posiFormData = z.object({
   location: location,
   dates: z.object({ start: z.date(), end: z.date() }),
   video: formUrl,
-  maker: maker,
   about: z.string().min(5).max(1000).optional(),
   howToSupport: howToSupport,
 });

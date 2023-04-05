@@ -1,7 +1,10 @@
 import {
   Box,
+  Checkbox,
   FormControl,
   FormControlLabel,
+  FormGroup,
+  FormHelperText,
   FormLabel,
   Radio,
   RadioGroup,
@@ -9,7 +12,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import FileInput from "./fileInput";
 import {
   ChangeEvent,
   Dispatch,
@@ -17,23 +19,25 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useFormData } from "./context";
+import { AuthDialogState } from "./context";
+import { FileInput } from "../../posi/input";
 
-const OrganizationTypeInput = () => {
+const OrganizationTypeInput = ({
+  setAuthDialogState,
+}: {
+  setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
+}) => {
   const [nameInput, setNameInput] = useState("");
-  const [formData, setFormData] = useFormData();
 
   useEffect(() => {
-    if (setFormData) {
-      setFormData((fD) => ({
-        ...fD,
-        maker: {
-          ...fD.maker,
-          name: nameInput,
-        },
-      }));
-    }
-  }, [nameInput, setFormData]);
+    setAuthDialogState((aDS) => ({
+      ...aDS,
+      maker: {
+        ...aDS.maker,
+        name: nameInput,
+      },
+    }));
+  }, [nameInput, setAuthDialogState]);
   return (
     <Box>
       <TextField
@@ -76,23 +80,25 @@ const OrganizationTypeInput = () => {
   );
 };
 
-const DetailedInput = ({ type }: { type: "individual" | "organization" }) => {
+const DetailedInput = ({
+  type,
+  setAuthDialogState,
+}: {
+  type: "individual" | "organization";
+  setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
+}) => {
   const [imgUrl, setImgUrl] = useState<string | undefined | "loading">(
     undefined
   );
-
-  const [formData, setFormData] = useFormData();
   useEffect(() => {
-    if (setFormData) {
-      setFormData((fD) => ({
-        ...fD,
-        maker: {
-          ...fD.maker,
-          pic: imgUrl,
-        },
-      }));
-    }
-  }, [imgUrl, setFormData]);
+    setAuthDialogState((aDS) => ({
+      ...aDS,
+      maker: {
+        ...aDS.maker,
+        pic: imgUrl,
+      },
+    }));
+  }, [imgUrl, setAuthDialogState]);
 
   const askForInfoMsg =
     type == "individual"
@@ -107,7 +113,9 @@ const DetailedInput = ({ type }: { type: "individual" | "organization" }) => {
   return (
     <Stack margin={2}>
       <Typography variant="h3">{askForInfoMsg}</Typography>
-      {type == "organization" && <OrganizationTypeInput />}
+      {type == "organization" && (
+        <OrganizationTypeInput setAuthDialogState={setAuthDialogState} />
+      )}
       <Typography>{askForImage}</Typography>
       <FileInput
         required
@@ -120,23 +128,24 @@ const DetailedInput = ({ type }: { type: "individual" | "organization" }) => {
   );
 };
 
-const MakerInput = () => {
+const ChooseMakerType = ({
+  setAuthDialogState,
+}: {
+  setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
+}) => {
   const [makerType, setMakerType] = useState<
     "individual" | "organization" | undefined
   >();
-  const [formData, setFormData] = useFormData();
   const makerChange = (e: ChangeEvent<HTMLInputElement>, value: string) => {
     const type = value as "individual" | "organization";
     setMakerType(type);
-    if (setFormData) {
-      setFormData((fD) => ({
-        ...fD,
-        maker: {
-          ...fD.maker,
-          type: type,
-        },
-      }));
-    }
+    setAuthDialogState((aDS) => ({
+      ...aDS,
+      maker: {
+        ...aDS.maker,
+        type: type,
+      },
+    }));
   };
 
   return (
@@ -156,8 +165,53 @@ const MakerInput = () => {
           />
         </RadioGroup>
       </FormControl>
-      {makerType && <DetailedInput type={makerType} />}
+      {makerType && (
+        <DetailedInput
+          type={makerType}
+          setAuthDialogState={setAuthDialogState}
+        />
+      )}
     </Stack>
+  );
+};
+
+const MakerInput = ({
+  authDialogState,
+  setAuthDialogState,
+}: {
+  authDialogState: AuthDialogState;
+  setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
+}) => {
+  return (
+    <Box pb={2}>
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={authDialogState.maker != undefined}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setAuthDialogState((aDS) => ({
+                  ...aDS,
+                  isMaker: aDS.maker ? aDS.maker : {},
+                }))
+              }
+              sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
+            />
+          }
+          label={
+            <Box>
+              <Typography fontSize={20}>Soy un Maker.</Typography>
+            </Box>
+          }
+        />
+        <FormHelperText>
+          Maker = Creador de impacto social positivo. Debes ser mayor de edad.
+        </FormHelperText>
+      </FormGroup>
+      {authDialogState.maker && (
+        <ChooseMakerType setAuthDialogState={setAuthDialogState} />
+      )}
+    </Box>
   );
 };
 
