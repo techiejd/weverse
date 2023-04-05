@@ -21,10 +21,10 @@ const darkPalette = {
     paper: "#4f171d",
   },
   primary: {
-    main: "#624a04",
-    light: "#7a5d05",
-    dark: "#493803",
-    contrastText: "white",
+    main: "#FBE39E",
+    light: "#FBE7AC",
+    dark: "#FADF90",
+    contrastText: "black",
   },
   secondary: {
     main: "#254134",
@@ -40,10 +40,10 @@ const lightPalette = {
     paper: "#eec4c9",
   },
   primary: {
-    main: "#FBE39E",
-    light: "#FBE7AC",
-    dark: "#FADF90",
-    contrastText: "black",
+    main: "#624a04",
+    light: "#7a5d05",
+    dark: "#493803",
+    contrastText: "white",
   },
   secondary: {
     main: "#D4E7DE",
