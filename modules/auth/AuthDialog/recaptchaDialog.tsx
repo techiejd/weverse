@@ -1,0 +1,110 @@
+import { Dialog, DialogTitle, Box } from "@mui/material";
+import { Dispatch, SetStateAction, useRef, useState, useEffect } from "react";
+
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  ConfirmationResult,
+  Auth,
+} from "firebase/auth";
+import { AuthDialogState, PhoneNumber } from "./context";
+import { useAppState } from "../../../common/context/appState";
+
+const RecaptchaDialog = ({
+  authDialogState,
+  setAuthDialogState,
+}: {
+  authDialogState: AuthDialogState;
+  setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
+}) => {
+  const appState = useAppState();
+  const recaptchaContainer = useRef<HTMLElement | null>(null);
+  const [recaptchaContainerReady, setRecaptchaContainerReady] = useState(false);
+  const [recaptchaVerifier, setRecaptchaVerifier] = useState<
+    RecaptchaVerifier | undefined
+  >(undefined);
+  useEffect(() => {
+    const phoneNumberIsReady =
+      authDialogState.phoneNumber.countryCallingCode &&
+      authDialogState.phoneNumber.nationalNumber;
+    if (!phoneNumberIsReady) return;
+    const phoneNumberFormattedForGoogle = `+${authDialogState.phoneNumber.countryCallingCode} ${authDialogState.phoneNumber.nationalNumber}`;
+    console.log(
+      "phoneNumber: ",
+      phoneNumberIsReady,
+      phoneNumberFormattedForGoogle
+    );
+    console.log("yo");
+
+    if (
+      appState?.auth &&
+      authDialogState.registerConfirmDialogOpen &&
+      recaptchaContainerReady
+    ) {
+      const triggerSignInProcess = async () => {
+        console.log("here: ", {
+          auth: appState.auth,
+          pN: authDialogState.phoneNumber,
+          open: authDialogState.registerConfirmDialogOpen,
+          recaptchaContainerReady,
+        });
+        console.log("Window: ", window);
+        console.log(recaptchaContainer);
+        if (recaptchaContainer.current != null) {
+          const verifier = new RecaptchaVerifier(
+            recaptchaContainer.current,
+            {},
+            appState.auth
+          );
+          setRecaptchaVerifier(verifier);
+          const confirmationResult = await signInWithPhoneNumber(
+            appState.auth,
+            phoneNumberFormattedForGoogle,
+            verifier
+          );
+          setAuthDialogState((aDS) => ({
+            ...aDS,
+            recaptchaConfirmationResult: confirmationResult,
+            registerConfirmDialogOpen: false,
+          }));
+        }
+      };
+      triggerSignInProcess();
+    }
+  }, [
+    appState?.auth,
+    authDialogState.phoneNumber,
+    authDialogState.registerConfirmDialogOpen,
+    setAuthDialogState,
+    recaptchaContainerReady,
+  ]);
+
+  console.log("here too: ", {
+    auth: appState?.auth,
+    pN: authDialogState.phoneNumber,
+    open: authDialogState.registerConfirmDialogOpen,
+    recaptchaContainerReady,
+  });
+  console.log(open);
+
+  return (
+    <Dialog open={authDialogState.registerConfirmDialogOpen} fullWidth>
+      <DialogTitle>
+        Lamentamos tener que preguntar, pero ¿eres un robot?
+      </DialogTitle>
+      <center>
+        <Box
+          ref={(r) => {
+            recaptchaContainer.current = r as HTMLElement;
+            console.log("current: ", recaptchaContainer.current);
+            setRecaptchaContainerReady(true);
+          }}
+          m={0}
+          p={1}
+        ></Box>
+      </center>
+    </Dialog>
+  );
+};
+
+export default RecaptchaDialog;

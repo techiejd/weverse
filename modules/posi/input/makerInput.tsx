@@ -20,32 +20,59 @@ import {
 import { useFormData } from "./context";
 
 const OrganizationTypeInput = () => {
+  const [nameInput, setNameInput] = useState("");
+  const [formData, setFormData] = useFormData();
+
+  useEffect(() => {
+    if (setFormData) {
+      setFormData((fD) => ({
+        ...fD,
+        maker: {
+          ...fD.maker,
+          name: nameInput,
+        },
+      }));
+    }
+  }, [nameInput, setFormData]);
   return (
-    <FormControl>
-      <FormLabel>Tipo de la organización.</FormLabel>
-      <RadioGroup name="chooseOrganizationType">
-        <FormControlLabel
-          value="non-profit"
-          control={<Radio required />}
-          label="Fundación u Otra ONG"
-        />
-        <FormControlLabel
-          value="religious"
-          control={<Radio required />}
-          label="Organización Religiosa"
-        />
-        <FormControlLabel
-          value="governmental"
-          control={<Radio required />}
-          label="Organización Gubermental"
-        />
-        <FormControlLabel
-          value="volunteers"
-          control={<Radio required />}
-          label="Voluntarios u Otro No Asociados"
-        />
-      </RadioGroup>
-    </FormControl>
+    <Box>
+      <TextField
+        required
+        fullWidth
+        label={`¿Cómo se llama la organización? (75 caracteres)`}
+        margin="normal"
+        inputProps={{ maxLength: 75 }}
+        value={nameInput}
+        onChange={(e) => {
+          setNameInput(e.target.value);
+        }}
+      />
+      <FormControl>
+        <FormLabel>Tipo de la organización.</FormLabel>
+        <RadioGroup name="chooseOrganizationType">
+          <FormControlLabel
+            value="non-profit"
+            control={<Radio required />}
+            label="Fundación u Otra ONG"
+          />
+          <FormControlLabel
+            value="religious"
+            control={<Radio required />}
+            label="Organización Religiosa"
+          />
+          <FormControlLabel
+            value="governmental"
+            control={<Radio required />}
+            label="Organización Gubermental"
+          />
+          <FormControlLabel
+            value="volunteers"
+            control={<Radio required />}
+            label="Voluntarios u Otro No Asociados"
+          />
+        </RadioGroup>
+      </FormControl>
+    </Box>
   );
 };
 
@@ -53,7 +80,7 @@ const DetailedInput = ({ type }: { type: "individual" | "organization" }) => {
   const [imgUrl, setImgUrl] = useState<string | undefined | "loading">(
     undefined
   );
-  const [nameInput, setNameInput] = useState("");
+
   const [formData, setFormData] = useFormData();
   useEffect(() => {
     if (setFormData) {
@@ -67,26 +94,11 @@ const DetailedInput = ({ type }: { type: "individual" | "organization" }) => {
     }
   }, [imgUrl, setFormData]);
 
-  useEffect(() => {
-    if (setFormData) {
-      setFormData((fD) => ({
-        ...fD,
-        maker: {
-          ...fD.maker,
-          name: nameInput,
-        },
-      }));
-    }
-  }, [nameInput, setFormData]);
-
   const askForInfoMsg =
     type == "individual"
       ? "Cuéntame sobre ti"
       : "Cuéntame sobre la organización";
-  const nameLabel =
-    type == "individual"
-      ? "¿Cómo te llamas?"
-      : "¿Cómo se llama la organización? (75 caracteres)";
+
   const askForImage =
     type == "individual"
       ? "Una foto de perfil por favor."
@@ -96,18 +108,6 @@ const DetailedInput = ({ type }: { type: "individual" | "organization" }) => {
     <Stack margin={2}>
       <Typography variant="h3">{askForInfoMsg}</Typography>
       {type == "organization" && <OrganizationTypeInput />}
-      <TextField
-        required
-        fullWidth
-        label={`${nameLabel} (75 caracteres)`}
-        name="maker-name"
-        margin="normal"
-        inputProps={{ maxLength: 75 }}
-        value={nameInput}
-        onChange={(e) => {
-          setNameInput(e.target.value);
-        }}
-      />
       <Typography>{askForImage}</Typography>
       <FileInput
         required
