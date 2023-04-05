@@ -1,0 +1,114 @@
+.whatKindOf {
+  position: relative;
+  line-height: 28px;
+  display: flex;
+  align-items: center;
+  width: 247px;
+  height: 39px;
+  flex-shrink: 0;
+}
+.div1 {
+  margin: 0;
+  top: 17px;
+  left: 17px;
+  width: 316px;
+  display: flex;
+  flex-direction: row;
+  padding: 0 0 16px;
+  box-sizing: border-box;
+  align-items: flex-start;
+  justify-content: flex-start;
+  font-size: 17px;
+  color: #21293c;
+  font-family: inherit;
+}
+.div1,
+.location,
+.span {
+  position: absolute;
+}
+.span {
+  top: 80px;
+  left: 84px;
+}
+.location {
+  top: 84px;
+  left: 19px;
+  color: #a7acb4;
+}
+.input {
+  background-color: transparent;
+}
+.label,
+.seeMore {
+  position: absolute;
+}
+.label {
+  top: 120px;
+  left: 17px;
+  width: 329px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.seeMore {
+  text-decoration: none;
+  top: 230px;
+  left: 137.97px;
+  font-size: 12px;
+  line-height: 20px;
+  color: #005ef6;
+}
+.education {
+  position: relative;
+}
+.educationWrapper {
+  text-decoration: none;
+  left: 37px;
+  color: inherit;
+}
+.educationWrapper,
+.hungerWrapper,
+.sustainabilityWrapper {
+  position: absolute;
+  top: 179px;
+  border-radius: var(--br-21xl);
+  background-color: var(--color-lavender-100);
+  display: flex;
+  flex-direction: row;
+  padding: var(--padding-5xs) var(--padding-sm);
+  align-items: center;
+  justify-content: center;
+}
+.sustainabilityWrapper {
+  text-decoration: none;
+  left: 133px;
+  color: inherit;
+}
+.hungerWrapper {
+  left: 249px;
+}
+.div {
+  position: relative;
+  border-radius: 8px;
+  background: linear-gradient(-1.69deg, #fff, rgba(255, 255, 255, 0)),
+    linear-gradient(
+      89.84deg,
+      rgba(230, 36, 174, 0.15) 0.34%,
+      rgba(94, 58, 255, 0.15) 16.96%,
+      rgba(10, 136, 255, 0.15) 34.66%,
+      rgba(75, 191, 80, 0.15) 50.12%,
+      rgba(137, 206, 0, 0.15) 66.22%,
+      rgba(239, 183, 0, 0.15) 82%,
+      rgba(246, 73, 0, 0.15) 99.9%
+    );
+  border: 1px solid rgba(217, 225, 236, 0.2);
+  box-sizing: border-box;
+  width: 100%;
+  height: 270px;
+  text-align: left;
+  font-size: var(--font-size-sm);
+  color: var(--color-black);
+  font-family: var(--font-helvetica);
+}

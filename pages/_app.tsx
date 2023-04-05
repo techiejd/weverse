@@ -3,6 +3,7 @@ import Head from "next/head";
 import Layout from "../common/components/layout";
 import initAuth from "../common/utils/initAuth";
 import "../modules/auth/AuthCode.css";
+import "antd/dist/reset.css";
 
 initAuth();
 
