@@ -1,9 +1,4 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Box,
   Dialog,
@@ -28,6 +23,7 @@ import RecaptchaDialog from "./recaptchaDialog";
 import ConfirmRegistrationDialog from "./confirmRegistrationDialog";
 import { AuthAction, AuthDialogState, prompts } from "./context";
 import { AppState, useAppState } from "../../../common/context/appState";
+import MakerInput from "./makerInput";
 
 const TabControl = ({
   appState,
@@ -198,7 +194,10 @@ const AuthDialogContent = ({
                 key={"register-name"}
               />,
               <Box key={"register-maker"}>
-                
+                <MakerInput
+                  authDialogState={authDialogState}
+                  setAuthDialogState={setAuthDialogState}
+                />
               </Box>,
             ]}
             <PhoneInput

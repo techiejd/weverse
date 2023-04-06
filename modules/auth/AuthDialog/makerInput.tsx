@@ -190,10 +190,13 @@ const MakerInput = ({
             <Checkbox
               checked={authDialogState.maker != undefined}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setAuthDialogState((aDS) => ({
-                  ...aDS,
-                  isMaker: aDS.maker ? aDS.maker : {},
-                }))
+                setAuthDialogState((aDS) => {
+                  console.log("AYO iN here: ", aDS, e.target.checked);
+                  return {
+                    ...aDS,
+                    maker: aDS.maker ? aDS.maker : {},
+                  };
+                })
               }
               sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
             />
