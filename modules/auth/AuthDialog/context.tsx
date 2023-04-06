@@ -1,4 +1,3 @@
-import { createContext, Dispatch, SetStateAction, useContext } from "react";
 import { z } from "zod";
 import { ConfirmationResult } from "firebase/auth";
 import { formUrl } from "../../../common/context/context";
@@ -20,10 +19,26 @@ export const prompts = {
 };
 
 const makerType = z.enum(["individual", "organization"]);
+export const organizationType = z.enum([
+  "nonprofit",
+  "religious",
+  "governmental",
+  "unincorporated",
+  "profit",
+]);
+export type OrganizationType = z.infer<typeof organizationType>;
+export const organizationLabels = {
+  [organizationType.Enum.nonprofit]: "Fundación u Otra ONG",
+  [organizationType.Enum.religious]: "Organización Religiosa",
+  [organizationType.Enum.governmental]: "Organización Gubermental",
+  [organizationType.Enum.unincorporated]: "Voluntarios u Otro No Asociados",
+  [organizationType.Enum.profit]: "Organización con fines de lucro",
+};
 const maker = z.object({
   type: makerType,
   pic: formUrl,
   name: z.string().min(1),
+  organizationType: organizationType,
 });
 const partialMaker = maker.partial();
 type PartialMaker = z.infer<typeof partialMaker>;
@@ -39,20 +54,3 @@ export type AuthDialogState = {
   recaptchaDialogOpen: boolean;
   confirmRegistrationDialogOpen: boolean;
 };
-
-/**export const AuthDialogContext = createContext<AuthDialogState | undefined>(
-  undefined
-);
-
-export const SetAuthDialogContext = createContext<
-  Dispatch<SetStateAction<AuthDialogState | undefined>> | undefined
->(undefined);
-
-export function useAuthDialogState() {
-  return useContext(AuthDialogContext);
-}
-
-export function useSetAuthDialogState() {
-  return useContext(SetAuthDialogContext);
-}
-*/

@@ -19,7 +19,12 @@ import {
   useEffect,
   useState,
 } from "react";
-import { AuthDialogState } from "./context";
+import {
+  AuthDialogState,
+  OrganizationType,
+  organizationLabels,
+  organizationType,
+} from "./context";
 import { FileInput } from "../../posi/input";
 
 const OrganizationTypeInput = ({
@@ -28,6 +33,20 @@ const OrganizationTypeInput = ({
   setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
 }) => {
   const [nameInput, setNameInput] = useState("");
+
+  const organizationTypeChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    value: string
+  ) => {
+    const type = value as OrganizationType;
+    setAuthDialogState((aDS) => ({
+      ...aDS,
+      maker: {
+        ...aDS.maker,
+        organizationType: type,
+      },
+    }));
+  };
 
   useEffect(() => {
     setAuthDialogState((aDS) => ({
@@ -53,27 +72,21 @@ const OrganizationTypeInput = ({
       />
       <FormControl>
         <FormLabel>Tipo de la organización.</FormLabel>
-        <RadioGroup name="chooseOrganizationType">
-          <FormControlLabel
-            value="non-profit"
-            control={<Radio required />}
-            label="Fundación u Otra ONG"
-          />
-          <FormControlLabel
-            value="religious"
-            control={<Radio required />}
-            label="Organización Religiosa"
-          />
-          <FormControlLabel
-            value="governmental"
-            control={<Radio required />}
-            label="Organización Gubermental"
-          />
-          <FormControlLabel
-            value="volunteers"
-            control={<Radio required />}
-            label="Voluntarios u Otro No Asociados"
-          />
+        <RadioGroup
+          name="chooseOrganizationType"
+          onChange={organizationTypeChange}
+        >
+          {Object.keys(organizationType.Values).map((val) => {
+            const oType = val as OrganizationType;
+            return (
+              <FormControlLabel
+                key={oType}
+                value={oType}
+                control={<Radio required />}
+                label={organizationLabels[oType]}
+              />
+            );
+          })}
         </RadioGroup>
       </FormControl>
     </Box>
@@ -122,7 +135,7 @@ const DetailedInput = ({
         setFileUrl={setImgUrl}
         maxFileSize={1048576 /** 1MB */}
         accept={"img"}
-        metadata={{ makerId: "" }}
+        metadata={{ makerId: "", userID: "" }}
       />
     </Stack>
   );

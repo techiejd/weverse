@@ -6,10 +6,11 @@ import {
   Stack,
   DialogActions,
   Button,
+  Avatar,
 } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { Login } from "@mui/icons-material";
-import { AuthDialogState } from "./context";
+import { AuthDialogState, organizationLabels } from "./context";
 
 const ConfirmRegistrationDialog = ({
   authDialogState,
@@ -25,17 +26,40 @@ const ConfirmRegistrationDialog = ({
       <DialogTitle>Por favor revisar la información.</DialogTitle>
       <DialogContent>
         <Typography>
-          <b>Nombre:</b>
+          <b>Nombre: </b>
+          {authDialogState.name}
         </Typography>
         <Stack>
+          {authDialogState.maker && [
+            <Typography key="maker-section-title">
+              <b>Maker:</b>
+            </Typography>,
+            <Stack
+              ml={2}
+              mr={2}
+              key="maker-section-content"
+              alignItems={"center"}
+            >
+              <Avatar src={authDialogState.maker.pic} />
+              <Typography>
+                {authDialogState.maker.type == "individual"
+                  ? "Individual"
+                  : authDialogState.maker.name}
+              </Typography>
+              {authDialogState.maker.type == "organization" &&
+                authDialogState.maker.organizationType && (
+                  <Typography>
+                    {organizationLabels[authDialogState.maker.organizationType]}
+                  </Typography>
+                )}
+            </Stack>,
+          ]}
           <Typography>
-            <b>Maker:</b>
+            <b>Número telefónico:</b>{" "}
+            {`+${authDialogState.phoneNumber.countryCallingCode} ${authDialogState.phoneNumber.nationalNumber}`}
           </Typography>
-          <Stack ml={2} mr={2}>
-            <Typography>MakerType</Typography>
-          </Stack>
           <Typography>
-            <b>Número telefónico:</b>
+            Vas a recibir un codigo de verificación a este número.
           </Typography>
         </Stack>
       </DialogContent>

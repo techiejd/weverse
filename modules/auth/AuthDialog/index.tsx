@@ -188,6 +188,13 @@ const AuthDialogContent = ({
                 key="register-confirm"
               />,
               <TextField
+                value={authDialogState.name}
+                onChange={(e) => {
+                  setAuthDialogState((aDS) => ({
+                    ...aDS,
+                    name: e.target.value,
+                  }));
+                }}
                 required
                 helperText="¿Con qué nombre te identificas? Ej: Fula, Fulano, Fulano Detal, etc. Este nombre lo va usar la comunidad de impacto social."
                 label="¿Cómo te llamas?"
