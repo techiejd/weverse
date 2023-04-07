@@ -28,12 +28,12 @@ import {
 import { FileInput } from "../../posi/input";
 
 const OrganizationTypeInput = ({
+  authDialogState,
   setAuthDialogState,
 }: {
+  authDialogState: AuthDialogState;
   setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
 }) => {
-  const [nameInput, setNameInput] = useState("");
-
   const organizationTypeChange = (
     e: ChangeEvent<HTMLInputElement>,
     value: string
@@ -48,15 +48,6 @@ const OrganizationTypeInput = ({
     }));
   };
 
-  useEffect(() => {
-    setAuthDialogState((aDS) => ({
-      ...aDS,
-      maker: {
-        ...aDS.maker,
-        name: nameInput,
-      },
-    }));
-  }, [nameInput, setAuthDialogState]);
   return (
     <Box>
       <TextField
@@ -65,9 +56,15 @@ const OrganizationTypeInput = ({
         label={`¿Cómo se llama la organización? (75 caracteres)`}
         margin="normal"
         inputProps={{ maxLength: 75 }}
-        value={nameInput}
+        value={authDialogState.maker?.name ? authDialogState.maker?.name : ""}
         onChange={(e) => {
-          setNameInput(e.target.value);
+          setAuthDialogState((aDS) => ({
+            ...aDS,
+            maker: {
+              ...aDS.maker,
+              name: e.target.value,
+            },
+          }));
         }}
       />
       <FormControl>
@@ -95,8 +92,10 @@ const OrganizationTypeInput = ({
 
 const DetailedInput = ({
   type,
+  authDialogState,
   setAuthDialogState,
 }: {
+  authDialogState: AuthDialogState;
   type: "individual" | "organization";
   setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
 }) => {
@@ -127,7 +126,10 @@ const DetailedInput = ({
     <Stack margin={2}>
       <Typography variant="h3">{askForInfoMsg}</Typography>
       {type == "organization" && (
-        <OrganizationTypeInput setAuthDialogState={setAuthDialogState} />
+        <OrganizationTypeInput
+          authDialogState={authDialogState}
+          setAuthDialogState={setAuthDialogState}
+        />
       )}
       <Typography>{askForImage}</Typography>
       <FileInput
@@ -143,7 +145,9 @@ const DetailedInput = ({
 
 const ChooseMakerType = ({
   setAuthDialogState,
+  authDialogState,
 }: {
+  authDialogState: AuthDialogState;
   setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
 }) => {
   const [makerType, setMakerType] = useState<
@@ -181,6 +185,7 @@ const ChooseMakerType = ({
       {makerType && (
         <DetailedInput
           type={makerType}
+          authDialogState={authDialogState}
           setAuthDialogState={setAuthDialogState}
         />
       )}
@@ -204,11 +209,8 @@ const MakerInput = ({
               checked={authDialogState.maker != undefined}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setAuthDialogState((aDS) => {
-                  console.log("AYO iN here: ", aDS, e.target.checked);
-                  return {
-                    ...aDS,
-                    maker: aDS.maker ? aDS.maker : {},
-                  };
+                  console.log("AYO iN here: ", aDS);
+                  return { ...aDS, maker: e.target.checked ? {} : undefined };
                 })
               }
               sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
@@ -225,7 +227,10 @@ const MakerInput = ({
         </FormHelperText>
       </FormGroup>
       {authDialogState.maker && (
-        <ChooseMakerType setAuthDialogState={setAuthDialogState} />
+        <ChooseMakerType
+          authDialogState={authDialogState}
+          setAuthDialogState={setAuthDialogState}
+        />
       )}
     </Box>
   );

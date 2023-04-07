@@ -62,6 +62,8 @@ const RecaptchaDialog = ({
             phoneNumberFormattedForGoogle,
             verifier
           );
+          verifier.clear();
+          console.log("Is the error happening before this?");
           setAuthDialogState((aDS) => ({
             ...aDS,
             recaptchaConfirmationResult: confirmationResult,

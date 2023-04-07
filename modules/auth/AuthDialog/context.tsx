@@ -34,11 +34,12 @@ export const organizationLabels = {
   [organizationType.Enum.unincorporated]: "Voluntarios u Otro No Asociados",
   [organizationType.Enum.profit]: "Organización con fines de lucro",
 };
-const maker = z.object({
+export const maker = z.object({
+  ownerId: z.string(),
   type: makerType,
   pic: formUrl,
   name: z.string().min(1),
-  organizationType: organizationType,
+  organizationType: organizationType.optional(),
 });
 const partialMaker = maker.partial();
 type PartialMaker = z.infer<typeof partialMaker>;
@@ -46,7 +47,7 @@ type PartialMaker = z.infer<typeof partialMaker>;
 export type AuthDialogState = {
   phoneNumber: PhoneNumber;
   phoneNumberInputError: boolean;
-  name?: string;
+  name: string;
   maker?: PartialMaker;
   authAction: AuthAction;
   recaptchaConfirmationResult?: ConfirmationResult;

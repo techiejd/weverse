@@ -13,15 +13,14 @@ import {
   TextField,
   CircularProgress,
 } from "@mui/material";
-
-import { useAuthState } from "react-firebase-hooks/auth";
-
+import { useAuthState, useUpdateProfile } from "react-firebase-hooks/auth";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { Login } from "@mui/icons-material";
 import OtpDialog from "./otpDialog";
 import PhoneInput from "./phoneInput";
 import RecaptchaDialog from "./recaptchaDialog";
 import ConfirmRegistrationDialog from "./confirmRegistrationDialog";
-import { AuthAction, AuthDialogState, prompts } from "./context";
+import { AuthAction, AuthDialogState, maker, prompts } from "./context";
 import { AppState, useAppState } from "../../../common/context/appState";
 import MakerInput from "./makerInput";
 
@@ -55,8 +54,12 @@ const AuthDialogContent = ({
   appState: AppState;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [user, loading, error] = useAuthState(appState.auth);
+  const [user, loading, authError] = useAuthState(appState.auth);
+  const [updateProfile, updating, updateProfileError] = useUpdateProfile(
+    appState.auth
+  );
   const [authDialogState, setAuthDialogState] = useState<AuthDialogState>({
+    name: "",
     phoneNumber: { countryCallingCode: null, nationalNumber: null },
     phoneNumberInputError: false,
     authAction: AuthAction.logIn,
@@ -72,8 +75,8 @@ const AuthDialogContent = ({
     console.log("AYo change in : loading", loading);
   }, [loading]);
   useEffect(() => {
-    console.log("AYo change in : error", error);
-  }, [error]);
+    console.log("AYo change in : error", authError);
+  }, [authError]);
 
   useEffect(() => {
     if (authDialogState.recaptchaConfirmationResult)
@@ -82,17 +85,63 @@ const AuthDialogContent = ({
 
   const handleOtp = async (otp: string) => {
     console.log("tok");
+    console.log(otp);
     if (authDialogState.recaptchaConfirmationResult == undefined)
       return "Try restarting";
     return authDialogState.recaptchaConfirmationResult
       .confirm(otp)
-      .then((userCred) => {
+      .then(async (userCred) => {
+        let error = "";
         console.log("homie");
         console.log(userCred);
         /**Stick it into db and return ""*/
+        if (authDialogState.authAction == AuthAction.register) {
+          const createUserAndMaker = async () => {
+            const updateSuccessful = updateProfile({
+              displayName: authDialogState.name,
+              photoURL:
+                authDialogState.maker?.type == "individual"
+                  ? authDialogState.maker?.pic
+                  : undefined,
+            });
+            console.log("breakpoint: ", userCred);
+            if (authDialogState.maker) {
+            }
+
+            const makerDocRef = await (async () => {
+              if (!authDialogState.maker) return undefined;
+              const makerEncoded = maker.parse({
+                ...authDialogState.maker,
+                ownerId: userCred.user.uid,
+                name:
+                  authDialogState.maker?.type == "individual"
+                    ? authDialogState.name
+                    : authDialogState.maker?.name,
+              });
+              return await addDoc(
+                collection(appState.firestore, "makers"),
+                makerEncoded
+              );
+            })();
+
+            const userDocRef = setDoc(
+              doc(appState.firestore, "users", userCred.user.uid),
+              makerDocRef ? { makers: [makerDocRef.id] } : {}
+            );
+
+            const [finishedUpdateSuccessful, finishedUserDocRef] =
+              await Promise.all([updateSuccessful, userDocRef]);
+
+            if (!finishedUpdateSuccessful)
+              error = updateProfileError?.message
+                ? updateProfileError?.message
+                : "";
+          };
+          await createUserAndMaker();
+        }
         setAuthDialogState((aDS) => ({ ...aDS, otpDialogOpen: false }));
         setOpen(false);
-        return "";
+        return error;
       })
       .catch((err) => {
         console.log("in here yo");
@@ -146,7 +195,11 @@ const AuthDialogContent = ({
 
   const onConfirmRegistration = () => {
     //TODO(techiejd): Add user to registration.
-    console.log("AYO user registered: ", authDialogState);
+    setAuthDialogState((aDS) => ({
+      ...aDS,
+      confirmRegistrationDialogOpen: false,
+      recaptchaDialogOpen: true,
+    }));
   };
 
   return (
