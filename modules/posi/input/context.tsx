@@ -1,6 +1,7 @@
 import { createContext, useContext, Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 import { formUrl } from "../../../common/context/context";
+import { maker } from "../../auth/AuthDialog/context";
 
 export enum InvestedTimeLevel {
   hour = 1,
@@ -88,6 +89,7 @@ export const posiFormData = z.object({
   video: formUrl,
   about: z.string().min(5).max(1000).optional(),
   howToSupport: howToSupport,
+  maker: maker,
 });
 
 // TODO(techiejd): Look into a better way of doing this maybe using firestore zod schema

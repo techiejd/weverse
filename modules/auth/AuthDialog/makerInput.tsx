@@ -206,12 +206,11 @@ const MakerInput = ({
         <FormControlLabel
           control={
             <Checkbox
-              checked={authDialogState.maker != undefined}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setAuthDialogState((aDS) => {
-                  console.log("AYO iN here: ", aDS);
-                  return { ...aDS, maker: e.target.checked ? {} : undefined };
-                })
+              checked={true}
+              onClick={(e) =>
+                confirm(
+                  "A este momemento, solo se permite la entrada a Makers."
+                )
               }
               sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
             />
@@ -223,7 +222,9 @@ const MakerInput = ({
           }
         />
         <FormHelperText>
-          Maker = Creador de impacto social positivo. Debes ser mayor de edad.
+          {
+            "Solo se permite la entrada a Makers. Maker = Creador de impacto social positivo. Debes ser mayor de edad."
+          }
         </FormHelperText>
       </FormGroup>
       {authDialogState.maker && (

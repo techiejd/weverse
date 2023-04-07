@@ -13,7 +13,6 @@ import { collection, addDoc } from "firebase/firestore";
 import { ReactNode, useState } from "react";
 import { CitySearchInput, TagsInput } from "../../modules/posi/input";
 import ImpactedPersonsInput from "../../modules/posi/input/impactedPersonsInput";
-import MakerInput from "../../modules/posi/input/makerInput";
 import {
   PartialPosiFormData,
   PosiFormContext,
@@ -136,9 +135,6 @@ const PosiForm = () => {
               </Section>
               <Section label="Mostramelo pues">
                 <ImpactVideoInput />
-              </Section>
-              <Section label="¿Quien fue?">
-                <MakerInput />
               </Section>
               <Section label="Ahora sí, cuentemelo bien (opcional)">
                 <AboutInput />

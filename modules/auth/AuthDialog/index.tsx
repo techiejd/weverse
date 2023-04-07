@@ -66,6 +66,7 @@ const AuthDialogContent = ({
     otpDialogOpen: false,
     recaptchaDialogOpen: false,
     confirmRegistrationDialogOpen: false,
+    maker: {}, // Right now we are only onboarding makers
   });
 
   useEffect(() => {
@@ -105,8 +106,6 @@ const AuthDialogContent = ({
                   : undefined,
             });
             console.log("breakpoint: ", userCred);
-            if (authDialogState.maker) {
-            }
 
             const makerDocRef = await (async () => {
               if (!authDialogState.maker) return undefined;
@@ -126,7 +125,7 @@ const AuthDialogContent = ({
 
             const userDocRef = setDoc(
               doc(appState.firestore, "users", userCred.user.uid),
-              makerDocRef ? { makers: [makerDocRef.id] } : {}
+              makerDocRef ? { maker: makerDocRef.id } : {}
             );
 
             const [finishedUpdateSuccessful, finishedUserDocRef] =
