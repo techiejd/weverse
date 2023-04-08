@@ -15,9 +15,6 @@ const RecaptchaDialog = ({
   const appState = useAppState();
   const recaptchaContainer = useRef<HTMLElement | null>(null);
   const [recaptchaContainerReady, setRecaptchaContainerReady] = useState(false);
-  const [recaptchaVerifier, setRecaptchaVerifier] = useState<
-    RecaptchaVerifier | undefined
-  >(undefined);
 
   useEffect(() => {
     if (!authDialogState.recaptchaDialogOpen) {
@@ -58,7 +55,6 @@ const RecaptchaDialog = ({
             {},
             appState.auth
           );
-          setRecaptchaVerifier(verifier);
           const confirmationResult = await signInWithPhoneNumber(
             appState.auth,
             phoneNumberFormattedForGoogle,
