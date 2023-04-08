@@ -6,8 +6,10 @@ const phoneNumber = z.object({
   countryCallingCode: z.string().nullable(),
   nationalNumber: z.string().nullable(),
 });
-
 export type PhoneNumber = z.infer<typeof phoneNumber>;
+export const encodePhoneNumber = (pN: PhoneNumber) =>
+  `+${pN.countryCallingCode} ${pN.nationalNumber}`;
+
 export enum AuthAction {
   logIn = 0,
   register = 1,
@@ -54,4 +56,6 @@ export type AuthDialogState = {
   otpDialogOpen: boolean;
   recaptchaDialogOpen: boolean;
   confirmRegistrationDialogOpen: boolean;
+  checkingUserRegistered: boolean;
+  userRegisteredError: boolean;
 };

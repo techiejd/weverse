@@ -14,13 +14,19 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useAuthState, useUpdateProfile } from "react-firebase-hooks/auth";
-import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc, getDoc } from "firebase/firestore";
 import { Login } from "@mui/icons-material";
 import OtpDialog from "./otpDialog";
 import PhoneInput from "./phoneInput";
 import RecaptchaDialog from "./recaptchaDialog";
 import ConfirmRegistrationDialog from "./confirmRegistrationDialog";
-import { AuthAction, AuthDialogState, maker, prompts } from "./context";
+import {
+  AuthAction,
+  AuthDialogState,
+  encodePhoneNumber,
+  maker,
+  prompts,
+} from "./context";
 import { AppState, useAppState } from "../../../common/context/appState";
 import MakerInput from "./makerInput";
 
@@ -47,6 +53,30 @@ const TabControl = ({
   );
 };
 
+const CheckingUserRegisteredExplanation = ({
+  authAction,
+}: {
+  authAction: AuthAction;
+}) => {
+  return (
+    <Box>
+      <Typography>
+        Un momento mientras verificamos que{" "}
+        {authAction == AuthAction.logIn ? "ya" : "no"} estes registrado.
+      </Typography>
+      <CircularProgress />
+    </Box>
+  );
+};
+
+const UserRegisteredError = ({ authAction }: { authAction: AuthAction }) => {
+  return (
+    <Typography color={"red"}>
+      Hola, {authAction == AuthAction.logIn ? "no" : "ya"} estas registrado.
+    </Typography>
+  );
+};
+
 const AuthDialogContent = ({
   appState,
   setOpen,
@@ -56,7 +86,7 @@ const AuthDialogContent = ({
   setOpen: Dispatch<SetStateAction<boolean>>;
   initialAuthAction: AuthAction;
 }) => {
-  const [user, loading, authError] = useAuthState(appState.auth);
+  const [user, userLoading, authError] = useAuthState(appState.auth);
   const [updateProfile, updating, updateProfileError] = useUpdateProfile(
     appState.auth
   );
@@ -69,14 +99,16 @@ const AuthDialogContent = ({
     recaptchaDialogOpen: false,
     confirmRegistrationDialogOpen: false,
     maker: {}, // Right now we are only onboarding makers
+    checkingUserRegistered: false,
+    userRegisteredError: false,
   });
 
   useEffect(() => {
     console.log("AYo change in : user", user);
   }, [user]);
   useEffect(() => {
-    console.log("AYo change in : loading", loading);
-  }, [loading]);
+    console.log("AYo change in : loading", userLoading);
+  }, [userLoading]);
   useEffect(() => {
     console.log("AYo change in : error", authError);
   }, [authError]);
@@ -85,6 +117,12 @@ const AuthDialogContent = ({
     if (authDialogState.recaptchaConfirmationResult)
       setAuthDialogState((aDS) => ({ ...aDS, otpDialogOpen: true }));
   }, [authDialogState.recaptchaConfirmationResult, setAuthDialogState]);
+
+  useEffect(() => {
+    setAuthDialogState((aDS) =>
+      aDS.userRegisteredError ? { ...aDS, userRegisteredError: false } : aDS
+    );
+  }, [authDialogState.authAction, setAuthDialogState]);
 
   const handleOtp = async (otp: string) => {
     console.log("tok");
@@ -152,8 +190,28 @@ const AuthDialogContent = ({
       });
   };
 
-  const onSubmit = () => {
-    if (!authDialogState) return;
+  const checkIfUserRegistered = async () => {
+    setAuthDialogState((aDS) => ({
+      ...aDS,
+      checkingUserRegistered: true,
+    }));
+
+    const registeredPNRef = doc(
+      appState.firestore,
+      "registeredPhoneNumbers",
+      encodePhoneNumber(authDialogState.phoneNumber)
+    );
+    const registeredPNDoc = await getDoc(registeredPNRef);
+
+    setAuthDialogState((aDS) => ({
+      ...aDS,
+      checkingUserRegistered: false,
+    }));
+
+    return registeredPNDoc.exists();
+  };
+
+  const onSubmit = async () => {
     const phoneNumber = authDialogState.phoneNumber;
     if (
       !phoneNumber.countryCallingCode ||
@@ -170,14 +228,30 @@ const AuthDialogContent = ({
       );
       return;
     }
-    setAuthDialogState((aDS) =>
-      aDS
-        ? {
+
+    const userIsRegistered = await checkIfUserRegistered();
+    switch (authDialogState.authAction) {
+      case AuthAction.logIn: {
+        if (!userIsRegistered) {
+          setAuthDialogState((aDS) => ({
             ...aDS,
-            phoneNumberInputError: false,
-          }
-        : aDS
-    );
+            userRegisteredError: true,
+          }));
+          return;
+        }
+        break;
+      }
+      case AuthAction.register: {
+        if (userIsRegistered) {
+          setAuthDialogState((aDS) => ({
+            ...aDS,
+            userRegisteredError: true,
+          }));
+          return;
+        }
+        break;
+      }
+    }
 
     console.log("bruh");
     console.log("Ayo");
@@ -209,6 +283,10 @@ const AuthDialogContent = ({
         authDialogState={authDialogState}
         setAuthDialogState={setAuthDialogState}
         handleVerification={handleOtp}
+      />
+      <RecaptchaDialog
+        authDialogState={authDialogState}
+        setAuthDialogState={setAuthDialogState}
       />
       <DialogTitle>¡A autenticarnos!</DialogTitle>
       <form
@@ -265,14 +343,19 @@ const AuthDialogContent = ({
               authDialogState={authDialogState}
               setAuthDialogState={setAuthDialogState}
             />
-            <RecaptchaDialog
-              authDialogState={authDialogState}
-              setAuthDialogState={setAuthDialogState}
-            />
+            {authDialogState.checkingUserRegistered && (
+              <CheckingUserRegisteredExplanation
+                authAction={authDialogState.authAction}
+              />
+            )}
+            {authDialogState.userRegisteredError && (
+              <UserRegisteredError authAction={authDialogState.authAction} />
+            )}
           </Stack>
         </DialogContent>
         <DialogActions>
           <Button
+            disabled={authDialogState.checkingUserRegistered}
             variant="outlined"
             color="secondary"
             onClick={(e) => {
@@ -282,7 +365,7 @@ const AuthDialogContent = ({
             Cancelar
           </Button>
           <Button
-            disabled={loading}
+            disabled={userLoading || authDialogState.checkingUserRegistered}
             variant="contained"
             endIcon={<Login />}
             type="submit"

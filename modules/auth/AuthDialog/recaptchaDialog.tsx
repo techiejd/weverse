@@ -2,7 +2,7 @@ import { Dialog, DialogTitle, Box } from "@mui/material";
 import { Dispatch, SetStateAction, useRef, useState, useEffect } from "react";
 
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { AuthDialogState } from "./context";
+import { AuthDialogState, encodePhoneNumber } from "./context";
 import { useAppState } from "../../../common/context/appState";
 
 const RecaptchaDialog = ({
@@ -27,7 +27,9 @@ const RecaptchaDialog = ({
       authDialogState.phoneNumber.countryCallingCode &&
       authDialogState.phoneNumber.nationalNumber;
     if (!phoneNumberIsReady) return;
-    const phoneNumberFormattedForGoogle = `+${authDialogState.phoneNumber.countryCallingCode} ${authDialogState.phoneNumber.nationalNumber}`;
+    const phoneNumberFormattedForGoogle = encodePhoneNumber(
+      authDialogState.phoneNumber
+    );
     console.log(
       "phoneNumber: ",
       phoneNumberIsReady,
