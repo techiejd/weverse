@@ -94,6 +94,9 @@ const baseConfiguration = {
     h3: {
       fontSize: "1.5rem",
     },
+    button: {
+      textTransform: "none",
+    },
   },
 };
 
