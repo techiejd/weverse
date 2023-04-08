@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   Divider,
   Stack,
@@ -118,10 +119,13 @@ const HandleLogInDialog = ({
       />
       <Dialog open={open}>
         <DialogTitle>¡Oh-oh! Primero se necesita iniciar sesión.</DialogTitle>
-        <DialogActions>
-          <Button size="small" onClick={(e) => setOpen(false)}>
-            Cancelar
-          </Button>
+        <DialogContent>
+          <DialogContentText>
+            Regístrese si no lo ha hecho. Inicia sesión si ya estás registrado.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions onClick={(e) => setOpen(false)}>
+          <Button size="small">Cancelar</Button>
           <AuthDialogButton setAuthDialogOpen={setLogInDialogOpen} />
           <AuthDialogButton
             setAuthDialogOpen={setLogInDialogOpen}
