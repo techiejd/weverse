@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
-import { ReactNode, useState } from "react";
+import { Dispatch, ReactNode, SetStateAction, useState } from "react";
 import { CitySearchInput, TagsInput } from "../../modules/posi/input";
 import ImpactedPersonsInput from "../../modules/posi/input/impactedPersonsInput";
 import {
@@ -18,6 +18,7 @@ import {
   PosiFormContext,
   PosiFormDispatchContext,
   posiFormData,
+  useFormData,
 } from "../../modules/posi/input/context";
 import ImpactVideoInput from "../../modules/posi/input/impactVideoInput";
 import SummaryInput from "../../modules/posi/input/SummaryInput";
@@ -43,44 +44,59 @@ const Section = ({
   );
 };
 
-const PosiForm = () => {
-  const [formData, setFormData] = useState<PartialPosiFormData>({});
-  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+const ConfirmAndUploadDialog = ({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const [formData, setFormData] = useFormData();
   const appState = useAppState();
   const router = useRouter();
   return (
+    <Dialog fullScreen open={open}>
+      <DialogTitle>
+        Confirma que este es el impacto que deseas cargar.
+      </DialogTitle>
+      <DialogContent>
+        <Box sx={{ backgroundColor: "white" }}>
+          {open /** We only want to parse the data when we're ready to display. */ && (
+            <AboutContent {...posiFormData.parse(formData)} readonly />
+          )}
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setOpen(false)}>Cancel</Button>
+        <Button
+          variant="contained"
+          onClick={async (e) => {
+            console.log(formData);
+            const usersPosiFormData = posiFormData.parse(formData);
+            if (appState) {
+              const docRef = await addDoc(
+                collection(appState.firestore, "impacts"),
+                usersPosiFormData
+              );
+              router.push(`/posi/${docRef.id}/about`);
+            }
+          }}
+        >
+          Se ve bien!
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const PosiForm = () => {
+  const [promptLogInDialogOpen, setPromptLogInDialogOpen] = useState(true);
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const [formData, setFormData] = useState<PartialPosiFormData>({});
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+
+  return (
     <Box>
-      {uploadDialogOpen && (
-        <Dialog fullScreen open={uploadDialogOpen}>
-          <DialogTitle>
-            Confirma que este es el impacto que deseas cargar.
-          </DialogTitle>
-          <DialogContent>
-            <Box sx={{ backgroundColor: "white" }}>
-              <AboutContent {...posiFormData.parse(formData)} readonly />
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setUploadDialogOpen(false)}>Cancel</Button>
-            <Button
-              variant="contained"
-              onClick={async (e) => {
-                console.log(formData);
-                const usersPosiFormData = posiFormData.parse(formData);
-                if (appState) {
-                  const docRef = await addDoc(
-                    collection(appState.firestore, "impacts"),
-                    usersPosiFormData
-                  );
-                  router.push(`/posi/${docRef.id}/about`);
-                }
-              }}
-            >
-              Se ve bien!
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -88,9 +104,14 @@ const PosiForm = () => {
           posiFormData.parse(formData);
           setUploadDialogOpen(true);
         }}
+        onClick={(e) => alert("Clicked!")}
       >
         <PosiFormContext.Provider value={formData}>
           <PosiFormDispatchContext.Provider value={setFormData}>
+            <ConfirmAndUploadDialog
+              open={uploadDialogOpen}
+              setOpen={setUploadDialogOpen}
+            />
             <Stack
               spacing={2}
               margin={2}
