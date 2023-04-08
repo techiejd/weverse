@@ -95,7 +95,7 @@ const baseConfiguration = {
       fontSize: "1.5rem",
     },
     button: {
-      textTransform: "none",
+      textTransform: undefined,
     },
   },
 };
