@@ -270,7 +270,13 @@ const AuthDialogContent = ({
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button disabled={loading} variant="outlined" color="secondary">
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={(e) => {
+              setOpen(false);
+            }}
+          >
             Cancelar
           </Button>
           <Button
