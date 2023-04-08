@@ -1,13 +1,8 @@
 import { Dialog, DialogTitle, Box } from "@mui/material";
 import { Dispatch, SetStateAction, useRef, useState, useEffect } from "react";
 
-import {
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-  ConfirmationResult,
-  Auth,
-} from "firebase/auth";
-import { AuthDialogState, PhoneNumber } from "./context";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { AuthDialogState } from "./context";
 import { useAppState } from "../../../common/context/appState";
 
 const RecaptchaDialog = ({
@@ -62,7 +57,15 @@ const RecaptchaDialog = ({
             phoneNumberFormattedForGoogle,
             verifier
           );
-          verifier.clear();
+          const resetRecaptchaDialogState = () => {
+            verifier.clear();
+            if (recaptchaContainer.current)
+              recaptchaContainer.current.innerHTML = "";
+            recaptchaContainer.current = null;
+            setRecaptchaContainerReady(false);
+          };
+          resetRecaptchaDialogState();
+
           console.log("Is the error happening before this?");
           setAuthDialogState((aDS) => ({
             ...aDS,
