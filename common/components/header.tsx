@@ -3,6 +3,7 @@ import {
   Box,
   BoxProps,
   Button,
+  CircularProgress,
   IconButton,
   Link,
   ListItemIcon,
@@ -12,11 +13,13 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useAuthUser } from "next-firebase-auth";
+import { useAuthState, useUpdateProfile } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { Home, Login, PlusOne } from "@mui/icons-material";
+import { AppState, useAppState } from "../context/appState";
+import AuthDialog from "../../modules/auth/AuthDialog";
 
 export const MenuComponent = (props: BoxProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -62,8 +65,35 @@ export const MenuComponent = (props: BoxProps) => {
   );
 };
 
+const UserPortal = ({ appState }: { appState: AppState }) => {
+  const [user, loading, error] = useAuthState(appState.auth);
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  return (
+    <Box>
+      <AuthDialog open={authDialogOpen} setOpen={setAuthDialogOpen} />
+      {loading ? (
+        <CircularProgress />
+      ) : user ? (
+        <Button size="small" variant="outlined" href={`/user/${user.uid}`}>
+          {user.displayName}
+        </Button>
+      ) : (
+        <Button
+          size="small"
+          variant="outlined"
+          onClick={(e) => {
+            setAuthDialogOpen(true);
+          }}
+        >
+          LOGIN
+        </Button>
+      )}
+    </Box>
+  );
+};
+
 export const Header = () => {
-  const authUser = useAuthUser();
+  const appState = useAppState();
   const router = useRouter();
   return (
     <AppBar position="static" color="secondary">
@@ -75,24 +105,7 @@ export const Header = () => {
           </Link>
         </Typography>
         <div style={{ flexGrow: 1 }}></div>
-        {authUser.id ? (
-          authUser.displayName ? (
-            authUser.displayName
-          ) : (
-            <Button
-              href={"/user/registration/personal"}
-              variant="outlined"
-              color="info"
-              size="small"
-            >
-              Register
-            </Button>
-          )
-        ) : (
-          <Button href={`/auth?destination=${router.pathname}`} size="small">
-            LOGIN
-          </Button>
-        )}
+        {appState ? <UserPortal appState={appState} /> : <CircularProgress />}
       </Toolbar>
     </AppBar>
   );
