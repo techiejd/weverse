@@ -27,10 +27,10 @@ const darkPalette = {
     contrastText: "black",
   },
   secondary: {
-    main: "#D4E7DE",
-    light: "#DAEBE3",
-    dark: "#CEE4D9",
-    contrastText: "black",
+    main: "#254134",
+    light: "#2e5241",
+    dark: "#1c3127",
+    contrastText: "white",
   },
 };
 
@@ -47,10 +47,10 @@ const lightPalette = {
     contrastText: "white",
   },
   secondary: {
-    main: "#254134",
-    light: "#2e5241",
-    dark: "#1c3127",
-    contrastText: "white",
+    main: "#D4E7DE",
+    light: "#DAEBE3",
+    dark: "#CEE4D9",
+    contrastText: "black",
   },
   info: {
     main: "#624a04",
