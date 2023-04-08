@@ -18,6 +18,13 @@ const RecaptchaDialog = ({
   const [recaptchaVerifier, setRecaptchaVerifier] = useState<
     RecaptchaVerifier | undefined
   >(undefined);
+
+  useEffect(() => {
+    if (!authDialogState.recaptchaDialogOpen) {
+      setRecaptchaContainerReady(false);
+    }
+  }, [authDialogState.recaptchaDialogOpen]);
+
   useEffect(() => {
     const phoneNumberIsReady =
       authDialogState.phoneNumber.countryCallingCode &&
@@ -59,10 +66,6 @@ const RecaptchaDialog = ({
           );
           const resetRecaptchaDialogState = () => {
             verifier.clear();
-            if (recaptchaContainer.current)
-              recaptchaContainer.current.innerHTML = "";
-            recaptchaContainer.current = null;
-            setRecaptchaContainerReady(false);
           };
           resetRecaptchaDialogState();
 

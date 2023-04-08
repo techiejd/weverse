@@ -10,7 +10,13 @@ import {
   Typography,
 } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
-import { Dispatch, ReactNode, SetStateAction, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { CitySearchInput, TagsInput } from "../../modules/posi/input";
 import ImpactedPersonsInput from "../../modules/posi/input/impactedPersonsInput";
 import {
@@ -28,6 +34,10 @@ import { useAppState } from "../../common/context/appState";
 import TimeInfoInput from "../../modules/posi/input/timeInfoInput";
 import AboutContent from "../../modules/posi/impactPage/about/AboutContent";
 import { useRouter } from "next/router";
+import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
+import { AuthAction } from "../../modules/auth/AuthDialog/context";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuthUser } from "next-firebase-auth";
 
 const Section = ({
   label,
@@ -89,14 +99,56 @@ const ConfirmAndUploadDialog = ({
   );
 };
 
-const PosiForm = () => {
-  const [promptLogInDialogOpen, setPromptLogInDialogOpen] = useState(true);
-  const [authDialogOpen, setAuthDialogOpen] = useState(false);
-  const [formData, setFormData] = useState<PartialPosiFormData>({});
-  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+const HandleLogInDialog = ({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const [logInDialogOpen, setLogInDialogOpen] = useState(false);
+  const [registerDialogOpen, setRegisterDialogOpen] = useState(false);
 
   return (
     <Box>
+      <AuthDialog open={logInDialogOpen} setOpen={setLogInDialogOpen} />
+      <AuthDialog
+        open={registerDialogOpen}
+        setOpen={setRegisterDialogOpen}
+        initialAuthAction={AuthAction.register}
+      />
+      <Dialog open={open}>
+        <DialogTitle>¡Oh-oh! Primero se necesita iniciar sesión.</DialogTitle>
+        <DialogActions>
+          <Button size="small" onClick={(e) => setOpen(false)}>
+            Cancelar
+          </Button>
+          <AuthDialogButton setAuthDialogOpen={setLogInDialogOpen} />
+          <AuthDialogButton
+            setAuthDialogOpen={setLogInDialogOpen}
+            authAction={AuthAction.register}
+            buttonVariant="contained"
+          />
+        </DialogActions>
+      </Dialog>
+    </Box>
+  );
+};
+
+const PosiForm = () => {
+  const [formData, setFormData] = useState<PartialPosiFormData>({});
+  const [handleLogInDialogOpen, setHandleLogInDialogOpen] = useState(false);
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [unauthorizedUserInteraction, setUnauthorizedUserInteraction] =
+    useState(false);
+  const user = useAuthUser();
+
+  return (
+    <Box>
+      <HandleLogInDialog
+        open={unauthorizedUserInteraction}
+        setOpen={setUnauthorizedUserInteraction}
+      />
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -104,7 +156,11 @@ const PosiForm = () => {
           posiFormData.parse(formData);
           setUploadDialogOpen(true);
         }}
-        onClick={(e) => alert("Clicked!")}
+        onClick={(e) => {
+          if (user.id == null) {
+            setUnauthorizedUserInteraction(true);
+          }
+        }}
       >
         <PosiFormContext.Provider value={formData}>
           <PosiFormDispatchContext.Provider value={setFormData}>

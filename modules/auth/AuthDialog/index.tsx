@@ -50,9 +50,11 @@ const TabControl = ({
 const AuthDialogContent = ({
   appState,
   setOpen,
+  initialAuthAction,
 }: {
   appState: AppState;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  initialAuthAction: AuthAction;
 }) => {
   const [user, loading, authError] = useAuthState(appState.auth);
   const [updateProfile, updating, updateProfileError] = useUpdateProfile(
@@ -62,7 +64,7 @@ const AuthDialogContent = ({
     name: "",
     phoneNumber: { countryCallingCode: null, nationalNumber: null },
     phoneNumberInputError: false,
-    authAction: AuthAction.logIn,
+    authAction: initialAuthAction,
     otpDialogOpen: false,
     recaptchaDialogOpen: false,
     confirmRegistrationDialogOpen: false,
@@ -293,19 +295,60 @@ const AuthDialogContent = ({
   );
 };
 
+export const AuthDialogButton = ({
+  setAuthDialogOpen,
+  authAction = AuthAction.logIn,
+  buttonVariant = "outlined",
+}: {
+  setAuthDialogOpen: Dispatch<SetStateAction<boolean>>;
+  authAction?: AuthAction;
+  buttonVariant?: "text" | "outlined" | "contained";
+}) => {
+  const appState = useAppState();
+
+  const AuthDialogButtonInner = ({ appState }: { appState: AppState }) => {
+    const [user, loading, error] = useAuthState(appState.auth);
+    return loading ? (
+      <CircularProgress />
+    ) : (
+      <Button
+        size="small"
+        variant={buttonVariant}
+        disabled={user != null || user != undefined}
+        onClick={(e) => {
+          setAuthDialogOpen(true);
+        }}
+      >
+        {authAction == AuthAction.logIn ? "Iniciar Sesión" : "Registrarme"}
+      </Button>
+    );
+  };
+  return appState == undefined ? (
+    <CircularProgress />
+  ) : (
+    <AuthDialogButtonInner appState={appState} />
+  );
+};
+
 const AuthDialog = ({
   open,
   setOpen,
+  initialAuthAction = AuthAction.logIn,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  initialAuthAction?: AuthAction;
 }) => {
   const appState = useAppState();
 
   return (
     <Dialog open={open} fullScreen>
       {appState ? (
-        <AuthDialogContent setOpen={setOpen} appState={appState} />
+        <AuthDialogContent
+          setOpen={setOpen}
+          appState={appState}
+          initialAuthAction={initialAuthAction}
+        />
       ) : (
         <CircularProgress />
       )}

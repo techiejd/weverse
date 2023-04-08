@@ -19,7 +19,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { Home, Login, PlusOne } from "@mui/icons-material";
 import { AppState, useAppState } from "../context/appState";
-import AuthDialog from "../../modules/auth/AuthDialog";
+import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 
 export const MenuComponent = (props: BoxProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -78,15 +78,7 @@ const UserPortal = ({ appState }: { appState: AppState }) => {
           {user.displayName}
         </Button>
       ) : (
-        <Button
-          size="small"
-          variant="outlined"
-          onClick={(e) => {
-            setAuthDialogOpen(true);
-          }}
-        >
-          LOGIN
-        </Button>
+        <AuthDialogButton setAuthDialogOpen={setAuthDialogOpen} />
       )}
     </Box>
   );
