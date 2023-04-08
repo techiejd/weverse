@@ -104,16 +104,6 @@ const AuthDialogContent = ({
   });
 
   useEffect(() => {
-    console.log("AYo change in : user", user);
-  }, [user]);
-  useEffect(() => {
-    console.log("AYo change in : loading", userLoading);
-  }, [userLoading]);
-  useEffect(() => {
-    console.log("AYo change in : error", authError);
-  }, [authError]);
-
-  useEffect(() => {
     if (authDialogState.recaptchaConfirmationResult)
       setAuthDialogState((aDS) => ({ ...aDS, otpDialogOpen: true }));
   }, [authDialogState.recaptchaConfirmationResult, setAuthDialogState]);
@@ -125,16 +115,12 @@ const AuthDialogContent = ({
   }, [authDialogState.authAction, setAuthDialogState]);
 
   const handleOtp = async (otp: string) => {
-    console.log("tok");
-    console.log(otp);
     if (authDialogState.recaptchaConfirmationResult == undefined)
       return "Try restarting";
     return authDialogState.recaptchaConfirmationResult
       .confirm(otp)
       .then(async (userCred) => {
         let error = "";
-        console.log("homie");
-        console.log(userCred);
         /**Stick it into db and return ""*/
         if (authDialogState.authAction == AuthAction.register) {
           const createUserAndMaker = async () => {
@@ -145,7 +131,6 @@ const AuthDialogContent = ({
                   ? authDialogState.maker?.pic
                   : undefined,
             });
-            console.log("breakpoint: ", userCred);
 
             const makerDocRef = await (async () => {
               if (!authDialogState.maker) return undefined;
@@ -196,9 +181,6 @@ const AuthDialogContent = ({
         return error;
       })
       .catch((err) => {
-        console.log("in here yo");
-        console.log(String(err));
-        console.log(JSON.stringify(err));
         return "Wrong code!";
       });
   };
@@ -266,8 +248,6 @@ const AuthDialogContent = ({
       }
     }
 
-    console.log("bruh");
-    console.log("Ayo");
     switch (authDialogState.authAction) {
       case AuthAction.logIn: {
         setAuthDialogState((aDS) => ({ ...aDS, recaptchaDialogOpen: true }));

@@ -64,14 +64,11 @@ const OtpDialog = ({
           variant="contained"
           endIcon={<Login />}
           onClick={() => {
-            console.log(authCodeInput);
             const verify = async () => {
               setWaitingVerificationResult(true);
               const err = await handleVerification(authCodeInput);
               setWaitingVerificationResult(false);
               if (err != "") {
-                console.log("We were right all along");
-                console.log(err);
                 setError(err);
               }
             };

@@ -81,7 +81,6 @@ const ConfirmAndUploadDialog = ({
         <Button
           variant="contained"
           onClick={async (e) => {
-            console.log(formData);
             const usersPosiFormData = posiFormData.parse(formData);
             if (appState) {
               const docRef = await addDoc(
@@ -152,7 +151,6 @@ const PosiForm = () => {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          console.log(formData);
           posiFormData.parse(formData);
           setUploadDialogOpen(true);
         }}

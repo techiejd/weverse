@@ -10,7 +10,6 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
   const theme = useMemo(() => {
-    console.log(configuration(prefersDarkMode));
     return createTheme(configuration(prefersDarkMode));
   }, [prefersDarkMode]);
 

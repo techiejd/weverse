@@ -16,9 +16,6 @@ const About = () => {
   const router = useRouter();
   const { posiId } = router.query;
   const [posiData, setPosiData] = useState<PosiFormData | undefined>(undefined);
-  console.log("posiId ", posiId);
-  console.log("route: ", router.route);
-  console.log("idk: ", router);
 
   useEffect(() => {
     if (appState && posiId) {

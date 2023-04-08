@@ -63,9 +63,7 @@ const InvestedTimeLevelInput = () => {
 
   useEffect(() => {
     if (setFormData) {
-      console.log("Ayooo");
       setFormData((fD) => {
-        console.log(fD);
         return {
           ...fD,
           investedTimeLevel: fD.investedTimeLevel

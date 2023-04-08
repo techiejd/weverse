@@ -30,12 +30,6 @@ const RecaptchaDialog = ({
     const phoneNumberFormattedForGoogle = encodePhoneNumber(
       authDialogState.phoneNumber
     );
-    console.log(
-      "phoneNumber: ",
-      phoneNumberIsReady,
-      phoneNumberFormattedForGoogle
-    );
-    console.log("yo");
 
     if (
       appState?.auth &&
@@ -43,14 +37,6 @@ const RecaptchaDialog = ({
       recaptchaContainerReady
     ) {
       const triggerSignInProcess = async () => {
-        console.log("here: ", {
-          auth: appState.auth,
-          pN: authDialogState.phoneNumber,
-          open: authDialogState.recaptchaDialogOpen,
-          recaptchaContainerReady,
-        });
-        console.log("Window: ", window);
-        console.log(recaptchaContainer);
         if (recaptchaContainer.current != null) {
           const verifier = new RecaptchaVerifier(
             recaptchaContainer.current,
@@ -67,7 +53,6 @@ const RecaptchaDialog = ({
           };
           resetRecaptchaDialogState();
 
-          console.log("Is the error happening before this?");
           setAuthDialogState((aDS) => ({
             ...aDS,
             recaptchaConfirmationResult: confirmationResult,
@@ -85,14 +70,6 @@ const RecaptchaDialog = ({
     recaptchaContainerReady,
   ]);
 
-  console.log("here too: ", {
-    auth: appState?.auth,
-    pN: authDialogState.phoneNumber,
-    open: authDialogState.recaptchaDialogOpen,
-    recaptchaContainerReady,
-  });
-  console.log(open);
-
   return (
     <Dialog open={authDialogState.recaptchaDialogOpen} fullWidth>
       <DialogTitle>
@@ -102,7 +79,6 @@ const RecaptchaDialog = ({
         <Box
           ref={(r) => {
             recaptchaContainer.current = r as HTMLElement;
-            console.log("current: ", recaptchaContainer.current);
             setRecaptchaContainerReady(true);
           }}
           m={0}
