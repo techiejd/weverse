@@ -163,13 +163,26 @@ const AuthDialogContent = ({
               );
             })();
 
-            const userDocRef = setDoc(
+            const userDocPromise = setDoc(
               doc(appState.firestore, "users", userCred.user.uid),
               makerDocRef ? { maker: makerDocRef.id } : {}
             );
 
-            const [finishedUpdateSuccessful, finishedUserDocRef] =
-              await Promise.all([updateSuccessful, userDocRef]);
+            const registeredPhoneNumberPromise = setDoc(
+              doc(
+                appState.firestore,
+                "registeredPhoneNumbers",
+                encodePhoneNumber(authDialogState.phoneNumber)
+              ),
+              { ownerId: userCred.user.uid }
+            );
+
+            const [finishedUpdateSuccessful, userDoc, registeredPhoneNumber] =
+              await Promise.all([
+                updateSuccessful,
+                userDocPromise,
+                registeredPhoneNumberPromise,
+              ]);
 
             if (!finishedUpdateSuccessful)
               error = updateProfileError?.message
