@@ -10,7 +10,8 @@ import {
 } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { Login } from "@mui/icons-material";
-import { AuthDialogState, organizationLabels } from "./context";
+import { AuthDialogState } from "./context";
+import { organizationLabels } from "../../../common/context/weverse";
 
 const ConfirmRegistrationDialog = ({
   authDialogState,

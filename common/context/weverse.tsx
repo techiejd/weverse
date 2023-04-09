@@ -23,6 +23,12 @@ export const maker = z.object({
   pic: formUrl,
   name: z.string().min(1),
   organizationType: organizationType.optional(),
+  createdAt: z.any(), // TODO(techiejd): Look into firebase schemas and transformations.
 });
 const partialMaker = maker.partial();
 export type PartialMaker = z.infer<typeof partialMaker>;
+
+export const member = z.object({
+  makerId: z.string(),
+  createdAt: z.any(), // TODO(techiejd): Look into firebase schemas and transformations.
+});

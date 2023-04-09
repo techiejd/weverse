@@ -14,7 +14,14 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useAuthState, useUpdateProfile } from "react-firebase-hooks/auth";
-import { collection, addDoc, setDoc, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  setDoc,
+  doc,
+  getDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { Login } from "@mui/icons-material";
 import OtpDialog from "./otpDialog";
 import PhoneInput from "./phoneInput";
@@ -24,11 +31,11 @@ import {
   AuthAction,
   AuthDialogState,
   encodePhoneNumber,
-  maker,
   prompts,
 } from "./context";
 import { AppState, useAppState } from "../../../common/context/appState";
 import MakerInput from "./makerInput";
+import { maker } from "../../../common/context/weverse";
 
 const TabControl = ({
   appState,
@@ -121,9 +128,9 @@ const AuthDialogContent = ({
       .confirm(otp)
       .then(async (userCred) => {
         let error = "";
-        /**Stick it into db and return ""*/
         if (authDialogState.authAction == AuthAction.register) {
           const createUserAndMaker = async () => {
+            // TODO(techiejd): Look into using transactions or batch writes here.
             const updateSuccessful = updateProfile({
               displayName: authDialogState.name,
               photoURL:
@@ -141,6 +148,7 @@ const AuthDialogContent = ({
                   authDialogState.maker?.type == "individual"
                     ? authDialogState.name
                     : authDialogState.maker?.name,
+                createdAt: serverTimestamp(),
               });
               return await addDoc(
                 collection(appState.firestore, "makers"),
@@ -148,9 +156,11 @@ const AuthDialogContent = ({
               );
             })();
 
-            const userDocPromise = setDoc(
-              doc(appState.firestore, "users", userCred.user.uid),
-              makerDocRef ? { maker: makerDocRef.id } : {}
+            const memberDocPromise = setDoc(
+              doc(appState.firestore, "members", userCred.user.uid),
+              makerDocRef
+                ? { makerId: makerDocRef.id, createdAt: serverTimestamp() }
+                : {}
             );
 
             const registeredPhoneNumberPromise = setDoc(
@@ -159,13 +169,13 @@ const AuthDialogContent = ({
                 "registeredPhoneNumbers",
                 encodePhoneNumber(authDialogState.phoneNumber)
               ),
-              { ownerId: userCred.user.uid }
+              { ownerId: userCred.user.uid, createdAt: serverTimestamp() }
             );
 
             const [finishedUpdateSuccessful, userDoc, registeredPhoneNumber] =
               await Promise.all([
                 updateSuccessful,
-                userDocPromise,
+                memberDocPromise,
                 registeredPhoneNumberPromise,
               ]);
 

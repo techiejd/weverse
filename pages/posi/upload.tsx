@@ -10,7 +10,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDoc, doc } from "firebase/firestore";
 import {
   Dispatch,
   ReactNode,
@@ -37,8 +37,9 @@ import AboutContent from "../../modules/posi/impactPage/about/AboutContent";
 import { useRouter } from "next/router";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import { AuthAction } from "../../modules/auth/AuthDialog/context";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useAuthUser } from "next-firebase-auth";
+import { member } from "../../common/context/weverse";
+import { serverTimestamp } from "firebase/firestore";
 
 const Section = ({
   label,
@@ -139,12 +140,26 @@ const HandleLogInDialog = ({
 };
 
 const PosiForm = () => {
-  const [formData, setFormData] = useState<PartialPosiFormData>({});
-  const [handleLogInDialogOpen, setHandleLogInDialogOpen] = useState(false);
+  const [formData, setFormData] = useState<PartialPosiFormData>({
+    createdAt: serverTimestamp(),
+  });
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [unauthorizedUserInteraction, setUnauthorizedUserInteraction] =
     useState(false);
   const user = useAuthUser();
+  const appState = useAppState();
+
+  useEffect(() => {
+    if (user.id && appState) {
+      const memberDocRef = doc(appState.firestore, "members", user.id);
+      const getMakerId = async () => {
+        const memberDoc = await getDoc(memberDocRef);
+        const memberData = member.parse(memberDoc.data());
+        setFormData((fD) => ({ ...fD, makerId: memberData.makerId }));
+      };
+      getMakerId();
+    }
+  }, [user, appState]);
 
   return (
     <Box>
