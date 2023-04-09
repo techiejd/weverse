@@ -19,13 +19,13 @@ import {
   useEffect,
   useState,
 } from "react";
+import { AuthDialogState } from "./context";
+import { FileInput } from "../../posi/input";
 import {
-  AuthDialogState,
   OrganizationType,
   organizationLabels,
   organizationType,
-} from "./context";
-import { FileInput } from "../../posi/input";
+} from "../../../common/context/weverse";
 
 const OrganizationTypeInput = ({
   authDialogState,

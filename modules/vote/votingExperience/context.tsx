@@ -15,10 +15,6 @@ import {
 } from "../context";
 import { CandidatesById } from "./votingExperience";
 import { useAppState } from "../../../common/context/appState";
-import {
-  useSetHeaderContext,
-  useHeaderState,
-} from "../../../common/context/header";
 
 export enum VotingActionType {
   vote = "vote",
@@ -59,10 +55,6 @@ const VotingProvider: React.FC<{
   children: JSX.Element;
   initialState: VotingState;
 }> = ({ children, initialState }) => {
-  //TODO(techijd): Move this header stuff out of here and into Vote or App Context
-  const setHeaderState = useSetHeaderContext();
-  const headerState = useHeaderState();
-
   const appState = useAppState();
 
   const voteDispatch = useVoteDispatch();
@@ -192,6 +184,7 @@ const VotingProvider: React.FC<{
     }
   }, []);
 
+  /** 
   useEffect(() => {
     if (setHeaderState) {
       setHeaderState({
@@ -203,6 +196,7 @@ const VotingProvider: React.FC<{
       });
     }
   }, [setHeaderState, votingState]);
+  */
 
   return (
     <VotingContext.Provider value={votingState}>

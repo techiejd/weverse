@@ -179,7 +179,7 @@ const Finale = () => {
         See the results below.
       </Typography>
       <br />
-      <Image src={board} />
+      <Image src={board} alt="WeRace Game." />
       <br />
       <Paper>
         <List>
