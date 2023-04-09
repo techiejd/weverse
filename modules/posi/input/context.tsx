@@ -1,7 +1,7 @@
 import { createContext, useContext, Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 import { formUrl } from "../../../common/context/context";
-import { maker } from "../../auth/AuthDialog/context";
+import { maker } from "../../../common/context/weverse";
 
 export enum InvestedTimeLevel {
   hour = 1,
