@@ -130,7 +130,7 @@ const HandleLogInDialog = ({
           <Button size="small">Cancelar</Button>
           <AuthDialogButton setAuthDialogOpen={setLogInDialogOpen} />
           <AuthDialogButton
-            setAuthDialogOpen={setLogInDialogOpen}
+            setAuthDialogOpen={setRegisterDialogOpen}
             authAction={AuthAction.register}
             buttonVariant="contained"
           />
