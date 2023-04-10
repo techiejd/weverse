@@ -1,6 +1,4 @@
-import "firebase/compat/auth";
-import compatApp from "firebase/compat/app";
-import firebase from "firebase/compat/app";
+import { initializeApp } from 'firebase/app';
 
 export const creds = {
   apiKey: String(process.env.NEXT_PUBLIC_REACT_APP_API_KEY),
@@ -13,4 +11,4 @@ export const creds = {
   measurementId: String(process.env.NEXT_PUBLIC_REACT_APP_MEASUREMENT_ID),
 };
 
-export const app = firebase.apps.length == 0 ? compatApp.initializeApp(creds) : firebase.apps[0];
+export const app = initializeApp(creds);
