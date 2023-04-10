@@ -17,11 +17,14 @@ import { useEffect, useState } from "react";
 import {
   castFirestoreDocToPosiFormData,
   PosiFormData,
+  getShareProps,
+  getPosiPage,
 } from "../../modules/posi/input/context";
 import { getDocs, collection } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import QuickStats from "../../modules/posi/impactPage/QuickStats";
 import { PlusOne } from "@mui/icons-material";
+import ShareActionArea from "../../common/components/shareActionArea";
 
 const ImpactCard = ({
   posiData,
@@ -71,10 +74,12 @@ const ImpactCard = ({
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" variant="contained">
-          Learn More
+        <Button size="small" variant="contained" href={getPosiPage(id)}>
+          Aprender más
         </Button>
-        <Button size="small">Share</Button>
+        <ShareActionArea shareProps={getShareProps(posiData, id)}>
+          <Button size="small">Share</Button>
+        </ShareActionArea>
       </CardActions>
     </Card>
   );

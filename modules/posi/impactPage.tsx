@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 import { z } from "zod";
 import { ReactNode } from "react";
-import ImpactPageProvider from "./impactPage/context";
 
 export enum PageTypes {
   about,
@@ -76,14 +75,8 @@ const ImpactPage = (props: {
 }) => {
   return (
     <Box sx={{ pb: 7 }}>
-      <ImpactPageProvider
-        text={props.description}
-        url={props.path}
-        title={props.title ? props.title : "OneWe - Proof of Social Impact"}
-      >
-        {props.children}
-        <NavigationFooter value={props.type} id={props.id} />
-      </ImpactPageProvider>
+      {props.children}
+      <NavigationFooter value={props.type} id={props.id} />
     </Box>
   );
 };

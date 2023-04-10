@@ -119,3 +119,11 @@ export const useFormData = (): [
 ] => {
   return [useContext(PosiFormContext), useContext(PosiFormDispatchContext)];
 };
+
+export const getPosiPage = (id: string) => `/posi/${id}/about`;
+
+export const getShareProps = (posiData: { summary: string }, id: string) => ({
+  title: posiData.summary,
+  text: posiData.summary,
+  url: `https://onewe.tech${getPosiPage(id)}`,
+});

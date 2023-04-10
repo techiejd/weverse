@@ -74,7 +74,7 @@ const ConfirmAndUploadDialog = ({
       <DialogContent>
         <Box sx={{ backgroundColor: "white" }}>
           {open /** We only want to parse the data when we're ready to display. */ && (
-            <AboutContent {...posiFormData.parse(formData)} readonly />
+            <AboutContent {...posiFormData.parse(formData)} />
           )}
         </Box>
       </DialogContent>

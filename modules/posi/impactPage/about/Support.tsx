@@ -14,11 +14,14 @@ import {
   SpeedDial,
   Typography,
   SpeedDialAction,
+  SpeedDialActionProps,
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
-import { useImpactPageContext } from "../context";
 import Linkify from "react-linkify";
 import { HowToSupport } from "../../input/context";
+import ShareActionArea, {
+  ShareProps,
+} from "../../../../common/components/shareActionArea";
 
 const SupportDialog = ({
   open,
@@ -49,38 +52,58 @@ const SupportDialog = ({
   );
 };
 
-const Support = ({ howToSupport }: { howToSupport: HowToSupport }) => {
+const Support = ({
+  howToSupport,
+  shareProps,
+}: {
+  howToSupport: HowToSupport;
+  shareProps: ShareProps;
+}) => {
   const [connectDialogOpen, setConnectDialogOpen] = useState(false);
   const [financeDialogOpen, setFinanceDialogOpen] = useState(false);
-  const impactPageContext = useImpactPageContext();
+
+  const SharingSpeedDial = (props: SpeedDialActionProps) => {
+    const { ref, ...others } = props;
+    return (
+      <ShareActionArea shareProps={shareProps}>
+        <SpeedDialAction {...others} ref={ref} />
+      </ShareActionArea>
+    );
+  };
+
   const actions = (() => {
     const actions = [
-      {
-        icon: <Share />,
-        name: "Compartir",
-        onClick: () => {
-          impactPageContext?.launchShare();
-        },
-      },
+      <SharingSpeedDial
+        key={"Compartir"}
+        icon={<Share />}
+        tooltipTitle={"Compartir"}
+        tooltipOpen
+      />,
     ];
-    // It renders in backwards order lmao.
     if (howToSupport?.contact) {
-      actions.unshift({
-        icon: <ConnectWithoutContact />,
-        name: "Conectar",
-        onClick: () => setConnectDialogOpen(true),
-      });
+      actions.unshift(
+        <SpeedDialAction
+          key={"Conectar"}
+          icon={<ConnectWithoutContact />}
+          tooltipTitle={"Conectar"}
+          tooltipOpen
+          onClick={() => setConnectDialogOpen(true)}
+        />
+      );
     }
     if (howToSupport?.finance) {
-      actions.unshift({
-        icon: <CardGiftcard />,
-        name: "Financiar",
-        onClick: () => setFinanceDialogOpen(true),
-      });
+      actions.unshift(
+        <SpeedDialAction
+          key={"Financiar"}
+          icon={<CardGiftcard />}
+          tooltipTitle={"Financiar"}
+          tooltipOpen
+          onClick={() => setFinanceDialogOpen(true)}
+        />
+      );
     }
     return actions;
   })();
-
   return (
     <div>
       {howToSupport?.finance && (
@@ -115,15 +138,7 @@ const Support = ({ howToSupport }: { howToSupport: HowToSupport }) => {
           </div>
         }
       >
-        {actions.map((action) => (
-          <SpeedDialAction
-            key={action.name}
-            icon={action.icon}
-            tooltipTitle={action.name}
-            tooltipOpen
-            onClick={action.onClick}
-          />
-        ))}
+        {actions}
       </SpeedDial>
     </div>
   );

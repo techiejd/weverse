@@ -38,7 +38,7 @@ const About = () => {
       description={`${posiData.summary}`}
       id={String(posiId)}
     >
-      <AboutContent {...posiData} />
+      <AboutContent {...posiData} support={{ shareId: String(posiId) }} />
     </ImpactPage>
   ) : (
     <CircularProgress />

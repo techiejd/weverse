@@ -19,7 +19,7 @@ import {
 import moment from "moment";
 import { PillBoxMessage } from "../../../../common/components/pillBoxMessage";
 import CandidateMedia from "../../../vote/votingExperience/candidate/candidateMedia";
-import { posiFormData } from "../../input/context";
+import { getShareProps, posiFormData } from "../../input/context";
 import QuickStats from "../QuickStats";
 import Support from "./Support";
 import { z } from "zod";
@@ -30,7 +30,11 @@ import { useEffect } from "react";
 import { doc } from "firebase/firestore";
 
 const aboutContentProps = posiFormData.extend({
-  readonly: z.boolean().optional(),
+  support: z
+    .object({
+      shareId: z.string(),
+    })
+    .optional(),
 });
 export type AboutContentProps = z.infer<typeof aboutContentProps>;
 
@@ -82,7 +86,7 @@ const AboutContent = ({
   makerId,
   about,
   howToSupport,
-  readonly = false,
+  support,
 }: AboutContentProps) => {
   const dateFormat = "DD/MM/YY";
   return (
@@ -183,7 +187,12 @@ const AboutContent = ({
           </CardContent>
         </Card>
       </Stack>
-      {readonly == false && <Support howToSupport={howToSupport} />}
+      {support && (
+        <Support
+          howToSupport={howToSupport}
+          shareProps={getShareProps({ summary }, support.shareId)}
+        />
+      )}
     </Box>
   );
 };
