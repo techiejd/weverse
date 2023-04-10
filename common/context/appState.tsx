@@ -1,11 +1,20 @@
+import { app } from "../utils/firebase";
 import {
   connectDatabaseEmulator,
   Database,
   getDatabase,
 } from "firebase/database";
-import { getStorage, FirebaseStorage } from "firebase/storage";
-import { getFirestore, Firestore } from "firebase/firestore";
-import { getAuth, Auth } from "firebase/auth";
+import {
+  getStorage,
+  FirebaseStorage,
+  connectStorageEmulator,
+} from "firebase/storage";
+import {
+  getFirestore,
+  Firestore,
+  connectFirestoreEmulator,
+} from "firebase/firestore";
+import { getAuth, Auth, connectAuthEmulator } from "firebase/auth";
 import {
   createContext,
   Dispatch,
@@ -13,7 +22,7 @@ import {
   useContext,
   useState,
 } from "react";
-import { app } from "../utils/firebase";
+import { isDevEnvironment } from "./context";
 
 export type User = {
   phoneNumber: string;
@@ -32,21 +41,25 @@ export type AppState = {
 //TODO(techijd): In all of these I should check if I'm in prod otherwise use emulator.
 const db = (() => {
   const db = getDatabase(app);
+  if (isDevEnvironment) connectDatabaseEmulator(db, "localhost", 9000);
   return db;
 })();
 
 const storage = (() => {
   const storage = getStorage(app);
+  if (isDevEnvironment) connectStorageEmulator(storage, "localhost", 9199);
   return storage;
 })();
 
 const firestore = (() => {
   const firestore = getFirestore(app);
+  if (isDevEnvironment) connectFirestoreEmulator(firestore, "localhost", 8080);
   return firestore;
 })();
 
 const auth = (() => {
   const auth = getAuth(app);
+  connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true });
   return auth;
 })();
 

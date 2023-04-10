@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -31,15 +32,15 @@ import ImpactVideoInput from "../../modules/posi/input/impactVideoInput";
 import SummaryInput from "../../modules/posi/input/SummaryInput";
 import HowToSupportInput from "../../modules/posi/input/HowToSupportInput";
 import AboutInput from "../../modules/posi/input/aboutInput";
-import { useAppState } from "../../common/context/appState";
+import { AppState, useAppState } from "../../common/context/appState";
 import TimeInfoInput from "../../modules/posi/input/timeInfoInput";
 import AboutContent from "../../modules/posi/impactPage/about/AboutContent";
 import { useRouter } from "next/router";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import { AuthAction } from "../../modules/auth/AuthDialog/context";
-import { useAuthUser } from "next-firebase-auth";
 import { member } from "../../common/context/weverse";
 import { serverTimestamp } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Section = ({
   label,
@@ -140,107 +141,115 @@ const HandleLogInDialog = ({
 };
 
 const PosiForm = () => {
-  const [formData, setFormData] = useState<PartialPosiFormData>({
-    createdAt: serverTimestamp(),
-  });
-  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
-  const [unauthorizedUserInteraction, setUnauthorizedUserInteraction] =
-    useState(false);
-  const user = useAuthUser();
   const appState = useAppState();
 
-  useEffect(() => {
-    if (user.id && appState) {
-      const memberDocRef = doc(appState.firestore, "members", user.id);
-      const getMakerId = async () => {
-        const memberDoc = await getDoc(memberDocRef);
-        const memberData = member.parse(memberDoc.data());
-        setFormData((fD) => ({ ...fD, makerId: memberData.makerId }));
-      };
-      getMakerId();
-    }
-  }, [user, appState]);
+  const PosiFormContent = ({ appState }: { appState: AppState }) => {
+    const [user, loading, error] = useAuthState(appState.auth);
+    const [formData, setFormData] = useState<PartialPosiFormData>({
+      createdAt: serverTimestamp(),
+    });
+    const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+    const [unauthorizedUserInteraction, setUnauthorizedUserInteraction] =
+      useState(false);
+    useEffect(() => {
+      if (user && appState) {
+        const memberDocRef = doc(appState.firestore, "members", user.uid);
+        const getMakerId = async () => {
+          const memberDoc = await getDoc(memberDocRef);
+          const memberData = member.parse(memberDoc.data());
+          setFormData((fD) => ({ ...fD, makerId: memberData.makerId }));
+        };
+        getMakerId();
+      }
+    }, [user, appState]);
 
-  return (
-    <Box>
-      <HandleLogInDialog
-        open={unauthorizedUserInteraction}
-        setOpen={setUnauthorizedUserInteraction}
-      />
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          posiFormData.parse(formData);
-          setUploadDialogOpen(true);
-        }}
-        onClick={(e) => {
-          if (user.id == null) {
-            setUnauthorizedUserInteraction(true);
-          }
-        }}
-      >
-        <PosiFormContext.Provider value={formData}>
-          <PosiFormDispatchContext.Provider value={setFormData}>
-            <ConfirmAndUploadDialog
-              open={uploadDialogOpen}
-              setOpen={setUploadDialogOpen}
-            />
-            <Stack
-              spacing={2}
-              margin={2}
-              divider={<Divider flexItem />}
-              alignItems={"center"}
-              justifyContent={"space-between"}
-            >
-              <Box width="100%">
-                <Typography variant="h1">Publica tu Impacto 🪧</Typography>
-                <Typography>¡Bienvenido!</Typography>
-                <Typography>
-                  Estamos creando un escenario donde puedes poner tu impacto en
-                  un pedestal.
-                </Typography>
-                <Typography>
-                  Tu audiencia son fanaticos del impacto social que aman los
-                  datos. Buscan aprender sobre tu impacto para encontrar a quién
-                  apoyar.
-                </Typography>
-                <Typography>
-                  Gracias por tu impacto valiente. Por favor,{" "}
-                  <b>¡presumame el impacto!</b>
-                </Typography>
-              </Box>
-              <Section label="Dimelo Rapido">
-                <SummaryInput />
-              </Section>
-              <Section label="¿Cómo apoyarte con este impacto?">
-                <HowToSupportInput />
-              </Section>
-              <Section label="Contame sobre las personas impactadas">
-                <ImpactedPersonsInput />
-              </Section>
-              <Section label="Etiquetamelo por favor">
-                <TagsInput />
-              </Section>
-              <Section label="¿Donde fue?">
-                <CitySearchInput />
-              </Section>
-              <Section label="Cuenteme sobre el esfuerzo">
-                <TimeInfoInput />
-              </Section>
-              <Section label="Mostramelo pues">
-                <ImpactVideoInput />
-              </Section>
-              <Section label="Ahora sí, cuentemelo bien (opcional)">
-                <AboutInput />
-              </Section>
-              <Button variant="contained" sx={{ mt: 3 }} type="submit">
-                Publicar
-              </Button>
-            </Stack>
-          </PosiFormDispatchContext.Provider>
-        </PosiFormContext.Provider>
-      </form>
-    </Box>
+    return (
+      <Box>
+        <HandleLogInDialog
+          open={unauthorizedUserInteraction}
+          setOpen={setUnauthorizedUserInteraction}
+        />
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            posiFormData.parse(formData);
+            setUploadDialogOpen(true);
+          }}
+          onClick={(e) => {
+            if (!user) {
+              setUnauthorizedUserInteraction(true);
+            }
+          }}
+        >
+          <PosiFormContext.Provider value={formData}>
+            <PosiFormDispatchContext.Provider value={setFormData}>
+              <ConfirmAndUploadDialog
+                open={uploadDialogOpen}
+                setOpen={setUploadDialogOpen}
+              />
+              <Stack
+                spacing={2}
+                margin={2}
+                divider={<Divider flexItem />}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+              >
+                <Box width="100%">
+                  <Typography variant="h1">Publica tu Impacto 🪧</Typography>
+                  <Typography>¡Bienvenido!</Typography>
+                  <Typography>
+                    Estamos creando un escenario donde puedes poner tu impacto
+                    en un pedestal.
+                  </Typography>
+                  <Typography>
+                    Tu audiencia son fanaticos del impacto social que aman los
+                    datos. Buscan aprender sobre tu impacto para encontrar a
+                    quién apoyar.
+                  </Typography>
+                  <Typography>
+                    Gracias por tu impacto valiente. Por favor,{" "}
+                    <b>¡presumame el impacto!</b>
+                  </Typography>
+                </Box>
+                <Section label="Dimelo Rapido">
+                  <SummaryInput />
+                </Section>
+                <Section label="¿Cómo apoyarte con este impacto?">
+                  <HowToSupportInput />
+                </Section>
+                <Section label="Contame sobre las personas impactadas">
+                  <ImpactedPersonsInput />
+                </Section>
+                <Section label="Etiquetamelo por favor">
+                  <TagsInput />
+                </Section>
+                <Section label="¿Donde fue?">
+                  <CitySearchInput />
+                </Section>
+                <Section label="Cuenteme sobre el esfuerzo">
+                  <TimeInfoInput />
+                </Section>
+                <Section label="Mostramelo pues">
+                  <ImpactVideoInput />
+                </Section>
+                <Section label="Ahora sí, cuentemelo bien (opcional)">
+                  <AboutInput />
+                </Section>
+                <Button variant="contained" sx={{ mt: 3 }} type="submit">
+                  Publicar
+                </Button>
+              </Stack>
+            </PosiFormDispatchContext.Provider>
+          </PosiFormContext.Provider>
+        </form>
+      </Box>
+    );
+  };
+
+  return appState ? (
+    <PosiFormContent appState={appState} />
+  ) : (
+    <CircularProgress />
   );
 };
 

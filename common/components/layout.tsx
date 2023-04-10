@@ -4,7 +4,6 @@ import AppStateProvider from "../context/appState";
 import { Header } from "./header";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { configuration } from "./theme";
-import { withAuthUser } from "next-firebase-auth";
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -27,4 +26,4 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   );
 };
 
-export default withAuthUser<{ children: ReactNode }>({})(Layout);
+export default Layout;
