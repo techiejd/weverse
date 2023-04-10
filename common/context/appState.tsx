@@ -59,7 +59,10 @@ const firestore = (() => {
 
 const auth = (() => {
   const auth = getAuth(app);
-  connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true });
+  if (isDevEnvironment)
+    connectAuthEmulator(auth, "http://localhost:9099", {
+      disableWarnings: true,
+    });
   return auth;
 })();
 
