@@ -1,6 +1,6 @@
 import { createContext, useContext, Dispatch, SetStateAction } from "react";
 import { z } from "zod";
-import { formUrl } from "../../../common/context/context";
+import { formUrl, isDevEnvironment } from "../../../common/context/context";
 
 export enum InvestedTimeLevel {
   hour = 1,
@@ -125,5 +125,7 @@ export const getPosiPage = (id: string) => `/posi/${id}/about`;
 export const getShareProps = (posiData: { summary: string }, id: string) => ({
   title: posiData.summary,
   text: posiData.summary,
-  url: `https://onewe.tech${getPosiPage(id)}`,
+  url: `${
+    isDevEnvironment ? "https://localhost:3000" : "https://onewe.co"
+  }${getPosiPage(id)}`,
 });
