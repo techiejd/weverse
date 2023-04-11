@@ -20,27 +20,27 @@ import { useState } from "react";
 import { Home, Login, PlusOne } from "@mui/icons-material";
 import { AppState, useAppState } from "../context/appState";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
+import { LinkBehavior } from "./theme";
 
 export const MenuComponent = (props: BoxProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const menuOpen = Boolean(anchorEl);
+  const closeMenu = () => setAnchorEl(null);
   return (
     <Box {...props}>
+      <AuthDialog open={authDialogOpen} setOpen={setAuthDialogOpen} />
       <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
         <MenuIcon />
       </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        open={menuOpen}
-        onClose={(e) => setAnchorEl(null)}
-      >
-        <MenuItem href="/">
+      <Menu anchorEl={anchorEl} open={menuOpen} onClose={closeMenu}>
+        <MenuItem href="/" onClick={closeMenu}>
           <ListItemIcon>
             <Home />
           </ListItemIcon>
           <ListItemText>Inicio </ListItemText>
         </MenuItem>
-        <MenuItem href="/posi">
+        <MenuItem href="/posi" onClick={closeMenu}>
           <ListItemIcon>
             <Typography>📺</Typography>
           </ListItemIcon>
@@ -48,13 +48,19 @@ export const MenuComponent = (props: BoxProps) => {
             <b>We</b>Screen
           </ListItemText>
         </MenuItem>
-        <MenuItem href="/posi/upload">
+        <MenuItem href="/posi/upload" onClick={closeMenu}>
           <ListItemIcon>
             <PlusOne />
           </ListItemIcon>
           <ListItemText>Agrega tu impacto!</ListItemText>
         </MenuItem>
-        <MenuItem href="/auth">
+        <MenuItem
+          component="li"
+          onClick={() => {
+            setAuthDialogOpen(true);
+            closeMenu();
+          }}
+        >
           <ListItemIcon>
             <Login />
           </ListItemIcon>
