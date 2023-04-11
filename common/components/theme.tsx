@@ -1,4 +1,4 @@
-import { LinkProps, PaletteMode, Theme } from "@mui/material";
+import { LinkProps, MenuItemProps, PaletteMode, Theme } from "@mui/material";
 import { ReactNode, Ref, forwardRef } from "react";
 import Link from "next/link";
 
@@ -76,7 +76,7 @@ const baseConfiguration = {
     MuiMenuItem: {
       defaultProps: {
         component: LinkBehavior,
-      },
+      } as MenuItemProps,
     },
     MuiInputLabel: {
       defaultProps: {
