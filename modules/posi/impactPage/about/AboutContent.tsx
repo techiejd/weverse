@@ -1,20 +1,12 @@
-import {
-  PlayCircle,
-  Info,
-  SentimentVerySatisfied,
-  Summarize,
-} from "@mui/icons-material";
+import { PlayCircle, Info, Summarize } from "@mui/icons-material";
 import {
   Box,
   Typography,
   Stack,
   Divider,
-  Card,
   CardHeader,
   Icon,
   CardContent,
-  Avatar,
-  CircularProgress,
 } from "@mui/material";
 import moment from "moment";
 import { PillBoxMessage } from "../../../../common/components/pillBoxMessage";
@@ -23,11 +15,7 @@ import { getShareProps, posiFormData } from "../../input/context";
 import QuickStats from "../QuickStats";
 import Support from "./Support";
 import { z } from "zod";
-import { AppState, useAppState } from "../../../../common/context/appState";
-import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
-import { maker } from "../../../../common/context/weverse";
-import { useEffect } from "react";
-import { doc } from "firebase/firestore";
+import MakerCard from "../../../makers/MakerCard";
 
 const aboutContentProps = posiFormData.extend({
   support: z
@@ -37,43 +25,6 @@ const aboutContentProps = posiFormData.extend({
     .optional(),
 });
 export type AboutContentProps = z.infer<typeof aboutContentProps>;
-
-const MakerCard = ({ makerId }: { makerId: string }) => {
-  const appState = useAppState();
-  const MakerCardContent = ({ appState }: { appState: AppState }) => {
-    const makerDocRef = doc(appState.firestore, "makers", makerId);
-    const [value, loading, error, reload] = useDocumentDataOnce(makerDocRef);
-
-    return loading || value == undefined ? (
-      <CircularProgress />
-    ) : (
-      <Stack direction={"row"} alignItems={"center"} spacing={2}>
-        <Avatar src={maker.parse(value).pic} />
-        <Typography>{maker.parse(value).name}</Typography>
-      </Stack>
-    );
-  };
-
-  return (
-    <Card>
-      <CardHeader
-        avatar={
-          <Icon>
-            <SentimentVerySatisfied />
-          </Icon>
-        }
-        title={"Maker"}
-      />
-      <CardContent>
-        {appState == undefined ? (
-          <CircularProgress />
-        ) : (
-          <MakerCardContent appState={appState} />
-        )}
-      </CardContent>
-    </Card>
-  );
-};
 
 const AboutContent = ({
   summary,

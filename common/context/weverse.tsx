@@ -25,6 +25,7 @@ export const maker = z.object({
   organizationType: organizationType.optional(),
   createdAt: z.any(), // TODO(techiejd): Look into firebase schemas and transformations.
 });
+export type Maker = z.infer<typeof maker>;
 const partialMaker = maker.partial();
 export type PartialMaker = z.infer<typeof partialMaker>;
 
