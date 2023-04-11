@@ -3,7 +3,6 @@ import { collection } from "firebase/firestore";
 import { AppState, useAppState } from "../../common/context/appState";
 import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Maker, maker } from "../../common/context/weverse";
 import MakerCard from "../../modules/makers/MakerCard";
 
 const MakersListed = ({ appState }: { appState: AppState }) => {
@@ -24,7 +23,7 @@ const MakersListed = ({ appState }: { appState: AppState }) => {
 
   useEffect(() => {
     console.log(makersSnapshot);
-    makersSnapshot?.docChanges().map((docChange) => {
+    makersSnapshot?.docChanges().forEach((docChange) => {
       console.log(docChange);
       // TODO(techiejd): Look into the other scenarios.
       if (docChange.type == "added") {
@@ -38,8 +37,9 @@ const MakersListed = ({ appState }: { appState: AppState }) => {
         <Typography color={"red"}>Error: {JSON.stringify(error)}</Typography>
       )}
       {loading && <Loading />}
-      {makers.length > 0 &&
-        makers.map((maker) => <MakerCard makerId={maker} key={maker} />)}
+      {makers.map((maker) => (
+        <MakerCard makerId={maker} key={maker} />
+      ))}
     </Stack>
   );
 };

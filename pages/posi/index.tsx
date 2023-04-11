@@ -1,89 +1,13 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  CardMedia,
-  CircularProgress,
-  Divider,
-  Fab,
-  Rating,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, Fab, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   castFirestoreDocToPosiFormData,
   PosiFormData,
-  getShareProps,
-  getPosiPage,
 } from "../../modules/posi/input/context";
 import { getDocs, collection } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
-import QuickStats from "../../modules/posi/impactPage/QuickStats";
 import { PlusOne } from "@mui/icons-material";
-import ShareActionArea from "../../common/components/shareActionArea";
-
-const ImpactCard = ({
-  posiData,
-  id,
-}: {
-  posiData: PosiFormData;
-  id: string;
-}) => {
-  return (
-    <Card sx={{ width: "100%" }}>
-      <CardActionArea href={`/posi/${id}/about`}>
-        <CardMedia
-          component="video"
-          sx={{ height: 180, objectFit: "cover" }}
-          image={posiData.video}
-          autoPlay
-          muted
-          loop
-        />
-        <CardContent>
-          <Typography
-            gutterBottom
-            variant="h5"
-            sx={{
-              textAlign: "justify",
-              textJustify: "inter-word",
-              fontSize: 18,
-            }}
-          >
-            {posiData.summary}
-          </Typography>
-          <Stack
-            direction={"row"}
-            spacing={2}
-            divider={<Divider orientation="vertical" flexItem />}
-          >
-            <Stack direction={"row"}>
-              <Typography ml={1}>🤳</Typography>
-              <Typography ml={2}>0</Typography>
-            </Stack>
-            <Rating value={null} readOnly />
-          </Stack>
-          <QuickStats
-            impactedPeopleAmount={posiData.impactedPeople.amount}
-            investedTimeLevel={posiData.investedTimeLevel}
-          />
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button size="small" variant="contained" href={getPosiPage(id)}>
-          Aprender más
-        </Button>
-        <ShareActionArea shareProps={getShareProps(posiData, id)}>
-          <Button size="small">Share</Button>
-        </ShareActionArea>
-      </CardActions>
-    </Card>
-  );
-};
+import ImpactCard from "../../modules/posi/impactCard";
 
 const Index = () => {
   //TODO(techiejd): Decouple the form data input from the impacts db output.
