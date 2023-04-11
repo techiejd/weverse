@@ -101,7 +101,7 @@ const AboutContent = ({
         </Typography>{" "}
       </Box>
       <Stack divider={<Divider flexItem />} spacing={1} m={1.5}>
-        <Card>
+        <Box>
           <CardHeader
             avatar={
               <Icon>
@@ -128,8 +128,8 @@ const AboutContent = ({
               }}
             />
           </Box>
-        </Card>
-        <Card>
+        </Box>
+        <Box>
           <CardHeader
             avatar={
               <Icon>
@@ -171,9 +171,9 @@ const AboutContent = ({
               </Box>
             </Stack>
           </CardContent>
-        </Card>
+        </Box>
         <MakerCard makerId={makerId} />
-        <Card>
+        <Box>
           <CardHeader
             avatar={
               <Icon>
@@ -185,7 +185,7 @@ const AboutContent = ({
           <CardContent>
             <Typography>{about}</Typography>
           </CardContent>
-        </Card>
+        </Box>
       </Stack>
       {support && (
         <Support

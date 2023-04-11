@@ -38,7 +38,7 @@ const ImpactCard = ({
       <CardActionArea href={`/posi/${id}/about`}>
         <CardMedia
           component="video"
-          sx={{ height: 180 }}
+          sx={{ height: 180, objectFit: "cover" }}
           image={posiData.video}
           autoPlay
           muted
