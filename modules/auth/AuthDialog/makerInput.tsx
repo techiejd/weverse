@@ -135,7 +135,7 @@ const DetailedInput = ({
       <FileInput
         required
         setFileUrl={setImgUrl}
-        maxFileSize={1048576 /** 1MB */}
+        maxFileSize={10485760 /** 10MB */}
         accept={"img"}
         metadata={{ makerId: "", userID: "" }}
       />
