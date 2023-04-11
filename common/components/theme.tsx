@@ -1,13 +1,5 @@
-import { LinkProps, MenuItemProps, PaletteMode, Theme } from "@mui/material";
-import { ReactNode, Ref, forwardRef } from "react";
-import Link from "next/link";
-
-export const LinkBehavior = forwardRef(function LinkBehaviour(
-  props: { href: string },
-  ref: Ref<HTMLAnchorElement> | undefined
-) {
-  return <Link ref={ref} {...props} />;
-});
+import { LinkProps, PaletteMode } from "@mui/material";
+import { LinkBehavior } from "../context/context";
 
 const darkPalette = {
   mode: "dark" as PaletteMode,
@@ -72,11 +64,6 @@ const baseConfiguration = {
       defaultProps: {
         LinkComponent: LinkBehavior,
       },
-    },
-    MuiMenuItem: {
-      defaultProps: {
-        component: LinkBehavior,
-      } as MenuItemProps,
     },
     MuiInputLabel: {
       defaultProps: {

@@ -13,14 +13,13 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useAuthState, useUpdateProfile } from "react-firebase-hooks/auth";
-import { useRouter } from "next/router";
+import { useAuthState } from "react-firebase-hooks/auth";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { AccountCircle, Home, Login, PlusOne } from "@mui/icons-material";
 import { AppState, useAppState } from "../context/appState";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
-import { LinkBehavior } from "./theme";
+import { LinkBehavior } from "../context/context";
 
 export const MenuComponent = (props: BoxProps) => {
   const appState = useAppState();
@@ -35,7 +34,14 @@ export const MenuComponent = (props: BoxProps) => {
         {!loading &&
           !error &&
           (user ? (
-            <MenuItem href={`/user/${user.uid}`} onClick={closeMenu}>
+            <MenuItem
+              href={`/user/${user.uid}`}
+              onClick={closeMenu}
+              component={
+                //TODO(techiejd): Look into why the href isn't rendered as an 'a'
+                LinkBehavior as any
+              }
+            >
               <ListItemIcon>
                 <AccountCircle />
               </ListItemIcon>
@@ -43,7 +49,6 @@ export const MenuComponent = (props: BoxProps) => {
             </MenuItem>
           ) : (
             <MenuItem
-              component="li"
               onClick={() => {
                 setAuthDialogOpen(true);
                 closeMenu();
@@ -65,13 +70,17 @@ export const MenuComponent = (props: BoxProps) => {
         <MenuIcon />
       </IconButton>
       <Menu anchorEl={anchorEl} open={menuOpen} onClose={closeMenu}>
-        <MenuItem href="/" onClick={closeMenu}>
+        <MenuItem onClick={closeMenu} href="/" component={LinkBehavior as any}>
           <ListItemIcon>
             <Home />
           </ListItemIcon>
           <ListItemText>Inicio </ListItemText>
         </MenuItem>
-        <MenuItem href="/posi" onClick={closeMenu}>
+        <MenuItem
+          href="/posi"
+          onClick={closeMenu}
+          component={LinkBehavior as any}
+        >
           <ListItemIcon>
             <Typography>📺</Typography>
           </ListItemIcon>
@@ -79,7 +88,11 @@ export const MenuComponent = (props: BoxProps) => {
             <b>We</b>Screen
           </ListItemText>
         </MenuItem>
-        <MenuItem href="/posi/upload" onClick={closeMenu}>
+        <MenuItem
+          href="/posi/upload"
+          onClick={closeMenu}
+          component={LinkBehavior as any}
+        >
           <ListItemIcon>
             <PlusOne />
           </ListItemIcon>
@@ -112,7 +125,6 @@ const UserPortal = ({ appState }: { appState: AppState }) => {
 
 export const Header = () => {
   const appState = useAppState();
-  const router = useRouter();
   return (
     <AppBar position="static" color="secondary">
       <Toolbar>
