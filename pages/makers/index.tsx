@@ -31,7 +31,10 @@ const MakersListed = ({ appState }: { appState: AppState }) => {
     });
   }, [makersSnapshot]);
   return (
-    <Stack>
+    <Stack
+      sx={{ alignItems: "center", justifyContent: "center", p: 1 }}
+      spacing={1}
+    >
       {error && (
         <Typography color={"red"}>Error: {JSON.stringify(error)}</Typography>
       )}
