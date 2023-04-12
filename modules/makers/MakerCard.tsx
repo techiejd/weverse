@@ -13,20 +13,22 @@ import {
 import { doc } from "firebase/firestore";
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import { useAppState, AppState } from "../../common/context/appState";
-import { maker } from "../../common/context/weverse";
+import { makerConverter } from "../../common/context/weverse";
 
 const MakerCard = ({ makerId }: { makerId: string }) => {
   const appState = useAppState();
   const MakerCardContent = ({ appState }: { appState: AppState }) => {
     const makerDocRef = doc(appState.firestore, "makers", makerId);
-    const [value, loading, error, reload] = useDocumentDataOnce(makerDocRef);
+    const [value, loading, error, reload] = useDocumentDataOnce(
+      makerDocRef.withConverter(makerConverter)
+    );
 
     return loading || value == undefined ? (
       <CircularProgress />
     ) : (
       <Stack direction={"row"} alignItems={"center"} spacing={2}>
-        <Avatar src={maker.parse(value).pic} />
-        <Typography>{maker.parse(value).name}</Typography>
+        <Avatar src={value.pic} />
+        <Typography>{value.name}</Typography>
       </Stack>
     );
   };

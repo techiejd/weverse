@@ -3,45 +3,62 @@ import ImpactPage, { PageTypes } from "../../../modules/posi/impactPage";
 import AboutContent from "../../../modules/posi/impactPage/about/AboutContent";
 import {
   PosiFormData,
-  castFirestoreDocToPosiFormData,
+  posiFormDataConverter,
 } from "../../../modules/posi/input/context";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, DocumentReference } from "firebase/firestore";
 import { useAppState } from "../../../common/context/appState";
-import { useEffect, useState } from "react";
 import { z } from "zod";
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 
 const About = () => {
   const appState = useAppState();
   const router = useRouter();
   const { posiId } = router.query;
-  const [posiData, setPosiData] = useState<PosiFormData | undefined>(undefined);
 
-  useEffect(() => {
-    if (appState && posiId) {
-      const fetchAndSetPosiData = async () => {
-        const docRef = doc(
-          appState.firestore,
-          "impacts",
-          z.string().parse(posiId)
-        );
-        const docSnap = await getDoc(docRef);
-        setPosiData(castFirestoreDocToPosiFormData.parse(docSnap.data()));
-      };
-      fetchAndSetPosiData();
-    }
-  }, [appState, setPosiData, posiId]);
-  return posiData && posiId ? (
-    <ImpactPage
-      type={PageTypes.about}
-      path={router.asPath}
-      description={`${posiData.summary}`}
-      id={String(posiId)}
-    >
-      <AboutContent {...posiData} support={{ shareId: String(posiId) }} />
+  const q = appState
+    ? doc(
+        appState.firestore,
+        "impacts",
+        z.string().parse(posiId)
+      ).withConverter(posiFormDataConverter)
+    : undefined;
+
+  const QueriedAboutContent = ({
+    posiDocRef,
+  }: {
+    posiDocRef: DocumentReference<PosiFormData>;
+  }) => {
+    const [posiData, loading, error] = useDocumentData(posiDocRef);
+
+    const Loading = () => {
+      return (
+        <Box>
+          <Typography>Impacts: Loading...</Typography>
+          <CircularProgress />
+        </Box>
+      );
+    };
+
+    return (
+      <Box>
+        {error && (
+          <Typography color={"red"}>Error: {JSON.stringify(error)}</Typography>
+        )}
+        {loading && <Loading />}
+        {!loading && !error && posiData == undefined && (
+          <Typography>No hay ningun impacto aquí.</Typography>
+        )}
+        {posiData && (
+          <AboutContent {...posiData} support={{ shareId: String(posiId) }} />
+        )}
+      </Box>
+    );
+  };
+  return (
+    <ImpactPage type={PageTypes.about} id={String(posiId)}>
+      {q ? <QueriedAboutContent posiDocRef={q} /> : <CircularProgress />}
     </ImpactPage>
-  ) : (
-    <CircularProgress />
   );
 };
 

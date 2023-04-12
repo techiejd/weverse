@@ -68,9 +68,6 @@ const NavigationFooter = (props: { value: number; id: string }) => {
 const ImpactPage = (props: {
   id: string;
   type: Types;
-  path: string;
-  description?: string;
-  title?: string;
   children: ReactNode;
 }) => {
   return (

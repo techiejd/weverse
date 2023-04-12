@@ -4,10 +4,11 @@ import { AppState, useAppState } from "../../common/context/appState";
 import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import MakerCard from "../../modules/makers/MakerCard";
+import { makerConverter } from "../../common/context/weverse";
 
 const MakersListed = ({ appState }: { appState: AppState }) => {
   const [makersSnapshot, loading, error] = useCollection(
-    collection(appState.firestore, "makers")
+    collection(appState.firestore, "makers").withConverter(makerConverter)
   );
 
   const [makers, setMakers] = useState<string[]>([]);

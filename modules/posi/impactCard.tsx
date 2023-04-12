@@ -14,16 +14,10 @@ import ShareActionArea from "../../common/components/shareActionArea";
 import QuickStats from "./impactPage/QuickStats";
 import { PosiFormData, getPosiPage, getShareProps } from "./input/context";
 
-const ImpactCard = ({
-  posiData,
-  id,
-}: {
-  posiData: PosiFormData;
-  id: string;
-}) => {
+const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
   return (
     <Card sx={{ width: "100%" }}>
-      <CardActionArea href={`/posi/${id}/about`}>
+      <CardActionArea href={`/posi/${posiData.id}/about`}>
         <CardMedia
           component="video"
           sx={{ height: 180, objectFit: "cover" }}
@@ -62,10 +56,14 @@ const ImpactCard = ({
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" variant="contained" href={getPosiPage(id)}>
+        <Button
+          size="small"
+          variant="contained"
+          href={getPosiPage(posiData.id)}
+        >
           Aprender más
         </Button>
-        <ShareActionArea shareProps={getShareProps(posiData, id)}>
+        <ShareActionArea shareProps={getShareProps(posiData)}>
           <Button size="small">Share</Button>
         </ShareActionArea>
       </CardActions>

@@ -1,6 +1,13 @@
 import { createContext, useContext, Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 import { formUrl, isDevEnvironment } from "../../../common/context/context";
+import {
+  FirestoreDataConverter,
+  WithFieldValue,
+  DocumentData,
+  serverTimestamp,
+  QueryDocumentSnapshot,
+} from "firebase/firestore";
 
 export enum InvestedTimeLevel {
   hour = 1,
@@ -76,6 +83,7 @@ const howToSupport = z
 export type HowToSupport = z.infer<typeof howToSupport>;
 
 export const posiFormData = z.object({
+  id: z.string().optional(), // If it exists, then it exists in the db.
   summary: z.string().min(5).max(100),
   impactedPeople: z.object({
     amount: z.number().int().nonnegative(),
@@ -89,22 +97,29 @@ export const posiFormData = z.object({
   about: z.string().min(5).max(1000).optional(),
   howToSupport: howToSupport,
   makerId: z.string(),
-  createdAt: z.any(), // TODO(techiejd): Look into firebase schemas and transformations.
+  createdAt: z.date().optional(),
 });
 
-// TODO(techiejd): Look into a better way of doing this maybe using firestore zod schema
-export const castFirestoreDocToPosiFormData = z.preprocess(
-  (val: any) => ({
-    ...val,
-    dates: {
-      start: new Date(val.dates.start.seconds * 1000),
-      end: new Date(val.dates.end.seconds * 1000),
-    },
-  }),
-  posiFormData
-);
-
 export type PosiFormData = z.infer<typeof posiFormData>;
+
+export const posiFormDataConverter: FirestoreDataConverter<PosiFormData> = {
+  toFirestore: (posiFormData: WithFieldValue<PosiFormData>): DocumentData => ({
+    ...posiFormData,
+    createdAt: posiFormData.createdAt
+      ? posiFormData.createdAt
+      : serverTimestamp(),
+  }),
+  fromFirestore: (snapshot: QueryDocumentSnapshot): PosiFormData => {
+    const data = snapshot.data();
+    return posiFormData.parse({
+      ...data,
+      id: snapshot.id,
+      createdAt: data.createdAt.toDate(),
+      dates: { start: data.dates.start.toDate(), end: data.dates.end.toDate() },
+    });
+  },
+};
+
 const partialPosiFormData = posiFormData.deepPartial();
 export type PartialPosiFormData = z.infer<typeof partialPosiFormData>;
 
@@ -120,12 +135,13 @@ export const useFormData = (): [
   return [useContext(PosiFormContext), useContext(PosiFormDispatchContext)];
 };
 
-export const getPosiPage = (id: string) => `/posi/${id}/about`;
+// TODO(techiejd): Look into making this string instead of | undefined.
+export const getPosiPage = (id: string | undefined) => `/posi/${id}/about`;
 
-export const getShareProps = (posiData: { summary: string }, id: string) => ({
+export const getShareProps = (posiData: PosiFormData) => ({
   title: posiData.summary,
   text: posiData.summary,
   url: `${
     isDevEnvironment ? "https://localhost:3000" : "https://onewe.co"
-  }${getPosiPage(id)}`,
+  }${getPosiPage(posiData.id)}`,
 });
