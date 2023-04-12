@@ -18,10 +18,20 @@ const Index = () => {
     : undefined;
 
   return (
-    <Box mb={9}>
-      <Typography variant="h1" justifyContent={"center"}>
-        📺 <b>We</b>Screen
-      </Typography>
+    <Box mb={9} /** For the fab icon space. */>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          p: 1,
+        }}
+      >
+        <Typography variant="h1" justifyContent={"center"}>
+          📺 <b>We</b>Screen
+        </Typography>
+      </Box>
+
       {query == undefined ? (
         <CircularProgress />
       ) : (
