@@ -34,7 +34,7 @@ const MakerCard = ({ makerId }: { makerId: string }) => {
   };
 
   return (
-    <Card>
+    <Card sx={{ width: "100%" }}>
       <CardActionArea href={`/makers/${makerId}`}>
         <CardHeader
           avatar={

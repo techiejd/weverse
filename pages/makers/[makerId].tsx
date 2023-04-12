@@ -7,9 +7,13 @@ import {
 } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import MakerCard from "../../modules/makers/MakerCard";
-import { PosiFormData } from "../../modules/posi/input/context";
+import {
+  PosiFormData,
+  posiFormDataConverter,
+} from "../../modules/posi/input/context";
 import { useRouter } from "next/router";
 import ImpactsList from "../../modules/posi/impactsList";
+import { makerConverter } from "../../common/context/weverse";
 
 const MakerPage = () => {
   const appState = useAppState();
@@ -20,7 +24,7 @@ const MakerPage = () => {
     ? query(
         collection(appState.firestore, "impacts"),
         where("makerId", "==", makerId)
-      )
+      ).withConverter(posiFormDataConverter)
     : undefined;
   return appState ? (
     <Stack>

@@ -32,7 +32,7 @@ const ImpactsList = ({
 
   return (
     <Stack
-      sx={{ alignItems: "center", justifyContent: "center", m: 1 }}
+      sx={{ alignItems: "center", justifyContent: "center", p: 1 }}
       spacing={1}
     >
       {error && (
@@ -42,9 +42,9 @@ const ImpactsList = ({
       {!loading && !error && impacts.length == 0 && (
         <Typography>No hay ningun impacto aquí.</Typography>
       )}
-      {impacts.map((impact) => (
-        <ImpactCard posiData={impact} key={impact.id} />
-      ))}
+      {impacts.map((impact) => {
+        return <ImpactCard posiData={impact} key={impact.id} />;
+      })}
     </Stack>
   );
 };

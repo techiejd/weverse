@@ -35,7 +35,7 @@ export const MenuComponent = (props: BoxProps) => {
           !error &&
           (user ? (
             <MenuItem
-              href={`/user/${user.uid}`}
+              href={`/users/${user.uid}`}
               onClick={closeMenu}
               component={
                 //TODO(techiejd): Look into why the href isn't rendered as an 'a'
@@ -113,7 +113,7 @@ const UserPortal = ({ appState }: { appState: AppState }) => {
       {loading ? (
         <CircularProgress />
       ) : user ? (
-        <Button size="small" variant="outlined" href={`/user/${user.uid}`}>
+        <Button size="small" variant="outlined" href={`/users/${user.uid}`}>
           {user.displayName}
         </Button>
       ) : (

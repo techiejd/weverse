@@ -23,9 +23,7 @@ const MakersListed = ({ appState }: { appState: AppState }) => {
   };
 
   useEffect(() => {
-    console.log(makersSnapshot);
     makersSnapshot?.docChanges().forEach((docChange) => {
-      console.log(docChange);
       // TODO(techiejd): Look into the other scenarios.
       if (docChange.type == "added") {
         setMakers((makers) => [...makers, docChange.doc.id]);
