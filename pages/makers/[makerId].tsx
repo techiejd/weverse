@@ -20,12 +20,13 @@ const MakerPage = () => {
   const router = useRouter();
   const { makerId } = router.query;
 
-  const q = appState
-    ? query(
-        collection(appState.firestore, "impacts"),
-        where("makerId", "==", makerId)
-      ).withConverter(posiFormDataConverter)
-    : undefined;
+  const q =
+    appState && makerId
+      ? query(
+          collection(appState.firestore, "impacts"),
+          where("makerId", "==", makerId)
+        ).withConverter(posiFormDataConverter)
+      : undefined;
   return appState ? (
     <Stack>
       <MakerCard makerId={String(makerId)} />

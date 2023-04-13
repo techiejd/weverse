@@ -6,8 +6,8 @@ import { CircularProgress } from "@mui/material";
 const Evidence = () => {
   const router = useRouter();
   const { posiId } = router.query;
-  return posiId != undefined ? (
-    <ImpactPage id={String(posiId)} type={PageTypes.evidence} path="localhost">
+  return posiId ? (
+    <ImpactPage id={String(posiId)} type={PageTypes.evidence}>
       <UnderConstruction />
     </ImpactPage>
   ) : (

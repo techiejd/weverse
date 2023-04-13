@@ -16,13 +16,14 @@ const About = () => {
   const router = useRouter();
   const { posiId } = router.query;
 
-  const q = appState
-    ? doc(
-        appState.firestore,
-        "impacts",
-        z.string().parse(posiId)
-      ).withConverter(posiFormDataConverter)
-    : undefined;
+  const q =
+    appState && posiId
+      ? doc(
+          appState.firestore,
+          "impacts",
+          z.string().parse(posiId)
+        ).withConverter(posiFormDataConverter)
+      : undefined;
 
   const QueriedAboutContent = ({
     posiDocRef,

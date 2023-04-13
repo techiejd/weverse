@@ -6,12 +6,8 @@ import { CircularProgress } from "@mui/material";
 const Testimonials = () => {
   const router = useRouter();
   const { posiId } = router.query;
-  return posiId != undefined ? (
-    <ImpactPage
-      id={String(posiId)}
-      type={PageTypes.testimonial}
-      path="localhost"
-    >
+  return posiId ? (
+    <ImpactPage id={String(posiId)} type={PageTypes.testimonial}>
       <UnderConstruction />
     </ImpactPage>
   ) : (

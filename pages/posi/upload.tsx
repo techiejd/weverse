@@ -26,6 +26,7 @@ import {
   PosiFormContext,
   PosiFormDispatchContext,
   posiFormData,
+  posiFormDataConverter,
   useFormData,
 } from "../../modules/posi/input/context";
 import ImpactVideoInput from "../../modules/posi/input/impactVideoInput";
@@ -87,7 +88,9 @@ const ConfirmAndUploadDialog = ({
             const usersPosiFormData = posiFormData.parse(formData);
             if (appState) {
               const docRef = await addDoc(
-                collection(appState.firestore, "impacts"),
+                collection(appState.firestore, "impacts").withConverter(
+                  posiFormDataConverter
+                ),
                 usersPosiFormData
               );
               router.push(`/posi/${docRef.id}/about`);
@@ -145,9 +148,7 @@ const PosiForm = () => {
 
   const PosiFormContent = ({ appState }: { appState: AppState }) => {
     const [user, loading, error] = useAuthState(appState.auth);
-    const [formData, setFormData] = useState<PartialPosiFormData>({
-      createdAt: serverTimestamp(),
-    });
+    const [formData, setFormData] = useState<PartialPosiFormData>({});
     const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
     const [unauthorizedUserInteraction, setUnauthorizedUserInteraction] =
       useState(false);
