@@ -18,11 +18,7 @@ import { z } from "zod";
 import MakerCard from "../../../makers/MakerCard";
 
 const aboutContentProps = posiFormData.extend({
-  support: z
-    .object({
-      shareId: z.string(),
-    })
-    .optional(),
+  support: z.boolean().optional(),
 });
 export type AboutContentProps = z.infer<typeof aboutContentProps>;
 
@@ -38,6 +34,7 @@ const AboutContent = ({
   about,
   howToSupport,
   support,
+  id,
 }: AboutContentProps) => {
   const dateFormat = "DD/MM/YY";
   return (
@@ -141,7 +138,7 @@ const AboutContent = ({
       {support && (
         <Support
           howToSupport={howToSupport}
-          shareProps={getShareProps({ summary }, support.shareId)}
+          shareProps={getShareProps({ summary, id })}
         />
       )}
     </Box>

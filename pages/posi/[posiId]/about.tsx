@@ -49,9 +49,7 @@ const About = () => {
         {!loading && !error && posiData == undefined && (
           <Typography>No hay ningun impacto aquí.</Typography>
         )}
-        {posiData && (
-          <AboutContent {...posiData} support={{ shareId: String(posiId) }} />
-        )}
+        {posiData && <AboutContent {...posiData} support />}
       </Box>
     );
   };
