@@ -76,7 +76,7 @@ const ConfirmAndUploadDialog = ({
         Confirma que este es el impacto que deseas cargar.
       </DialogTitle>
       <DialogContent>
-        <Box sx={{ backgroundColor: "white" }}>
+        <Box>
           {open /** We only want to parse the data when we're ready to display. */ && (
             <AboutContent {...posiFormData.parse(formData)} />
           )}
