@@ -15,20 +15,22 @@ const QuickStats = ({
         <Icon>
           <EmojiPeople />
         </Icon>
+        <Typography color={"grey"}>Impacto:</Typography>
         <Typography>{impactedPeopleAmount}</Typography>
       </Stack>
       <Stack direction={"row"}>
         <Icon sx={{ mr: 2 }}>
           <Timer />
         </Icon>
+        <Typography color={"grey"} width={"250px"}>
+          Tiempo invertido:
+        </Typography>
         <Box
           sx={{
             backgroundColor: levelToColors[investedTimeLevel],
             width: investedTimeLevel / InvestedTimeLevel.year,
           }}
-        >
-          <Typography>{InvestedTimeLevel[investedTimeLevel]}</Typography>
-        </Box>
+        ></Box>
         <Box
           sx={{
             backgroundColor: "grey",

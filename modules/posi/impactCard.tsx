@@ -44,7 +44,10 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
             divider={<Divider orientation="vertical" flexItem />}
           >
             <Stack direction={"row"}>
-              <Typography ml={1}>🤳</Typography>
+              <Typography ml={1} mr={2}>
+                🤳
+              </Typography>
+              <Typography color={"grey"}>Testimonios:</Typography>
               <Typography ml={2}>0</Typography>
             </Stack>
             <Rating value={null} readOnly />
@@ -61,10 +64,10 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
           variant="contained"
           href={getPosiPage(posiData.id)}
         >
-          Aprender más
+          Conoce más
         </Button>
         <ShareActionArea shareProps={getShareProps(posiData)}>
-          <Button size="small">Share</Button>
+          <Button size="small">Comparte</Button>
         </ShareActionArea>
       </CardActions>
     </Card>
