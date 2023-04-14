@@ -7,6 +7,7 @@ import { collection, CollectionReference } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import { PlusOne } from "@mui/icons-material";
 import ImpactsList from "../../modules/posi/impactsList";
+import PageTitle from "../../common/components/pageTitle";
 
 const Index = () => {
   const appState = useAppState();
@@ -19,18 +20,13 @@ const Index = () => {
 
   return (
     <Box mb={9} /** For the fab icon space. */>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          p: 1,
-        }}
-      >
-        <Typography variant="h1" justifyContent={"center"}>
-          📺 <b>We</b>Screen
-        </Typography>
-      </Box>
+      <PageTitle
+        title={
+          <>
+            📺 <b>We</b>Screen
+          </>
+        }
+      />
 
       {query == undefined ? (
         <CircularProgress />

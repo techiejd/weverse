@@ -5,6 +5,7 @@ import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import MakerCard from "../../modules/makers/MakerCard";
 import { makerConverter } from "../../common/context/weverse";
+import PageTitle from "../../common/components/pageTitle";
 
 const MakersListed = ({ appState }: { appState: AppState }) => {
   const [makersSnapshot, loading, error] = useCollection(
@@ -35,6 +36,7 @@ const MakersListed = ({ appState }: { appState: AppState }) => {
       sx={{ alignItems: "center", justifyContent: "center", p: 1 }}
       spacing={1}
     >
+      <PageTitle title={<b>💪 Makers</b>} />
       {error && (
         <Typography color={"red"}>Error: {JSON.stringify(error)}</Typography>
       )}

@@ -10,6 +10,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -20,6 +21,7 @@ import { AccountCircle, Home, Login, PlusOne } from "@mui/icons-material";
 import { AppState, useAppState } from "../context/appState";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import { LinkBehavior } from "../context/context";
+import Image from "next/image";
 
 export const MenuComponent = (props: BoxProps) => {
   const appState = useAppState();
@@ -129,11 +131,25 @@ export const Header = () => {
     <AppBar position="static" color="secondary">
       <Toolbar>
         <MenuComponent />
-        <Typography fontSize={"16px"} noWrap>
-          <Link sx={{ all: "unset" }} href="/">
-            🪐<b>We</b>Verse
-          </Link>
-        </Typography>
+        <Link sx={{ all: "unset" }} href="/">
+          <Stack
+            direction={"row"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            pl={1}
+          >
+            <Image
+              src="/Icon.png"
+              alt="OneWe logo"
+              width={"20"}
+              height={"20"}
+            />{" "}
+            <Typography fontSize={"16px"} noWrap pl={0.5}>
+              <b>One</b>We
+            </Typography>
+          </Stack>
+        </Link>
+
         <div style={{ flexGrow: 1 }}></div>
         {appState ? <UserPortal appState={appState} /> : <CircularProgress />}
       </Toolbar>

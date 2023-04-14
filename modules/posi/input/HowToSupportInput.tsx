@@ -31,14 +31,12 @@ const HowToSupportInput = () => {
   return (
     <Stack spacing={2}>
       <Box>
-        <Typography variant="h3">
-          Deja aquí el enlace o los datos de tus cuentas para recibir
-          donaciones:
-        </Typography>
+        <Typography variant="h3">Apoyo financiero:</Typography>
         <TextField
           required
           fullWidth
-          label="Se especifico para recibir dinero. (500 caracteres.)"
+          label="Deja aquí el enlace o los datos de tus cuentas para recibir
+          donaciones: (500 caracteres.)"
           name="summary"
           multiline
           minRows={2}
@@ -51,14 +49,12 @@ const HowToSupportInput = () => {
         />
       </Box>
       <Box>
-        <Typography variant="h3">
-          Deja aquí los datos de contacto para recibir ayudas de cualquier otro
-          tipo:
-        </Typography>
+        <Typography variant="h3">Otro tipo de apoyo:</Typography>
         <TextField
           required
           fullWidth
-          label="Se especifico para recibir ayuda. (500 caracteres.)"
+          label="Deja aquí los datos de contacto para recibir ayudas de cualquier otro
+          tipo. (500 caracteres.)"
           name="summary"
           multiline
           minRows={2}

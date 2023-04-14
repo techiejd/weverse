@@ -1,8 +1,16 @@
-import { Button, Stack } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import PageTitle from "../common/components/pageTitle";
 
 const VotingPortal = () => {
   return (
     <Stack m={2} spacing={2}>
+      <PageTitle
+        title={
+          <>
+            🪐 <b>We</b>Verse
+          </>
+        }
+      />
       <Button href="/posi" variant="contained">
         Ver todos los impactos sociales.
       </Button>
