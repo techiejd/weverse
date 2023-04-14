@@ -39,9 +39,11 @@ import AboutContent from "../../modules/posi/impactPage/about/AboutContent";
 import { useRouter } from "next/router";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import { AuthAction } from "../../modules/auth/AuthDialog/context";
-import { member } from "../../common/context/weverse";
+import { member, memberConverter } from "../../common/context/weverse";
 import { serverTimestamp } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { User } from "firebase/auth";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 
 const Section = ({
   label,
@@ -143,6 +145,24 @@ const HandleLogInDialog = ({
   );
 };
 
+const GetMaker = ({ appState, user }: { appState: AppState; user: User }) => {
+  const [formData, setFormData] = useFormData();
+  const memberDocRef = doc(
+    appState.firestore,
+    "members",
+    user.uid
+  ).withConverter(memberConverter);
+  const [member, loading, error] = useDocumentData(memberDocRef);
+
+  useEffect(() => {
+    if (member && setFormData) {
+      setFormData((fD) => ({ ...fD, makerId: member.makerId }));
+    }
+  }, [member, setFormData]);
+
+  return <></>;
+};
+
 const PosiForm = () => {
   const appState = useAppState();
 
@@ -152,17 +172,6 @@ const PosiForm = () => {
     const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
     const [unauthorizedUserInteraction, setUnauthorizedUserInteraction] =
       useState(false);
-    useEffect(() => {
-      if (user && appState) {
-        const memberDocRef = doc(appState.firestore, "members", user.uid);
-        const getMakerId = async () => {
-          const memberDoc = await getDoc(memberDocRef);
-          const memberData = member.parse(memberDoc.data());
-          setFormData((fD) => ({ ...fD, makerId: memberData.makerId }));
-        };
-        getMakerId();
-      }
-    }, [user, appState]);
 
     return (
       <Box>
@@ -188,6 +197,7 @@ const PosiForm = () => {
                 open={uploadDialogOpen}
                 setOpen={setUploadDialogOpen}
               />
+              {user && appState && <GetMaker appState={appState} user={user} />}
               <Stack
                 spacing={2}
                 margin={2}

@@ -76,7 +76,7 @@ export const memberConverter: FirestoreDataConverter<Member> = {
     return member.parse({
       ...data,
       id: snapshot.id,
-      createdAt: z.date().optional(),
+      createdAt: data.createdAt.toDate(),
     });
   },
 };
