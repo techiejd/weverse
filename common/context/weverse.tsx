@@ -72,11 +72,17 @@ export const memberConverter: FirestoreDataConverter<Member> = {
     };
   },
   fromFirestore(snapshot: QueryDocumentSnapshot): Member {
-    const data = snapshot.data();
-    return member.parse({
-      ...data,
-      id: snapshot.id,
-      createdAt: data.createdAt.toDate(),
-    });
+    const { createdAt, ...others } = snapshot.data();
+    // anything with serverTimestamp does not exist atm if pending writes.
+    return snapshot.metadata.hasPendingWrites
+      ? member.parse({
+          ...others,
+          id: snapshot.id,
+        })
+      : member.parse({
+          ...others,
+          id: snapshot.id,
+          createdAt: createdAt.toDate(),
+        });
   },
 };
