@@ -16,7 +16,7 @@ const SummaryInput = () => {
     <TextField
       required
       fullWidth
-      label="En una frase, ¿cuál fue tu impacto? (100 caracteres)"
+      label="Resume el impacto de tu proyecto en 100 caracteres."
       name="title"
       margin="normal"
       inputProps={{ maxLength: 100 }}

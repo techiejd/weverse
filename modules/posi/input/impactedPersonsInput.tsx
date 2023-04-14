@@ -32,7 +32,9 @@ const ImpactedPersonsInput = () => {
 
   return (
     <Stack spacing={2} margin={2} justifyContent={"space-between"}>
-      <Typography variant="h3">¿Cuantas personas fueron impactadas?</Typography>
+      <Typography variant="h3">
+        ¿Cuántas personas fueron impactadas con tu proyecto?
+      </Typography>
       <TextField
         required
         label="XXX personas"
@@ -44,12 +46,13 @@ const ImpactedPersonsInput = () => {
         }
       />
       <Typography variant="h3">
-        En una frase ¿cómo identificar a esta gente? (125 caracteres)
+        En una frase, ¿cómo podrías definir la población a la que ayudaste? (125
+        caracteres)
       </Typography>
       <TextField
         required
         fullWidth
-        label="Ej: Hablale a cualquiera de la clase 2023 del colegio San Ignacio en el barrio Laureles."
+        label="Ej: La clase 2023 del colegio San Ignacio en el barrio Laureles."
         name="impactedPersons-identification"
         margin="normal"
         inputProps={{ maxLength: 125 }}

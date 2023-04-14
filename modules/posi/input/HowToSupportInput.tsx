@@ -31,7 +31,10 @@ const HowToSupportInput = () => {
   return (
     <Stack spacing={2}>
       <Box>
-        <Typography variant="h3">Cómo ayudarte financialmente:</Typography>
+        <Typography variant="h3">
+          Deja aquí el enlace o los datos de tus cuentas para recibir
+          donaciones:
+        </Typography>
         <TextField
           required
           fullWidth
@@ -40,7 +43,7 @@ const HowToSupportInput = () => {
           multiline
           minRows={2}
           inputProps={{ maxLength: 500 }}
-          helperText="Si estan listos para recibir dinero, por favor indique la forma de pago con detalles. [Por ejemplo: datos de bancolombia, nequi o de tu billetera crypto o enlace de PayPal]"
+          helperText="Si tu proyecto está listo para recibir dinero, por favor indica los medios de pago. Por ejemplo: Datos de tu cuenta bancaria como Bancolombia, Nequi, Billetera Crypto, PayPal, etc."
           value={financeInput}
           onChange={(e) => {
             setFinanceInput(e.target.value);
@@ -49,7 +52,8 @@ const HowToSupportInput = () => {
       </Box>
       <Box>
         <Typography variant="h3">
-          Cómo contactarte para ayudarte en otras formas:
+          Deja aquí los datos de contacto para recibir ayudas de cualquier otro
+          tipo:
         </Typography>
         <TextField
           required
@@ -59,7 +63,7 @@ const HowToSupportInput = () => {
           multiline
           minRows={2}
           inputProps={{ maxLength: 500 }}
-          helperText="Si estan listos para recibir voluntariados o hablar con los medios, por favor indique cómo ponerse en contacto con detalles. [Por ejemplo: número télefonico, correo electronico, enlaces a paginas de los redes, etc.]"
+          helperText="Si tu proyecto está listo para recibir voluntarios, hablar con medios de comunicación o con especialistas como abogados, desarrolladores, etc, por favor, indica tu solicitud y los enlaces o los detalles para ponerse en contacto contigo. Por ejemplo: número telefónico, correo electrónico, redes sociales, página web, etc."
           value={contactInput}
           onChange={(e) => {
             setContactInput(e.target.value);

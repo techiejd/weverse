@@ -205,45 +205,53 @@ const PosiForm = () => {
                 alignItems={"center"}
                 justifyContent={"space-between"}
               >
-                <Box width="100%">
-                  <Typography variant="h1">Publica tu Impacto 🪧</Typography>
-                  <Typography>¡Bienvenido!</Typography>
+                <Stack
+                  spacing={1}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  textAlign={"center"}
+                >
+                  <Typography variant="h1">
+                    Publica el impacto de tu proyecto 🪧
+                  </Typography>
+                  <Typography>¡Hola, muchas gracias por estar aquí!</Typography>
                   <Typography>
-                    Estamos creando un escenario donde puedes poner tu impacto
-                    en un pedestal.
+                    Estamos creando un universo en el que le puedas contar al
+                    mundo todo lo bueno que estás haciendo por los demás,
+                    ¡porque vale la pena decirlo!
                   </Typography>
                   <Typography>
-                    Tu audiencia son fanaticos del impacto social que aman los
-                    datos. Buscan aprender sobre tu impacto para encontrar a
-                    quién apoyar.
+                    Aquí amamos el impacto social, poder demostrar con datos los
+                    resultados de tu esfuerzo y brindarte el apoyo que
+                    necesites.
                   </Typography>
                   <Typography>
-                    Gracias por tu impacto valiente. Por favor,{" "}
-                    <b>¡presumame el impacto!</b>
+                    De nuevo, gracias por querer compartirlo con nuestra
+                    comunidad.
                   </Typography>
-                </Box>
-                <Section label="Dimelo Rapido">
+                </Stack>
+                <Section label="En pocas palabras">
                   <SummaryInput />
                 </Section>
-                <Section label="¿Cómo apoyarte con este impacto?">
+                <Section label="¿Qué tipo de apoyo necesitas?">
                   <HowToSupportInput />
                 </Section>
-                <Section label="Contame sobre las personas impactadas">
+                <Section label="Hablemos sobre la población impactada">
                   <ImpactedPersonsInput />
                 </Section>
-                <Section label="Etiquetamelo por favor">
+                <Section label="Agrega los # que sean necesarios">
                   <TagsInput />
                 </Section>
-                <Section label="¿Donde fue?">
+                <Section label="¿Dónde realizaste este proyecto?">
                   <CitySearchInput />
                 </Section>
-                <Section label="Cuenteme sobre el esfuerzo">
+                <Section label="Hablemos de tu esfuerzo en este proyecto">
                   <TimeInfoInput />
                 </Section>
-                <Section label="Mostramelo pues">
+                <Section label="Muéstranos un poco de lo que has hecho">
                   <ImpactVideoInput />
                 </Section>
-                <Section label="Ahora sí, cuentemelo bien (opcional)">
+                <Section label="¿Quieres contarnos más? ¡Adelante!">
                   <AboutInput />
                 </Section>
                 <Button variant="contained" sx={{ mt: 3 }} type="submit">

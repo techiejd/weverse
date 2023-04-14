@@ -91,7 +91,7 @@ const SearchTagsInput = ({
         <TextField
           {...params}
           label="Elija las etiquetas del impacto."
-          helperText="Mínimo de una etiqueta. Agregue su propia etiqueta si no ve la que desea. Solo se puede de 'a' a 'z', de 0 a 9 y ' '."
+          helperText="Agrega mínimo una etiqueta. Si no ves la que deseas, puedes crear la tuya usando caracteres de la 'a la z', del '0 al 9' o ' '."
           InputProps={{
             ...params.InputProps,
             startAdornment: (

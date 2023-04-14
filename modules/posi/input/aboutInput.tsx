@@ -21,7 +21,7 @@ const AboutInput = () => {
       multiline
       minRows={3}
       inputProps={{ maxLength: 1000 }}
-      helperText="Este es tu lugar para dar todo el detalle de tu impacto."
+      helperText="Es aquí donde puedes dar todos los detalles que quieras sobre tu proyecto."
       value={aboutInput}
       onChange={(e) => setAboutInput(e.target.value)}
     />

@@ -88,7 +88,7 @@ const InvestedTimeLevelInput = () => {
   return (
     <Box>
       <Typography variant="h3">
-        Qué cantidad de tiempo le invertiste al impacto:{" "}
+        ¿Qué cantidad de tiempo le invertiste a tu proyecto?
       </Typography>
       <Box alignSelf={"center"} ml={2} mr={2}>
         <Slider
@@ -221,7 +221,9 @@ const DateRangeInput = () => {
 
   return (
     <Box>
-      <Typography variant="h3">¿De cúando a cúando?: </Typography>
+      <Typography variant="h3">
+        ¿En qué periodo de tiempo llevaste a cabo el proyecto?:
+      </Typography>
       <TextField
         label={`${dateFormat} - ${dateFormat}`}
         fullWidth={true}
