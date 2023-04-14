@@ -128,7 +128,7 @@ const AboutContent = ({
                 <Summarize />
               </Icon>
             }
-            title={"Integro"}
+            title={"Descripción detallada del proyecto"}
           />
           <CardContent>
             <Typography>{about}</Typography>
