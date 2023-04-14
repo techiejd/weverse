@@ -10,7 +10,7 @@ const VotingPortal = () => {
         Ver a todos los Makers.
       </Button>
       <Button href="/posi/upload" variant="contained">
-        Sube tu impacto
+        Sube tu impacto.
       </Button>
     </Stack>
   );
