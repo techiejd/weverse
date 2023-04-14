@@ -196,7 +196,6 @@ const AuthDialogContent = ({
         return error;
       })
       .catch((err) => {
-        console.log(err);
         return "Wrong code!";
       });
   };
