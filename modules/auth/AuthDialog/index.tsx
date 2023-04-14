@@ -34,7 +34,11 @@ import {
 } from "./context";
 import { AppState, useAppState } from "../../../common/context/appState";
 import MakerInput from "./makerInput";
-import { maker } from "../../../common/context/weverse";
+import {
+  maker,
+  makerConverter,
+  memberConverter,
+} from "../../../common/context/weverse";
 
 const TabControl = ({
   appState,
@@ -139,7 +143,6 @@ const AuthDialogContent = ({
             });
 
             const makerDocRef = await (async () => {
-              if (!authDialogState.maker) return undefined;
               const makerEncoded = maker.parse({
                 ...authDialogState.maker,
                 ownerId: userCred.user.uid,
@@ -147,19 +150,22 @@ const AuthDialogContent = ({
                   authDialogState.maker?.type == "individual"
                     ? authDialogState.name
                     : authDialogState.maker?.name,
-                createdAt: serverTimestamp(),
               });
               return await addDoc(
-                collection(appState.firestore, "makers"),
+                collection(appState.firestore, "makers").withConverter(
+                  makerConverter
+                ),
                 makerEncoded
               );
             })();
 
             const memberDocPromise = setDoc(
-              doc(appState.firestore, "members", userCred.user.uid),
-              makerDocRef
-                ? { makerId: makerDocRef.id, createdAt: serverTimestamp() }
-                : {}
+              doc(
+                appState.firestore,
+                "members",
+                userCred.user.uid
+              ).withConverter(memberConverter),
+              { makerId: makerDocRef.id }
             );
 
             const registeredPhoneNumberPromise = setDoc(
@@ -190,6 +196,7 @@ const AuthDialogContent = ({
         return error;
       })
       .catch((err) => {
+        console.log(err);
         return "Wrong code!";
       });
   };

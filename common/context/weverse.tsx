@@ -26,6 +26,7 @@ export const organizationLabels = {
   [organizationType.Enum.profit]: "Organización con fines de lucro",
 };
 export const maker = z.object({
+  id: z.string().optional(),
   ownerId: z.string(),
   type: makerType,
   pic: formUrl,
@@ -39,18 +40,43 @@ export type PartialMaker = z.infer<typeof partialMaker>;
 
 export const makerConverter: FirestoreDataConverter<Maker> = {
   toFirestore(maker: WithFieldValue<Maker>): DocumentData {
+    const { id, ...others } = maker;
     return {
-      ...maker,
+      ...others,
       createdAt: maker.createdAt ? maker.createdAt : serverTimestamp(),
     };
   },
   fromFirestore(snapshot: QueryDocumentSnapshot): Maker {
     const data = snapshot.data();
-    return maker.parse({ ...data, createdAt: data.createdAt.toDate() });
+    return maker.parse({
+      ...data,
+      id: snapshot.id,
+      createdAt: data.createdAt.toDate(),
+    });
   },
 };
 
 export const member = z.object({
   makerId: z.string(),
-  createdAt: z.any(), // TODO(techiejd): Look into firebase schemas and transformations.
+  id: z.string().optional(),
+  createdAt: z.date().optional(),
 });
+export type Member = z.infer<typeof member>;
+
+export const memberConverter: FirestoreDataConverter<Member> = {
+  toFirestore: (member: WithFieldValue<Member>): DocumentData => {
+    const { id, ...others } = member;
+    return {
+      ...others,
+      createdAt: member.createdAt ? member.createdAt : serverTimestamp(),
+    };
+  },
+  fromFirestore(snapshot: QueryDocumentSnapshot): Member {
+    const data = snapshot.data();
+    return member.parse({
+      ...data,
+      id: snapshot.id,
+      createdAt: z.date().optional(),
+    });
+  },
+};

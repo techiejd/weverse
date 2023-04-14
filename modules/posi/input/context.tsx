@@ -103,12 +103,15 @@ export const posiFormData = z.object({
 export type PosiFormData = z.infer<typeof posiFormData>;
 
 export const posiFormDataConverter: FirestoreDataConverter<PosiFormData> = {
-  toFirestore: (posiFormData: WithFieldValue<PosiFormData>): DocumentData => ({
-    ...posiFormData,
-    createdAt: posiFormData.createdAt
-      ? posiFormData.createdAt
-      : serverTimestamp(),
-  }),
+  toFirestore: (posiFormData: WithFieldValue<PosiFormData>): DocumentData => {
+    const { id, ...others } = posiFormData;
+    return {
+      ...others,
+      createdAt: posiFormData.createdAt
+        ? posiFormData.createdAt
+        : serverTimestamp(),
+    };
+  },
   fromFirestore: (snapshot: QueryDocumentSnapshot): PosiFormData => {
     const data = snapshot.data();
     return posiFormData.parse({
