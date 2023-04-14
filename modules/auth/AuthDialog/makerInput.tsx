@@ -68,7 +68,7 @@ const OrganizationTypeInput = ({
         }}
       />
       <FormControl>
-        <FormLabel>Tipo de la organización.</FormLabel>
+        <FormLabel>Tipo de organización:</FormLabel>
         <RadioGroup
           name="chooseOrganizationType"
           onChange={organizationTypeChange}
@@ -114,13 +114,13 @@ const DetailedInput = ({
 
   const askForInfoMsg =
     type == "individual"
-      ? "Cuéntame sobre ti"
-      : "Cuéntame sobre la organización";
+      ? "Elige tu foto de perfil"
+      : "Cuéntanos un poco sobre tu organización";
 
   const askForImage =
     type == "individual"
-      ? "Una foto de perfil por favor."
-      : "Tu logo por favor.";
+      ? "Selecciona una imagen con la que quieras ser identificado por la comunidad OneWe."
+      : "Sube una foto de tu logo.";
 
   return (
     <Stack margin={2}>
@@ -168,17 +168,16 @@ const ChooseMakerType = ({
   return (
     <Stack>
       <FormControl>
-        <FormLabel>Maker</FormLabel>
         <RadioGroup name="chooseMakerType" row onChange={makerChange}>
           <FormControlLabel
             value="individual"
             control={<Radio required />}
-            label="Individual"
+            label="Trabajo solo"
           />
           <FormControlLabel
             value="organization"
             control={<Radio required />}
-            label="Organization"
+            label="Pertenezco a una organización"
           />
         </RadioGroup>
       </FormControl>
@@ -223,7 +222,7 @@ const MakerInput = ({
         />
         <FormHelperText>
           {
-            "Solo se permite la entrada a Makers. Maker = Creador de impacto social positivo. Debes ser mayor de edad."
+            "Maker = creador de impacto social. Sólo puedes ingresar si eres uno, y debes ser mayor de edad para registrarte."
           }
         </FormHelperText>
       </FormGroup>

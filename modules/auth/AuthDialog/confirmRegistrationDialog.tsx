@@ -24,7 +24,7 @@ const ConfirmRegistrationDialog = ({
 }) => {
   return (
     <Dialog open={authDialogState.confirmRegistrationDialogOpen}>
-      <DialogTitle>Por favor revisar la información.</DialogTitle>
+      <DialogTitle>Revisa la información:</DialogTitle>
       <DialogContent>
         <Typography>
           <b>Nombre: </b>

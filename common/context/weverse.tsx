@@ -19,10 +19,10 @@ export const organizationType = z.enum([
 ]);
 export type OrganizationType = z.infer<typeof organizationType>;
 export const organizationLabels = {
-  [organizationType.Enum.nonprofit]: "Fundación u Otra ONG",
+  [organizationType.Enum.nonprofit]: "Fundación u otra ONG",
   [organizationType.Enum.religious]: "Organización Religiosa",
   [organizationType.Enum.governmental]: "Organización Gubermental",
-  [organizationType.Enum.unincorporated]: "Voluntarios u Otro No Asociados",
+  [organizationType.Enum.unincorporated]: "Voluntarios",
   [organizationType.Enum.profit]: "Organización con fines de lucro",
 };
 export const maker = z.object({

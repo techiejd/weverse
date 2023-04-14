@@ -33,7 +33,7 @@ const OtpDialog = ({
   return (
     <Dialog open={authDialogState.otpDialogOpen} fullWidth>
       <DialogTitle textAlign={"justify"} fontSize={18}>
-        Ingrese el código de verificación que debería haber recibido.
+        Ingresa el código de verificación que recibiste.
       </DialogTitle>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         {waitingVerificationResult ? (

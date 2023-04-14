@@ -16,8 +16,8 @@ export enum AuthAction {
 }
 
 export const prompts = {
-  [AuthAction.logIn]: "Iniciar sesión",
-  [AuthAction.register]: "Registrarme",
+  [AuthAction.logIn]: "Inicia sesión",
+  [AuthAction.register]: "Regístrate",
 };
 
 export type AuthDialogState = {

@@ -1,6 +1,6 @@
 import { MuiTelInputInfo, MuiTelInput } from "mui-tel-input";
 import { Dispatch, SetStateAction, useState } from "react";
-import { AuthDialogState } from "./context";
+import { AuthAction, AuthDialogState } from "./context";
 
 const PhoneInput = ({
   authDialogState,
@@ -31,7 +31,9 @@ const PhoneInput = ({
       error={authDialogState.phoneNumberInputError}
       onChange={onPhoneNumberChange}
       label="Número telefónico."
-      helperText="Vas a recibir un codigo de verificación."
+      helperText={`Vas a recibir un código de verificación para completar el ${
+        authDialogState.authAction == AuthAction.logIn ? "ingreso" : "registro"
+      }.`}
     />
   );
 };

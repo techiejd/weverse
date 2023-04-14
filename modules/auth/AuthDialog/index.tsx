@@ -2,7 +2,6 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   Box,
   Dialog,
-  DialogTitle,
   Tabs,
   Tab,
   DialogContent,
@@ -291,7 +290,6 @@ const AuthDialogContent = ({
         authDialogState={authDialogState}
         setAuthDialogState={setAuthDialogState}
       />
-      <DialogTitle>¡A autenticarnos!</DialogTitle>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -331,7 +329,7 @@ const AuthDialogContent = ({
                   }));
                 }}
                 required
-                helperText="¿Con qué nombre te identificas? Ej: Fula, Fulano, Fulano Detal, etc. Este nombre lo va usar la comunidad de impacto social."
+                helperText="¿Con qué nombre te identificas? Ej: Fula, Fulano, Fulano Detal, etc. Este nombre lo usará la comunidad OneWe para conocerte y conocer tu iniciativa."
                 label="¿Cómo te llamas?"
                 key={"register-name"}
               />,
