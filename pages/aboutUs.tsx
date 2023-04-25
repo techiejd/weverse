@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-// TODO(jimenez1917): look into next Image for optimization.
+// TODO(techiejd): why isn't this static? and maybe upgrade.
 import type { NextPage } from "next";
 import React from "react";
 import aboutUsStyle from "./../styles/aboutUs.module.css";
