@@ -4,7 +4,6 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { collection, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { CircularProgress, Stack, Typography } from "@mui/material";
-import { impacts } from "../../modules/vote/hardcoded";
 import MakerCard from "../../modules/makers/MakerCard";
 
 const UserPage = () => {
@@ -42,7 +41,7 @@ const UserPage = () => {
           <Typography color={"red"}>Error: {JSON.stringify(error)}</Typography>
         )}
         {loading && <Typography>Makers: Loading...</Typography>}
-        {!loading && !error && impacts.length == 0 && (
+        {!loading && !error && makerIds.length == 0 && (
           <Typography>No hay maker aquí.</Typography>
         )}
         {makerIds.map((makerId) => (

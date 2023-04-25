@@ -10,12 +10,12 @@ import {
 } from "@mui/material";
 import moment from "moment";
 import { PillBoxMessage } from "../../../../common/components/pillBoxMessage";
-import CandidateMedia from "../../../vote/votingExperience/candidate/candidateMedia";
 import { getShareProps, posiFormData } from "../../input/context";
 import QuickStats from "../QuickStats";
 import Support from "./Support";
 import { z } from "zod";
 import MakerCard from "../../../makers/MakerCard";
+import PosiMedia from "./posiMedia";
 
 const aboutContentProps = posiFormData.extend({
   support: z.boolean().optional(),
@@ -64,7 +64,7 @@ const AboutContent = ({
               width: "100%",
             }}
           >
-            <CandidateMedia
+            <PosiMedia
               video={{
                 threshold: 0.9,
                 muted: false,
