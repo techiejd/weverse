@@ -9,28 +9,6 @@ import {
   QueryDocumentSnapshot,
 } from "firebase/firestore";
 
-export enum InvestedTimeLevel {
-  hour = 1,
-  day = 2,
-  week = 3,
-  twoWeeks = 5,
-  month = 8,
-  threeMonths = 13,
-  halfYear = 21,
-  year = 34,
-}
-export const levelToColors = {
-  [InvestedTimeLevel.hour]: "violet",
-  [InvestedTimeLevel.day]: "indigo",
-  [InvestedTimeLevel.week]: "blue",
-  [InvestedTimeLevel.twoWeeks]: "green",
-  [InvestedTimeLevel.month]: "yellow",
-  [InvestedTimeLevel.threeMonths]: "orange",
-  [InvestedTimeLevel.halfYear]: "red",
-  [InvestedTimeLevel.year]: "white",
-};
-export const investedTimeLevel = z.nativeEnum(InvestedTimeLevel);
-
 // related to
 /// <reference types="google.maps" />
 const location = z.object({
@@ -89,7 +67,6 @@ export const posiFormData = z.object({
     amount: z.number().int().nonnegative(),
     howToIdentify: z.string().min(5).max(125),
   }),
-  investedTimeLevel: investedTimeLevel,
   tags: z.string().array(),
   location: location,
   dates: z.object({ start: z.date(), end: z.date() }),

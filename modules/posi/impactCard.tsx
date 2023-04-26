@@ -52,10 +52,7 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
             </Stack>
             <Rating value={null} readOnly />
           </Stack>
-          <QuickStats
-            impactedPeopleAmount={posiData.impactedPeople.amount}
-            investedTimeLevel={posiData.investedTimeLevel}
-          />
+          <QuickStats impactedPeopleAmount={posiData.impactedPeople.amount} />
         </CardContent>
       </CardActionArea>
       <CardActions>

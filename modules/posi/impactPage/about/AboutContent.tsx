@@ -28,7 +28,6 @@ const AboutContent = ({
   location,
   dates,
   impactedPeople,
-  investedTimeLevel,
   tags,
   makerId,
   about,
@@ -106,10 +105,7 @@ const AboutContent = ({
                   {moment(dates.end).format(dateFormat)}
                 </Typography>
               </Stack>
-              <QuickStats
-                impactedPeopleAmount={impactedPeople.amount}
-                investedTimeLevel={investedTimeLevel}
-              />
+              <QuickStats impactedPeopleAmount={impactedPeople.amount} />
               <Box alignItems={"normal"} width={"100%"} display={"flex"}>
                 {tags.map((tag) => (
                   <PillBoxMessage key={tag} sx={{ m: 1 }}>

@@ -34,7 +34,6 @@ import SummaryInput from "../../modules/posi/input/SummaryInput";
 import HowToSupportInput from "../../modules/posi/input/HowToSupportInput";
 import AboutInput from "../../modules/posi/input/aboutInput";
 import { AppState, useAppState } from "../../common/context/appState";
-import TimeInfoInput from "../../modules/posi/input/timeInfoInput";
 import AboutContent from "../../modules/posi/impactPage/about/AboutContent";
 import { useRouter } from "next/router";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
@@ -244,9 +243,6 @@ const PosiForm = () => {
                 </Section>
                 <Section label="¿Dónde realizaste este proyecto?">
                   <CitySearchInput />
-                </Section>
-                <Section label="Hablemos de tu esfuerzo en este proyecto">
-                  <TimeInfoInput />
                 </Section>
                 <Section label="Muéstranos un poco de lo que has hecho">
                   <ImpactVideoInput />
