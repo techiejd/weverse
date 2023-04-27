@@ -67,7 +67,6 @@ export const posiFormData = z.object({
     amount: z.number().int().nonnegative(),
     howToIdentify: z.string().min(5).max(125),
   }),
-  tags: z.string().array(),
   location: location,
   dates: z.object({ start: z.date(), end: z.date() }),
   video: formUrl,

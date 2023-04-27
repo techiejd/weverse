@@ -11,7 +11,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { collection, addDoc, getDoc, doc } from "firebase/firestore";
+import { collection, addDoc, doc } from "firebase/firestore";
 import {
   Dispatch,
   ReactNode,
@@ -19,7 +19,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { CitySearchInput, TagsInput } from "../../modules/posi/input";
+import { CitySearchInput } from "../../modules/posi/input";
 import ImpactedPersonsInput from "../../modules/posi/input/impactedPersonsInput";
 import {
   PartialPosiFormData,
@@ -38,8 +38,7 @@ import AboutContent from "../../modules/posi/impactPage/about/AboutContent";
 import { useRouter } from "next/router";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import { AuthAction } from "../../modules/auth/AuthDialog/context";
-import { member, memberConverter } from "../../common/context/weverse";
-import { serverTimestamp } from "firebase/firestore";
+import { memberConverter } from "../../common/context/weverse";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { User } from "firebase/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -237,9 +236,6 @@ const PosiForm = () => {
                 </Section>
                 <Section label="Hablemos sobre la población impactada">
                   <ImpactedPersonsInput />
-                </Section>
-                <Section label="Agrega los # que sean necesarios">
-                  <TagsInput />
                 </Section>
                 <Section label="¿Dónde realizaste este proyecto?">
                   <CitySearchInput />

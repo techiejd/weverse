@@ -9,7 +9,6 @@ import {
   CardContent,
 } from "@mui/material";
 import moment from "moment";
-import { PillBoxMessage } from "../../../../common/components/pillBoxMessage";
 import { getShareProps, posiFormData } from "../../input/context";
 import QuickStats from "../QuickStats";
 import Support from "./Support";
@@ -28,7 +27,6 @@ const AboutContent = ({
   location,
   dates,
   impactedPeople,
-  tags,
   makerId,
   about,
   howToSupport,
@@ -106,13 +104,6 @@ const AboutContent = ({
                 </Typography>
               </Stack>
               <QuickStats impactedPeopleAmount={impactedPeople.amount} />
-              <Box alignItems={"normal"} width={"100%"} display={"flex"}>
-                {tags.map((tag) => (
-                  <PillBoxMessage key={tag} sx={{ m: 1 }}>
-                    #{tag}
-                  </PillBoxMessage>
-                ))}
-              </Box>
             </Stack>
           </CardContent>
         </Box>
