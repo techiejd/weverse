@@ -27,11 +27,14 @@
     "singleProjectMode": true
   },
   "hosting": {
-    "source": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
+    "rewrites": [
+      {
+        "source": "**",
+        "run": {
+          "serviceId": "weverse",
+          "region": "southamerica-west1"
+        }
+      }
     ]
   },
   "firestore": {
