@@ -209,22 +209,21 @@ const PosiForm = () => {
                   alignItems={"center"}
                   textAlign={"center"}
                 >
-                  <Typography variant="h1">
-                    Publica el impacto de tu proyecto 🪧
-                  </Typography>
+                  <Typography variant="h1">Publica tu acción! 🪧</Typography>
                   <Typography>¡Hola, muchas gracias por estar aquí!</Typography>
                   <Typography>
-                    Estamos creando un universo en el que le puedas contar al
+                    Estamos creando un universo en el que le puedas mostrar al
                     mundo todo lo bueno que estás haciendo por los demás,
-                    ¡porque vale la pena decirlo!
+                    ¡porque vale la pena mostrarlo!
                   </Typography>
                   <Typography>
                     Aquí amamos el impacto social, poder demostrar con datos los
-                    resultados de tu esfuerzo y brindarte el apoyo que
-                    necesites.
+                    resultados de tus acciones sociales y brindarte el apoyo que
+                    necesites. Por ende, necesitamos que nos muestres la acción
+                    para nosotros emitirlo a la comunidad y medir el impacto.
                   </Typography>
                   <Typography>
-                    De nuevo, gracias por querer compartirlo con nuestra
+                    De nuevo, gracias por querer compartirla con nuestra
                     comunidad.
                   </Typography>
                 </Stack>
@@ -237,7 +236,7 @@ const PosiForm = () => {
                 <Section label="Hablemos sobre la población impactada">
                   <ImpactedPersonsInput />
                 </Section>
-                <Section label="¿Dónde realizaste este proyecto?">
+                <Section label="¿Dónde realizaste esta acción?">
                   <CitySearchInput />
                 </Section>
                 <Section label="Muéstranos un poco de lo que has hecho">

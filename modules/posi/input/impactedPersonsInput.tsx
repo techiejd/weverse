@@ -33,7 +33,7 @@ const ImpactedPersonsInput = () => {
   return (
     <Stack spacing={2} margin={2} justifyContent={"space-between"}>
       <Typography variant="h3">
-        ¿Cuántas personas fueron impactadas con tu proyecto?
+        ¿Cuántas personas fueron impactadas con tu acción?
       </Typography>
       <TextField
         required

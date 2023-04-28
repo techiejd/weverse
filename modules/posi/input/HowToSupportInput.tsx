@@ -41,7 +41,7 @@ const HowToSupportInput = () => {
           multiline
           minRows={2}
           inputProps={{ maxLength: 500 }}
-          helperText="Si tu proyecto está listo para recibir dinero, por favor indica los medios de pago. Por ejemplo: Datos de tu cuenta bancaria como Bancolombia, Nequi, Billetera Crypto, PayPal, etc."
+          helperText="Si tu iniciativa está lista para recibir dinero, por favor indica los medios de pago. Por ejemplo: Datos de tu cuenta bancaria como Bancolombia, Nequi, Billetera Crypto, PayPal, etc."
           value={financeInput}
           onChange={(e) => {
             setFinanceInput(e.target.value);
@@ -59,7 +59,7 @@ const HowToSupportInput = () => {
           multiline
           minRows={2}
           inputProps={{ maxLength: 500 }}
-          helperText="Si tu proyecto está listo para recibir voluntarios, hablar con medios de comunicación o con especialistas como abogados, desarrolladores, etc, por favor, indica tu solicitud y los enlaces o los detalles para ponerse en contacto contigo. Por ejemplo: número telefónico, correo electrónico, redes sociales, página web, etc."
+          helperText="Si tu iniciativa está listo para recibir voluntarios, hablar con medios de comunicación o con especialistas como abogados, desarrolladores, etc, por favor, indica tu solicitud y los enlaces o los detalles para ponerse en contacto contigo. Por ejemplo: número telefónico, correo electrónico, redes sociales, página web, etc."
           value={contactInput}
           onChange={(e) => {
             setContactInput(e.target.value);

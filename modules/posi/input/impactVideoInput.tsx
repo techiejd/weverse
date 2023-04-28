@@ -16,7 +16,7 @@ const ImpactVideoInput = () => {
   }, [videoUrl, setFormData]);
   return (
     <Box>
-      <Typography>Sube un video de tu proyecto</Typography>
+      <Typography>Sube un video de la acción social</Typography>
       <FileInput
         setFileUrl={setVideoUrl}
         required
