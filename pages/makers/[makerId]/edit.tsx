@@ -45,7 +45,9 @@ const Register = () => {
   return (
     <Stack sx={{ justifyContent: "center", alignItems: "center" }} spacing={2}>
       <Typography variant="h1">Editar tu página Maker.</Typography>
-      <Typography variant="h2">Maker = creador de impacto social.</Typography>
+      <Typography variant="h2">
+        Maker = creador de impacto social a traves de sus Actions.
+      </Typography>
       <form>
         <MakerInput userName="uName" val={maker} setVal={setMaker} />
       </form>

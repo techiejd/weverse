@@ -48,7 +48,7 @@ const About = () => {
         )}
         {loading && <Loading />}
         {!loading && !error && posiData == undefined && (
-          <Typography>No hay ningun impacto aquí.</Typography>
+          <Typography>No hay ninguna Action aquí.</Typography>
         )}
         {posiData && <AboutContent {...posiData} support />}
       </Box>

@@ -20,13 +20,7 @@ const Index = () => {
 
   return (
     <Box mb={9} /** For the fab icon space. */>
-      <PageTitle
-        title={
-          <>
-            📺 <b>We</b>Screen
-          </>
-        }
-      />
+      <PageTitle title={<>🤸 Actions</>} />
 
       {query == undefined ? (
         <CircularProgress />
@@ -49,7 +43,7 @@ const Index = () => {
         color="primary"
       >
         <PlusOne sx={{ mr: 1 }} />
-        <Typography>Agrega tu impacto!</Typography>
+        <Typography>Agrega tu Action!</Typography>
       </Fab>
     </Box>
   );

@@ -40,7 +40,7 @@ const ImpactsList = ({
       )}
       {loading && <Loading />}
       {!loading && !error && impacts.length == 0 && (
-        <Typography>No hay ningun impacto aquí.</Typography>
+        <Typography>No hay ninguna Action aquí.</Typography>
       )}
       {impacts.map((impact) => {
         return <ImpactCard posiData={impact} key={impact.id} />;

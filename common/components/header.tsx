@@ -84,11 +84,11 @@ export const MenuComponent = (props: BoxProps) => {
           component={LinkBehavior as any}
         >
           <ListItemIcon>
-            <Typography>📺</Typography>
+            <Typography>
+              <b>🤸</b>
+            </Typography>
           </ListItemIcon>
-          <ListItemText>
-            <b>We</b>Screen
-          </ListItemText>
+          <ListItemText>Actions</ListItemText>
         </MenuItem>
         <MenuItem
           href="/posi/upload"
@@ -98,7 +98,7 @@ export const MenuComponent = (props: BoxProps) => {
           <ListItemIcon>
             <PlusOne />
           </ListItemIcon>
-          <ListItemText>Agrega tu impacto!</ListItemText>
+          <ListItemText>Agrega tu Action!</ListItemText>
         </MenuItem>
         {appState && <UserPortal appState={appState} />}
       </Menu>
