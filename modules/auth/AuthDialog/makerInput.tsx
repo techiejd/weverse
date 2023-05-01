@@ -26,6 +26,8 @@ import {
   organizationLabels,
   organizationType,
 } from "../../../common/context/weverse";
+import HowToSupportInput from "../../posi/input/HowToSupportInput";
+import { Section } from "../../../pages/posi/upload";
 
 const OrganizationTypeInput = ({
   authDialogState,
@@ -123,7 +125,7 @@ const DetailedInput = ({
       : "Sube una foto de tu logo.";
 
   return (
-    <Stack margin={2}>
+    <Stack margin={2} spacing={2}>
       <Typography variant="h3">{askForInfoMsg}</Typography>
       {type == "organization" && (
         <OrganizationTypeInput
@@ -139,6 +141,9 @@ const DetailedInput = ({
         accept={"img"}
         metadata={{ makerId: "", userID: "" }}
       />
+      <Section label="¿Qué tipo de apoyo necesitas?">
+        <HowToSupportInput />
+      </Section>
     </Stack>
   );
 };

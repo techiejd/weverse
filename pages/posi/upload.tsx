@@ -31,7 +31,6 @@ import {
 } from "../../modules/posi/input/context";
 import ImpactVideoInput from "../../modules/posi/input/impactVideoInput";
 import SummaryInput from "../../modules/posi/input/SummaryInput";
-import HowToSupportInput from "../../modules/posi/input/HowToSupportInput";
 import AboutInput from "../../modules/posi/input/aboutInput";
 import { AppState, useAppState } from "../../common/context/appState";
 import AboutContent from "../../modules/posi/impactPage/about/AboutContent";
@@ -43,7 +42,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { User } from "firebase/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
-const Section = ({
+export const Section = ({
   label,
   children,
 }: {
@@ -229,9 +228,6 @@ const PosiForm = () => {
                 </Stack>
                 <Section label="En pocas palabras">
                   <SummaryInput />
-                </Section>
-                <Section label="¿Qué tipo de apoyo necesitas?">
-                  <HowToSupportInput />
                 </Section>
                 <Section label="Hablemos sobre la población impactada">
                   <ImpactedPersonsInput />
