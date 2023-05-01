@@ -1,10 +1,7 @@
 import {
   Box,
-  Checkbox,
   FormControl,
   FormControlLabel,
-  FormGroup,
-  FormHelperText,
   FormLabel,
   Radio,
   RadioGroup,
@@ -19,9 +16,9 @@ import {
   useEffect,
   useState,
 } from "react";
-import { AuthDialogState } from "./context";
 import { FileInput } from "../../posi/input";
 import {
+  Maker,
   OrganizationType,
   organizationLabels,
   organizationType,
@@ -30,23 +27,20 @@ import HowToSupportInput from "../../posi/input/HowToSupportInput";
 import { Section } from "../../../pages/posi/upload";
 
 const OrganizationTypeInput = ({
-  authDialogState,
-  setAuthDialogState,
+  val,
+  setVal,
 }: {
-  authDialogState: AuthDialogState;
-  setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
+  val: Maker;
+  setVal: Dispatch<SetStateAction<Maker>>;
 }) => {
   const organizationTypeChange = (
     e: ChangeEvent<HTMLInputElement>,
     value: string
   ) => {
     const type = value as OrganizationType;
-    setAuthDialogState((aDS) => ({
-      ...aDS,
-      maker: {
-        ...aDS.maker,
-        organizationType: type,
-      },
+    setVal((maker) => ({
+      ...maker,
+      organizationType: type,
     }));
   };
 
@@ -58,14 +52,11 @@ const OrganizationTypeInput = ({
         label={`¿Cómo se llama la organización? (75 caracteres)`}
         margin="normal"
         inputProps={{ maxLength: 75 }}
-        value={authDialogState.maker?.name ? authDialogState.maker?.name : ""}
+        value={val.name ? val.name : ""}
         onChange={(e) => {
-          setAuthDialogState((aDS) => ({
-            ...aDS,
-            maker: {
-              ...aDS.maker,
-              name: e.target.value,
-            },
+          setVal((maker) => ({
+            ...maker,
+            name: e.target.value,
           }));
         }}
       />
@@ -93,45 +84,34 @@ const OrganizationTypeInput = ({
 };
 
 const DetailedInput = ({
-  type,
-  authDialogState,
-  setAuthDialogState,
+  val,
+  setVal,
 }: {
-  authDialogState: AuthDialogState;
-  type: "individual" | "organization";
-  setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
+  val: Maker;
+  setVal: Dispatch<SetStateAction<Maker>>;
 }) => {
   const [imgUrl, setImgUrl] = useState<string | undefined | "loading">(
     undefined
   );
   useEffect(() => {
-    setAuthDialogState((aDS) => ({
-      ...aDS,
-      maker: {
-        ...aDS.maker,
-        pic: imgUrl,
-      },
-    }));
-  }, [imgUrl, setAuthDialogState]);
+    setVal((maker) => ({ ...maker, pic: imgUrl }));
+  }, [imgUrl, setVal]);
 
   const askForInfoMsg =
-    type == "individual"
+    val.type == "individual"
       ? "Elige tu foto de perfil"
       : "Cuéntanos un poco sobre tu organización";
 
   const askForImage =
-    type == "individual"
+    val.type == "individual"
       ? "Selecciona una imagen con la que quieras ser identificado por la comunidad OneWe."
       : "Sube una foto de tu logo.";
 
   return (
     <Stack margin={2} spacing={2}>
       <Typography variant="h3">{askForInfoMsg}</Typography>
-      {type == "organization" && (
-        <OrganizationTypeInput
-          authDialogState={authDialogState}
-          setAuthDialogState={setAuthDialogState}
-        />
+      {val.type == "organization" && (
+        <OrganizationTypeInput val={val} setVal={setVal} />
       )}
       <Typography>{askForImage}</Typography>
       <FileInput
@@ -148,32 +128,37 @@ const DetailedInput = ({
   );
 };
 
-const ChooseMakerType = ({
-  setAuthDialogState,
-  authDialogState,
+const MakerInput = ({
+  userName,
+  val,
+  setVal,
 }: {
-  authDialogState: AuthDialogState;
-  setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
+  userName: string;
+  val: Maker;
+  setVal: Dispatch<SetStateAction<Maker>>;
 }) => {
-  const [makerType, setMakerType] = useState<
-    "individual" | "organization" | undefined
-  >();
   const makerChange = (e: ChangeEvent<HTMLInputElement>, value: string) => {
     const type = value as "individual" | "organization";
-    setMakerType(type);
-    setAuthDialogState((aDS) => ({
-      ...aDS,
-      maker: {
-        ...aDS.maker,
-        type: type,
-      },
+
+    setVal((maker) => ({
+      ...maker,
+      type: type,
+      organizationType:
+        type == "organization" ? val.organizationType : undefined,
+      name: type == "organization" ? val.name : userName,
     }));
   };
+  console.log(val.type);
 
   return (
     <Stack>
       <FormControl>
-        <RadioGroup name="chooseMakerType" row onChange={makerChange}>
+        <RadioGroup
+          name="chooseMakerType"
+          row
+          onChange={makerChange}
+          value={val.type}
+        >
           <FormControlLabel
             value="individual"
             control={<Radio required />}
@@ -186,58 +171,8 @@ const ChooseMakerType = ({
           />
         </RadioGroup>
       </FormControl>
-      {makerType && (
-        <DetailedInput
-          type={makerType}
-          authDialogState={authDialogState}
-          setAuthDialogState={setAuthDialogState}
-        />
-      )}
+      <DetailedInput val={val} setVal={setVal} />
     </Stack>
-  );
-};
-
-const MakerInput = ({
-  authDialogState,
-  setAuthDialogState,
-}: {
-  authDialogState: AuthDialogState;
-  setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
-}) => {
-  return (
-    <Box pb={2}>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={true}
-              onClick={(e) =>
-                confirm(
-                  "A este momemento, solo se permite la entrada a Makers."
-                )
-              }
-              sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
-            />
-          }
-          label={
-            <Box>
-              <Typography fontSize={20}>Soy un Maker.</Typography>
-            </Box>
-          }
-        />
-        <FormHelperText>
-          {
-            "Maker = creador de impacto social. Sólo puedes ingresar si eres uno, y debes ser mayor de edad para registrarte."
-          }
-        </FormHelperText>
-      </FormGroup>
-      {authDialogState.maker && (
-        <ChooseMakerType
-          authDialogState={authDialogState}
-          setAuthDialogState={setAuthDialogState}
-        />
-      )}
-    </Box>
   );
 };
 

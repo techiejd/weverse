@@ -29,14 +29,12 @@ export const maker = z.object({
   id: z.string().optional(),
   ownerId: z.string(),
   type: makerType,
-  pic: formUrl,
+  pic: formUrl.optional(),
   name: z.string().min(1),
   organizationType: organizationType.optional(),
   createdAt: z.date().optional(),
 });
 export type Maker = z.infer<typeof maker>;
-const partialMaker = maker.partial();
-export type PartialMaker = z.infer<typeof partialMaker>;
 
 export const makerConverter: FirestoreDataConverter<Maker> = {
   toFirestore(maker: WithFieldValue<Maker>): DocumentData {

@@ -108,7 +108,6 @@ const AuthDialogContent = ({
     otpDialogOpen: false,
     recaptchaDialogOpen: false,
     confirmRegistrationDialogOpen: false,
-    maker: {}, // Right now we are only onboarding makers
     checkingUserRegistered: false,
     userRegisteredError: false,
   });
@@ -136,20 +135,14 @@ const AuthDialogContent = ({
             // TODO(techiejd): Look into using transactions or batch writes here.
             const updateSuccessful = updateProfile({
               displayName: authDialogState.name,
-              photoURL:
-                authDialogState.maker?.type == "individual"
-                  ? authDialogState.maker?.pic
-                  : undefined,
             });
 
             const makerDocRef = await (async () => {
+              // So we assume all users are also makers. They can edit this later.
               const makerEncoded = maker.parse({
-                ...authDialogState.maker,
                 ownerId: userCred.user.uid,
-                name:
-                  authDialogState.maker?.type == "individual"
-                    ? authDialogState.name
-                    : authDialogState.maker?.name,
+                name: authDialogState.name,
+                type: "individual",
               });
               return await addDoc(
                 collection(appState.firestore, "makers").withConverter(
@@ -339,12 +332,6 @@ const AuthDialogContent = ({
                 label="¿Cómo te llamas?"
                 key={"register-name"}
               />,
-              <Box key={"register-maker"}>
-                <MakerInput
-                  authDialogState={authDialogState}
-                  setAuthDialogState={setAuthDialogState}
-                />
-              </Box>,
             ]}
             <PhoneInput
               authDialogState={authDialogState}
