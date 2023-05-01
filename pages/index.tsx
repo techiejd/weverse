@@ -9,6 +9,7 @@ import { doc } from "firebase/firestore";
 import { memberConverter } from "../common/context/weverse";
 import { User } from "firebase/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
+import Image from "next/image";
 
 const MakerPortal = ({ appState }: { appState: AppState }) => {
   const [user, loading, error] = useAuthState(appState.auth);
@@ -69,6 +70,7 @@ const WeVerse = () => {
         <PageTitle
           title={
             <>
+              <Image src="/Icon.png" alt="OneWe logo" width={40} height={40} />{" "}
               <b>One</b>We
             </>
           }
