@@ -25,6 +25,7 @@ import {
 } from "../../../common/context/weverse";
 import HowToSupportInput from "../../posi/input/HowToSupportInput";
 import { Section } from "../../../pages/posi/upload";
+import AboutInput from "../../posi/input/aboutInput";
 
 const OrganizationTypeInput = ({
   val,
@@ -148,10 +149,10 @@ const MakerInput = ({
       name: type == "organization" ? val.name : userName,
     }));
   };
-  console.log(val.type);
 
   return (
     <Stack>
+      <AboutInput />
       <FormControl>
         <RadioGroup
           name="chooseMakerType"

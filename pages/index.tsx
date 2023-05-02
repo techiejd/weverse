@@ -33,7 +33,7 @@ const MakerPortal = ({ appState }: { appState: AppState }) => {
         disabled={!member}
         fullWidth
       >
-        📛 Mi Pagina Maker
+        📛 Mi Página Maker
       </Button>
     );
   };
@@ -55,7 +55,7 @@ const MakerPortal = ({ appState }: { appState: AppState }) => {
             setAuthDialogOpen(true);
           }}
         >
-          +🧑 : Registrarte como Maker.
+          +🧑 Registrarte como Maker.
         </Button>
       )}
     </Box>
@@ -76,13 +76,13 @@ const WeVerse = () => {
           }
         />
         <Button href="/posi" variant="contained">
-          🤸‍♀️ Actions
+          🤸‍♀️ Acción
         </Button>
         <Button href="/makers" variant="contained">
           💪 Makers
         </Button>
         <Button href="/posi/upload" variant="contained">
-          +🤸‍♀️ : Agrega tu Action
+          🤸‍♀️ Agrega tu Acción
         </Button>
         {appState ? (
           <MakerPortal appState={appState} />

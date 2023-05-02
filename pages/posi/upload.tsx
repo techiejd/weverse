@@ -208,7 +208,7 @@ const PosiForm = () => {
                   alignItems={"center"}
                   textAlign={"center"}
                 >
-                  <Typography variant="h1">Publica tu Action! 🪧</Typography>
+                  <Typography variant="h1">¡Publica tu acción! 🪧</Typography>
                   <Typography>¡Hola, muchas gracias por estar aquí!</Typography>
                   <Typography>
                     Estamos creando un universo en el que le puedas mostrar al
@@ -227,20 +227,17 @@ const PosiForm = () => {
                     comunidad.
                   </Typography>
                 </Stack>
-                <Section label="En pocas palabras">
+                <Section label="Muéstranos un poco de lo que has hecho">
+                  <ImpactVideoInput />
+                </Section>
+                <Section label="Si tu acción tuviera un nombre ¿cuál sería?">
                   <SummaryInput />
                 </Section>
-                <Section label="Hablemos sobre la población impactada">
+                <Section label="¿A quiénes ayudaste?">
                   <ImpactedPersonsInput />
                 </Section>
                 <Section label="¿Dónde realizaste esta acción?">
                   <CitySearchInput />
-                </Section>
-                <Section label="Muéstranos un poco de lo que has hecho">
-                  <ImpactVideoInput />
-                </Section>
-                <Section label="¿Quieres contarnos más? ¡Adelante!">
-                  <AboutInput />
                 </Section>
                 <Button variant="contained" sx={{ mt: 3 }} type="submit">
                   Publicar

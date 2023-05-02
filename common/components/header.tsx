@@ -88,7 +88,7 @@ export const MenuComponent = (props: BoxProps) => {
               <b>🤸</b>
             </Typography>
           </ListItemIcon>
-          <ListItemText>Actions</ListItemText>
+          <ListItemText>Acciones</ListItemText>
         </MenuItem>
         <MenuItem
           href="/posi/upload"
