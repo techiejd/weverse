@@ -117,7 +117,10 @@ export const useFormData = (): [
 // TODO(techiejd): Look into making this string instead of | undefined.
 export const getPosiPage = (id: string | undefined) => `/posi/${id}/about`;
 
-export const getShareProps = (posiData: { summary: string; id?: string }) => ({
+export const getSharePropsForPosi = (posiData: {
+  summary: string;
+  id?: string;
+}) => ({
   title: posiData.summary,
   text: posiData.summary,
   url: `${

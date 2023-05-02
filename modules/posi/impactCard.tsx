@@ -12,7 +12,11 @@ import {
 } from "@mui/material";
 import ShareActionArea from "../../common/components/shareActionArea";
 import QuickStats from "./impactPage/QuickStats";
-import { PosiFormData, getPosiPage, getShareProps } from "./input/context";
+import {
+  PosiFormData,
+  getPosiPage,
+  getSharePropsForPosi,
+} from "./input/context";
 
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
   return (
@@ -63,7 +67,7 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
         >
           Conoce más
         </Button>
-        <ShareActionArea shareProps={getShareProps(posiData)}>
+        <ShareActionArea shareProps={getSharePropsForPosi(posiData)}>
           <Button size="small">Comparte</Button>
         </ShareActionArea>
       </CardActions>

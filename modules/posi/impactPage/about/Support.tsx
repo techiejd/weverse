@@ -19,9 +19,8 @@ import {
 import { Dispatch, SetStateAction, useState } from "react";
 import Linkify from "react-linkify";
 import { HowToSupport } from "../../input/context";
-import ShareActionArea, {
-  ShareProps,
-} from "../../../../common/components/shareActionArea";
+import { ShareProps } from "../../../../common/components/shareActionArea";
+import SharingSpeedDialAction from "../../sharingSpeedDialAction";
 
 const SupportDialog = ({
   open,
@@ -62,22 +61,14 @@ const Support = ({
   const [connectDialogOpen, setConnectDialogOpen] = useState(false);
   const [financeDialogOpen, setFinanceDialogOpen] = useState(false);
 
-  const SharingSpeedDial = (props: SpeedDialActionProps) => {
-    const { ref, ...others } = props;
-    return (
-      <ShareActionArea shareProps={shareProps}>
-        <SpeedDialAction {...others} ref={ref} />
-      </ShareActionArea>
-    );
-  };
-
   const actions = (() => {
     const actions = [
-      <SharingSpeedDial
+      <SharingSpeedDialAction
         key={"Compartir"}
         icon={<Share />}
         tooltipTitle={"Compartir"}
         tooltipOpen
+        {...shareProps}
       />,
     ];
     if (howToSupport?.contact) {

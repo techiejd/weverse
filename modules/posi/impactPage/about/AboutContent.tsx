@@ -9,7 +9,7 @@ import {
   CardContent,
 } from "@mui/material";
 import moment from "moment";
-import { getShareProps, posiFormData } from "../../input/context";
+import { getSharePropsForPosi, posiFormData } from "../../input/context";
 import QuickStats from "../QuickStats";
 import Support from "./Support";
 import { z } from "zod";
@@ -125,7 +125,7 @@ const AboutContent = ({
       {support && (
         <Support
           howToSupport={howToSupport}
-          shareProps={getShareProps({ summary, id })}
+          shareProps={getSharePropsForPosi({ summary, id })}
         />
       )}
     </Box>
