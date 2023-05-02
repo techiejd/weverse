@@ -130,16 +130,6 @@ const AboutContent = ({
           </CardContent>
         </Box>
         <MakerCard makerId={makerId} />
-        <Box>
-          <CardHeader
-            avatar={
-              <Icon>
-                <Summarize />
-              </Icon>
-            }
-            title={"Descripción detallada de la acción social."}
-          />
-        </Box>
       </Stack>
       {support && (
         <SupportButton
