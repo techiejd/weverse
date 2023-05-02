@@ -25,21 +25,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import SharingSpeedDialAction from "../../modules/posi/sharingSpeedDialAction";
 import { User } from "firebase/auth";
 import { doc } from "firebase/firestore";
-
-const loadingFab = (
-  <Fab
-    variant="extended"
-    sx={{
-      position: "fixed",
-      bottom: 16,
-      right: 16,
-    }}
-    color="primary"
-  >
-    <Pending sx={{ mr: 1 }} />
-    <Typography>Loading</Typography>
-  </Fab>
-);
+import LoadingFab from "../../common/components/loadingFab";
 
 const makerFab = (maker: Maker) => {
   const actions = [
@@ -122,7 +108,7 @@ const MyMakerSpeedDial = ({
     ).withConverter(makerConverter);
     const [maker, makerLoading, makerError] = useDocumentData(makerDocRef);
     console.log(maker);
-    return maker ? makerFab(maker) : loadingFab;
+    return maker ? makerFab(maker) : <LoadingFab />;
   };
   const memberDocRef = doc(
     appState.firestore,
@@ -134,7 +120,7 @@ const MyMakerSpeedDial = ({
   return member ? (
     <MyMakerSpeedDialContent makerId={member.makerId} />
   ) : (
-    loadingFab
+    <LoadingFab />
   );
 };
 
@@ -164,7 +150,7 @@ const MyMakerPortal = ({ appState }: { appState: AppState }) => {
     <Box>
       <AuthDialog open={authDialogOpen} setOpen={setAuthDialogOpen} />
       {userLoading ? (
-        loadingFab
+        <LoadingFab />
       ) : user ? (
         <MyMakerSpeedDial user={user} appState={appState} />
       ) : (

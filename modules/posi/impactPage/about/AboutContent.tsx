@@ -8,32 +8,64 @@ import {
   Icon,
   CardContent,
 } from "@mui/material";
-import moment from "moment";
 import { getSharePropsForPosi, posiFormData } from "../../input/context";
-import QuickStats from "../QuickStats";
 import Support from "./Support";
 import { z } from "zod";
 import MakerCard from "../../../makers/MakerCard";
 import PosiMedia from "./posiMedia";
+import { ShareProps } from "../../../../common/components/shareActionArea";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { makerConverter } from "../../../../common/context/weverse";
+import { doc } from "firebase/firestore";
+import { AppState, useAppState } from "../../../../common/context/appState";
+import LoadingFab from "../../../../common/components/loadingFab";
 
 const aboutContentProps = posiFormData.extend({
   support: z.boolean().optional(),
 });
 export type AboutContentProps = z.infer<typeof aboutContentProps>;
 
+const SupportButton = ({
+  shareProps,
+  makerId,
+}: {
+  shareProps: ShareProps;
+  makerId: string;
+}) => {
+  const SupportButtonContent = ({ appState }: { appState: AppState }) => {
+    // TODO(techiejd): create a userMaker(id).
+    const makerDocRef = doc(appState.firestore, "makers", makerId);
+    const [maker, makerLoading, error] = useDocumentData(
+      makerDocRef.withConverter(makerConverter)
+    );
+    return maker ? (
+      <Support
+        howToSupport={maker.howToSupport ? maker.howToSupport : {}}
+        shareProps={shareProps}
+      />
+    ) : (
+      <LoadingFab />
+    );
+  };
+
+  const appState = useAppState();
+
+  return appState ? (
+    <SupportButtonContent appState={appState} />
+  ) : (
+    <LoadingFab />
+  );
+};
+
 const AboutContent = ({
   summary,
   video,
   location,
-  dates,
   impactedPeople,
   makerId,
-  about,
-  howToSupport,
   support,
   id,
 }: AboutContentProps) => {
-  const dateFormat = "DD/MM/YY";
   return (
     <Box>
       <Box sx={{ boxShadow: 1 }} padding={1}>
@@ -85,25 +117,15 @@ const AboutContent = ({
           />
           <CardContent>
             <Stack spacing={2}>
-              <Stack
-                direction={"row"}
-                spacing={2}
-                divider={<Divider orientation="vertical" flexItem />}
-              >
-                <Stack>
-                  <Typography variant="h3">
-                    {location.structuredFormatting.mainText}
-                  </Typography>
-                  <Typography fontSize={10}>
-                    {location.structuredFormatting.secondaryText}
-                  </Typography>
-                </Stack>
+              <Stack>
                 <Typography variant="h3">
-                  {moment(dates.start).format(dateFormat)} -{" "}
-                  {moment(dates.end).format(dateFormat)}
+                  {location.structuredFormatting.mainText}
+                </Typography>
+                <Typography fontSize={10}>
+                  {location.structuredFormatting.secondaryText}
                 </Typography>
               </Stack>
-              <QuickStats impactedPeopleAmount={impactedPeople.amount} />
+              <Typography>{impactedPeople.howToIdentify}</Typography>
             </Stack>
           </CardContent>
         </Box>
@@ -117,15 +139,12 @@ const AboutContent = ({
             }
             title={"Descripción detallada de la acción social."}
           />
-          <CardContent>
-            <Typography>{about}</Typography>
-          </CardContent>
         </Box>
       </Stack>
       {support && (
-        <Support
-          howToSupport={howToSupport}
+        <SupportButton
           shareProps={getSharePropsForPosi({ summary, id })}
+          makerId={makerId}
         />
       )}
     </Box>

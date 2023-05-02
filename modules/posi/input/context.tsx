@@ -52,26 +52,14 @@ const location = z.object({
   types: z.string().array(),
 });
 
-const howToSupport = z
-  .object({
-    contact: z.string().max(500).optional(),
-    finance: z.string().max(500).optional(),
-  })
-  .optional();
-export type HowToSupport = z.infer<typeof howToSupport>;
-
 export const posiFormData = z.object({
   id: z.string().optional(), // If it exists, then it exists in the db.
   summary: z.string().min(5).max(100),
   impactedPeople: z.object({
-    amount: z.number().int().nonnegative(),
     howToIdentify: z.string().min(5).max(125),
   }),
   location: location,
-  dates: z.object({ start: z.date(), end: z.date() }),
   video: formUrl,
-  about: z.string().min(5).max(1000).optional(),
-  howToSupport: howToSupport,
   makerId: z.string(),
   createdAt: z.date().optional(),
 });

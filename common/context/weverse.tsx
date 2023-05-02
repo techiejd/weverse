@@ -25,6 +25,13 @@ export const organizationLabels = {
   [organizationType.Enum.unincorporated]: "Voluntarios",
   [organizationType.Enum.profit]: "Organización con fines de lucro",
 };
+
+const howToSupport = z.object({
+  contact: z.string().max(500).optional(),
+  finance: z.string().max(500).optional(),
+});
+export type HowToSupport = z.infer<typeof howToSupport>;
+
 export const maker = z.object({
   id: z.string().optional(),
   ownerId: z.string(),
@@ -33,6 +40,8 @@ export const maker = z.object({
   name: z.string().min(1),
   organizationType: organizationType.optional(),
   createdAt: z.date().optional(),
+  howToSupport: howToSupport.optional(),
+  about: z.string().min(5).max(1000).optional(),
 });
 export type Maker = z.infer<typeof maker>;
 

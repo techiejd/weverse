@@ -18,9 +18,9 @@ import {
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import Linkify from "react-linkify";
-import { HowToSupport } from "../../input/context";
 import { ShareProps } from "../../../../common/components/shareActionArea";
 import SharingSpeedDialAction from "../../sharingSpeedDialAction";
+import { HowToSupport } from "../../../../common/context/weverse";
 
 const SupportDialog = ({
   open,

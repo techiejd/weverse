@@ -11,7 +11,6 @@ import {
   Button,
 } from "@mui/material";
 import ShareActionArea from "../../common/components/shareActionArea";
-import QuickStats from "./impactPage/QuickStats";
 import {
   PosiFormData,
   getPosiPage,
@@ -56,7 +55,6 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
             </Stack>
             <Rating value={null} readOnly />
           </Stack>
-          <QuickStats impactedPeopleAmount={posiData.impactedPeople.amount} />
         </CardContent>
       </CardActionArea>
       <CardActions>
