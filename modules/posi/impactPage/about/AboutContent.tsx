@@ -115,7 +115,7 @@ const AboutContent = ({
                 <Summarize />
               </Icon>
             }
-            title={"Descripción detallada de la acción."}
+            title={"Descripción detallada de la acción social."}
           />
           <CardContent>
             <Typography>{about}</Typography>

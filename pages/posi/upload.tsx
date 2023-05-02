@@ -208,7 +208,7 @@ const PosiForm = () => {
                   alignItems={"center"}
                   textAlign={"center"}
                 >
-                  <Typography variant="h1">Publica tu acción! 🪧</Typography>
+                  <Typography variant="h1">Publica tu Action! 🪧</Typography>
                   <Typography>¡Hola, muchas gracias por estar aquí!</Typography>
                   <Typography>
                     Estamos creando un universo en el que le puedas mostrar al
@@ -219,7 +219,8 @@ const PosiForm = () => {
                     Aquí amamos el impacto social, poder demostrar con datos los
                     resultados de tus acciones sociales y brindarte el apoyo que
                     necesites. Por ende, necesitamos que nos muestres la acción
-                    para nosotros emitirlo a la comunidad y medir el impacto.
+                    social -- Action -- para nosotros emitirlo a la comunidad y
+                    medir el impacto.
                   </Typography>
                   <Typography>
                     De nuevo, gracias por querer compartirla con nuestra
