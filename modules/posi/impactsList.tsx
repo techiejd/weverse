@@ -35,6 +35,7 @@ const ImpactsList = ({
       sx={{ alignItems: "center", justifyContent: "center", p: 1 }}
       spacing={1}
     >
+      <Typography variant="h2">Acciones</Typography>
       {error && (
         <Typography color={"red"}>Error: {JSON.stringify(error)}</Typography>
       )}

@@ -113,6 +113,6 @@ export const getSharePropsForPosi = (posiData: {
   title: posiData.summary,
   text: posiData.summary,
   url: `${
-    isDevEnvironment ? "https://localhost:3000" : "https://onewe.co"
+    isDevEnvironment ? "http://localhost:3000" : "https://onewe.co"
   }${getPosiPage(posiData.id)}`,
 });
