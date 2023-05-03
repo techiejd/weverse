@@ -56,16 +56,11 @@ export const makerConverter: FirestoreDataConverter<Maker> = {
   fromFirestore(snapshot: QueryDocumentSnapshot): Maker {
     const data = snapshot.data();
     // anything with serverTimestamp does not exist atm if pending writes.
-    return snapshot.metadata.hasPendingWrites
-      ? maker.parse({
-          ...data,
-          id: snapshot.id,
-        })
-      : maker.parse({
-          ...data,
-          id: snapshot.id,
-          createdAt: data.createdAt.toDate(),
-        });
+    return maker.parse({
+      ...data,
+      id: snapshot.id,
+      createdAt: data.createdAt ? data.createdAt.toDate() : undefined,
+    });
   },
 };
 
@@ -87,15 +82,10 @@ export const memberConverter: FirestoreDataConverter<Member> = {
   fromFirestore(snapshot: QueryDocumentSnapshot): Member {
     const { createdAt, ...others } = snapshot.data();
     // anything with serverTimestamp does not exist atm if pending writes.
-    return snapshot.metadata.hasPendingWrites
-      ? member.parse({
-          ...others,
-          id: snapshot.id,
-        })
-      : member.parse({
-          ...others,
-          id: snapshot.id,
-          createdAt: createdAt.toDate(),
-        });
+    return member.parse({
+      ...others,
+      id: snapshot.id,
+      createdAt: createdAt ? createdAt.toDate() : undefined,
+    });
   },
 };

@@ -11,7 +11,7 @@ import {
   CardActionArea,
 } from "@mui/material";
 import { doc } from "firebase/firestore";
-import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useAppState, AppState } from "../../common/context/appState";
 import { makerConverter } from "../../common/context/weverse";
 
@@ -19,7 +19,7 @@ const MakerCard = ({ makerId }: { makerId: string }) => {
   const appState = useAppState();
   const MakerCardContent = ({ appState }: { appState: AppState }) => {
     const makerDocRef = doc(appState.firestore, "makers", makerId);
-    const [value, loading, error, reload] = useDocumentDataOnce(
+    const [value, loading, error] = useDocumentData(
       makerDocRef.withConverter(makerConverter)
     );
 

@@ -23,9 +23,7 @@ import {
   organizationLabels,
   organizationType,
 } from "../../../common/context/weverse";
-import HowToSupportInput from "../../posi/input/HowToSupportInput";
 import { Section } from "../../../pages/posi/upload";
-import AboutInput from "../../posi/input/aboutInput";
 
 const OrganizationTypeInput = ({
   val,
@@ -98,10 +96,24 @@ const DetailedInput = ({
     setVal((maker) => ({ ...maker, pic: imgUrl }));
   }, [imgUrl, setVal]);
 
+  const setAboutInput = (about: string) => {
+    setVal((maker) => ({ ...maker, about: about }));
+  };
+  const setFinanceSupport = (financeSupport: string) => {
+    setVal((maker) => ({
+      ...maker,
+      howToSupport: { ...maker.howToSupport, finance: financeSupport },
+    }));
+  };
+  const setContactSupport = (contactSupport: string) => {
+    setVal((maker) => ({
+      ...maker,
+      howToSupport: { ...maker.howToSupport, contact: contactSupport },
+    }));
+  };
+
   const askForInfoMsg =
-    val.type == "individual"
-      ? "Elige tu foto de perfil"
-      : "Cuéntanos un poco sobre tu organización";
+    val.type == "individual" ? "" : "Cuéntanos un poco sobre tu organización";
 
   const askForImage =
     val.type == "individual"
@@ -114,16 +126,84 @@ const DetailedInput = ({
       {val.type == "organization" && (
         <OrganizationTypeInput val={val} setVal={setVal} />
       )}
-      <Typography>{askForImage}</Typography>
-      <FileInput
-        required
-        setFileUrl={setImgUrl}
-        maxFileSize={10485760 /** 10MB */}
-        accept={"img"}
-        metadata={{ makerId: "", userID: "" }}
-      />
-      <Section label="¿Qué tipo de apoyo necesitas?">
-        <HowToSupportInput />
+
+      <Section
+        label={
+          val.type == "organization"
+            ? "Elige la foto de perfil de la organización"
+            : "Elige tu foto de perfil"
+        }
+      >
+        <Typography>{askForImage}</Typography>
+        <FileInput
+          setFileUrl={setImgUrl}
+          maxFileSize={10485760 /** 10MB */}
+          accept={"img"}
+          metadata={{ makerId: "", userID: "" }}
+        />
+      </Section>
+      <Section
+        label={
+          val.type == "organization"
+            ? "Cuéntanos acerca de la organización y sus iniciativas"
+            : "Cuéntanos acerca de tí y tus iniciativas"
+        }
+      >
+        <TextField
+          fullWidth
+          label="Danos una historia (1000 caracteres)"
+          name="summary"
+          multiline
+          minRows={3}
+          inputProps={{ maxLength: 1000 }}
+          helperText="Es aquí donde puedes dar detalles"
+          value={val.about ? val.about : ""}
+          onChange={(e) => setAboutInput(e.target.value)}
+        />
+      </Section>
+      <Section
+        label={`¿Qué tipo de apoyo necesita${
+          val.type == "organization" ? "" : "s"
+        }?`}
+      >
+        <Stack spacing={2}>
+          <Box>
+            <Typography variant="h3">Apoyo financiero:</Typography>
+            <TextField
+              required
+              fullWidth
+              label="Deja aquí el enlace o los datos de tus cuentas para recibir
+          donaciones: (500 caracteres.)"
+              name="summary"
+              multiline
+              minRows={2}
+              inputProps={{ maxLength: 500 }}
+              helperText="Si tu iniciativa está lista para recibir dinero, por favor indica los medios de pago. Por ejemplo: Datos de tu cuenta bancaria como Bancolombia, Nequi, Billetera Crypto, PayPal, etc."
+              value={val.howToSupport?.finance ? val.howToSupport.finance : ""}
+              onChange={(e) => {
+                setFinanceSupport(e.target.value);
+              }}
+            />
+          </Box>
+          <Box>
+            <Typography variant="h3">Otro tipo de apoyo:</Typography>
+            <TextField
+              required
+              fullWidth
+              label="Deja aquí los datos de contacto para recibir ayudas de cualquier otro
+          tipo. (500 caracteres.)"
+              name="summary"
+              multiline
+              minRows={2}
+              inputProps={{ maxLength: 500 }}
+              helperText="Si tu iniciativa está listo para recibir voluntarios, hablar con medios de comunicación o con especialistas como abogados, desarrolladores, etc, por favor, indica tu solicitud y los enlaces o los detalles para ponerse en contacto contigo. Por ejemplo: número telefónico, correo electrónico, redes sociales, página web, etc."
+              value={val.howToSupport?.contact ? val.howToSupport.contact : ""}
+              onChange={(e) => {
+                setContactSupport(e.target.value);
+              }}
+            />
+          </Box>
+        </Stack>
       </Section>
     </Stack>
   );
@@ -151,8 +231,7 @@ const MakerInput = ({
   };
 
   return (
-    <Stack>
-      <AboutInput />
+    <Stack alignItems={"center"}>
       <FormControl>
         <RadioGroup
           name="chooseMakerType"
