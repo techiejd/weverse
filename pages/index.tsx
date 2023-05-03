@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import PageTitle from "../common/components/pageTitle";
 import AuthDialog from "../modules/auth/AuthDialog";
 import { useEffect, useState } from "react";
@@ -66,7 +66,7 @@ const WeVerse = () => {
   const appState = useAppState();
   return (
     <Box>
-      <Stack m={2} spacing={2}>
+      <Stack p={2} spacing={2} sx={{ width: "100%" }}>
         <PageTitle
           title={
             <>
@@ -75,22 +75,38 @@ const WeVerse = () => {
             </>
           }
         />
-        <Button href="/posi" variant="contained">
-          🤸‍♀️ Acción
-        </Button>
-        <Button href="/makers" variant="contained">
-          💪 Makers
-        </Button>
-        <Button href="/posi/upload" variant="contained">
-          🤸‍♀️ Agrega tu Acción
-        </Button>
-        {appState ? (
-          <MakerPortal appState={appState} />
-        ) : (
-          <Button variant="contained" disabled>
-            Loading...
+        <Typography>En OneWe hacemos lo imposible:</Typography>
+        <Typography>
+          Hacemos el mundo mejor con confianza en nosotros mismos.
+        </Typography>
+        <Stack>
+          <Typography>Veanos mejorar el mundo en vivo:</Typography>
+          <Button href="/posi" variant="contained">
+            🤸‍♀️ Acciones
           </Button>
-        )}
+        </Stack>
+        <Stack>
+          Los que lo hacen posible:
+          <Button href="/makers" variant="contained">
+            💪 Makers
+          </Button>
+        </Stack>
+        <Stack>
+          <Typography>Suma al cambio para lo mejor:</Typography>
+          <Button href="/posi/upload" variant="contained">
+            🤸‍♀️ Agrega tu Acción
+          </Button>
+        </Stack>
+        <Stack>
+          <Typography>Tú:</Typography>
+          {appState ? (
+            <MakerPortal appState={appState} />
+          ) : (
+            <Button variant="contained" disabled>
+              Loading...
+            </Button>
+          )}
+        </Stack>
       </Stack>
     </Box>
   );
