@@ -89,9 +89,7 @@ const DetailedInput = ({
   val: Maker;
   setVal: Dispatch<SetStateAction<Maker>>;
 }) => {
-  const [imgUrl, setImgUrl] = useState<string | undefined | "loading">(
-    undefined
-  );
+  const [imgUrl, setImgUrl] = useState<string | undefined | "loading">(val.pic);
   useEffect(() => {
     setVal((maker) => ({ ...maker, pic: imgUrl }));
   }, [imgUrl, setVal]);
@@ -136,6 +134,7 @@ const DetailedInput = ({
       >
         <Typography>{askForImage}</Typography>
         <FileInput
+          initialFileUrl={val.pic}
           setFileUrl={setImgUrl}
           maxFileSize={10485760 /** 10MB */}
           accept={"img"}
@@ -170,7 +169,6 @@ const DetailedInput = ({
           <Box>
             <Typography variant="h3">Apoyo financiero:</Typography>
             <TextField
-              required
               fullWidth
               label="Deja aquí el enlace o los datos de tus cuentas para recibir
           donaciones: (500 caracteres.)"
@@ -188,7 +186,6 @@ const DetailedInput = ({
           <Box>
             <Typography variant="h3">Otro tipo de apoyo:</Typography>
             <TextField
-              required
               fullWidth
               label="Deja aquí los datos de contacto para recibir ayudas de cualquier otro
           tipo. (500 caracteres.)"

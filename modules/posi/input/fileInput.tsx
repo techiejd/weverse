@@ -30,6 +30,7 @@ function humanFileSize(size: number) {
 // Only supports single file atm
 const FileInput = ({
   required = false,
+  initialFileUrl,
   setFileUrl,
   minFileSize,
   maxFileSize,
@@ -37,6 +38,7 @@ const FileInput = ({
   metadata = {},
 }: {
   required?: boolean;
+  initialFileUrl?: string;
   setFileUrl: Dispatch<SetStateAction<string | undefined | "loading">>;
   minFileSize?: number;
   maxFileSize?: number;
@@ -44,6 +46,7 @@ const FileInput = ({
   metadata?: Record<string, string>;
 }) => {
   const appState = useAppState();
+  const [useInitialFileUrl, setUseInitialFileUrl] = useState(true);
 
   const [uploadTask, setUploadTask] = useState<UploadTask | undefined>();
   const [file, setFile] = useState<File | undefined | "loading">();
@@ -112,17 +115,16 @@ const FileInput = ({
       {error != "" && (
         <Typography sx={{ color: "red" }}>Error: {error}</Typography>
       )}
-      <Input
-        type="file"
-        onChange={handleFileChange}
-        slotProps={{
-          input: {
-            accept: accept == "video" ? "video/mp4" : "image/jpeg, image/jpg",
-          },
-        }}
-        error={error != ""}
-        required={required}
-      />
+      {useInitialFileUrl && initialFileUrl && (
+        <CardMedia
+          sx={{
+            height: 200,
+            width: 200,
+          }}
+          component={accept}
+          image={initialFileUrl}
+        />
+      )}
       {file != undefined &&
         (file == "loading" ? (
           <CircularProgress />
@@ -136,6 +138,18 @@ const FileInput = ({
             image={URL.createObjectURL(file as File)}
           />
         ))}
+      <Input
+        type="file"
+        onChange={handleFileChange}
+        slotProps={{
+          input: {
+            accept: accept == "video" ? "video/mp4" : "image/jpeg, image/jpg",
+          },
+        }}
+        onClick={() => setUseInitialFileUrl(false)}
+        error={error != ""}
+        required={required}
+      />
     </Box>
   );
 };
