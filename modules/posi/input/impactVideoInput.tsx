@@ -4,8 +4,10 @@ import { useFormData } from "./context";
 import { Box, Typography } from "@mui/material";
 
 const ImpactVideoInput = () => {
-  const [videoUrl, setVideoUrl] = useState<string | undefined | "loading">();
   const [formData, setFormData] = useFormData();
+  const [videoUrl, setVideoUrl] = useState<string | undefined | "loading">(
+    formData.video
+  );
   useEffect(() => {
     if (setFormData) {
       setFormData((fD) => ({
@@ -18,8 +20,9 @@ const ImpactVideoInput = () => {
     <Box>
       <Typography>Sube un video de tu acción</Typography>
       <FileInput
+        initialFileUrl={formData.video}
         setFileUrl={setVideoUrl}
-        required
+        required={formData.video ? false : true}
         minFileSize={1048576 /** 1MB */}
         maxFileSize={2147483648 /** 2GB */}
         accept={"video"}

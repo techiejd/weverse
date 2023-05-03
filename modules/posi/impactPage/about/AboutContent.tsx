@@ -1,4 +1,4 @@
-import { PlayCircle, Info, Summarize } from "@mui/icons-material";
+import { PlayCircle, Info } from "@mui/icons-material";
 import {
   Box,
   Typography,
@@ -8,64 +8,18 @@ import {
   Icon,
   CardContent,
 } from "@mui/material";
-import { getSharePropsForPosi, posiFormData } from "../../input/context";
-import Support from "./Support";
-import { z } from "zod";
 import MakerCard from "../../../makers/MakerCard";
 import PosiMedia from "./posiMedia";
-import { ShareProps } from "../../../../common/components/shareActionArea";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import { makerConverter } from "../../../../common/context/weverse";
-import { doc } from "firebase/firestore";
-import { AppState, useAppState } from "../../../../common/context/appState";
-import LoadingFab from "../../../../common/components/loadingFab";
-
-const aboutContentProps = posiFormData.extend({
-  support: z.boolean().optional(),
-});
-export type AboutContentProps = z.infer<typeof aboutContentProps>;
-
-const SupportButton = ({
-  shareProps,
-  makerId,
-}: {
-  shareProps: ShareProps;
-  makerId: string;
-}) => {
-  const SupportButtonContent = ({ appState }: { appState: AppState }) => {
-    // TODO(techiejd): create a userMaker(id).
-    const makerDocRef = doc(appState.firestore, "makers", makerId);
-    const [maker, makerLoading, error] = useDocumentData(
-      makerDocRef.withConverter(makerConverter)
-    );
-    return maker ? (
-      <Support
-        howToSupport={maker.howToSupport ? maker.howToSupport : {}}
-        shareProps={shareProps}
-      />
-    ) : (
-      <LoadingFab />
-    );
-  };
-
-  const appState = useAppState();
-
-  return appState ? (
-    <SupportButtonContent appState={appState} />
-  ) : (
-    <LoadingFab />
-  );
-};
+import { PosiFormData } from "../../input/context";
 
 const AboutContent = ({
   summary,
   video,
   location,
-  impactedPeople,
+  howToIdentifyImpactedPeople,
   makerId,
-  support,
   id,
-}: AboutContentProps) => {
+}: PosiFormData) => {
   return (
     <Box>
       <Box sx={{ boxShadow: 1 }} padding={1}>
@@ -106,7 +60,7 @@ const AboutContent = ({
             />
           </Box>
         </Box>
-        {(location || impactedPeople) && (
+        {(location || howToIdentifyImpactedPeople) && (
           <Box>
             <CardHeader
               avatar={
@@ -129,8 +83,8 @@ const AboutContent = ({
                     </Typography>
                   </Stack>
                 )}
-                {impactedPeople && (
-                  <Typography>{impactedPeople.howToIdentify}</Typography>
+                {howToIdentifyImpactedPeople && (
+                  <Typography>{howToIdentifyImpactedPeople}</Typography>
                 )}
               </Stack>
             </CardContent>
@@ -138,12 +92,6 @@ const AboutContent = ({
         )}
         <MakerCard makerId={makerId} />
       </Stack>
-      {support && (
-        <SupportButton
-          shareProps={getSharePropsForPosi({ summary, id })}
-          makerId={makerId}
-        />
-      )}
     </Box>
   );
 };

@@ -3,6 +3,9 @@ import {
   Box,
   CircularProgress,
   Divider,
+  Link,
+  SpeedDial,
+  SpeedDialAction,
   Stack,
   Typography,
 } from "@mui/material";
@@ -27,6 +30,8 @@ import {
 } from "../../../common/context/weverse";
 import LoadingFab from "../../../common/components/loadingFab";
 import Support from "../../../modules/posi/impactPage/about/Support";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { AdminPanelSettings, Edit } from "@mui/icons-material";
 
 const SupportMaker = ({
   appState,
@@ -40,10 +45,6 @@ const SupportMaker = ({
     makerDocRef.withConverter(makerConverter)
   );
 
-  console.log(maker);
-  console.log(makerId);
-  console.log(makerError);
-  console.log(makerLoading);
   return maker ? (
     <Support
       howToSupport={maker.howToSupport ? maker.howToSupport : {}}
@@ -55,6 +56,78 @@ const SupportMaker = ({
     />
   ) : (
     <LoadingFab />
+  );
+};
+
+const AdministerMaker = ({
+  appState,
+  makerId,
+}: {
+  appState: AppState;
+  makerId: string;
+}) => {
+  const [user, userLoading, userError] = useAuthState(appState.auth);
+  const makerDocRef = doc(appState.firestore, "makers", makerId);
+  const [maker, makerLoading, makerError] = useDocumentData(
+    makerDocRef.withConverter(makerConverter)
+  );
+
+  return (
+    <>
+      {maker?.ownerId == user?.uid && (
+        <SpeedDial
+          ariaLabel="Administer Maker"
+          sx={{
+            position: "fixed",
+            bottom: 64,
+            right: 84,
+          }}
+          icon={
+            <div>
+              <AdminPanelSettings />
+              <Typography fontSize={8} mt={-1}>
+                Admin
+              </Typography>
+            </div>
+          }
+        >
+          <SpeedDialAction
+            key="Add Action"
+            icon={
+              <Link href={`/posi/upload`} sx={{ textDecoration: "none" }}>
+                <Typography fontSize={24}>🤸</Typography>
+              </Link>
+            }
+            tooltipTitle={
+              <Link href={`/posi/upload`} style={{ textDecoration: "none" }}>
+                Agregar Acción
+              </Link>
+            }
+            tooltipOpen
+          />
+          <SpeedDialAction
+            key="Edit Maker"
+            icon={
+              <Link
+                href={`/makers/${makerId}/edit`}
+                sx={{ textDecoration: "none" }}
+              >
+                <Edit />
+              </Link>
+            }
+            tooltipTitle={
+              <Link
+                href={`/makers/${makerId}/edit`}
+                style={{ textDecoration: "none" }}
+              >
+                Editar
+              </Link>
+            }
+            tooltipOpen
+          />
+        </SpeedDial>
+      )}
+    </>
   );
 };
 
@@ -124,6 +197,7 @@ const MakerPage = () => {
           />
         )}
       </Stack>
+      <AdministerMaker appState={appState} makerId={String(makerId)} />
       <SupportMaker appState={appState} makerId={String(makerId)} />
     </Box>
   ) : (

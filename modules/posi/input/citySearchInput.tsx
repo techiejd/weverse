@@ -14,7 +14,11 @@ import Script from "next/script";
 
 const CitySearchInput = () => {
   const [formData, setFormData] = useFormData();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(
+    formData.location?.structuredFormatting
+      ? `${formData.location.structuredFormatting.mainText} ${formData.location.structuredFormatting.secondaryText}`
+      : ""
+  );
   const handleInputChange = (query: string) => {
     setQuery(query);
   };
@@ -37,6 +41,17 @@ const CitySearchInput = () => {
           types: suggestion.types,
         },
       }));
+    }
+  };
+
+  const handleClear = () => {
+    setQuery("");
+    if (setFormData) {
+      console.log("Clearing form location");
+      setFormData((fD) => {
+        const { location, ...others } = fD;
+        return others;
+      });
     }
   };
 
@@ -83,6 +98,9 @@ const CitySearchInput = () => {
                     // Onblur with no selection
                     setQuery("");
                   }
+                },
+                onClick: () => {
+                  handleClear();
                 },
               })}
               sx={{ width: "100%" }}

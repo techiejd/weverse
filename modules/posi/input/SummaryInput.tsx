@@ -3,15 +3,15 @@ import { useState, useEffect } from "react";
 import { useFormData } from "./context";
 
 const SummaryInput = () => {
-  const [summaryInput, setSummaryInput] = useState("");
   const [formData, setFormData] = useFormData();
-  useEffect(() => {
+  const setSummaryInput = (summary: string) => {
     if (setFormData) {
       setFormData((fD) => {
-        return { ...fD, summary: summaryInput };
+        return { ...fD, summary: summary };
       });
     }
-  }, [summaryInput, setFormData]);
+  };
+
   return (
     <Box>
       <Typography>(100 caracteres)</Typography>
@@ -22,7 +22,7 @@ const SummaryInput = () => {
         name="title"
         margin="normal"
         inputProps={{ maxLength: 100 }}
-        value={summaryInput}
+        value={formData.summary ? formData.summary : ""}
         onChange={(e) => {
           setSummaryInput(e.target.value);
         }}

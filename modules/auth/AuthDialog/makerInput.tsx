@@ -23,7 +23,7 @@ import {
   organizationLabels,
   organizationType,
 } from "../../../common/context/weverse";
-import { Section } from "../../../pages/posi/upload";
+import Section from "../../../common/components/section";
 
 const OrganizationTypeInput = ({
   val,

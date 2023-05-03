@@ -6,7 +6,7 @@ import {
   maker as makerSchema,
 } from "../../../common/context/weverse";
 import MakerInput from "../../../modules/auth/AuthDialog/makerInput";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { AppState, useAppState } from "../../../common/context/appState";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -27,7 +27,11 @@ const Edit = () => {
     appState: AppState;
   }) => {
     const [user, userLoading, userError] = useAuthState(appState.auth);
-    const makerDocRef = doc(appState.firestore, "makers", makerId);
+    const makerDocRef = doc(
+      appState.firestore,
+      "makers",
+      makerId
+    ).withConverter(makerConverter);
     const [maker, makerLoading, makerError] = useDocumentData(
       makerDocRef.withConverter(makerConverter)
     );
@@ -47,9 +51,8 @@ const Edit = () => {
             setUploading(true);
             e.preventDefault();
             const cleanedMaker = pickBy(maker, identity);
-            makerSchema.parse(cleanedMaker);
-            console.log(cleanedMaker);
-            await updateDoc(makerDocRef, cleanedMaker);
+            const parsedMaker = makerSchema.parse(cleanedMaker);
+            await setDoc(makerDocRef, parsedMaker);
             router.push(`/makers/${makerIn.id}`);
           }}
         >

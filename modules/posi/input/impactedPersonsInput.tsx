@@ -1,33 +1,22 @@
 import { Typography, TextField, Stack } from "@mui/material";
-import { ChangeEvent } from "react";
 import { useFormData } from "./context";
 
 const ImpactedPersonsInput = () => {
   const [formData, setFormData] = useFormData();
   const maxLength = 200;
-  const processNumImpacted = (e: ChangeEvent<HTMLInputElement>) => {
-    const result = e.target.value.replace(/\D/g, "");
-
-    if (setFormData) {
-      setFormData((fD) => ({
-        ...fD,
-        impactedPeople: {
-          ...fD.impactedPeople,
-          amount: Number(result),
-        },
-      }));
-    }
-  };
 
   const setHowToId = (input: string) => {
     if (setFormData) {
-      setFormData((fD) => ({
-        ...fD,
-        impactedPeople: {
-          ...fD.impactedPeople,
-          howToIdentify: input,
-        },
-      }));
+      setFormData((fD) => {
+        if (input == "") {
+          const { howToIdentifyImpactedPeople, ...others } = fD;
+          return others;
+        }
+        return {
+          ...fD,
+          howToIdentifyImpactedPeople: input,
+        };
+      });
     }
   };
 
@@ -41,8 +30,8 @@ const ImpactedPersonsInput = () => {
         margin="normal"
         inputProps={{ maxLength: maxLength }}
         value={
-          formData.impactedPeople?.howToIdentify
-            ? formData.impactedPeople.howToIdentify
+          formData.howToIdentifyImpactedPeople
+            ? formData.howToIdentifyImpactedPeople
             : ""
         }
         onChange={(e) => {
