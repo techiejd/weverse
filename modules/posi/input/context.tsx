@@ -82,7 +82,6 @@ export const posiFormDataConverter: FirestoreDataConverter<PosiFormData> = {
       ...data,
       id: snapshot.id,
       createdAt: data.createdAt.toDate(),
-      dates: { start: data.dates.start.toDate(), end: data.dates.end.toDate() },
     });
   },
 };

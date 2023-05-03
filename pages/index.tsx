@@ -55,7 +55,7 @@ const MakerPortal = ({ appState }: { appState: AppState }) => {
             setAuthDialogOpen(true);
           }}
         >
-          +🧑 Registrarte como Maker.
+          🧑 Registrarte como Maker
         </Button>
       )}
     </Box>
