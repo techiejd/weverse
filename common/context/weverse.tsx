@@ -55,11 +55,17 @@ export const makerConverter: FirestoreDataConverter<Maker> = {
   },
   fromFirestore(snapshot: QueryDocumentSnapshot): Maker {
     const data = snapshot.data();
-    return maker.parse({
-      ...data,
-      id: snapshot.id,
-      createdAt: data.createdAt.toDate(),
-    });
+    // anything with serverTimestamp does not exist atm if pending writes.
+    return snapshot.metadata.hasPendingWrites
+      ? maker.parse({
+          ...data,
+          id: snapshot.id,
+        })
+      : maker.parse({
+          ...data,
+          id: snapshot.id,
+          createdAt: data.createdAt.toDate(),
+        });
   },
 };
 

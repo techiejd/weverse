@@ -35,7 +35,6 @@ const ImpactedPersonsInput = () => {
     <Stack spacing={2} margin={2} justifyContent={"space-between"}>
       <Typography>({`${maxLength}`} caracteres)</Typography>
       <TextField
-        required
         fullWidth
         label="Ej: La clase 2023 del colegio San Ignacio en el barrio Laureles."
         name="impactedPersons-identification"

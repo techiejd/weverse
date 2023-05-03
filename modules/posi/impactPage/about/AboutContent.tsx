@@ -106,29 +106,36 @@ const AboutContent = ({
             />
           </Box>
         </Box>
-        <Box>
-          <CardHeader
-            avatar={
-              <Icon>
-                <Info />
-              </Icon>
-            }
-            title={"Info Rapída"}
-          />
-          <CardContent>
-            <Stack spacing={2}>
-              <Stack>
-                <Typography variant="h3">
-                  {location.structuredFormatting.mainText}
-                </Typography>
-                <Typography fontSize={10}>
-                  {location.structuredFormatting.secondaryText}
-                </Typography>
+        {(location || impactedPeople) && (
+          <Box>
+            <CardHeader
+              avatar={
+                <Icon>
+                  <Info />
+                </Icon>
+              }
+              title={"Info Rapída"}
+            />
+
+            <CardContent>
+              <Stack spacing={2}>
+                {location && (
+                  <Stack>
+                    <Typography variant="h3">
+                      {location.structuredFormatting.mainText}
+                    </Typography>
+                    <Typography fontSize={10}>
+                      {location.structuredFormatting.secondaryText}
+                    </Typography>
+                  </Stack>
+                )}
+                {impactedPeople && (
+                  <Typography>{impactedPeople.howToIdentify}</Typography>
+                )}
               </Stack>
-              <Typography>{impactedPeople.howToIdentify}</Typography>
-            </Stack>
-          </CardContent>
-        </Box>
+            </CardContent>
+          </Box>
+        )}
         <MakerCard makerId={makerId} />
       </Stack>
       {support && (

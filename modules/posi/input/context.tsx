@@ -55,10 +55,12 @@ const location = z.object({
 export const posiFormData = z.object({
   id: z.string().optional(), // If it exists, then it exists in the db.
   summary: z.string().min(5).max(100),
-  impactedPeople: z.object({
-    howToIdentify: z.string().min(5).max(125),
-  }),
-  location: location,
+  impactedPeople: z
+    .object({
+      howToIdentify: z.string().min(5).max(125),
+    })
+    .optional(),
+  location: location.optional(),
   video: formUrl,
   makerId: z.string(),
   createdAt: z.date().optional(),
