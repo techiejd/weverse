@@ -4,45 +4,31 @@ import { LinkBehavior } from "../context/context";
 const darkPalette = {
   mode: "dark" as PaletteMode,
   background: {
-    default: "#1d3749",
-    paper: "#4f171d",
+    default: "#001849",
+    paper: "#682c7f",
   },
   primary: {
-    main: "#FBE39E",
-    light: "#FBE7AC",
-    dark: "#FADF90",
-    contrastText: "black",
+    main: "#edb1ff",
   },
   secondary: {
-    main: "#254134",
-    light: "#2e5241",
-    dark: "#1c3127",
-    contrastText: "white",
+    main: "#c0c1ff",
   },
 };
 
 const lightPalette = {
   mode: "light" as PaletteMode,
   background: {
-    default: "#B6D0E2",
-    paper: "#eec4c9",
+    default: "#fefbff",
+    paper: "#f9d8ff",
   },
   primary: {
-    main: "#624a04",
-    light: "#7a5d05",
-    dark: "#493803",
-    contrastText: "white",
+    main: "#824599",
   },
   secondary: {
-    main: "#D4E7DE",
-    light: "#DAEBE3",
-    dark: "#CEE4D9",
-    contrastText: "black",
+    main: "#5355a9",
   },
   info: {
-    main: "#624a04",
-    light: "#7a5d05",
-    dark: "#493803",
+    main: "#824599",
   },
 };
 
