@@ -125,7 +125,7 @@ const CandidateImage = ({ src }: ImageProps) => {
   );
 };
 
-const PosiMedia = (props: { video?: VideoProps; image?: ImageProps }) => {
+const ActionMedia = (props: { video?: VideoProps; image?: ImageProps }) => {
   return props.video ? (
     <CandidateVideo {...props.video} />
   ) : (
@@ -133,4 +133,4 @@ const PosiMedia = (props: { video?: VideoProps; image?: ImageProps }) => {
   );
 };
 
-export default PosiMedia;
+export default ActionMedia;

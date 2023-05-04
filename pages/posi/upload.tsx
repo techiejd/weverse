@@ -18,7 +18,7 @@ import { useRouter } from "next/router";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import { AuthAction } from "../../modules/auth/AuthDialog/context";
 import { useAuthState } from "react-firebase-hooks/auth";
-import PosiForm from "../../modules/posi/form";
+import PosiForm from "../../modules/posi/action/form";
 
 const LogInPrompt = () => {
   const [logInDialogOpen, setLogInDialogOpen] = useState(false);
@@ -67,7 +67,7 @@ const Upload = () => {
           ),
           usersPosi
         );
-        router.push(`/posi/${docRef.id}/about`);
+        router.push(`/posi/${docRef.id}/action`);
       }
     };
     return (

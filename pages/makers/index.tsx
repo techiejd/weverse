@@ -22,10 +22,10 @@ import PageTitle from "../../common/components/pageTitle";
 import { Edit, Pending, PlusOne, Share, Visibility } from "@mui/icons-material";
 import AuthDialog from "../../modules/auth/AuthDialog";
 import { useAuthState } from "react-firebase-hooks/auth";
-import SharingSpeedDialAction from "../../modules/posi/sharingSpeedDialAction";
 import { User } from "firebase/auth";
 import { doc } from "firebase/firestore";
 import LoadingFab from "../../common/components/loadingFab";
+import SharingSpeedDialAction from "../../modules/makers/sharingSpeedDialAction";
 
 const makerFab = (maker: Maker) => {
   const actions = [

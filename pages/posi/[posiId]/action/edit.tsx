@@ -1,16 +1,16 @@
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useAppState, AppState } from "../../../common/context/appState";
-import PosiForm from "../../../modules/posi/form";
-import {
-  PosiFormData,
-  posiFormData,
-  posiFormDataConverter,
-} from "../../../modules/posi/input/context";
-import { doc, setDoc } from "firebase/firestore";
 import { identity, pickBy } from "lodash";
 import { useDocumentData } from "react-firebase-hooks/firestore";
+import { doc, setDoc } from "firebase/firestore";
+import { useAppState, AppState } from "../../../../common/context/appState";
+import {
+  posiFormDataConverter,
+  PosiFormData,
+  posiFormData,
+} from "../../../../modules/posi/input/context";
+import PosiForm from "../../../../modules/posi/action/form";
 
 const Edit = () => {
   const appState = useAppState();
@@ -30,7 +30,7 @@ const Edit = () => {
         const cleanedPosi = pickBy(usersPosi, identity);
         const parsedPosi = posiFormData.parse(cleanedPosi);
         await setDoc(posiDocRef, parsedPosi);
-        router.push(`/posi/${posiId}/about`);
+        router.push(`/posi/${posiId}/action`);
       }
     };
     return (

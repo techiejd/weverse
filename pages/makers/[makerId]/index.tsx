@@ -29,9 +29,9 @@ import {
   organizationLabels,
 } from "../../../common/context/weverse";
 import LoadingFab from "../../../common/components/loadingFab";
-import Support from "../../../modules/posi/impactPage/about/Support";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { AdminPanelSettings, Edit } from "@mui/icons-material";
+import Support from "../../../common/components/support";
 
 const SupportMaker = ({
   appState,

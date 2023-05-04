@@ -8,9 +8,9 @@ import {
   Icon,
   CardContent,
 } from "@mui/material";
-import MakerCard from "../../../makers/MakerCard";
-import PosiMedia from "./posiMedia";
-import { PosiFormData } from "../../input/context";
+import ActionMedia from "./media";
+import { PosiFormData } from "../input/context";
+import MakerCard from "../../makers/MakerCard";
 
 const AboutContent = ({
   summary,
@@ -47,7 +47,7 @@ const AboutContent = ({
               width: "100%",
             }}
           >
-            <PosiMedia
+            <ActionMedia
               video={{
                 threshold: 0.9,
                 muted: false,

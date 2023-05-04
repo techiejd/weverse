@@ -1,22 +1,21 @@
 import { useRouter } from "next/router";
-import ImpactPage, { PageTypes } from "../../../modules/posi/impactPage";
-import AboutContent from "../../../modules/posi/impactPage/about/AboutContent";
-import {
-  PosiFormData,
-  getSharePropsForPosi,
-  posiFormDataConverter,
-} from "../../../modules/posi/input/context";
-import { doc, DocumentReference } from "firebase/firestore";
-import { AppState, useAppState } from "../../../common/context/appState";
-import { z } from "zod";
 import { Box, CircularProgress, Fab, Link, Typography } from "@mui/material";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import LoadingFab from "../../../common/components/loadingFab";
-import { ShareProps } from "../../../common/components/shareActionArea";
-import { makerConverter } from "../../../common/context/weverse";
-import Support from "../../../modules/posi/impactPage/about/Support";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Edit } from "@mui/icons-material";
+import { doc, DocumentReference } from "firebase/firestore";
+import LoadingFab from "../../../../common/components/loadingFab";
+import { ShareProps } from "../../../../common/components/shareActionArea";
+import { AppState, useAppState } from "../../../../common/context/appState";
+import { makerConverter } from "../../../../common/context/weverse";
+import ImpactPage, { PageTypes } from "../../../../modules/posi/impactPage";
+import {
+  posiFormDataConverter,
+  PosiFormData,
+  getSharePropsForPosi,
+} from "../../../../modules/posi/input/context";
+import Support from "../../../../common/components/support";
+import AboutContent from "../../../../modules/posi/action/about";
 
 const SupportButton = ({
   shareProps,
@@ -73,7 +72,7 @@ const EditButton = ({
             bottom: 64,
             right: 84,
           }}
-          href={`/posi/${posiId}/edit`}
+          href={`/posi/${posiId}/action/edit`}
         >
           <Edit />
         </Fab>
@@ -82,7 +81,7 @@ const EditButton = ({
   );
 };
 
-const About = () => {
+const Action = () => {
   const appState = useAppState();
   const router = useRouter();
   const { posiId } = router.query;
@@ -139,10 +138,10 @@ const About = () => {
     );
   };
   return (
-    <ImpactPage type={PageTypes.about} id={String(posiId)}>
+    <ImpactPage type={PageTypes.action} id={String(posiId)}>
       {q ? <QueriedAboutContent posiDocRef={q} /> : <CircularProgress />}
     </ImpactPage>
   );
 };
 
-export default About;
+export default Action;

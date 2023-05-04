@@ -9,10 +9,8 @@ import { z } from "zod";
 import { ReactNode } from "react";
 
 export enum PageTypes {
-  about,
-  testimonial,
-  evidence,
-  comments,
+  action,
+  impact,
 }
 
 const Types = z.nativeEnum(PageTypes);
@@ -41,24 +39,14 @@ const NavigationFooter = (props: { value: number; id: string }) => {
     >
       <BottomNavigation showLabels value={props.value}>
         <EmojiNavigationAction
-          emoji={"ℹ️"}
-          href={`/posi/${props.id}/about`}
-          label="Sobre"
+          emoji={"🤸"}
+          href={`/posi/${props.id}/action`}
+          label="Acción"
         />
         <EmojiNavigationAction
-          emoji={"🤳"}
+          emoji={"💥"}
           href={`/posi/${props.id}/testimonials`}
-          label="Testimonios"
-        />
-        <EmojiNavigationAction
-          emoji={"👁️‍🗨️"}
-          href={`/posi/${props.id}/evidence`}
-          label="Evidencia"
-        />
-        <EmojiNavigationAction
-          emoji={"💬"}
-          href={`/posi/${props.id}/comments`}
-          label="Comentarios"
+          label="Impacto"
         />
       </BottomNavigation>
     </Paper>

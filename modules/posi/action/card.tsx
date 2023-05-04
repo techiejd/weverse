@@ -10,17 +10,17 @@ import {
   CardActions,
   Button,
 } from "@mui/material";
-import ShareActionArea from "../../common/components/shareActionArea";
+import ShareActionArea from "../../../common/components/shareActionArea";
 import {
   PosiFormData,
   getPosiPage,
   getSharePropsForPosi,
-} from "./input/context";
+} from "../input/context";
 
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
   return (
     <Card sx={{ width: "100%" }}>
-      <CardActionArea href={`/posi/${posiData.id}/about`}>
+      <CardActionArea href={`/posi/${posiData.id}/action`}>
         <CardMedia
           component="video"
           sx={{ height: 270, objectFit: "cover" }}

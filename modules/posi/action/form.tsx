@@ -3,21 +3,21 @@ import { User } from "firebase/auth";
 import { doc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { AppState } from "../../common/context/appState";
-import { memberConverter } from "../../common/context/weverse";
-import { CitySearchInput } from "./input";
-import SummaryInput from "./input/SummaryInput";
+import Section from "../../../common/components/section";
+import { AppState } from "../../../common/context/appState";
+import { memberConverter } from "../../../common/context/weverse";
+import { CitySearchInput } from "../input";
+import SummaryInput from "../input/SummaryInput";
 import {
   useFormData,
+  PosiFormData,
   PartialPosiFormData,
   posiFormData,
   PosiFormContext,
   PosiFormDispatchContext,
-  PosiFormData,
-} from "./input/context";
-import ImpactVideoInput from "./input/impactVideoInput";
-import ImpactedPersonsInput from "./input/impactedPersonsInput";
-import Section from "../../common/components/section";
+} from "../input/context";
+import ImpactVideoInput from "../input/impactVideoInput";
+import ImpactedPersonsInput from "../input/impactedPersonsInput";
 
 const GetMaker = ({ appState, user }: { appState: AppState; user: User }) => {
   const [formData, setFormData] = useFormData();
