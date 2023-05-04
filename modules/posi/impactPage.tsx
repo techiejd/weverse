@@ -45,7 +45,7 @@ const NavigationFooter = (props: { value: number; id: string }) => {
         />
         <EmojiNavigationAction
           emoji={"💥"}
-          href={`/posi/${props.id}/testimonials`}
+          href={`/posi/${props.id}/impact`}
           label="Impacto"
         />
       </BottomNavigation>

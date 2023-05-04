@@ -48,9 +48,9 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
           >
             <Stack direction={"row"}>
               <Typography ml={1} mr={2}>
-                🤳
+                💥
               </Typography>
-              <Typography color={"grey"}>Testimonios:</Typography>
+              <Typography color={"grey"}>Impacto:</Typography>
               <Typography ml={2}>0</Typography>
             </Stack>
             <Rating value={null} readOnly />
