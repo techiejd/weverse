@@ -23,7 +23,7 @@ const ImpactVideoInput = () => {
         initialFileUrl={formData.video}
         setFileUrl={setVideoUrl}
         required={formData.video ? false : true}
-        minFileSize={1048576 /** 1MB */}
+        minFileSize={104857 /** 0.1MB */}
         maxFileSize={2147483648 /** 2GB */}
         accept={"video"}
         metadata={{ impactId: "" }}

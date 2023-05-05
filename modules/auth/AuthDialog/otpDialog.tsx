@@ -7,6 +7,7 @@ import {
   Typography,
   DialogActions,
   Button,
+  Stack,
 } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import AuthCode from "react-auth-code-input";
@@ -34,8 +35,11 @@ const OtpDialog = ({
     <Dialog open={authDialogState.otpDialogOpen} fullWidth>
       <DialogTitle textAlign={"justify"} fontSize={18}>
         Ingresa el código de verificación que recibiste.
+        <Typography color={"gray"} fontSize={12}>
+          (Es posible que el código vaya a la carpeta SPAM de tus mensajes.)
+        </Typography>
       </DialogTitle>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
         {waitingVerificationResult ? (
           <CircularProgress />
         ) : (
@@ -45,10 +49,10 @@ const OtpDialog = ({
             inputClassName="authCodeInput"
           />
         )}
-      </Box>
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Typography color={"red"}>{error}</Typography>
-      </Box>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Typography color={"red"}>{error}</Typography>
+        </Box>
+      </Stack>
       <DialogActions>
         <Button
           variant="outlined"

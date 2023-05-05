@@ -1,4 +1,4 @@
-import { Box, Typography, CircularProgress, Stack } from "@mui/material";
+import { Box, Typography, CircularProgress, Grid } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { PosiFormData } from "./input/context";
@@ -31,10 +31,7 @@ const ImpactsList = ({
   };
 
   return (
-    <Stack
-      sx={{ alignItems: "center", justifyContent: "center", p: 1 }}
-      spacing={1}
-    >
+    <Box sx={{ p: 1 }}>
       <Typography variant="h2">Acciones</Typography>
       {error && (
         <Typography color={"red"}>Error: {JSON.stringify(error)}</Typography>
@@ -43,10 +40,14 @@ const ImpactsList = ({
       {!loading && !error && impacts.length == 0 && (
         <Typography>No hay ninguna acción aquí.</Typography>
       )}
-      {impacts.map((impact) => {
-        return <ImpactCard posiData={impact} key={impact.id} />;
-      })}
-    </Stack>
+      <Grid container spacing={1}>
+        {impacts.map((impact) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={impact.id}>
+            <ImpactCard posiData={impact} />
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 };
 
