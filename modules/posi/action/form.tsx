@@ -85,7 +85,7 @@ const PosiForm = ({
               <Section label="¿Dónde realizaste esta acción?">
                 <CitySearchInput />
               </Section>
-              {uploading ? (
+              {uploading || formData.video == "loading" ? (
                 <CircularProgress />
               ) : (
                 <Button variant="contained" sx={{ mt: 3 }} type="submit">

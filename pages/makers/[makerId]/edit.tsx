@@ -69,7 +69,7 @@ const Edit = () => {
               pb: 2,
             }}
           >
-            {uploading ? (
+            {uploading || maker.pic == "loading" ? (
               <CircularProgress />
             ) : (
               <Button type="submit" variant="contained">

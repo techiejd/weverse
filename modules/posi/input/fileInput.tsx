@@ -106,6 +106,7 @@ const FileInput = ({
         }
       };
       setFile("loading");
+      setFileUrl("loading");
       uploadFileAndSetFileUrl();
     }
   };

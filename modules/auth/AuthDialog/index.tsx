@@ -33,7 +33,6 @@ import {
   prompts,
 } from "./context";
 import { AppState, useAppState } from "../../../common/context/appState";
-import MakerInput from "./makerInput";
 import {
   maker,
   makerConverter,
