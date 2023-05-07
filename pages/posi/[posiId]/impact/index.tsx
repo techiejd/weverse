@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
-import ImpactPage, { PageTypes } from "../../../modules/posi/impactPage";
-import UnderConstruction from "../../../modules/posi/underConstruction";
 import { CircularProgress } from "@mui/material";
+import ImpactPage, { PageTypes } from "../../../../modules/posi/impactPage";
+import UnderConstruction from "../../../../modules/posi/underConstruction";
 
 const Impact = () => {
   const router = useRouter();

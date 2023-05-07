@@ -89,3 +89,33 @@ export const memberConverter: FirestoreDataConverter<Member> = {
     });
   },
 };
+
+export const socialProof = z.object({
+  id: z.string().optional(),
+  rating: z.number(),
+  videoUrl: formUrl.optional(),
+  by: z.string(),
+  createdAt: z.date().optional(),
+});
+
+export type SocialProof = z.infer<typeof socialProof>;
+export const socialProofConverter: FirestoreDataConverter<SocialProof> = {
+  toFirestore: (socialProof: WithFieldValue<SocialProof>): DocumentData => {
+    const { id, ...others } = socialProof;
+    return {
+      ...others,
+      createdAt: socialProof.createdAt
+        ? socialProof.createdAt
+        : serverTimestamp(),
+    };
+  },
+  fromFirestore: (snapshot: QueryDocumentSnapshot): SocialProof => {
+    const { createdAt, ...others } = snapshot.data();
+    // anything with serverTimestamp does not exist atm if pending writes.
+    return socialProof.parse({
+      ...others,
+      id: snapshot.id,
+      createdAt: createdAt ? createdAt.toDate() : undefined,
+    });
+  },
+};

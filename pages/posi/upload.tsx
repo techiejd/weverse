@@ -1,58 +1,14 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  DialogActions,
-  DialogContentText,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
-import { useState } from "react";
 import {
   PosiFormData,
   posiFormDataConverter,
 } from "../../modules/posi/input/context";
 import { AppState, useAppState } from "../../common/context/appState";
 import { useRouter } from "next/router";
-import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
-import { AuthAction } from "../../modules/auth/AuthDialog/context";
 import { useAuthState } from "react-firebase-hooks/auth";
 import PosiForm from "../../modules/posi/action/form";
-
-const LogInPrompt = () => {
-  const [logInDialogOpen, setLogInDialogOpen] = useState(false);
-  const [registerDialogOpen, setRegisterDialogOpen] = useState(false);
-  return (
-    <Box border={1} borderColor={"black"} p={2} m={2}>
-      <AuthDialog open={logInDialogOpen} setOpen={setLogInDialogOpen} />
-      <AuthDialog
-        open={registerDialogOpen}
-        setOpen={setRegisterDialogOpen}
-        initialAuthAction={AuthAction.register}
-      />
-      <Stack alignItems={"center"} justifyItems={"center"}>
-        <Typography variant="h3">
-          ¡Oh-oh! Primero se necesita iniciar sesión.
-        </Typography>
-        <DialogContentText>
-          Regístrese si no lo has hecho. Inicia sesión si ya estás registrado.
-        </DialogContentText>
-        <DialogActions>
-          <Button href="/" size="small">
-            Cancelar
-          </Button>
-          <AuthDialogButton setAuthDialogOpen={setLogInDialogOpen} />
-          <AuthDialogButton
-            setAuthDialogOpen={setRegisterDialogOpen}
-            authAction={AuthAction.register}
-            buttonVariant="contained"
-          />
-        </DialogActions>
-      </Stack>
-    </Box>
-  );
-};
+import LogInPrompt from "../../common/components/logInPrompt";
 
 const Upload = () => {
   const appState = useAppState();
@@ -99,7 +55,9 @@ const Upload = () => {
         {user ? (
           <PosiForm appState={appState} onSubmit={onSubmit} user={user} />
         ) : (
-          <LogInPrompt />
+          <LogInPrompt
+            title={"Para cargar una acción, debes ingresar al sistem."}
+          />
         )}
       </Stack>
     );

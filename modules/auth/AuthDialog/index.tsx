@@ -13,14 +13,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useAuthState, useUpdateProfile } from "react-firebase-hooks/auth";
-import {
-  collection,
-  addDoc,
-  setDoc,
-  doc,
-  getDoc,
-  serverTimestamp,
-} from "firebase/firestore";
+import { collection, addDoc, setDoc, doc, getDoc } from "firebase/firestore";
 import { Login } from "@mui/icons-material";
 import OtpDialog from "./otpDialog";
 import PhoneInput from "./phoneInput";
@@ -166,7 +159,7 @@ const AuthDialogContent = ({
                 "registeredPhoneNumbers",
                 encodePhoneNumber(authDialogState.phoneNumber)
               ),
-              { ownerId: userCred.user.uid, createdAt: serverTimestamp() }
+              { ownerId: userCred.user.uid }
             );
 
             const [finishedUpdateSuccessful, userDoc, registeredPhoneNumber] =
