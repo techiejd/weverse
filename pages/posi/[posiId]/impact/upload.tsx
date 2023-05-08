@@ -20,6 +20,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import LogInPrompt from "../../../../common/components/logInPrompt";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { posiFormDataConverter } from "../../../../modules/posi/input/context";
+import { useMyMaker } from "../../../../common/context/weverseUtils";
 
 const FormTitle = ({
   actionTitle,
@@ -68,6 +69,8 @@ const UploadForm = ({
   ).withConverter(posiFormDataConverter);
   const [action, actionLoading, actionError] = useDocumentData(posiDocRef);
 
+  const [myMaker, myMakerLoading, myMakerError] = useMyMaker(appState);
+
   useEffect(() => {
     if (error == needsRatingMsg && rating != null) {
       setError("");
@@ -87,11 +90,11 @@ const UploadForm = ({
           }
 
           console.log("action: ", action);
-          if (appState && posiId) {
+          if (appState && posiId && myMaker) {
             setUploading(true);
             const partialSocialProof = {
               rating: rating,
-              by: user.uid,
+              byMaker: myMaker.id,
               forMaker: action.makerId,
               forAction: action.id,
             };

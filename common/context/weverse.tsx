@@ -94,7 +94,7 @@ export const socialProof = z.object({
   id: z.string().optional(),
   rating: z.number(),
   videoUrl: formUrl.optional(),
-  by: z.string(),
+  byMaker: z.string(),
   forMaker: z.string(),
   forAction: z.string().optional(),
   createdAt: z.date().optional(),

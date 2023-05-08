@@ -40,7 +40,9 @@ const SupportMaker = ({
   appState: AppState;
   makerId: string;
 }) => {
-  const makerDocRef = doc(appState.firestore, "makers", makerId);
+  const makerDocRef = doc(appState.firestore, "makers", makerId).withConverter(
+    makerConverter
+  );
   const [maker, makerLoading, makerError] = useDocumentData(
     makerDocRef.withConverter(makerConverter)
   );
