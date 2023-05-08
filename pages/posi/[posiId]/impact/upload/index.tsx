@@ -78,7 +78,9 @@ const UploadForm = ({
     }
   }, [rating, setError, error]);
 
-  return action && user ? (
+  console.log({ action, user });
+
+  return action ? (
     <Stack>
       <form
         onSubmit={async (e) => {
@@ -183,6 +185,7 @@ const Upload = () => {
 
   // TODO(techiejd): Add a thank you and ask if they want to go back to that action, the testimonials of that action or back to all actions.
 
+  console.log({ appState, isReady: router.isReady });
   return appState && router.isReady ? (
     <UploadForm posiId={String(posiId)} appState={appState} />
   ) : (

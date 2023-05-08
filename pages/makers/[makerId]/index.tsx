@@ -1,76 +1,63 @@
 import {
   Avatar,
   Box,
+  Card,
+  CardContent,
+  CardHeader,
   CircularProgress,
   Divider,
+  Grid,
   Link,
+  Rating,
   SpeedDial,
   SpeedDialAction,
   Stack,
   Typography,
 } from "@mui/material";
-import {
-  query,
-  collection,
-  where,
-  CollectionReference,
-} from "firebase/firestore";
-import { useRouter } from "next/router";
 import { AppState, useAppState } from "../../../common/context/appState";
-import ImpactsList from "../../../modules/posi/impactsList";
+import { posiFormData } from "../../../modules/posi/input/context";
 import {
-  posiFormDataConverter,
-  PosiFormData,
-} from "../../../modules/posi/input/context";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import { doc } from "firebase/firestore";
-import {
+  SocialProof,
   makerConverter,
   organizationLabels,
+  socialProof,
 } from "../../../common/context/weverse";
 import LoadingFab from "../../../common/components/loadingFab";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { AdminPanelSettings, Edit, Hearing } from "@mui/icons-material";
 import Support from "../../../common/components/support";
-import { useCurrentMaker } from "../../../modules/makers/context";
+import {
+  useCurrentActions,
+  useCurrentImpacts,
+  useCurrentMaker,
+} from "../../../modules/makers/context";
 import SharingSpeedDialAction from "../../../modules/makers/sharingSpeedDialAction";
+import { useEffect, useState } from "react";
+import { z } from "zod";
+import moment from "moment";
+import ImpactCard from "../../../modules/posi/action/card";
+import Media from "../../../modules/posi/media";
+import { useAction, useMaker } from "../../../common/context/weverseUtils";
 
-const SupportMaker = ({
-  appState,
-  makerId,
-}: {
-  appState: AppState;
-  makerId: string;
-}) => {
-  const makerDocRef = doc(appState.firestore, "makers", makerId).withConverter(
-    makerConverter
-  );
-  const [maker, makerLoading, makerError] = useDocumentData(
-    makerDocRef.withConverter(makerConverter)
-  );
+const SupportMaker = ({ appState }: { appState: AppState }) => {
+  const [maker, makerLoading, makerError] = useCurrentMaker(appState);
 
   return maker ? (
     <Support
       howToSupport={maker.howToSupport ? maker.howToSupport : {}}
       shareProps={{
-        path: `/makers/${makerId}`,
+        path: `/makers/${maker.id}`,
         text: `Echa un vistazo a la página Maker de ${maker.name}`,
         title: `Echa un vistazo a la página Maker de ${maker.name}`,
       }}
-      addSocialProofPath={`/makers/${makerId}/impact/upload`}
+      addSocialProofPath={`/makers/${maker.id}/impact/upload`}
     />
   ) : (
     <LoadingFab />
   );
 };
 
-const AdministerMaker = ({
-  appState,
-  makerId,
-}: {
-  appState: AppState;
-  makerId: string;
-}) => {
+const AdministerMaker = ({ appState }: { appState: AppState }) => {
   const [user, userLoading, userError] = useAuthState(appState.auth);
   const [maker, makerLoading, makerError] = useCurrentMaker(appState);
 
@@ -111,7 +98,7 @@ const AdministerMaker = ({
             key="Edit Maker"
             icon={
               <Link
-                href={`/makers/${makerId}/edit`}
+                href={`/makers/${maker.id}/edit`}
                 sx={{ textDecoration: "none" }}
               >
                 <Edit />
@@ -119,7 +106,7 @@ const AdministerMaker = ({
             }
             tooltipTitle={
               <Link
-                href={`/makers/${makerId}/edit`}
+                href={`/makers/${maker.id}/edit`}
                 style={{ textDecoration: "none" }}
               >
                 Editar
@@ -142,17 +129,8 @@ const AdministerMaker = ({
   );
 };
 
-const MakerContent = ({
-  makerId,
-  appState,
-}: {
-  makerId: string;
-  appState: AppState;
-}) => {
-  const makerDocRef = doc(appState.firestore, "makers", makerId);
-  const [maker, makerLoading, makerError] = useDocumentData(
-    makerDocRef.withConverter(makerConverter)
-  );
+const MakerProfile = ({ appState }: { appState: AppState }) => {
+  const [maker, makerLoading, makerError] = useCurrentMaker(appState);
   return maker ? (
     <Stack
       spacing={2}
@@ -179,37 +157,161 @@ const MakerContent = ({
   );
 };
 
+const SocialProofCard = ({ socialProof }: { socialProof: SocialProof }) => {
+  // TODO(techiejd): WET => DRY.
+  const appState = useAppState();
+  const SocialProofCardHeader = ({ appState }: { appState: AppState }) => {
+    const [byMaker, byMakerLoading, byMakerError] = useMaker(
+      appState,
+      socialProof.byMaker
+    );
+    return (
+      <CardHeader
+        title={
+          <Stack
+            direction={"row"}
+            sx={{ justifyContent: "center", alignItems: "center" }}
+          >
+            <Box pr={2}>
+              {byMaker ? `${byMaker.name}: ` : <CircularProgress />}
+            </Box>
+            <Rating value={socialProof.rating} />
+          </Stack>
+        }
+      />
+    );
+  };
+  const SocialProofCardContent = ({ appState }: { appState: AppState }) => {
+    const [action, actionLoading, actionError] = useAction(
+      appState,
+      socialProof.forAction
+    );
+    return (
+      <>
+        {action && <CardContent>Por la acción: {action.summary}</CardContent>}
+      </>
+    );
+  };
+  return (
+    <Card sx={{ width: "100%" }}>
+      {appState ? (
+        <SocialProofCardHeader appState={appState} />
+      ) : (
+        <CircularProgress />
+      )}
+      {socialProof.videoUrl && (
+        <Box
+          sx={{
+            height: "50vh",
+            width: "100%",
+          }}
+        >
+          <Media
+            video={{
+              threshold: 0.9,
+              muted: false,
+              controls: true,
+              controlsList:
+                "play volume fullscreen nodownload noplaybackrate notimeline",
+              disablePictureInPicture: true,
+              src: socialProof.videoUrl,
+            }}
+          />
+        </Box>
+      )}
+      {appState && <SocialProofCardContent appState={appState} />}
+    </Card>
+  );
+};
+
+const content = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("action"),
+    data: posiFormData,
+    createdAt: z.date(),
+  }),
+  z.object({
+    type: z.literal("impact"),
+    data: socialProof,
+    createdAt: z.date(),
+  }),
+]);
+type Content = z.infer<typeof content>;
+
+const MakerContent = ({ appState }: { appState: AppState }) => {
+  const [actions, actionsLoading, actionsError] = useCurrentActions(appState);
+  const [socialProofs, socialProofsLoading, socialProofsError] =
+    useCurrentImpacts(appState);
+  const [actionsContent, setActionsContent] = useState<Content[]>([]);
+  const [socialProofsContent, setSocialProofsContent] = useState<Content[]>([]);
+  const [content, setContent] = useState<Content[]>([]);
+
+  useEffect(() => {
+    if (actions && actions.length > 0) {
+      setActionsContent(
+        actions.map((action) => ({
+          type: "action",
+          data: action,
+          createdAt: action.createdAt ? action.createdAt : moment().toDate(),
+        }))
+      );
+    }
+  }, [actions, setActionsContent]);
+  useEffect(() => {
+    if (socialProofs && socialProofs.length > 0) {
+      setSocialProofsContent(
+        socialProofs.map((socialProof) => ({
+          type: "impact",
+          data: socialProof,
+          createdAt: socialProof.createdAt
+            ? socialProof.createdAt
+            : moment().toDate(),
+        }))
+      );
+    }
+  }, [socialProofs, setSocialProofsContent]);
+
+  useEffect(() => {
+    setContent(
+      [...actionsContent, ...socialProofsContent].sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+      )
+    );
+  }, [actionsContent, socialProofsContent, setContent]);
+
+  return (
+    <Grid container spacing={1}>
+      {content.map((c, idx) => (
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
+          xl={2}
+          key={c.data.id ? c.data.id : idx}
+        >
+          {c.type == "action" ? (
+            <ImpactCard posiData={c.data} />
+          ) : (
+            <SocialProofCard socialProof={c.data} />
+          )}
+        </Grid>
+      ))}
+    </Grid>
+  );
+};
+
 const MakerPage = () => {
   const appState = useAppState();
-  const router = useRouter();
-  const { makerId } = router.query;
-
-  const q =
-    appState && makerId
-      ? query(
-          collection(appState.firestore, "impacts"),
-          where("makerId", "==", makerId)
-        ).withConverter(posiFormDataConverter)
-      : undefined;
   return appState ? (
     <Box>
       <Stack p={2} divider={<Divider />}>
-        {makerId && appState && (
-          <MakerContent makerId={String(makerId)} appState={appState} />
-        )}
-        {q == undefined ? (
-          <CircularProgress />
-        ) : (
-          <ImpactsList
-            impactsQuery={
-              // TODO(techiejd: Look into this casting why necessary? Something funky with zod.
-              q as CollectionReference<PosiFormData>
-            }
-          />
-        )}
+        <MakerProfile appState={appState} />
+        <MakerContent appState={appState} />
       </Stack>
-      <AdministerMaker appState={appState} makerId={String(makerId)} />
-      <SupportMaker appState={appState} makerId={String(makerId)} />
+      <AdministerMaker appState={appState} />
+      <SupportMaker appState={appState} />
     </Box>
   ) : (
     <CircularProgress />

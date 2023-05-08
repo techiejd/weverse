@@ -7,6 +7,7 @@ import {
   useDocumentData,
 } from "react-firebase-hooks/firestore";
 import { posiFormDataConverter } from "./input/context";
+import { useAction } from "../../common/context/weverseUtils";
 
 export const useCurrentPosiId = () => {
   //TODO(techiejd): Go through codebase and replace with this.
@@ -18,13 +19,7 @@ export const useCurrentPosiId = () => {
 export const useCurrentPosi = (appState: AppState) => {
   const posiId = useCurrentPosiId();
   console.log("posiId: ", posiId);
-  return useDocumentData(
-    posiId
-      ? doc(appState.firestore, "impacts", posiId).withConverter(
-          posiFormDataConverter
-        )
-      : undefined
-  );
+  return useAction(appState, posiId);
 };
 
 export const useCurrentSocialProofs = (appState: AppState) => {

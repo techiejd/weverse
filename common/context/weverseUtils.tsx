@@ -3,6 +3,7 @@ import { AppState, useAppState } from "./appState";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { doc } from "firebase/firestore";
 import { makerConverter, memberConverter } from "./weverse";
+import { posiFormDataConverter } from "../../modules/posi/input/context";
 
 export const useMyMaker = (appState: AppState) => {
   //TODO(techiejd): Go through codebase and replace with this.
@@ -29,6 +30,17 @@ export const useMaker = (appState: AppState, makerId: string | undefined) => {
   return useDocumentData(
     makerId
       ? doc(appState.firestore, "makers", makerId).withConverter(makerConverter)
+      : undefined
+  );
+};
+
+export const useAction = (appState: AppState, posiId: string | undefined) => {
+  //TODO(techiejd): Go through codebase and replace with this.
+  return useDocumentData(
+    posiId
+      ? doc(appState.firestore, "impacts", posiId).withConverter(
+          posiFormDataConverter
+        )
       : undefined
   );
 };
