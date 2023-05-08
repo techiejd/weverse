@@ -21,7 +21,6 @@ const ShareActionArea = ({
   const hostname = useHostname();
   const { title, text, path } = shareProps;
   const shareData = { title, text, url: hostname ? hostname + path : path };
-  console.log(hostname);
   return (
     <RWebShare data={shareData} onClick={onClick}>
       {children}

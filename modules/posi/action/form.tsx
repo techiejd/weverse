@@ -48,9 +48,7 @@ const PosiForm = ({
   onSubmit: (posiFormData: PosiFormData) => Promise<void>;
   initialPosi?: PartialPosiFormData;
 }) => {
-  console.log("initialPosi: ", initialPosi);
   const [formData, setFormData] = useState<PartialPosiFormData>(initialPosi);
-  console.log("FormData: ", formData);
   const [uploading, setUploading] = useState(false);
 
   return (

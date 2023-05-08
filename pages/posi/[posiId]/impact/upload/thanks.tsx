@@ -4,7 +4,6 @@ import { AppState, useAppState } from "../../../../../common/context/appState";
 
 const ImpactsButton = ({ appState }: { appState: AppState }) => {
   const [action, actionLoading, actionError] = useCurrentPosi(appState);
-  console.log(action);
   return action ? (
     <Button href={`/posi/${action.id}/impact`} variant="contained">
       Ver lo que han dicho los demas de esta acción

@@ -47,7 +47,6 @@ const CitySearchInput = () => {
   const handleClear = () => {
     setQuery("");
     if (setFormData) {
-      console.log("Clearing form location");
       setFormData((fD) => {
         const { location, ...others } = fD;
         return others;

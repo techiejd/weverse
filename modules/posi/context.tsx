@@ -18,7 +18,6 @@ export const useCurrentPosiId = () => {
 
 export const useCurrentPosi = (appState: AppState) => {
   const posiId = useCurrentPosiId();
-  console.log("posiId: ", posiId);
   return useAction(appState, posiId);
 };
 

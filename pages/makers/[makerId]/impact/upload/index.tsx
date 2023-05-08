@@ -58,7 +58,6 @@ const UploadForm = ({ appState }: { appState: AppState }) => {
     <Stack>
       <form
         onSubmit={async (e) => {
-          console.log("Being called");
           e.preventDefault();
           if (rating == null) {
             setError(needsRatingMsg);
@@ -80,7 +79,6 @@ const UploadForm = ({ appState }: { appState: AppState }) => {
                   }
                 : partialSocialProof
             );
-            console.log("SocialProof: ", socialProofEncoded);
 
             await addDoc(
               collection(appState.firestore, `socialProofs`).withConverter(

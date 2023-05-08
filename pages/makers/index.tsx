@@ -107,7 +107,6 @@ const MyMakerSpeedDial = ({
       makerId
     ).withConverter(makerConverter);
     const [maker, makerLoading, makerError] = useDocumentData(makerDocRef);
-    console.log(maker);
     return maker ? makerFab(maker) : <LoadingFab />;
   };
   const memberDocRef = doc(

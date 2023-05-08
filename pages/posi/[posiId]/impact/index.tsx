@@ -81,7 +81,6 @@ const SocialProofCard = ({ socialProof }: { socialProof: SocialProof }) => {
 const SupportImpact = ({ appState }: { appState: AppState }) => {
   const [posi, posiLoading, posiError] = useCurrentPosi(appState);
   const [maker, makerLoading, makerError] = useMaker(appState, posi?.makerId);
-  console.log({ posi, maker });
   return posi && maker ? (
     <Support
       howToSupport={maker.howToSupport ? maker.howToSupport : {}}

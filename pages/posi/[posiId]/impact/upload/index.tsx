@@ -78,20 +78,16 @@ const UploadForm = ({
     }
   }, [rating, setError, error]);
 
-  console.log({ action, user });
-
   return action ? (
     <Stack>
       <form
         onSubmit={async (e) => {
-          console.log("Being called");
           e.preventDefault();
           if (rating == null) {
             setError(needsRatingMsg);
             return;
           }
 
-          console.log("action: ", action);
           if (appState && posiId && myMaker) {
             setUploading(true);
             const partialSocialProof = {
@@ -108,7 +104,6 @@ const UploadForm = ({
                   }
                 : partialSocialProof
             );
-            console.log("SocialProof: ", socialProofEncoded);
 
             await addDoc(
               collection(appState.firestore, `socialProofs`).withConverter(
@@ -185,7 +180,6 @@ const Upload = () => {
 
   // TODO(techiejd): Add a thank you and ask if they want to go back to that action, the testimonials of that action or back to all actions.
 
-  console.log({ appState, isReady: router.isReady });
   return appState && router.isReady ? (
     <UploadForm posiId={String(posiId)} appState={appState} />
   ) : (
