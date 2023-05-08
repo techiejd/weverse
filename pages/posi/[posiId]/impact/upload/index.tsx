@@ -6,44 +6,70 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { FileInput } from "../../../../modules/posi/input";
 import { useEffect, useState } from "react";
-import { addDoc, collection } from "firebase/firestore";
-import { AppState, useAppState } from "../../../../common/context/appState";
+import { addDoc, collection, doc } from "firebase/firestore";
+import { useRouter } from "next/router";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import LogInPrompt from "../../../../../common/components/logInPrompt";
+import { AppState, useAppState } from "../../../../../common/context/appState";
 import {
+  makerConverter,
   socialProof,
   socialProofConverter,
-} from "../../../../common/context/weverse";
-import { useAuthState } from "react-firebase-hooks/auth";
-import LogInPrompt from "../../../../common/components/logInPrompt";
-import { useMyMaker } from "../../../../common/context/weverseUtils";
-import { useCurrentMaker } from "../../../../modules/makers/context";
-
-//TODO(techiejd): WET -> DRY
+} from "../../../../../common/context/weverse";
+import { useMyMaker } from "../../../../../common/context/weverseUtils";
+import { FileInput } from "../../../../../modules/posi/input";
+import { posiFormDataConverter } from "../../../../../modules/posi/input/context";
 
 const FormTitle = ({
-  makerName,
+  actionTitle,
+  actionId,
   makerId,
+  appState,
 }: {
-  makerName: string;
+  actionTitle: string;
+  actionId: string;
   makerId: string;
+  appState: AppState;
 }) => {
+  const makerDocRef = doc(appState.firestore, "makers", makerId).withConverter(
+    makerConverter
+  );
+  const [maker, makerLoading, makerError] = useDocumentData(makerDocRef);
   return (
     <Typography variant="h2">
-      <Link href={`/makers/${makerId}`}>{`${makerName}`}</Link>
-      {` pide que des tu opinión sobre su impacto social.`}
+      <Link href={`/makers/${makerId}`}>{`${maker?.name}`}</Link>
+      {` pide que des tu opinión sobre `}
+      <Link
+        href={`/posi/${actionId}/action`}
+      >{`la acción social: ${actionTitle}`}</Link>
     </Typography>
   );
 };
 
-const UploadForm = ({ appState }: { appState: AppState }) => {
+const UploadForm = ({
+  appState,
+  posiId,
+}: {
+  appState: AppState;
+  posiId: string;
+}) => {
   const [user, userLoading, userError] = useAuthState(appState.auth);
   const [error, setError] = useState("");
   const [rating, setRating] = useState<number | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | undefined | "loading">("");
   const [uploading, setUploading] = useState(false);
   const needsRatingMsg = "Calificación necesaria.";
-  const [maker, makerLoading, makerError] = useCurrentMaker(appState);
+  const router = useRouter();
+
+  const posiDocRef = doc(
+    appState.firestore,
+    "impacts",
+    String(posiId)
+  ).withConverter(posiFormDataConverter);
+  const [action, actionLoading, actionError] = useDocumentData(posiDocRef);
+
   const [myMaker, myMakerLoading, myMakerError] = useMyMaker(appState);
 
   useEffect(() => {
@@ -52,7 +78,7 @@ const UploadForm = ({ appState }: { appState: AppState }) => {
     }
   }, [rating, setError, error]);
 
-  return maker && user ? (
+  return action && user ? (
     <Stack>
       <form
         onSubmit={async (e) => {
@@ -60,16 +86,17 @@ const UploadForm = ({ appState }: { appState: AppState }) => {
           e.preventDefault();
           if (rating == null) {
             setError(needsRatingMsg);
-            e.preventDefault();
             return;
           }
 
-          if (appState && maker && myMaker) {
+          console.log("action: ", action);
+          if (appState && posiId && myMaker) {
             setUploading(true);
             const partialSocialProof = {
               rating: rating,
               byMaker: myMaker.id,
-              forMaker: maker.id,
+              forMaker: action.makerId,
+              forAction: action.id,
             };
             const socialProofEncoded = socialProof.parse(
               videoUrl
@@ -87,9 +114,10 @@ const UploadForm = ({ appState }: { appState: AppState }) => {
               ),
               socialProofEncoded
             );
+
+            router.push(`/posi/${action.id}/impact/upload/thanks`);
           } else {
             setError("Internal error.");
-            e.preventDefault();
           }
         }}
       >
@@ -100,11 +128,16 @@ const UploadForm = ({ appState }: { appState: AppState }) => {
         >
           <Typography variant="h1">Queremos escuchar de ¡tí!</Typography>
           {appState ? (
-            <FormTitle makerName={maker.name} makerId={maker.id!} />
+            <FormTitle
+              actionId={String(action.id)}
+              actionTitle={action.summary}
+              makerId={action.makerId}
+              appState={appState}
+            />
           ) : (
             <CircularProgress />
           )}
-          <Typography>Califica el impacto social de la Maker:</Typography>
+          <Typography>Califica la acción:</Typography>
           <Rating
             value={rating}
             aria-required={true}
@@ -115,7 +148,7 @@ const UploadForm = ({ appState }: { appState: AppState }) => {
           {error != "" && <Typography color="red">{error}</Typography>}
           <Typography>
             En forma selfie, cuentenos con detalle qué impacto ha tenido la
-            Maker hasta ahora en tu vida. (30s - 5 minutos y opcional.)
+            acción hasta ahora en tu vida. (30s - 5 minutos y opcional.)
           </Typography>
           <FileInput
             setFileUrl={setVideoUrl}
@@ -144,9 +177,17 @@ const UploadForm = ({ appState }: { appState: AppState }) => {
 };
 
 const Upload = () => {
+  const router = useRouter();
+  const { posiId } = router.query;
   const appState = useAppState();
-  // TODO(techiejd): Add a thank you and ask if they want to go back to that maker, back to all actions or home.
-  return appState ? <UploadForm appState={appState} /> : <CircularProgress />;
+
+  // TODO(techiejd): Add a thank you and ask if they want to go back to that action, the testimonials of that action or back to all actions.
+
+  return appState && router.isReady ? (
+    <UploadForm posiId={String(posiId)} appState={appState} />
+  ) : (
+    <CircularProgress />
+  );
 };
 
 export default Upload;
