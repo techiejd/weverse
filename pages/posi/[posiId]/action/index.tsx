@@ -1,8 +1,16 @@
 import { useRouter } from "next/router";
-import { Box, CircularProgress, Fab, Link, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Fab,
+  Link,
+  SpeedDial,
+  SpeedDialAction,
+  Typography,
+} from "@mui/material";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Edit } from "@mui/icons-material";
+import { AdminPanelSettings, Edit, Hearing } from "@mui/icons-material";
 import { doc, DocumentReference } from "firebase/firestore";
 import LoadingFab from "../../../../common/components/loadingFab";
 import { ShareProps } from "../../../../common/components/shareActionArea";
@@ -17,6 +25,7 @@ import {
 import Support from "../../../../common/components/support";
 import AboutContent from "../../../../modules/posi/action/about";
 import { useCurrentPosiId } from "../../../../modules/posi/context";
+import SharingSpeedDialAction from "../../../../modules/makers/sharingSpeedDialAction";
 
 const SupportButton = ({
   shareProps,
@@ -53,7 +62,7 @@ const SupportButton = ({
   );
 };
 
-const EditButton = ({
+const AdminButton = ({
   posiId,
   makerId,
   appState,
@@ -70,16 +79,52 @@ const EditButton = ({
   return (
     <>
       {maker?.ownerId == user?.uid && (
-        <Fab
+        <SpeedDial
+          ariaLabel="Administer Action"
           sx={{
             position: "fixed",
             bottom: 64,
             right: 84,
           }}
-          href={`/posi/${posiId}/action/edit`}
+          icon={
+            <div>
+              <AdminPanelSettings />
+              <Typography fontSize={8} mt={-1}>
+                Admin
+              </Typography>
+            </div>
+          }
         >
-          <Edit />
-        </Fab>
+          <SpeedDialAction
+            key="Edit Action"
+            icon={
+              <Link
+                href={`/posi/${posiId}/action/edit`}
+                sx={{ textDecoration: "none" }}
+              >
+                <Edit />
+              </Link>
+            }
+            tooltipTitle={
+              <Link
+                href={`/posi/${posiId}/action/edit`}
+                style={{ textDecoration: "none" }}
+              >
+                Editar
+              </Link>
+            }
+            tooltipOpen
+          />
+          <SharingSpeedDialAction
+            key="solicit"
+            icon={<Hearing />}
+            tooltipTitle={"Solicitar"}
+            tooltipOpen
+            title={"Por favor dame tu opinion sobre mi impacto social"}
+            text={"Por favor dame tu opinion sobre mi impacto social"}
+            path={`/posi/${posiId}/impact/upload`}
+          />
+        </SpeedDial>
       )}
     </>
   );
@@ -130,7 +175,7 @@ const Action = () => {
               posiId={posiId}
             />
             {appState && (
-              <EditButton
+              <AdminButton
                 posiId={String(posiData.id)}
                 makerId={posiData.makerId}
                 appState={appState}

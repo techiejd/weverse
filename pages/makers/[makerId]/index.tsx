@@ -30,8 +30,10 @@ import {
 } from "../../../common/context/weverse";
 import LoadingFab from "../../../common/components/loadingFab";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { AdminPanelSettings, Edit } from "@mui/icons-material";
+import { AdminPanelSettings, Edit, Hearing } from "@mui/icons-material";
 import Support from "../../../common/components/support";
+import { useCurrentMaker } from "../../../modules/makers/context";
+import SharingSpeedDialAction from "../../../modules/makers/sharingSpeedDialAction";
 
 const SupportMaker = ({
   appState,
@@ -70,14 +72,11 @@ const AdministerMaker = ({
   makerId: string;
 }) => {
   const [user, userLoading, userError] = useAuthState(appState.auth);
-  const makerDocRef = doc(appState.firestore, "makers", makerId);
-  const [maker, makerLoading, makerError] = useDocumentData(
-    makerDocRef.withConverter(makerConverter)
-  );
+  const [maker, makerLoading, makerError] = useCurrentMaker(appState);
 
   return (
     <>
-      {maker?.ownerId == user?.uid && (
+      {maker && maker.ownerId == user?.uid && (
         <SpeedDial
           ariaLabel="Administer Maker"
           sx={{
@@ -127,6 +126,15 @@ const AdministerMaker = ({
               </Link>
             }
             tooltipOpen
+          />
+          <SharingSpeedDialAction
+            key="solicit"
+            icon={<Hearing />}
+            tooltipTitle={"Solicitar"}
+            tooltipOpen
+            title={"Por favor dame tu opinion sobre mi impacto social"}
+            text={"Por favor dame tu opinion sobre mi impacto social"}
+            path={`/makers/${maker.id}/impact/upload`}
           />
         </SpeedDial>
       )}
