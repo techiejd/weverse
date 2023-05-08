@@ -24,9 +24,11 @@ export const useMyMaker = (appState: AppState) => {
   );
 };
 
-export const useMaker = (appState: AppState, makerId: string) => {
+export const useMaker = (appState: AppState, makerId: string | undefined) => {
   //TODO(techiejd): Go through codebase and replace with this.
   return useDocumentData(
-    doc(appState.firestore, "makers", makerId).withConverter(makerConverter)
+    makerId
+      ? doc(appState.firestore, "makers", makerId).withConverter(makerConverter)
+      : undefined
   );
 };

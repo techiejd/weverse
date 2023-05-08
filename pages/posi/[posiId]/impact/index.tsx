@@ -15,10 +15,14 @@ import { useMaker } from "../../../../common/context/weverseUtils";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { query } from "firebase/firestore";
 import {
+  useCurrentPosi,
   useCurrentPosiId,
   useCurrentSocialProofs,
 } from "../../../../modules/posi/context";
 import Media from "../../../../modules/posi/media";
+import Support from "../../../../common/components/support";
+import { getSharePropsForPosi } from "../../../../modules/posi/input/context";
+import LoadingFab from "../../../../common/components/loadingFab";
 
 const SocialProofCard = ({ socialProof }: { socialProof: SocialProof }) => {
   const appState = useAppState();
@@ -74,6 +78,21 @@ const SocialProofCard = ({ socialProof }: { socialProof: SocialProof }) => {
   );
 };
 
+const SupportImpact = ({ appState }: { appState: AppState }) => {
+  const [posi, posiLoading, posiError] = useCurrentPosi(appState);
+  const [maker, makerLoading, makerError] = useMaker(appState, posi?.makerId);
+  console.log({ posi, maker });
+  return posi && maker ? (
+    <Support
+      howToSupport={maker.howToSupport ? maker.howToSupport : {}}
+      shareProps={getSharePropsForPosi(posi)}
+      addSocialProofPath={`/posi/${posi.id}/impact/upload`}
+    />
+  ) : (
+    <LoadingFab />
+  );
+};
+
 const Impact = () => {
   const posiId = useCurrentPosiId();
   const appState = useAppState();
@@ -96,6 +115,7 @@ const Impact = () => {
   return posiId && appState ? (
     <ImpactPage id={posiId} type={PageTypes.impact}>
       <ImpactContent appState={appState} />
+      <SupportImpact appState={appState} />
     </ImpactPage>
   ) : (
     <CircularProgress />

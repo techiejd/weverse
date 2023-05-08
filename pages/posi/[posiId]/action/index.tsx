@@ -16,13 +16,16 @@ import {
 } from "../../../../modules/posi/input/context";
 import Support from "../../../../common/components/support";
 import AboutContent from "../../../../modules/posi/action/about";
+import { useCurrentPosiId } from "../../../../modules/posi/context";
 
 const SupportButton = ({
   shareProps,
   makerId,
+  posiId,
 }: {
   shareProps: ShareProps;
   makerId: string;
+  posiId: string;
 }) => {
   const SupportButtonContent = ({ appState }: { appState: AppState }) => {
     // TODO(techiejd): create a userMaker(id).
@@ -34,6 +37,7 @@ const SupportButton = ({
       <Support
         howToSupport={maker.howToSupport ? maker.howToSupport : {}}
         shareProps={shareProps}
+        addSocialProofPath={`/posi/${posiId}/impact/upload`}
       />
     ) : (
       <LoadingFab />
@@ -83,8 +87,7 @@ const EditButton = ({
 
 const Action = () => {
   const appState = useAppState();
-  const router = useRouter();
-  const { posiId } = router.query;
+  const posiId = useCurrentPosiId();
 
   const q =
     appState && posiId
@@ -109,7 +112,7 @@ const Action = () => {
       );
     };
 
-    return (
+    return posiId ? (
       <Box>
         {error && (
           <Typography color={"red"}>Error: {JSON.stringify(error)}</Typography>
@@ -124,6 +127,7 @@ const Action = () => {
             <SupportButton
               shareProps={getSharePropsForPosi(posiData)}
               makerId={posiData.makerId}
+              posiId={posiId}
             />
             {appState && (
               <EditButton
@@ -135,6 +139,8 @@ const Action = () => {
           </Box>
         )}
       </Box>
+    ) : (
+      <CircularProgress />
     );
   };
   return (

@@ -3,6 +3,7 @@ import {
   ConnectWithoutContact,
   CardGiftcard,
   Handshake,
+  Campaign,
 } from "@mui/icons-material";
 import {
   Dialog,
@@ -14,7 +15,7 @@ import {
   SpeedDial,
   Typography,
   SpeedDialAction,
-  SpeedDialActionProps,
+  Link,
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import Linkify from "react-linkify";
@@ -54,9 +55,11 @@ const SupportDialog = ({
 const Support = ({
   howToSupport,
   shareProps,
+  addSocialProofPath,
 }: {
   howToSupport: HowToSupport;
   shareProps: ShareProps;
+  addSocialProofPath: string;
 }) => {
   const [connectDialogOpen, setConnectDialogOpen] = useState(false);
   const [financeDialogOpen, setFinanceDialogOpen] = useState(false);
@@ -69,6 +72,20 @@ const Support = ({
         tooltipTitle={"Compartir"}
         tooltipOpen
         {...shareProps}
+      />,
+      <SpeedDialAction
+        key="Vociferar"
+        icon={
+          <Link href={addSocialProofPath} style={{ textDecoration: "none" }}>
+            <Campaign />
+          </Link>
+        }
+        tooltipTitle={
+          <Link href={addSocialProofPath} style={{ textDecoration: "none" }}>
+            Vociferar
+          </Link>
+        }
+        tooltipOpen
       />,
     ];
     if (howToSupport?.contact) {

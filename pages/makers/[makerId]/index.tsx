@@ -55,6 +55,7 @@ const SupportMaker = ({
         text: `Echa un vistazo a la página Maker de ${maker.name}`,
         title: `Echa un vistazo a la página Maker de ${maker.name}`,
       }}
+      addSocialProofPath={`/makers/${makerId}/impact/upload`}
     />
   ) : (
     <LoadingFab />
