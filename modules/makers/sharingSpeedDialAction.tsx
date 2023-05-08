@@ -6,9 +6,9 @@ import ShareActionArea, {
 export type SharingSpeedDialActionProps = ShareProps & SpeedDialActionProps;
 
 const SharingSpeedDialAction = (props: SharingSpeedDialActionProps) => {
-  const { ref, title, text, url, ...others } = props;
+  const { ref, title, text, path, ...others } = props;
   return (
-    <ShareActionArea shareProps={{ title, text, url }}>
+    <ShareActionArea shareProps={{ title, text, path }}>
       <SpeedDialAction {...others} ref={ref} />
     </ShareActionArea>
   );

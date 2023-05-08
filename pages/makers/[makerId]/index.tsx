@@ -49,9 +49,9 @@ const SupportMaker = ({
     <Support
       howToSupport={maker.howToSupport ? maker.howToSupport : {}}
       shareProps={{
-        url: "",
-        text: "",
-        title: "",
+        path: `/makers/${makerId}`,
+        text: `Echa un vistazo a la página Maker de ${maker.name}`,
+        title: `Echa un vistazo a la página Maker de ${maker.name}`,
       }}
     />
   ) : (

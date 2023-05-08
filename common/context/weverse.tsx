@@ -95,6 +95,8 @@ export const socialProof = z.object({
   rating: z.number(),
   videoUrl: formUrl.optional(),
   by: z.string(),
+  forMaker: z.string(),
+  forAction: z.string().optional(),
   createdAt: z.date().optional(),
 });
 

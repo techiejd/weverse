@@ -68,9 +68,9 @@ const makerFab = (maker: Maker) => {
       icon={<Share />}
       tooltipTitle={"Compartir"}
       tooltipOpen
-      title={`Maker: `}
-      text={`Maker: `}
-      url={``}
+      title={`Echa un vistazo a la página Maker de ${maker.name}`}
+      text={`Echa un vistazo a la página Maker de ${maker.name}`}
+      path={`/makers/${maker.id}`}
     />,
   ];
   return (

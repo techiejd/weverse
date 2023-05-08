@@ -74,34 +74,41 @@ const UploadForm = ({
     }
   }, [rating, setError, error]);
 
-  return (
+  return action && user ? (
     <Stack>
       <form
         onSubmit={async (e) => {
           console.log("Being called");
+          e.preventDefault();
           if (rating == null) {
             setError(needsRatingMsg);
             e.preventDefault();
             return;
           }
 
+          console.log("action: ", action);
           if (appState && posiId) {
             setUploading(true);
+            const partialSocialProof = {
+              rating: rating,
+              by: user.uid,
+              forMaker: action.makerId,
+              forAction: action.id,
+            };
             const socialProofEncoded = socialProof.parse(
               videoUrl
                 ? {
                     videoUrl: videoUrl,
-                    rating: rating,
-                    by: user!.uid,
+                    ...partialSocialProof,
                   }
-                : { rating: rating, by: user!.uid }
+                : partialSocialProof
             );
+            console.log("SocialProof: ", socialProofEncoded);
 
             await addDoc(
-              collection(
-                appState.firestore,
-                `impacts/${posiId}/socialProofs`
-              ).withConverter(socialProofConverter),
+              collection(appState.firestore, `socialProofs`).withConverter(
+                socialProofConverter
+              ),
               socialProofEncoded
             );
           } else {
@@ -116,7 +123,7 @@ const UploadForm = ({
           p={2}
         >
           <Typography variant="h1">Queremos escuchar de ¡tí!</Typography>
-          {action && appState ? (
+          {appState ? (
             <FormTitle
               actionId={String(action.id)}
               actionTitle={action.summary}
@@ -160,6 +167,8 @@ const UploadForm = ({
         <LogInPrompt title="Para vociferar, hay que ingresar al sistema." />
       )}
     </Stack>
+  ) : (
+    <CircularProgress />
   );
 };
 

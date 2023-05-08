@@ -1,4 +1,4 @@
-import { Ref, forwardRef } from "react";
+import { Ref, forwardRef, useEffect, useState } from "react";
 import Link from "next/link";
 import { z } from "zod";
 
@@ -14,3 +14,17 @@ export const LinkBehavior = forwardRef(function LinkBehaviour(
 ) {
   return <Link ref={ref} {...props} />;
 });
+
+export const useHostname = () => {
+  const [hostname, setHostName] = useState<undefined | string>();
+  useEffect(() => {
+    const origin =
+      typeof window !== "undefined" && window.location.origin
+        ? window.location.origin
+        : undefined;
+    if (origin) {
+      setHostName(origin);
+    }
+  }, []);
+  return hostname;
+};

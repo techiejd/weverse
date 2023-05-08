@@ -23,7 +23,7 @@ const Upload = () => {
           ),
           usersPosi
         );
-        router.push(`/posi/${docRef.id}/action`);
+        router.push(`/posi/${docRef.id}/action/share`);
       }
     };
     return (
