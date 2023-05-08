@@ -53,8 +53,8 @@ const Solicit = () => {
         )}
         <ShareActionArea
           shareProps={{
-            title: `Por favor denos tu opinion sobre la acción social: ${posi.summary}`,
-            text: `Por favor denos tu opinion sobre la acción social: ${posi.summary}`,
+            title: `Por favor dame tu opinion sobre mi acción social: ${posi.summary}`,
+            text: `Por favor dame tu opinion sobre mi acción social: ${posi.summary}`,
             path: `/posi/${posiId}/impact/upload`,
           }}
         >
