@@ -18,10 +18,11 @@ import {
   useCurrentPosiId,
   useCurrentSocialProofs,
 } from "../../../../modules/posi/context";
+import Media from "../../../../modules/posi/media";
 
 const SocialProofCard = ({ socialProof }: { socialProof: SocialProof }) => {
   const appState = useAppState();
-  const SocialProofCardContent = ({ appState }: { appState: AppState }) => {
+  const SocialProofCardHeader = ({ appState }: { appState: AppState }) => {
     const [byMaker, byMakerLoading, byMakerError] = useMaker(
       appState,
       socialProof.byMaker
@@ -45,9 +46,29 @@ const SocialProofCard = ({ socialProof }: { socialProof: SocialProof }) => {
   return (
     <Card sx={{ width: "100%" }}>
       {appState ? (
-        <SocialProofCardContent appState={appState} />
+        <SocialProofCardHeader appState={appState} />
       ) : (
         <CircularProgress />
+      )}
+      {socialProof.videoUrl && (
+        <Box
+          sx={{
+            height: "50vh",
+            width: "100%",
+          }}
+        >
+          <Media
+            video={{
+              threshold: 0.9,
+              muted: false,
+              controls: true,
+              controlsList:
+                "play volume fullscreen nodownload noplaybackrate notimeline",
+              disablePictureInPicture: true,
+              src: socialProof.videoUrl,
+            }}
+          />
+        </Box>
       )}
     </Card>
   );
