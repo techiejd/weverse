@@ -94,7 +94,7 @@ const GenericSupportDialog = ({
             startIcon={<Campaign />}
             variant="outlined"
           >
-            Vociferar
+            Dar tu opinión
           </Button>
           {howToSupport.finance && (
             <Button
@@ -168,7 +168,7 @@ const Support = ({
         {...shareProps}
       />,
       <SpeedDialAction
-        key="Vociferar"
+        key="Dar opinión"
         icon={
           <Link href={addSocialProofPath} style={{ textDecoration: "none" }}>
             <Campaign />
@@ -176,7 +176,7 @@ const Support = ({
         }
         tooltipTitle={
           <Link href={addSocialProofPath} style={{ textDecoration: "none" }}>
-            Vociferar
+            Dar opinión
           </Link>
         }
         tooltipOpen

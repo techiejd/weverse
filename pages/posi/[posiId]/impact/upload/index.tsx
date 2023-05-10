@@ -159,13 +159,13 @@ const UploadForm = ({
               <CircularProgress />
             ) : (
               <Button type="submit" variant="contained">
-                Vociferar
+                Dar opinión
               </Button>
             ))}
         </Stack>
       </form>
       {!user && (
-        <LogInPrompt title="Para vociferar, hay que ingresar al sistema." />
+        <LogInPrompt title="Para dar tu opinión, hay que ingresar al sistema." />
       )}
     </Stack>
   ) : (
