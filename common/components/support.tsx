@@ -126,7 +126,7 @@ const Support = ({
         <SupportDialog
           open={connectDialogOpen}
           setOpen={setConnectDialogOpen}
-          title="El o la Maker dice que puede financiarlos de las siguientes maneras:"
+          title="El o la Maker dice que busca el siguiente tipo de ayuda y con estos canales de contacto:"
           text={howToSupport!.contact}
         />
       )}

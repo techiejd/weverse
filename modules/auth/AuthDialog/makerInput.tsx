@@ -184,7 +184,9 @@ const DetailedInput = ({
             />
           </Box>
           <Box>
-            <Typography variant="h3">Otro tipo de apoyo:</Typography>
+            <Typography variant="h3">
+              Otro tipo de apoyo y mejor forma de contactar:
+            </Typography>
             <TextField
               fullWidth
               label="Deja aquí los datos de contacto para recibir ayudas de cualquier otro

@@ -23,7 +23,7 @@ export const organizationLabels = {
   [organizationType.Enum.religious]: "Organización Religiosa",
   [organizationType.Enum.governmental]: "Organización Gubermental",
   [organizationType.Enum.unincorporated]: "Voluntarios",
-  [organizationType.Enum.profit]: "Organización con fines de lucro",
+  [organizationType.Enum.profit]: "Organización comercial",
 };
 
 const howToSupport = z.object({
