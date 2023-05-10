@@ -15,6 +15,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
+import { Media } from "../../../common/context/context";
 
 /** TODO(techiejd): Log errors and state in our servers */
 
@@ -27,22 +28,24 @@ function humanFileSize(size: number) {
   );
 }
 
+const getFileType = (f: File) => {
+  return f.name.endsWith("mp4") ? "video" : "img";
+};
+
 // Only supports single file atm
 const FileInput = ({
   required = false,
-  initialFileUrl,
-  setFileUrl,
-  minFileSize,
+  initialMedia,
+  setMedia,
   maxFileSize,
   accept,
   metadata = {},
 }: {
   required?: boolean;
-  initialFileUrl?: string;
-  setFileUrl: Dispatch<SetStateAction<string | undefined | "loading">>;
-  minFileSize?: number;
+  initialMedia?: Media;
+  setMedia: Dispatch<SetStateAction<Media | undefined | "loading">>;
   maxFileSize?: number;
-  accept: "video" | "img";
+  accept: "video" | "img" | "both";
   metadata?: Record<string, string>;
 }) => {
   const appState = useAppState();
@@ -69,21 +72,14 @@ const FileInput = ({
     if (e.target.files && e.target.files[0]) {
       const f = e.target.files[0];
 
-      if (
-        (minFileSize && f.size < minFileSize) ||
-        (maxFileSize && f.size > maxFileSize)
-      ) {
+      if (maxFileSize && f.size > maxFileSize) {
         setFile(undefined);
-        setFileUrl(undefined);
+        setMedia(undefined);
         e.target.value = "";
         setError(
-          minFileSize && f.size < minFileSize
-            ? `File is too small. Must be greater than ${humanFileSize(
-                minFileSize
-              )}.`
-            : `File is too large. Must be smaller than ${humanFileSize(
-                maxFileSize ? maxFileSize : 0
-              )}.`
+          `File is too large. Must be smaller than ${humanFileSize(
+            maxFileSize ? maxFileSize : 0
+          )}.`
         );
         return;
       }
@@ -98,7 +94,10 @@ const FileInput = ({
           newUploadTask.on("state_changed", {
             complete: () => {
               (async () => {
-                setFileUrl(await getDownloadURL(newUploadTask.snapshot.ref));
+                setMedia({
+                  type: getFileType(f),
+                  url: await getDownloadURL(newUploadTask.snapshot.ref),
+                });
                 setFile(f);
               })();
             },
@@ -106,7 +105,7 @@ const FileInput = ({
         }
       };
       setFile("loading");
-      setFileUrl("loading");
+      setMedia("loading");
       uploadFileAndSetFileUrl();
     }
   };
@@ -116,14 +115,14 @@ const FileInput = ({
       {error != "" && (
         <Typography sx={{ color: "red" }}>Error: {error}</Typography>
       )}
-      {useInitialFileUrl && initialFileUrl && (
+      {useInitialFileUrl && initialMedia && (
         <CardMedia
           sx={{
             height: 200,
             width: 200,
           }}
-          component={accept}
-          image={initialFileUrl}
+          component={initialMedia.type}
+          image={initialMedia.url}
         />
       )}
       {file != undefined &&
@@ -135,7 +134,7 @@ const FileInput = ({
               height: 200,
               width: 200,
             }}
-            component={accept}
+            component={getFileType(file as File)}
             image={URL.createObjectURL(file as File)}
           />
         ))}
@@ -144,7 +143,12 @@ const FileInput = ({
         onChange={handleFileChange}
         slotProps={{
           input: {
-            accept: accept == "video" ? "video/mp4" : "image/jpeg, image/jpg",
+            accept:
+              accept == "both"
+                ? "video/mp4, image/jpeg, image/jpg, image/png"
+                : accept == "video"
+                ? "video/mp4"
+                : "image/jpeg, image/jpg, image/png",
           },
         }}
         onClick={() => setUseInitialFileUrl(false)}

@@ -1,6 +1,6 @@
 import { createContext, useContext, Dispatch, SetStateAction } from "react";
 import { z } from "zod";
-import { formUrl, isDevEnvironment } from "../../../common/context/context";
+import { media } from "../../../common/context/context";
 import {
   FirestoreDataConverter,
   WithFieldValue,
@@ -58,7 +58,7 @@ export const posiFormData = z.object({
   summary: z.string().min(5).max(100),
   howToIdentifyImpactedPeople: z.string().min(5).max(200).optional(),
   location: location.optional(),
-  video: formUrl,
+  media: media,
   makerId: z.string(),
   createdAt: z.date().optional(),
 });
@@ -85,17 +85,21 @@ export const posiFormDataConverter: FirestoreDataConverter<PosiFormData> = {
   },
 };
 
-const partialPosiFormData = posiFormData.deepPartial();
-export type PartialPosiFormData = z.infer<typeof partialPosiFormData>;
+const workingCopyPosiFormData = posiFormData
+  .extend({
+    media: z.union([media, z.enum(["loading"])]),
+  })
+  .partial();
+export type WorkingCopyPosiFormData = z.infer<typeof workingCopyPosiFormData>;
 
-export const PosiFormContext = createContext<PartialPosiFormData>({});
+export const PosiFormContext = createContext<WorkingCopyPosiFormData>({});
 export const PosiFormDispatchContext = createContext<
-  Dispatch<SetStateAction<PartialPosiFormData>> | undefined
+  Dispatch<SetStateAction<WorkingCopyPosiFormData>> | undefined
 >(undefined);
 
 export const useFormData = (): [
-  PartialPosiFormData,
-  Dispatch<SetStateAction<PartialPosiFormData>> | undefined
+  WorkingCopyPosiFormData,
+  Dispatch<SetStateAction<WorkingCopyPosiFormData>> | undefined
 ] => {
   return [useContext(PosiFormContext), useContext(PosiFormDispatchContext)];
 };

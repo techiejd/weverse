@@ -21,6 +21,7 @@ import {
 import { useMyMaker } from "../../../../../common/context/weverseUtils";
 import { FileInput } from "../../../../../modules/posi/input";
 import { posiFormDataConverter } from "../../../../../modules/posi/input/context";
+import { Media } from "../../../../../common/context/context";
 
 const FormTitle = ({
   actionTitle,
@@ -58,7 +59,7 @@ const UploadForm = ({
   const [user, userLoading, userError] = useAuthState(appState.auth);
   const [error, setError] = useState("");
   const [rating, setRating] = useState<number | null>(null);
-  const [videoUrl, setVideoUrl] = useState<string | undefined | "loading">("");
+  const [media, setMedia] = useState<Media | undefined | "loading">(undefined);
   const [uploading, setUploading] = useState(false);
   const needsRatingMsg = "Calificación necesaria.";
   const router = useRouter();
@@ -97,9 +98,9 @@ const UploadForm = ({
               forAction: action.id,
             };
             const socialProofEncoded = socialProof.parse(
-              videoUrl
+              media && media != "loading"
                 ? {
-                    videoUrl: videoUrl,
+                    videoUrl: media.url,
                     ...partialSocialProof,
                   }
                 : partialSocialProof
@@ -148,14 +149,13 @@ const UploadForm = ({
             acción hasta ahora en tu vida. (30s - 5 minutos y opcional.)
           </Typography>
           <FileInput
-            setFileUrl={setVideoUrl}
-            minFileSize={104857 /** 0.1MB */}
+            setMedia={setMedia}
             maxFileSize={2147483648 /** 2GB */}
             accept={"video"}
             metadata={{ impactId: "", isTestimonial: "true", from: "" }}
           />
           {user &&
-            (videoUrl == "loading" || uploading ? (
+            (media == "loading" || uploading ? (
               <CircularProgress />
             ) : (
               <Button type="submit" variant="contained">

@@ -1,12 +1,8 @@
 import { useRouter } from "next/router";
 import { AppState } from "../../common/context/appState";
-import { collection, doc, query, where } from "firebase/firestore";
+import { collection, query, where } from "firebase/firestore";
 import { socialProofConverter } from "../../common/context/weverse";
-import {
-  useCollectionData,
-  useDocumentData,
-} from "react-firebase-hooks/firestore";
-import { posiFormDataConverter } from "./input/context";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useAction } from "../../common/context/weverseUtils";
 
 export const useCurrentPosiId = () => {

@@ -22,9 +22,9 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
     <Card sx={{ width: "100%" }}>
       <CardActionArea href={`/posi/${posiData.id}/action`}>
         <CardMedia
-          component="video"
+          component={posiData.media.type}
           sx={{ height: 270, objectFit: "cover" }}
-          image={posiData.video}
+          image={posiData.media.url}
           autoPlay
           muted
           loop

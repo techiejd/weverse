@@ -4,6 +4,13 @@ import { z } from "zod";
 
 // TODO(techiejd): Check all urls are with our hosting.
 export const formUrl = z.string().url();
+export const mediaType = z.enum(["video", "img"]);
+export type MediaType = z.infer<typeof mediaType>;
+export const media = z.object({
+  type: mediaType,
+  url: formUrl,
+});
+export type Media = z.infer<typeof media>;
 
 export const isDevEnvironment =
   process && process.env.NODE_ENV === "development";

@@ -11,13 +11,13 @@ import SummaryInput from "../input/SummaryInput";
 import {
   useFormData,
   PosiFormData,
-  PartialPosiFormData,
+  WorkingCopyPosiFormData,
   posiFormData,
   PosiFormContext,
   PosiFormDispatchContext,
 } from "../input/context";
-import ImpactVideoInput from "../input/impactVideoInput";
 import ImpactedPersonsInput from "../input/impactedPersonsInput";
+import ImpactMediaInput from "../input/impactMediaInput";
 
 const GetMaker = ({ appState, user }: { appState: AppState; user: User }) => {
   const [formData, setFormData] = useFormData();
@@ -46,9 +46,10 @@ const PosiForm = ({
   appState: AppState;
   user: User | null;
   onSubmit: (posiFormData: PosiFormData) => Promise<void>;
-  initialPosi?: PartialPosiFormData;
+  initialPosi?: WorkingCopyPosiFormData;
 }) => {
-  const [formData, setFormData] = useState<PartialPosiFormData>(initialPosi);
+  const [formData, setFormData] =
+    useState<WorkingCopyPosiFormData>(initialPosi);
   const [uploading, setUploading] = useState(false);
 
   return (
@@ -57,6 +58,7 @@ const PosiForm = ({
         onSubmit={async (e) => {
           e.preventDefault();
           setUploading(true);
+          console.log(formData);
           const checkedPosiFormData = posiFormData.parse(formData);
           await onSubmit(checkedPosiFormData);
         }}
@@ -72,7 +74,7 @@ const PosiForm = ({
               justifyContent={"space-between"}
             >
               <Section label="Muéstranos un poco de lo que has hecho">
-                <ImpactVideoInput />
+                <ImpactMediaInput />
               </Section>
               <Section label="Si tu acción tuviera un nombre ¿cuál sería?">
                 <SummaryInput />
@@ -83,7 +85,7 @@ const PosiForm = ({
               <Section label="¿Dónde realizaste esta acción?">
                 <CitySearchInput />
               </Section>
-              {uploading || formData.video == "loading" ? (
+              {uploading || formData.media == "loading" ? (
                 <CircularProgress />
               ) : (
                 <Button variant="contained" sx={{ mt: 3 }} type="submit">

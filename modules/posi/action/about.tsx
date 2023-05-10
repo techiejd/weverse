@@ -14,7 +14,7 @@ import MakerCard from "../../makers/MakerCard";
 
 const AboutContent = ({
   summary,
-  video,
+  media,
   location,
   howToIdentifyImpactedPeople,
   makerId,
@@ -47,17 +47,21 @@ const AboutContent = ({
               width: "100%",
             }}
           >
-            <Media
-              video={{
-                threshold: 0.9,
-                muted: false,
-                controls: true,
-                controlsList:
-                  "play volume fullscreen nodownload noplaybackrate notimeline",
-                disablePictureInPicture: true,
-                src: video,
-              }}
-            />
+            {media.type == "video" ? (
+              <Media
+                video={{
+                  threshold: 0.9,
+                  muted: false,
+                  controls: true,
+                  controlsList:
+                    "play volume fullscreen nodownload noplaybackrate notimeline",
+                  disablePictureInPicture: true,
+                  src: media.url,
+                }}
+              />
+            ) : (
+              <Media image={{ src: media.url }} />
+            )}
           </Box>
         </Box>
         {(location || howToIdentifyImpactedPeople) && (

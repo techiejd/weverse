@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import {
   Box,
   Card,
@@ -6,14 +5,11 @@ import {
   CircularProgress,
   Rating,
   Stack,
-  Typography,
 } from "@mui/material";
 import ImpactPage, { PageTypes } from "../../../../modules/posi/impactPage";
 import { SocialProof } from "../../../../common/context/weverse";
 import { AppState, useAppState } from "../../../../common/context/appState";
 import { useMaker } from "../../../../common/context/weverseUtils";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { query } from "firebase/firestore";
 import {
   useCurrentPosi,
   useCurrentPosiId,

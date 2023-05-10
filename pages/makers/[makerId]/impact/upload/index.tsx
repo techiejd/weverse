@@ -19,6 +19,7 @@ import { useMyMaker } from "../../../../../common/context/weverseUtils";
 import { useCurrentMaker } from "../../../../../modules/makers/context";
 import { FileInput } from "../../../../../modules/posi/input";
 import { useRouter } from "next/router";
+import { Media } from "../../../../../common/context/context";
 
 //TODO(techiejd): WET -> DRY
 
@@ -41,7 +42,7 @@ const UploadForm = ({ appState }: { appState: AppState }) => {
   const [user, userLoading, userError] = useAuthState(appState.auth);
   const [error, setError] = useState("");
   const [rating, setRating] = useState<number | null>(null);
-  const [videoUrl, setVideoUrl] = useState<string | undefined | "loading">("");
+  const [media, setMedia] = useState<Media | undefined | "loading">(undefined);
   const [uploading, setUploading] = useState(false);
   const needsRatingMsg = "Calificación necesaria.";
   const [maker, makerLoading, makerError] = useCurrentMaker(appState);
@@ -72,9 +73,9 @@ const UploadForm = ({ appState }: { appState: AppState }) => {
               forMaker: maker.id,
             };
             const socialProofEncoded = socialProof.parse(
-              videoUrl
+              media
                 ? {
-                    videoUrl: videoUrl,
+                    media: media,
                     ...partialSocialProof,
                   }
                 : partialSocialProof
@@ -117,14 +118,13 @@ const UploadForm = ({ appState }: { appState: AppState }) => {
             Maker hasta ahora en tu vida. (30s - 5 minutos y opcional.)
           </Typography>
           <FileInput
-            setFileUrl={setVideoUrl}
-            minFileSize={104857 /** 0.1MB */}
+            setMedia={setMedia}
             maxFileSize={2147483648 /** 2GB */}
             accept={"video"}
             metadata={{ impactId: "", isTestimonial: "true", from: "" }}
           />
           {user &&
-            (videoUrl == "loading" || uploading ? (
+            (media == "loading" || uploading ? (
               <CircularProgress />
             ) : (
               <Button type="submit" variant="contained">

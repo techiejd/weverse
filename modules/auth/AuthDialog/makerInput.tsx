@@ -24,6 +24,7 @@ import {
   organizationType,
 } from "../../../common/context/weverse";
 import Section from "../../../common/components/section";
+import { Media } from "../../../common/context/context";
 
 const OrganizationTypeInput = ({
   val,
@@ -89,10 +90,14 @@ const DetailedInput = ({
   val: Maker;
   setVal: Dispatch<SetStateAction<Maker>>;
 }) => {
-  const [imgUrl, setImgUrl] = useState<string | undefined | "loading">(val.pic);
+  const [media, setMedia] = useState<Media | undefined | "loading">(
+    val.pic ? { type: "img", url: val.pic } : undefined
+  );
   useEffect(() => {
-    setVal((maker) => ({ ...maker, pic: imgUrl }));
-  }, [imgUrl, setVal]);
+    if (media && media != "loading") {
+      setVal((maker) => ({ ...maker, pic: media.url }));
+    }
+  }, [media, setVal]);
 
   const setAboutInput = (about: string) => {
     setVal((maker) => ({ ...maker, about: about }));
@@ -134,8 +139,8 @@ const DetailedInput = ({
       >
         <Typography>{askForImage}</Typography>
         <FileInput
-          initialFileUrl={val.pic}
-          setFileUrl={setImgUrl}
+          initialMedia={val.pic ? { type: "img", url: val.pic } : undefined}
+          setMedia={setMedia}
           maxFileSize={10485760 /** 10MB */}
           accept={"img"}
           metadata={{ makerId: "", userID: "" }}
