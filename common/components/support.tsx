@@ -16,12 +16,26 @@ import {
   Typography,
   SpeedDialAction,
   Link,
+  Stack,
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import Linkify from "react-linkify";
 import SharingSpeedDialAction from "../../modules/makers/sharingSpeedDialAction";
 import { HowToSupport } from "../context/weverse";
-import { ShareProps } from "./shareActionArea";
+import ShareActionArea, { ShareProps } from "./shareActionArea";
+import { useRouter } from "next/router";
+import { z } from "zod";
+
+const supportDialogs = z.enum(["connect", "finance", "generic"]);
+export type SupportDialogs = z.infer<typeof supportDialogs>;
+
+const useOpenSupportDialog = () => {
+  const router = useRouter();
+  const { openSupport } = router.query;
+  return router.isReady && openSupport
+    ? supportDialogs.parse(openSupport)
+    : undefined;
+};
 
 const SupportDialog = ({
   open,
@@ -52,6 +66,80 @@ const SupportDialog = ({
   );
 };
 
+const GenericSupportDialog = ({
+  open,
+  setFinanceDialogOpen,
+  setConnectDialogOpen,
+  howToSupport,
+  shareProps,
+  addSocialProofPath,
+}: {
+  open: boolean;
+  setFinanceDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setConnectDialogOpen: Dispatch<SetStateAction<boolean>>;
+  howToSupport: HowToSupport;
+  shareProps: ShareProps;
+  addSocialProofPath: string;
+}) => {
+  const [o, setO] = useState(open);
+  const handleClose = () => setO(false);
+  return (
+    <Dialog open={o} onClose={handleClose}>
+      <DialogTitle>¡Gracias por tu apoyo!</DialogTitle>
+      <DialogContent>
+        <Stack spacing={1}>
+          {/** Speak, Fund, Contact, Share */}
+          <Button
+            href={addSocialProofPath}
+            startIcon={<Campaign />}
+            variant="outlined"
+          >
+            Vociferar
+          </Button>
+          {howToSupport.finance && (
+            <Button
+              onClick={() => {
+                setFinanceDialogOpen(true);
+                handleClose();
+              }}
+              startIcon={<CardGiftcard />}
+              variant="outlined"
+            >
+              Financiar
+            </Button>
+          )}
+          {howToSupport.contact && (
+            <Button
+              onClick={() => {
+                setConnectDialogOpen(true);
+                handleClose();
+              }}
+              startIcon={<ConnectWithoutContact />}
+              variant="outlined"
+            >
+              Conectar
+            </Button>
+          )}
+          <ShareActionArea shareProps={shareProps}>
+            <Button
+              onClick={() => handleClose()}
+              startIcon={<Share />}
+              variant="outlined"
+            >
+              Compartir
+            </Button>
+          </ShareActionArea>
+        </Stack>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} autoFocus>
+          Cerrar
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 const Support = ({
   howToSupport,
   shareProps,
@@ -61,8 +149,14 @@ const Support = ({
   shareProps: ShareProps;
   addSocialProofPath: string;
 }) => {
-  const [connectDialogOpen, setConnectDialogOpen] = useState(false);
-  const [financeDialogOpen, setFinanceDialogOpen] = useState(false);
+  const openSupportDialog = useOpenSupportDialog();
+  const [connectDialogOpen, setConnectDialogOpen] = useState(
+    openSupportDialog == "connect"
+  );
+  const [financeDialogOpen, setFinanceDialogOpen] = useState(
+    openSupportDialog == "finance"
+  );
+  const genericDialogOpen = openSupportDialog == "generic";
 
   const actions = (() => {
     const actions = [
@@ -130,6 +224,14 @@ const Support = ({
           text={howToSupport!.contact}
         />
       )}
+      <GenericSupportDialog
+        open={genericDialogOpen}
+        setFinanceDialogOpen={setFinanceDialogOpen}
+        setConnectDialogOpen={setConnectDialogOpen}
+        howToSupport={howToSupport}
+        shareProps={shareProps}
+        addSocialProofPath={addSocialProofPath}
+      />
       <SpeedDial
         ariaLabel="Support"
         sx={{

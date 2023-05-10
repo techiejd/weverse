@@ -10,7 +10,11 @@ import {
 } from "@mui/material";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { AdminPanelSettings, Edit, Hearing } from "@mui/icons-material";
+import {
+  AdminPanelSettings,
+  Edit,
+  Support as SupportIcon,
+} from "@mui/icons-material";
 import { doc, DocumentReference } from "firebase/firestore";
 import LoadingFab from "../../../../common/components/loadingFab";
 import { ShareProps } from "../../../../common/components/shareActionArea";
@@ -26,6 +30,9 @@ import Support from "../../../../common/components/support";
 import AboutContent from "../../../../modules/posi/action/about";
 import { useCurrentPosiId } from "../../../../modules/posi/context";
 import SharingSpeedDialAction from "../../../../modules/makers/sharingSpeedDialAction";
+import { useMaker } from "../../../../common/context/weverseUtils";
+import SolicitDialog from "../../../../common/components/solicitHelpDialog";
+import { useState } from "react";
 
 const SupportButton = ({
   shareProps,
@@ -72,59 +79,65 @@ const AdminButton = ({
   appState: AppState;
 }) => {
   const [user, userLoading, userError] = useAuthState(appState.auth);
-  const makerDocRef = doc(appState.firestore, "makers", makerId);
-  const [maker, makerLoading, makerError] = useDocumentData(
-    makerDocRef.withConverter(makerConverter)
-  );
+  const [maker, makerLoading, makerError] = useMaker(appState, makerId);
+  const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
   return (
     <>
-      {maker?.ownerId == user?.uid && (
-        <SpeedDial
-          ariaLabel="Administer Action"
-          sx={{
-            position: "fixed",
-            bottom: 64,
-            right: 84,
-          }}
-          icon={
-            <div>
-              <AdminPanelSettings />
-              <Typography fontSize={8} mt={-1}>
-                Admin
-              </Typography>
-            </div>
-          }
-        >
-          <SpeedDialAction
-            key="Edit Action"
+      {maker && user && maker.ownerId == user.uid && (
+        <>
+          <SolicitDialog
+            open={solicitDialogOpen}
+            setOpen={setSolicitDialogOpen}
+            howToSupport={maker.howToSupport ? maker.howToSupport : {}}
+            solicitOpinionPath={`/posi/${posiId}/impact/upload`}
+            pathUnderSupport={`/posi/${posiId}/action`}
+            editMakerPath={`/makers/${maker.id}/edit`}
+          />
+          <SpeedDial
+            ariaLabel="Administer Action"
+            sx={{
+              position: "fixed",
+              bottom: 64,
+              right: 84,
+            }}
             icon={
-              <Link
-                href={`/posi/${posiId}/action/edit`}
-                sx={{ textDecoration: "none" }}
-              >
-                <Edit />
-              </Link>
+              <div>
+                <AdminPanelSettings />
+                <Typography fontSize={8} mt={-1}>
+                  Admin
+                </Typography>
+              </div>
             }
-            tooltipTitle={
-              <Link
-                href={`/posi/${posiId}/action/edit`}
-                style={{ textDecoration: "none" }}
-              >
-                Editar
-              </Link>
-            }
-            tooltipOpen
-          />
-          <SharingSpeedDialAction
-            key="solicit"
-            icon={<Hearing />}
-            tooltipTitle={"Solicitar"}
-            tooltipOpen
-            title={"Por favor dame tu opinion sobre mi impacto social"}
-            text={"Por favor dame tu opinion sobre mi impacto social"}
-            path={`/posi/${posiId}/impact/upload`}
-          />
-        </SpeedDial>
+          >
+            <SpeedDialAction
+              key="Edit Action"
+              icon={
+                <Link
+                  href={`/posi/${posiId}/action/edit`}
+                  sx={{ textDecoration: "none" }}
+                >
+                  <Edit />
+                </Link>
+              }
+              tooltipTitle={
+                <Link
+                  href={`/posi/${posiId}/action/edit`}
+                  style={{ textDecoration: "none" }}
+                >
+                  Editar
+                </Link>
+              }
+              tooltipOpen
+            />
+            <SpeedDialAction
+              key="solicit"
+              icon={<SupportIcon />}
+              tooltipTitle="Apoyo"
+              tooltipOpen
+              onClick={() => setSolicitDialogOpen(true)}
+            />
+          </SpeedDial>
+        </>
       )}
     </>
   );
