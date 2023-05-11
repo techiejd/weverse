@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, ButtonProps, Stack, Typography } from "@mui/material";
 import PageTitle from "../common/components/pageTitle";
 import AuthDialog from "../modules/auth/AuthDialog";
 import { useEffect, useState } from "react";
@@ -10,6 +10,16 @@ import { memberConverter } from "../common/context/weverse";
 import { User } from "firebase/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import Image from "next/image";
+
+const FrontPageButton = (props: ButtonProps) => {
+  return (
+    <Button
+      variant="contained"
+      sx={{ width: "100%", maxWidth: 350 }}
+      {...props}
+    />
+  );
+};
 
 const MakerPortal = ({ appState }: { appState: AppState }) => {
   const [user, loading, error] = useAuthState(appState.auth);
@@ -27,14 +37,9 @@ const MakerPortal = ({ appState }: { appState: AppState }) => {
     const [member, loading, error] = useDocumentData(memberDocRef);
 
     return (
-      <Button
-        href={`/makers/${member?.makerId}`}
-        variant="contained"
-        disabled={!member}
-        fullWidth
-      >
+      <FrontPageButton href={`/makers/${member?.makerId}`} disabled={!member}>
         📛 Mi Página Maker
-      </Button>
+      </FrontPageButton>
     );
   };
 
@@ -45,19 +50,21 @@ const MakerPortal = ({ appState }: { appState: AppState }) => {
         setOpen={setAuthDialogOpen}
         initialAuthAction={AuthAction.register}
       />
-      {user ? (
-        <MakerPortalBtn user={user} />
-      ) : (
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={() => {
-            setAuthDialogOpen(true);
-          }}
-        >
-          🧑 Registrarte como Maker
-        </Button>
-      )}
+      <Stack
+        sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
+      >
+        {user ? (
+          <MakerPortalBtn user={user} />
+        ) : (
+          <FrontPageButton
+            onClick={() => {
+              setAuthDialogOpen(true);
+            }}
+          >
+            🧑 ¡Regístrate como maker!
+          </FrontPageButton>
+        )}
+      </Stack>
     </Box>
   );
 };
@@ -66,7 +73,11 @@ const WeVerse = () => {
   const appState = useAppState();
   return (
     <Box>
-      <Stack p={2} spacing={2} sx={{ width: "100%" }}>
+      <Stack
+        p={2}
+        spacing={2}
+        sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
+      >
         <PageTitle
           title={
             <>
@@ -75,36 +86,39 @@ const WeVerse = () => {
             </>
           }
         />
-        <Typography>En OneWe hacemos lo imposible:</Typography>
         <Typography>
-          Hacemos el mundo mejor con confianza en nosotros mismos.
+          Validando e incentivando el mundo de impacto social.
         </Typography>
-        <Stack>
-          <Typography>Veanos mejorar el mundo en vivo:</Typography>
-          <Button href="/posi" variant="contained">
-            🤸‍♀️ Acciones
-          </Button>
+        <Stack
+          sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
+        >
+          <Typography>
+            Estas son las acciones que están cambiando el mundo:
+          </Typography>
+          <FrontPageButton href="/posi">🤸‍♀️ Acciones</FrontPageButton>
         </Stack>
-        <Stack>
-          Los que lo hacen posible:
-          <Button href="/makers" variant="contained">
-            💪 Makers
-          </Button>
+        <Stack
+          sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
+        >
+          Ellos son nuestros héroes sin capa:
+          <FrontPageButton href="/makers">💪 Makers</FrontPageButton>
         </Stack>
-        <Stack>
-          <Typography>Suma al cambio para lo mejor:</Typography>
-          <Button href="/posi/upload" variant="contained">
+        <Stack
+          sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
+        >
+          <Typography>¿Quieres compartir tu acción? ¡Hazlo aquí!:</Typography>
+          <FrontPageButton href="/posi/upload">
             🤸‍♀️ Agrega tu Acción
-          </Button>
+          </FrontPageButton>
         </Stack>
-        <Stack>
+        <Stack
+          sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
+        >
           <Typography>Tú:</Typography>
           {appState ? (
             <MakerPortal appState={appState} />
           ) : (
-            <Button variant="contained" disabled>
-              Loading...
-            </Button>
+            <FrontPageButton disabled>Loading...</FrontPageButton>
           )}
         </Stack>
       </Stack>

@@ -26,7 +26,6 @@ const PhoneInput = ({
   return (
     <MuiTelInput
       defaultCountry="CO"
-      continents={["NA", "SA"]}
       value={phoneNumberIn}
       error={authDialogState.phoneNumberInputError}
       onChange={onPhoneNumberChange}
