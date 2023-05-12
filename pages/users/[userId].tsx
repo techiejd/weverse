@@ -3,8 +3,9 @@ import { AppState, useAppState } from "../../common/context/appState";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { collection, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { CircularProgress, Stack, Typography } from "@mui/material";
+import { Button, CircularProgress, Stack, Typography } from "@mui/material";
 import MakerCard from "../../modules/makers/MakerCard";
+import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 
 const UserPage = () => {
   const router = useRouter();
@@ -26,6 +27,10 @@ const UserPage = () => {
       );
     }, [makersSnapshot, setMakerIds]);
 
+    const [myUser, myUserLoading, myUserError] = useAuthState(appState.auth);
+    const [signOut, signOutLoading, signOutError] = useSignOut(appState.auth);
+    console.log({ myUser, userId });
+
     return (
       <Stack
         sx={{
@@ -36,7 +41,20 @@ const UserPage = () => {
         }}
         spacing={1}
       >
-        <Typography variant="h2">Tus Makers</Typography>
+        {myUser &&
+          userId == myUser.uid && [
+            <Typography key="user title" variant="h2">
+              Usuario:
+            </Typography>,
+            <Button
+              key="disconnect button"
+              variant="contained"
+              onClick={() => signOut()}
+            >
+              Desconectar
+            </Button>,
+          ]}
+        <Typography variant="h2">Los Makers:</Typography>
         {error && (
           <Typography color={"red"}>Error: {JSON.stringify(error)}</Typography>
         )}
