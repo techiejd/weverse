@@ -132,22 +132,7 @@ export const Header = () => {
       <Toolbar>
         <MenuComponent />
         <Link sx={{ all: "unset" }} href="/">
-          <Stack
-            direction={"row"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            pl={1}
-          >
-            <Image
-              src="/Icon.png"
-              alt="OneWe logo"
-              width={"20"}
-              height={"20"}
-            />{" "}
-            <Typography fontSize={"16px"} noWrap pl={0.5}>
-              <b>One</b>We
-            </Typography>
-          </Stack>
+          <Image src="/logo.png" alt="OneWe logo" width={"125"} height={"20"} />
         </Link>
 
         <div style={{ flexGrow: 1 }}></div>

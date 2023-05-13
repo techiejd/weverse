@@ -1,19 +1,13 @@
-import { Box, CssBaseline, useMediaQuery } from "@mui/material";
-import { FC, ReactNode, useMemo } from "react";
+import { Box, CssBaseline } from "@mui/material";
+import { FC, ReactNode } from "react";
 import AppStateProvider from "../context/appState";
 import { Header } from "./header";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { configuration } from "./theme";
+import { lightConfiguration } from "./theme";
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-
-  const theme = useMemo(() => {
-    return createTheme(configuration(prefersDarkMode));
-  }, [prefersDarkMode]);
-
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={createTheme(lightConfiguration)}>
       <CssBaseline>
         <AppStateProvider>
           <Header />

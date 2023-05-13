@@ -8,7 +8,7 @@ const AboutUs: NextPage = () => {
   return (
     <div className={aboutUsStyle.aboutUs}>
       <nav className={aboutUsStyle.nav}>
-        <img className={aboutUsStyle.logo} src="/Icon.png" alt="logo" />
+        <img className={aboutUsStyle.logo} src="/logo.png" alt="logo" />
         <h1 className={aboutUsStyle.title}>OneWe Networks LLC</h1>
       </nav>
       <div className={aboutUsStyle.Banner}>

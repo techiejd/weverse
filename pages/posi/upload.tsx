@@ -35,22 +35,6 @@ const Upload = () => {
           textAlign={"center"}
         >
           <Typography variant="h1">¡Publica tu acción! 🪧</Typography>
-          <Typography>¡Hola, muchas gracias por estar aquí!</Typography>
-          <Typography>
-            Estamos creando un universo en el que le puedas mostrar al mundo
-            todo lo bueno que estás haciendo por los demás, ¡porque vale la pena
-            mostrarlo!
-          </Typography>
-          <Typography>
-            Aquí amamos el impacto social, poder demostrar con datos los
-            resultados de tus acciones sociales y brindarte el apoyo que
-            necesites. Por ende, necesitamos que nos muestres la acción social
-            -- Action -- para nosotros emitirlo a la comunidad y medir el
-            impacto.
-          </Typography>
-          <Typography>
-            De nuevo, gracias por querer compartirla con nuestra comunidad.
-          </Typography>
         </Stack>
         {user ? (
           <PosiForm appState={appState} onSubmit={onSubmit} user={user} />

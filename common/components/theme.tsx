@@ -73,15 +73,7 @@ const baseConfiguration = {
   },
 };
 
-const lightConfiguration = {
+export const lightConfiguration = {
   ...baseConfiguration,
   palette: lightPalette,
 };
-
-const darkConfiguration = {
-  ...baseConfiguration,
-  palette: darkPalette,
-};
-
-export const configuration = (prefersDarkMode: boolean) =>
-  prefersDarkMode ? darkConfiguration : lightConfiguration;

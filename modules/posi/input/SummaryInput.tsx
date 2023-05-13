@@ -18,7 +18,7 @@ const SummaryInput = () => {
       <TextField
         required
         fullWidth
-        label="Resume la acción social."
+        label="Ej: 'Le enseñé a escribir a 10 personas analfabetas'"
         name="title"
         margin="normal"
         inputProps={{ maxLength: 100 }}
