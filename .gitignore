@@ -37,7 +37,7 @@ next-env.d.ts
 
 # ignore all json that start with weverse,
 # since they tend to be credential files.
-weverse*.json
+webapp*.json
 
 # Everything under public
 public/*

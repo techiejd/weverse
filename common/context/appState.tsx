@@ -1,10 +1,5 @@
 import { app } from "../utils/firebase";
 import {
-  connectDatabaseEmulator,
-  Database,
-  getDatabase,
-} from "firebase/database";
-import {
   getStorage,
   FirebaseStorage,
   connectStorageEmulator,
@@ -32,18 +27,10 @@ export type User = {
 
 export type AppState = {
   user?: User; // TODO(techiejd): Firstly, deprecated. Secondly, I should split responsibility between storage and authentication.
-  db: Database;
   storage: FirebaseStorage;
   firestore: Firestore;
   auth: Auth;
 };
-
-//TODO(techijd): In all of these I should check if I'm in prod otherwise use emulator.
-const db = (() => {
-  const db = getDatabase(app);
-  if (isDevEnvironment) connectDatabaseEmulator(db, "localhost", 9000);
-  return db;
-})();
 
 const storage = (() => {
   const storage = getStorage(app);
@@ -76,7 +63,6 @@ const AppStateProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const [appState, setAppState] = useState<AppState | undefined>({
-    db: db,
     storage: storage,
     firestore: firestore,
     auth: auth,

@@ -31,7 +31,7 @@
       {
         "source": "**",
         "run": {
-          "serviceId": "weverse",
+          "serviceId": "webapp",
           "region": "southamerica-west1"
         }
       }
