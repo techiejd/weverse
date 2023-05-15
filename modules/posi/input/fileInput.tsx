@@ -29,7 +29,7 @@ function humanFileSize(size: number) {
 }
 
 const getFileType = (f: File) => {
-  return f.name.endsWith("mp4") ? "video" : "img";
+  return f.name.endsWith("mp4") || f.name.endsWith("MP4") ? "video" : "img";
 };
 
 // Only supports single file atm

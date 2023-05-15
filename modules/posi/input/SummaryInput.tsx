@@ -14,14 +14,14 @@ const SummaryInput = () => {
 
   return (
     <Box>
-      <Typography>(100 caracteres)</Typography>
+      <Typography>(180 caracteres)</Typography>
       <TextField
         required
         fullWidth
         label="Ej: 'Le enseñé a escribir a 10 personas analfabetas'"
         name="title"
         margin="normal"
-        inputProps={{ maxLength: 100 }}
+        inputProps={{ maxLength: 180 }}
         value={formData.summary ? formData.summary : ""}
         onChange={(e) => {
           setSummaryInput(e.target.value);

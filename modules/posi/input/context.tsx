@@ -55,11 +55,11 @@ const location = z.object({
 // TODO(techiejd): Reshape db. It should go posi {action: Action, impacts: Impact[], makerId}
 export const posiFormData = z.object({
   id: z.string().optional(), // If it exists, then it exists in the db.
-  summary: z.string().min(5).max(100),
-  howToIdentifyImpactedPeople: z.string().min(5).max(200).optional(),
+  summary: z.string().min(1),
+  howToIdentifyImpactedPeople: z.string().min(1).optional(),
   location: location.optional(),
   media: media,
-  makerId: z.string(),
+  makerId: z.string(), // TODO(techiejd): How many chars is the id?
   createdAt: z.date().optional(),
 });
 

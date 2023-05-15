@@ -1,4 +1,9 @@
-import { PlayCircle, Info } from "@mui/icons-material";
+import {
+  PlayCircle,
+  Info,
+  Image as ImageIcon,
+  Place,
+} from "@mui/icons-material";
 import {
   Box,
   Typography,
@@ -33,14 +38,25 @@ const AboutContent = ({
       </Box>
       <Stack divider={<Divider flexItem />} spacing={1} m={1.5}>
         <Box>
-          <CardHeader
-            avatar={
-              <Icon>
-                <PlayCircle />
-              </Icon>
-            }
-            title={"Video"}
-          />
+          {media.type == "video" ? (
+            <CardHeader
+              avatar={
+                <Icon>
+                  <PlayCircle />
+                </Icon>
+              }
+              title={"Video de Portada"}
+            />
+          ) : (
+            <CardHeader
+              avatar={
+                <Icon>
+                  <ImageIcon />
+                </Icon>
+              }
+              title={"Imagen de Portada"}
+            />
+          )}
           <Box
             sx={{
               height: "50vh",
@@ -64,33 +80,41 @@ const AboutContent = ({
             )}
           </Box>
         </Box>
-        {(location || howToIdentifyImpactedPeople) && (
+        {location && (
           <Box>
             <CardHeader
               avatar={
                 <Icon>
-                  <Info />
+                  <Place />
                 </Icon>
               }
-              title={"Info Rapída"}
+              title={"Ubicación"}
             />
 
             <CardContent>
-              <Stack spacing={2}>
-                {location && (
-                  <Stack>
-                    <Typography variant="h3">
-                      {location.structuredFormatting.mainText}
-                    </Typography>
-                    <Typography fontSize={10}>
-                      {location.structuredFormatting.secondaryText}
-                    </Typography>
-                  </Stack>
-                )}
-                {howToIdentifyImpactedPeople && (
-                  <Typography>{howToIdentifyImpactedPeople}</Typography>
-                )}
+              <Stack>
+                <Typography variant="h3">
+                  {location.structuredFormatting.mainText}
+                </Typography>
+                <Typography fontSize={10}>
+                  {location.structuredFormatting.secondaryText}
+                </Typography>
               </Stack>
+            </CardContent>
+          </Box>
+        )}
+        {howToIdentifyImpactedPeople && (
+          <Box>
+            <CardHeader
+              avatar={
+                <Icon>
+                  <Place />
+                </Icon>
+              }
+              title={"¿A quiénes ayudó?"}
+            />
+            <CardContent>
+              <Typography>{howToIdentifyImpactedPeople}</Typography>
             </CardContent>
           </Box>
         )}

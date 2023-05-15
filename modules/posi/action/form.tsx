@@ -76,7 +76,7 @@ const PosiForm = ({
               <Section label="Muéstranos un poco de lo que has hecho">
                 <ImpactMediaInput />
               </Section>
-              <Section label="¿Cuál es el nombre de tu acción?">
+              <Section label="Describe tu acción">
                 <SummaryInput />
               </Section>
               <Section label="¿A quiénes ayudaste?">
