@@ -40,6 +40,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
           gtag('config', 'G-NN708F3V4T');`}
       </Script>
+      <Script id="videojs" src="https://vjs.zencdn.net/8.0.4/video.min.js" />
       <Layout>
         <Component {...pageProps} />
       </Layout>

@@ -84,26 +84,11 @@ const CandidateVideo = ({
         backgroundColor: "#E6E6E6",
       }}
     >
-      <video
-        width="160vh"
-        height="100%"
-        style={{
-          minWidth: "100%",
-          minHeight: "54vw",
-          position: "absolute",
-          left: "50%" /* % of surrounding element */,
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-        ref={videoRef}
-        muted={muted}
-        controls={props.controls}
-        controlsList={props.controlsList}
-        disablePictureInPicture={disablePictureInPicture}
-        loop
-        playsInline={playsInline}
-      >
-        <source src={props.src} type="video/mp4" />
+      <video controls preload="auto" width="640" height="264" data-setup="{}">
+        <source
+          src="http://localhost:9199/v0/b/webapp-dec4b.appspot.com/o/video_transcoding_output%2FIMG_1105-1%2Fmanifest.m3u8?alt=media&token=71afcda7-6a68-4b9a-8ab0-74dba6b21ac8"
+          type="application/x-mpegURL"
+        />
       </video>
     </Box>
   );

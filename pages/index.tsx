@@ -1,4 +1,11 @@
-import { Box, Button, ButtonProps, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  ButtonProps,
+  CircularProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import PageTitle from "../common/components/pageTitle";
 import AuthDialog from "../modules/auth/AuthDialog";
 import { useEffect, useState } from "react";
@@ -10,6 +17,8 @@ import { memberConverter } from "../common/context/weverse";
 import { User } from "firebase/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import Image from "next/image";
+import { ref } from "firebase/storage";
+import { useDownloadURL } from "react-firebase-hooks/storage";
 
 const FrontPageButton = (props: ButtonProps) => {
   return (
@@ -69,6 +78,19 @@ const MakerPortal = ({ appState }: { appState: AppState }) => {
   );
 };
 
+const PrintDownloadUrl = ({ appState }: { appState: AppState }) => {
+  const [url, urlLoading, urlError] = useDownloadURL(
+    ref(appState.storage, "/video_transcoding_output/IMG_1105-1/manifest.m3u8")
+  );
+  return url ? (
+    <Typography>
+      {url} {urlLoading} {urlError?.code}
+    </Typography>
+  ) : (
+    <Typography>Waiting on download link.</Typography>
+  );
+};
+
 const WeVerse = () => {
   const appState = useAppState();
   return (
@@ -120,6 +142,11 @@ const WeVerse = () => {
             <FrontPageButton disabled>Loading...</FrontPageButton>
           )}
         </Stack>
+        {appState ? (
+          <PrintDownloadUrl appState={appState} />
+        ) : (
+          <CircularProgress />
+        )}
       </Stack>
     </Box>
   );
