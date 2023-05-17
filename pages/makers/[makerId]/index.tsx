@@ -36,6 +36,7 @@ import { useAction, useMaker } from "../../../common/context/weverseUtils";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
 import { SocialProof, organizationLabels } from "shared";
 import { Content } from "../../../modules/posi/content";
+import RatingsStack from "../../../common/components/ratings";
 
 const SupportMaker = ({ appState }: { appState: AppState }) => {
   const [maker, makerLoading, makerError] = useCurrentMaker(appState);
@@ -144,6 +145,7 @@ const MakerProfile = ({ appState }: { appState: AppState }) => {
       sx={{ justifyContent: "center", alignItems: "center", pb: 2 }}
     >
       <Typography variant="h1">{maker.name}</Typography>
+      <RatingsStack ratings={maker.ratings} />
       <Avatar src={maker.pic} sx={{ width: 225, height: 225 }} />
       <Typography>
         {maker.type == "individual"

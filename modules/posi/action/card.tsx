@@ -4,15 +4,13 @@ import {
   CardMedia,
   CardContent,
   Typography,
-  Stack,
-  Divider,
-  Rating,
   CardActions,
   Button,
 } from "@mui/material";
 import ShareActionArea from "../../../common/components/shareActionArea";
 import { getPosiPage, getSharePropsForPosi } from "../input/context";
-import { PosiFormData, posiFormData } from "shared";
+import { PosiFormData } from "shared";
+import RatingsStack from "../../../common/components/ratings";
 
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
   return (
@@ -38,20 +36,7 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
           >
             {posiData.summary}
           </Typography>
-          <Stack
-            direction={"row"}
-            spacing={2}
-            divider={<Divider orientation="vertical" flexItem />}
-          >
-            <Stack direction={"row"}>
-              <Typography ml={1} mr={2}>
-                💥
-              </Typography>
-              <Typography color={"grey"}>Impacto:</Typography>
-              <Typography ml={2}>0</Typography>
-            </Stack>
-            <Rating value={null} readOnly />
-          </Stack>
+          <RatingsStack ratings={posiData.ratings} />
         </CardContent>
       </CardActionArea>
       <CardActions>

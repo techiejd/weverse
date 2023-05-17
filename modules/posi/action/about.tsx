@@ -16,6 +16,7 @@ import {
 import Media from "./../media";
 import MakerCard from "../../makers/MakerCard";
 import { PosiFormData } from "shared";
+import RatingsStack from "../../../common/components/ratings";
 
 const AboutContent = ({
   summary,
@@ -24,18 +25,20 @@ const AboutContent = ({
   howToIdentifyImpactedPeople,
   makerId,
   id,
+  ratings,
 }: PosiFormData) => {
   // TODO(techiejd): Look into why it's happening.
   return summary && makerId && media ? (
     <Box>
-      <Box sx={{ boxShadow: 1 }} padding={1}>
+      <Box sx={{ boxShadow: 1 }} padding={2}>
         <Typography
           variant="h1"
           fontSize={35}
           sx={{ textAlign: "justify", textJustify: "inter-word" }}
         >
           {summary}
-        </Typography>{" "}
+        </Typography>
+        <RatingsStack ratings={ratings} />
       </Box>
       <Stack divider={<Divider flexItem />} spacing={1} m={1.5}>
         <Box>

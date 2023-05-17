@@ -43,6 +43,7 @@ export declare const ratings: z.ZodObject<{
     sum?: number;
     count?: number;
 }>;
+export type Ratings = z.infer<typeof ratings>;
 export declare const maker: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
     ownerId: z.ZodString;
