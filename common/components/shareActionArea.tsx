@@ -1,6 +1,6 @@
 import { ReactNode, useRef } from "react";
 import { RWebShare } from "react-web-share";
-import { useHostname } from "../context/context";
+import useHostname from "../utils/useHostname";
 
 export type ShareProps = {
   title: string;

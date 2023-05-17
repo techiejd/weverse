@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
-import { HowToSupport } from "../context/weverse";
 import ShareActionArea from "./shareActionArea";
+import { HowToSupport } from "shared";
 
 const SolicitDialog = ({
   open,

@@ -6,10 +6,10 @@ import { AuthAction } from "../modules/auth/AuthDialog/context";
 import { AppState, useAppState } from "../common/context/appState";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { doc } from "firebase/firestore";
-import { memberConverter } from "../common/context/weverse";
 import { User } from "firebase/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import Image from "next/image";
+import { memberConverter } from "../common/utils/firebase";
 
 const FrontPageButton = (props: ButtonProps) => {
   return (

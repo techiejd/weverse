@@ -1,9 +1,9 @@
 import { Box, Typography, CircularProgress, Grid } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { PosiFormData } from "./input/context";
 import { CollectionReference } from "firebase/firestore";
 import ImpactCard from "./action/card";
+import { PosiFormData } from "shared";
 
 const ImpactsList = ({
   impactsQuery,

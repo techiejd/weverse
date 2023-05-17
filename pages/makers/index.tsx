@@ -13,11 +13,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import MakerCard from "../../modules/makers/MakerCard";
-import {
-  Maker,
-  makerConverter,
-  memberConverter,
-} from "../../common/context/weverse";
 import PageTitle from "../../common/components/pageTitle";
 import { Edit, Pending, PlusOne, Share, Visibility } from "@mui/icons-material";
 import AuthDialog from "../../modules/auth/AuthDialog";
@@ -26,6 +21,8 @@ import { User } from "firebase/auth";
 import { doc } from "firebase/firestore";
 import LoadingFab from "../../common/components/loadingFab";
 import SharingSpeedDialAction from "../../modules/makers/sharingSpeedDialAction";
+import { Maker } from "shared";
+import { makerConverter, memberConverter } from "../../common/utils/firebase";
 
 const makerFab = (maker: Maker) => {
   const actions = [
@@ -117,7 +114,7 @@ const MyMakerSpeedDial = ({
   const [member, memberLoading, memberError] = useDocumentData(memberDocRef);
 
   return member ? (
-    <MyMakerSpeedDialContent makerId={member.makerId} />
+    <MyMakerSpeedDialContent makerId={member!.makerId!} />
   ) : (
     <LoadingFab />
   );

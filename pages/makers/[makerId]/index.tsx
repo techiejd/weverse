@@ -15,12 +15,6 @@ import {
   Typography,
 } from "@mui/material";
 import { AppState, useAppState } from "../../../common/context/appState";
-import { posiFormData } from "../../../modules/posi/input/context";
-import {
-  SocialProof,
-  organizationLabels,
-  socialProof,
-} from "../../../common/context/weverse";
 import LoadingFab from "../../../common/components/loadingFab";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
@@ -44,6 +38,12 @@ import ImpactCard from "../../../modules/posi/action/card";
 import Media from "../../../modules/posi/media";
 import { useAction, useMaker } from "../../../common/context/weverseUtils";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
+import {
+  SocialProof,
+  organizationLabels,
+  posiFormData,
+  socialProof,
+} from "shared";
 
 const SupportMaker = ({ appState }: { appState: AppState }) => {
   const [maker, makerLoading, makerError] = useCurrentMaker(appState);
@@ -289,7 +289,7 @@ const MakerContent = ({ appState }: { appState: AppState }) => {
   useEffect(() => {
     setContent(
       [...actionsContent, ...socialProofsContent].sort(
-        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+        (a, b) => b.createdAt!.getTime() - a.createdAt!.getTime()
       )
     );
   }, [actionsContent, socialProofsContent, setContent]);

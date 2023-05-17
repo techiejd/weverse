@@ -11,15 +11,12 @@ import { addDoc, collection } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import LogInPrompt from "../../../../../common/components/logInPrompt";
 import { AppState, useAppState } from "../../../../../common/context/appState";
-import {
-  socialProof,
-  socialProofConverter,
-} from "../../../../../common/context/weverse";
 import { useMyMaker } from "../../../../../common/context/weverseUtils";
 import { useCurrentMaker } from "../../../../../modules/makers/context";
 import { FileInput } from "../../../../../modules/posi/input";
 import { useRouter } from "next/router";
-import { Media } from "../../../../../common/context/context";
+import { Media, socialProof } from "shared";
+import { socialProofConverter } from "../../../../../common/utils/firebase";
 
 //TODO(techiejd): WET -> DRY
 
@@ -100,7 +97,7 @@ const UploadForm = ({ appState }: { appState: AppState }) => {
         >
           <Typography variant="h1">Queremos escuchar de ¡tí!</Typography>
           {appState ? (
-            <FormTitle makerName={maker.name} makerId={maker.id!} />
+            <FormTitle makerName={maker!.name!} makerId={maker.id!} />
           ) : (
             <CircularProgress />
           )}

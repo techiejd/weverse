@@ -11,20 +11,17 @@ import {
   Button,
 } from "@mui/material";
 import ShareActionArea from "../../../common/components/shareActionArea";
-import {
-  PosiFormData,
-  getPosiPage,
-  getSharePropsForPosi,
-} from "../input/context";
+import { getPosiPage, getSharePropsForPosi } from "../input/context";
+import { PosiFormData, posiFormData } from "shared";
 
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
   return (
     <Card sx={{ width: "100%" }}>
       <CardActionArea href={`/posi/${posiData.id}/action`}>
         <CardMedia
-          component={posiData.media.type}
+          component={posiData!.media!.type!}
           sx={{ height: 270, objectFit: "cover" }}
-          image={posiData.media.url}
+          image={posiData!.media!.url}
           autoPlay
           muted
           loop
@@ -65,7 +62,12 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
         >
           Conoce más
         </Button>
-        <ShareActionArea shareProps={getSharePropsForPosi(posiData)}>
+        <ShareActionArea
+          shareProps={getSharePropsForPosi({
+            summary: posiData.summary!,
+            id: posiData.id,
+          })}
+        >
           <Button size="small">Comparte</Button>
         </ShareActionArea>
       </CardActions>

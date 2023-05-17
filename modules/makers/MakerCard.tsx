@@ -13,7 +13,7 @@ import {
 import { doc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useAppState, AppState } from "../../common/context/appState";
-import { makerConverter } from "../../common/context/weverse";
+import { makerConverter } from "../../common/utils/firebase";
 
 const MakerCard = ({ makerId }: { makerId: string }) => {
   const appState = useAppState();

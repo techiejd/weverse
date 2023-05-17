@@ -7,7 +7,6 @@ import {
   Stack,
 } from "@mui/material";
 import ImpactPage, { PageTypes } from "../../../../modules/posi/impactPage";
-import { SocialProof } from "../../../../common/context/weverse";
 import { AppState, useAppState } from "../../../../common/context/appState";
 import { useMaker } from "../../../../common/context/weverseUtils";
 import {
@@ -19,6 +18,7 @@ import Media from "../../../../modules/posi/media";
 import Support from "../../../../common/components/support";
 import { getSharePropsForPosi } from "../../../../modules/posi/input/context";
 import LoadingFab from "../../../../common/components/loadingFab";
+import { SocialProof } from "shared";
 
 const SocialProofCard = ({ socialProof }: { socialProof: SocialProof }) => {
   const appState = useAppState();
@@ -80,7 +80,7 @@ const SupportImpact = ({ appState }: { appState: AppState }) => {
   return posi && maker ? (
     <Support
       howToSupport={maker.howToSupport ? maker.howToSupport : {}}
-      shareProps={getSharePropsForPosi(posi)}
+      shareProps={getSharePropsForPosi({ summary: posi.summary!, id: posi.id })}
       addSocialProofPath={`/posi/${posi.id}/impact/upload`}
     />
   ) : (

@@ -5,19 +5,18 @@ import { useEffect, useState } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import Section from "../../../common/components/section";
 import { AppState } from "../../../common/context/appState";
-import { memberConverter } from "../../../common/context/weverse";
 import { CitySearchInput } from "../input";
 import SummaryInput from "../input/SummaryInput";
 import {
   useFormData,
-  PosiFormData,
   WorkingCopyPosiFormData,
-  posiFormData,
   PosiFormContext,
   PosiFormDispatchContext,
 } from "../input/context";
 import ImpactedPersonsInput from "../input/impactedPersonsInput";
 import ImpactMediaInput from "../input/impactMediaInput";
+import { memberConverter } from "../../../common/utils/firebase";
+import { PosiFormData, posiFormData } from "shared";
 
 const GetMaker = ({ appState, user }: { appState: AppState; user: User }) => {
   const [formData, setFormData] = useFormData();

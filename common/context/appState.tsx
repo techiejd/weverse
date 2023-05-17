@@ -17,7 +17,6 @@ import {
   useContext,
   useState,
 } from "react";
-import { isDevEnvironment } from "./context";
 
 export type User = {
   phoneNumber: string;
@@ -31,6 +30,8 @@ export type AppState = {
   firestore: Firestore;
   auth: Auth;
 };
+
+const isDevEnvironment = process && process.env.NODE_ENV === "development";
 
 const storage = (() => {
   const storage = getStorage(app);

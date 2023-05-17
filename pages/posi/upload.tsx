@@ -1,14 +1,12 @@
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
-import {
-  PosiFormData,
-  posiFormDataConverter,
-} from "../../modules/posi/input/context";
 import { AppState, useAppState } from "../../common/context/appState";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import PosiForm from "../../modules/posi/action/form";
 import LogInPrompt from "../../common/components/logInPrompt";
+import { posiFormDataConverter } from "../../common/utils/firebase";
+import { PosiFormData } from "shared";
 
 const Upload = () => {
   const appState = useAppState();

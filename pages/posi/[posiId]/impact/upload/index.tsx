@@ -13,15 +13,14 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import LogInPrompt from "../../../../../common/components/logInPrompt";
 import { AppState, useAppState } from "../../../../../common/context/appState";
-import {
-  makerConverter,
-  socialProof,
-  socialProofConverter,
-} from "../../../../../common/context/weverse";
 import { useMyMaker } from "../../../../../common/context/weverseUtils";
 import { FileInput } from "../../../../../modules/posi/input";
-import { posiFormDataConverter } from "../../../../../modules/posi/input/context";
-import { Media } from "../../../../../common/context/context";
+import { Media, socialProof } from "shared";
+import {
+  makerConverter,
+  posiFormDataConverter,
+  socialProofConverter,
+} from "../../../../../common/utils/firebase";
 
 const FormTitle = ({
   actionTitle,
@@ -128,8 +127,8 @@ const UploadForm = ({
           {appState ? (
             <FormTitle
               actionId={String(action.id)}
-              actionTitle={action.summary}
-              makerId={action.makerId}
+              actionTitle={action.summary!}
+              makerId={action.makerId!}
               appState={appState}
             />
           ) : (

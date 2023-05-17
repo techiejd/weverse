@@ -17,14 +17,14 @@ import {
   useState,
 } from "react";
 import { FileInput } from "../../posi/input";
+import Section from "../../../common/components/section";
 import {
   Maker,
   OrganizationType,
-  organizationLabels,
   organizationType,
-} from "../../../common/context/weverse";
-import Section from "../../../common/components/section";
-import { Media } from "../../../common/context/context";
+  organizationLabels,
+  Media,
+} from "shared";
 
 const OrganizationTypeInput = ({
   val,

@@ -1,31 +1,15 @@
-import { initializeApp } from 'firebase/app';
-import {
-  FirestoreDataConverter,
-  WithFieldValue,
-  DocumentData,
-  serverTimestamp,
-  QueryDocumentSnapshot,
-} from "firebase/firestore";
-import { Maker, maker, SocialProof, socialProof, Member, member, PosiFormData, posiFormData } from '../../functions/shared';
+import {FirestoreDataConverter, WithFieldValue,
+  DocumentData, QueryDocumentSnapshot} from "firebase-admin/firestore";
+import {Maker, maker, SocialProof,
+  socialProof, Member, member,
+  PosiFormData, posiFormData} from "shared";
 
-export const creds = {
-  apiKey: String(process.env.NEXT_PUBLIC_REACT_APP_API_KEY),
-  authDomain: String(process.env.NEXT_PUBLIC_REACT_APP_AUTH_DOMAIN),
-  projectId: String(process.env.NEXT_PUBLIC_REACT_APP_PROJECT_ID),
-  storageBucket: String(process.env.NEXT_PUBLIC_REACT_APP_STORAGE_BUCKET),
-  messagingSenderId: String(process.env.NEXT_PUBLIC_REACT_APP_MESSAGING_SENDER_ID),
-  appId: String(process.env.NEXT_PUBLIC_REACT_APP_ID),
-  measurementId: String(process.env.NEXT_PUBLIC_REACT_APP_MEASUREMENT_ID),
-};
-
-export const app = initializeApp(creds);
 
 export const makerConverter: FirestoreDataConverter<Maker> = {
   toFirestore(maker: WithFieldValue<Maker>): DocumentData {
     const {id, ...others} = maker;
     return {
       ...others,
-      createdAt: maker.createdAt ? maker.createdAt : serverTimestamp(),
     };
   },
   fromFirestore(snapshot: QueryDocumentSnapshot): Maker {
@@ -44,9 +28,6 @@ export const socialProofConverter: FirestoreDataConverter<SocialProof> = {
     const {id, ...others} = socialProof;
     return {
       ...others,
-      createdAt: socialProof.createdAt ?
-        socialProof.createdAt :
-        serverTimestamp(),
     };
   },
   fromFirestore: (snapshot: QueryDocumentSnapshot): SocialProof => {
@@ -65,7 +46,6 @@ export const memberConverter: FirestoreDataConverter<Member> = {
     const {id, ...others} = member;
     return {
       ...others,
-      createdAt: member.createdAt ? member.createdAt : serverTimestamp(),
     };
   },
   fromFirestore(snapshot: QueryDocumentSnapshot): Member {
@@ -84,9 +64,6 @@ export const posiFormDataConverter: FirestoreDataConverter<PosiFormData> = {
     const {id, ...others} = posiFormData;
     return {
       ...others,
-      createdAt: posiFormData.createdAt ?
-        posiFormData.createdAt :
-        serverTimestamp(),
     };
   },
   fromFirestore: (snapshot: QueryDocumentSnapshot): PosiFormData => {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import FileInput from "./fileInput";
 import { useFormData } from "./context";
 import { Box, Typography } from "@mui/material";
-import { Media } from "../../../common/context/context";
+import { Media } from "shared";
 
 const ImpactMediaInput = () => {
   const [formData, setFormData] = useFormData();

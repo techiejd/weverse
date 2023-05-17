@@ -15,7 +15,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
-import { Media } from "../../../common/context/context";
+import { Media } from "shared";
 
 /** TODO(techiejd): Log errors and state in our servers */
 
@@ -121,7 +121,7 @@ const FileInput = ({
             height: 200,
             width: 200,
           }}
-          component={initialMedia.type}
+          component={initialMedia!.type!}
           image={initialMedia.url}
         />
       )}

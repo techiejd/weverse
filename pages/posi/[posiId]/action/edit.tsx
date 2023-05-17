@@ -5,12 +5,9 @@ import { identity, pickBy } from "lodash";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { doc, setDoc } from "firebase/firestore";
 import { useAppState, AppState } from "../../../../common/context/appState";
-import {
-  posiFormDataConverter,
-  PosiFormData,
-  posiFormData,
-} from "../../../../modules/posi/input/context";
 import PosiForm from "../../../../modules/posi/action/form";
+import { posiFormDataConverter } from "../../../../common/utils/firebase";
+import { PosiFormData, posiFormData } from "shared";
 
 const Edit = () => {
   const appState = useAppState();

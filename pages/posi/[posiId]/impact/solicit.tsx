@@ -3,10 +3,12 @@ import ShareActionArea from "../../../../common/components/shareActionArea";
 import { Hearing } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { doc } from "firebase/firestore";
-import { posiFormDataConverter } from "../../../../modules/posi/input/context";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { AppState, useAppState } from "../../../../common/context/appState";
-import { makerConverter } from "../../../../common/context/weverse";
+import {
+  makerConverter,
+  posiFormDataConverter,
+} from "../../../../common/utils/firebase";
 
 const Solicit = () => {
   const router = useRouter();
@@ -40,7 +42,7 @@ const Solicit = () => {
         spacing={2}
         sx={{ justifyContent: "center", alignItems: "center", p: 2 }}
       >
-        <PromptMaker makerId={posi.makerId} />
+        <PromptMaker makerId={posi.makerId!} />
         {posi.howToIdentifyImpactedPeople ? (
           <Typography variant="h2">
             Escuchemos a los siguientes: {posi.howToIdentifyImpactedPeople}

@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import { AppState } from "../../common/context/appState";
 import { collection, query, where } from "firebase/firestore";
-import { socialProofConverter } from "../../common/context/weverse";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useAction } from "../../common/context/weverseUtils";
+import { socialProofConverter } from "../../common/utils/firebase";
 
 export const useCurrentPosiId = () => {
   //TODO(techiejd): Go through codebase and replace with this.

@@ -1,5 +1,5 @@
 import { LinkProps, PaletteMode } from "@mui/material";
-import { LinkBehavior } from "../context/context";
+import LinkBehavior from "../utils/linkBehavior";
 
 const darkPalette = {
   mode: "dark" as PaletteMode,

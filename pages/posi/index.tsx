@@ -1,13 +1,11 @@
 import { Box, CircularProgress, Fab, Typography } from "@mui/material";
-import {
-  PosiFormData,
-  posiFormDataConverter,
-} from "../../modules/posi/input/context";
 import { collection, CollectionReference } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import { PlusOne } from "@mui/icons-material";
 import ImpactsList from "../../modules/posi/impactsList";
 import PageTitle from "../../common/components/pageTitle";
+import { PosiFormData } from "shared";
+import { posiFormDataConverter } from "../../common/utils/firebase";
 
 const Index = () => {
   const appState = useAppState();

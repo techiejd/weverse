@@ -14,8 +14,8 @@ import {
   CardContent,
 } from "@mui/material";
 import Media from "./../media";
-import { PosiFormData } from "../input/context";
 import MakerCard from "../../makers/MakerCard";
+import { PosiFormData } from "shared";
 
 const AboutContent = ({
   summary,
@@ -25,7 +25,8 @@ const AboutContent = ({
   makerId,
   id,
 }: PosiFormData) => {
-  return (
+  // TODO(techiejd): Look into why it's happening.
+  return summary && makerId && media ? (
     <Box>
       <Box sx={{ boxShadow: 1 }} padding={1}>
         <Typography
@@ -72,11 +73,11 @@ const AboutContent = ({
                   controlsList:
                     "play volume fullscreen nodownload noplaybackrate notimeline",
                   disablePictureInPicture: true,
-                  src: media.url,
+                  src: media.url!,
                 }}
               />
             ) : (
-              <Media image={{ src: media.url }} />
+              <Media image={{ src: media.url! }} />
             )}
           </Box>
         </Box>
@@ -94,10 +95,10 @@ const AboutContent = ({
             <CardContent>
               <Stack>
                 <Typography variant="h3">
-                  {location.structuredFormatting.mainText}
+                  {location.structuredFormatting!.mainText}
                 </Typography>
                 <Typography fontSize={10}>
-                  {location.structuredFormatting.secondaryText}
+                  {location.structuredFormatting!.secondaryText}
                 </Typography>
               </Stack>
             </CardContent>
@@ -121,6 +122,8 @@ const AboutContent = ({
         <MakerCard makerId={makerId} />
       </Stack>
     </Box>
+  ) : (
+    <></>
   );
 };
 

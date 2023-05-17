@@ -19,20 +19,19 @@ import { doc, DocumentReference } from "firebase/firestore";
 import LoadingFab from "../../../../common/components/loadingFab";
 import { ShareProps } from "../../../../common/components/shareActionArea";
 import { AppState, useAppState } from "../../../../common/context/appState";
-import { makerConverter } from "../../../../common/context/weverse";
 import ImpactPage, { PageTypes } from "../../../../modules/posi/impactPage";
-import {
-  posiFormDataConverter,
-  PosiFormData,
-  getSharePropsForPosi,
-} from "../../../../modules/posi/input/context";
 import Support from "../../../../common/components/support";
 import AboutContent from "../../../../modules/posi/action/about";
 import { useCurrentPosiId } from "../../../../modules/posi/context";
-import SharingSpeedDialAction from "../../../../modules/makers/sharingSpeedDialAction";
 import { useMaker } from "../../../../common/context/weverseUtils";
 import SolicitDialog from "../../../../common/components/solicitHelpDialog";
 import { useState } from "react";
+import { PosiFormData } from "shared";
+import {
+  makerConverter,
+  posiFormDataConverter,
+} from "../../../../common/utils/firebase";
+import { getSharePropsForPosi } from "../../../../modules/posi/input/context";
 
 const SupportButton = ({
   shareProps,
@@ -170,6 +169,8 @@ const Action = () => {
       );
     };
 
+    console.log(posiId);
+    console.log(posiData);
     return posiId ? (
       <Box>
         {error && (
@@ -183,14 +184,17 @@ const Action = () => {
           <Box>
             <AboutContent {...posiData} />
             <SupportButton
-              shareProps={getSharePropsForPosi(posiData)}
-              makerId={posiData.makerId}
+              shareProps={getSharePropsForPosi({
+                summary: posiData!.summary!,
+                id: posiData.id,
+              })}
+              makerId={posiData!.makerId!}
               posiId={posiId}
             />
             {appState && (
               <AdminButton
                 posiId={String(posiData.id)}
-                makerId={posiData.makerId}
+                makerId={posiData!.makerId!}
                 appState={appState}
               />
             )}

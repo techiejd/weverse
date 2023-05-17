@@ -1,9 +1,12 @@
 import { useAuthState } from "react-firebase-hooks/auth";
-import { AppState, useAppState } from "./appState";
+import { AppState } from "./appState";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { doc } from "firebase/firestore";
-import { makerConverter, memberConverter } from "./weverse";
-import { posiFormDataConverter } from "../../modules/posi/input/context";
+import {
+  memberConverter,
+  makerConverter,
+  posiFormDataConverter,
+} from "../utils/firebase";
 
 export const useMyMaker = (appState: AppState) => {
   //TODO(techiejd): Go through codebase and replace with this.
@@ -15,9 +18,8 @@ export const useMyMaker = (appState: AppState) => {
         )
       : undefined
   );
-
   return useDocumentData(
-    member
+    member && member.makerId
       ? doc(appState.firestore, "makers", member.makerId).withConverter(
           makerConverter
         )

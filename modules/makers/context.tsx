@@ -3,8 +3,10 @@ import { AppState } from "../../common/context/appState";
 import { useMaker } from "../../common/context/weverseUtils";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { query, collection, where } from "firebase/firestore";
-import { posiFormDataConverter } from "../posi/input/context";
-import { socialProofConverter } from "../../common/context/weverse";
+import {
+  posiFormDataConverter,
+  socialProofConverter,
+} from "../../common/utils/firebase";
 
 export const useCurrentMaker = (appState: AppState) => {
   const router = useRouter();

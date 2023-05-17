@@ -10,7 +10,6 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -20,8 +19,8 @@ import { useState } from "react";
 import { AccountCircle, Home, Login, PlusOne } from "@mui/icons-material";
 import { AppState, useAppState } from "../context/appState";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
-import { LinkBehavior } from "../context/context";
 import Image from "next/image";
+import LinkBehavior from "../utils/linkBehavior";
 
 export const MenuComponent = (props: BoxProps) => {
   const appState = useAppState();

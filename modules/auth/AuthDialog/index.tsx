@@ -26,11 +26,11 @@ import {
   prompts,
 } from "./context";
 import { AppState, useAppState } from "../../../common/context/appState";
+import { maker } from "shared";
 import {
-  maker,
   makerConverter,
   memberConverter,
-} from "../../../common/context/weverse";
+} from "../../../common/utils/firebase";
 
 const TabControl = ({
   appState,
