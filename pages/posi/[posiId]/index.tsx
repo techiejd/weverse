@@ -1,11 +1,11 @@
-import { useRouter } from "next/router";
 import {
   Box,
   CircularProgress,
-  Fab,
+  Grid,
   Link,
   SpeedDial,
   SpeedDialAction,
+  Stack,
   Typography,
 } from "@mui/material";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -15,23 +15,23 @@ import {
   Edit,
   Support as SupportIcon,
 } from "@mui/icons-material";
-import { doc, DocumentReference } from "firebase/firestore";
-import LoadingFab from "../../../../common/components/loadingFab";
-import { ShareProps } from "../../../../common/components/shareActionArea";
-import { AppState, useAppState } from "../../../../common/context/appState";
-import ImpactPage, { PageTypes } from "../../../../modules/posi/impactPage";
-import Support from "../../../../common/components/support";
-import AboutContent from "../../../../modules/posi/action/about";
-import { useCurrentPosiId } from "../../../../modules/posi/context";
-import { useMaker } from "../../../../common/context/weverseUtils";
-import SolicitDialog from "../../../../common/components/solicitHelpDialog";
 import { useState } from "react";
-import { PosiFormData } from "shared";
+import { doc } from "firebase/firestore";
+import LoadingFab from "../../../common/components/loadingFab";
+import { ShareProps } from "../../../common/components/shareActionArea";
+import SolicitDialog from "../../../common/components/solicitHelpDialog";
+import { AppState, useAppState } from "../../../common/context/appState";
+import { useMaker } from "../../../common/context/weverseUtils";
+import { makerConverter } from "../../../common/utils/firebase";
+import AboutContent from "../../../modules/posi/action/about";
 import {
-  makerConverter,
-  posiFormDataConverter,
-} from "../../../../common/utils/firebase";
-import { getSharePropsForPosi } from "../../../../modules/posi/input/context";
+  useCurrentPosi,
+  useCurrentPosiId,
+  useCurrentSocialProofs,
+} from "../../../modules/posi/context";
+import { getSharePropsForPosi } from "../../../modules/posi/input/context";
+import Support from "../../../common/components/support";
+import SocialProofCard from "../../../modules/posi/socialProofCard";
 
 const SupportButton = ({
   shareProps,
@@ -89,7 +89,7 @@ const AdminButton = ({
             setOpen={setSolicitDialogOpen}
             howToSupport={maker.howToSupport ? maker.howToSupport : {}}
             solicitOpinionPath={`/posi/${posiId}/impact/upload`}
-            pathUnderSupport={`/posi/${posiId}/action`}
+            pathUnderSupport={`/posi/${posiId}`}
             editMakerPath={`/makers/${maker.id}/edit`}
           />
           <SpeedDial
@@ -142,23 +142,14 @@ const AdminButton = ({
   );
 };
 
-const Action = () => {
+const Index = () => {
   const appState = useAppState();
   const posiId = useCurrentPosiId();
 
-  const q =
-    appState && posiId
-      ? doc(appState.firestore, "impacts", String(posiId)).withConverter(
-          posiFormDataConverter
-        )
-      : undefined;
-
-  const QueriedAboutContent = ({
-    posiDocRef,
-  }: {
-    posiDocRef: DocumentReference<PosiFormData>;
-  }) => {
-    const [posiData, loading, error] = useDocumentData(posiDocRef);
+  const IndexContent = ({ appState }: { appState: AppState }) => {
+    const [posiData, loading, error] = useCurrentPosi(appState);
+    const [socialProofs, socialProofsLoading, socialProofsError] =
+      useCurrentSocialProofs(appState);
 
     const Loading = () => {
       return (
@@ -183,6 +174,34 @@ const Action = () => {
         {posiData && (
           <Box>
             <AboutContent {...posiData} />
+            {socialProofs && (
+              <Stack spacing={1} m={1.5}>
+                <Typography variant="h3">Testimonios</Typography>
+                {socialProofs.length == 0 && (
+                  <Typography>No hay testimonios.</Typography>
+                )}
+                <Grid container spacing={1}>
+                  {socialProofs.map((socialProof) => {
+                    return (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        xl={2}
+                        key={socialProof.id}
+                      >
+                        <SocialProofCard
+                          key={socialProof.id}
+                          socialProof={socialProof}
+                        />
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </Stack>
+            )}
             <SupportButton
               shareProps={getSharePropsForPosi({
                 summary: posiData!.summary!,
@@ -205,11 +224,7 @@ const Action = () => {
       <CircularProgress />
     );
   };
-  return (
-    <ImpactPage type={PageTypes.action} id={String(posiId)}>
-      {q ? <QueriedAboutContent posiDocRef={q} /> : <CircularProgress />}
-    </ImpactPage>
-  );
+  return appState ? <IndexContent appState={appState} /> : <CircularProgress />;
 };
 
-export default Action;
+export default Index;

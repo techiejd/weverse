@@ -17,7 +17,7 @@ import { PosiFormData, posiFormData } from "shared";
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
   return (
     <Card sx={{ width: "100%" }}>
-      <CardActionArea href={`/posi/${posiData.id}/action`}>
+      <CardActionArea href={`/posi/${posiData.id}`}>
         <CardMedia
           component={posiData!.media!.type!}
           sx={{ height: 270, objectFit: "cover" }}

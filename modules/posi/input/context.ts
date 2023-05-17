@@ -22,7 +22,7 @@ export const useFormData = (): [
 };
 
 // TODO(techiejd): Look into making this string instead of | undefined.
-export const getPosiPage = (id: string | undefined) => `/posi/${id}/action`;
+export const getPosiPage = (id: string | undefined) => `/posi/${id}`;
 
 export const getSharePropsForPosi = (posiData: {
   summary: string;

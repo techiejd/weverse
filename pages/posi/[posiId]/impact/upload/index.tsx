@@ -42,7 +42,7 @@ const FormTitle = ({
       <Link href={`/makers/${makerId}`}>{`${maker?.name}`}</Link>
       {` pide que des tu opinión sobre `}
       <Link
-        href={`/posi/${actionId}/action`}
+        href={`/posi/${actionId}`}
       >{`la acción social: ${actionTitle}`}</Link>
     </Typography>
   );

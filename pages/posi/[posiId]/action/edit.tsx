@@ -27,7 +27,7 @@ const Edit = () => {
         const cleanedPosi = pickBy(usersPosi, identity);
         const parsedPosi = posiFormData.parse(cleanedPosi);
         await setDoc(posiDocRef, parsedPosi);
-        router.push(`/posi/${posiId}/action`);
+        router.push(`/posi/${posiId}`);
       }
     };
     return (

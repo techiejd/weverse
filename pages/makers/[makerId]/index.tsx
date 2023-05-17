@@ -20,10 +20,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import {
   AdminPanelSettings,
   Edit,
-  Hearing,
   Support as SupportIcon,
-  ConnectWithoutContact,
-  CardGiftcard,
 } from "@mui/icons-material";
 import Support from "../../../common/components/support";
 import {
@@ -32,18 +29,13 @@ import {
   useCurrentMaker,
 } from "../../../modules/makers/context";
 import { useEffect, useState } from "react";
-import { z } from "zod";
 import moment from "moment";
 import ImpactCard from "../../../modules/posi/action/card";
 import Media from "../../../modules/posi/media";
 import { useAction, useMaker } from "../../../common/context/weverseUtils";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
-import {
-  SocialProof,
-  organizationLabels,
-  posiFormData,
-  socialProof,
-} from "shared";
+import { SocialProof, organizationLabels } from "shared";
+import { Content } from "../../../modules/posi/content";
 
 const SupportMaker = ({ appState }: { appState: AppState }) => {
   const [maker, makerLoading, makerError] = useCurrentMaker(appState);
@@ -238,20 +230,6 @@ const SocialProofCard = ({ socialProof }: { socialProof: SocialProof }) => {
     </Card>
   );
 };
-
-const content = z.discriminatedUnion("type", [
-  z.object({
-    type: z.literal("action"),
-    data: posiFormData,
-    createdAt: z.date(),
-  }),
-  z.object({
-    type: z.literal("impact"),
-    data: socialProof,
-    createdAt: z.date(),
-  }),
-]);
-type Content = z.infer<typeof content>;
 
 const MakerContent = ({ appState }: { appState: AppState }) => {
   const [actions, actionsLoading, actionsError] = useCurrentActions(appState);
