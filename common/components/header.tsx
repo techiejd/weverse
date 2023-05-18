@@ -131,7 +131,13 @@ export const Header = () => {
       <Toolbar>
         <MenuComponent />
         <Link sx={{ all: "unset" }} href="/">
-          <Image src="/logo.png" alt="OneWe logo" width={"125"} height={"20"} />
+          <Image
+            src="/logo.png"
+            priority
+            alt="OneWe logo"
+            width={"125"}
+            height={"20"}
+          />
         </Link>
 
         <div style={{ flexGrow: 1 }}></div>

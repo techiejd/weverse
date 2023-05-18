@@ -81,7 +81,13 @@ const WeVerse = () => {
         <PageTitle
           title={
             <>
-              <Image src="/logo.png" alt="OneWe logo" width={250} height={40} />{" "}
+              <Image
+                src="/logo.png"
+                alt="OneWe logo"
+                priority
+                width={250}
+                height={40}
+              />
             </>
           }
         />
