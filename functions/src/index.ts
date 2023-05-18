@@ -1,5 +1,5 @@
 import * as functions from "firebase-functions";
-import {maker} from "shared";
+import {maker} from "../shared";
 import {getFirestore} from "firebase-admin/firestore";
 import {initializeApp} from "firebase-admin/app";
 import {makerConverter, posiFormDataConverter,
@@ -12,8 +12,9 @@ functions.firestore.document("socialProofs/{socialProofId}")
     const sProof = socialProofConverter
       .fromFirestore(snapshot);
     const store = getFirestore();
+    const promises = [];
     if (sProof.forAction) {
-      store.doc(`impacts/${sProof.forAction}`)
+      promises.push(store.doc(`impacts/${sProof.forAction}`)
         .withConverter(posiFormDataConverter)
         .get().then((docSnap) => {
           const action = docSnap.data();
@@ -24,9 +25,9 @@ functions.firestore.document("socialProofs/{socialProofId}")
                 count: action.ratings.count + 1,
               } : {sum: sProof.rating, count: 1},
           });
-        });
+        }));
     }
-    store.doc(`makers/${sProof.forMaker}`)
+    promises.push(store.doc(`makers/${sProof.forMaker}`)
       .withConverter(makerConverter)
       .get().then((docSnap) => {
         const m = maker.parse(docSnap.data());
@@ -37,6 +38,7 @@ functions.firestore.document("socialProofs/{socialProofId}")
               count: m.ratings.count + 1,
             } : {sum: sProof.rating, count: 1},
         });
-      });
+      }));
+    return Promise.all(promises);
   });
 

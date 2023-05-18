@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import ShareActionArea from "../../../common/components/shareActionArea";
 import { getPosiPage, getSharePropsForPosi } from "../input/context";
-import { PosiFormData } from "shared";
+import { PosiFormData } from "../../../functions/shared/src";
 import RatingsStack from "../../../common/components/ratings";
 
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {

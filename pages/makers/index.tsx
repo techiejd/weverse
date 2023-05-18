@@ -21,7 +21,7 @@ import { User } from "firebase/auth";
 import { doc } from "firebase/firestore";
 import LoadingFab from "../../common/components/loadingFab";
 import SharingSpeedDialAction from "../../modules/makers/sharingSpeedDialAction";
-import { Maker } from "shared";
+import { Maker } from "../../functions/shared/src";
 import { makerConverter, memberConverter } from "../../common/utils/firebase";
 
 const makerFab = (maker: Maker) => {

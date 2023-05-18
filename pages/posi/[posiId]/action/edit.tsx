@@ -7,7 +7,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { useAppState, AppState } from "../../../../common/context/appState";
 import PosiForm from "../../../../modules/posi/action/form";
 import { posiFormDataConverter } from "../../../../common/utils/firebase";
-import { PosiFormData, posiFormData } from "shared";
+import { PosiFormData, posiFormData } from "../../../../functions/shared/src";
 
 const Edit = () => {
   const appState = useAppState();

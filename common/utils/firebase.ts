@@ -6,7 +6,7 @@ import {
   serverTimestamp,
   QueryDocumentSnapshot,
 } from "firebase/firestore";
-import { Maker, maker, SocialProof, socialProof, Member, member, PosiFormData, posiFormData } from '../../functions/shared';
+import { Maker, maker, SocialProof, socialProof, Member, member, PosiFormData, posiFormData } from '../../functions/shared/src';
 
 export const creds = {
   apiKey: String(process.env.NEXT_PUBLIC_REACT_APP_API_KEY),

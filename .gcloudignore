@@ -33,7 +33,3 @@ node_modules/
 # Next gets built on the server:
 
 .next/
-
-# Functions are pushed up through firebase deploy
-
-functions/

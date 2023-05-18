@@ -19,6 +19,7 @@ module.exports = {
   },
   ignorePatterns: [
     "/lib/**/*", // Ignore built files.
+    "shared/**/*", // Ignore shared npm module.
   ],
   plugins: [
     "@typescript-eslint",
@@ -27,6 +28,6 @@ module.exports = {
   rules: {
     "quotes": ["error", "double"],
     "import/no-unresolved": 0,
-    "indent": ["error", 2]
+    "indent": ["error", 2],
   },
 };

@@ -1,6 +1,6 @@
 import { createContext, useContext, Dispatch, SetStateAction } from "react";
 import { z } from "zod";
-import { media, posiFormData } from "shared";
+import { media, posiFormData } from "../../../functions/shared/src";
 
 const workingCopyPosiFormData = posiFormData
   .extend({

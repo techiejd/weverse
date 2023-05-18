@@ -1,5 +1,5 @@
 import { Stack, Divider, Typography, Rating } from "@mui/material";
-import { Ratings } from "shared";
+import { Ratings } from "../../functions/shared/src";
 
 const RatingsStack = ({ ratings }: { ratings: Ratings | undefined }) => {
   return (

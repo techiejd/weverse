@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { CollectionReference } from "firebase/firestore";
 import ImpactCard from "./action/card";
-import { PosiFormData } from "shared";
+import { PosiFormData } from "../../functions/shared/src";
 
 const ImpactsList = ({
   impactsQuery,

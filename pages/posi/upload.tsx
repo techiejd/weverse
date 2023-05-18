@@ -6,7 +6,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import PosiForm from "../../modules/posi/action/form";
 import LogInPrompt from "../../common/components/logInPrompt";
 import { posiFormDataConverter } from "../../common/utils/firebase";
-import { PosiFormData } from "shared";
+import { PosiFormData } from "../../functions/shared/src";
 
 const Upload = () => {
   const appState = useAppState();

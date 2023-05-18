@@ -24,7 +24,7 @@ import {
   organizationType,
   organizationLabels,
   Media,
-} from "shared";
+} from "../../../functions/shared/src";
 
 const OrganizationTypeInput = ({
   val,

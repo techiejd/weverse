@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import Media from "./../media";
 import MakerCard from "../../makers/MakerCard";
-import { PosiFormData } from "shared";
+import { PosiFormData } from "../../../functions/shared/src";
 import RatingsStack from "../../../common/components/ratings";
 
 const AboutContent = ({

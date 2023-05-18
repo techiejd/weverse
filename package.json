@@ -19,6 +19,8 @@
     "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.8",
     "firebase": "^9.20.0",
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.4.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "mui-tel-input": "^3.1.1",
@@ -33,7 +35,6 @@
     "react-linkify": "^1.0.0-alpha",
     "react-places-autocomplete": "^7.3.0",
     "react-web-share": "^2.0.2",
-    "shared": "file:functions/shared",
     "sharp": "^0.32.1",
     "uuid": "^9.0.0",
     "zod": "^3.21.4"

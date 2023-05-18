@@ -15,7 +15,7 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { v4 } from "uuid";
-import { Media } from "shared";
+import { Media } from "../../../functions/shared/src";
 
 /** TODO(techiejd): Log errors and state in our servers */
 

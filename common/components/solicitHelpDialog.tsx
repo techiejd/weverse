@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
 import ShareActionArea from "./shareActionArea";
-import { HowToSupport } from "shared";
+import { HowToSupport } from "../../functions/shared/src";
 
 const SolicitDialog = ({
   open,

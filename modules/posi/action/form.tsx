@@ -16,7 +16,7 @@ import {
 import ImpactedPersonsInput from "../input/impactedPersonsInput";
 import ImpactMediaInput from "../input/impactMediaInput";
 import { memberConverter } from "../../../common/utils/firebase";
-import { PosiFormData, posiFormData } from "shared";
+import { PosiFormData, posiFormData } from "../../../functions/shared/src";
 
 const GetMaker = ({ appState, user }: { appState: AppState; user: User }) => {
   const [formData, setFormData] = useFormData();

@@ -26,7 +26,7 @@ import {
   prompts,
 } from "./context";
 import { AppState, useAppState } from "../../../common/context/appState";
-import { maker } from "shared";
+import { maker } from "../../../functions/shared/src";
 import {
   makerConverter,
   memberConverter,

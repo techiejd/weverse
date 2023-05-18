@@ -15,7 +15,7 @@ import { useMyMaker } from "../../../../../common/context/weverseUtils";
 import { useCurrentMaker } from "../../../../../modules/makers/context";
 import { FileInput } from "../../../../../modules/posi/input";
 import { useRouter } from "next/router";
-import { Media, socialProof } from "shared";
+import { Media, socialProof } from "../../../../../functions/shared/src";
 import { socialProofConverter } from "../../../../../common/utils/firebase";
 
 //TODO(techiejd): WET -> DRY

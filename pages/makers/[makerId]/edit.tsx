@@ -9,7 +9,7 @@ import { User } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { pickBy, identity } from "lodash";
 import { makerConverter } from "../../../common/utils/firebase";
-import { Maker, maker as makerSchema } from "shared";
+import { Maker, maker as makerSchema } from "../../../functions/shared/src";
 
 const Edit = () => {
   const appState = useAppState();

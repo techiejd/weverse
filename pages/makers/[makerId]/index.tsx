@@ -34,7 +34,7 @@ import ImpactCard from "../../../modules/posi/action/card";
 import Media from "../../../modules/posi/media";
 import { useAction, useMaker } from "../../../common/context/weverseUtils";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
-import { SocialProof, organizationLabels } from "shared";
+import { SocialProof, organizationLabels } from "../../../functions/shared/src";
 import { Content } from "../../../modules/posi/content";
 import RatingsStack from "../../../common/components/ratings";
 

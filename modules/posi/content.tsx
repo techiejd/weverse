@@ -1,4 +1,4 @@
-import { posiFormData, socialProof } from "shared";
+import { posiFormData, socialProof } from "../../functions/shared/src";
 import { z } from "zod";
 export const content = z.discriminatedUnion("type", [
   z.object({

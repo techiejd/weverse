@@ -24,7 +24,7 @@ import SharingSpeedDialAction from "../../modules/makers/sharingSpeedDialAction"
 import ShareActionArea, { ShareProps } from "./shareActionArea";
 import { useRouter } from "next/router";
 import { z } from "zod";
-import { HowToSupport } from "shared";
+import { HowToSupport } from "../../functions/shared/src";
 
 const supportDialogs = z.enum(["connect", "finance", "generic"]);
 export type SupportDialogs = z.infer<typeof supportDialogs>;

@@ -6,7 +6,7 @@ import {
   Rating,
   Card,
 } from "@mui/material";
-import { SocialProof } from "shared";
+import { SocialProof } from "../../functions/shared/src";
 import { useAppState, AppState } from "../../common/context/appState";
 import { useMaker } from "../../common/context/weverseUtils";
 import Media from "./media";

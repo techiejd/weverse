@@ -2,7 +2,7 @@ import {FirestoreDataConverter, WithFieldValue,
   DocumentData, QueryDocumentSnapshot} from "firebase-admin/firestore";
 import {Maker, maker, SocialProof,
   socialProof, Member, member,
-  PosiFormData, posiFormData} from "shared";
+  PosiFormData, posiFormData} from "../shared";
 
 
 export const makerConverter: FirestoreDataConverter<Maker> = {

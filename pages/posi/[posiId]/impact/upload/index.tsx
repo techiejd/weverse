@@ -15,7 +15,7 @@ import LogInPrompt from "../../../../../common/components/logInPrompt";
 import { AppState, useAppState } from "../../../../../common/context/appState";
 import { useMyMaker } from "../../../../../common/context/weverseUtils";
 import { FileInput } from "../../../../../modules/posi/input";
-import { Media, socialProof } from "shared";
+import { Media, socialProof } from "../../../../../functions/shared/src";
 import {
   makerConverter,
   posiFormDataConverter,
