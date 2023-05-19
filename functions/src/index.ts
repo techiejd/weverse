@@ -5,10 +5,11 @@ import {initializeApp} from "firebase-admin/app";
 import {makerConverter, posiFormDataConverter,
   socialProofConverter} from "./utils";
 
+initializeApp();
+
 export const testimonialAdded =
 functions.firestore.document("socialProofs/{socialProofId}")
   .onCreate((snapshot) =>{
-    initializeApp();
     const sProof = socialProofConverter
       .fromFirestore(snapshot);
     const store = getFirestore();

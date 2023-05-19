@@ -65,6 +65,7 @@ export const socialProof = z.object({
   forMaker: z.string(),
   forAction: z.string().optional(),
   createdAt: z.date().optional(),
+  text: z.string().optional(),
 });
 
 export type SocialProof = z.infer<typeof socialProof>;
