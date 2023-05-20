@@ -4,6 +4,8 @@ import {
   CardGiftcard,
   Handshake,
   Campaign,
+  Add,
+  VolunteerActivism,
 } from "@mui/icons-material";
 import {
   Dialog,
@@ -17,6 +19,9 @@ import {
   SpeedDialAction,
   Link,
   Stack,
+  AppBar,
+  Box,
+  Toolbar,
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import Linkify from "react-linkify";
@@ -24,7 +29,13 @@ import SharingSpeedDialAction from "../../modules/makers/sharingSpeedDialAction"
 import ShareActionArea, { ShareProps } from "./shareActionArea";
 import { useRouter } from "next/router";
 import { z } from "zod";
-import { HowToSupport } from "../../functions/shared/src";
+import { HowToSupport, maker, posiFormData } from "../../functions/shared/src";
+import { AppState } from "../context/appState";
+import { useMaker, useMyMaker } from "../context/weverseUtils";
+import { useCurrentMaker } from "../../modules/makers/context";
+import IconButtonWithLabel from "./iconButtonWithLabel";
+import SolicitDialog from "./solicitHelpDialog";
+import CenterBottomFab from "./centerBottomFab";
 
 const supportDialogs = z.enum(["connect", "finance", "generic"]);
 export type SupportDialogs = z.infer<typeof supportDialogs>;
@@ -40,15 +51,25 @@ const useOpenSupportDialog = () => {
 const SupportDialog = ({
   open,
   setOpen,
-  title,
-  text,
+  inputText,
+  type,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  title: string;
-  text: string;
+  inputText?: string;
+  type: "contact" | "finance";
 }) => {
   const handleClose = () => setOpen(false);
+  const title = !inputText
+    ? "El o la Maker aún no ha terminado su perfil."
+    : type == "contact"
+    ? "El o la Maker dice que busca el siguiente tipo de ayuda y con estos canales de contacto:"
+    : "El o la Maker dice que puede financiarlos de las siguientes maneras:";
+  const text = inputText
+    ? inputText
+    : `¡Gracias por querer ${
+        type == "contact" ? "apoyar" : "contribuir"
+      }! Le dejamos saber al o la Maker tu interes.`;
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>{title}</DialogTitle>
@@ -140,117 +161,92 @@ const GenericSupportDialog = ({
   );
 };
 
-const Support = ({
-  howToSupport,
-  shareProps,
-  addSocialProofPath,
-}: {
-  howToSupport: HowToSupport;
-  shareProps: ShareProps;
-  addSocialProofPath: string;
-}) => {
+const beneficiaryType = z.object({
+  maker: maker,
+  action: posiFormData.optional(),
+});
+type Beneficiary = z.infer<typeof beneficiaryType>;
+const Support = ({ beneficiary }: { beneficiary: Beneficiary }) => {
   const openSupportDialog = useOpenSupportDialog();
+  const genericDialogOpen = openSupportDialog == "generic";
   const [connectDialogOpen, setConnectDialogOpen] = useState(
     openSupportDialog == "connect"
   );
   const [financeDialogOpen, setFinanceDialogOpen] = useState(
     openSupportDialog == "finance"
   );
-  const genericDialogOpen = openSupportDialog == "generic";
 
-  const actions = (() => {
-    const actions = [
-      <SharingSpeedDialAction
-        key={"Compartir"}
-        icon={<Share />}
-        tooltipTitle={"Compartir"}
-        tooltipOpen
-        {...shareProps}
-      />,
-      <SpeedDialAction
-        key="Dar opinión"
-        icon={
-          <Link href={addSocialProofPath} style={{ textDecoration: "none" }}>
-            <Campaign />
-          </Link>
-        }
-        tooltipTitle={
-          <Link href={addSocialProofPath} style={{ textDecoration: "none" }}>
-            Dar opinión
-          </Link>
-        }
-        tooltipOpen
-      />,
-    ];
-    if (howToSupport?.contact) {
-      actions.unshift(
-        <SpeedDialAction
-          key={"Conectar"}
-          icon={<ConnectWithoutContact />}
-          tooltipTitle={"Conectar"}
-          tooltipOpen
-          onClick={() => setConnectDialogOpen(true)}
-        />
-      );
-    }
-    if (howToSupport?.finance) {
-      actions.unshift(
-        <SpeedDialAction
-          key={"Financiar"}
-          icon={<CardGiftcard />}
-          tooltipTitle={"Financiar"}
-          tooltipOpen
-          onClick={() => setFinanceDialogOpen(true)}
-        />
-      );
-    }
-    return actions;
-  })();
+  const addSocialProofPath = beneficiary.action
+    ? `/posi/${beneficiary.action.id}/impact/upload`
+    : `/makers/${beneficiary.maker.id}/impact/upload`;
+
+  const shareProps = beneficiary.action
+    ? {
+        title: "Mira esta acción social tan chévere. ¡Apoyemosla!",
+        text: "Mira esta acción social tan chévere. ¡Apoyemosla!",
+        path: `/posi/${beneficiary.action.id}`,
+      }
+    : {
+        title: "Mira esta Maker tan chévere. ¡Apoyemosla!",
+        text: "Mira esta Maker tan chévere. ¡Apoyemosla!",
+        path: `/makers/${beneficiary.maker.id}`,
+      };
   return (
-    <div>
-      {howToSupport?.finance && (
-        <SupportDialog
-          open={financeDialogOpen}
-          setOpen={setFinanceDialogOpen}
-          title="El o la Maker dice que puede financiarlos de las siguientes maneras:"
-          text={howToSupport!.finance}
-        />
-      )}
-      {howToSupport?.contact && (
-        <SupportDialog
-          open={connectDialogOpen}
-          setOpen={setConnectDialogOpen}
-          title="El o la Maker dice que busca el siguiente tipo de ayuda y con estos canales de contacto:"
-          text={howToSupport!.contact}
-        />
-      )}
+    <AppBar
+      position="fixed"
+      color="primary"
+      sx={{ top: "auto", bottom: 16, borderRadius: 8, boxShadow: 8 }}
+    >
+      <SupportDialog
+        open={financeDialogOpen}
+        setOpen={setFinanceDialogOpen}
+        inputText={beneficiary.maker.howToSupport?.finance}
+        type="finance"
+      />
+      <SupportDialog
+        open={connectDialogOpen}
+        setOpen={setConnectDialogOpen}
+        inputText={beneficiary.maker.howToSupport?.contact}
+        type="contact"
+      />
       <GenericSupportDialog
         open={genericDialogOpen}
         setFinanceDialogOpen={setFinanceDialogOpen}
         setConnectDialogOpen={setConnectDialogOpen}
-        howToSupport={howToSupport}
+        howToSupport={
+          beneficiary.maker.howToSupport ? beneficiary.maker.howToSupport : {}
+        }
         shareProps={shareProps}
         addSocialProofPath={addSocialProofPath}
       />
-      <SpeedDial
-        ariaLabel="Support"
-        sx={{
-          position: "fixed",
-          bottom: 64,
-          right: 16,
-        }}
-        icon={
-          <div>
-            <Handshake />
-            <Typography fontSize={8} mt={-1}>
-              Soportar
-            </Typography>
-          </div>
-        }
-      >
-        {actions}
-      </SpeedDial>
-    </div>
+      <Toolbar>
+        <IconButtonWithLabel href={addSocialProofPath}>
+          <Campaign />
+          <Typography>Testimonio</Typography>
+        </IconButtonWithLabel>
+        <CenterBottomFab
+          color="secondary"
+          aria-label="add"
+          sx={{ width: 70, height: 70 }}
+        >
+          <IconButtonWithLabel onClick={() => setFinanceDialogOpen(true)}>
+            <VolunteerActivism />
+            <Typography fontSize={13}>Contribuir</Typography>
+          </IconButtonWithLabel>
+        </CenterBottomFab>
+        <Box sx={{ flexGrow: 1 }} />
+        <IconButtonWithLabel onClick={() => setConnectDialogOpen(true)}>
+          <Add />
+          <Typography>Apoyar</Typography>
+        </IconButtonWithLabel>
+        <ShareActionArea shareProps={shareProps}>
+          <IconButtonWithLabel>
+            <Share />
+            <Typography>Compartir</Typography>
+          </IconButtonWithLabel>
+        </ShareActionArea>
+      </Toolbar>
+    </AppBar>
   );
 };
 

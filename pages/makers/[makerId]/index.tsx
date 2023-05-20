@@ -12,9 +12,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
-  Fab,
   Grid,
-  IconButton,
   List,
   ListItemButton,
   ListItemIcon,
@@ -23,7 +21,6 @@ import {
   Stack,
   Toolbar,
   Typography,
-  styled,
 } from "@mui/material";
 import { AppState, useAppState } from "../../../common/context/appState";
 import LoadingFab from "../../../common/components/loadingFab";
@@ -65,24 +62,9 @@ import {
 import { Content } from "../../../modules/posi/content";
 import RatingsStack from "../../../common/components/ratings";
 import ShareActionArea from "../../../common/components/shareActionArea";
-
-const SupportMaker = ({ appState }: { appState: AppState }) => {
-  const [maker, makerLoading, makerError] = useCurrentMaker(appState);
-
-  return maker ? (
-    <Support
-      howToSupport={maker.howToSupport ? maker.howToSupport : {}}
-      shareProps={{
-        path: `/makers/${maker.id}`,
-        text: `Echa un vistazo a la página Maker de ${maker.name}`,
-        title: `Echa un vistazo a la página Maker de ${maker.name}`,
-      }}
-      addSocialProofPath={`/makers/${maker.id}/impact/upload`}
-    />
-  ) : (
-    <LoadingFab />
-  );
-};
+import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
+import CenterBottomCircularProgress from "../../../common/components/centerBottomCircularProgress";
+import CenterBottomFab from "../../../common/components/centerBottomFab";
 
 const MakerProfile = ({ appState }: { appState: AppState }) => {
   const [maker, makerLoading, makerError] = useCurrentMaker(appState);
@@ -306,61 +288,12 @@ const VipDialog = ({
   );
 };
 
-const StyledFab = styled(Fab)({
-  position: "absolute",
-  zIndex: 1,
-  top: -30,
-  left: 0,
-  right: 0,
-  margin: "0 auto",
-});
-
-const StyledCircularProgess = styled(CircularProgress)({
-  position: "fixed",
-  zIndex: 1,
-  bottom: 16,
-  left: "50%",
-});
-
 const BottomBar = ({ appState }: { appState: AppState }) => {
   const [maker, makerLoading, makerError] = useCurrentMaker(appState);
   const [myMaker, myMakerLoading, myMakerError] = useMyMaker(appState);
   const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
   const [vipDialogOpen, setVipDialogOpen] = useState(false);
-  const IconButtonWithLabel = ({
-    children,
-    href,
-    onClick,
-  }: {
-    children: ReactNode;
-    href?: string;
-    onClick?: MouseEventHandler<HTMLButtonElement>;
-  }) => {
-    return href ? (
-      <IconButton
-        color="inherit"
-        sx={{ display: "flex", flexDirection: "column" }}
-        href={href}
-      >
-        {children}
-      </IconButton>
-    ) : onClick ? (
-      <IconButton
-        color="inherit"
-        sx={{ display: "flex", flexDirection: "column" }}
-        onClick={onClick}
-      >
-        {children}
-      </IconButton>
-    ) : (
-      <IconButton
-        color="inherit"
-        sx={{ display: "flex", flexDirection: "column" }}
-      >
-        {children}
-      </IconButton>
-    );
-  };
+
   return myMaker && maker ? (
     myMaker.id == maker.id ? (
       <AppBar
@@ -391,12 +324,12 @@ const BottomBar = ({ appState }: { appState: AppState }) => {
             <SupportIcon />
             <Typography>Apoyo</Typography>
           </IconButtonWithLabel>
-          <StyledFab color="secondary" aria-label="add">
+          <CenterBottomFab color="secondary" aria-label="add">
             <IconButtonWithLabel onClick={() => setVipDialogOpen(true)}>
               <Typography fontSize={25}>👑</Typography>
               <Typography fontSize={12}>VIP</Typography>
             </IconButtonWithLabel>
-          </StyledFab>
+          </CenterBottomFab>
           <Box sx={{ flexGrow: 1 }} />
           <ShareActionArea
             shareProps={{
@@ -417,10 +350,10 @@ const BottomBar = ({ appState }: { appState: AppState }) => {
         </Toolbar>
       </AppBar>
     ) : (
-      <></>
+      <Support beneficiary={{ maker }} />
     )
   ) : (
-    <StyledCircularProgess />
+    <CenterBottomCircularProgress />
   );
 };
 
