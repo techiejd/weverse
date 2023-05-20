@@ -57,7 +57,6 @@ const PosiForm = ({
         onSubmit={async (e) => {
           e.preventDefault();
           setUploading(true);
-          console.log(formData);
           const checkedPosiFormData = posiFormData.parse(formData);
           await onSubmit(checkedPosiFormData);
         }}

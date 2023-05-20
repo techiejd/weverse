@@ -160,8 +160,6 @@ const Index = () => {
       );
     };
 
-    console.log(posiId);
-    console.log(posiData);
     return posiId ? (
       <Box>
         {error && (

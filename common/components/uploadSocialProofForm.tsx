@@ -61,14 +61,6 @@ const UploadSocialProofForm = ({
 
           if (myMaker) {
             setUploading(true);
-            console.log({
-              rating: rating,
-              byMaker: myMaker.id,
-              forMaker: forMaker.id,
-              forAction: forAction?.id,
-              videoUrl: media && media != "loading" ? media.url : undefined,
-              text: text != "" ? text : undefined,
-            });
             const socialProofEncoded = socialProof.parse(
               pickBy(
                 {

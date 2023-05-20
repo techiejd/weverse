@@ -29,7 +29,6 @@ const UserPage = () => {
 
     const [myUser, myUserLoading, myUserError] = useAuthState(appState.auth);
     const [signOut, signOutLoading, signOutError] = useSignOut(appState.auth);
-    console.log({ myUser, userId });
 
     return (
       <Stack
