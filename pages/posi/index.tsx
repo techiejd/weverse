@@ -1,4 +1,5 @@
 import {
+  AppBar,
   Box,
   CircularProgress,
   Fab,
@@ -8,8 +9,6 @@ import {
 } from "@mui/material";
 import {
   collection,
-  doc,
-  getDoc,
   getDocs,
   limit,
   orderBy,
@@ -18,7 +17,7 @@ import {
   startAfter,
 } from "firebase/firestore";
 import { AppState, useAppState } from "../../common/context/appState";
-import { PlusOne } from "@mui/icons-material";
+import { Menu, More, PlusOne, Search } from "@mui/icons-material";
 import PageTitle from "../../common/components/pageTitle";
 import { PosiFormData } from "../../functions/shared/src";
 import { posiFormDataConverter } from "../../common/utils/firebase";

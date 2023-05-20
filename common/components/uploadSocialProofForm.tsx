@@ -141,7 +141,7 @@ const UploadSocialProofForm = ({
             acción hasta ahora en tu vida. (500 caracteres)
           </Typography>
           <TextField
-            label="Opinión escrita."
+            label="Testimonio escrita."
             multiline
             rows={4}
             inputProps={{ maxLength: 500 }}

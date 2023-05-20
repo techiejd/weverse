@@ -1,26 +1,38 @@
 import {
+  AppBar,
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
   CardHeader,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
+  Fab,
   Grid,
-  Link,
+  IconButton,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   Rating,
-  SpeedDial,
-  SpeedDialAction,
   Stack,
+  Toolbar,
   Typography,
+  styled,
 } from "@mui/material";
 import { AppState, useAppState } from "../../../common/context/appState";
 import LoadingFab from "../../../common/components/loadingFab";
-import { useAuthState } from "react-firebase-hooks/auth";
 import {
-  AdminPanelSettings,
   Edit,
   Support as SupportIcon,
+  Share,
+  Add,
+  CheckBoxOutlineBlank,
 } from "@mui/icons-material";
 import Support from "../../../common/components/support";
 import {
@@ -28,15 +40,31 @@ import {
   useCurrentImpacts,
   useCurrentMaker,
 } from "../../../modules/makers/context";
-import { useEffect, useState } from "react";
+import {
+  Dispatch,
+  MouseEventHandler,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import moment from "moment";
 import ImpactCard from "../../../modules/posi/action/card";
 import Media from "../../../modules/posi/media";
-import { useAction, useMaker } from "../../../common/context/weverseUtils";
+import {
+  useAction,
+  useMaker,
+  useMyMaker,
+} from "../../../common/context/weverseUtils";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
-import { SocialProof, organizationLabels } from "../../../functions/shared/src";
+import {
+  Maker,
+  SocialProof,
+  organizationLabels,
+} from "../../../functions/shared/src";
 import { Content } from "../../../modules/posi/content";
 import RatingsStack from "../../../common/components/ratings";
+import ShareActionArea from "../../../common/components/shareActionArea";
 
 const SupportMaker = ({ appState }: { appState: AppState }) => {
   const [maker, makerLoading, makerError] = useCurrentMaker(appState);
@@ -53,87 +81,6 @@ const SupportMaker = ({ appState }: { appState: AppState }) => {
     />
   ) : (
     <LoadingFab />
-  );
-};
-
-const AdministerMaker = ({ appState }: { appState: AppState }) => {
-  const [user, userLoading, userError] = useAuthState(appState.auth);
-  const [maker, makerLoading, makerError] = useCurrentMaker(appState);
-  const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
-
-  return (
-    <>
-      {maker && maker.ownerId == user?.uid && (
-        <>
-          <SolicitDialog
-            open={solicitDialogOpen}
-            setOpen={setSolicitDialogOpen}
-            howToSupport={maker.howToSupport ? maker.howToSupport : {}}
-            solicitOpinionPath={`/makers/${maker.id}/impact/upload`}
-            pathUnderSupport={`/makers/${maker.id}`}
-            editMakerPath={`/makers/${maker.id}/edit`}
-          />
-          <SpeedDial
-            ariaLabel="Administer Maker"
-            sx={{
-              position: "fixed",
-              bottom: 64,
-              right: 84,
-            }}
-            icon={
-              <div>
-                <AdminPanelSettings />
-                <Typography fontSize={8} mt={-1}>
-                  Admin
-                </Typography>
-              </div>
-            }
-          >
-            <SpeedDialAction
-              key="Add Action"
-              icon={
-                <Link href={`/posi/upload`} sx={{ textDecoration: "none" }}>
-                  <Typography fontSize={24}>🤸</Typography>
-                </Link>
-              }
-              tooltipTitle={
-                <Link href={`/posi/upload`} style={{ textDecoration: "none" }}>
-                  Agregar Acción
-                </Link>
-              }
-              tooltipOpen
-            />
-            <SpeedDialAction
-              key="Edit Maker"
-              icon={
-                <Link
-                  href={`/makers/${maker.id}/edit`}
-                  sx={{ textDecoration: "none" }}
-                >
-                  <Edit />
-                </Link>
-              }
-              tooltipTitle={
-                <Link
-                  href={`/makers/${maker.id}/edit`}
-                  style={{ textDecoration: "none" }}
-                >
-                  Editar
-                </Link>
-              }
-              tooltipOpen
-            />
-            <SpeedDialAction
-              key="solicit"
-              icon={<SupportIcon />}
-              tooltipTitle="Apoyo"
-              tooltipOpen
-              onClick={() => setSolicitDialogOpen(true)}
-            />
-          </SpeedDial>
-        </>
-      )}
-    </>
   );
 };
 
@@ -297,16 +244,195 @@ const MakerContent = ({ appState }: { appState: AppState }) => {
   );
 };
 
+const VipDialog = ({
+  open,
+  setOpen,
+  setSolicitDialogOpen,
+  myMaker,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  setSolicitDialogOpen: Dispatch<SetStateAction<boolean>>;
+  myMaker: Maker;
+}) => {
+  return (
+    <Dialog open={open}>
+      <DialogTitle>
+        Realiza cada una de las siguientes tareas para ingresar a la sala VIP:
+      </DialogTitle>
+      <DialogContent>
+        <Typography>Haz clic en la tarea para comenzar el proceso:</Typography>
+        <List>
+          <ListItemButton href="/posi/upload">
+            <ListItemIcon>
+              <CheckBoxOutlineBlank />
+            </ListItemIcon>
+            <ListItemText
+              primary="Agregar una acción."
+              secondary="Mostramos cambios en el mundo agregando acciones."
+            />
+          </ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              setOpen(false);
+              setSolicitDialogOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <CheckBoxOutlineBlank />
+            </ListItemIcon>
+            <ListItemText
+              primary="Escuchar a 3 personas impactadas solicitandoles el testimonio y/o opinión."
+              secondary="Involucramos a la comunidad en la discusión."
+            />
+          </ListItemButton>
+          <ListItemButton href={`/makers/${myMaker.id}/edit`}>
+            <ListItemIcon>
+              <CheckBoxOutlineBlank />
+            </ListItemIcon>
+            <ListItemText
+              primary="Configurar tu perfil de Maker."
+              secondary="Todos los campos llenados."
+            />
+          </ListItemButton>
+        </List>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setOpen(false)} autoFocus>
+          Cerrar
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const StyledFab = styled(Fab)({
+  position: "absolute",
+  zIndex: 1,
+  top: -30,
+  left: 0,
+  right: 0,
+  margin: "0 auto",
+});
+
+const StyledCircularProgess = styled(CircularProgress)({
+  position: "fixed",
+  zIndex: 1,
+  bottom: 16,
+  left: "50%",
+});
+
+const BottomBar = ({ appState }: { appState: AppState }) => {
+  const [maker, makerLoading, makerError] = useCurrentMaker(appState);
+  const [myMaker, myMakerLoading, myMakerError] = useMyMaker(appState);
+  const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
+  const [vipDialogOpen, setVipDialogOpen] = useState(false);
+  const IconButtonWithLabel = ({
+    children,
+    href,
+    onClick,
+  }: {
+    children: ReactNode;
+    href?: string;
+    onClick?: MouseEventHandler<HTMLButtonElement>;
+  }) => {
+    return href ? (
+      <IconButton
+        color="inherit"
+        sx={{ display: "flex", flexDirection: "column" }}
+        href={href}
+      >
+        {children}
+      </IconButton>
+    ) : onClick ? (
+      <IconButton
+        color="inherit"
+        sx={{ display: "flex", flexDirection: "column" }}
+        onClick={onClick}
+      >
+        {children}
+      </IconButton>
+    ) : (
+      <IconButton
+        color="inherit"
+        sx={{ display: "flex", flexDirection: "column" }}
+      >
+        {children}
+      </IconButton>
+    );
+  };
+  return myMaker && maker ? (
+    myMaker.id == maker.id ? (
+      <AppBar
+        position="fixed"
+        color="primary"
+        sx={{ top: "auto", bottom: 16, borderRadius: 8, boxShadow: 8 }}
+      >
+        <SolicitDialog
+          open={solicitDialogOpen}
+          setOpen={setSolicitDialogOpen}
+          howToSupport={maker.howToSupport ? maker.howToSupport : {}}
+          solicitOpinionPath={`/makers/${maker.id}/impact/upload`}
+          pathUnderSupport={`/makers/${maker.id}`}
+          editMakerPath={`/makers/${maker.id}/edit`}
+        />
+        <VipDialog
+          open={vipDialogOpen}
+          setOpen={setVipDialogOpen}
+          setSolicitDialogOpen={setSolicitDialogOpen}
+          myMaker={myMaker}
+        />
+        <Toolbar>
+          <IconButtonWithLabel href={`/makers/${maker.id}/edit`}>
+            <Edit />
+            <Typography>Editar</Typography>
+          </IconButtonWithLabel>
+          <IconButtonWithLabel onClick={() => setSolicitDialogOpen(true)}>
+            <SupportIcon />
+            <Typography>Apoyo</Typography>
+          </IconButtonWithLabel>
+          <StyledFab color="secondary" aria-label="add">
+            <IconButtonWithLabel onClick={() => setVipDialogOpen(true)}>
+              <Typography fontSize={25}>👑</Typography>
+              <Typography fontSize={12}>VIP</Typography>
+            </IconButtonWithLabel>
+          </StyledFab>
+          <Box sx={{ flexGrow: 1 }} />
+          <ShareActionArea
+            shareProps={{
+              title: "Por favor, eche un vistazo a mi página de Maker.",
+              text: "Por favor, eche un vistazo a mi página de Maker.",
+              path: `makers/${maker.id}`,
+            }}
+          >
+            <IconButtonWithLabel>
+              <Share />
+              <Typography>Compartir</Typography>
+            </IconButtonWithLabel>
+          </ShareActionArea>
+          <IconButtonWithLabel href={`/posi/upload`}>
+            <Add />
+            <Typography>Acción</Typography>
+          </IconButtonWithLabel>
+        </Toolbar>
+      </AppBar>
+    ) : (
+      <></>
+    )
+  ) : (
+    <StyledCircularProgess />
+  );
+};
+
 const MakerPage = () => {
   const appState = useAppState();
   return appState ? (
-    <Box>
+    <Box mb={12}>
       <Stack p={2} divider={<Divider />}>
         <MakerProfile appState={appState} />
         <MakerContent appState={appState} />
       </Stack>
-      <AdministerMaker appState={appState} />
-      <SupportMaker appState={appState} />
+      <BottomBar appState={appState} />
     </Box>
   ) : (
     <CircularProgress />

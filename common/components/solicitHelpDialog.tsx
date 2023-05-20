@@ -58,7 +58,7 @@ const SolicitDialog = ({
             }}
           >
             <Button variant="outlined" startIcon={<Hearing />}>
-              Solicitar Opinión
+              Solicitar testimonio
             </Button>
           </ShareActionArea>
           {howToSupport.finance && (
