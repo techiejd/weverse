@@ -11,9 +11,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
       <CssBaseline>
         <AppStateProvider>
           <Header />
-          <main>
-            <Box>{children}</Box>
-          </main>
+          <main>{children}</main>
         </AppStateProvider>
       </CssBaseline>
     </ThemeProvider>

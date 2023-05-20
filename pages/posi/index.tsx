@@ -83,7 +83,7 @@ const IndexPage = ({ appState }: { appState: AppState }) => {
       hasMore={hasMore}
       loader={<LinearProgress />}
       dataLength={actions.length}
-      style={{ display: "flex" }}
+      style={{ display: "flex", flexDirection: "column" }}
     >
       <Grid container spacing={1}>
         {actions.map((action) => (
@@ -98,9 +98,22 @@ const IndexPage = ({ appState }: { appState: AppState }) => {
 
 const Index = () => {
   const appState = useAppState();
+  const fullHeightPage = (
+    <style global jsx>{`
+      html,
+      body,
+      main,
+      body > div:first-child,
+      div#__next,
+      div#__next > div {
+        height: 100%;
+      }
+    `}</style>
+  );
 
   return (
     <Box mb={9} /** For the fab icon space. */>
+      {fullHeightPage}
       <PageTitle title={<>🤸 Actions</>} />
       {appState ? <IndexPage appState={appState} /> : <CircularProgress />}
       <Fab
