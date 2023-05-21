@@ -23,7 +23,6 @@ import {
   Typography,
 } from "@mui/material";
 import { AppState, useAppState } from "../../../common/context/appState";
-import LoadingFab from "../../../common/components/loadingFab";
 import {
   Edit,
   Support as SupportIcon,
@@ -31,20 +30,13 @@ import {
   Add,
   CheckBoxOutlineBlank,
 } from "@mui/icons-material";
-import Support from "../../../common/components/support";
+import SupportBottomBar from "../../../common/components/supportBottomBar";
 import {
   useCurrentActions,
   useCurrentImpacts,
   useCurrentMaker,
 } from "../../../modules/makers/context";
-import {
-  Dispatch,
-  MouseEventHandler,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import moment from "moment";
 import ImpactCard from "../../../modules/posi/action/card";
 import Media from "../../../modules/posi/media";
@@ -350,7 +342,7 @@ const BottomBar = ({ appState }: { appState: AppState }) => {
         </Toolbar>
       </AppBar>
     ) : (
-      <Support beneficiary={{ maker }} />
+      <SupportBottomBar beneficiary={{ maker }} />
     )
   ) : (
     <CenterBottomCircularProgress />

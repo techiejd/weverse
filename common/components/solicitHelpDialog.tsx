@@ -42,8 +42,9 @@ const SolicitDialog = ({
           <ShareActionArea
             shareProps={{
               path: pathUnderSupport + queryKeyExt + "generic",
-              text: "Me encantaría recibir tu apoyo para mi impacto social.",
-              title: "Me encantaría recibir tu apoyo para mi impacto social.",
+              text: "Me encantaría recibir tu colaboración para mi impacto social.",
+              title:
+                "Me encantaría recibir tu colaboración para mi impacto social.",
             }}
           >
             <Button variant="outlined" startIcon={<Support />}>
@@ -53,8 +54,8 @@ const SolicitDialog = ({
           <ShareActionArea
             shareProps={{
               path: solicitOpinionPath,
-              text: "Por favor dame tu opinion sobre mi impacto social",
-              title: "Por favor dame tu opinion sobre mi impacto social",
+              text: "Por favor dame tu testimonio sobre mi impacto social",
+              title: "Por favor dame tu testimonio sobre mi impacto social",
             }}
           >
             <Button variant="outlined" startIcon={<Hearing />}>
@@ -65,8 +66,8 @@ const SolicitDialog = ({
             <ShareActionArea
               shareProps={{
                 path: pathUnderSupport + queryKeyExt + "finance",
-                text: "Busco apoyo financiero para mi impacto social",
-                title: "Busco apoyo financiero para mi impacto social",
+                text: "Busco colaboración financiera para mi impacto social",
+                title: "Busco colaboración financiera para mi impacto social",
               }}
             >
               <Button variant="outlined" startIcon={<CardGiftcard />}>

@@ -2,7 +2,6 @@ import {
   Share,
   ConnectWithoutContact,
   CardGiftcard,
-  Handshake,
   Campaign,
   Add,
   VolunteerActivism,
@@ -14,10 +13,7 @@ import {
   DialogContentText,
   DialogActions,
   Button,
-  SpeedDial,
   Typography,
-  SpeedDialAction,
-  Link,
   Stack,
   AppBar,
   Box,
@@ -25,16 +21,11 @@ import {
 } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import Linkify from "react-linkify";
-import SharingSpeedDialAction from "../../modules/makers/sharingSpeedDialAction";
 import ShareActionArea, { ShareProps } from "./shareActionArea";
 import { useRouter } from "next/router";
 import { z } from "zod";
 import { HowToSupport, maker, posiFormData } from "../../functions/shared/src";
-import { AppState } from "../context/appState";
-import { useMaker, useMyMaker } from "../context/weverseUtils";
-import { useCurrentMaker } from "../../modules/makers/context";
 import IconButtonWithLabel from "./iconButtonWithLabel";
-import SolicitDialog from "./solicitHelpDialog";
 import CenterBottomFab from "./centerBottomFab";
 
 const supportDialogs = z.enum(["connect", "finance", "generic"]);
@@ -69,7 +60,7 @@ const SupportDialog = ({
     ? inputText
     : `¡Gracias por querer ${
         type == "contact" ? "apoyar" : "contribuir"
-      }! Le dejamos saber al o la Maker tu interes.`;
+      }! Le hemos mandado un mensaje al o la Maker de tu interes y esperamos que tu solicitud le anime a terminar pronto.`;
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>{title}</DialogTitle>
@@ -166,7 +157,7 @@ const beneficiaryType = z.object({
   action: posiFormData.optional(),
 });
 type Beneficiary = z.infer<typeof beneficiaryType>;
-const Support = ({ beneficiary }: { beneficiary: Beneficiary }) => {
+const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
   const openSupportDialog = useOpenSupportDialog();
   const genericDialogOpen = openSupportDialog == "generic";
   const [connectDialogOpen, setConnectDialogOpen] = useState(
@@ -221,8 +212,8 @@ const Support = ({ beneficiary }: { beneficiary: Beneficiary }) => {
       />
       <Toolbar>
         <IconButtonWithLabel href={addSocialProofPath}>
-          <Campaign />
-          <Typography>Testimonio</Typography>
+          <Campaign fontSize="large" />
+          <Typography fontSize={12}>Dar Testimonio</Typography>
         </IconButtonWithLabel>
         <CenterBottomFab
           color="secondary"
@@ -230,19 +221,19 @@ const Support = ({ beneficiary }: { beneficiary: Beneficiary }) => {
           sx={{ width: 70, height: 70 }}
         >
           <IconButtonWithLabel onClick={() => setFinanceDialogOpen(true)}>
-            <VolunteerActivism />
-            <Typography fontSize={13}>Contribuir</Typography>
+            <VolunteerActivism fontSize="large" />
+            <Typography fontSize={12}>Contribuir</Typography>
           </IconButtonWithLabel>
         </CenterBottomFab>
         <Box sx={{ flexGrow: 1 }} />
         <IconButtonWithLabel onClick={() => setConnectDialogOpen(true)}>
-          <Add />
-          <Typography>Apoyar</Typography>
+          <Add fontSize="large" />
+          <Typography fontSize={12}>Apoyar</Typography>
         </IconButtonWithLabel>
         <ShareActionArea shareProps={shareProps}>
           <IconButtonWithLabel>
-            <Share />
-            <Typography>Compartir</Typography>
+            <Share fontSize="large" />
+            <Typography fontSize={12}>Compartir</Typography>
           </IconButtonWithLabel>
         </ShareActionArea>
       </Toolbar>
@@ -250,4 +241,4 @@ const Support = ({ beneficiary }: { beneficiary: Beneficiary }) => {
   );
 };
 
-export default Support;
+export default SupportBottomBar;

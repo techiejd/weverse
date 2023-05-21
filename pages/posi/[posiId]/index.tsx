@@ -1,4 +1,5 @@
 import {
+  AppBar,
   Box,
   CircularProgress,
   Grid,
@@ -6,6 +7,7 @@ import {
   SpeedDial,
   SpeedDialAction,
   Stack,
+  Toolbar,
   Typography,
 } from "@mui/material";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -13,15 +15,20 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import {
   AdminPanelSettings,
   Edit,
+  Handshake,
+  Hearing,
+  Share,
   Support as SupportIcon,
 } from "@mui/icons-material";
 import { useState } from "react";
 import { doc } from "firebase/firestore";
 import LoadingFab from "../../../common/components/loadingFab";
-import { ShareProps } from "../../../common/components/shareActionArea";
+import ShareActionArea, {
+  ShareProps,
+} from "../../../common/components/shareActionArea";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
 import { AppState, useAppState } from "../../../common/context/appState";
-import { useMaker } from "../../../common/context/weverseUtils";
+import { useMaker, useMyMaker } from "../../../common/context/weverseUtils";
 import { makerConverter } from "../../../common/utils/firebase";
 import AboutContent from "../../../modules/posi/action/about";
 import {
@@ -30,43 +37,12 @@ import {
   useCurrentSocialProofs,
 } from "../../../modules/posi/context";
 import { getSharePropsForPosi } from "../../../modules/posi/input/context";
-import Support from "../../../common/components/support";
+import SupportBottomBar from "../../../common/components/supportBottomBar";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
-
-const SupportButton = ({
-  shareProps,
-  makerId,
-  posiId,
-}: {
-  shareProps: ShareProps;
-  makerId: string;
-  posiId: string;
-}) => {
-  const SupportButtonContent = ({ appState }: { appState: AppState }) => {
-    // TODO(techiejd): create a userMaker(id).
-    const makerDocRef = doc(appState.firestore, "makers", makerId);
-    const [maker, makerLoading, error] = useDocumentData(
-      makerDocRef.withConverter(makerConverter)
-    );
-    return maker ? (
-      <Support
-        howToSupport={maker.howToSupport ? maker.howToSupport : {}}
-        shareProps={shareProps}
-        addSocialProofPath={`/posi/${posiId}/impact/upload`}
-      />
-    ) : (
-      <LoadingFab />
-    );
-  };
-
-  const appState = useAppState();
-
-  return appState ? (
-    <SupportButtonContent appState={appState} />
-  ) : (
-    <LoadingFab />
-  );
-};
+import CenterBottomCircularProgress from "../../../common/components/centerBottomCircularProgress";
+import { Maker, PosiFormData, maker } from "../../../functions/shared/src";
+import CenterBottomFab from "../../../common/components/centerBottomFab";
+import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
 
 const AdminButton = ({
   posiId,
@@ -142,14 +118,86 @@ const AdminButton = ({
   );
 };
 
+const AdminBottomBar = ({
+  action,
+  myMaker,
+}: {
+  action: PosiFormData;
+  myMaker: Maker;
+}) => {
+  const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
+  const solicitOpinionPath = `/posi/${action.id}/impact/upload`;
+  return (
+    <AppBar
+      position="fixed"
+      color="primary"
+      sx={{ top: "auto", bottom: 16, borderRadius: 8, boxShadow: 8 }}
+    >
+      <SolicitDialog
+        open={solicitDialogOpen}
+        setOpen={setSolicitDialogOpen}
+        howToSupport={myMaker.howToSupport ? myMaker.howToSupport : {}}
+        solicitOpinionPath={`/posi/${action.id}/impact/upload`}
+        pathUnderSupport={`/posi/${action.id}`}
+        editMakerPath={`/makers/${myMaker.id}/edit`}
+      />
+      <Toolbar>
+        <IconButtonWithLabel href={`/makers/${myMaker.id}/edit`}>
+          <Edit />
+          <Typography>Editar</Typography>
+        </IconButtonWithLabel>
+        <CenterBottomFab
+          color="secondary"
+          aria-label="add"
+          sx={{ width: 70, height: 70 }}
+        >
+          <IconButtonWithLabel onClick={() => setSolicitDialogOpen(true)}>
+            <Handshake fontSize="large" />
+            <Typography fontSize={12}>Apoyo</Typography>
+          </IconButtonWithLabel>
+        </CenterBottomFab>
+        <Box sx={{ flexGrow: 1 }} />
+        <ShareActionArea
+          shareProps={{
+            path: solicitOpinionPath,
+            text: "Por favor dame tu testimonio sobre mi impacto social",
+            title: "Por favor dame tu testimonio sobre mi impacto social",
+          }}
+        >
+          <IconButtonWithLabel>
+            <Hearing fontSize="large" />
+            <Typography fontSize={12}>Escuchar</Typography>
+          </IconButtonWithLabel>
+        </ShareActionArea>
+        <ShareActionArea
+          shareProps={{
+            path: `/posi/${action.id}`,
+            text: "Mira mi acción social.",
+            title: "Mira mi acción social.",
+          }}
+        >
+          <IconButtonWithLabel>
+            <Share fontSize="large" />
+            <Typography fontSize={12}>Compartir</Typography>
+          </IconButtonWithLabel>
+        </ShareActionArea>
+      </Toolbar>
+    </AppBar>
+  );
+};
+
 const Index = () => {
   const appState = useAppState();
-  const posiId = useCurrentPosiId();
 
   const IndexContent = ({ appState }: { appState: AppState }) => {
     const [posiData, loading, error] = useCurrentPosi(appState);
     const [socialProofs, socialProofsLoading, socialProofsError] =
       useCurrentSocialProofs(appState);
+    const [myMaker, myMakerLoading, myMakerError] = useMyMaker(appState);
+    const [maker, makerLoading, makerError] = useMaker(
+      appState,
+      posiData?.makerId
+    );
 
     const Loading = () => {
       return (
@@ -160,7 +208,7 @@ const Index = () => {
       );
     };
 
-    return posiId ? (
+    return posiData ? (
       <Box>
         {error && (
           <Typography color={"red"}>Error: {JSON.stringify(error)}</Typography>
@@ -200,20 +248,14 @@ const Index = () => {
                 </Grid>
               </Stack>
             )}
-            <SupportButton
-              shareProps={getSharePropsForPosi({
-                summary: posiData!.summary!,
-                id: posiData.id,
-              })}
-              makerId={posiData!.makerId!}
-              posiId={posiId}
-            />
-            {appState && (
-              <AdminButton
-                posiId={String(posiData.id)}
-                makerId={posiData!.makerId!}
-                appState={appState}
-              />
+            {maker ? (
+              myMaker && myMaker.id == maker.id ? (
+                <AdminBottomBar action={posiData} myMaker={myMaker} />
+              ) : (
+                <SupportBottomBar beneficiary={{ maker, action: posiData }} />
+              )
+            ) : (
+              <CenterBottomCircularProgress />
             )}
           </Box>
         )}
