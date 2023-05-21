@@ -219,11 +219,10 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
           color="secondary"
           aria-label="add"
           sx={{ width: 70, height: 70 }}
+          onClick={() => setFinanceDialogOpen(true)}
         >
-          <IconButtonWithLabel onClick={() => setFinanceDialogOpen(true)}>
-            <VolunteerActivism fontSize="large" />
-            <Typography fontSize={12}>Contribuir</Typography>
-          </IconButtonWithLabel>
+          <VolunteerActivism fontSize="large" />
+          <Typography fontSize={12}>Contribuir</Typography>
         </CenterBottomFab>
         <Box sx={{ flexGrow: 1 }} />
         <IconButtonWithLabel onClick={() => setConnectDialogOpen(true)}>

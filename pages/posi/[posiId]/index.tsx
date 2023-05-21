@@ -151,10 +151,8 @@ const AdminBottomBar = ({
           aria-label="add"
           sx={{ width: 70, height: 70 }}
         >
-          <IconButtonWithLabel onClick={() => setSolicitDialogOpen(true)}>
-            <Handshake fontSize="large" />
-            <Typography fontSize={12}>Apoyo</Typography>
-          </IconButtonWithLabel>
+          <Handshake fontSize="large" />
+          <Typography fontSize={12}>Apoyo</Typography>
         </CenterBottomFab>
         <Box sx={{ flexGrow: 1 }} />
         <ShareActionArea

@@ -7,6 +7,8 @@ const CenterBottomFab = styled(Fab)({
   left: 0,
   right: 0,
   margin: "0 auto",
+  display: "flex",
+  flexDirection: "column",
 });
 
 export default CenterBottomFab;

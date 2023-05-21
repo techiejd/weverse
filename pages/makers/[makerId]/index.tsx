@@ -59,6 +59,8 @@ import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel"
 import CenterBottomCircularProgress from "../../../common/components/centerBottomCircularProgress";
 import CenterBottomFab from "../../../common/components/centerBottomFab";
 import { pickBy } from "lodash";
+import { calculateVipState } from "../../../common/utils/vip";
+import { useRouter } from "next/router";
 
 const MakerProfile = ({ appState }: { appState: AppState }) => {
   const [maker, makerLoading, makerError] = useCurrentMaker(appState);
@@ -236,24 +238,7 @@ const VipDialog = ({
   const [actions, actionsLoading, actionsError] = useCurrentActions(appState);
   const [socialProofs, socialProofsLoading, socialProofsError] =
     useCurrentImpacts(appState);
-  const oneActionDone = actions ? actions.length > 0 : false;
-  const socialProofsLength = socialProofs?.length;
-  const unfinishedFields = (() => {
-    const fieldsWeWantToAnswers = {
-      name: myMaker.name,
-      pic: myMaker.pic,
-      financial: myMaker.howToSupport?.finance,
-      contact: myMaker.howToSupport?.contact,
-      about: myMaker.about,
-    };
-    const unfinishedFields = Object.entries(fieldsWeWantToAnswers).reduce(
-      (unansweredFields, [field, answer]) => {
-        return answer ? unansweredFields : [...unansweredFields, field];
-      },
-      Array<string>()
-    );
-    return unfinishedFields;
-  })();
+  const vipState = calculateVipState(myMaker, socialProofs, actions);
   return (
     <Dialog open={open}>
       <DialogTitle>
@@ -263,9 +248,9 @@ const VipDialog = ({
       <DialogContent>
         <Typography>Haz clic en la tarea para comenzar el proceso:</Typography>
         <List>
-          <ListItemButton href="/posi/upload" disabled={oneActionDone}>
+          <ListItemButton href="/posi/upload" disabled={vipState.oneActionDone}>
             <ListItemIcon>
-              {oneActionDone ? <CheckBox /> : <CheckBoxOutlineBlank />}
+              {vipState.oneActionDone ? <CheckBox /> : <CheckBoxOutlineBlank />}
             </ListItemIcon>
             <ListItemText
               primary="Agregar una acción."
@@ -277,10 +262,10 @@ const VipDialog = ({
               setOpen(false);
               setSolicitDialogOpen(true);
             }}
-            disabled={socialProofs ? socialProofs.length >= 3 : false}
+            disabled={vipState.enoughSocialProof}
           >
             <ListItemIcon>
-              {socialProofs && socialProofs.length >= 3 ? (
+              {vipState.enoughSocialProof ? (
                 <CheckBox />
               ) : (
                 <CheckBoxOutlineBlank />
@@ -288,21 +273,15 @@ const VipDialog = ({
             </ListItemIcon>
             <ListItemText
               primary="Escuchar a 3 personas impactadas solicitandoles el testimonio y/o opinión."
-              secondary={`Involucramos a la comunidad en la discusión. ${
-                socialProofs
-                  ? socialProofs.length >= 3
-                    ? 3
-                    : socialProofs.length
-                  : 0
-              }/3 Testimonios recibido.`}
+              secondary={`Involucramos a la comunidad en la discusión. ${vipState.numSocialProofsDoneForVIP}/3 Testimonios recibido.`}
             />
           </ListItemButton>
           <ListItemButton
             href={`/makers/${myMaker.id}/edit`}
-            disabled={!unfinishedFields.length}
+            disabled={vipState.allFieldsFinished}
           >
             <ListItemIcon>
-              {unfinishedFields.length == 0 ? (
+              {vipState.allFieldsFinished ? (
                 <CheckBox />
               ) : (
                 <CheckBoxOutlineBlank />
@@ -311,11 +290,11 @@ const VipDialog = ({
             <ListItemText
               primary="Configurar tu perfil de Maker."
               secondary={
-                unfinishedFields.length
-                  ? `Hacen falta los siguientes campos: ${unfinishedFields.join(
+                vipState.allFieldsFinished
+                  ? "Ya has terminado."
+                  : `Hacen falta los siguientes campos: ${vipState.unfinishedFields!.join(
                       ", "
                     )}.`
-                  : "Ya has terminado."
               }
             />
           </ListItemButton>
@@ -334,7 +313,11 @@ const BottomBar = ({ appState }: { appState: AppState }) => {
   const [maker, makerLoading, makerError] = useCurrentMaker(appState);
   const [myMaker, myMakerLoading, myMakerError] = useMyMaker(appState);
   const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
-  const [vipDialogOpen, setVipDialogOpen] = useState(false);
+  const router = useRouter();
+  const { vipDialogOpen: queryVipDialogOpen } = router.query;
+  const [vipDialogOpen, setVipDialogOpen] = useState(
+    Boolean(queryVipDialogOpen)
+  );
 
   return myMaker && maker ? (
     myMaker.id == maker.id ? (
@@ -367,11 +350,13 @@ const BottomBar = ({ appState }: { appState: AppState }) => {
             <SupportIcon />
             <Typography>Apoyo</Typography>
           </IconButtonWithLabel>
-          <CenterBottomFab color="secondary" aria-label="add">
-            <IconButtonWithLabel onClick={() => setVipDialogOpen(true)}>
-              <Typography fontSize={25}>👑</Typography>
-              <Typography fontSize={12}>VIP</Typography>
-            </IconButtonWithLabel>
+          <CenterBottomFab
+            color="secondary"
+            aria-label="add"
+            onClick={() => setVipDialogOpen(true)}
+          >
+            <Typography fontSize={25}>👑</Typography>
+            <Typography fontSize={12}>VIP</Typography>
           </CenterBottomFab>
           <Box sx={{ flexGrow: 1 }} />
           <ShareActionArea
