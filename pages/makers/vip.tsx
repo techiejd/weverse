@@ -8,6 +8,7 @@ import {
 } from "../../common/context/weverseUtils";
 import LogInPrompt from "../../common/components/logInPrompt";
 import { calculateVipState } from "../../common/utils/vip";
+import { useEffect } from "react";
 
 const Vip = () => {
   const VipPage = ({ appState }: { appState: AppState }) => {
@@ -20,16 +21,17 @@ const Vip = () => {
       myMaker?.id
     );
     const vipState = calculateVipState(myMaker, socialProofs, actions);
-    console.log({
-      myMaker,
-      entryGiven: vipState.entryGiven,
-      total:
-        myMaker && vipState.entryGiven != undefined && !vipState.entryGiven,
-    });
-    if (myMaker && vipState.entryGiven != undefined && !vipState.entryGiven) {
-      console.log("here yol");
-      router.push(`/makers/${myMaker.id}?vipDialogOpen=true`);
-    }
+
+    useEffect(() => {
+      if (
+        router.isReady &&
+        myMaker &&
+        vipState.entryGiven != undefined &&
+        !vipState.entryGiven
+      ) {
+        router.push(`/makers/${myMaker.id}?vipDialogOpen=true`);
+      }
+    }, [myMaker, vipState.entryGiven, router]);
     return myMaker ? (
       <Stack>
         <Typography variant="h1">

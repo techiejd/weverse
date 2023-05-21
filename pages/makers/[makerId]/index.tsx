@@ -318,6 +318,13 @@ const BottomBar = ({ appState }: { appState: AppState }) => {
   const [vipDialogOpen, setVipDialogOpen] = useState(
     Boolean(queryVipDialogOpen)
   );
+  const [socialProofs, socialProofsLoading, socialProofsError] =
+    useCurrentImpacts(appState);
+  const [actions, actionsLoading, actionsError] = useCurrentActions(appState);
+  const vipState = calculateVipState(myMaker, socialProofs, actions);
+  const vipButtonBehavior = vipState.entryGiven
+    ? { href: "/makers/vip" }
+    : { onClick: () => setVipDialogOpen(true) };
 
   return myMaker && maker ? (
     myMaker.id == maker.id ? (
@@ -353,7 +360,7 @@ const BottomBar = ({ appState }: { appState: AppState }) => {
           <CenterBottomFab
             color="secondary"
             aria-label="add"
-            onClick={() => setVipDialogOpen(true)}
+            {...vipButtonBehavior}
           >
             <Typography fontSize={25}>👑</Typography>
             <Typography fontSize={12}>VIP</Typography>
