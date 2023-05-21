@@ -29,6 +29,7 @@ import {
   Share,
   Add,
   CheckBoxOutlineBlank,
+  CheckBox,
 } from "@mui/icons-material";
 import SupportBottomBar from "../../../common/components/supportBottomBar";
 import {
@@ -57,6 +58,7 @@ import ShareActionArea from "../../../common/components/shareActionArea";
 import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
 import CenterBottomCircularProgress from "../../../common/components/centerBottomCircularProgress";
 import CenterBottomFab from "../../../common/components/centerBottomFab";
+import { pickBy } from "lodash";
 
 const MakerProfile = ({ appState }: { appState: AppState }) => {
   const [maker, makerLoading, makerError] = useCurrentMaker(appState);
@@ -223,23 +225,47 @@ const VipDialog = ({
   setOpen,
   setSolicitDialogOpen,
   myMaker,
+  appState,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   setSolicitDialogOpen: Dispatch<SetStateAction<boolean>>;
   myMaker: Maker;
+  appState: AppState;
 }) => {
+  const [actions, actionsLoading, actionsError] = useCurrentActions(appState);
+  const [socialProofs, socialProofsLoading, socialProofsError] =
+    useCurrentImpacts(appState);
+  const oneActionDone = actions ? actions.length > 0 : false;
+  const socialProofsLength = socialProofs?.length;
+  const unfinishedFields = (() => {
+    const fieldsWeWantToAnswers = {
+      name: myMaker.name,
+      pic: myMaker.pic,
+      financial: myMaker.howToSupport?.finance,
+      contact: myMaker.howToSupport?.contact,
+      about: myMaker.about,
+    };
+    const unfinishedFields = Object.entries(fieldsWeWantToAnswers).reduce(
+      (unansweredFields, [field, answer]) => {
+        return answer ? unansweredFields : [...unansweredFields, field];
+      },
+      Array<string>()
+    );
+    return unfinishedFields;
+  })();
   return (
     <Dialog open={open}>
       <DialogTitle>
-        Realiza cada una de las siguientes tareas para ingresar a la sala VIP:
+        Para ingresar a la sala VIP donde hay $400,000 USD en posibilidades de
+        asistencia, realiza cada una de las siguientes tareas:
       </DialogTitle>
       <DialogContent>
         <Typography>Haz clic en la tarea para comenzar el proceso:</Typography>
         <List>
-          <ListItemButton href="/posi/upload">
+          <ListItemButton href="/posi/upload" disabled={oneActionDone}>
             <ListItemIcon>
-              <CheckBoxOutlineBlank />
+              {oneActionDone ? <CheckBox /> : <CheckBoxOutlineBlank />}
             </ListItemIcon>
             <ListItemText
               primary="Agregar una acción."
@@ -251,22 +277,46 @@ const VipDialog = ({
               setOpen(false);
               setSolicitDialogOpen(true);
             }}
+            disabled={socialProofs ? socialProofs.length >= 3 : false}
           >
             <ListItemIcon>
-              <CheckBoxOutlineBlank />
+              {socialProofs && socialProofs.length >= 3 ? (
+                <CheckBox />
+              ) : (
+                <CheckBoxOutlineBlank />
+              )}
             </ListItemIcon>
             <ListItemText
               primary="Escuchar a 3 personas impactadas solicitandoles el testimonio y/o opinión."
-              secondary="Involucramos a la comunidad en la discusión."
+              secondary={`Involucramos a la comunidad en la discusión. ${
+                socialProofs
+                  ? socialProofs.length >= 3
+                    ? 3
+                    : socialProofs.length
+                  : 0
+              }/3 Testimonios recibido.`}
             />
           </ListItemButton>
-          <ListItemButton href={`/makers/${myMaker.id}/edit`}>
+          <ListItemButton
+            href={`/makers/${myMaker.id}/edit`}
+            disabled={!unfinishedFields.length}
+          >
             <ListItemIcon>
-              <CheckBoxOutlineBlank />
+              {unfinishedFields.length == 0 ? (
+                <CheckBox />
+              ) : (
+                <CheckBoxOutlineBlank />
+              )}
             </ListItemIcon>
             <ListItemText
               primary="Configurar tu perfil de Maker."
-              secondary="Todos los campos llenados."
+              secondary={
+                unfinishedFields.length
+                  ? `Hacen falta los siguientes campos: ${unfinishedFields.join(
+                      ", "
+                    )}.`
+                  : "Ya has terminado."
+              }
             />
           </ListItemButton>
         </List>
@@ -306,6 +356,7 @@ const BottomBar = ({ appState }: { appState: AppState }) => {
           setOpen={setVipDialogOpen}
           setSolicitDialogOpen={setSolicitDialogOpen}
           myMaker={myMaker}
+          appState={appState}
         />
         <Toolbar>
           <IconButtonWithLabel href={`/makers/${maker.id}/edit`}>
