@@ -48,3 +48,6 @@ firebase-debug.log
 firestore-debug.log
 pubsub-debug.log
 database-debug.log
+
+# Ignore firebase emulator stuff
+emulators_export/
