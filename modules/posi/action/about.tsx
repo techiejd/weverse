@@ -1,9 +1,4 @@
-import {
-  PlayCircle,
-  Info,
-  Image as ImageIcon,
-  Place,
-} from "@mui/icons-material";
+import { PlayCircle, Image as ImageIcon, Place } from "@mui/icons-material";
 import {
   Box,
   Typography,
@@ -24,7 +19,6 @@ const AboutContent = ({
   location,
   howToIdentifyImpactedPeople,
   makerId,
-  id,
   ratings,
 }: PosiFormData) => {
   // TODO(techiejd): Look into why it's happening.

@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
+import PageInteractionListener from "@iroomit/page-interaction-listener";
 
 const useElementOnScreen = (
   options: IntersectionObserverInit,
@@ -29,7 +30,11 @@ const useElementOnScreen = (
   return isVisible;
 };
 
-export type VideoProps = {
+type MediaBase = {
+  objectFit?: "contain" | "cover";
+};
+
+export type VideoProps = MediaBase & {
   muted?: boolean;
   threshold: number;
   src: string;
@@ -39,7 +44,7 @@ export type VideoProps = {
   playsInline?: boolean;
 };
 
-export type ImageProps = {
+export type ImageProps = MediaBase & {
   src: string;
 };
 
@@ -47,9 +52,11 @@ const CandidateVideo = ({
   muted = true,
   disablePictureInPicture = true,
   playsInline = true,
+  objectFit = "contain",
   ...props
 }: VideoProps) => {
   const [playing, setPlaying] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
   const options = {
     root: null,
     rootMargin: "0px",
@@ -63,8 +70,13 @@ const CandidateVideo = ({
   useEffect(() => {
     if (isVisible) {
       if (!playing) {
-        videoRef?.current?.play();
-        setPlaying(true);
+        if (muted) {
+          videoRef?.current?.play();
+          setPlaying(true);
+        } else if (userInteracted) {
+          videoRef?.current?.play();
+          setPlaying(true);
+        }
       }
     } else {
       if (playing) {
@@ -72,49 +84,38 @@ const CandidateVideo = ({
         setPlaying(false);
       }
     }
-  }, [isVisible, playing]);
+  }, [isVisible, playing, muted, userInteracted]);
+
+  useEffect(() => {
+    PageInteractionListener.addListener(() => {
+      setUserInteracted(true);
+    });
+  }, []);
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        height: "100%",
-        overflow: "hidden",
-        position: "relative",
-        backgroundColor: "#E6E6E6",
-      }}
+    <video
+      height={"100%"}
+      width={"100%"}
+      style={{ objectFit: objectFit }}
+      ref={videoRef}
+      muted={muted}
+      controls={props.controls}
+      controlsList={props.controlsList}
+      disablePictureInPicture={disablePictureInPicture}
+      loop
+      playsInline={playsInline}
     >
-      <video
-        width="160vh"
-        height="100%"
-        style={{
-          minWidth: "100%",
-          minHeight: "54vw",
-          position: "absolute",
-          left: "50%" /* % of surrounding element */,
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-        ref={videoRef}
-        muted={muted}
-        controls={props.controls}
-        controlsList={props.controlsList}
-        disablePictureInPicture={disablePictureInPicture}
-        loop
-        playsInline={playsInline}
-      >
-        <source src={props.src} type="video/mp4" />
-      </video>
-    </Box>
+      <source src={props.src} type="video/mp4" />
+    </video>
   );
 };
 
-const CandidateImage = ({ src }: ImageProps) => {
+const CandidateImage = ({ objectFit = "cover", src }: ImageProps) => {
   return (
     <div
       style={{
         backgroundImage: `url(${src})`,
-        backgroundSize: "cover",
+        backgroundSize: objectFit,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
         height: "100%",

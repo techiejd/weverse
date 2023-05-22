@@ -58,6 +58,9 @@ const IndexPage = ({ appState }: { appState: AppState }) => {
   }, [appState.firestore]);
 
   const next = useCallback(() => {
+    if (!latestDoc) {
+      return;
+    }
     const nextQuery = query(
       collection(appState.firestore, "impacts").withConverter(
         posiFormDataConverter

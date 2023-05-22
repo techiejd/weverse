@@ -3,120 +3,27 @@ import {
   Box,
   CircularProgress,
   Grid,
-  Link,
-  SpeedDial,
-  SpeedDialAction,
   Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import { useAuthState } from "react-firebase-hooks/auth";
-import {
-  AdminPanelSettings,
-  Edit,
-  Handshake,
-  Hearing,
-  Share,
-  Support as SupportIcon,
-} from "@mui/icons-material";
+import { Edit, Handshake, Hearing, Share } from "@mui/icons-material";
 import { useState } from "react";
-import { doc } from "firebase/firestore";
-import LoadingFab from "../../../common/components/loadingFab";
-import ShareActionArea, {
-  ShareProps,
-} from "../../../common/components/shareActionArea";
+import ShareActionArea from "../../../common/components/shareActionArea";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
 import { AppState, useAppState } from "../../../common/context/appState";
 import { useMaker, useMyMaker } from "../../../common/context/weverseUtils";
-import { makerConverter } from "../../../common/utils/firebase";
 import AboutContent from "../../../modules/posi/action/about";
 import {
   useCurrentPosi,
-  useCurrentPosiId,
   useCurrentSocialProofs,
 } from "../../../modules/posi/context";
-import { getSharePropsForPosi } from "../../../modules/posi/input/context";
 import SupportBottomBar from "../../../common/components/supportBottomBar";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
 import CenterBottomCircularProgress from "../../../common/components/centerBottomCircularProgress";
-import { Maker, PosiFormData, maker } from "../../../functions/shared/src";
+import { Maker, PosiFormData } from "../../../functions/shared/src";
 import CenterBottomFab from "../../../common/components/centerBottomFab";
 import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
-
-const AdminButton = ({
-  posiId,
-  makerId,
-  appState,
-}: {
-  posiId: string;
-  makerId: string;
-  appState: AppState;
-}) => {
-  const [user, userLoading, userError] = useAuthState(appState.auth);
-  const [maker, makerLoading, makerError] = useMaker(appState, makerId);
-  const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
-  return (
-    <>
-      {maker && user && maker.ownerId == user.uid && (
-        <>
-          <SolicitDialog
-            open={solicitDialogOpen}
-            setOpen={setSolicitDialogOpen}
-            howToSupport={maker.howToSupport ? maker.howToSupport : {}}
-            solicitOpinionPath={`/posi/${posiId}/impact/upload`}
-            pathUnderSupport={`/posi/${posiId}`}
-            editMakerPath={`/makers/${maker.id}/edit`}
-          />
-          <SpeedDial
-            ariaLabel="Administer Action"
-            sx={{
-              position: "fixed",
-              bottom: 64,
-              right: 84,
-            }}
-            icon={
-              <div>
-                <AdminPanelSettings />
-                <Typography fontSize={8} mt={-1}>
-                  Admin
-                </Typography>
-              </div>
-            }
-          >
-            <SpeedDialAction
-              key="Edit Action"
-              icon={
-                <Link
-                  href={`/posi/${posiId}/action/edit`}
-                  sx={{ textDecoration: "none" }}
-                >
-                  <Edit />
-                </Link>
-              }
-              tooltipTitle={
-                <Link
-                  href={`/posi/${posiId}/action/edit`}
-                  style={{ textDecoration: "none" }}
-                >
-                  Editar
-                </Link>
-              }
-              tooltipOpen
-            />
-            <SpeedDialAction
-              key="solicit"
-              icon={<SupportIcon />}
-              tooltipTitle="Apoyo"
-              tooltipOpen
-              onClick={() => setSolicitDialogOpen(true)}
-            />
-          </SpeedDial>
-        </>
-      )}
-    </>
-  );
-};
 
 const AdminBottomBar = ({
   action,

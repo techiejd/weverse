@@ -6,24 +6,39 @@ import {
   Typography,
   CardActions,
   Button,
+  Box,
 } from "@mui/material";
 import ShareActionArea from "../../../common/components/shareActionArea";
 import { getPosiPage, getSharePropsForPosi } from "../input/context";
 import { PosiFormData } from "../../../functions/shared/src";
 import RatingsStack from "../../../common/components/ratings";
+import Media, { VideoProps } from "../media";
 
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
+  const media =
+    posiData.media.type == "video"
+      ? {
+          video: {
+            threshold: 0.9,
+            muted: true,
+            disablePictureInPicture: true,
+            src: posiData.media.url,
+            controls: false,
+            objectFit: "cover" as "cover",
+          },
+        }
+      : { image: { src: posiData.media.url } };
   return (
     <Card sx={{ width: "100%" }}>
       <CardActionArea href={`/posi/${posiData.id}`}>
-        <CardMedia
-          component={posiData!.media!.type!}
-          sx={{ height: 270, objectFit: "cover" }}
-          image={posiData!.media!.url}
-          autoPlay
-          muted
-          loop
-        />
+        <Box
+          sx={{
+            height: "50vh",
+            width: "100%",
+          }}
+        >
+          <Media {...media} />
+        </Box>
         <CardContent>
           <Typography
             gutterBottom
