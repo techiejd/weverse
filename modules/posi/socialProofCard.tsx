@@ -5,13 +5,22 @@ import {
   CircularProgress,
   Rating,
   Card,
+  CardContent,
 } from "@mui/material";
 import { SocialProof } from "../../functions/shared/src";
 import { useAppState, AppState } from "../../common/context/appState";
-import { useMaker } from "../../common/context/weverseUtils";
+import { useAction, useMaker } from "../../common/context/weverseUtils";
 import Media from "./media";
 
-const SocialProofCard = ({ socialProof }: { socialProof: SocialProof }) => {
+const SocialProofCard = ({
+  socialProof,
+  showMaker = true,
+  showAction = true,
+}: {
+  socialProof: SocialProof;
+  showMaker?: boolean;
+  showAction?: boolean;
+}) => {
   const appState = useAppState();
   const SocialProofCardHeader = ({ appState }: { appState: AppState }) => {
     const [byMaker, byMakerLoading, byMakerError] = useMaker(
@@ -32,6 +41,24 @@ const SocialProofCard = ({ socialProof }: { socialProof: SocialProof }) => {
           </Stack>
         }
       />
+    );
+  };
+  const SocialProofCardContent = ({ appState }: { appState: AppState }) => {
+    const [action, actionLoading, actionError] = useAction(
+      appState,
+      showAction ? socialProof.forAction : undefined
+    );
+    const [forMaker, forMakerLoading, forMakerError] = useMaker(
+      appState,
+      showMaker ? socialProof.forMaker : undefined
+    );
+    return (
+      <>
+        {action && <CardContent>Por la acción: {action.summary}</CardContent>}
+        {forMaker && (
+          <CardContent>Para el o la Maker: {forMaker.name}</CardContent>
+        )}
+      </>
     );
   };
   return (
@@ -61,6 +88,7 @@ const SocialProofCard = ({ socialProof }: { socialProof: SocialProof }) => {
           />
         </Box>
       )}
+      {appState && <SocialProofCardContent appState={appState} />}
     </Card>
   );
 };

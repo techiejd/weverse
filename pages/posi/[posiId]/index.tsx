@@ -239,6 +239,8 @@ const Index = () => {
                         <SocialProofCard
                           key={socialProof.id}
                           socialProof={socialProof}
+                          showAction={false}
+                          showMaker={false}
                         />
                       </Grid>
                     );

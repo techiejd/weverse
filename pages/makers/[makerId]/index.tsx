@@ -61,6 +61,7 @@ import CenterBottomFab from "../../../common/components/centerBottomFab";
 import { pickBy } from "lodash";
 import { calculateVipState } from "../../../common/utils/vip";
 import { useRouter } from "next/router";
+import SocialProofCard from "../../../modules/posi/socialProofCard";
 
 const MakerProfile = ({ appState }: { appState: AppState }) => {
   const [maker, makerLoading, makerError] = useCurrentMaker(appState);
@@ -88,73 +89,6 @@ const MakerProfile = ({ appState }: { appState: AppState }) => {
     </Stack>
   ) : (
     <CircularProgress />
-  );
-};
-
-const SocialProofCard = ({ socialProof }: { socialProof: SocialProof }) => {
-  // TODO(techiejd): WET => DRY.
-  const appState = useAppState();
-  const SocialProofCardHeader = ({ appState }: { appState: AppState }) => {
-    const [byMaker, byMakerLoading, byMakerError] = useMaker(
-      appState,
-      socialProof.byMaker
-    );
-    return (
-      <CardHeader
-        title={
-          <Stack
-            direction={"row"}
-            sx={{ justifyContent: "center", alignItems: "center" }}
-          >
-            <Box pr={2}>
-              {byMaker ? `${byMaker.name}: ` : <CircularProgress />}
-            </Box>
-            <Rating value={socialProof.rating} />
-          </Stack>
-        }
-      />
-    );
-  };
-  const SocialProofCardContent = ({ appState }: { appState: AppState }) => {
-    const [action, actionLoading, actionError] = useAction(
-      appState,
-      socialProof.forAction
-    );
-    return (
-      <>
-        {action && <CardContent>Por la acción: {action.summary}</CardContent>}
-      </>
-    );
-  };
-  return (
-    <Card sx={{ width: "100%" }}>
-      {appState ? (
-        <SocialProofCardHeader appState={appState} />
-      ) : (
-        <CircularProgress />
-      )}
-      {socialProof.videoUrl && (
-        <Box
-          sx={{
-            height: "50vh",
-            width: "100%",
-          }}
-        >
-          <Media
-            video={{
-              threshold: 0.9,
-              muted: false,
-              controls: true,
-              controlsList:
-                "play volume fullscreen nodownload noplaybackrate notimeline",
-              disablePictureInPicture: true,
-              src: socialProof.videoUrl,
-            }}
-          />
-        </Box>
-      )}
-      {appState && <SocialProofCardContent appState={appState} />}
-    </Card>
   );
 };
 
@@ -214,7 +148,7 @@ const MakerContent = ({ appState }: { appState: AppState }) => {
           {c.type == "action" ? (
             <ImpactCard posiData={c.data} />
           ) : (
-            <SocialProofCard socialProof={c.data} />
+            <SocialProofCard socialProof={c.data} showMaker={false} />
           )}
         </Grid>
       ))}
