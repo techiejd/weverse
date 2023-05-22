@@ -6,6 +6,7 @@ import {
   Rating,
   Card,
   CardContent,
+  CardActionArea,
 } from "@mui/material";
 import { SocialProof } from "../../functions/shared/src";
 import { useAppState, AppState } from "../../common/context/appState";
@@ -28,19 +29,21 @@ const SocialProofCard = ({
       socialProof.byMaker
     );
     return (
-      <CardHeader
-        title={
-          <Stack
-            direction={"row"}
-            sx={{ justifyContent: "center", alignItems: "center" }}
-          >
-            <Box pr={2}>
-              {byMaker ? `${byMaker.name}: ` : <CircularProgress />}
-            </Box>
-            <Rating value={socialProof.rating} />
-          </Stack>
-        }
-      />
+      <CardActionArea href={`/makers/${socialProof.byMaker}`}>
+        <CardHeader
+          title={
+            <Stack
+              direction={"row"}
+              sx={{ justifyContent: "center", alignItems: "center" }}
+            >
+              <Box pr={2}>
+                {byMaker ? `${byMaker.name}: ` : <CircularProgress />}
+              </Box>
+              <Rating value={socialProof.rating} />
+            </Stack>
+          }
+        />
+      </CardActionArea>
     );
   };
   const SocialProofCardContent = ({ appState }: { appState: AppState }) => {
