@@ -114,6 +114,12 @@ const DetailedInput = ({
       howToSupport: { ...maker.howToSupport, contact: contactSupport },
     }));
   };
+  const setEmail = (email: string) => {
+    setVal((maker) => ({
+      ...maker,
+      email: email,
+    }));
+  };
 
   const askForInfoMsg =
     val.type == "individual" ? "" : "Cuéntanos un poco sobre tu organización";
@@ -129,6 +135,19 @@ const DetailedInput = ({
       {val.type == "organization" && (
         <OrganizationTypeInput val={val} setVal={setVal} />
       )}
+      <Section
+        label={
+          "OneWe se comunicará contigo por correo electrónico acerca de la información relacionada con Maker"
+        }
+      >
+        <TextField
+          label="Correo Electronico"
+          type="email"
+          fullWidth
+          value={val.email ? val.email : ""}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </Section>
 
       <Section
         label={
@@ -190,12 +209,12 @@ const DetailedInput = ({
           </Box>
           <Box>
             <Typography variant="h3">
-              Otro tipo de apoyo y mejor forma de contactar:
+              Otro tipo de apoyo y la mejor forma de contactar:
             </Typography>
             <TextField
               fullWidth
               label="Deja aquí los datos de contacto para recibir ayudas de cualquier otro
-          tipo. (500 caracteres.)"
+          tipo y sea explicito a lo que está pidiendo. (500 caracteres.)"
               name="summary"
               multiline
               minRows={2}

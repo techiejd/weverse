@@ -45,8 +45,9 @@ export const maker = z.object({
   organizationType: organizationType.optional(),
   createdAt: z.date().optional(),
   howToSupport: howToSupport.optional(),
-  about: z.string().min(5).max(1000).optional(),
+  about: z.string().optional(),
   ratings: ratings.optional(),
+  email: z.string().optional(),
 });
 export type Maker = z.infer<typeof maker>;
 
