@@ -142,7 +142,7 @@ const AdminBottomBar = ({
         editMakerPath={`/makers/${myMaker.id}/edit`}
       />
       <Toolbar>
-        <IconButtonWithLabel href={`/makers/${myMaker.id}/edit`}>
+        <IconButtonWithLabel href={`/posi/${action.id}/action/edit`}>
           <Edit />
           <Typography>Editar</Typography>
         </IconButtonWithLabel>
@@ -216,7 +216,7 @@ const Index = () => {
           <Typography>No hay ninguna Action aquí.</Typography>
         )}
         {posiData && (
-          <Box>
+          /** Padding for bottom bar. */ <Box pb={15}>
             <AboutContent {...posiData} />
             {socialProofs && (
               <Stack spacing={1} m={1.5}>
