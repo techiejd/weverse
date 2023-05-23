@@ -260,69 +260,67 @@ const BottomBar = ({ appState }: { appState: AppState }) => {
     ? { href: "/makers/vip" }
     : { onClick: () => setVipDialogOpen(true) };
 
-  return myMaker && maker ? (
-    myMaker.id == maker.id ? (
-      <AppBar
-        position="fixed"
-        color="primary"
-        sx={{ top: "auto", bottom: 16, borderRadius: 8, boxShadow: 8 }}
-      >
-        <SolicitDialog
-          open={solicitDialogOpen}
-          setOpen={setSolicitDialogOpen}
-          howToSupport={maker.howToSupport ? maker.howToSupport : {}}
-          solicitOpinionPath={`/makers/${maker.id}/impact/upload`}
-          pathUnderSupport={`/makers/${maker.id}`}
-          editMakerPath={`/makers/${maker.id}/edit`}
-        />
-        <VipDialog
-          open={vipDialogOpen}
-          setOpen={setVipDialogOpen}
-          setSolicitDialogOpen={setSolicitDialogOpen}
-          myMaker={myMaker}
-          appState={appState}
-        />
-        <Toolbar>
-          <IconButtonWithLabel href={`/makers/${maker.id}/edit`}>
-            <Edit />
-            <Typography>Editar</Typography>
-          </IconButtonWithLabel>
-          <IconButtonWithLabel onClick={() => setSolicitDialogOpen(true)}>
-            <SupportIcon />
-            <Typography>Apoyo</Typography>
-          </IconButtonWithLabel>
-          <CenterBottomFab
-            color="secondary"
-            aria-label="add"
-            {...vipButtonBehavior}
-          >
-            <Typography fontSize={25}>👑</Typography>
-            <Typography fontSize={12}>VIP</Typography>
-          </CenterBottomFab>
-          <Box sx={{ flexGrow: 1 }} />
-          <ShareActionArea
-            shareProps={{
-              title: "Por favor, eche un vistazo a mi página de Maker.",
-              text: "Por favor, eche un vistazo a mi página de Maker.",
-              path: `makers/${maker.id}`,
-            }}
-          >
-            <IconButtonWithLabel>
-              <Share />
-              <Typography>Compartir</Typography>
-            </IconButtonWithLabel>
-          </ShareActionArea>
-          <IconButtonWithLabel href={`/posi/upload`}>
-            <Add />
-            <Typography>Acción</Typography>
-          </IconButtonWithLabel>
-        </Toolbar>
-      </AppBar>
-    ) : (
-      <SupportBottomBar beneficiary={{ maker }} />
-    )
-  ) : (
+  return maker == undefined ? (
     <CenterBottomCircularProgress />
+  ) : myMaker && myMaker.id == maker.id ? (
+    <AppBar
+      position="fixed"
+      color="primary"
+      sx={{ top: "auto", bottom: 16, borderRadius: 8, boxShadow: 8 }}
+    >
+      <SolicitDialog
+        open={solicitDialogOpen}
+        setOpen={setSolicitDialogOpen}
+        howToSupport={maker.howToSupport ? maker.howToSupport : {}}
+        solicitOpinionPath={`/makers/${maker.id}/impact/upload`}
+        pathUnderSupport={`/makers/${maker.id}`}
+        editMakerPath={`/makers/${maker.id}/edit`}
+      />
+      <VipDialog
+        open={vipDialogOpen}
+        setOpen={setVipDialogOpen}
+        setSolicitDialogOpen={setSolicitDialogOpen}
+        myMaker={myMaker}
+        appState={appState}
+      />
+      <Toolbar>
+        <IconButtonWithLabel href={`/makers/${maker.id}/edit`}>
+          <Edit />
+          <Typography>Editar</Typography>
+        </IconButtonWithLabel>
+        <IconButtonWithLabel onClick={() => setSolicitDialogOpen(true)}>
+          <SupportIcon />
+          <Typography>Apoyo</Typography>
+        </IconButtonWithLabel>
+        <CenterBottomFab
+          color="secondary"
+          aria-label="add"
+          {...vipButtonBehavior}
+        >
+          <Typography fontSize={25}>👑</Typography>
+          <Typography fontSize={12}>VIP</Typography>
+        </CenterBottomFab>
+        <Box sx={{ flexGrow: 1 }} />
+        <ShareActionArea
+          shareProps={{
+            title: "Por favor, eche un vistazo a mi página de Maker.",
+            text: "Por favor, eche un vistazo a mi página de Maker.",
+            path: `makers/${maker.id}`,
+          }}
+        >
+          <IconButtonWithLabel>
+            <Share />
+            <Typography>Compartir</Typography>
+          </IconButtonWithLabel>
+        </ShareActionArea>
+        <IconButtonWithLabel href={`/posi/upload`}>
+          <Add />
+          <Typography>Acción</Typography>
+        </IconButtonWithLabel>
+      </Toolbar>
+    </AppBar>
+  ) : (
+    <SupportBottomBar beneficiary={{ maker }} />
   );
 };
 
