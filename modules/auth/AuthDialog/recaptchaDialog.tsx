@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, Box } from "@mui/material";
+import { Dialog, DialogTitle, Box, DialogContentText } from "@mui/material";
 import { Dispatch, SetStateAction, useRef, useState, useEffect } from "react";
 
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
@@ -40,7 +40,7 @@ const RecaptchaDialog = ({
         if (recaptchaContainer.current != null) {
           const verifier = new RecaptchaVerifier(
             recaptchaContainer.current,
-            {},
+            { size: "invisible" },
             appState.auth
           );
           const confirmationResult = await signInWithPhoneNumber(
@@ -72,9 +72,7 @@ const RecaptchaDialog = ({
 
   return (
     <Dialog open={authDialogState.recaptchaDialogOpen} fullWidth>
-      <DialogTitle>
-        Lamentamos tener que preguntar, pero ¿eres un robot?
-      </DialogTitle>
+      <DialogTitle>Verifiquemos tu humanidad</DialogTitle>
       <center>
         <Box
           ref={(r) => {
@@ -85,6 +83,10 @@ const RecaptchaDialog = ({
           p={1}
         ></Box>
       </center>
+      <DialogContentText>
+        En caso tal de no poder avanzar, refresca tu pagina o contactanos a:
+        community@onewe.co.
+      </DialogContentText>
     </Dialog>
   );
 };
