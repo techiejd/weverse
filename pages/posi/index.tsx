@@ -87,7 +87,7 @@ const IndexPage = ({ appState }: { appState: AppState }) => {
       dataLength={actions.length}
       style={{ display: "flex", flexDirection: "column" }}
     >
-      <Grid container spacing={1}>
+      <Grid container spacing={1} pl={1} pr={1}>
         {actions.map((action) => (
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={action.id}>
             <ImpactCard posiData={action} />

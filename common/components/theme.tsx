@@ -18,8 +18,8 @@ const darkPalette = {
 const lightPalette = {
   mode: "light" as PaletteMode,
   background: {
-    default: "#ffffff",
-    paper: "#fefbff",
+    default: "#fcfcfc",
+    paper: "#ffffff",
   },
   primary: {
     main: "#824599",

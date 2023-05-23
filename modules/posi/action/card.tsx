@@ -1,18 +1,114 @@
 import {
   Card,
   CardActionArea,
-  CardMedia,
   CardContent,
   Typography,
-  CardActions,
-  Button,
   Box,
+  Stack,
+  Avatar,
+  LinearProgress,
 } from "@mui/material";
-import ShareActionArea from "../../../common/components/shareActionArea";
-import { getPosiPage, getSharePropsForPosi } from "../input/context";
 import { PosiFormData } from "../../../functions/shared/src";
 import RatingsStack from "../../../common/components/ratings";
-import Media, { VideoProps } from "../media";
+import Media from "../media";
+import { AppState, useAppState } from "../../../common/context/appState";
+import { useMaker } from "../../../common/context/weverseUtils";
+import { FmdGood } from "@mui/icons-material";
+
+const OverlayInfo = ({ action }: { action: PosiFormData }) => {
+  const appState = useAppState();
+  const MakerTitle = ({ appState }: { appState: AppState }) => {
+    const [maker, makerLoading, makerError] = useMaker(
+      appState,
+      action.makerId
+    );
+    const makerInfo = maker
+      ? [
+          <Typography key="makerTitleOnActionCard" color={"white"}>
+            {maker.name}
+          </Typography>,
+          <Typography
+            key="makerTypeOnActionCard"
+            sx={{
+              backgroundColor: "#d6ffcc",
+              borderRadius: 5,
+              height: 18,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              p: 1,
+            }}
+          >
+            {maker.type == "organization" ? maker.organizationType : maker.type}
+          </Typography>,
+        ]
+      : [<LinearProgress key="makerLinearProgressOnActionCard" />];
+    return (
+      <>
+        <Avatar
+          key="makerAvatorOnActionCard"
+          src={maker?.pic}
+          sx={{ width: 25, height: 25, mr: 1 }}
+        />
+        {...makerInfo}
+      </>
+    );
+  };
+  return (
+    <Stack
+      sx={{
+        backgroundColor: "transparent",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        justifyContent: "space-between",
+        pt: 3,
+        pl: 1,
+        pr: 1,
+        pb: 2,
+      }}
+    >
+      <Stack
+        sx={{
+          width: "100%",
+          minHeight: "33px",
+          backgroundColor: "rgba(2, 13, 14,0.3)",
+          borderRadius: 5,
+          alignItems: "center",
+          justifyContent: "space-between",
+          pl: 1,
+          pr: 1,
+        }}
+        direction={"row"}
+      >
+        {appState ? (
+          <MakerTitle appState={appState} />
+        ) : (
+          <LinearProgress sx={{ width: "100%" }} />
+        )}
+      </Stack>
+      {action.location && (
+        <Typography
+          sx={{
+            backgroundColor: "white",
+            borderRadius: 5,
+            minHeight: 23,
+            width: "fit-content",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            p: 1,
+          }}
+        >
+          <FmdGood />
+          {action.location.structuredFormatting.mainText}
+        </Typography>
+      )}
+    </Stack>
+  );
+};
 
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
   const media =
@@ -29,15 +125,35 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
         }
       : { image: { src: posiData.media.url } };
   return (
-    <Card sx={{ width: "100%" }}>
+    <Card
+      sx={{
+        width: "100%",
+        p: 1,
+        borderRadius: 2,
+      }}
+    >
       <CardActionArea href={`/posi/${posiData.id}`}>
         <Box
           sx={{
-            height: "50vh",
             width: "100%",
+            height: "50vh",
+            borderRadius: 3,
+            overflow: "hidden",
+            position: "relative",
           }}
         >
-          <Media {...media} />
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <Media {...media} />
+          </Box>
+          <OverlayInfo action={posiData} />
         </Box>
         <CardContent>
           <Typography
@@ -54,23 +170,6 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
           <RatingsStack ratings={posiData.ratings} />
         </CardContent>
       </CardActionArea>
-      <CardActions>
-        <Button
-          size="small"
-          variant="contained"
-          href={getPosiPage(posiData.id)}
-        >
-          Conoce más
-        </Button>
-        <ShareActionArea
-          shareProps={getSharePropsForPosi({
-            summary: posiData.summary!,
-            id: posiData.id,
-          })}
-        >
-          <Button size="small">Comparte</Button>
-        </ShareActionArea>
-      </CardActions>
     </Card>
   );
 };
