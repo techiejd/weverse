@@ -36,11 +36,14 @@ const UploadSocialProofPrompt = ({
         sx={{ justifyContent: "center", alignItems: "center" }}
         p={2}
       >
+        {forMaker.pic && (
+          <Avatar src={forMaker.pic} sx={{ width: 112, height: 112 }} />
+        )}
         <Typography variant="h2" fontWeight="bold">
           <Link
             href={`/makers/${forMaker.id}`}
             sx={{ color: "black" }}
-          >{`${forMaker.name}:`}</Link>
+          >{`${forMaker.name}`}</Link>
         </Typography>
         <Typography variant="h2" fontWeight="bold" textAlign="center">
           {`quiere saber ¿cómo ${

@@ -131,6 +131,7 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
         p: 1,
         borderRadius: 2,
       }}
+      elevation={5}
     >
       <CardActionArea href={`/posi/${posiData.id}`}>
         <Box

@@ -5,6 +5,7 @@ import {
   Fab,
   Grid,
   LinearProgress,
+  Stack,
   Typography,
 } from "@mui/material";
 import {
@@ -116,21 +117,35 @@ const Index = () => {
   return (
     <Box mb={9} /** For the fab icon space. */>
       {fullHeightPage}
-      <PageTitle title={<>🤸 Actions</>} />
-      {appState ? <IndexPage appState={appState} /> : <CircularProgress />}
-      <Fab
-        variant="extended"
+      <Stack
         sx={{
-          position: "fixed",
-          bottom: 16,
-          right: 16,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
-        href="/posi/upload"
-        color="primary"
+        spacing={3}
+        pt={3}
       >
-        <PlusOne sx={{ mr: 1 }} />
-        <Typography>Agrega tu Action!</Typography>
-      </Fab>
+        <Typography
+          fontSize={25}
+          variant="h2"
+          textAlign="center"
+          fontWeight="bold"
+          pb={1}
+        >
+          Apoyando acciones que cambian el mundo
+        </Typography>
+        <Fab
+          variant="extended"
+          href="/posi/upload"
+          color="primary"
+          sx={{ width: "fit-content" }}
+        >
+          <PlusOne sx={{ mr: 1 }} />
+          <Typography>Agrega tu acción!</Typography>
+        </Fab>
+        {appState ? <IndexPage appState={appState} /> : <CircularProgress />}
+      </Stack>
     </Box>
   );
 };

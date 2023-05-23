@@ -176,8 +176,8 @@ const VipDialog = ({
   return (
     <Dialog open={open}>
       <DialogTitle>
-        Para ingresar a la sala VIP donde hay $400,000 USD en posibilidades de
-        asistencia, realiza cada una de las siguientes tareas:
+        Para ingresar a la sala VIP y entrar a ganar $100USD en la rifa, realiza
+        cada una de las siguientes tareas:
       </DialogTitle>
       <DialogContent>
         <Typography>Haz clic en la tarea para comenzar el proceso:</Typography>

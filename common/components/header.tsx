@@ -127,7 +127,7 @@ const UserPortal = ({ appState }: { appState: AppState }) => {
 export const Header = () => {
   const appState = useAppState();
   return (
-    <AppBar position="static" color="transparent">
+    <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar>
         <MenuComponent />
         <Link sx={{ all: "unset" }} href="/">

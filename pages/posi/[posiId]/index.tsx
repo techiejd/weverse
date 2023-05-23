@@ -65,8 +65,8 @@ const AdminBottomBar = ({
         <ShareActionArea
           shareProps={{
             path: solicitOpinionPath,
-            text: "Por favor dame tu testimonio sobre mi impacto social",
-            title: "Por favor dame tu testimonio sobre mi impacto social",
+            title: `Por favor dame tu opinion sobre mi acción social: ${action.summary}`,
+            text: `Por favor dame tu opinion sobre mi acción social: ${action.summary}`,
           }}
         >
           <IconButtonWithLabel>
