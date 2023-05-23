@@ -1,5 +1,9 @@
 import { LinkProps, PaletteMode } from "@mui/material";
 import LinkBehavior from "../utils/linkBehavior";
+import { Inter, Montserrat } from "next/font/google";
+
+const interFont = Inter({ subsets: ["latin"] });
+const montserratFont = Montserrat({ subsets: ["latin"] });
 
 const darkPalette = {
   mode: "dark" as PaletteMode,
@@ -58,11 +62,14 @@ const baseConfiguration = {
     },
   },
   typography: {
+    fontFamily: interFont.style.fontFamily,
     h1: {
       fontSize: "3rem",
+      fontFamily: montserratFont.style.fontFamily,
     },
     h2: {
       fontSize: "2rem",
+      fontFamily: montserratFont.style.fontFamily,
     },
     h3: {
       fontSize: "1.5rem",
