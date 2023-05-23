@@ -2,13 +2,13 @@ import { CircularProgress } from "@mui/material";
 import { AppState, useAppState } from "../../../../../common/context/appState";
 import { useMaker } from "../../../../../common/context/weverseUtils";
 import { useCurrentPosi } from "../../../../../modules/posi/context";
-import UploadSocialProofPrompt from "../../../../../common/components/upload/prompt";
+import UploadSocialProofForm from "../../../../../common/components/upload/form";
 
-const UploadPage = ({ appState }: { appState: AppState }) => {
+const UploadFormPage = ({ appState }: { appState: AppState }) => {
   const [action, actionLoading, actionError] = useCurrentPosi(appState);
   const [maker, makerLoading, makerError] = useMaker(appState, action?.makerId);
   return action && maker ? (
-    <UploadSocialProofPrompt
+    <UploadSocialProofForm
       forMaker={maker}
       forAction={action}
       appState={appState}
@@ -18,10 +18,14 @@ const UploadPage = ({ appState }: { appState: AppState }) => {
   );
 };
 
-const Upload = () => {
+const UploadForm = () => {
   const appState = useAppState();
 
-  return appState ? <UploadPage appState={appState} /> : <CircularProgress />;
+  return appState ? (
+    <UploadFormPage appState={appState} />
+  ) : (
+    <CircularProgress />
+  );
 };
 
-export default Upload;
+export default UploadForm;

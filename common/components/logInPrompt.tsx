@@ -14,7 +14,16 @@ const LogInPrompt = ({ title }: { title: string }) => {
   const [logInDialogOpen, setLogInDialogOpen] = useState(false);
   const [registerDialogOpen, setRegisterDialogOpen] = useState(false);
   return (
-    <Box border={1} borderColor={"black"} p={2} m={2}>
+    <Box
+      sx={{
+        border: 1,
+        p: 2,
+        m: 2,
+        backgroundColor: "#f5f8ff",
+        borderRadius: 2,
+        borderColor: "#d9e1ec",
+      }}
+    >
       <AuthDialog open={logInDialogOpen} setOpen={setLogInDialogOpen} />
       <AuthDialog
         open={registerDialogOpen}
