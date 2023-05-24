@@ -1,4 +1,4 @@
-import { CircularProgress, Stack, Typography } from "@mui/material";
+import { Button, CircularProgress, Stack, Typography } from "@mui/material";
 import { AppState, useAppState } from "../../common/context/appState";
 import { useRouter } from "next/router";
 import {
@@ -33,13 +33,19 @@ const Vip = () => {
       }
     }, [myMaker, vipState.entryGiven, router]);
     return myMaker ? (
-      <Stack>
-        <Typography variant="h1">
+      <Stack spacing={2} p={2} alignItems="center">
+        <Typography variant="h1" textAlign="center">
           ¡Bienvenidos a la sala VIP de OneWe!
         </Typography>
-        <Typography>
-          Join the whatsapp group and or broadcast. Do it now. Coolio.
+        <Typography variant="h2" textAlign="center">
+          Primero, ingrese al grupo VIP WhatsApp:
         </Typography>
+        <Button
+          href="https://chat.whatsapp.com/Bi3PenMNgDZJJNdX6rw5HA"
+          variant="contained"
+        >
+          Ingresar
+        </Button>
       </Stack>
     ) : (
       <LogInPrompt
