@@ -1,4 +1,10 @@
-import { Button, CircularProgress, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Link,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { AppState, useAppState } from "../../common/context/appState";
 import { useRouter } from "next/router";
 import {
@@ -38,7 +44,8 @@ const Vip = () => {
           ¡Bienvenidos a la sala VIP de OneWe!
         </Typography>
         <Typography variant="h2" textAlign="center">
-          Primero, ingrese al grupo VIP WhatsApp:
+          Para recibir los premios (el dinero y entrar a la rifa) y ser parte
+          del VIP Makers, ingrese al grupo VIP WhatsApp:
         </Typography>
         <Button
           href="https://chat.whatsapp.com/Bi3PenMNgDZJJNdX6rw5HA"
