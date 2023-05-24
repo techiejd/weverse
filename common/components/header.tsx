@@ -21,6 +21,7 @@ import { AppState, useAppState } from "../context/appState";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import Image from "next/image";
 import LinkBehavior from "../utils/linkBehavior";
+import { useMyMaker } from "../context/weverseUtils";
 
 export const MenuComponent = (props: BoxProps) => {
   const appState = useAppState();
@@ -106,15 +107,16 @@ export const MenuComponent = (props: BoxProps) => {
 };
 
 const UserPortal = ({ appState }: { appState: AppState }) => {
-  const [user, loading, error] = useAuthState(appState.auth);
+  const [user, userLoading, userError] = useAuthState(appState.auth);
+  const [myMaker, myMakerLoading, myMakerError] = useMyMaker(appState);
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   return (
     <Box>
       <AuthDialog open={authDialogOpen} setOpen={setAuthDialogOpen} />
-      {loading ? (
+      {myMakerLoading || userLoading ? (
         <CircularProgress />
-      ) : user ? (
-        <Button size="small" variant="outlined" href={`/users/${user.uid}`}>
+      ) : myMaker && user ? (
+        <Button size="small" variant="outlined" href={`/makers/${myMaker.id}`}>
           {user.displayName}
         </Button>
       ) : (
