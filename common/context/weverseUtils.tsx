@@ -1,16 +1,24 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import { AppState } from "./appState";
 import {
+  useCollection,
   useCollectionData,
   useDocumentData,
 } from "react-firebase-hooks/firestore";
-import { collection, doc, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getCountFromServer,
+  query,
+  where,
+} from "firebase/firestore";
 import {
   memberConverter,
   makerConverter,
   posiFormDataConverter,
   socialProofConverter,
 } from "../utils/firebase";
+import { useEffect, useState } from "react";
 
 export const useMyMaker = (appState: AppState) => {
   //TODO(techiejd): Go through codebase and replace with this.
@@ -29,6 +37,58 @@ export const useMyMaker = (appState: AppState) => {
         )
       : undefined
   );
+};
+
+export const useMyMember = (appState: AppState) => {
+  //TODO(techiejd): Go through codebase and replace with this.
+  const [user, userLoading, userError] = useAuthState(appState.auth);
+  return useDocumentData(
+    user
+      ? doc(appState.firestore, "members", user.uid).withConverter(
+          memberConverter
+        )
+      : undefined
+  );
+};
+
+export const useMyLikes = (appState: AppState) => {
+  const [user, userLoading, userError] = useAuthState(appState.auth);
+  const [likesCollection, likesCollectionLoading, likesCollectionError] =
+    useCollection(
+      user
+        ? collection(appState.firestore, "members", user.uid, "likes")
+        : undefined
+    );
+  const [likes, setLikes] = useState<string[]>([]);
+  useEffect(() => {
+    if (likesCollection) {
+      setLikes(likesCollection.docs.map((likeDoc) => likeDoc.id));
+    }
+  }, [likesCollection, setLikes]);
+
+  return likes;
+};
+
+export const useLikesCount = (
+  appState: AppState,
+  actionId: string | undefined
+) => {
+  const [c, setC] = useState(0);
+  useEffect(() => {
+    (async () => {
+      if (actionId) {
+        setC(
+          (
+            await getCountFromServer(
+              collection(appState.firestore, "impacts", actionId, "likes")
+            )
+          ).data().count
+        );
+      }
+    })();
+  }, [appState.firestore, actionId, setC]);
+
+  return c;
 };
 
 export const useMaker = (appState: AppState, makerId: string | undefined) => {

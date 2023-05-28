@@ -6,7 +6,7 @@ import {
   serverTimestamp,
   QueryDocumentSnapshot,
 } from "firebase/firestore";
-import { Maker, maker, SocialProof, socialProof, Member, member, PosiFormData, posiFormData } from '../../functions/shared/src';
+import { Maker, maker, SocialProof, socialProof, Member, member, PosiFormData, posiFormData, Like, like } from '../../functions/shared/src';
 
 export const creds = {
   apiKey: String(process.env.NEXT_PUBLIC_REACT_APP_API_KEY),
@@ -91,7 +91,31 @@ export const posiFormDataConverter: FirestoreDataConverter<PosiFormData> = {
   },
   fromFirestore: (snapshot: QueryDocumentSnapshot): PosiFormData => {
     const data = snapshot.data();
+    console.log(snapshot)
+    console.log(data);
     return posiFormData.parse({
+      ...data,
+      id: snapshot.id,
+      createdAt: data.createdAt.toDate(),
+    });
+  },
+};
+
+export const likeConverter: FirestoreDataConverter<Like> = {
+  toFirestore: (likeData: WithFieldValue<Like>): DocumentData => {
+    const {id, ...others} = likeData;
+    return {
+      ...others,
+      createdAt: likeData.createdAt ?
+      likeData.createdAt :
+        serverTimestamp(),
+    };
+  },
+  fromFirestore: (snapshot: QueryDocumentSnapshot): Like => {
+    const data = snapshot.data();
+    console.log(snapshot)
+    console.log(data);
+    return like.parse({
       ...data,
       id: snapshot.id,
       createdAt: data.createdAt.toDate(),

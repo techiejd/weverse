@@ -58,6 +58,13 @@ export const member = z.object({
 });
 export type Member = z.infer<typeof member>;
 
+// This is an edge.
+export const like = z.object({
+  id: z.string().optional(),
+  createdAt: z.date().optional(),
+})
+export type Like = z.infer<typeof like>;
+
 export const socialProof = z.object({
   id: z.string().optional(),
   rating: z.number(),

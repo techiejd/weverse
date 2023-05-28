@@ -1,0 +1,229 @@
+import { Favorite, FavoriteBorder, FmdGood } from "@mui/icons-material";
+import {
+  Stack,
+  Typography,
+  CircularProgress,
+  LinearProgress,
+  Avatar,
+} from "@mui/material";
+import { writeBatch, doc } from "firebase/firestore";
+import { MouseEvent, useState } from "react";
+import { AppState, useAppState } from "../../../../common/context/appState";
+import {
+  useLikesCount,
+  useMaker,
+  useMyLikes,
+  useMyMember,
+} from "../../../../common/context/weverseUtils";
+import { likeConverter } from "../../../../common/utils/firebase";
+import { PosiFormData } from "../../../../functions/shared/src";
+
+const transaparentPillBox = {
+  minHeight: "33px",
+  backgroundColor: "rgba(2, 13, 14,0.3)",
+  borderRadius: 5,
+  alignItems: "center",
+  justifyContent: "space-between",
+  pl: 1,
+  pr: 1,
+};
+
+const LikesDisplay = ({
+  appState,
+  action,
+}: {
+  appState: AppState;
+  action: PosiFormData;
+}) => {
+  const [myMember, myMemberLoading, myMemberError] = useMyMember(appState);
+  const likes = useLikesCount(appState, action.id);
+  const [localChange, setLocalChange] = useState<
+    "increment" | "decrement" | undefined
+  >();
+  const [updating, setUpdating] = useState(false);
+  const localLikes =
+    likes +
+    (localChange == undefined ? 0 : localChange == "increment" ? 1 : -1);
+  const myLikes = useMyLikes(appState);
+  const liked = myLikes.includes(String(action.id));
+  console.log({ localChange, liked });
+  const updateLikes = async (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (updating) {
+      return;
+    }
+    if (action.id == undefined || myMember?.id == undefined) return;
+    const batch = writeBatch(appState.firestore);
+    const actionLikeDoc = doc(
+      appState.firestore,
+      "impacts",
+      action.id,
+      "likes",
+      myMember.id
+    ).withConverter(likeConverter);
+    const memberLikeDoc = doc(
+      appState.firestore,
+      "members",
+      myMember.id,
+      "likes",
+      action.id
+    ).withConverter(likeConverter);
+    const commit = async () => {
+      setUpdating(true);
+      await batch.commit();
+      setUpdating(false);
+    };
+    const increment = async () => {
+      batch.set(actionLikeDoc, {});
+      batch.set(memberLikeDoc, {});
+      await commit();
+    };
+    const decrement = async () => {
+      batch.delete(actionLikeDoc);
+      batch.delete(memberLikeDoc);
+      await commit();
+    };
+    switch (localChange) {
+      case "increment": {
+        console.log("in increment");
+        await decrement();
+        setLocalChange(undefined);
+        break;
+      }
+      case "decrement": {
+        console.log("in decrement");
+        await increment();
+        setLocalChange(undefined);
+        break;
+      }
+      default: {
+        console.log("in default");
+        if (liked) {
+          await decrement();
+          setLocalChange("decrement");
+        } else {
+          await increment();
+          setLocalChange("increment");
+        }
+        break;
+      }
+    }
+  };
+  return (
+    <Stack
+      direction="row"
+      sx={[transaparentPillBox, { color: "white", maxHeight: "33px" }]}
+      width="fit-content"
+      spacing={1}
+      onClick={(e) => updateLikes(e)}
+    >
+      {((!localChange && liked) || localChange == "increment") && (
+        <Favorite sx={{ color: "red" }} />
+      )}
+      {((!localChange && !liked) || localChange == "decrement") && (
+        <FavoriteBorder />
+      )}
+      <Typography>{updating ? <CircularProgress /> : localLikes}</Typography>
+    </Stack>
+  );
+};
+
+const OverlayInfo = ({ action }: { action: PosiFormData }) => {
+  const appState = useAppState();
+  const MakerTitle = ({ appState }: { appState: AppState }) => {
+    const [maker, makerLoading, makerError] = useMaker(
+      appState,
+      action.makerId
+    );
+    const makerInfo = maker
+      ? [
+          <Typography key="makerTitleOnActionCard" color={"white"}>
+            {maker.name}
+          </Typography>,
+          <Typography
+            key="makerTypeOnActionCard"
+            sx={{
+              backgroundColor: "#d6ffcc",
+              borderRadius: 5,
+              height: 18,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              p: 1,
+            }}
+          >
+            {maker.type == "organization" ? maker.organizationType : maker.type}
+          </Typography>,
+        ]
+      : [<LinearProgress key="makerLinearProgressOnActionCard" />];
+    return (
+      <>
+        <Avatar
+          key="makerAvatorOnActionCard"
+          src={maker?.pic}
+          sx={{ width: 25, height: 25, mr: 1 }}
+        />
+        {...makerInfo}
+      </>
+    );
+  };
+
+  return (
+    <Stack
+      sx={{
+        backgroundColor: "transparent",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        justifyContent: "space-between",
+        pt: 3,
+        pl: 1,
+        pr: 1,
+        pb: 2,
+      }}
+    >
+      <Stack sx={transaparentPillBox} direction={"row"}>
+        {appState ? (
+          <MakerTitle appState={appState} />
+        ) : (
+          <LinearProgress sx={{ width: "100%" }} />
+        )}
+      </Stack>
+      <Stack
+        direction="row-reverse"
+        justifyContent="space-between"
+        alignItems="end"
+      >
+        {appState ? (
+          <LikesDisplay appState={appState} action={action} />
+        ) : (
+          <></>
+        )}
+        {action.location ? (
+          <Typography
+            sx={{
+              backgroundColor: "white",
+              borderRadius: 5,
+              minHeight: 23,
+              width: "fit-content",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              p: 1,
+            }}
+          >
+            <FmdGood />
+            {action.location.structuredFormatting.mainText}
+          </Typography>
+        ) : (
+          <></>
+        )}
+      </Stack>
+    </Stack>
+  );
+};
+
+export default OverlayInfo;
