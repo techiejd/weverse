@@ -6,13 +6,26 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import { AuthAction } from "../../modules/auth/AuthDialog/context";
 
-const LogInPrompt = ({ title }: { title: string }) => {
+const LogInPrompt = ({
+  title,
+  setOpen,
+}: {
+  title: string;
+  setOpen?: Dispatch<SetStateAction<boolean>>;
+}) => {
   const [logInDialogOpen, setLogInDialogOpen] = useState(false);
   const [registerDialogOpen, setRegisterDialogOpen] = useState(false);
+  const behavior = setOpen
+    ? {
+        onClick: () => {
+          setOpen(false);
+        },
+      }
+    : { href: "/" };
   return (
     <Box
       sx={{
@@ -36,7 +49,7 @@ const LogInPrompt = ({ title }: { title: string }) => {
           Regístrate si no lo has hecho. Inicia sesión si ya estás registrado.
         </DialogContentText>
         <DialogActions>
-          <Button href="/" size="small">
+          <Button {...behavior} size="small">
             Cancelar
           </Button>
           <AuthDialogButton setAuthDialogOpen={setLogInDialogOpen} />

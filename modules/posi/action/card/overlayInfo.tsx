@@ -7,7 +7,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { writeBatch, doc } from "firebase/firestore";
-import { MouseEvent, useState } from "react";
+import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { AppState, useAppState } from "../../../../common/context/appState";
 import {
   useLikesCount,
@@ -31,9 +31,11 @@ const transaparentPillBox = {
 const LikesDisplay = ({
   appState,
   action,
+  setLogInPromptOpen,
 }: {
   appState: AppState;
   action: PosiFormData;
+  setLogInPromptOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [myMember, myMemberLoading, myMemberError] = useMyMember(appState);
   const likes = useLikesCount(appState, action.id);
@@ -46,14 +48,15 @@ const LikesDisplay = ({
     (localChange == undefined ? 0 : localChange == "increment" ? 1 : -1);
   const myLikes = useMyLikes(appState);
   const liked = myLikes.includes(String(action.id));
-  console.log({ localChange, liked });
   const updateLikes = async (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (updating) {
+    if (updating || action.id == undefined || myMember?.id == undefined) {
+      if (myMember?.id == undefined) {
+        setLogInPromptOpen(true);
+      }
       return;
     }
-    if (action.id == undefined || myMember?.id == undefined) return;
     const batch = writeBatch(appState.firestore);
     const actionLikeDoc = doc(
       appState.firestore,
@@ -86,19 +89,16 @@ const LikesDisplay = ({
     };
     switch (localChange) {
       case "increment": {
-        console.log("in increment");
         await decrement();
         setLocalChange(undefined);
         break;
       }
       case "decrement": {
-        console.log("in decrement");
         await increment();
         setLocalChange(undefined);
         break;
       }
       default: {
-        console.log("in default");
         if (liked) {
           await decrement();
           setLocalChange("decrement");
@@ -129,7 +129,13 @@ const LikesDisplay = ({
   );
 };
 
-const OverlayInfo = ({ action }: { action: PosiFormData }) => {
+const OverlayInfo = ({
+  action,
+  setLogInPromptOpen,
+}: {
+  action: PosiFormData;
+  setLogInPromptOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   const appState = useAppState();
   const MakerTitle = ({ appState }: { appState: AppState }) => {
     const [maker, makerLoading, makerError] = useMaker(
@@ -198,7 +204,11 @@ const OverlayInfo = ({ action }: { action: PosiFormData }) => {
         alignItems="end"
       >
         {appState ? (
-          <LikesDisplay appState={appState} action={action} />
+          <LikesDisplay
+            appState={appState}
+            action={action}
+            setLogInPromptOpen={setLogInPromptOpen}
+          />
         ) : (
           <></>
         )}

@@ -91,8 +91,6 @@ export const posiFormDataConverter: FirestoreDataConverter<PosiFormData> = {
   },
   fromFirestore: (snapshot: QueryDocumentSnapshot): PosiFormData => {
     const data = snapshot.data();
-    console.log(snapshot)
-    console.log(data);
     return posiFormData.parse({
       ...data,
       id: snapshot.id,
@@ -113,8 +111,6 @@ export const likeConverter: FirestoreDataConverter<Like> = {
   },
   fromFirestore: (snapshot: QueryDocumentSnapshot): Like => {
     const data = snapshot.data();
-    console.log(snapshot)
-    console.log(data);
     return like.parse({
       ...data,
       id: snapshot.id,

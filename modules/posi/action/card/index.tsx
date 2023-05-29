@@ -4,11 +4,49 @@ import {
   CardContent,
   Typography,
   Box,
+  Dialog,
 } from "@mui/material";
 import { PosiFormData } from "../../../../functions/shared/src";
 import Media from "../../media";
 import OverlayInfo from "./overlayInfo";
 import RatingsStack from "../../../../common/components/ratings";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import LogInPrompt from "../../../../common/components/logInPrompt";
+import { AppState, useAppState } from "../../../../common/context/appState";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useMyMember } from "../../../../common/context/weverseUtils";
+
+const LogInPromptDialog = ({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
+  //TODO(techiejd): Figure out the log in stuff. bring to top of app.
+  return (
+    <Dialog open={open}>
+      <LogInPrompt
+        title="Para dar 'Me Gusta' debes iniciar sesión."
+        setOpen={setOpen}
+      />
+    </Dialog>
+  );
+};
+
+const MemberLogInTrigger = ({
+  appState,
+  setLogInPromptDialogOpen,
+}: {
+  appState: AppState;
+  setLogInPromptDialogOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const [myMember, myMemberLoading, myMemberError] = useMyMember(appState);
+  useEffect(() => {
+    if (myMember) setLogInPromptDialogOpen(false);
+  }, [myMember, setLogInPromptDialogOpen]);
+  return <Box />;
+};
 
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
   const media =
@@ -24,6 +62,8 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
           },
         }
       : { image: { src: posiData.media.url } };
+  const [logInPromptDialogOpen, setLogInPromptDialogOpen] = useState(false);
+  const appState = useAppState();
   return (
     <Card
       sx={{
@@ -33,6 +73,16 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
       }}
       elevation={5}
     >
+      <LogInPromptDialog
+        open={logInPromptDialogOpen}
+        setOpen={setLogInPromptDialogOpen}
+      />
+      {appState && (
+        <MemberLogInTrigger
+          setLogInPromptDialogOpen={setLogInPromptDialogOpen}
+          appState={appState}
+        />
+      )}
       <CardActionArea href={`/posi/${posiData.id}`}>
         <Box
           sx={{
@@ -54,7 +104,10 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
           >
             <Media {...media} />
           </Box>
-          <OverlayInfo action={posiData} />
+          <OverlayInfo
+            action={posiData}
+            setLogInPromptOpen={setLogInPromptDialogOpen}
+          />
         </Box>
         <CardContent>
           <Typography
