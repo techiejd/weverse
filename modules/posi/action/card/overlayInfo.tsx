@@ -212,7 +212,7 @@ const OverlayInfo = ({
         ) : (
           <></>
         )}
-        {action.location ? (
+        {action.location?.structuredFormatting?.mainText ? (
           <Typography
             sx={{
               backgroundColor: "white",

@@ -119,7 +119,7 @@ const location = z.object({
    * <code>'establishment'</code> or <code>'geocode'</code>.
    */
   types: z.string().array(),
-});
+}).deepPartial(); // TODO(techiejd): Look into this error.
 
 // TODO(techiejd): Reshape db. It should go posi
 // {action: Action, impacts: Impact[], makerId}
