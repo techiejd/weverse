@@ -1,5 +1,5 @@
 import { useAuthState } from "react-firebase-hooks/auth";
-import { AppState } from "./appState";
+import { useAppState } from "./appState";
 import {
   useCollection,
   useCollectionData,
@@ -20,9 +20,9 @@ import {
 } from "../utils/firebase";
 import { useEffect, useState } from "react";
 
-export const useMyMaker = (appState: AppState) => {
-  //TODO(techiejd): Go through codebase and replace with this.
-  const [user, userLoading, userError] = useAuthState(appState.auth);
+export const useMyMaker = () => {
+  const appState = useAppState();
+  const { user } = appState.authState;
   const [member, memberLoading, memberError] = useDocumentData(
     user
       ? doc(appState.firestore, "members", user.uid).withConverter(
@@ -39,9 +39,9 @@ export const useMyMaker = (appState: AppState) => {
   );
 };
 
-export const useMyMember = (appState: AppState) => {
-  //TODO(techiejd): Go through codebase and replace with this.
-  const [user, userLoading, userError] = useAuthState(appState.auth);
+export const useMyMember = () => {
+  const appState = useAppState();
+  const { user } = appState.authState;
   return useDocumentData(
     user
       ? doc(appState.firestore, "members", user.uid).withConverter(
@@ -51,8 +51,9 @@ export const useMyMember = (appState: AppState) => {
   );
 };
 
-export const useMyLikes = (appState: AppState) => {
-  const [user, userLoading, userError] = useAuthState(appState.auth);
+export const useMyLikes = () => {
+  const appState = useAppState();
+  const { user } = useAppState().authState;
   const [likesCollection, likesCollectionLoading, likesCollectionError] =
     useCollection(
       user
@@ -69,10 +70,8 @@ export const useMyLikes = (appState: AppState) => {
   return likes;
 };
 
-export const useLikesCount = (
-  appState: AppState,
-  actionId: string | undefined
-) => {
+export const useLikesCount = (actionId: string | undefined) => {
+  const appState = useAppState();
   const [c, setC] = useState(0);
   useEffect(() => {
     (async () => {
@@ -91,8 +90,8 @@ export const useLikesCount = (
   return c;
 };
 
-export const useMaker = (appState: AppState, makerId: string | undefined) => {
-  //TODO(techiejd): Go through codebase and replace with this.
+export const useMaker = (makerId: string | undefined) => {
+  const appState = useAppState();
   return useDocumentData(
     makerId
       ? doc(appState.firestore, "makers", makerId).withConverter(makerConverter)
@@ -100,8 +99,8 @@ export const useMaker = (appState: AppState, makerId: string | undefined) => {
   );
 };
 
-export const useAction = (appState: AppState, posiId: string | undefined) => {
-  //TODO(techiejd): Go through codebase and replace with this.
+export const useAction = (posiId: string | undefined) => {
+  const appState = useAppState();
   return useDocumentData(
     posiId
       ? doc(appState.firestore, "impacts", posiId).withConverter(
@@ -112,10 +111,10 @@ export const useAction = (appState: AppState, posiId: string | undefined) => {
 };
 
 export const useSocialProofs = (
-  appState: AppState,
   beneficiary: string | undefined,
   beneficiaryType: "action" | "maker"
 ) => {
+  const appState = useAppState();
   return useCollectionData(
     beneficiary
       ? query(
@@ -132,7 +131,8 @@ export const useSocialProofs = (
   );
 };
 
-export const useActions = (appState: AppState, maker: string | undefined) => {
+export const useActions = (maker: string | undefined) => {
+  const appState = useAppState();
   return useCollectionData(
     maker
       ? query(

@@ -32,7 +32,7 @@ const RecaptchaDialog = ({
     );
 
     if (
-      appState?.auth &&
+      appState?.authState &&
       authDialogState.recaptchaDialogOpen &&
       recaptchaContainerReady
     ) {
@@ -63,7 +63,7 @@ const RecaptchaDialog = ({
       triggerSignInProcess();
     }
   }, [
-    appState?.auth,
+    appState?.authState,
     authDialogState.phoneNumber,
     authDialogState.recaptchaDialogOpen,
     setAuthDialogState,

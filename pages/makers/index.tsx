@@ -1,6 +1,6 @@
 import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
 import { collection } from "firebase/firestore";
-import { AppState, useAppState } from "../../common/context/appState";
+import { useAppState } from "../../common/context/appState";
 import {
   Box,
   CircularProgress,
@@ -90,13 +90,8 @@ const makerFab = (maker: Maker) => {
   );
 };
 
-const MyMakerSpeedDial = ({
-  user,
-  appState,
-}: {
-  user: User;
-  appState: AppState;
-}) => {
+const MyMakerSpeedDial = ({ user }: { user: User }) => {
+  const appState = useAppState();
   const MyMakerSpeedDialContent = ({ makerId }: { makerId: string }) => {
     const makerDocRef = doc(
       appState.firestore,
@@ -120,8 +115,8 @@ const MyMakerSpeedDial = ({
   );
 };
 
-const MyMakerPortal = ({ appState }: { appState: AppState }) => {
-  const [user, userLoading, userError] = useAuthState(appState.auth);
+const MyMakerPortal = () => {
+  const { user, loading: userLoading } = useAppState().authState;
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
 
   const registerFab = (
@@ -148,7 +143,7 @@ const MyMakerPortal = ({ appState }: { appState: AppState }) => {
       {userLoading ? (
         <LoadingFab />
       ) : user ? (
-        <MyMakerSpeedDial user={user} appState={appState} />
+        <MyMakerSpeedDial user={user} />
       ) : (
         registerFab
       )}
@@ -156,7 +151,8 @@ const MyMakerPortal = ({ appState }: { appState: AppState }) => {
   );
 };
 
-const MakersListed = ({ appState }: { appState: AppState }) => {
+const Makers = () => {
+  const appState = useAppState();
   const [makersSnapshot, makersLoading, makersError] = useCollection(
     collection(appState.firestore, "makers").withConverter(makerConverter)
   );
@@ -197,14 +193,9 @@ const MakersListed = ({ appState }: { appState: AppState }) => {
           <MakerCard makerId={maker} key={maker} />
         ))}
       </Stack>
-      <MyMakerPortal appState={appState} />
+      <MyMakerPortal />
     </Box>
   );
-};
-
-const Makers = () => {
-  const appState = useAppState();
-  return appState ? <MakersListed appState={appState} /> : <CircularProgress />;
 };
 
 export default Makers;

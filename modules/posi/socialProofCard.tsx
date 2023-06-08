@@ -9,7 +9,6 @@ import {
   CardActionArea,
 } from "@mui/material";
 import { SocialProof } from "../../functions/shared/src";
-import { useAppState, AppState } from "../../common/context/appState";
 import { useAction, useMaker } from "../../common/context/weverseUtils";
 import Media from "./media";
 
@@ -22,10 +21,8 @@ const SocialProofCard = ({
   showMaker?: boolean;
   showAction?: boolean;
 }) => {
-  const appState = useAppState();
-  const SocialProofCardHeader = ({ appState }: { appState: AppState }) => {
+  const SocialProofCardHeader = () => {
     const [byMaker, byMakerLoading, byMakerError] = useMaker(
-      appState,
       socialProof.byMaker
     );
     return (
@@ -46,13 +43,11 @@ const SocialProofCard = ({
       </CardActionArea>
     );
   };
-  const SocialProofCardContent = ({ appState }: { appState: AppState }) => {
+  const SocialProofCardContent = () => {
     const [action, actionLoading, actionError] = useAction(
-      appState,
       showAction ? socialProof.forAction : undefined
     );
     const [forMaker, forMakerLoading, forMakerError] = useMaker(
-      appState,
       showMaker ? socialProof.forMaker : undefined
     );
     return (
@@ -66,11 +61,7 @@ const SocialProofCard = ({
   };
   return (
     <Card sx={{ width: "100%" }}>
-      {appState ? (
-        <SocialProofCardHeader appState={appState} />
-      ) : (
-        <CircularProgress />
-      )}
+      <SocialProofCardHeader />
       {socialProof.videoUrl && (
         <Box
           sx={{
@@ -91,7 +82,7 @@ const SocialProofCard = ({
           />
         </Box>
       )}
-      {appState && <SocialProofCardContent appState={appState} />}
+      <SocialProofCardContent />
     </Card>
   );
 };

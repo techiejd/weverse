@@ -12,7 +12,7 @@ import OverlayInfo from "./overlayInfo";
 import RatingsStack from "../../../../common/components/ratings";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import LogInPrompt from "../../../../common/components/logInPrompt";
-import { AppState, useAppState } from "../../../../common/context/appState";
+import { useAppState } from "../../../../common/context/appState";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 
@@ -35,13 +35,11 @@ const LogInPromptDialog = ({
 };
 
 const MemberLogInTrigger = ({
-  appState,
   setLogInPromptDialogOpen,
 }: {
-  appState: AppState;
   setLogInPromptDialogOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [myMember, myMemberLoading, myMemberError] = useMyMember(appState);
+  const [myMember, myMemberLoading, myMemberError] = useMyMember();
   useEffect(() => {
     if (myMember) setLogInPromptDialogOpen(false);
   }, [myMember, setLogInPromptDialogOpen]);
@@ -77,12 +75,7 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
         open={logInPromptDialogOpen}
         setOpen={setLogInPromptDialogOpen}
       />
-      {appState && (
-        <MemberLogInTrigger
-          setLogInPromptDialogOpen={setLogInPromptDialogOpen}
-          appState={appState}
-        />
-      )}
+      <MemberLogInTrigger setLogInPromptDialogOpen={setLogInPromptDialogOpen} />
       <CardActionArea href={`/posi/${posiData.id}`}>
         <Box
           sx={{

@@ -1,9 +1,8 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import Layout from "../common/components/layout";
 import "../modules/auth/AuthCode.css";
 import Script from "next/script";
-import AppStateProvider from "../common/context/appState";
+import AppProvider from "../common/context/appState";
 
 function WeVerse({ Component, pageProps }: AppProps) {
   return (
@@ -41,11 +40,9 @@ function WeVerse({ Component, pageProps }: AppProps) {
 
           gtag('config', 'G-NN708F3V4T');`}
       </Script>
-      <AppStateProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </AppStateProvider>
+      <AppProvider>
+        <Component {...pageProps} />
+      </AppProvider>
     </>
   );
 }

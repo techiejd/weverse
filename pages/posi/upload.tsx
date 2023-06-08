@@ -1,8 +1,7 @@
-import { CircularProgress, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
-import { AppState, useAppState } from "../../common/context/appState";
+import { useAppState } from "../../common/context/appState";
 import { useRouter } from "next/router";
-import { useAuthState } from "react-firebase-hooks/auth";
 import PosiForm from "../../modules/posi/action/form";
 import LogInPrompt from "../../common/components/logInPrompt";
 import { posiFormDataConverter } from "../../common/utils/firebase";
@@ -11,8 +10,8 @@ import { PosiFormData } from "../../functions/shared/src";
 const Upload = () => {
   const appState = useAppState();
   const router = useRouter();
-  const UploadContent = ({ appState }: { appState: AppState }) => {
-    const [user, loading, error] = useAuthState(appState.auth);
+  const UploadContent = () => {
+    const { user } = useAppState().authState;
     const onSubmit = async (usersPosi: PosiFormData) => {
       if (appState) {
         const docRef = await addDoc(
@@ -35,7 +34,7 @@ const Upload = () => {
           <Typography variant="h1">¡Publica tu acción! 🪧</Typography>
         </Stack>
         {user ? (
-          <PosiForm appState={appState} onSubmit={onSubmit} user={user} />
+          <PosiForm onSubmit={onSubmit} user={user} />
         ) : (
           <LogInPrompt
             title={"Para cargar una acción, debes ingresar al sistem."}
@@ -45,11 +44,7 @@ const Upload = () => {
     );
   };
 
-  return appState ? (
-    <UploadContent appState={appState} />
-  ) : (
-    <CircularProgress />
-  );
+  return <UploadContent />;
 };
 
 export default Upload;

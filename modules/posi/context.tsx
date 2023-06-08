@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
-import { AppState } from "../../common/context/appState";
 import { collection, query, where } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useAction } from "../../common/context/weverseUtils";
 import { socialProofConverter } from "../../common/utils/firebase";
+import { useAppState } from "../../common/context/appState";
 
 export const useCurrentPosiId = () => {
   //TODO(techiejd): Go through codebase and replace with this.
@@ -12,12 +12,13 @@ export const useCurrentPosiId = () => {
   return router.isReady ? String(posiId) : undefined;
 };
 
-export const useCurrentPosi = (appState: AppState) => {
+export const useCurrentPosi = () => {
   const posiId = useCurrentPosiId();
-  return useAction(appState, posiId);
+  return useAction(posiId);
 };
 
-export const useCurrentSocialProofs = (appState: AppState) => {
+export const useCurrentSocialProofs = () => {
+  const appState = useAppState();
   const posiId = useCurrentPosiId();
   return useCollectionData(
     posiId

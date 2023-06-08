@@ -1,34 +1,44 @@
 import { app } from "../utils/firebase";
 import {
   getStorage,
-  FirebaseStorage,
   connectStorageEmulator,
+  FirebaseStorage,
 } from "firebase/storage";
 import {
   getFirestore,
-  Firestore,
   connectFirestoreEmulator,
+  Firestore,
 } from "firebase/firestore";
-import { getAuth, Auth, connectAuthEmulator } from "firebase/auth";
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useState,
-} from "react";
+import { getAuth, connectAuthEmulator, User, Auth } from "firebase/auth";
 
-export type User = {
-  phoneNumber: string;
-  name: string;
-  id: string;
-};
+import { CssBaseline } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useAuthState } from "react-firebase-hooks/auth";
+import AuthDialog from "../../modules/auth/AuthDialog";
+import { AuthAction } from "../../modules/auth/AuthDialog/context";
+import { Header } from "../components/header";
+import { lightConfiguration } from "../components/theme";
 
-export type AppState = {
-  user?: User; // TODO(techiejd): Firstly, deprecated. Secondly, I should split responsibility between storage and authentication.
-  storage: FirebaseStorage;
-  firestore: Firestore;
-  auth: Auth;
+const RegisterModal = () => {
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const router = useRouter();
+  const { registerRequested } = router.query;
+  const { user, loading: userLoading } = useAppState().authState;
+  useEffect(() => {
+    const unauthorizedUser = !user && !userLoading;
+    if (unauthorizedUser && registerRequested) {
+      setAuthDialogOpen(true);
+    }
+  }, [user, userLoading, setAuthDialogOpen, registerRequested]);
+  return (
+    <AuthDialog
+      open={authDialogOpen}
+      setOpen={setAuthDialogOpen}
+      initialAuthAction={AuthAction.register}
+    />
+  );
 };
 
 const isDevEnvironment = process && process.env.NODE_ENV === "development";
@@ -54,35 +64,51 @@ const auth = (() => {
   return auth;
 })();
 
-const AppContext = createContext<AppState | undefined>(undefined);
+const weverse: {
+  storage: FirebaseStorage;
+  firestore: Firestore;
+  authState: {
+    user: User | undefined | null;
+    loading: boolean;
+  };
+  auth: Auth;
+} = {
+  storage: storage,
+  firestore: firestore,
+  authState: { user: undefined, loading: false },
+  auth: auth,
+};
 
-const SetAppContext = createContext<
-  Dispatch<SetStateAction<AppState | undefined>> | undefined
->(undefined);
+const AppStateContext = createContext(weverse);
 
-const AppStateProvider: React.FC<{
+const AppProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const [appState, setAppState] = useState<AppState | undefined>({
-    storage: storage,
-    firestore: firestore,
-    auth: auth,
-  });
+  const [appState, setAppState] = useState(weverse);
+  const [user, loading, error] = useAuthState(appState.auth);
+  // TODO(techiejd): Do something about errors.
+  useEffect(() => {
+    setAppState((appState) => ({
+      ...appState,
+      authState: { user, loading },
+    }));
+  }, [setAppState, user, loading]);
+
   return (
-    <AppContext.Provider value={appState}>
-      <SetAppContext.Provider value={setAppState}>
-        {children}
-      </SetAppContext.Provider>
-    </AppContext.Provider>
+    <AppStateContext.Provider value={appState}>
+      <ThemeProvider theme={createTheme(lightConfiguration)}>
+        <CssBaseline>
+          <RegisterModal />
+          <Header />
+          <main>{children}</main>
+        </CssBaseline>
+      </ThemeProvider>
+    </AppStateContext.Provider>
   );
 };
 
 export function useAppState() {
-  return useContext(AppContext);
+  return useContext(AppStateContext);
 }
 
-export function useSetAppState() {
-  return useContext(SetAppContext);
-}
-
-export default AppStateProvider;
+export default AppProvider;

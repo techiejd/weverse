@@ -25,7 +25,7 @@ import {
   encodePhoneNumber,
   prompts,
 } from "./context";
-import { AppState, useAppState } from "../../../common/context/appState";
+import { useAppState } from "../../../common/context/appState";
 import { maker } from "../../../functions/shared/src";
 import {
   makerConverter,
@@ -33,15 +33,13 @@ import {
 } from "../../../common/utils/firebase";
 
 const TabControl = ({
-  appState,
   authDialogState,
   setAuthDialogState,
 }: {
-  appState: AppState;
   authDialogState: AuthDialogState;
   setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
 }) => {
-  const [user, loading, error] = useAuthState(appState.auth);
+  const { user, loading } = useAppState().authState;
   return (
     <Tabs
       value={authDialogState.authAction}
@@ -80,15 +78,14 @@ const UserRegisteredError = ({ authAction }: { authAction: AuthAction }) => {
 };
 
 const AuthDialogContent = ({
-  appState,
   setOpen,
   initialAuthAction,
 }: {
-  appState: AppState;
   setOpen: Dispatch<SetStateAction<boolean>>;
   initialAuthAction: AuthAction;
 }) => {
-  const [user, userLoading, authError] = useAuthState(appState.auth);
+  const appState = useAppState();
+  const { user, loading: userLoading } = appState.authState;
   const [updateProfile, updating, updateProfileError] = useUpdateProfile(
     appState.auth
   );
@@ -288,15 +285,10 @@ const AuthDialogContent = ({
         }}
       >
         <DialogContent>
-          <Box>
-            {appState && (
-              <TabControl
-                appState={appState}
-                authDialogState={authDialogState}
-                setAuthDialogState={setAuthDialogState}
-              />
-            )}
-          </Box>
+          <TabControl
+            authDialogState={authDialogState}
+            setAuthDialogState={setAuthDialogState}
+          />
           <Stack
             sx={{ width: "100%", justifyContent: "center", mt: 2 }}
             spacing={2}
@@ -373,29 +365,20 @@ export const AuthDialogButton = ({
   authAction?: AuthAction;
   buttonVariant?: "text" | "outlined" | "contained";
 }) => {
-  const appState = useAppState();
-
-  const AuthDialogButtonInner = ({ appState }: { appState: AppState }) => {
-    const [user, loading, error] = useAuthState(appState.auth);
-    return loading ? (
-      <CircularProgress />
-    ) : (
-      <Button
-        size="small"
-        variant={buttonVariant}
-        disabled={user != null || user != undefined}
-        onClick={(e) => {
-          setAuthDialogOpen(true);
-        }}
-      >
-        {authAction == AuthAction.logIn ? "Iniciar Sesión" : "Registrarme"}
-      </Button>
-    );
-  };
-  return appState == undefined ? (
+  const { user, loading } = useAppState().authState;
+  return loading ? (
     <CircularProgress />
   ) : (
-    <AuthDialogButtonInner appState={appState} />
+    <Button
+      size="small"
+      variant={buttonVariant}
+      disabled={!!user}
+      onClick={(e) => {
+        setAuthDialogOpen(true);
+      }}
+    >
+      {authAction == AuthAction.logIn ? "Iniciar Sesión" : "Registrarme"}
+    </Button>
   );
 };
 
@@ -408,19 +391,12 @@ const AuthDialog = ({
   setOpen: Dispatch<SetStateAction<boolean>>;
   initialAuthAction?: AuthAction;
 }) => {
-  const appState = useAppState();
-
   return (
     <Dialog open={open} fullScreen>
-      {appState ? (
-        <AuthDialogContent
-          setOpen={setOpen}
-          appState={appState}
-          initialAuthAction={initialAuthAction}
-        />
-      ) : (
-        <CircularProgress />
-      )}
+      <AuthDialogContent
+        setOpen={setOpen}
+        initialAuthAction={initialAuthAction}
+      />
     </Dialog>
   );
 };

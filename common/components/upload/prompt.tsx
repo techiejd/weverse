@@ -1,24 +1,21 @@
 import { Avatar, Button, Grid, Link, Stack, Typography } from "@mui/material";
 import { Maker, PosiFormData } from "../../../functions/shared/src";
 import ImpactCard from "../../../modules/posi/action/card";
-import { AppState } from "../../context/appState";
+
 import { useActions } from "../../context/weverseUtils";
 import LogInPrompt from "../logInPrompt";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
+import { useAppState } from "../../context/appState";
 
 const UploadSocialProofPrompt = ({
   forMaker,
   forAction,
-  appState,
 }: {
   forMaker: Maker;
   forAction?: PosiFormData;
-  appState: AppState;
 }) => {
-  const [user, userLoading, userError] = useAuthState(appState.auth);
+  const { user } = useAppState().authState;
   const [makerActions, makerActionsLoading, makerActionsError] = useActions(
-    appState,
     forAction ? undefined : forMaker.id
   );
   const [actions, setActions] = useState<PosiFormData[]>(

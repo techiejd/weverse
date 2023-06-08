@@ -22,7 +22,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { AppState, useAppState } from "../../../common/context/appState";
+import { useAppState } from "../../../common/context/appState";
 import {
   Edit,
   Support as SupportIcon,
@@ -63,8 +63,8 @@ import { calculateVipState } from "../../../common/utils/vip";
 import { useRouter } from "next/router";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
 
-const MakerProfile = ({ appState }: { appState: AppState }) => {
-  const [maker, makerLoading, makerError] = useCurrentMaker(appState);
+const MakerProfile = () => {
+  const [maker, makerLoading, makerError] = useCurrentMaker();
   return maker ? (
     <Stack
       spacing={2}
@@ -92,10 +92,10 @@ const MakerProfile = ({ appState }: { appState: AppState }) => {
   );
 };
 
-const MakerContent = ({ appState }: { appState: AppState }) => {
-  const [actions, actionsLoading, actionsError] = useCurrentActions(appState);
+const MakerContent = () => {
+  const [actions, actionsLoading, actionsError] = useCurrentActions();
   const [socialProofs, socialProofsLoading, socialProofsError] =
-    useCurrentImpacts(appState);
+    useCurrentImpacts();
   const [actionsContent, setActionsContent] = useState<Content[]>([]);
   const [socialProofsContent, setSocialProofsContent] = useState<Content[]>([]);
   const [content, setContent] = useState<Content[]>([]);
@@ -161,17 +161,15 @@ const VipDialog = ({
   setOpen,
   setSolicitDialogOpen,
   myMaker,
-  appState,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   setSolicitDialogOpen: Dispatch<SetStateAction<boolean>>;
   myMaker: Maker;
-  appState: AppState;
 }) => {
-  const [actions, actionsLoading, actionsError] = useCurrentActions(appState);
+  const [actions, actionsLoading, actionsError] = useCurrentActions();
   const [socialProofs, socialProofsLoading, socialProofsError] =
-    useCurrentImpacts(appState);
+    useCurrentImpacts();
   const vipState = calculateVipState(myMaker, socialProofs, actions);
   return (
     <Dialog open={open}>
@@ -243,9 +241,9 @@ const VipDialog = ({
   );
 };
 
-const BottomBar = ({ appState }: { appState: AppState }) => {
-  const [maker, makerLoading, makerError] = useCurrentMaker(appState);
-  const [myMaker, myMakerLoading, myMakerError] = useMyMaker(appState);
+const BottomBar = () => {
+  const [maker, makerLoading, makerError] = useCurrentMaker();
+  const [myMaker, myMakerLoading, myMakerError] = useMyMaker();
   const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
   const router = useRouter();
   const { vipDialogOpen: queryVipDialogOpen } = router.query;
@@ -253,8 +251,8 @@ const BottomBar = ({ appState }: { appState: AppState }) => {
     Boolean(queryVipDialogOpen)
   );
   const [socialProofs, socialProofsLoading, socialProofsError] =
-    useCurrentImpacts(appState);
-  const [actions, actionsLoading, actionsError] = useCurrentActions(appState);
+    useCurrentImpacts();
+  const [actions, actionsLoading, actionsError] = useCurrentActions();
   const vipState = calculateVipState(myMaker, socialProofs, actions);
   const vipButtonBehavior = vipState.entryGiven
     ? { href: "/makers/vip" }
@@ -281,7 +279,6 @@ const BottomBar = ({ appState }: { appState: AppState }) => {
         setOpen={setVipDialogOpen}
         setSolicitDialogOpen={setSolicitDialogOpen}
         myMaker={myMaker}
-        appState={appState}
       />
       <Toolbar>
         <IconButtonWithLabel href={`/makers/${maker.id}/edit`}>
@@ -325,17 +322,14 @@ const BottomBar = ({ appState }: { appState: AppState }) => {
 };
 
 const MakerPage = () => {
-  const appState = useAppState();
-  return appState ? (
+  return (
     <Box mb={12}>
       <Stack p={2} divider={<Divider />}>
-        <MakerProfile appState={appState} />
-        <MakerContent appState={appState} />
+        <MakerProfile />
+        <MakerContent />
       </Stack>
-      <BottomBar appState={appState} />
+      <BottomBar />
     </Box>
-  ) : (
-    <CircularProgress />
   );
 };
 

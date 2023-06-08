@@ -4,7 +4,6 @@ import { doc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import Section from "../../../common/components/section";
-import { AppState } from "../../../common/context/appState";
 import { CitySearchInput } from "../input";
 import SummaryInput from "../input/SummaryInput";
 import {
@@ -17,9 +16,11 @@ import ImpactedPersonsInput from "../input/impactedPersonsInput";
 import ImpactMediaInput from "../input/impactMediaInput";
 import { memberConverter } from "../../../common/utils/firebase";
 import { PosiFormData, posiFormData } from "../../../functions/shared/src";
+import { useAppState } from "../../../common/context/appState";
 
-const GetMaker = ({ appState, user }: { appState: AppState; user: User }) => {
+const GetMaker = ({ user }: { user: User }) => {
   const [formData, setFormData] = useFormData();
+  const appState = useAppState();
   const memberDocRef = doc(
     appState.firestore,
     "members",
@@ -37,12 +38,10 @@ const GetMaker = ({ appState, user }: { appState: AppState; user: User }) => {
 };
 
 const PosiForm = ({
-  appState,
   user,
   onSubmit,
   initialPosi = {},
 }: {
-  appState: AppState;
   user: User | null;
   onSubmit: (posiFormData: PosiFormData) => Promise<void>;
   initialPosi?: WorkingCopyPosiFormData;
@@ -63,7 +62,7 @@ const PosiForm = ({
       >
         <PosiFormContext.Provider value={formData}>
           <PosiFormDispatchContext.Provider value={setFormData}>
-            {user && appState && <GetMaker appState={appState} user={user} />}
+            {user && <GetMaker user={user} />}
             <Stack
               spacing={2}
               margin={2}

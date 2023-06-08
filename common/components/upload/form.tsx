@@ -12,21 +12,20 @@ import { pickBy, identity } from "lodash";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { Maker, Media, socialProof } from "../../../functions/shared/src";
-import { AppState } from "../../context/appState";
 import { useMyMaker } from "../../context/weverseUtils";
 import { socialProofConverter } from "../../utils/firebase";
 import { PosiFormData } from "../../../functions/shared/lib";
+import { useAppState } from "../../context/appState";
 
 const UploadSocialProofForm = ({
   forMaker,
   forAction,
-  appState,
 }: {
   forMaker: Maker;
   forAction?: PosiFormData;
-  appState: AppState;
 }) => {
-  const [myMaker, myMakerLoading, myMakerError] = useMyMaker(appState);
+  const appState = useAppState();
+  const [myMaker, myMakerLoading, myMakerError] = useMyMaker();
   const [error, setError] = useState("");
   const [rating, setRating] = useState<number | null>(null);
   const [media, setMedia] = useState<Media | undefined | "loading">(undefined);

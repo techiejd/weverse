@@ -10,15 +10,14 @@ import {
   CardContent,
   CardActionArea,
 } from "@mui/material";
-import { doc } from "firebase/firestore";
-import { useAppState, AppState } from "../../common/context/appState";
+import { useAppState } from "../../common/context/appState";
 import { useMaker } from "../../common/context/weverseUtils";
 import RatingsStack from "../../common/components/ratings";
 
 const MakerCard = ({ makerId }: { makerId: string }) => {
   const appState = useAppState();
-  const MakerCardContent = ({ appState }: { appState: AppState }) => {
-    const [value, loading, error] = useMaker(appState, makerId);
+  const MakerCardContent = () => {
+    const [value, loading, error] = useMaker(makerId);
 
     return loading || value == undefined ? (
       <CircularProgress />
@@ -45,11 +44,7 @@ const MakerCard = ({ makerId }: { makerId: string }) => {
           title={"Maker"}
         />
         <CardContent>
-          {appState == undefined ? (
-            <CircularProgress />
-          ) : (
-            <MakerCardContent appState={appState} />
-          )}
+          <MakerCardContent />
         </CardContent>
       </CardActionArea>
     </Card>

@@ -1,21 +1,14 @@
 import { CircularProgress } from "@mui/material";
-import { AppState, useAppState } from "../../../../../common/context/appState";
 import { useCurrentMaker } from "../../../../../modules/makers/context";
 import UploadSocialProofPrompt from "../../../../../common/components/upload/prompt";
 
-const UploadPage = ({ appState }: { appState: AppState }) => {
-  const [maker, makerLoading, makerError] = useCurrentMaker(appState);
+const Upload = () => {
+  const [maker, makerLoading, makerError] = useCurrentMaker();
   return maker ? (
-    <UploadSocialProofPrompt forMaker={maker} appState={appState} />
+    <UploadSocialProofPrompt forMaker={maker} />
   ) : (
     <CircularProgress />
   );
-};
-
-const Upload = () => {
-  const appState = useAppState();
-
-  return appState ? <UploadPage appState={appState} /> : <CircularProgress />;
 };
 
 export default Upload;

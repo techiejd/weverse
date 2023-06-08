@@ -13,56 +13,48 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useAuthState } from "react-firebase-hooks/auth";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { AccountCircle, Home, Login, PlusOne } from "@mui/icons-material";
-import { AppState, useAppState } from "../context/appState";
+import { useAppState } from "../context/appState";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import Image from "next/image";
 import LinkBehavior from "../utils/linkBehavior";
 import { useMyMaker } from "../context/weverseUtils";
 
 export const MenuComponent = (props: BoxProps) => {
-  const appState = useAppState();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const menuOpen = Boolean(anchorEl);
   const closeMenu = () => setAnchorEl(null);
-  const UserPortal = ({ appState }: { appState: AppState }) => {
-    const [user, loading, error] = useAuthState(appState.auth);
-    return (
-      <>
-        {!loading &&
-          !error &&
-          (user ? (
-            <MenuItem
-              href={`/users/${user.uid}`}
-              onClick={closeMenu}
-              component={
-                //TODO(techiejd): Look into why the href isn't rendered as an 'a'
-                LinkBehavior as any
-              }
-            >
-              <ListItemIcon>
-                <AccountCircle />
-              </ListItemIcon>
-              <ListItemText>Mi pagina</ListItemText>
-            </MenuItem>
-          ) : (
-            <MenuItem
-              onClick={() => {
-                setAuthDialogOpen(true);
-                closeMenu();
-              }}
-            >
-              <ListItemIcon>
-                <Login />
-              </ListItemIcon>
-              <ListItemText>Log In</ListItemText>
-            </MenuItem>
-          ))}
-      </>
+  const UserPortal = () => {
+    const { user } = useAppState().authState;
+    return user ? (
+      <MenuItem
+        href={`/users/${user.uid}`}
+        onClick={closeMenu}
+        component={
+          //TODO(techiejd): Look into why the href isn't rendered as an 'a'
+          LinkBehavior as any
+        }
+      >
+        <ListItemIcon>
+          <AccountCircle />
+        </ListItemIcon>
+        <ListItemText>Mi pagina</ListItemText>
+      </MenuItem>
+    ) : (
+      <MenuItem
+        onClick={() => {
+          setAuthDialogOpen(true);
+          closeMenu();
+        }}
+      >
+        <ListItemIcon>
+          <Login />
+        </ListItemIcon>
+        <ListItemText>Log In</ListItemText>
+      </MenuItem>
     );
   };
   return (
@@ -100,15 +92,15 @@ export const MenuComponent = (props: BoxProps) => {
           </ListItemIcon>
           <ListItemText>Agrega tu Action!</ListItemText>
         </MenuItem>
-        {appState && <UserPortal appState={appState} />}
+        <UserPortal />
       </Menu>
     </Box>
   );
 };
 
-const UserPortal = ({ appState }: { appState: AppState }) => {
-  const [user, userLoading, userError] = useAuthState(appState.auth);
-  const [myMaker, myMakerLoading, myMakerError] = useMyMaker(appState);
+const UserPortal = () => {
+  const { user, loading: userLoading } = useAppState().authState;
+  const [myMaker, myMakerLoading, myMakerError] = useMyMaker();
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   return (
     <Box>
@@ -127,7 +119,6 @@ const UserPortal = ({ appState }: { appState: AppState }) => {
 };
 
 export const Header = () => {
-  const appState = useAppState();
   return (
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar>
@@ -143,7 +134,7 @@ export const Header = () => {
         </Link>
 
         <div style={{ flexGrow: 1 }}></div>
-        {appState ? <UserPortal appState={appState} /> : <CircularProgress />}
+        <UserPortal />
       </Toolbar>
     </AppBar>
   );

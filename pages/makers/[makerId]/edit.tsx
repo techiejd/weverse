@@ -3,10 +3,9 @@ import { Button, CircularProgress, Stack, Typography } from "@mui/material";
 import MakerInput from "../../../modules/auth/AuthDialog/makerInput";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
-import { AppState, useAppState } from "../../../common/context/appState";
+import { useAppState } from "../../../common/context/appState";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { User } from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { pickBy, identity } from "lodash";
 import { makerConverter } from "../../../common/utils/firebase";
 import { Maker, maker as makerSchema } from "../../../functions/shared/src";
@@ -16,14 +15,8 @@ const Edit = () => {
   const router = useRouter();
   const { makerId } = router.query;
 
-  const MakerForm = ({
-    makerId,
-    appState,
-  }: {
-    makerId: string;
-    appState: AppState;
-  }) => {
-    const [user, userLoading, userError] = useAuthState(appState.auth);
+  const MakerForm = ({ makerId }: { makerId: string }) => {
+    const { user } = useAppState().authState;
     const makerDocRef = doc(
       appState.firestore,
       "makers",
@@ -89,11 +82,7 @@ const Edit = () => {
       <Typography variant="h2">
         Maker = creador de impacto social a través de sus acciones.
       </Typography>
-      {appState && makerId ? (
-        <MakerForm makerId={String(makerId)} appState={appState} />
-      ) : (
-        <CircularProgress />
-      )}
+      {makerId ? <MakerForm makerId={String(makerId)} /> : <CircularProgress />}
     </Stack>
   );
 };

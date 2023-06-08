@@ -1,9 +1,9 @@
 import { Button, CircularProgress, Stack, Typography } from "@mui/material";
 import { useCurrentPosi } from "../../../../../modules/posi/context";
-import { AppState, useAppState } from "../../../../../common/context/appState";
+import { useAppState } from "../../../../../common/context/appState";
 
-const ImpactsButton = ({ appState }: { appState: AppState }) => {
-  const [action, actionLoading, actionError] = useCurrentPosi(appState);
+const ImpactsButton = () => {
+  const [action, actionLoading, actionError] = useCurrentPosi();
   return action ? (
     <Button href={`/posi/${action.id}`} variant="contained">
       Ver lo que han dicho los demas de esta acción
@@ -13,8 +13,8 @@ const ImpactsButton = ({ appState }: { appState: AppState }) => {
   );
 };
 
-const MakerButton = ({ appState }: { appState: AppState }) => {
-  const [action, actionLoading, actionError] = useCurrentPosi(appState);
+const MakerButton = () => {
+  const [action, actionLoading, actionError] = useCurrentPosi();
   return action ? (
     <Button href={`/makers/${action.makerId}`} variant="contained">
       Ver las otras acciones e impactos del Maker
@@ -31,8 +31,8 @@ const Thanks = () => {
       <Typography variant="h1">¡Así mejoramos el mundo!</Typography>
       <Typography>Gracias a tí, recibimos información muy valiosa.</Typography>
       <Typography>Ahora qué ¿te gustaría hacer?</Typography>
-      {appState && <ImpactsButton appState={appState} />}
-      {appState && <MakerButton appState={appState} />}
+      <ImpactsButton />
+      <MakerButton />
       <Button href="/" variant="contained">
         Ir al inicio
       </Button>

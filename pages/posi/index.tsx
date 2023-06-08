@@ -1,7 +1,5 @@
 import {
-  AppBar,
   Box,
-  CircularProgress,
   Fab,
   Grid,
   LinearProgress,
@@ -17,16 +15,16 @@ import {
   QueryDocumentSnapshot,
   startAfter,
 } from "firebase/firestore";
-import { AppState, useAppState } from "../../common/context/appState";
-import { Menu, More, PlusOne, Search } from "@mui/icons-material";
-import PageTitle from "../../common/components/pageTitle";
+import { useAppState } from "../../common/context/appState";
+import { PlusOne } from "@mui/icons-material";
 import { PosiFormData } from "../../functions/shared/src";
 import { posiFormDataConverter } from "../../common/utils/firebase";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useCallback, useEffect, useState } from "react";
 import ImpactCard from "../../modules/posi/action/card";
 
-const IndexPage = ({ appState }: { appState: AppState }) => {
+const IndexPage = () => {
+  const appState = useAppState();
   const [latestDoc, setLatestDoc] = useState<
     QueryDocumentSnapshot<PosiFormData> | undefined
   >(undefined);
@@ -144,7 +142,7 @@ const Index = () => {
           <PlusOne sx={{ mr: 1 }} />
           <Typography>Agrega tu acción!</Typography>
         </Fab>
-        {appState ? <IndexPage appState={appState} /> : <CircularProgress />}
+        <IndexPage />
       </Stack>
     </Box>
   );

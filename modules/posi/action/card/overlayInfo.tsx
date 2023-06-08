@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { writeBatch, doc } from "firebase/firestore";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
-import { AppState, useAppState } from "../../../../common/context/appState";
+import { useAppState } from "../../../../common/context/appState";
 import {
   useLikesCount,
   useMaker,
@@ -29,16 +29,15 @@ const transaparentPillBox = {
 };
 
 const LikesDisplay = ({
-  appState,
   action,
   setLogInPromptOpen,
 }: {
-  appState: AppState;
   action: PosiFormData;
   setLogInPromptOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [myMember, myMemberLoading, myMemberError] = useMyMember(appState);
-  const likes = useLikesCount(appState, action.id);
+  const appState = useAppState();
+  const [myMember, myMemberLoading, myMemberError] = useMyMember();
+  const likes = useLikesCount(action.id);
   const [localChange, setLocalChange] = useState<
     "increment" | "decrement" | undefined
   >();
@@ -46,7 +45,7 @@ const LikesDisplay = ({
   const localLikes =
     likes +
     (localChange == undefined ? 0 : localChange == "increment" ? 1 : -1);
-  const myLikes = useMyLikes(appState);
+  const myLikes = useMyLikes();
   const liked = myLikes.includes(String(action.id));
   const updateLikes = async (e: MouseEvent) => {
     e.preventDefault();
@@ -136,12 +135,8 @@ const OverlayInfo = ({
   action: PosiFormData;
   setLogInPromptOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const appState = useAppState();
-  const MakerTitle = ({ appState }: { appState: AppState }) => {
-    const [maker, makerLoading, makerError] = useMaker(
-      appState,
-      action.makerId
-    );
+  const MakerTitle = () => {
+    const [maker, makerLoading, makerError] = useMaker(action.makerId);
     const makerInfo = maker
       ? [
           <Typography key="makerTitleOnActionCard" color={"white"}>
@@ -192,26 +187,14 @@ const OverlayInfo = ({
       }}
     >
       <Stack sx={transaparentPillBox} direction={"row"}>
-        {appState ? (
-          <MakerTitle appState={appState} />
-        ) : (
-          <LinearProgress sx={{ width: "100%" }} />
-        )}
+        <MakerTitle />
       </Stack>
       <Stack
         direction="row-reverse"
         justifyContent="space-between"
         alignItems="end"
       >
-        {appState ? (
-          <LikesDisplay
-            appState={appState}
-            action={action}
-            setLogInPromptOpen={setLogInPromptOpen}
-          />
-        ) : (
-          <></>
-        )}
+        <LikesDisplay action={action} setLogInPromptOpen={setLogInPromptOpen} />
         {action.location?.structuredFormatting?.mainText ? (
           <Typography
             sx={{

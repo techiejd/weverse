@@ -3,7 +3,7 @@ import PageTitle from "../common/components/pageTitle";
 import AuthDialog from "../modules/auth/AuthDialog";
 import { useEffect, useState } from "react";
 import { AuthAction } from "../modules/auth/AuthDialog/context";
-import { AppState, useAppState } from "../common/context/appState";
+import { useAppState } from "../common/context/appState";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { doc } from "firebase/firestore";
 import { User } from "firebase/auth";
@@ -21,13 +21,10 @@ const FrontPageButton = (props: ButtonProps) => {
   );
 };
 
-const MakerPortal = ({ appState }: { appState: AppState }) => {
-  const [user, loading, error] = useAuthState(appState.auth);
+const MakerPortal = () => {
+  const appState = useAppState();
+  const { user } = useAppState().authState;
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
-  useEffect(() => {
-    if (user && !loading && !error) {
-    }
-  }, [user, loading, error, appState.firestore]);
   const MakerPortalBtn = ({ user }: { user: User }) => {
     const memberDocRef = doc(
       appState.firestore,
@@ -120,11 +117,7 @@ const WeVerse = () => {
           sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
         >
           <Typography>Tú:</Typography>
-          {appState ? (
-            <MakerPortal appState={appState} />
-          ) : (
-            <FrontPageButton disabled>Loading...</FrontPageButton>
-          )}
+          <MakerPortal />
         </Stack>
       </Stack>
     </Box>

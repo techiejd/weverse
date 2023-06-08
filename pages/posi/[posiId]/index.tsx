@@ -11,7 +11,6 @@ import { Edit, Handshake, Hearing, Share } from "@mui/icons-material";
 import { useState } from "react";
 import ShareActionArea from "../../../common/components/shareActionArea";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
-import { AppState, useAppState } from "../../../common/context/appState";
 import { useMaker, useMyMaker } from "../../../common/context/weverseUtils";
 import AboutContent from "../../../modules/posi/action/about";
 import {
@@ -92,86 +91,78 @@ const AdminBottomBar = ({
 };
 
 const Index = () => {
-  const appState = useAppState();
+  const [posiData, loading, error] = useCurrentPosi();
+  const [socialProofs, socialProofsLoading, socialProofsError] =
+    useCurrentSocialProofs();
+  const [myMaker, myMakerLoading, myMakerError] = useMyMaker();
+  const [maker, makerLoading, makerError] = useMaker(posiData?.makerId);
 
-  const IndexContent = ({ appState }: { appState: AppState }) => {
-    const [posiData, loading, error] = useCurrentPosi(appState);
-    const [socialProofs, socialProofsLoading, socialProofsError] =
-      useCurrentSocialProofs(appState);
-    const [myMaker, myMakerLoading, myMakerError] = useMyMaker(appState);
-    const [maker, makerLoading, makerError] = useMaker(
-      appState,
-      posiData?.makerId
-    );
-
-    const Loading = () => {
-      return (
-        <Box>
-          <Typography>Impacts: Loading...</Typography>
-          <CircularProgress />
-        </Box>
-      );
-    };
-
-    return posiData ? (
+  const Loading = () => {
+    return (
       <Box>
-        {error && (
-          <Typography color={"red"}>Error: {JSON.stringify(error)}</Typography>
-        )}
-        {loading && <Loading />}
-        {!loading && !error && posiData == undefined && (
-          <Typography>No hay ninguna Action aquí.</Typography>
-        )}
-        {posiData && (
-          /** Padding for bottom bar. */ <Box pb={15}>
-            <AboutContent {...posiData} />
-            {socialProofs && (
-              <Stack spacing={1} m={1.5}>
-                <Typography variant="h3">Testimonios</Typography>
-                {socialProofs.length == 0 && (
-                  <Typography>No hay testimonios.</Typography>
-                )}
-                <Grid container spacing={1}>
-                  {socialProofs.map((socialProof) => {
-                    return (
-                      <Grid
-                        item
-                        xs={12}
-                        sm={6}
-                        md={4}
-                        lg={3}
-                        xl={2}
-                        key={socialProof.id}
-                      >
-                        <SocialProofCard
-                          key={socialProof.id}
-                          socialProof={socialProof}
-                          showAction={false}
-                          showMaker={false}
-                        />
-                      </Grid>
-                    );
-                  })}
-                </Grid>
-              </Stack>
-            )}
-            {maker ? (
-              myMaker && myMaker.id == maker.id ? (
-                <AdminBottomBar action={posiData} myMaker={myMaker} />
-              ) : (
-                <SupportBottomBar beneficiary={{ maker, action: posiData }} />
-              )
-            ) : (
-              <CenterBottomCircularProgress />
-            )}
-          </Box>
-        )}
+        <Typography>Impacts: Loading...</Typography>
+        <CircularProgress />
       </Box>
-    ) : (
-      <CircularProgress />
     );
   };
-  return appState ? <IndexContent appState={appState} /> : <CircularProgress />;
+
+  return posiData ? (
+    <Box>
+      {error && (
+        <Typography color={"red"}>Error: {JSON.stringify(error)}</Typography>
+      )}
+      {loading && <Loading />}
+      {!loading && !error && posiData == undefined && (
+        <Typography>No hay ninguna Action aquí.</Typography>
+      )}
+      {posiData && (
+        /** Padding for bottom bar. */ <Box pb={15}>
+          <AboutContent {...posiData} />
+          {socialProofs && (
+            <Stack spacing={1} m={1.5}>
+              <Typography variant="h3">Testimonios</Typography>
+              {socialProofs.length == 0 && (
+                <Typography>No hay testimonios.</Typography>
+              )}
+              <Grid container spacing={1}>
+                {socialProofs.map((socialProof) => {
+                  return (
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      lg={3}
+                      xl={2}
+                      key={socialProof.id}
+                    >
+                      <SocialProofCard
+                        key={socialProof.id}
+                        socialProof={socialProof}
+                        showAction={false}
+                        showMaker={false}
+                      />
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            </Stack>
+          )}
+          {maker ? (
+            myMaker && myMaker.id == maker.id ? (
+              <AdminBottomBar action={posiData} myMaker={myMaker} />
+            ) : (
+              <SupportBottomBar beneficiary={{ maker, action: posiData }} />
+            )
+          ) : (
+            <CenterBottomCircularProgress />
+          )}
+        </Box>
+      )}
+    </Box>
+  ) : (
+    <CircularProgress />
+  );
 };
 
 export default Index;
