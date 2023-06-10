@@ -1,20 +1,19 @@
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { identity, pickBy } from "lodash";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { useAppState } from "../../../../common/context/appState";
 import PosiForm from "../../../../modules/posi/action/form";
 import { posiFormDataConverter } from "../../../../common/utils/firebase";
 import { PosiFormData, posiFormData } from "../../../../functions/shared/src";
 import { useCurrentPosiId } from "../../../../modules/posi/context";
+import { useEffect } from "react";
 
 const Edit = () => {
   const appState = useAppState();
   const router = useRouter();
   const posiId = useCurrentPosiId();
-  const { user } = useAppState().authState;
   const posiDocRef = doc(
     appState.firestore,
     "impacts",
@@ -22,14 +21,24 @@ const Edit = () => {
   ).withConverter(posiFormDataConverter);
   const [posi, posiLoading, posiError] = useDocumentData(posiDocRef);
 
-  const onSubmit = async (usersPosi: PosiFormData) => {
-    if (appState) {
-      const cleanedPosi = pickBy(usersPosi, identity);
-      const parsedPosi = posiFormData.parse(cleanedPosi);
-      await setDoc(posiDocRef, parsedPosi);
-      router.push(`/posi/${posiId}`);
-    }
+  const onUpdate = async (usersPosi: PosiFormData) => {
+    const cleanedPosi = pickBy(usersPosi, identity);
+    const parsedPosi = posiFormData.parse(cleanedPosi);
+    await setDoc(posiDocRef, parsedPosi);
+    router.push(`/posi/${posiId}`);
   };
+
+  const onDelete = (p: PosiFormData) => {
+    const makerRoute = `/makers/${p.makerId}`;
+
+    router.prefetch(makerRoute);
+
+    return async () => {
+      await deleteDoc(posiDocRef);
+      router.push(makerRoute);
+    };
+  };
+
   return (
     <Stack>
       <Stack
@@ -40,8 +49,11 @@ const Edit = () => {
       >
         <Typography variant="h1">Edita tu acción. 🤸 </Typography>
       </Stack>
-      {user && posi ? (
-        <PosiForm onSubmit={onSubmit} user={user} initialPosi={posi} />
+      {posi ? (
+        <PosiForm
+          onInteraction={{ type: "update", onUpdate, onDelete: onDelete(posi) }}
+          initialPosi={posi}
+        />
       ) : (
         <CircularProgress />
       )}

@@ -92,24 +92,22 @@ const FileInput = ({
       }
 
       const uploadFileAndSetFileUrl = async () => {
-        if (appState) {
-          const fileRef = ref(appState.storage, v4());
-          const newUploadTask = uploadBytesResumable(fileRef, f, {
-            customMetadata: metadata,
-          });
-          setUploadTask(newUploadTask);
-          newUploadTask.on("state_changed", {
-            complete: () => {
-              (async () => {
-                setMedia({
-                  type: getFileType(f),
-                  url: await getDownloadURL(newUploadTask.snapshot.ref),
-                });
-                setFile(f);
-              })();
-            },
-          });
-        }
+        const fileRef = ref(appState.storage, v4());
+        const newUploadTask = uploadBytesResumable(fileRef, f, {
+          customMetadata: metadata,
+        });
+        setUploadTask(newUploadTask);
+        newUploadTask.on("state_changed", {
+          complete: () => {
+            (async () => {
+              setMedia({
+                type: getFileType(f),
+                url: await getDownloadURL(newUploadTask.snapshot.ref),
+              });
+              setFile(f);
+            })();
+          },
+        });
       };
       setFile("loading");
       setMedia("loading");

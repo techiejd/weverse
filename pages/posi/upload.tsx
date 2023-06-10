@@ -13,15 +13,13 @@ const Upload = () => {
   const UploadContent = () => {
     const { user } = useAppState().authState;
     const onSubmit = async (usersPosi: PosiFormData) => {
-      if (appState) {
-        const docRef = await addDoc(
-          collection(appState.firestore, "impacts").withConverter(
-            posiFormDataConverter
-          ),
-          usersPosi
-        );
-        router.push(`/posi/${docRef.id}/impact/solicit`);
-      }
+      const docRef = await addDoc(
+        collection(appState.firestore, "impacts").withConverter(
+          posiFormDataConverter
+        ),
+        usersPosi
+      );
+      router.push(`/posi/${docRef.id}/impact/solicit`);
     };
     return (
       <Stack>
@@ -34,7 +32,7 @@ const Upload = () => {
           <Typography variant="h1">¡Publica tu acción! 🪧</Typography>
         </Stack>
         {user ? (
-          <PosiForm onSubmit={onSubmit} user={user} />
+          <PosiForm onInteraction={{ type: "create", onSubmit }} />
         ) : (
           <LogInPrompt
             title={"Para cargar una acción, debes ingresar al sistem."}

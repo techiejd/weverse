@@ -14,41 +14,34 @@ import {
 } from "../input/context";
 import ImpactedPersonsInput from "../input/impactedPersonsInput";
 import ImpactMediaInput from "../input/impactMediaInput";
-import { memberConverter } from "../../../common/utils/firebase";
 import { PosiFormData, posiFormData } from "../../../functions/shared/src";
-import { useAppState } from "../../../common/context/appState";
+import { useMyMaker } from "../../../common/context/weverseUtils";
 
-const GetMaker = ({ user }: { user: User }) => {
-  const [formData, setFormData] = useFormData();
-  const appState = useAppState();
-  const memberDocRef = doc(
-    appState.firestore,
-    "members",
-    user.uid
-  ).withConverter(memberConverter);
-  const [member, loading, error] = useDocumentData(memberDocRef);
-
-  useEffect(() => {
-    if (member && setFormData) {
-      setFormData((fD) => ({ ...fD, makerId: member.makerId }));
-    }
-  }, [member, setFormData]);
-
-  return <></>;
-};
+type onInteractionProp =
+  | { type: "create"; onSubmit: (posiFormData: PosiFormData) => Promise<void> }
+  | {
+      type: "update";
+      onUpdate: (posiFormData: PosiFormData) => Promise<void>;
+      onDelete: () => Promise<void>;
+    };
 
 const PosiForm = ({
-  user,
-  onSubmit,
+  onInteraction,
   initialPosi = {},
 }: {
-  user: User | null;
-  onSubmit: (posiFormData: PosiFormData) => Promise<void>;
+  onInteraction: onInteractionProp;
   initialPosi?: WorkingCopyPosiFormData;
 }) => {
   const [formData, setFormData] =
     useState<WorkingCopyPosiFormData>(initialPosi);
   const [uploading, setUploading] = useState(false);
+
+  const [myMaker, myMakerLoading, myMakerErrors] = useMyMaker();
+  useEffect(() => {
+    if (myMaker && setFormData) {
+      setFormData((fD) => ({ ...fD, makerId: myMaker.id }));
+    }
+  }, [myMaker, setFormData]);
 
   return (
     <Box>
@@ -57,12 +50,15 @@ const PosiForm = ({
           e.preventDefault();
           setUploading(true);
           const checkedPosiFormData = posiFormData.parse(formData);
-          await onSubmit(checkedPosiFormData);
+          if (onInteraction.type == "create") {
+            await onInteraction.onSubmit(checkedPosiFormData);
+          } else {
+            await onInteraction.onUpdate(checkedPosiFormData);
+          }
         }}
       >
         <PosiFormContext.Provider value={formData}>
           <PosiFormDispatchContext.Provider value={setFormData}>
-            {user && <GetMaker user={user} />}
             <Stack
               spacing={2}
               margin={2}
@@ -84,10 +80,19 @@ const PosiForm = ({
               </Section>
               {uploading || formData.media == "loading" ? (
                 <CircularProgress />
-              ) : (
+              ) : onInteraction.type == "create" ? (
                 <Button variant="contained" sx={{ mt: 3 }} type="submit">
                   Publicar
                 </Button>
+              ) : (
+                <Stack direction={"row"} sx={{ mt: 3 }} spacing={1}>
+                  <Button variant="outlined" onClick={onInteraction.onDelete}>
+                    Borrar
+                  </Button>
+                  <Button variant="contained" type="submit">
+                    Actualizar
+                  </Button>
+                </Stack>
               )}
             </Stack>
           </PosiFormDispatchContext.Provider>
