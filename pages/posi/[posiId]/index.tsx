@@ -135,6 +135,7 @@ const Index = () => {
                       lg={3}
                       xl={2}
                       key={socialProof.id}
+                      p={2}
                     >
                       <SocialProofCard
                         key={socialProof.id}

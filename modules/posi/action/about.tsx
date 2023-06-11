@@ -25,11 +25,7 @@ const AboutContent = ({
   return summary && makerId && media ? (
     <Box>
       <Box sx={{ boxShadow: 1 }} padding={2}>
-        <Typography
-          variant="h1"
-          fontSize={35}
-          sx={{ textAlign: "justify", textJustify: "inter-word" }}
-        >
+        <Typography variant="h1" fontSize={35}>
           {summary}
         </Typography>
         <RatingsStack ratings={ratings} />

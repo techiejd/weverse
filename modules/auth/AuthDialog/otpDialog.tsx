@@ -33,7 +33,7 @@ const OtpDialog = ({
   }, [authCodeInput, setVerifyButtonDisabled]);
   return (
     <Dialog open={authDialogState.otpDialogOpen} fullWidth>
-      <DialogTitle textAlign={"justify"} fontSize={18}>
+      <DialogTitle>
         Ingresa el código de verificación que recibiste.
         <Typography color={"gray"} fontSize={12}>
           (Es posible que el código vaya a la carpeta SPAM de tus mensajes.)

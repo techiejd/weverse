@@ -10,22 +10,14 @@ export const media = z.object({
 });
 export type Media = z.infer<typeof media>;
 
-const makerType = z.enum(["individual", "organization"]);
+export const makerType = z.enum(["individual", "organization"]);
 export const organizationType = z.enum([
   "nonprofit",
   "religious",
-  "governmental",
   "unincorporated",
   "profit",
 ]);
 export type OrganizationType = z.infer<typeof organizationType>;
-export const organizationLabels = {
-  [organizationType.Enum.nonprofit]: "Fundación u otra ONG",
-  [organizationType.Enum.religious]: "Organización Religiosa",
-  [organizationType.Enum.governmental]: "Organización Gubermental",
-  [organizationType.Enum.unincorporated]: "Voluntarios",
-  [organizationType.Enum.profit]: "Organización comercial",
-};
 
 const howToSupport = z.object({
   contact: z.string().max(500).optional(),

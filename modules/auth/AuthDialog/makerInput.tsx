@@ -22,9 +22,15 @@ import {
   Maker,
   OrganizationType,
   organizationType,
-  organizationLabels,
   Media,
 } from "../../../functions/shared/src";
+
+const organizationExplanations = {
+  [organizationType.Enum.nonprofit]: "Fundación u otra ONG",
+  [organizationType.Enum.religious]: "Organización Religiosa",
+  [organizationType.Enum.unincorporated]: "Voluntarios",
+  [organizationType.Enum.profit]: "Organización Comercial",
+};
 
 const OrganizationTypeInput = ({
   val,
@@ -73,7 +79,7 @@ const OrganizationTypeInput = ({
                 key={oType}
                 value={oType}
                 control={<Radio required />}
-                label={organizationLabels[oType]}
+                label={organizationExplanations[oType]}
               />
             );
           })}

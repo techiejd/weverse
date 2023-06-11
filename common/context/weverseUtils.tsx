@@ -1,4 +1,3 @@
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useAppState } from "./appState";
 import {
   useCollection,
@@ -19,6 +18,7 @@ import {
   socialProofConverter,
 } from "../utils/firebase";
 import { useEffect, useState } from "react";
+import { organizationType, makerType, Maker } from "../../functions/shared/src";
 
 export const useMyMaker = () => {
   const appState = useAppState();
@@ -143,4 +143,23 @@ export const useActions = (maker: string | undefined) => {
         )
       : undefined
   );
+};
+
+export const getMakerTypeLabel = (maker: Maker) => {
+  const organizationLabels = {
+    [organizationType.Enum.nonprofit]: "ONG",
+    [organizationType.Enum.religious]: "Congregación",
+    [organizationType.Enum.unincorporated]: "Voluntarios",
+    [organizationType.Enum.profit]: "Comercial",
+  };
+
+  const makerTypeLabels = {
+    [makerType.Enum.individual]: "Individuo",
+    [makerType.Enum.organization]: "Organización",
+  };
+  return maker.type == "individual"
+    ? makerTypeLabels[maker.type]
+    : maker.organizationType
+    ? organizationLabels[maker.organizationType]
+    : makerTypeLabels[maker.type];
 };

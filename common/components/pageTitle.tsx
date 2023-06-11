@@ -11,12 +11,7 @@ const PageTitle = ({ title }: { title: ReactNode }) => {
           alignItems: "center",
         }}
       >
-        <Typography
-          fontSize={25}
-          variant="h2"
-          textAlign="center"
-          fontWeight="bold"
-        >
+        <Typography fontSize={25} variant="h2" textAlign="center">
           {title}
         </Typography>
       </Box>

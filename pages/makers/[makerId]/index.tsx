@@ -40,25 +40,18 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import moment from "moment";
 import ImpactCard from "../../../modules/posi/action/card";
-import Media from "../../../modules/posi/media";
 import {
-  useAction,
-  useMaker,
+  getMakerTypeLabel,
   useMyMaker,
 } from "../../../common/context/weverseUtils";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
-import {
-  Maker,
-  SocialProof,
-  organizationLabels,
-} from "../../../functions/shared/src";
+import { Maker } from "../../../functions/shared/src";
 import { Content } from "../../../modules/posi/content";
 import RatingsStack from "../../../common/components/ratings";
 import ShareActionArea from "../../../common/components/shareActionArea";
 import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
 import CenterBottomCircularProgress from "../../../common/components/centerBottomCircularProgress";
 import CenterBottomFab from "../../../common/components/centerBottomFab";
-import { pickBy } from "lodash";
 import { calculateVipState } from "../../../common/utils/vip";
 import { useRouter } from "next/router";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
@@ -73,13 +66,7 @@ const MakerProfile = () => {
       <Typography variant="h1">{maker.name}</Typography>
       <RatingsStack ratings={maker.ratings} />
       <Avatar src={maker.pic} sx={{ width: 225, height: 225 }} />
-      <Typography>
-        {maker.type == "individual"
-          ? "Individuo"
-          : maker.organizationType
-          ? organizationLabels[maker.organizationType]
-          : "Error"}
-      </Typography>
+      <Typography>{getMakerTypeLabel(maker)}</Typography>
       <Stack sx={{ width: "100%" }}>
         <Typography variant="h2">Acerca de:</Typography>
         <Typography>

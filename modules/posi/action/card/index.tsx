@@ -107,8 +107,6 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
             gutterBottom
             variant="h5"
             sx={{
-              textAlign: "justify",
-              textJustify: "inter-word",
               fontSize: 18,
             }}
           >

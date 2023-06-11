@@ -10,6 +10,7 @@ import { writeBatch, doc } from "firebase/firestore";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { useAppState } from "../../../../common/context/appState";
 import {
+  getMakerTypeLabel,
   useLikesCount,
   useMaker,
   useMyLikes,
@@ -23,7 +24,6 @@ const transaparentPillBox = {
   backgroundColor: "rgba(2, 13, 14,0.3)",
   borderRadius: 5,
   alignItems: "center",
-  justifyContent: "space-between",
   pl: 1,
   pr: 1,
 };
@@ -135,40 +135,7 @@ const OverlayInfo = ({
   action: PosiFormData;
   setLogInPromptOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const MakerTitle = () => {
-    const [maker, makerLoading, makerError] = useMaker(action.makerId);
-    const makerInfo = maker
-      ? [
-          <Typography key="makerTitleOnActionCard" color={"white"}>
-            {maker.name}
-          </Typography>,
-          <Typography
-            key="makerTypeOnActionCard"
-            sx={{
-              backgroundColor: "#d6ffcc",
-              borderRadius: 5,
-              height: 18,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              p: 1,
-            }}
-          >
-            {maker.type == "organization" ? maker.organizationType : maker.type}
-          </Typography>,
-        ]
-      : [<LinearProgress key="makerLinearProgressOnActionCard" />];
-    return (
-      <>
-        <Avatar
-          key="makerAvatorOnActionCard"
-          src={maker?.pic}
-          sx={{ width: 25, height: 25, mr: 1 }}
-        />
-        {...makerInfo}
-      </>
-    );
-  };
+  const [maker, makerLoading, makerError] = useMaker(action.makerId);
 
   return (
     <Stack
@@ -186,8 +153,43 @@ const OverlayInfo = ({
         pb: 2,
       }}
     >
-      <Stack sx={transaparentPillBox} direction={"row"}>
-        <MakerTitle />
+      <Stack
+        sx={[transaparentPillBox, { width: "fit-content" }]}
+        direction={"row"}
+        spacing={1}
+      >
+        <Avatar
+          key="makerAvatorOnActionCard"
+          src={maker?.pic}
+          sx={{ width: 25, height: 25, mr: 1 }}
+        />
+        {maker ? (
+          [
+            <Typography
+              key="makerTitleOnActionCard"
+              fontWeight={"bold"}
+              color={"white"}
+            >
+              {maker.name}
+            </Typography>,
+            <Typography
+              key="makerTypeOnActionCard"
+              sx={{
+                backgroundColor: "#d6ffcc",
+                borderRadius: 5,
+                height: 18,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                p: 1,
+              }}
+            >
+              {getMakerTypeLabel(maker)}
+            </Typography>,
+          ]
+        ) : (
+          <LinearProgress key="makerLinearProgressOnActionCard" />
+        )}
       </Stack>
       <Stack
         direction="row-reverse"

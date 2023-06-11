@@ -36,13 +36,13 @@ const UploadSocialProofPrompt = ({
         {forMaker.pic && (
           <Avatar src={forMaker.pic} sx={{ width: 112, height: 112 }} />
         )}
-        <Typography variant="h2" fontWeight="bold">
+        <Typography variant="h2">
           <Link
             href={`/makers/${forMaker.id}`}
             sx={{ color: "black" }}
           >{`${forMaker.name}`}</Link>
         </Typography>
-        <Typography variant="h2" fontWeight="bold" textAlign="center">
+        <Typography variant="h2" textAlign="center">
           {`quiere saber ¿cómo ${
             forAction ? `hizo esta acción` : `hicieron sus acciones`
           } un cambio en tu vida?`}
@@ -87,11 +87,7 @@ const UploadSocialProofPrompt = ({
           p: 2,
         }}
       >
-        <Typography
-          variant="h2"
-          fontWeight="bold"
-          key={"actionInQuestionTitle"}
-        >
+        <Typography variant="h2" key={"actionInQuestionTitle"}>
           {forAction ? `Acción en cuestión:` : `Sus acciones:`}
         </Typography>
         <Grid key="actionsGridUploadSocialProofPrompt" container spacing={1}>

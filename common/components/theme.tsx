@@ -66,10 +66,12 @@ const baseConfiguration = {
     h1: {
       fontSize: "3rem",
       fontFamily: montserratFont.style.fontFamily,
+      fontWeight: "bold",
     },
     h2: {
       fontSize: "2rem",
       fontFamily: montserratFont.style.fontFamily,
+      fontWeight: "bold",
     },
     h3: {
       fontSize: "1.5rem",

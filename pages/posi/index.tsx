@@ -124,13 +124,7 @@ const Index = () => {
         spacing={3}
         pt={3}
       >
-        <Typography
-          fontSize={25}
-          variant="h2"
-          textAlign="center"
-          fontWeight="bold"
-          pb={1}
-        >
+        <Typography fontSize={25} variant="h2" textAlign="center" pb={1}>
           Apoyando acciones que cambian el mundo
         </Typography>
         <Fab
