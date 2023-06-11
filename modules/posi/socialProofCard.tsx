@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardActionArea,
+  Typography,
 } from "@mui/material";
 import { SocialProof } from "../../functions/shared/src";
 import { useAction, useMaker } from "../../common/context/weverseUtils";
@@ -45,18 +46,19 @@ const SocialProofCard = ({
   };
   const SocialProofCardContent = () => {
     const [action, actionLoading, actionError] = useAction(
-      showAction ? socialProof.forAction : undefined
+      true ? socialProof.forAction : undefined
     );
     const [forMaker, forMakerLoading, forMakerError] = useMaker(
-      showMaker ? socialProof.forMaker : undefined
+      true ? socialProof.forMaker : undefined
     );
     return (
-      <>
-        {action && <CardContent>Por la acción: {action.summary}</CardContent>}
+      <CardContent>
+        {socialProof.text && <Typography>{socialProof.text}</Typography>}
+        {action && <Typography>Por la acción: {action.summary}</Typography>}
         {forMaker && (
-          <CardContent>Para el o la Maker: {forMaker.name}</CardContent>
+          <Typography>Para el o la Maker: {forMaker.name}</Typography>
         )}
-      </>
+      </CardContent>
     );
   };
   return (
