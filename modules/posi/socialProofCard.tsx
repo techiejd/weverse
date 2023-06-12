@@ -46,10 +46,10 @@ const SocialProofCard = ({
   };
   const SocialProofCardContent = () => {
     const [action, actionLoading, actionError] = useAction(
-      true ? socialProof.forAction : undefined
+      showAction ? socialProof.forAction : undefined
     );
     const [forMaker, forMakerLoading, forMakerError] = useMaker(
-      true ? socialProof.forMaker : undefined
+      showMaker ? socialProof.forMaker : undefined
     );
     return (
       <CardContent>

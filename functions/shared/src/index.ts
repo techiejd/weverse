@@ -28,6 +28,13 @@ export type HowToSupport = z.infer<typeof howToSupport>;
 export const ratings = z.object({sum: z.number(), count: z.number()});
 export type Ratings = z.infer<typeof ratings>;
 
+// TODO(techiejd): go through and extend all the db ones.
+const dbBase = z.object({
+  id: z.string().optional(),
+  createdAt: z.date().optional(), // from db iff exists
+});
+export type DbBase = z.infer<typeof dbBase>;
+
 export const maker = z.object({
   id: z.string().optional(),
   ownerId: z.string(),
@@ -127,3 +134,17 @@ export const posiFormData = z.object({
 });
 
 export type PosiFormData = z.infer<typeof posiFormData>;
+
+const parseDBInfo =
+<T extends z.ZodType<DbBase>>(zAny: T) => z.preprocess((val) => {
+  const {createdAt, ...others} = z.object({}).passthrough().parse(val);
+  return {createdAt: createdAt ? (createdAt as any).toDate() : undefined, ...others};
+}, zAny);
+
+const actionContent = dbBase.extend({type: z.literal("action"), data: parseDBInfo(posiFormData.optional())});
+const socialProofContent = dbBase.extend({type: z.literal("socialProof"), data: parseDBInfo(socialProof.optional())});
+
+export const content = z.discriminatedUnion("type", 
+[actionContent, 
+socialProofContent]);
+export type Content = z.infer<typeof content>;

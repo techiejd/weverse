@@ -6,7 +6,8 @@ import {
   serverTimestamp,
   QueryDocumentSnapshot,
 } from "firebase/firestore";
-import { Maker, maker, SocialProof, socialProof, Member, member, PosiFormData, posiFormData, Like, like } from '../../functions/shared/src';
+import { maker, socialProof, member, posiFormData, like, DbBase, content, Content } from '../../functions/shared/src';
+import { z } from 'zod';
 
 export const creds = {
   apiKey: String(process.env.NEXT_PUBLIC_REACT_APP_API_KEY),
@@ -20,101 +21,27 @@ export const creds = {
 
 export const app = initializeApp(creds);
 
-export const makerConverter: FirestoreDataConverter<Maker> = {
-  toFirestore(maker: WithFieldValue<Maker>): DocumentData {
-    const {id, ...others} = maker;
-    return {
-      ...others,
-      createdAt: maker.createdAt ? maker.createdAt : serverTimestamp(),
-    };
-  },
-  fromFirestore(snapshot: QueryDocumentSnapshot): Maker {
-    const data = snapshot.data();
-    // anything with serverTimestamp does not exist atm if pending writes.
-    return maker.parse({
-      ...data,
-      id: snapshot.id,
-      createdAt: data.createdAt ? data.createdAt.toDate() : undefined,
-    });
-  },
-};
+const makeDataConverter =
+<T extends z.ZodType<DbBase>>(zAny: T) :
+ FirestoreDataConverter<z.infer<typeof zAny>> => ({
+    toFirestore: (data: WithFieldValue<z.infer<typeof zAny>>): DocumentData => {
+      const {id, createdAt, ...others} = data;
+      return {...others, createdAt: createdAt ? createdAt : serverTimestamp()};
+    },
+    fromFirestore: (snapshot: QueryDocumentSnapshot): z.infer<typeof zAny> => {
+      const data = snapshot.data();
+      // anything with serverTimestamp does not exist atm if pending writes.
+      return zAny.parse({
+        ...data,
+        id: snapshot.id,
+        createdAt: data.createdAt ? data.createdAt.toDate() : undefined,
+      });
+    },
+  });
 
-export const socialProofConverter: FirestoreDataConverter<SocialProof> = {
-  toFirestore: (socialProof: WithFieldValue<SocialProof>): DocumentData => {
-    const {id, ...others} = socialProof;
-    return {
-      ...others,
-      createdAt: socialProof.createdAt ?
-        socialProof.createdAt :
-        serverTimestamp(),
-    };
-  },
-  fromFirestore: (snapshot: QueryDocumentSnapshot): SocialProof => {
-    const {createdAt, ...others} = snapshot.data();
-    // anything with serverTimestamp does not exist atm if pending writes.
-    return socialProof.parse({
-      ...others,
-      id: snapshot.id,
-      createdAt: createdAt ? createdAt.toDate() : undefined,
-    });
-  },
-};
-
-export const memberConverter: FirestoreDataConverter<Member> = {
-  toFirestore: (member: WithFieldValue<Member>): DocumentData => {
-    const {id, ...others} = member;
-    return {
-      ...others,
-      createdAt: member.createdAt ? member.createdAt : serverTimestamp(),
-    };
-  },
-  fromFirestore(snapshot: QueryDocumentSnapshot): Member {
-    const {createdAt, ...others} = snapshot.data();
-    // anything with serverTimestamp does not exist atm if pending writes.
-    return member.parse({
-      ...others,
-      id: snapshot.id,
-      createdAt: createdAt ? createdAt.toDate() : undefined,
-    });
-  },
-};
-
-export const posiFormDataConverter: FirestoreDataConverter<PosiFormData> = {
-  toFirestore: (posiFormData: WithFieldValue<PosiFormData>): DocumentData => {
-    const {id, ...others} = posiFormData;
-    return {
-      ...others,
-      createdAt: posiFormData.createdAt ?
-        posiFormData.createdAt :
-        serverTimestamp(),
-    };
-  },
-  fromFirestore: (snapshot: QueryDocumentSnapshot): PosiFormData => {
-    const data = snapshot.data();
-    return posiFormData.parse({
-      ...data,
-      id: snapshot.id,
-      createdAt: data.createdAt.toDate(),
-    });
-  },
-};
-
-export const likeConverter: FirestoreDataConverter<Like> = {
-  toFirestore: (likeData: WithFieldValue<Like>): DocumentData => {
-    const {id, ...others} = likeData;
-    return {
-      ...others,
-      createdAt: likeData.createdAt ?
-      likeData.createdAt :
-        serverTimestamp(),
-    };
-  },
-  fromFirestore: (snapshot: QueryDocumentSnapshot): Like => {
-    const data = snapshot.data();
-    return like.parse({
-      ...data,
-      id: snapshot.id,
-      createdAt: data.createdAt.toDate(),
-    });
-  },
-};
+export const makerConverter = makeDataConverter(maker);
+export const socialProofConverter = makeDataConverter(socialProof);
+export const memberConverter = makeDataConverter(member);
+export const posiFormDataConverter = makeDataConverter(posiFormData);
+export const likeConverter = makeDataConverter(like);
+export const contentConverter = makeDataConverter(content);

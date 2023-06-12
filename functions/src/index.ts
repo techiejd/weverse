@@ -2,17 +2,23 @@ import * as functions from "firebase-functions";
 import {maker} from "../shared";
 import {getFirestore} from "firebase-admin/firestore";
 import {initializeApp} from "firebase-admin/app";
-import {makerConverter, posiFormDataConverter,
+import {contentConverter, makerConverter, posiFormDataConverter,
   socialProofConverter} from "./utils";
 
 initializeApp();
 
+const testimonialsPath = "socialProofs/{socialProofId}";
+const actionsPath = "impacts/{actionId}";
+const getContentDocRef = (snapshot: functions.firestore.QueryDocumentSnapshot,
+  store: FirebaseFirestore.Firestore) => store.doc(`content/${snapshot.id}`)
+  .withConverter(contentConverter);
+
 export const testimonialAdded =
-functions.firestore.document("socialProofs/{socialProofId}")
+functions.firestore.document(testimonialsPath)
   .onCreate((snapshot) => {
+    const store = getFirestore();
     const sProof = socialProofConverter
       .fromFirestore(snapshot);
-    const store = getFirestore();
     const promises = [];
     if (sProof.forAction) {
       promises.push(store.doc(`impacts/${sProof.forAction}`)
@@ -40,13 +46,34 @@ functions.firestore.document("socialProofs/{socialProofId}")
             } : {sum: sProof.rating, count: 1},
         });
       }));
+    if (sProof.videoUrl) {
+      promises.push(getContentDocRef(snapshot, store).create({
+        type: "socialProof",
+        data: sProof,
+      }));
+    }
     return Promise.all(promises);
   });
 
-export const actionDeleted = functions.firestore.document("impacts/{actionId}")
+export const testimonialDeleted = functions.firestore.document(testimonialsPath)
+  .onDelete((snapshot) => getContentDocRef(snapshot, getFirestore()).delete());
+
+export const actionAdded = functions.firestore.document(actionsPath).onCreate(
+  (snapshot) => getContentDocRef(snapshot, getFirestore())
+    .create({type: "action", data: snapshot.data()}
+    ));
+
+export const actionModified = functions.firestore.document(actionsPath)
+  .onUpdate((change) =>
+    getContentDocRef(change.after, getFirestore())
+      .set({type: "action", data: change.after.data()}));
+
+export const actionDeleted = functions.firestore.document(actionsPath)
   .onDelete(async (snapshot) => {
     const store = getFirestore();
     const action = posiFormDataConverter.fromFirestore(snapshot);
+    const batch = store.batch();
+    batch.delete(getContentDocRef(snapshot, store));
     const promises : [
       Promise<FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>>,
       Promise<FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>>,
@@ -60,9 +87,9 @@ export const actionDeleted = functions.firestore.document("impacts/{actionId}")
           store.doc(`makers/${action.makerId}`).get() :
           Promise.resolve(undefined)];
 
-    const [socialProofsCollection, likesCollection, makerDoc] =
+    const [socialProofsCollection,
+      likesCollection, makerDoc] =
     await Promise.all(promises);
-    const batch = store.batch();
     let actionRatings = {sum: 0, count: 0};
     socialProofsCollection.forEach((socialProofSnapshot) => {
       const socialProof =

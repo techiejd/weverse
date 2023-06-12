@@ -1,6 +1,17 @@
 "use strict";
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.posiFormData = exports.socialProof = exports.member = exports.maker = exports.ratings = exports.organizationLabels = exports.organizationType = exports.media = exports.mediaType = exports.formUrl = void 0;
+exports.content = exports.posiFormData = exports.socialProof = exports.like = exports.member = exports.maker = exports.ratings = exports.organizationLabels = exports.organizationType = exports.media = exports.mediaType = exports.formUrl = void 0;
 const zod_1 = require("zod");
 // TODO(techiejd): Check all urls are with our hosting.
 exports.formUrl = zod_1.z.string().url();
@@ -29,6 +40,11 @@ const howToSupport = zod_1.z.object({
     finance: zod_1.z.string().max(500).optional(),
 });
 exports.ratings = zod_1.z.object({ sum: zod_1.z.number(), count: zod_1.z.number() });
+// TODO(techiejd): go through and extend all the db ones.
+const dbBase = zod_1.z.object({
+    id: zod_1.z.string().optional(),
+    createdAt: zod_1.z.date().optional(), // from db iff exists
+});
 exports.maker = zod_1.z.object({
     id: zod_1.z.string().optional(),
     ownerId: zod_1.z.string(),
@@ -38,11 +54,17 @@ exports.maker = zod_1.z.object({
     organizationType: exports.organizationType.optional(),
     createdAt: zod_1.z.date().optional(),
     howToSupport: howToSupport.optional(),
-    about: zod_1.z.string().min(5).max(1000).optional(),
+    about: zod_1.z.string().optional(),
     ratings: exports.ratings.optional(),
+    email: zod_1.z.string().optional(),
 });
 exports.member = zod_1.z.object({
     makerId: zod_1.z.string(),
+    id: zod_1.z.string().optional(),
+    createdAt: zod_1.z.date().optional(),
+});
+// This is an edge.
+exports.like = zod_1.z.object({
     id: zod_1.z.string().optional(),
     createdAt: zod_1.z.date().optional(),
 });
@@ -54,6 +76,7 @@ exports.socialProof = zod_1.z.object({
     forMaker: zod_1.z.string(),
     forAction: zod_1.z.string().optional(),
     createdAt: zod_1.z.date().optional(),
+    text: zod_1.z.string().optional(),
 });
 // related to
 // / <reference types="google.maps" />
@@ -96,7 +119,7 @@ const location = zod_1.z.object({
      * <code>'establishment'</code> or <code>'geocode'</code>.
      */
     types: zod_1.z.string().array(),
-});
+}).deepPartial(); // TODO(techiejd): Look into this error.
 // TODO(techiejd): Reshape db. It should go posi
 // {action: Action, impacts: Impact[], makerId}
 exports.posiFormData = zod_1.z.object({
@@ -109,4 +132,12 @@ exports.posiFormData = zod_1.z.object({
     createdAt: zod_1.z.date().optional(),
     ratings: exports.ratings.optional(),
 });
+const parseDBInfo = (zAny) => zod_1.z.preprocess((val) => {
+    const _a = zod_1.z.object({}).passthrough().parse(val), { createdAt } = _a, others = __rest(_a, ["createdAt"]);
+    return Object.assign({ createdAt: createdAt ? createdAt.toDate() : undefined }, others);
+}, zAny);
+const actionContent = dbBase.extend({ type: zod_1.z.literal("action"), data: parseDBInfo(exports.posiFormData.optional()) });
+const socialProofContent = dbBase.extend({ type: zod_1.z.literal("socialProof"), data: parseDBInfo(exports.socialProof.optional()) });
+exports.content = zod_1.z.discriminatedUnion("type", [actionContent,
+    socialProofContent]);
 //# sourceMappingURL=index.js.map

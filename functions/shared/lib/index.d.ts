@@ -44,6 +44,17 @@ export declare const ratings: z.ZodObject<{
     count?: number;
 }>;
 export type Ratings = z.infer<typeof ratings>;
+declare const dbBase: z.ZodObject<{
+    id: z.ZodOptional<z.ZodString>;
+    createdAt: z.ZodOptional<z.ZodDate>;
+}, "strip", z.ZodTypeAny, {
+    id?: string;
+    createdAt?: Date;
+}, {
+    id?: string;
+    createdAt?: Date;
+}>;
+export type DbBase = z.infer<typeof dbBase>;
 export declare const maker: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
     ownerId: z.ZodString;
@@ -73,6 +84,7 @@ export declare const maker: z.ZodObject<{
         sum?: number;
         count?: number;
     }>>;
+    email: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
     ownerId?: string;
@@ -90,6 +102,7 @@ export declare const maker: z.ZodObject<{
         sum?: number;
         count?: number;
     };
+    email?: string;
 }, {
     id?: string;
     ownerId?: string;
@@ -107,6 +120,7 @@ export declare const maker: z.ZodObject<{
         sum?: number;
         count?: number;
     };
+    email?: string;
 }>;
 export type Maker = z.infer<typeof maker>;
 export declare const member: z.ZodObject<{
@@ -123,6 +137,17 @@ export declare const member: z.ZodObject<{
     createdAt?: Date;
 }>;
 export type Member = z.infer<typeof member>;
+export declare const like: z.ZodObject<{
+    id: z.ZodOptional<z.ZodString>;
+    createdAt: z.ZodOptional<z.ZodDate>;
+}, "strip", z.ZodTypeAny, {
+    id?: string;
+    createdAt?: Date;
+}, {
+    id?: string;
+    createdAt?: Date;
+}>;
+export type Like = z.infer<typeof like>;
 export declare const socialProof: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
     rating: z.ZodNumber;
@@ -131,6 +156,7 @@ export declare const socialProof: z.ZodObject<{
     forMaker: z.ZodString;
     forAction: z.ZodOptional<z.ZodString>;
     createdAt: z.ZodOptional<z.ZodDate>;
+    text: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
     rating?: number;
@@ -139,6 +165,7 @@ export declare const socialProof: z.ZodObject<{
     forMaker?: string;
     forAction?: string;
     createdAt?: Date;
+    text?: string;
 }, {
     id?: string;
     rating?: number;
@@ -147,6 +174,7 @@ export declare const socialProof: z.ZodObject<{
     forMaker?: string;
     forAction?: string;
     createdAt?: Date;
+    text?: string;
 }>;
 export type SocialProof = z.infer<typeof socialProof>;
 export declare const posiFormData: z.ZodObject<{
@@ -154,54 +182,28 @@ export declare const posiFormData: z.ZodObject<{
     summary: z.ZodString;
     howToIdentifyImpactedPeople: z.ZodOptional<z.ZodString>;
     location: z.ZodOptional<z.ZodObject<{
-        /**
-         * A place ID that can be used to retrieve details about this place using
-         * the place details service (see {@link
-         * google.maps.places.PlacesService.getDetails}).
-         */
-        id: z.ZodString;
-        /**
-         * Structured information about the place's description, divided into a
-         * main text and a secondary text. We remove lots of google info.
-         * (see {@link google.maps.places.StructuredFormatting}).
-         */
-        structuredFormatting: z.ZodObject<{
-            mainText: z.ZodString;
-            secondaryText: z.ZodString;
+        id: z.ZodOptional<z.ZodString>;
+        structuredFormatting: z.ZodOptional<z.ZodObject<{
+            mainText: z.ZodOptional<z.ZodString>;
+            secondaryText: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
             mainText?: string;
             secondaryText?: string;
         }, {
             mainText?: string;
             secondaryText?: string;
-        }>;
-        /**
-         * Information about individual terms in the above description, from most to
-         * least specific. For example, "Taco Bell", "TOWN",
-         * and "STATE".
-         */
-        terms: z.ZodArray<z.ZodObject<{
-            /**
-             * The offset, in unicode characters, of the start of this term in the
-             * description of the place. AKA first term's offset = 0.
-             */
-            offset: z.ZodNumber;
-            /**
-             * The value of this term, for example,"Taco Bell".
-             */
-            value: z.ZodString;
+        }>>;
+        terms: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            offset: z.ZodOptional<z.ZodNumber>;
+            value: z.ZodOptional<z.ZodString>;
         }, "strip", z.ZodTypeAny, {
             offset?: number;
             value?: string;
         }, {
             offset?: number;
             value?: string;
-        }>, "many">;
-        /**
-         * An array of types that the prediction belongs to, for example
-         * <code>'establishment'</code> or <code>'geocode'</code>.
-         */
-        types: z.ZodArray<z.ZodString, "many">;
+        }>, "many">>;
+        types: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
         id?: string;
         structuredFormatting?: {
@@ -301,4 +303,257 @@ export declare const posiFormData: z.ZodObject<{
     };
 }>;
 export type PosiFormData = z.infer<typeof posiFormData>;
+export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
+    id: z.ZodOptional<z.ZodString>;
+    createdAt: z.ZodOptional<z.ZodDate>;
+    type: z.ZodLiteral<"action">;
+    data: z.ZodEffects<z.ZodOptional<z.ZodObject<{
+        id: z.ZodOptional<z.ZodString>;
+        summary: z.ZodString;
+        howToIdentifyImpactedPeople: z.ZodOptional<z.ZodString>;
+        location: z.ZodOptional<z.ZodObject<{
+            id: z.ZodOptional<z.ZodString>;
+            structuredFormatting: z.ZodOptional<z.ZodObject<{
+                mainText: z.ZodOptional<z.ZodString>;
+                secondaryText: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                mainText?: string;
+                secondaryText?: string;
+            }, {
+                mainText?: string;
+                secondaryText?: string;
+            }>>;
+            terms: z.ZodOptional<z.ZodArray<z.ZodObject<{
+                offset: z.ZodOptional<z.ZodNumber>;
+                value: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                offset?: number;
+                value?: string;
+            }, {
+                offset?: number;
+                value?: string;
+            }>, "many">>;
+            types: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        }, "strip", z.ZodTypeAny, {
+            id?: string;
+            structuredFormatting?: {
+                mainText?: string;
+                secondaryText?: string;
+            };
+            terms?: {
+                offset?: number;
+                value?: string;
+            }[];
+            types?: string[];
+        }, {
+            id?: string;
+            structuredFormatting?: {
+                mainText?: string;
+                secondaryText?: string;
+            };
+            terms?: {
+                offset?: number;
+                value?: string;
+            }[];
+            types?: string[];
+        }>>;
+        media: z.ZodObject<{
+            type: z.ZodEnum<["video", "img"]>;
+            url: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            type?: "img" | "video";
+            url?: string;
+        }, {
+            type?: "img" | "video";
+            url?: string;
+        }>;
+        makerId: z.ZodString;
+        createdAt: z.ZodOptional<z.ZodDate>;
+        ratings: z.ZodOptional<z.ZodObject<{
+            sum: z.ZodNumber;
+            count: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            sum?: number;
+            count?: number;
+        }, {
+            sum?: number;
+            count?: number;
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        id?: string;
+        summary?: string;
+        howToIdentifyImpactedPeople?: string;
+        location?: {
+            id?: string;
+            structuredFormatting?: {
+                mainText?: string;
+                secondaryText?: string;
+            };
+            terms?: {
+                offset?: number;
+                value?: string;
+            }[];
+            types?: string[];
+        };
+        media?: {
+            type?: "img" | "video";
+            url?: string;
+        };
+        makerId?: string;
+        createdAt?: Date;
+        ratings?: {
+            sum?: number;
+            count?: number;
+        };
+    }, {
+        id?: string;
+        summary?: string;
+        howToIdentifyImpactedPeople?: string;
+        location?: {
+            id?: string;
+            structuredFormatting?: {
+                mainText?: string;
+                secondaryText?: string;
+            };
+            terms?: {
+                offset?: number;
+                value?: string;
+            }[];
+            types?: string[];
+        };
+        media?: {
+            type?: "img" | "video";
+            url?: string;
+        };
+        makerId?: string;
+        createdAt?: Date;
+        ratings?: {
+            sum?: number;
+            count?: number;
+        };
+    }>>, {
+        id?: string;
+        summary?: string;
+        howToIdentifyImpactedPeople?: string;
+        location?: {
+            id?: string;
+            structuredFormatting?: {
+                mainText?: string;
+                secondaryText?: string;
+            };
+            terms?: {
+                offset?: number;
+                value?: string;
+            }[];
+            types?: string[];
+        };
+        media?: {
+            type?: "img" | "video";
+            url?: string;
+        };
+        makerId?: string;
+        createdAt?: Date;
+        ratings?: {
+            sum?: number;
+            count?: number;
+        };
+    }, unknown>;
+}, "strip", z.ZodTypeAny, {
+    id?: string;
+    createdAt?: Date;
+    type?: "action";
+    data?: {
+        id?: string;
+        summary?: string;
+        howToIdentifyImpactedPeople?: string;
+        location?: {
+            id?: string;
+            structuredFormatting?: {
+                mainText?: string;
+                secondaryText?: string;
+            };
+            terms?: {
+                offset?: number;
+                value?: string;
+            }[];
+            types?: string[];
+        };
+        media?: {
+            type?: "img" | "video";
+            url?: string;
+        };
+        makerId?: string;
+        createdAt?: Date;
+        ratings?: {
+            sum?: number;
+            count?: number;
+        };
+    };
+}, {
+    id?: string;
+    createdAt?: Date;
+    type?: "action";
+    data?: unknown;
+}>, z.ZodObject<{
+    id: z.ZodOptional<z.ZodString>;
+    createdAt: z.ZodOptional<z.ZodDate>;
+    type: z.ZodLiteral<"socialProof">;
+    data: z.ZodEffects<z.ZodOptional<z.ZodObject<{
+        id: z.ZodOptional<z.ZodString>;
+        rating: z.ZodNumber;
+        videoUrl: z.ZodOptional<z.ZodString>;
+        byMaker: z.ZodString;
+        forMaker: z.ZodString;
+        forAction: z.ZodOptional<z.ZodString>;
+        createdAt: z.ZodOptional<z.ZodDate>;
+        text: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        id?: string;
+        rating?: number;
+        videoUrl?: string;
+        byMaker?: string;
+        forMaker?: string;
+        forAction?: string;
+        createdAt?: Date;
+        text?: string;
+    }, {
+        id?: string;
+        rating?: number;
+        videoUrl?: string;
+        byMaker?: string;
+        forMaker?: string;
+        forAction?: string;
+        createdAt?: Date;
+        text?: string;
+    }>>, {
+        id?: string;
+        rating?: number;
+        videoUrl?: string;
+        byMaker?: string;
+        forMaker?: string;
+        forAction?: string;
+        createdAt?: Date;
+        text?: string;
+    }, unknown>;
+}, "strip", z.ZodTypeAny, {
+    id?: string;
+    createdAt?: Date;
+    type?: "socialProof";
+    data?: {
+        id?: string;
+        rating?: number;
+        videoUrl?: string;
+        byMaker?: string;
+        forMaker?: string;
+        forAction?: string;
+        createdAt?: Date;
+        text?: string;
+    };
+}, {
+    id?: string;
+    createdAt?: Date;
+    type?: "socialProof";
+    data?: unknown;
+}>]>;
+export type Content = z.infer<typeof content>;
 export {};
