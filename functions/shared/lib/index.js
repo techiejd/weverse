@@ -11,7 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.content = exports.posiFormData = exports.socialProof = exports.like = exports.member = exports.maker = exports.ratings = exports.organizationLabels = exports.organizationType = exports.media = exports.mediaType = exports.formUrl = void 0;
+exports.sponsorship = exports.sponsorshipLevel = exports.content = exports.posiFormData = exports.socialProof = exports.like = exports.member = exports.maker = exports.ratings = exports.organizationType = exports.makerType = exports.media = exports.mediaType = exports.formUrl = void 0;
 const zod_1 = require("zod");
 // TODO(techiejd): Check all urls are with our hosting.
 exports.formUrl = zod_1.z.string().url();
@@ -20,21 +20,13 @@ exports.media = zod_1.z.object({
     type: exports.mediaType,
     url: exports.formUrl,
 });
-const makerType = zod_1.z.enum(["individual", "organization"]);
+exports.makerType = zod_1.z.enum(["individual", "organization"]);
 exports.organizationType = zod_1.z.enum([
     "nonprofit",
     "religious",
-    "governmental",
     "unincorporated",
     "profit",
 ]);
-exports.organizationLabels = {
-    [exports.organizationType.Enum.nonprofit]: "Fundación u otra ONG",
-    [exports.organizationType.Enum.religious]: "Organización Religiosa",
-    [exports.organizationType.Enum.governmental]: "Organización Gubermental",
-    [exports.organizationType.Enum.unincorporated]: "Voluntarios",
-    [exports.organizationType.Enum.profit]: "Organización comercial",
-};
 const howToSupport = zod_1.z.object({
     contact: zod_1.z.string().max(500).optional(),
     finance: zod_1.z.string().max(500).optional(),
@@ -48,7 +40,7 @@ const dbBase = zod_1.z.object({
 exports.maker = zod_1.z.object({
     id: zod_1.z.string().optional(),
     ownerId: zod_1.z.string(),
-    type: makerType,
+    type: exports.makerType,
     pic: exports.formUrl.optional(),
     name: zod_1.z.string().min(1),
     organizationType: exports.organizationType.optional(),
@@ -58,10 +50,27 @@ exports.maker = zod_1.z.object({
     ratings: exports.ratings.optional(),
     email: zod_1.z.string().optional(),
 });
+const customer = zod_1.z.object({
+    firstName: zod_1.z.string().min(1),
+    lastName: zod_1.z.string().min(1),
+    email: zod_1.z.string().email(),
+    phone: zod_1.z.string().min(1),
+    address: zod_1.z.object({
+        postalCode: zod_1.z.string().min(1),
+        country: zod_1.z.string().min(1),
+        countryCode: zod_1.z.string().min(1),
+    }),
+});
+const stripe = zod_1.z.object({
+    customer: zod_1.z.string().min(1),
+    subscription: zod_1.z.string().min(1),
+});
 exports.member = zod_1.z.object({
     makerId: zod_1.z.string(),
     id: zod_1.z.string().optional(),
     createdAt: zod_1.z.date().optional(),
+    customer: customer.optional(),
+    stripe: stripe.optional(),
 });
 // This is an edge.
 exports.like = zod_1.z.object({
@@ -136,8 +145,18 @@ const parseDBInfo = (zAny) => zod_1.z.preprocess((val) => {
     const _a = zod_1.z.object({}).passthrough().parse(val), { createdAt } = _a, others = __rest(_a, ["createdAt"]);
     return Object.assign({ createdAt: createdAt ? createdAt.toDate() : undefined }, others);
 }, zAny);
-const actionContent = dbBase.extend({ type: zod_1.z.literal("action"), data: parseDBInfo(exports.posiFormData.optional()) });
-const socialProofContent = dbBase.extend({ type: zod_1.z.literal("socialProof"), data: parseDBInfo(exports.socialProof.optional()) });
+const actionContent = dbBase.extend({ type: zod_1.z.literal("action"), data: parseDBInfo(exports.posiFormData) });
+const socialProofContent = dbBase.extend({ type: zod_1.z.literal("socialProof"), data: parseDBInfo(exports.socialProof) });
 exports.content = zod_1.z.discriminatedUnion("type", [actionContent,
     socialProofContent]);
+exports.sponsorshipLevel = zod_1.z.enum(["admirer", "fan", "lover", "custom"]);
+exports.sponsorship = dbBase.extend({
+    sponsorshipPrice: zod_1.z.string(),
+    total: zod_1.z.number(),
+    sponsorshipLevel: exports.sponsorshipLevel,
+    customAmount: zod_1.z.number().optional(),
+    tipAmount: zod_1.z.number().optional(),
+    denyFee: zod_1.z.boolean().optional(),
+    paid: zod_1.z.boolean().optional(),
+});
 //# sourceMappingURL=index.js.map

@@ -20,6 +20,7 @@ import AuthDialog from "../../modules/auth/AuthDialog";
 import { AuthAction } from "../../modules/auth/AuthDialog/context";
 import { Header } from "../components/header";
 import { lightConfiguration } from "../components/theme";
+import { Stripe, loadStripe } from "@stripe/stripe-js";
 
 const RegisterModal = () => {
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
@@ -64,6 +65,8 @@ const auth = (() => {
   return auth;
 })();
 
+let stripePromise: Promise<Stripe | null>;
+
 const weverse: {
   storage: FirebaseStorage;
   firestore: Firestore;
@@ -72,11 +75,20 @@ const weverse: {
     loading: boolean;
   };
   auth: Auth;
+  getStripe: () => Promise<Stripe | null>;
 } = {
   storage: storage,
   firestore: firestore,
   authState: { user: undefined, loading: false },
   auth: auth,
+  getStripe: () => {
+    if (!stripePromise) {
+      stripePromise = loadStripe(
+        process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+      );
+    }
+    return stripePromise;
+  },
 };
 
 const AppStateContext = createContext(weverse);

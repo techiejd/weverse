@@ -57,7 +57,7 @@ const CitySearchInput = () => {
   return (
     <Box>
       <Script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOkpsRpjgv8GyDniz5L7pnxoO40arBE38&libraries=places&callback=mapsInitializedForWeVerse"
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlX_wAx8E_fhosMPjNY1-GH_y78-KCwlI&libraries=places&callback=mapsInitializedForWeVerse"
         async
       />
       <PlacesAutocomplete

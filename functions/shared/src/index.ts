@@ -50,10 +50,30 @@ export const maker = z.object({
 });
 export type Maker = z.infer<typeof maker>;
 
+const customer = z.object({
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  email: z.string().email(),
+  phone: z.string().min(1),
+  address: z.object({
+    postalCode: z.string().min(1),
+    country: z.string().min(1),
+    countryCode: z.string().min(1),
+  }),
+});
+
+const stripe = z.object({
+  customer: z.string().min(1),
+  subscription: z.string().min(1),
+  state: z.enum(["active", "incomplete"]),
+});
+
 export const member = z.object({
   makerId: z.string(),
   id: z.string().optional(),
   createdAt: z.date().optional(),
+  customer: customer.optional(),
+  stripe: stripe.optional(),
 });
 export type Member = z.infer<typeof member>;
 
@@ -141,10 +161,23 @@ const parseDBInfo =
   return {createdAt: createdAt ? (createdAt as any).toDate() : undefined, ...others};
 }, zAny);
 
-const actionContent = dbBase.extend({type: z.literal("action"), data: parseDBInfo(posiFormData.optional())});
-const socialProofContent = dbBase.extend({type: z.literal("socialProof"), data: parseDBInfo(socialProof.optional())});
+const actionContent = dbBase.extend({type: z.literal("action"), data: parseDBInfo(posiFormData)});
+const socialProofContent = dbBase.extend({type: z.literal("socialProof"), data: parseDBInfo(socialProof)});
 
 export const content = z.discriminatedUnion("type", 
 [actionContent, 
 socialProofContent]);
 export type Content = z.infer<typeof content>;
+
+export const sponsorshipLevel = z.enum(["admirer", "fan", "lover", "custom"]);
+export type SponsorshipLevel = z.infer<typeof sponsorshipLevel>;
+
+export const sponsorship = dbBase.extend({
+  sponsorshipPrice: z.string(),
+  total: z.number(),
+  sponsorshipLevel: sponsorshipLevel,
+  customAmount: z.number().optional(),
+  tipAmount: z.number().optional(),
+  denyFee: z.boolean().optional(),
+  paid: z.boolean().optional(),
+});

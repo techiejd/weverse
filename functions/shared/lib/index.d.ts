@@ -13,15 +13,9 @@ export declare const media: z.ZodObject<{
     url?: string;
 }>;
 export type Media = z.infer<typeof media>;
-export declare const organizationType: z.ZodEnum<["nonprofit", "religious", "governmental", "unincorporated", "profit"]>;
+export declare const makerType: z.ZodEnum<["individual", "organization"]>;
+export declare const organizationType: z.ZodEnum<["nonprofit", "religious", "unincorporated", "profit"]>;
 export type OrganizationType = z.infer<typeof organizationType>;
-export declare const organizationLabels: {
-    nonprofit: string;
-    religious: string;
-    governmental: string;
-    unincorporated: string;
-    profit: string;
-};
 declare const howToSupport: z.ZodObject<{
     contact: z.ZodOptional<z.ZodString>;
     finance: z.ZodOptional<z.ZodString>;
@@ -61,7 +55,7 @@ export declare const maker: z.ZodObject<{
     type: z.ZodEnum<["individual", "organization"]>;
     pic: z.ZodOptional<z.ZodString>;
     name: z.ZodString;
-    organizationType: z.ZodOptional<z.ZodEnum<["nonprofit", "religious", "governmental", "unincorporated", "profit"]>>;
+    organizationType: z.ZodOptional<z.ZodEnum<["nonprofit", "religious", "unincorporated", "profit"]>>;
     createdAt: z.ZodOptional<z.ZodDate>;
     howToSupport: z.ZodOptional<z.ZodObject<{
         contact: z.ZodOptional<z.ZodString>;
@@ -91,7 +85,7 @@ export declare const maker: z.ZodObject<{
     type?: "individual" | "organization";
     pic?: string;
     name?: string;
-    organizationType?: "nonprofit" | "religious" | "governmental" | "unincorporated" | "profit";
+    organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit";
     createdAt?: Date;
     howToSupport?: {
         contact?: string;
@@ -109,7 +103,7 @@ export declare const maker: z.ZodObject<{
     type?: "individual" | "organization";
     pic?: string;
     name?: string;
-    organizationType?: "nonprofit" | "religious" | "governmental" | "unincorporated" | "profit";
+    organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit";
     createdAt?: Date;
     howToSupport?: {
         contact?: string;
@@ -127,14 +121,93 @@ export declare const member: z.ZodObject<{
     makerId: z.ZodString;
     id: z.ZodOptional<z.ZodString>;
     createdAt: z.ZodOptional<z.ZodDate>;
+    customer: z.ZodOptional<z.ZodObject<{
+        firstName: z.ZodString;
+        lastName: z.ZodString;
+        email: z.ZodString;
+        phone: z.ZodString;
+        address: z.ZodObject<{
+            postalCode: z.ZodString;
+            country: z.ZodString;
+            countryCode: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            postalCode?: string;
+            country?: string;
+            countryCode?: string;
+        }, {
+            postalCode?: string;
+            country?: string;
+            countryCode?: string;
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        firstName?: string;
+        lastName?: string;
+        email?: string;
+        phone?: string;
+        address?: {
+            postalCode?: string;
+            country?: string;
+            countryCode?: string;
+        };
+    }, {
+        firstName?: string;
+        lastName?: string;
+        email?: string;
+        phone?: string;
+        address?: {
+            postalCode?: string;
+            country?: string;
+            countryCode?: string;
+        };
+    }>>;
+    stripe: z.ZodOptional<z.ZodObject<{
+        customer: z.ZodString;
+        subscription: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        customer?: string;
+        subscription?: string;
+    }, {
+        customer?: string;
+        subscription?: string;
+    }>>;
 }, "strip", z.ZodTypeAny, {
     makerId?: string;
     id?: string;
     createdAt?: Date;
+    customer?: {
+        firstName?: string;
+        lastName?: string;
+        email?: string;
+        phone?: string;
+        address?: {
+            postalCode?: string;
+            country?: string;
+            countryCode?: string;
+        };
+    };
+    stripe?: {
+        customer?: string;
+        subscription?: string;
+    };
 }, {
     makerId?: string;
     id?: string;
     createdAt?: Date;
+    customer?: {
+        firstName?: string;
+        lastName?: string;
+        email?: string;
+        phone?: string;
+        address?: {
+            postalCode?: string;
+            country?: string;
+            countryCode?: string;
+        };
+    };
+    stripe?: {
+        customer?: string;
+        subscription?: string;
+    };
 }>;
 export type Member = z.infer<typeof member>;
 export declare const like: z.ZodObject<{
@@ -307,7 +380,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
     createdAt: z.ZodOptional<z.ZodDate>;
     type: z.ZodLiteral<"action">;
-    data: z.ZodEffects<z.ZodOptional<z.ZodObject<{
+    data: z.ZodEffects<z.ZodObject<{
         id: z.ZodOptional<z.ZodString>;
         summary: z.ZodString;
         howToIdentifyImpactedPeople: z.ZodOptional<z.ZodString>;
@@ -431,7 +504,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             sum?: number;
             count?: number;
         };
-    }>>, {
+    }>, {
         id?: string;
         summary?: string;
         howToIdentifyImpactedPeople?: string;
@@ -498,7 +571,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
     createdAt: z.ZodOptional<z.ZodDate>;
     type: z.ZodLiteral<"socialProof">;
-    data: z.ZodEffects<z.ZodOptional<z.ZodObject<{
+    data: z.ZodEffects<z.ZodObject<{
         id: z.ZodOptional<z.ZodString>;
         rating: z.ZodNumber;
         videoUrl: z.ZodOptional<z.ZodString>;
@@ -525,7 +598,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         forAction?: string;
         createdAt?: Date;
         text?: string;
-    }>>, {
+    }>, {
         id?: string;
         rating?: number;
         videoUrl?: string;
@@ -556,4 +629,37 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
     data?: unknown;
 }>]>;
 export type Content = z.infer<typeof content>;
+export declare const sponsorshipLevel: z.ZodEnum<["admirer", "fan", "lover", "custom"]>;
+export type SponsorshipLevel = z.infer<typeof sponsorshipLevel>;
+export declare const sponsorship: z.ZodObject<{
+    id: z.ZodOptional<z.ZodString>;
+    createdAt: z.ZodOptional<z.ZodDate>;
+    sponsorshipPrice: z.ZodString;
+    total: z.ZodNumber;
+    sponsorshipLevel: z.ZodEnum<["admirer", "fan", "lover", "custom"]>;
+    customAmount: z.ZodOptional<z.ZodNumber>;
+    tipAmount: z.ZodOptional<z.ZodNumber>;
+    denyFee: z.ZodOptional<z.ZodBoolean>;
+    paid: z.ZodOptional<z.ZodBoolean>;
+}, "strip", z.ZodTypeAny, {
+    id?: string;
+    createdAt?: Date;
+    sponsorshipPrice?: string;
+    total?: number;
+    sponsorshipLevel?: "custom" | "admirer" | "fan" | "lover";
+    customAmount?: number;
+    tipAmount?: number;
+    denyFee?: boolean;
+    paid?: boolean;
+}, {
+    id?: string;
+    createdAt?: Date;
+    sponsorshipPrice?: string;
+    total?: number;
+    sponsorshipLevel?: "custom" | "admirer" | "fan" | "lover";
+    customAmount?: number;
+    tipAmount?: number;
+    denyFee?: boolean;
+    paid?: boolean;
+}>;
 export {};

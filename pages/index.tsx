@@ -88,9 +88,7 @@ const WeVerse = () => {
             </>
           }
         />
-        <Typography>
-          Validando e incentivando el mundo de impacto social.
-        </Typography>
+        <Typography>Apoyando acciones que cambian el mundo.</Typography>
         <Stack
           sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
         >

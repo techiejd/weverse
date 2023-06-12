@@ -10,7 +10,7 @@ const makeDataConverter =
 <T extends z.ZodType<DbBase>>(zAny: T) :
  FirestoreDataConverter<z.infer<typeof zAny>> => ({
     toFirestore: (data: WithFieldValue<z.infer<typeof zAny>>): DocumentData => {
-      const {id, createdAt, ...others} = data;
+      const {createdAt, ...others} = data;
       return {...others, createdAt: createdAt ? createdAt : Timestamp.now()};
     },
     fromFirestore: (snapshot: QueryDocumentSnapshot): z.infer<typeof zAny> => {
