@@ -6,9 +6,6 @@
     "auth": {
       "port": 9099
     },
-    "database": {
-      "port": 9000
-    },
     "ui": {
       "enabled": true
     },
@@ -17,9 +14,6 @@
     },
     "hosting": {
       "port": 5001
-    },
-    "pubsub": {
-      "port": 8085
     },
     "storage": {
       "port": 9199
@@ -30,14 +24,14 @@
     }
   },
   "hosting": {
-    "rewrites": [
-      {
-        "source": "**",
-        "run": {
-          "serviceId": "webapp",
-          "region": "southamerica-west1"
-        }
-      }
+    "port": 5000,
+    "host": "0.0.0.0",
+    "source": ".",
+    "ignore": [
+      "firebase.json",
+      "**/functions/**",
+      "**/.*",
+      "**/node_modules/**"
     ]
   },
   "firestore": {

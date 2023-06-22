@@ -7,6 +7,8 @@ import {FirestoreDataConverter, WithFieldValue,
   QueryDocumentSnapshot, Timestamp} from "firebase-admin/firestore";
 import {z} from "zod";
 
+console.log("process.env.STRIPE_SECRET_KEY! :", process.env.STRIPE_SECRET_KEY!);
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2022-11-15',
 });

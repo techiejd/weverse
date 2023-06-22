@@ -51,3 +51,6 @@ database-debug.log
 
 # Ignore firebase emulator stuff
 emulators_export/
+
+# Ignore vscode
+.vscode/
