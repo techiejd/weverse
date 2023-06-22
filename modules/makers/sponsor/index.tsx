@@ -1,20 +1,13 @@
 import * as React from "react";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
-import Stepper from "@mui/material/Stepper";
-import { Step as StepComponent } from "@mui/material";
-import StepLabel from "@mui/material/StepLabel";
 import Typography from "@mui/material/Typography";
-import ChooseSponsorship from "./chooseSponsorship";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import Final from "./final";
 import { useCurrentMaker } from "../context";
-import CustomerDetails from "./customerDetails";
-import Pay from "./pay";
-import { Step } from "./utils";
-
-const steps = ["Elige", "Datos", "Pago"];
+import { useMyMemberOnce } from "../../../common/context/weverseUtils";
+import InitializeSponsor from "./initialize";
+import RepeatSponsor from "./repeat";
 
 export default function Sponsor({
   finishedButtonBehavior,
@@ -24,8 +17,10 @@ export default function Sponsor({
   const router = useRouter();
   const { isReady, query } = useRouter();
   const { sponsorStep } = query;
-  const [activeStep, setActiveStep] = React.useState(Step.chooseSponsorship);
+  const [activeStep, setActiveStep] = React.useState(0);
   const [maker, makerLoading, makerErrors] = useCurrentMaker();
+  const [myMember, myMemberLoading, myMemberErrors] = useMyMemberOnce();
+  const isRepeatSponsor = myMember?.stripe?.state === "active";
   React.useEffect(() => {
     if (isReady) {
       setActiveStep(sponsorStep ? parseInt(sponsorStep as string) : 0);
@@ -35,7 +30,7 @@ export default function Sponsor({
     router.push(
       {
         pathname: `/makers/${maker?.id}/sponsor`,
-        query: { sponsorStep: Step.next(activeStep) },
+        query: { sponsorStep: activeStep + 1 },
       },
       undefined,
       { shallow: true }
@@ -47,45 +42,22 @@ export default function Sponsor({
   };
 
   const [sponsorForm, setSponsorForm] = useState<Record<string, string>>({});
-  function getStepContent() {
-    switch (activeStep as Step) {
-      case Step.chooseSponsorship:
-        return <ChooseSponsorship sponsorForm={sponsorForm} />;
-      case Step.customerDetails:
-        return (
-          <CustomerDetails sponsorForm={sponsorForm} handleBack={handleBack} />
-        );
-      case Step.pay:
-        return (
-          <Pay
-            sponsorForm={sponsorForm}
-            handleBack={handleBack}
-            handleNext={handleNext}
-          />
-        );
-      case Step.success:
-        return (
-          <Final
-            sponsorForm={sponsorForm}
-            finishedButtonBehavior={finishedButtonBehavior}
-          />
-        );
-      default:
-        throw new Error("Unknown step");
-    }
-  }
 
-  const submit = (step: Step, sponsorForm: Record<string, string>) => {
-    const stepString = Step.toString(step);
+  const submit = (sponsorForm: Record<string, string>) => {
+    const stepString = sponsorForm.stepString;
     setSponsorForm((sponsorForm) => ({
       ...sponsorForm,
       status: "loading",
       [stepString]: "loading",
     }));
-    fetch("/api/sponsor?" + new URLSearchParams({ step: stepString }), {
-      method: "POST",
-      body: JSON.stringify(sponsorForm),
-    }).then((res) => {
+    fetch(
+      `/api/sponsor/${isRepeatSponsor ? "repeat" : "initialize"}?` +
+        new URLSearchParams({ step: stepString }),
+      {
+        method: "POST",
+        body: JSON.stringify(sponsorForm),
+      }
+    ).then((res) => {
       if (res.ok) {
         res.json().then((data) => {
           setSponsorForm((sponsorForm) => {
@@ -122,7 +94,7 @@ export default function Sponsor({
             setSponsorForm((sponsorForm) => {
               return newSponsorForm;
             });
-            submit(activeStep, newSponsorForm);
+            submit(newSponsorForm);
 
             e.preventDefault();
             e.stopPropagation();
@@ -134,14 +106,22 @@ export default function Sponsor({
           <Typography component="h1" variant="h4" align="center">
             Patrocina a {maker?.name}
           </Typography>
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-            {steps.map((label) => (
-              <StepComponent key={label}>
-                <StepLabel>{label}</StepLabel>
-              </StepComponent>
-            ))}
-          </Stepper>
-          {getStepContent()}
+          {isRepeatSponsor ? (
+            <RepeatSponsor
+              step={activeStep}
+              sponsorForm={sponsorForm}
+              finishedButtonBehavior={finishedButtonBehavior}
+              handleBack={handleBack}
+            />
+          ) : (
+            <InitializeSponsor
+              step={activeStep}
+              sponsorForm={sponsorForm}
+              finishedButtonBehavior={finishedButtonBehavior}
+              handleBack={handleBack}
+              handleNext={handleNext}
+            />
+          )}
         </form>
       </Paper>
     </Container>

@@ -79,6 +79,7 @@ const CustomerDetails = ({
       <Typography variant="h6" gutterBottom>
         Detalles de pago
       </Typography>
+      <input hidden value={"customerDetails"} name="stepString" readOnly />
       <input hidden readOnly value={countryInfo.code} name="countryCode" />
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>

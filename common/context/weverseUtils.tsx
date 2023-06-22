@@ -3,6 +3,7 @@ import {
   useCollection,
   useCollectionData,
   useDocumentData,
+  useDocumentDataOnce,
 } from "react-firebase-hooks/firestore";
 import {
   collection,
@@ -43,6 +44,18 @@ export const useMyMember = () => {
   const appState = useAppState();
   const { user } = appState.authState;
   return useDocumentData(
+    user
+      ? doc(appState.firestore, "members", user.uid).withConverter(
+          memberConverter
+        )
+      : undefined
+  );
+};
+
+export const useMyMemberOnce = () => {
+  const appState = useAppState();
+  const { user } = appState.authState;
+  return useDocumentDataOnce(
     user
       ? doc(appState.firestore, "members", user.uid).withConverter(
           memberConverter

@@ -15,13 +15,13 @@ import {
   Typography,
 } from "@mui/material";
 import { Fragment, useState } from "react";
+import { sponsorshipLevels, toCop } from "./utils";
+import { useMyMember } from "../../../../common/context/weverseUtils";
 import {
   SponsorshipLevel,
   sponsorshipLevel,
-} from "../../../functions/shared/src";
-import { sponsorshipLevels, toCop } from "./utils";
-import { useCurrentMaker } from "../context";
-import { useMyMember } from "../../../common/context/weverseUtils";
+} from "../../../../functions/shared/src";
+import { useCurrentMaker } from "../../context";
 
 const sponsorshipLevelLabel = (sponsorshipLevelIn: SponsorshipLevel) => {
   return (
@@ -86,6 +86,7 @@ const ChooseSponsorship = ({
         Elige tu nivel de patrocinio
       </Typography>
 
+      <input hidden value={"chooseSponsorship"} name="stepString" readOnly />
       <input hidden value={total} name="total" readOnly />
       <input hidden value={maker?.id ?? ""} name="maker" readOnly />
       <input hidden value={myMember?.id ?? ""} name="member" readOnly />

@@ -1,40 +1,31 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import { Box, Button, Stack } from "@mui/material";
-import { Step, sponsorshipLevels, toCop } from "./utils";
-import { SponsorshipLevel } from "../../../functions/shared/src";
-import {
-  collection,
-  doc,
-  getCountFromServer,
-  query,
-  where,
-  writeBatch,
-} from "firebase/firestore";
-
+import { Box, Stack } from "@mui/material";
+import { doc, writeBatch } from "firebase/firestore";
 import {
   StripeTextFieldCVC,
   StripeTextFieldExpiry,
   StripeTextFieldNumber,
 } from "./stripeTextFields";
-
 import {
   useStripe,
   useElements,
   CardNumberElement,
   Elements,
 } from "@stripe/react-stripe-js";
-import { useAppState } from "../../../common/context/appState";
 import { useState } from "react";
-
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useMyMember } from "../../../common/context/weverseUtils";
-import { useCurrentMaker } from "../context";
+import { useAppState } from "../../../../common/context/appState";
+import { useMyMember } from "../../../../common/context/weverseUtils";
 import {
-  memberConverter,
   sponsorshipConverter,
-} from "../../../common/utils/firebase";
+  memberConverter,
+} from "../../../../common/utils/firebase";
+import { SponsorshipLevel } from "../../../../functions/shared/src";
+import { useCurrentMaker } from "../../context";
+import { sponsorshipLevels, toCop } from "../common/utils";
+import { Step } from "./utils";
 
 const Pay = ({
   sponsorForm,
@@ -260,7 +251,7 @@ const Pay = ({
               disabled={loading}
               loading={loading}
             >
-              Atras
+              <span>Atras</span>
             </LoadingButton>
             <LoadingButton
               variant="contained"
@@ -269,7 +260,7 @@ const Pay = ({
               disabled={disableSubmit}
               loading={loading}
             >
-              Listo
+              <span>Listo</span>
             </LoadingButton>
           </React.Fragment>
         </Box>
