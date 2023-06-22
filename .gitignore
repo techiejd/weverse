@@ -38,10 +38,6 @@ next-env.d.ts
 # ignore all json that start with weverse,
 # since they tend to be credential files.
 webapp*.json
-
-# Everything under public
-public/*
-
 # Ignore firebase automoatic hosting stuff
 .firebase/
 firebase-debug.log
