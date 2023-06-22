@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { initializeApp, getApps } from 'firebase-admin/app';
+import { initializeApp, getApps, cert } from 'firebase-admin/app';
 import { DbBase, SponsorshipLevel, member, sponsorship, sponsorshipLevel } from '../../functions/shared/src';
 import Stripe from "stripe";
 import {FirestoreDataConverter, WithFieldValue,
@@ -7,6 +7,7 @@ import {FirestoreDataConverter, WithFieldValue,
   QueryDocumentSnapshot, Timestamp} from "firebase-admin/firestore";
 import {z} from "zod";
 
+const isDevEnvironment = process && process.env.NODE_ENV === "development";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2022-11-15',
 });
@@ -18,7 +19,12 @@ import { getFirestore } from 'firebase-admin/firestore';
 const testProduct = "prod_O76xw2wlNkijb1";
 const testFan = "prod_O7oOWYdMThvn5M";
 
-const sponsorshipLevelsToPlanIds : Record<SponsorshipLevel, string> = {
+const sponsorshipLevelsToPlanIds : Record<SponsorshipLevel, string> = isDevEnvironment ? {
+  [sponsorshipLevel.Enum.admirer]: "prod_O76xw2wlNkijb1",
+  [sponsorshipLevel.Enum.fan]: "prod_O7oOWYdMThvn5M",
+  [sponsorshipLevel.Enum.lover]: "prod_O76xw2wlNkijb1",
+  [sponsorshipLevel.Enum.custom]: "prod_O76xw2wlNkijb1",
+} : {
   [sponsorshipLevel.Enum.admirer]: "prod_O76kVZNQtlcRdx",
   [sponsorshipLevel.Enum.fan]: "prod_O76vBHvvBiDLi2",
   [sponsorshipLevel.Enum.lover]: "prod_O76wNilkqKlYsK",
@@ -26,8 +32,11 @@ const sponsorshipLevelsToPlanIds : Record<SponsorshipLevel, string> = {
 };
 
 const firestore = (() => {
+  if (isDevEnvironment) {
+    process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080';
+  }
   if (!getApps().length) {
-    const fs = getFirestore(initializeApp());
+    const fs = getFirestore(initializeApp({credential: cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT!  as string))}));
     fs.settings({ignoreUndefinedProperties: true});
   return fs;
   }

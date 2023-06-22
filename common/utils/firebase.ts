@@ -19,8 +19,6 @@ export const creds = {
   measurementId: String(process.env.NEXT_PUBLIC_REACT_APP_MEASUREMENT_ID),
 };
 
-console.log('creds', creds);
-
 export const app = initializeApp(creds);
 
 const makeDataConverter =
