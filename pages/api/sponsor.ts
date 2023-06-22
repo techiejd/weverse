@@ -7,8 +7,6 @@ import {FirestoreDataConverter, WithFieldValue,
   QueryDocumentSnapshot, Timestamp} from "firebase-admin/firestore";
 import {z} from "zod";
 
-console.log("process.env.STRIPE_SECRET_KEY! :", process.env.STRIPE_SECRET_KEY!);
-
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2022-11-15',
 });
@@ -16,11 +14,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 import { Step } from '../../modules/makers/sponsor/utils';
 import { getFirestore } from 'firebase-admin/firestore';
 
+// TODO(techiejd): Have some kind of dev mode read these instead.
+const testProduct = "prod_O76xw2wlNkijb1";
+const testFan = "prod_O7oOWYdMThvn5M";
+
 const sponsorshipLevelsToPlanIds : Record<SponsorshipLevel, string> = {
-  [sponsorshipLevel.Enum.admirer]: "prod_O76xw2wlNkijb1",
-  [sponsorshipLevel.Enum.fan]: "prod_O7oOWYdMThvn5M",
-  [sponsorshipLevel.Enum.lover]: "prod_O76xw2wlNkijb1",
-  [sponsorshipLevel.Enum.custom]: "prod_O76xw2wlNkijb1",
+  [sponsorshipLevel.Enum.admirer]: "prod_O76kVZNQtlcRdx",
+  [sponsorshipLevel.Enum.fan]: "prod_O76vBHvvBiDLi2",
+  [sponsorshipLevel.Enum.lover]: "prod_O76wNilkqKlYsK",
+  [sponsorshipLevel.Enum.custom]: "prod_O76x3IxBN4ROwm",
 };
 
 const firestore = (() => {
