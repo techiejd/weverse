@@ -51,8 +51,11 @@ export default function Sponsor({
       [stepString]: "loading",
     }));
     fetch(
-      `/api/sponsor/${isRepeatSponsor ? "repeat" : "initialize"}?` +
-        new URLSearchParams({ step: stepString }),
+      `/api/sponsor/?` +
+        new URLSearchParams({
+          step: stepString,
+          sponsorState: isRepeatSponsor ? "repeat" : "initialize",
+        }),
       {
         method: "POST",
         body: JSON.stringify(sponsorForm),

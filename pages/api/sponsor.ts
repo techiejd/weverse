@@ -12,7 +12,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2022-11-15',
 });
 
-import { Step } from '../../modules/makers/sponsor/utils';
 import { getFirestore } from 'firebase-admin/firestore';
 
 // TODO(techiejd): Have some kind of dev mode read these instead.
@@ -66,65 +65,71 @@ namespace Utils {
   export const sponsorshipConverter = makeDataConverter(sponsorship);
 }
 
+const badRequest = (res: NextApiResponse) => res.status(400).json({ message: 'Bad Request' });
+
 const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
     res.status(405).json({ message: 'Method Not Allowed' });
     return;
   }
-    const { step: stepIn } = req.query;
-    const body = JSON.parse(req.body);
-    if (stepIn == undefined) {
-      res.status(400).json({ message: 'Bad Request' });
+  const q =  req.query;
+  const { step, sponsorState } = q;
+  const body = JSON.parse(req.body);
+
+  if (step == undefined) {
+    badRequest(res);
+  }
+
+  const {member, maker,
+    total, sponsorshipLevel, customAmount, tipAmount, denyFee, prevSponsorshipPrice,
+    firstName, lastName, email, phone, postalCode, countryCode, country, 
+    sponsorshipPrice : sponsorshipPriceIn, subscription: subscriptionIn, customer: customerIn} = body;
+  
+  const setUpSubscriptionPrice = async (res: NextApiResponse) => {
+    const sponsorshipPlanId = sponsorshipLevelsToPlanIds[sponsorshipLevel as SponsorshipLevel];
+    const totalNoDecimal = parseInt(total) * 100;
+
+    const archiveLastSponsorshipPricePromise = !prevSponsorshipPrice ? Promise.resolve() : stripe.prices.update(prevSponsorshipPrice, {
+      active: false,});
+
+    const sponsorshipPrice = await stripe.prices.create({
+      metadata: {
+        maker,
+        member,
+      },
+      unit_amount: totalNoDecimal,
+      currency: 'cop',
+      recurring: {interval: 'month'},
+      product: sponsorshipPlanId,
+    });
+
+    const batch = firestore.batch();
+    const sponsorshipData = {
+      sponsorshipPrice: sponsorshipPrice.id,
+      total,
+      sponsorshipLevel,
+      customAmount,
+      tipAmount,
+      denyFee,
     }
+    batch.set(firestore.doc(`makers/${maker}/sponsorships/${member}`).withConverter(Utils.sponsorshipConverter), sponsorshipData);
+    batch.set(firestore.doc(`members/${member}/sponsorships/${maker}`).withConverter(Utils.sponsorshipConverter), sponsorshipData);
 
-    const {member, maker,
-      total, sponsorshipLevel, customAmount, tipAmount, denyFee, prevSponsorshipPrice,
-      firstName, lastName, email, phoneNumber, postalCode, countryCode, country, 
-      sponsorshipPrice : sponsorshipPriceIn, subscription: subscriptionIn, customer: customerIn} = body;
-
-    switch(Step.toStep(stepIn?.toString() ?? "")) {
-      case Step.chooseSponsorship:
-        const sponsorshipPlanId = sponsorshipLevelsToPlanIds[sponsorshipLevel as SponsorshipLevel];
-        const totalNoDecimal = parseInt(total) * 100;
-
-        const archiveLastSponsorshipPricePromise = !prevSponsorshipPrice ? Promise.resolve() : stripe.prices.update(prevSponsorshipPrice, {
-          active: false,});
-
-        const sponsorshipPrice = await stripe.prices.create({
-          metadata: {
-            maker,
-            member,
-          },
-          unit_amount: totalNoDecimal,
-          currency: 'cop',
-          recurring: {interval: 'month'},
-          product: sponsorshipPlanId,
-        });
-
-        const batch = firestore.batch();
-        const sponsorshipData = {
-          sponsorshipPrice: sponsorshipPrice.id,
-          total,
-          sponsorshipLevel,
-          customAmount,
-          tipAmount,
-          denyFee,
-        }
-        batch.set(firestore.doc(`makers/${maker}/sponsorships/${member}`).withConverter(Utils.sponsorshipConverter), sponsorshipData);
-        batch.set(firestore.doc(`members/${member}/sponsorships/${maker}`).withConverter(Utils.sponsorshipConverter), sponsorshipData);
-
-        await Promise.all([archiveLastSponsorshipPricePromise, batch.commit()]);
-
-
-        res.status(200).json({ sponsorshipPrice: sponsorshipPrice.id });
-
-
+    await Promise.all([archiveLastSponsorshipPricePromise, batch.commit()]);
+    
+    res.status(200).json({ sponsorshipPrice: sponsorshipPrice.id });
+  }
+  
+  const initializeSponsorship = async (res: NextApiResponse) => {
+    switch(step) {
+      case "chooseSponsorship":
+        await setUpSubscriptionPrice(res);
         break;
-      case Step.customerDetails:
+      case "customerDetails":
         const stripeCustomer = {
           name: `${firstName} ${lastName}`,
           email,
-          phone: phoneNumber,
+          phone,
           address: {
             postal_code: postalCode,
             country: countryCode,
@@ -134,7 +139,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
           firstName,
           lastName,
           email,
-          phone: phoneNumber,
+          phone,
           address: {
             postalCode,
             country,
@@ -176,8 +181,44 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
         res.status(200).json({ customer: customer.id, subscription: subscription.id, clientSecret: ((subscription.latest_invoice as Stripe.Invoice).payment_intent as Stripe.PaymentIntent).client_secret });
         break;
       default:
-        res.status(400).json({ message: 'Bad Request' });
+        badRequest(res);
     }
+  }
+
+  const updateSponsorship = async (res: NextApiResponse) => {
+    switch(step) {
+      case "chooseSponsorship":
+        await setUpSubscriptionPrice(res);
+        break;
+      case "confirm":
+        const batch = firestore.batch();
+
+        const subscriptionItem = await stripe.subscriptionItems.create({
+          subscription: subscriptionIn,
+          price: sponsorshipPriceIn,
+        });
+
+        batch.update(firestore.doc(`makers/${maker}/sponsorships/${member}`).withConverter(Utils.sponsorshipConverter), {paid: true});
+        batch.update(firestore.doc(`members/${member}/sponsorships/${maker}`).withConverter(Utils.sponsorshipConverter), {paid: true});
+        await batch.commit();
+
+        res.status(200).json({});
+        break;
+      default:
+        badRequest(res);
+    }
+  }
+
+  switch(sponsorState) {
+    case "initialize":
+      await initializeSponsorship(res);
+      break;
+    case "repeat":
+      await updateSponsorship(res);
+      break;
+    default:
+      badRequest(res);
+  }
 }
 
 export default Sponsor;

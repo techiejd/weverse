@@ -152,7 +152,12 @@ const ChooseSponsorship = ({
           <ListItem sx={{ px: 0 }}>
             <ListItemText
               primary={"Propina a OneWe"}
-              secondary={"Por los servicios brindando en la plataforma."}
+              secondary={
+                <>
+                  ¡Muéstranos!, cuánto nos amas. <br /> Por los servicios
+                  brindados en la plataforma.
+                </>
+              }
             />
             <Typography variant="body2">{tipDisplayAmount}</Typography>
           </ListItem>

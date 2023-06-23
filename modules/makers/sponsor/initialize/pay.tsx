@@ -26,6 +26,7 @@ import { SponsorshipLevel } from "../../../../functions/shared/src";
 import { useCurrentMaker } from "../../context";
 import { sponsorshipLevels, toCop } from "../common/utils";
 import { Step } from "./utils";
+import Details from "../common/details";
 
 const Pay = ({
   sponsorForm,
@@ -37,55 +38,6 @@ const Pay = ({
   handleNext: () => void;
 }) => {
   const appState = useAppState();
-  const sponsorship = [
-    {
-      name: "Tipo de patrocinio",
-      detail:
-        sponsorshipLevels[sponsorForm.sponsorshipLevel as SponsorshipLevel]
-          .displayName,
-    },
-    { name: "Total", detail: toCop(parseInt(sponsorForm.total)) },
-  ];
-
-  const customerDetails = [
-    {
-      name: "Titular de la tarjeta",
-      detail: `${sponsorForm.firstName} ${sponsorForm.lastName}`,
-    },
-    { name: "Correo electrónico", detail: sponsorForm.email },
-    { name: "Número de teléfono", detail: sponsorForm.phoneNumber },
-    { name: "Pais", detail: sponsorForm.country },
-    { name: "Codigo Postal", detail: sponsorForm.postalCode },
-  ];
-
-  const LineItems = ({
-    lineItems,
-  }: {
-    lineItems: { name: string; detail: string }[];
-  }) => {
-    return (
-      <Grid container>
-        {lineItems.map((lineItem) => (
-          <React.Fragment key={lineItem.name}>
-            <Grid item xs={6}>
-              <Typography gutterBottom>{lineItem.name}:</Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Box sx={{ textAlign: "right" }}>
-                <Typography
-                  gutterBottom
-                  fontWeight="bold"
-                  sx={{ overflowWrap: "break-word" }}
-                >
-                  {lineItem.detail}
-                </Typography>
-              </Box>
-            </Grid>
-          </React.Fragment>
-        ))}
-      </Grid>
-    );
-  };
 
   const StripePortal = () => {
     const appState = useAppState();
@@ -145,7 +97,7 @@ const Pay = ({
               billing_details: {
                 name: `${sponsorForm.firstName} ${sponsorForm.lastName}`,
                 email: sponsorForm.email,
-                phone: sponsorForm.phoneNumber,
+                phone: sponsorForm.phone,
                 address: {
                   country: sponsorForm.countryCode,
                   postal_code: sponsorForm.postalCode,
@@ -270,16 +222,10 @@ const Pay = ({
 
   return (
     <React.Fragment>
-      <Stack spacing={2}>
-        <Typography variant="h6" gutterBottom>
-          Resumen de patrocinio
-        </Typography>
-        <LineItems lineItems={sponsorship} />
-        <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-          Detalles de pago
-        </Typography>
-        <LineItems lineItems={customerDetails} />
-      </Stack>
+      <Details
+        customerDetails={sponsorForm as any}
+        sponsorship={sponsorForm as any}
+      />
       <Elements stripe={appState.getStripe()}>
         <StripePortal />
       </Elements>

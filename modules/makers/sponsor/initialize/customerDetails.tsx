@@ -11,20 +11,18 @@ import { Step } from "./utils";
 
 const PhoneInput = ({
   sponsorForm,
-  setPhoneNumberError,
-  phoneNumberError,
+  setPhoneError,
+  phoneError: phoneError,
 }: {
   sponsorForm: Record<string, string>;
-  setPhoneNumberError: React.Dispatch<React.SetStateAction<boolean>>;
-  phoneNumberError: boolean;
+  setPhoneError: React.Dispatch<React.SetStateAction<boolean>>;
+  phoneError: boolean;
 }) => {
-  const [phoneNumberIn, setPhoneNumberIn] = useState(
-    sponsorForm.phoneNumber ?? ""
-  );
-  const onPhoneNumberChange = (value: string, info: MuiTelInputInfo) => {
+  const [phoneIn, setPhoneIn] = useState(sponsorForm.phone ?? "");
+  const onPhoneChange = (value: string, info: MuiTelInputInfo) => {
     if (info.nationalNumber == null || info.nationalNumber.length <= 10) {
-      setPhoneNumberIn(value);
-      setPhoneNumberError(
+      setPhoneIn(value);
+      setPhoneError(
         !info.countryCallingCode ||
           !info.nationalNumber == null ||
           info.nationalNumber?.length != 10
@@ -36,12 +34,12 @@ const PhoneInput = ({
       <MuiTelInput
         variant="standard"
         defaultCountry="CO"
-        name="phoneNumber"
-        value={phoneNumberIn}
-        onChange={onPhoneNumberChange}
+        name="phone"
+        value={phoneIn}
+        onChange={onPhoneChange}
         label="Número telefónico"
         required
-        error={phoneNumberError}
+        error={phoneError}
         fullWidth
       />
     </Box>
@@ -55,12 +53,12 @@ const CustomerDetails = ({
   sponsorForm: Record<string, string>;
   handleBack: () => void;
 }) => {
-  const [phoneNumberError, setPhoneNumberError] = React.useState(false);
+  const [phoneError, setPhoneError] = React.useState(false);
   const [forwardDisabled, setForwardDisabled] = React.useState(false);
 
   React.useEffect(() => {
-    setForwardDisabled(phoneNumberError);
-  }, [phoneNumberError, setForwardDisabled]);
+    setForwardDisabled(phoneError);
+  }, [phoneError, setForwardDisabled]);
 
   const [countryInfo, setCountryInfo] = useState(
     sponsorForm.country && sponsorForm.countryCode
@@ -116,8 +114,8 @@ const CustomerDetails = ({
         <Grid item xs={12} md={6}>
           <PhoneInput
             sponsorForm={sponsorForm}
-            setPhoneNumberError={setPhoneNumberError}
-            phoneNumberError={phoneNumberError}
+            setPhoneError={setPhoneError}
+            phoneError={phoneError}
           />
         </Grid>
         <Grid item xs={12} md={6}>
