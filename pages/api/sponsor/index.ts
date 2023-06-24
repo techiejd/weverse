@@ -79,9 +79,10 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
   const partialSpnsorship = sponsorship.partial();
 
   const {member, maker,
-    total, sponsorshipLevel, customAmount, tipAmount, denyFee, prevSponsorshipPrice,
+    total, sponsorshipLevel, customAmount, tipAmount, denyFee, memberPublishable, prevSponsorshipPrice,
     firstName, lastName, email, phone, postalCode, countryCode, country, 
     sponsorshipPrice : sponsorshipPriceIn, subscription: subscriptionIn, customer: customerIn} = body;
+  console.log({denyFee, memberPublishable});
 
   const makerSponsorshipDoc = firestore.doc(`makers/${maker}/sponsorships/${member}`).withConverter(Utils.sponsorshipConverter);
   const memberSponsorshipDoc = firestore.doc(`members/${member}/sponsorships/${maker}`).withConverter(Utils.sponsorshipConverter);
@@ -118,7 +119,9 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
       sponsorshipLevel,
       customAmount: parseInt(customAmount),
       tipAmount: parseInt(tipAmount),
-      denyFee,
+      denyFee: !!denyFee,
+      //TODO(techiejd): Flesh out publishing name support.
+      memberPublishable: !!memberPublishable,
       maker,
       member,
     }

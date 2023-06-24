@@ -57,6 +57,7 @@ const ChooseSponsorship = ({
 
   const [tipPercentage, setTipPercentage] = useState(15);
   const [makerPaysFee, setMakerPaysFee] = useState(false);
+  const [memberPublishable, setMemberPublishable] = useState(true);
 
   const sponsorshipAmount =
     sponsorshipLevelIn == sponsorshipLevel.Enum.custom
@@ -195,11 +196,32 @@ const ChooseSponsorship = ({
                 <Checkbox
                   color="secondary"
                   name="denyFee"
-                  value={makerPaysFee}
+                  checked={makerPaysFee}
                   onChange={(e) => setMakerPaysFee(e.target.checked)}
                 />
               }
               label="Prefiero que el Maker pague la tarifa."
+            />
+          </ListItem>
+        </Stack>
+        <Stack>
+          <ListItem sx={{ pt: 1, px: 0 }}>
+            <ListItemText
+              primary={"¿Le contamos a la comunidad OneWe?"}
+              secondary={"El o la Maker siempre sabrá quien le patrocina."}
+            />
+          </ListItem>
+          <ListItem sx={{ pb: 1, px: 2 }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  color="secondary"
+                  name="memberPublishable"
+                  onChange={(e) => setMemberPublishable(e.target.checked)}
+                  checked={memberPublishable}
+                />
+              }
+              label="Quiero que la comunidad OneWe sepa que yo apoyo a este o esta Maker."
             />
           </ListItem>
         </Stack>

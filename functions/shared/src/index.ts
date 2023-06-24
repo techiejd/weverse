@@ -200,7 +200,7 @@ export const sponsorship = dbBase.extend({
   denyFee: z.boolean().optional(),
   maker: z.string(),
   member: z.string(),
-  wantsAnonymity: z.boolean().optional(),
+  memberPublishable: z.boolean().optional(),
 });
 
 export type Sponsorship = z.infer<typeof sponsorship>;
