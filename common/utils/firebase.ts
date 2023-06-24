@@ -5,6 +5,8 @@ import {
   DocumentData,
   serverTimestamp,
   QueryDocumentSnapshot,
+  Timestamp,
+  FieldValue
 } from "firebase/firestore";
 import { maker, socialProof, member, posiFormData, like, DbBase, content, sponsorship } from '../../functions/shared/src';
 import { z } from 'zod';

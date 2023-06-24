@@ -17,9 +17,11 @@ import {
   makerConverter,
   posiFormDataConverter,
   socialProofConverter,
+  sponsorshipConverter,
 } from "../utils/firebase";
 import { useEffect, useState } from "react";
 import { organizationType, makerType, Maker } from "../../functions/shared/src";
+import { useRouter } from "next/router";
 
 export const useMyMaker = () => {
   const appState = useAppState();
@@ -35,6 +37,17 @@ export const useMyMaker = () => {
     member && member.makerId
       ? doc(appState.firestore, "makers", member.makerId).withConverter(
           makerConverter
+        )
+      : undefined
+  );
+};
+
+export const useMember = (memberId: string | undefined) => {
+  const appState = useAppState();
+  return useDocumentData(
+    memberId
+      ? doc(appState.firestore, "members", memberId).withConverter(
+          memberConverter
         )
       : undefined
   );
@@ -62,6 +75,25 @@ export const useMyMemberOnce = () => {
         )
       : undefined
   );
+};
+
+export const useCurrentSubscriptions = () => {
+  const router = useRouter();
+  const appState = useAppState();
+  const { makerId, userId: memberId } = router.query;
+  const id = (makerId ? makerId : memberId) as string;
+
+  const sponsorshipCollection =
+    makerId || memberId
+      ? collection(
+          appState.firestore,
+          makerId ? "makers" : "members",
+          id,
+          "sponsorships"
+        ).withConverter(sponsorshipConverter)
+      : undefined;
+
+  return useCollectionData(sponsorshipCollection);
 };
 
 export const useMyLikes = () => {

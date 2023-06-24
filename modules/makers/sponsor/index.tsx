@@ -20,7 +20,7 @@ export default function Sponsor({
   const [activeStep, setActiveStep] = React.useState(0);
   const [maker, makerLoading, makerErrors] = useCurrentMaker();
   const [myMember, myMemberLoading, myMemberErrors] = useMyMemberOnce();
-  const isRepeatSponsor = myMember?.stripe?.state === "active";
+  const isRepeatSponsor = myMember?.stripe?.status === "active";
   React.useEffect(() => {
     if (isReady) {
       setActiveStep(sponsorStep ? parseInt(sponsorStep as string) : 0);

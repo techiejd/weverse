@@ -68,6 +68,7 @@ const MakerProfile = () => {
       <Avatar src={maker.pic} sx={{ width: 225, height: 225 }} />
       <Typography>{getMakerTypeLabel(maker)}</Typography>
       <Stack sx={{ width: "100%" }}>
+        <Typography variant="h2">Patrocinios:</Typography>
         <Typography variant="h2">Acerca de:</Typography>
         <Typography>
           {maker.about ? maker.about : "No hay sección 'acerca de'."}

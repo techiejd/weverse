@@ -7,9 +7,14 @@ import {
 import { collection, query, where } from "firebase/firestore";
 import { Fragment, useEffect, useState } from "react";
 import {
+  Avatar,
   Button,
+  IconButton,
+  List,
   ListItem,
+  ListItemIcon,
   ListItemText,
+  ListSubheader,
   Stack,
   Typography,
 } from "@mui/material";
@@ -17,18 +22,94 @@ import MakerCard from "../../modules/makers/MakerCard";
 import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 import { sponsorshipConverter } from "../../common/utils/firebase";
 import { Sponsorship } from "../../functions/shared/src";
-import { toCop } from "../../modules/makers/sponsor/common/utils";
-import { useMaker, useMyMember } from "../../common/context/weverseUtils";
+import {
+  sponsorshipLevels,
+  toCop,
+} from "../../modules/makers/sponsor/common/utils";
+import {
+  useCurrentSubscriptions,
+  useMaker,
+  useMember,
+  useMyMember,
+} from "../../common/context/weverseUtils";
+import { Close } from "@mui/icons-material";
 
-const SponsorshipDisplay = ({ sponsorship }: { sponsorship: Sponsorship }) => {
-  const [maker] = useMaker(sponsorship.maker);
+const SponsorshipDisplay = ({
+  sponsorship,
+  type,
+  handleDelete,
+}: {
+  sponsorship: Sponsorship;
+  type: "for" | "from";
+  handleDelete?: () => Promise<any>;
+}) => {
+  const [maker] = useMaker(type == "for" ? sponsorship.maker : undefined);
+  const [member] = useMember(type == "from" ? sponsorship.member : undefined);
+  const [loading, setLoading] = useState(false);
+  console.log("yo: ", {
+    maker,
+    member,
+    type,
+    sponsorship,
+    for: type == "for" ? sponsorship.maker : undefined,
+    from: type == "from" ? sponsorship.member : undefined,
+  });
+  const displayInfo =
+    type == "for"
+      ? {
+          name: maker?.name,
+          pic: maker?.pic,
+        }
+      : {
+          name: member?.name,
+          pic: member?.pic,
+        };
+  const dateStarted = new Intl.DateTimeFormat("es-CO").format(
+    sponsorship.paymentsStarted!
+  );
+  const amount = toCop(sponsorship.total);
+
   return (
-    <ListItem sx={{ px: 0 }}>
+    <ListItem>
+      {type == "for" && handleDelete && (
+        <ListItemIcon>
+          <IconButton
+            onClick={async () => {
+              setLoading(true);
+              await handleDelete();
+              setLoading(false);
+            }}
+          >
+            <Close />
+          </IconButton>
+        </ListItemIcon>
+      )}
       <ListItemText
-        primary={maker?.name ?? "Cargando..."}
-        secondary={sponsorship.paymentsStarted!.toLocaleString("es-CO")}
+        primary={
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Avatar
+              src={displayInfo.pic}
+              sx={{ width: 25, height: 25, mr: 1 }}
+            />
+            {displayInfo.name}
+          </Stack>
+        }
+        secondary={
+          <>
+            {dateStarted}{" "}
+            {!!amount && (
+              <>
+                <br />
+                {amount}
+              </>
+            )}
+          </>
+        }
+        secondaryTypographyProps={{ fontSize: 12 }}
       />
-      <Typography variant="body2">{toCop(sponsorship.total)}</Typography>
+      <Typography variant="body2">
+        {sponsorshipLevels[sponsorship.sponsorshipLevel].displayName}
+      </Typography>
     </ListItem>
   );
 };
@@ -56,21 +137,12 @@ const UserPage = () => {
   const [signOut, signOutLoading, signOutError] = useSignOut(appState.auth);
 
   const [sponsorships, sponsorshipsLoading, sponsorshipsError] =
-    useCollectionData(
-      user
-        ? collection(
-            appState.firestore,
-            "members",
-            user.uid,
-            "sponsorships"
-          ).withConverter(sponsorshipConverter)
-        : undefined
-    );
+    useCurrentSubscriptions();
 
   const Sponsorships = () => {
     const [myMember] = useMyMember();
     <Typography variant="h2">Patrocinios:</Typography>;
-    const memberPayingSponsorships = !myMember?.stripe?.billingCycleStart;
+    const memberPayingSponsorships = myMember?.stripe?.status == "active";
     const memberHasNoSponsorships =
       !memberPayingSponsorships ||
       (!sponsorshipsLoading &&
@@ -80,6 +152,7 @@ const UserPage = () => {
 
     return (
       <Fragment>
+        <Typography variant="h2">Patrocinios:</Typography>
         {memberPayingSponsorships && sponsorshipsError && (
           <Typography color={"red"}>
             Error: {JSON.stringify(sponsorshipsError)}
@@ -92,14 +165,42 @@ const UserPage = () => {
           <Typography>No hay patrocinios.</Typography>
         )}
         {memberPayingSponsorships &&
-          sponsorships
-            ?.filter((sponsorship) => !!sponsorship.paymentsStarted)
-            .map((sponsorship) => (
-              <SponsorshipDisplay
-                sponsorship={sponsorship}
-                key={sponsorship.id}
-              />
-            ))}
+          sponsorships &&
+          sponsorships?.length > 0 && (
+            <List
+              subheader={
+                <ListSubheader>
+                  Ciclo de facturación iniciado:{" "}
+                  {new Intl.DateTimeFormat("es-CO").format(
+                    myMember?.stripe?.billingCycleAnchor
+                  )}
+                </ListSubheader>
+              }
+              sx={{
+                border: 1,
+                p: 2,
+                m: 2,
+                backgroundColor: "#f5f8ff",
+                borderRadius: 2,
+                borderColor: "#d9e1ec",
+                width: "100%",
+                maxWidth: 500,
+              }}
+            >
+              {sponsorships
+                ?.filter((sponsorship) => !!sponsorship.paymentsStarted)
+                .map((sponsorship) => (
+                  <SponsorshipDisplay
+                    type="for"
+                    sponsorship={sponsorship}
+                    key={sponsorship.id}
+                    handleDelete={async () => {
+                      return fetch("/api/sponsor/cancel");
+                    }}
+                  />
+                ))}
+            </List>
+          )}
       </Fragment>
     );
   };

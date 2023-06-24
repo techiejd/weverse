@@ -114,7 +114,7 @@ const Pay = ({
 
         const batch = writeBatch(appState.firestore);
         const updateSponsorshipData = {
-          paymentsStarted: paymentIntent!.created,
+          paymentsStarted: new Date(paymentIntent!.created * 1000),
         };
         batch.update(
           doc(
@@ -141,7 +141,7 @@ const Pay = ({
           doc(appState.firestore, "members", myMember.id!).withConverter(
             memberConverter
           ),
-          { "stripe.billingCycleStart": paymentIntent!.created }
+          { "stripe.status": "active" }
         );
 
         await batch.commit();

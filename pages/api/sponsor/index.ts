@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { initializeApp, getApps, cert } from 'firebase-admin/app';
-import { DbBase, SponsorshipLevel, member, sponsorship, sponsorshipLevel } from '../../functions/shared/src';
+import { DbBase, SponsorshipLevel, member, sponsorship, sponsorshipLevel } from '../../../functions/shared/src';
 import Stripe from "stripe";
 import {FirestoreDataConverter, WithFieldValue,
   DocumentData,
@@ -69,8 +69,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(405).json({ message: 'Method Not Allowed' });
     return;
   }
-  const q =  req.query;
-  const { step, sponsorState } = q;
+  const { step, sponsorState } =  req.query;
   const body = JSON.parse(req.body);
 
   if (step == undefined) {
@@ -86,7 +85,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const makerSponsorshipDoc = firestore.doc(`makers/${maker}/sponsorships/${member}`).withConverter(Utils.sponsorshipConverter);
   const memberSponsorshipDoc = firestore.doc(`members/${member}/sponsorships/${maker}`).withConverter(Utils.sponsorshipConverter);
-  const mirroredSponsoredUpdate = (data: z.infer<typeof partialSpnsorship>) => {
+  const mirroredSponsorshipUpdate = (data: z.infer<typeof partialSpnsorship>) => {
     const batch = firestore.batch();
     batch.update(makerSponsorshipDoc, data);
     batch.update(memberSponsorshipDoc, data);
@@ -115,10 +114,10 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
     const sponsorshipData = {
       stripeSubscriptionItem: "incomplete",
       stripePrice: sponsorshipPrice.id,
-      total,
+      total: parseInt(total),
       sponsorshipLevel,
-      customAmount,
-      tipAmount,
+      customAmount: parseInt(customAmount),
+      tipAmount: parseInt(tipAmount),
       denyFee,
       maker,
       member,
@@ -185,11 +184,13 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
           stripe: {
             customer: subscription.customer as string,
             subscription: subscription.id,
+            status: "incomplete",
+            billingCycleAnchor: new Date(subscription.billing_cycle_anchor * 1000),
           },
         }));
         const updateSubscriptionItemPromise = subscriptionPromise.then(subscription => {
           const subscriptionItem = subscription.items.data[0];
-          return mirroredSponsoredUpdate({stripeSubscriptionItem: subscriptionItem.id});
+          return mirroredSponsorshipUpdate({stripeSubscriptionItem: subscriptionItem.id});
         });
         const [customer, subscription] = await Promise.all([customerPromise, subscriptionPromise, firestorePromise, updateSubscriptionItemPromise]);
         res.status(200).json({ customer: customer.id, subscription: subscription.id, clientSecret: ((subscription.latest_invoice as Stripe.Invoice).payment_intent as Stripe.PaymentIntent).client_secret });
@@ -214,7 +215,9 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
           price: sponsorshipPriceIn,
         });
 
-        await mirroredSponsoredUpdate({stripeSubscriptionItem: subscriptionItem.id, paymentsStarted: new Date(subscriptionItem.created * 1000)});
+        await mirroredSponsorshipUpdate(
+          {stripeSubscriptionItem: subscriptionItem.id,
+             paymentsStarted: new Date(subscriptionItem.created * 1000)});
 
         res.status(200).json({});
         break;

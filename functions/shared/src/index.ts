@@ -1,5 +1,19 @@
 import {z} from "zod";
 
+export const timeStamp = z.any().transform((val, ctx) => {
+  if (val instanceof Date) {
+    return val;
+  }
+  if (typeof val.toDate === 'function') {
+    return (val.toDate() as Date);
+  }
+  ctx.addIssue({
+    code: z.ZodIssueCode.custom,
+    message: "Not a firestore timestamp or date.",
+  });
+  return z.NEVER;
+});
+
 // TODO(techiejd): Check all urls are with our hosting.
 export const formUrl = z.string().url();
 export const mediaType = z.enum(["video", "img"]);
@@ -65,7 +79,8 @@ const customer = z.object({
 const stripe = z.object({
   customer: z.string().min(1),
   subscription: z.string().min(1),
-  billingCycleStart: z.date().optional(), // if it has the subscription is active
+  billingCycleAnchor: timeStamp,
+  status: z.enum(["active", "incomplete", ]),
 });
 
 export const member = z.object({
@@ -74,6 +89,8 @@ export const member = z.object({
   createdAt: z.date().optional(),
   customer: customer.optional(),
   stripe: stripe.optional(),
+  pic: formUrl.optional(),
+  name: z.string().min(1).optional(),
 });
 export type Member = z.infer<typeof member>;
 
@@ -175,7 +192,7 @@ export type SponsorshipLevel = z.infer<typeof sponsorshipLevel>;
 export const sponsorship = dbBase.extend({
   stripeSubscriptionItem: z.string().or(z.enum(["incomplete"])),
   stripePrice: z.string(), // Stripe's price id.
-  paymentsStarted: z.date().optional(), // When this particular sponsorship started being paid for.
+  paymentsStarted: timeStamp.optional(), // When this particular sponsorship started being paid for.
   total: z.number(),
   sponsorshipLevel: sponsorshipLevel,
   customAmount: z.number().optional(),
@@ -183,6 +200,7 @@ export const sponsorship = dbBase.extend({
   denyFee: z.boolean().optional(),
   maker: z.string(),
   member: z.string(),
+  wantsAnonymity: z.boolean().optional(),
 });
 
 export type Sponsorship = z.infer<typeof sponsorship>;
