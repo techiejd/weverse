@@ -10,9 +10,9 @@ import InitializeSponsor from "./initialize";
 import RepeatSponsor from "./repeat";
 
 export default function Sponsor({
-  finishedButtonBehavior,
+  exitButtonBehavior,
 }: {
-  finishedButtonBehavior: { href: string } | { onClick: () => void };
+  exitButtonBehavior: { href: string } | { onClick: () => void };
 }) {
   const router = useRouter();
   const { isReady, query } = useRouter();
@@ -113,14 +113,14 @@ export default function Sponsor({
             <RepeatSponsor
               step={activeStep}
               sponsorForm={sponsorForm}
-              finishedButtonBehavior={finishedButtonBehavior}
+              exitButtonBehavior={exitButtonBehavior}
               handleBack={handleBack}
             />
           ) : (
             <InitializeSponsor
               step={activeStep}
               sponsorForm={sponsorForm}
-              finishedButtonBehavior={finishedButtonBehavior}
+              exitButtonBehavior={exitButtonBehavior}
               handleBack={handleBack}
               handleNext={handleNext}
             />

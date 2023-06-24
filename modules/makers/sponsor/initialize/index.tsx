@@ -11,20 +11,25 @@ const steps = ["Elige", "Datos", "Pago"];
 const InitializeSponsor = ({
   step,
   sponsorForm,
-  finishedButtonBehavior,
+  exitButtonBehavior,
   handleBack,
   handleNext,
 }: {
   step: number;
   sponsorForm: Record<string, string>;
-  finishedButtonBehavior: { href: string } | { onClick: () => void };
+  exitButtonBehavior: { href: string } | { onClick: () => void };
   handleBack: () => void;
   handleNext: () => void;
 }) => {
   const getStepContent = () => {
     switch (step as Step) {
       case Step.chooseSponsorship:
-        return <ChooseSponsorship sponsorForm={sponsorForm} />;
+        return (
+          <ChooseSponsorship
+            sponsorForm={sponsorForm}
+            exitButtonBehavior={exitButtonBehavior}
+          />
+        );
       case Step.customerDetails:
         return (
           <CustomerDetails sponsorForm={sponsorForm} handleBack={handleBack} />
@@ -41,7 +46,7 @@ const InitializeSponsor = ({
         return (
           <Final
             sponsorForm={sponsorForm}
-            finishedButtonBehavior={finishedButtonBehavior}
+            exitButtonBehavior={exitButtonBehavior}
           />
         );
       default:

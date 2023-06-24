@@ -2,7 +2,7 @@ import {FirestoreDataConverter, WithFieldValue,
   DocumentData,
   QueryDocumentSnapshot, Timestamp} from "firebase-admin/firestore";
 import {maker, socialProof, member,
-  posiFormData, content, DbBase} from "../shared";
+  posiFormData, content, DbBase, sponsorship} from "../shared";
 import {z} from "zod";
 
 
@@ -29,3 +29,4 @@ export const makerConverter = makeDataConverter(maker);
 export const socialProofConverter = makeDataConverter(socialProof);
 export const memberConverter = makeDataConverter(member);
 export const posiFormDataConverter = makeDataConverter(posiFormData);
+export const sponsorshipConverter = makeDataConverter(sponsorship);

@@ -14,10 +14,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 import { getFirestore } from 'firebase-admin/firestore';
 
-// TODO(techiejd): Have some kind of dev mode read these instead.
-const testProduct = "prod_O76xw2wlNkijb1";
-const testFan = "prod_O7oOWYdMThvn5M";
-
 const sponsorshipLevelsToPlanIds : Record<SponsorshipLevel, string> = isDevEnvironment ? {
   [sponsorshipLevel.Enum.admirer]: "prod_O76xw2wlNkijb1",
   [sponsorshipLevel.Enum.fan]: "prod_O7oOWYdMThvn5M",
@@ -43,6 +39,7 @@ const firestore = (() => {
 })();
 
 namespace Utils {
+  //TODO(techiejd): This is a hack to get around sharing the same schema between nextjs and firebase functions.
   const makeDataConverter =
   <T extends z.ZodType<DbBase>>(zAny: T) :
    FirestoreDataConverter<z.infer<typeof zAny>> => ({
@@ -80,10 +77,21 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
     badRequest(res);
   }
 
+  const partialSpnsorship = sponsorship.partial();
+
   const {member, maker,
     total, sponsorshipLevel, customAmount, tipAmount, denyFee, prevSponsorshipPrice,
     firstName, lastName, email, phone, postalCode, countryCode, country, 
     sponsorshipPrice : sponsorshipPriceIn, subscription: subscriptionIn, customer: customerIn} = body;
+
+  const makerSponsorshipDoc = firestore.doc(`makers/${maker}/sponsorships/${member}`).withConverter(Utils.sponsorshipConverter);
+  const memberSponsorshipDoc = firestore.doc(`members/${member}/sponsorships/${maker}`).withConverter(Utils.sponsorshipConverter);
+  const mirroredSponsoredUpdate = (data: z.infer<typeof partialSpnsorship>) => {
+    const batch = firestore.batch();
+    batch.update(makerSponsorshipDoc, data);
+    batch.update(memberSponsorshipDoc, data);
+    return batch.commit();
+  }
   
   const setUpSubscriptionPrice = async (res: NextApiResponse) => {
     const sponsorshipPlanId = sponsorshipLevelsToPlanIds[sponsorshipLevel as SponsorshipLevel];
@@ -105,15 +113,18 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const batch = firestore.batch();
     const sponsorshipData = {
-      sponsorshipPrice: sponsorshipPrice.id,
+      stripeSubscriptionItem: "incomplete",
+      stripePrice: sponsorshipPrice.id,
       total,
       sponsorshipLevel,
       customAmount,
       tipAmount,
       denyFee,
+      maker,
+      member,
     }
-    batch.set(firestore.doc(`makers/${maker}/sponsorships/${member}`).withConverter(Utils.sponsorshipConverter), sponsorshipData);
-    batch.set(firestore.doc(`members/${member}/sponsorships/${maker}`).withConverter(Utils.sponsorshipConverter), sponsorshipData);
+    batch.set(makerSponsorshipDoc, sponsorshipData);
+    batch.set(memberSponsorshipDoc, sponsorshipData);
 
     await Promise.all([archiveLastSponsorshipPricePromise, batch.commit()]);
     
@@ -163,7 +174,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
               member,
             },
             customer: customer.id,
-            items: [{price: sponsorshipPriceIn}], // you can't update a default_incomplete subscription's price, so we choose to assume the price is stale and, thusly, to create a new subscription.
+            items: [{price: sponsorshipPriceIn, metadata: {maker, member}}], // you can't update a default_incomplete subscription's price, so we choose to assume the price is stale and, thusly, to create a new subscription.
             payment_behavior: 'default_incomplete', // since it's default incomplete, we can just ditch it.
             payment_settings: { save_default_payment_method: 'on_subscription' },
             expand: ['latest_invoice.payment_intent'],
@@ -174,10 +185,13 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
           stripe: {
             customer: subscription.customer as string,
             subscription: subscription.id,
-            state: "incomplete",
           },
         }));
-        const [customer, subscription] = await Promise.all([customerPromise, subscriptionPromise, firestorePromise]);
+        const updateSubscriptionItemPromise = subscriptionPromise.then(subscription => {
+          const subscriptionItem = subscription.items.data[0];
+          return mirroredSponsoredUpdate({stripeSubscriptionItem: subscriptionItem.id});
+        });
+        const [customer, subscription] = await Promise.all([customerPromise, subscriptionPromise, firestorePromise, updateSubscriptionItemPromise]);
         res.status(200).json({ customer: customer.id, subscription: subscription.id, clientSecret: ((subscription.latest_invoice as Stripe.Invoice).payment_intent as Stripe.PaymentIntent).client_secret });
         break;
       default:
@@ -191,16 +205,16 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
         await setUpSubscriptionPrice(res);
         break;
       case "confirm":
-        const batch = firestore.batch();
-
         const subscriptionItem = await stripe.subscriptionItems.create({
+          metadata: {
+            maker,
+            member,
+          },
           subscription: subscriptionIn,
           price: sponsorshipPriceIn,
         });
 
-        batch.update(firestore.doc(`makers/${maker}/sponsorships/${member}`).withConverter(Utils.sponsorshipConverter), {paid: true});
-        batch.update(firestore.doc(`members/${member}/sponsorships/${maker}`).withConverter(Utils.sponsorshipConverter), {paid: true});
-        await batch.commit();
+        await mirroredSponsoredUpdate({stripeSubscriptionItem: subscriptionItem.id, paymentsStarted: new Date(subscriptionItem.created * 1000)});
 
         res.status(200).json({});
         break;

@@ -65,7 +65,7 @@ const customer = z.object({
 const stripe = z.object({
   customer: z.string().min(1),
   subscription: z.string().min(1),
-  state: z.enum(["active", "incomplete"]),
+  billingCycleStart: z.date().optional(), // if it has the subscription is active
 });
 
 export const member = z.object({
@@ -173,11 +173,16 @@ export const sponsorshipLevel = z.enum(["admirer", "fan", "lover", "custom"]);
 export type SponsorshipLevel = z.infer<typeof sponsorshipLevel>;
 
 export const sponsorship = dbBase.extend({
-  sponsorshipPrice: z.string(),
+  stripeSubscriptionItem: z.string().or(z.enum(["incomplete"])),
+  stripePrice: z.string(), // Stripe's price id.
+  paymentsStarted: z.date().optional(), // When this particular sponsorship started being paid for.
   total: z.number(),
   sponsorshipLevel: sponsorshipLevel,
   customAmount: z.number().optional(),
   tipAmount: z.number().optional(),
   denyFee: z.boolean().optional(),
-  paid: z.boolean().optional(),
+  maker: z.string(),
+  member: z.string(),
 });
+
+export type Sponsorship = z.infer<typeof sponsorship>;

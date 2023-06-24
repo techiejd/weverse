@@ -35,8 +35,10 @@ const sponsorshipLevelLabel = (sponsorshipLevelIn: SponsorshipLevel) => {
 
 const ChooseSponsorship = ({
   sponsorForm,
+  exitButtonBehavior,
 }: {
   sponsorForm: Record<string, string>;
+  exitButtonBehavior: { href: string } | { onClick: () => void };
 }) => {
   const [customAmount, setCustomAmount] = useState(
     sponsorForm.customAmount
@@ -211,6 +213,9 @@ const ChooseSponsorship = ({
         </ListItem>
       </Stack>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button {...exitButtonBehavior} sx={{ mt: 3 }}>
+          Cancelar
+        </Button>
         <Button variant="contained" type="submit" sx={{ mt: 3, ml: 1 }}>
           Siguiente
         </Button>

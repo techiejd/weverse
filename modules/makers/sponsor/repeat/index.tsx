@@ -12,32 +12,34 @@ const steps = ["Elige", "Confirma"];
 const RepeatSponsor = ({
   step,
   sponsorForm,
-  finishedButtonBehavior,
+  exitButtonBehavior,
   handleBack,
 }: {
   step: number;
   sponsorForm: Record<string, string>;
-  finishedButtonBehavior: { href: string } | { onClick: () => void };
+  exitButtonBehavior: { href: string } | { onClick: () => void };
   handleBack: () => void;
 }) => {
   const repeatSponsorStep = step as Step;
   function getStepContent() {
+    const penultimateStepLoading =
+      sponsorForm[Step.toString(Step.confirm)] == "loading";
     switch (repeatSponsorStep) {
       case Step.chooseSponsorship:
-        return <ChooseSponsorship sponsorForm={sponsorForm} />;
-      case Step.confirm:
         return (
-          <Confirm
+          <ChooseSponsorship
             sponsorForm={sponsorForm}
-            handleBack={handleBack}
-            finishedButtonBehavior={finishedButtonBehavior}
+            exitButtonBehavior={exitButtonBehavior}
           />
         );
+      case Step.confirm:
+        return <Confirm sponsorForm={sponsorForm} handleBack={handleBack} />;
       case Step.success:
         return (
           <Final
             sponsorForm={sponsorForm}
-            finishedButtonBehavior={finishedButtonBehavior}
+            exitButtonBehavior={exitButtonBehavior}
+            loading={penultimateStepLoading}
           />
         );
       default:

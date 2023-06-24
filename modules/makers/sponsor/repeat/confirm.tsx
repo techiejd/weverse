@@ -10,7 +10,6 @@ const Confirm = ({
   handleBack,
 }: {
   sponsorForm: Record<string, string>;
-  finishedButtonBehavior: { href: string } | { onClick: () => void };
   handleBack: () => void;
 }) => {
   const [myMember, myMemberError, myMemberLoading] = useMyMember();

@@ -1,27 +1,39 @@
+import { LoadingButton } from "@mui/lab";
 import { Box, Button, Typography } from "@mui/material";
 import { Fragment } from "react";
+import { useAppState } from "../../../../common/context/appState";
+import { useCurrentMaker } from "../../context";
 
 const Final = ({
   sponsorForm,
-  finishedButtonBehavior,
+  exitButtonBehavior,
+  loading,
 }: {
   sponsorForm: Record<string, string>;
-  finishedButtonBehavior: { href: string } | { onClick: () => void };
+  exitButtonBehavior: { href: string } | { onClick: () => void };
+  loading?: boolean;
 }) => {
+  const appState = useAppState();
+  const [maker, makerLoading, makerError] = useCurrentMaker();
   return (
     <Fragment>
       <Box>
-        <Typography>¡Gracias por patrocinar a aldjfl!</Typography>
+        <Typography>
+          {appState.authState.user?.displayName}, ¡Gracias por patrocinar a
+          {maker?.name}!
+        </Typography>
         <Typography>Juntos cambian el mundo.</Typography>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button
+        <LoadingButton
           variant="contained"
           sx={{ mt: 3, ml: 1 }}
-          {...finishedButtonBehavior}
+          {...exitButtonBehavior}
+          disabled={loading}
+          loading={loading}
         >
           Listo
-        </Button>
+        </LoadingButton>
       </Box>
     </Fragment>
   );

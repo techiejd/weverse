@@ -1,7 +1,7 @@
 import Sponsor from "../../../modules/makers/sponsor";
 
 const SponsorPage = () => {
-  return <Sponsor finishedButtonBehavior={{ href: "/" }} />;
+  return <Sponsor exitButtonBehavior={{ href: "/" }} />;
 };
 
 export default SponsorPage;

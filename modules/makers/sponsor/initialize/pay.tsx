@@ -89,7 +89,7 @@ const Pay = ({
           return;
         }
 
-        const { error } = await stripe!.confirmCardPayment(
+        const { error, paymentIntent } = await stripe!.confirmCardPayment(
           sponsorForm.clientSecret,
           {
             payment_method: {
@@ -113,6 +113,9 @@ const Pay = ({
         }
 
         const batch = writeBatch(appState.firestore);
+        const updateSponsorshipData = {
+          paymentsStarted: paymentIntent!.created,
+        };
         batch.update(
           doc(
             appState.firestore,
@@ -121,7 +124,7 @@ const Pay = ({
             "sponsorships",
             myMember.id!
           ).withConverter(sponsorshipConverter),
-          { paid: true }
+          updateSponsorshipData
         );
         batch.update(
           doc(
@@ -131,14 +134,14 @@ const Pay = ({
             "sponsorships",
             maker.id!
           ).withConverter(sponsorshipConverter),
-          { paid: true }
+          updateSponsorshipData
         );
 
         batch.update(
           doc(appState.firestore, "members", myMember.id!).withConverter(
             memberConverter
           ),
-          { "stripe.state": "active" }
+          { "stripe.billingCycleStart": paymentIntent!.created }
         );
 
         await batch.commit();
