@@ -65,6 +65,19 @@ export const useMyMember = () => {
   );
 };
 
+export const useCurrentMember = () => {
+  const router = useRouter();
+  const appState = useAppState();
+  const { userId: memberId } = router.query;
+  return useDocumentData(
+    memberId
+      ? doc(appState.firestore, "members", memberId as string).withConverter(
+          memberConverter
+        )
+      : undefined
+  );
+};
+
 export const useMyMemberOnce = () => {
   const appState = useAppState();
   const { user } = appState.authState;
@@ -82,6 +95,7 @@ export const useCurrentSubscriptions = () => {
   const appState = useAppState();
   const { makerId, userId: memberId } = router.query;
   const id = (makerId ? makerId : memberId) as string;
+  const subscriptionsType = makerId ? "for" : "from";
 
   const sponsorshipCollection =
     makerId || memberId

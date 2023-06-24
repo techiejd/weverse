@@ -15,7 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Fragment, useState } from "react";
-import { sponsorshipLevels, toCop } from "./utils";
+import { feeCharge, feePercentage, sponsorshipLevels, toCop } from "./utils";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 import {
   SponsorshipLevel,
@@ -62,8 +62,6 @@ const ChooseSponsorship = ({
     sponsorshipLevelIn == sponsorshipLevel.Enum.custom
       ? customAmountNumber
       : sponsorshipLevels[sponsorshipLevelIn].amount;
-  const feePercentage = 0.029;
-  const feeCharge = 1300;
   const feeAmount = makerPaysFee
     ? 0
     : Math.ceil(feePercentage * sponsorshipAmount + feeCharge);

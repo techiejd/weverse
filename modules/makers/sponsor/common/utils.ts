@@ -19,3 +19,6 @@ export const sponsorshipLevels: Record<
 })();
 
 export const toCop = (amount: number) => amount.toLocaleString("es-CO", {style: "currency", currency: "COP"});
+
+export const feePercentage = 0.029;
+export const feeCharge = 1300;

@@ -3,9 +3,6 @@ import {
   Avatar,
   Box,
   Button,
-  Card,
-  CardContent,
-  CardHeader,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -17,12 +14,10 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Rating,
   Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useAppState } from "../../../common/context/appState";
 import {
   Edit,
   Support as SupportIcon,
@@ -55,9 +50,11 @@ import CenterBottomFab from "../../../common/components/centerBottomFab";
 import { calculateVipState } from "../../../common/utils/vip";
 import { useRouter } from "next/router";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
+import Sponsorships from "../../../modules/makers/sponsor/list";
 
 const MakerProfile = () => {
   const [maker, makerLoading, makerError] = useCurrentMaker();
+  const [myMaker] = useMyMaker();
   return maker ? (
     <Stack
       spacing={2}
@@ -68,7 +65,7 @@ const MakerProfile = () => {
       <Avatar src={maker.pic} sx={{ width: 225, height: 225 }} />
       <Typography>{getMakerTypeLabel(maker)}</Typography>
       <Stack sx={{ width: "100%" }}>
-        <Typography variant="h2">Patrocinios:</Typography>
+        <Sponsorships showAmount={myMaker && myMaker?.id == maker?.id} />
         <Typography variant="h2">Acerca de:</Typography>
         <Typography>
           {maker.about ? maker.about : "No hay sección 'acerca de'."}

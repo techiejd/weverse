@@ -196,7 +196,7 @@ export const sponsorship = dbBase.extend({
   total: z.number(),
   sponsorshipLevel: sponsorshipLevel,
   customAmount: z.number().optional(),
-  tipAmount: z.number().optional(),
+  tipAmount: z.number(),
   denyFee: z.boolean().optional(),
   maker: z.string(),
   member: z.string(),
