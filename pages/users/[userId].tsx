@@ -7,6 +7,8 @@ import { Button, Stack, Typography } from "@mui/material";
 import MakerCard from "../../modules/makers/MakerCard";
 import { useSignOut } from "react-firebase-hooks/auth";
 import Sponsorships from "../../modules/makers/sponsor/list";
+import { Sponsorship } from "../../functions/shared/src";
+import { useMyMember } from "../../common/context/weverseUtils";
 
 const UserPage = () => {
   // TODO(techiejd): Do admin story so that user page can be protected.
@@ -30,6 +32,7 @@ const UserPage = () => {
 
   const { user } = appState.authState;
   const [signOut, signOutLoading, signOutError] = useSignOut(appState.auth);
+  const [myMember] = useMyMember();
 
   return (
     <Stack
@@ -54,7 +57,29 @@ const UserPage = () => {
             Desconectar
           </Button>,
         ]}
-      <Sponsorships showAmount />
+      <Sponsorships
+        showAmount
+        handleCancelSponsorship={
+          myMember &&
+          (myMember.id != userId
+            ? undefined
+            : async (sponsorship: Sponsorship) => {
+                return fetch("/api/sponsor/cancel", {
+                  method: "POST",
+                  body: JSON.stringify({
+                    stripeSubscription: myMember.stripe?.subscription,
+                    stripeSubscriptionItem: sponsorship.stripeSubscriptionItem,
+                    maker: sponsorship.maker,
+                    member: sponsorship.member,
+                  }),
+                }).then((res) => {
+                  if (res.status != 200) {
+                    alert("Failed to cancel sponsorship.");
+                  }
+                });
+              })
+        }
+      />
       <Typography variant="h2">Los Makers:</Typography>
       {makersError && (
         <Typography color={"red"}>

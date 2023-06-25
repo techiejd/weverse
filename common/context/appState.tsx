@@ -52,7 +52,9 @@ const storage = (() => {
 
 const firestore = (() => {
   const firestore = getFirestore(app);
-  if (isDevEnvironment) connectFirestoreEmulator(firestore, "localhost", 8080);
+  if (isDevEnvironment && !(firestore as any)._settingsFrozen)
+    // https://stackoverflow.com/questions/71574102/firebase-error-firestore-has-already-been-started-and-its-settings-can-no-lon
+    connectFirestoreEmulator(firestore, "localhost", 8080);
   return firestore;
 })();
 

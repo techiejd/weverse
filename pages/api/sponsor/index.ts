@@ -76,17 +76,16 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
     badRequest(res);
   }
 
-  const partialSpnsorship = sponsorship.partial();
+  const partialSponsorship = sponsorship.partial();
 
   const {member, maker,
     total, sponsorshipLevel, customAmount, tipAmount, denyFee, memberPublishable, prevSponsorshipPrice,
     firstName, lastName, email, phone, postalCode, countryCode, country, 
     sponsorshipPrice : sponsorshipPriceIn, subscription: subscriptionIn, customer: customerIn} = body;
-  console.log({denyFee, memberPublishable});
 
   const makerSponsorshipDoc = firestore.doc(`makers/${maker}/sponsorships/${member}`).withConverter(Utils.sponsorshipConverter);
   const memberSponsorshipDoc = firestore.doc(`members/${member}/sponsorships/${maker}`).withConverter(Utils.sponsorshipConverter);
-  const mirroredSponsorshipUpdate = (data: z.infer<typeof partialSpnsorship>) => {
+  const mirroredSponsorshipUpdate = (data: z.infer<typeof partialSponsorship>) => {
     const batch = firestore.batch();
     batch.update(makerSponsorshipDoc, data);
     batch.update(memberSponsorshipDoc, data);

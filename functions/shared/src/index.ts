@@ -78,9 +78,9 @@ const customer = z.object({
 
 const stripe = z.object({
   customer: z.string().min(1),
-  subscription: z.string().min(1),
-  billingCycleAnchor: timeStamp,
-  status: z.enum(["active", "incomplete", ]),
+  subscription: z.string().min(1).optional(),
+  billingCycleAnchor: timeStamp.optional(),
+  status: z.enum(["active", "incomplete", "canceled"]),
 });
 
 export const member = z.object({

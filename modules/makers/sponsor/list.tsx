@@ -9,6 +9,7 @@ import {
   Typography,
   List,
   ListSubheader,
+  CircularProgress,
 } from "@mui/material";
 import { useState, Fragment } from "react";
 import {
@@ -28,25 +29,17 @@ import {
 const SponsorshipDisplay = ({
   sponsorship,
   type,
-  handleDelete,
+  handleCancelSponsorship,
   showAmount,
 }: {
   sponsorship: Sponsorship;
   type: "for" | "from";
-  handleDelete?: (sponsorshipId: string) => Promise<any>;
+  handleCancelSponsorship?: (sponsorship: Sponsorship) => Promise<any>;
   showAmount?: boolean;
 }) => {
   const [maker] = useMaker(type == "for" ? sponsorship.maker : undefined);
   const [member] = useMember(type == "from" ? sponsorship.member : undefined);
   const [loading, setLoading] = useState(false);
-  console.log("yo: ", {
-    maker,
-    member,
-    type,
-    sponsorship,
-    for: type == "for" ? sponsorship.maker : undefined,
-    from: type == "from" ? sponsorship.member : undefined,
-  });
   const displayInfo =
     type == "for"
       ? {
@@ -82,19 +75,23 @@ const SponsorshipDisplay = ({
 
   return (
     <ListItem>
-      {type == "for" && handleDelete && (
-        <ListItemIcon>
-          <IconButton
-            onClick={async () => {
-              setLoading(true);
-              await handleDelete(sponsorship.id!);
-              setLoading(false);
-            }}
-          >
-            <Close />
-          </IconButton>
-        </ListItemIcon>
-      )}
+      {type == "for" &&
+        handleCancelSponsorship &&
+        (loading ? (
+          <CircularProgress />
+        ) : (
+          <ListItemIcon>
+            <IconButton
+              onClick={async () => {
+                setLoading(true);
+                await handleCancelSponsorship(sponsorship);
+                setLoading(false);
+              }}
+            >
+              <Close />
+            </IconButton>
+          </ListItemIcon>
+        ))}
       <ListItemText
         primary={
           <Stack direction="row" alignItems="center" spacing={2}>
@@ -126,10 +123,10 @@ const SponsorshipDisplay = ({
 };
 
 const Sponsorships = ({
-  handleDelete,
+  handleCancelSponsorship,
   showAmount,
 }: {
-  handleDelete?: (sponsorshipId: string) => Promise<any>;
+  handleCancelSponsorship?: (sponsorship: Sponsorship) => Promise<any>;
   showAmount?: boolean;
 }) => {
   const [sponsorships, sponsorshipsLoading, sponsorshipsError] =
@@ -182,7 +179,7 @@ const Sponsorships = ({
                 type={myMember ? "for" : "from"}
                 sponsorship={sponsorship}
                 key={sponsorship.id}
-                handleDelete={handleDelete}
+                handleCancelSponsorship={handleCancelSponsorship}
                 showAmount={showAmount}
               />
             ))}
