@@ -62,19 +62,17 @@ const SolicitDialog = ({
               Solicitar testimonio
             </Button>
           </ShareActionArea>
-          {howToSupport.finance && (
-            <ShareActionArea
-              shareProps={{
-                path: pathUnderSupport + queryKeyExt + "finance",
-                text: "Busco colaboración financiera para mi impacto social",
-                title: "Busco colaboración financiera para mi impacto social",
-              }}
-            >
-              <Button variant="outlined" startIcon={<CardGiftcard />}>
-                Solicitar Fondos
-              </Button>
-            </ShareActionArea>
-          )}
+          <ShareActionArea
+            shareProps={{
+              path: pathUnderSupport + queryKeyExt + "sponsor",
+              text: "Busco patrocinio para mi impacto social",
+              title: "Busco patrocinio para mi impacto social",
+            }}
+          >
+            <Button variant="outlined" startIcon={<CardGiftcard />}>
+              Solicitar Patrocinio
+            </Button>
+          </ShareActionArea>
           {howToSupport.contact && (
             <ShareActionArea
               shareProps={{
@@ -90,7 +88,7 @@ const SolicitDialog = ({
           )}
         </Stack>
         <Typography>
-          Recuerda que puedes solicitar apoyo financiero y de otro tipo
+          Recuerda que puedes solicitar y de otro tipo (no financiero)
           <Link href={editMakerPath}> agregándolo en tu perfil de creador</Link>
           .
         </Typography>

@@ -29,13 +29,12 @@ export const organizationType = z.enum([
   "nonprofit",
   "religious",
   "unincorporated",
-  "profit",
+  "profit"
 ]);
 export type OrganizationType = z.infer<typeof organizationType>;
 
 const howToSupport = z.object({
   contact: z.string().max(500).optional(),
-  finance: z.string().max(500).optional(),
 });
 export type HowToSupport = z.infer<typeof howToSupport>;
 

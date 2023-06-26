@@ -13,7 +13,6 @@ export const calculateVipState = (
     const fieldsWeWantToAnswers = {
       name: myMaker.name,
       pic: myMaker.pic,
-      financial: myMaker.howToSupport?.finance,
       contact: myMaker.howToSupport?.contact,
       about: myMaker.about,
     };

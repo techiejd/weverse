@@ -132,14 +132,14 @@ const ContactSupportDialog = ({
 
 const GenericSupportDialog = ({
   open,
-  setFinanceDialogOpen,
+  setSponsorDialogOpen,
   setConnectDialogOpen,
   howToSupport,
   shareProps,
   addSocialProofPath,
 }: {
   open: boolean;
-  setFinanceDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setSponsorDialogOpen: Dispatch<SetStateAction<boolean>>;
   setConnectDialogOpen: Dispatch<SetStateAction<boolean>>;
   howToSupport: HowToSupport;
   shareProps: ShareProps;
@@ -160,18 +160,16 @@ const GenericSupportDialog = ({
           >
             Dar tu opinión
           </Button>
-          {howToSupport.finance && (
-            <Button
-              onClick={() => {
-                setFinanceDialogOpen(true);
-                handleClose();
-              }}
-              startIcon={<CardGiftcard />}
-              variant="outlined"
-            >
-              Financiar
-            </Button>
-          )}
+          <Button
+            onClick={() => {
+              setSponsorDialogOpen(true);
+              handleClose();
+            }}
+            startIcon={<CardGiftcard />}
+            variant="outlined"
+          >
+            Patrocinar
+          </Button>
           {howToSupport.contact && (
             <Button
               onClick={() => {
@@ -278,7 +276,7 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
       />
       <GenericSupportDialog
         open={genericDialogOpen}
-        setFinanceDialogOpen={setSponsorDialogOpen}
+        setSponsorDialogOpen={setSponsorDialogOpen}
         setConnectDialogOpen={setConnectDialogOpen}
         howToSupport={
           beneficiary.maker.howToSupport ? beneficiary.maker.howToSupport : {}
