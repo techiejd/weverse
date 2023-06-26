@@ -28,8 +28,9 @@ import { HowToSupport, maker, posiFormData } from "../../functions/shared/src";
 import IconButtonWithLabel from "./iconButtonWithLabel";
 import CenterBottomFab from "./centerBottomFab";
 import Sponsor from "../../modules/makers/sponsor";
-import { useMySponsorships } from "../context/weverseUtils";
+import { useMyMember, useMySponsorships } from "../context/weverseUtils";
 import UnderConstruction from "../../modules/posi/underConstruction";
+import LogInPrompt from "./logInPrompt";
 
 const supportDialogs = z.enum(["connect", "sponsor", "generic"]);
 export type SupportDialogs = z.infer<typeof supportDialogs>;
@@ -56,7 +57,17 @@ const SponsorDialog = ({
   setInAddSponsorshipExperience: Dispatch<SetStateAction<boolean>>;
 }) => {
   const handleClose = () => setOpen(false);
-  const showSponsoringExp = false;
+  const [myMember] = useMyMember();
+  if (!myMember) {
+    return (
+      <Dialog open={open} onClose={handleClose}>
+        <LogInPrompt
+          title={"Debes ser miembro registrado para poder patrocinar."}
+          setOpen={setOpen}
+        />
+      </Dialog>
+    );
+  }
   return sponsoring && !inAddSponsorshipExperience ? (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>
