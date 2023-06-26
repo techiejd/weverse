@@ -88,7 +88,7 @@ const SolicitDialog = ({
           )}
         </Stack>
         <Typography>
-          Recuerda que puedes solicitar y de otro tipo (no financiero)
+          Recuerda que puedes solicitar apoyo de otro tipo (no financiero)
           <Link href={editMakerPath}> agregándolo en tu perfil de creador</Link>
           .
         </Typography>
