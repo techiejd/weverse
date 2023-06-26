@@ -29,7 +29,8 @@ export const organizationType = z.enum([
   "nonprofit",
   "religious",
   "unincorporated",
-  "profit"
+  "profit",
+  "incubator",
 ]);
 export type OrganizationType = z.infer<typeof organizationType>;
 

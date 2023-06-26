@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button, CircularProgress, Stack, Typography } from "@mui/material";
-import MakerInput from "../../../modules/auth/AuthDialog/makerInput";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useAppState } from "../../../common/context/appState";
@@ -9,6 +8,7 @@ import { User } from "firebase/auth";
 import { pickBy, identity } from "lodash";
 import { makerConverter } from "../../../common/utils/firebase";
 import { Maker, maker as makerSchema } from "../../../functions/shared/src";
+import MakerInput from "../../../modules/makers/makerInput";
 
 const Edit = () => {
   const appState = useAppState();

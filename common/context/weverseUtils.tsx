@@ -225,6 +225,7 @@ export const getMakerTypeLabel = (maker: Maker) => {
     [organizationType.Enum.religious]: "Congregación",
     [organizationType.Enum.unincorporated]: "Voluntarios",
     [organizationType.Enum.profit]: "Comercial",
+    [organizationType.Enum.incubator]: "Incubadora",
   };
 
   const makerTypeLabels = {
