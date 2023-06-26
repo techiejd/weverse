@@ -16,7 +16,8 @@ export default function Sponsor({
 }) {
   const router = useRouter();
   const { isReady, query } = useRouter();
-  const { sponsorStep } = query;
+  const { sponsorStep, makerId, ...queryOthers } = query;
+  const currPath = router.asPath.split("?")[0];
   const [activeStep, setActiveStep] = React.useState(0);
   const [maker, makerLoading, makerErrors] = useCurrentMaker();
   const [myMember, myMemberLoading, myMemberErrors] = useMyMemberOnce();
@@ -29,8 +30,8 @@ export default function Sponsor({
   const handleNext = () => {
     router.push(
       {
-        pathname: `/makers/${maker?.id}/sponsor`,
-        query: { sponsorStep: activeStep + 1 },
+        pathname: currPath,
+        query: { sponsorStep: activeStep + 1, ...queryOthers },
       },
       undefined,
       { shallow: true }

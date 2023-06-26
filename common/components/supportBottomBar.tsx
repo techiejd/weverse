@@ -19,7 +19,7 @@ import {
   Box,
   Toolbar,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, Fragment, SetStateAction, use, useState } from "react";
 import Linkify from "react-linkify";
 import ShareActionArea, { ShareProps } from "./shareActionArea";
 import { useRouter } from "next/router";
@@ -27,8 +27,11 @@ import { z } from "zod";
 import { HowToSupport, maker, posiFormData } from "../../functions/shared/src";
 import IconButtonWithLabel from "./iconButtonWithLabel";
 import CenterBottomFab from "./centerBottomFab";
+import Sponsor from "../../modules/makers/sponsor";
+import { useMySponsorships } from "../context/weverseUtils";
+import UnderConstruction from "../../modules/posi/underConstruction";
 
-const supportDialogs = z.enum(["connect", "finance", "generic"]);
+const supportDialogs = z.enum(["connect", "sponsor", "generic"]);
 export type SupportDialogs = z.infer<typeof supportDialogs>;
 
 const useOpenSupportDialog = () => {
@@ -39,28 +42,66 @@ const useOpenSupportDialog = () => {
     : undefined;
 };
 
-const SupportDialog = ({
+const SponsorDialog = ({
+  open,
+  setOpen,
+  sponsoring,
+  inAddSponsorshipExperience,
+  setInAddSponsorshipExperience,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  sponsoring: boolean;
+  inAddSponsorshipExperience: boolean;
+  setInAddSponsorshipExperience: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const handleClose = () => setOpen(false);
+  const showSponsoringExp = false;
+  return sponsoring && !inAddSponsorshipExperience ? (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>
+        Gracias por patrocinar. OneWe está trabajando con el/la Maker para crear
+        la mejor experiencia de patrocinio.
+      </DialogTitle>
+      <DialogContent>
+        <UnderConstruction />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} autoFocus>
+          OK
+        </Button>
+      </DialogActions>
+    </Dialog>
+  ) : (
+    <Dialog open={open} onClose={() => setOpen(false)} fullScreen>
+      <Sponsor
+        exitButtonBehavior={{
+          onClick: () => {
+            setOpen(false);
+            setInAddSponsorshipExperience(false);
+          },
+        }}
+      />
+    </Dialog>
+  );
+};
+
+const ContactSupportDialog = ({
   open,
   setOpen,
   inputText,
-  type,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   inputText?: string;
-  type: "contact" | "finance";
 }) => {
   const handleClose = () => setOpen(false);
   const title = !inputText
     ? "El o la Maker aún no ha terminado su perfil."
-    : type == "contact"
-    ? "El o la Maker dice que busca el siguiente tipo de ayuda y con estos canales de contacto:"
-    : "El o la Maker dice que puede financiarlos de las siguientes maneras:";
+    : "El o la Maker dice que busca el siguiente tipo de ayuda y con estos canales de contacto:";
   const text = inputText
     ? inputText
-    : `¡Gracias por querer ${
-        type == "contact" ? "apoyar" : "contribuir"
-      }! Le hemos mandado un mensaje al o la Maker de tu interes y esperamos que tu solicitud le anime a terminar pronto.`;
+    : `¡Gracias por querer apoyar! Le hemos mandado un mensaje al o la Maker de tu interes y esperamos que tu solicitud le anime a terminar pronto.`;
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>{title}</DialogTitle>
@@ -163,8 +204,8 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
   const [connectDialogOpen, setConnectDialogOpen] = useState(
     openSupportDialog == "connect"
   );
-  const [financeDialogOpen, setFinanceDialogOpen] = useState(
-    openSupportDialog == "finance"
+  const [sponsorDialogOpen, setSponsorDialogOpen] = useState(
+    openSupportDialog == "sponsor"
   );
 
   const addSocialProofPath = beneficiary.action
@@ -182,27 +223,51 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
         text: "Mira esta Maker tan chévere. ¡Apoyemosla!",
         path: `/makers/${beneficiary.maker.id}`,
       };
+
+  const [sponsorships] = useMySponsorships();
+  const sponsoring = sponsorships
+    ? sponsorships.some(
+        (s) => s.maker == beneficiary.maker.id && !!s.paymentsStarted
+      )
+    : false;
+  const [inAddSponsorshipExperience, setInAddSponsorshipExperience] =
+    useState(false);
+
+  const SponsorCallToAction = () => {
+    return sponsoring ? (
+      <Fragment>
+        <Typography fontSize={25}>👑</Typography>
+        <Typography fontSize={12}>VIP</Typography>
+      </Fragment>
+    ) : (
+      <Fragment>
+        <VolunteerActivism fontSize="large" />
+        <Typography fontSize={12}>Patrocinar</Typography>
+      </Fragment>
+    );
+  };
+
   return (
     <AppBar
       position="fixed"
       color="primary"
       sx={{ top: "auto", bottom: 16, borderRadius: 8, boxShadow: 8 }}
     >
-      <SupportDialog
-        open={financeDialogOpen}
-        setOpen={setFinanceDialogOpen}
-        inputText={beneficiary.maker.howToSupport?.finance}
-        type="finance"
+      <SponsorDialog
+        open={sponsorDialogOpen}
+        setOpen={setSponsorDialogOpen}
+        sponsoring={sponsoring}
+        inAddSponsorshipExperience={inAddSponsorshipExperience}
+        setInAddSponsorshipExperience={setInAddSponsorshipExperience}
       />
-      <SupportDialog
+      <ContactSupportDialog
         open={connectDialogOpen}
         setOpen={setConnectDialogOpen}
         inputText={beneficiary.maker.howToSupport?.contact}
-        type="contact"
       />
       <GenericSupportDialog
         open={genericDialogOpen}
-        setFinanceDialogOpen={setFinanceDialogOpen}
+        setFinanceDialogOpen={setSponsorDialogOpen}
         setConnectDialogOpen={setConnectDialogOpen}
         howToSupport={
           beneficiary.maker.howToSupport ? beneficiary.maker.howToSupport : {}
@@ -219,10 +284,12 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
           color="secondary"
           aria-label="add"
           sx={{ width: 70, height: 70 }}
-          onClick={() => setFinanceDialogOpen(true)}
+          onClick={() => {
+            setSponsorDialogOpen(true);
+            if (!sponsoring) setInAddSponsorshipExperience(true);
+          }}
         >
-          <VolunteerActivism fontSize="large" />
-          <Typography fontSize={12}>Contribuir</Typography>
+          <SponsorCallToAction />
         </CenterBottomFab>
         <Box sx={{ flexGrow: 1 }} />
         <IconButtonWithLabel onClick={() => setConnectDialogOpen(true)}>

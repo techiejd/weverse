@@ -15,7 +15,7 @@ import { useState, Fragment } from "react";
 import {
   useMaker,
   useMember,
-  useCurrentSubscriptions,
+  useCurrentSponsorships,
   useCurrentMember,
 } from "../../../common/context/weverseUtils";
 import { Sponsorship } from "../../../functions/shared/src";
@@ -130,14 +130,18 @@ const Sponsorships = ({
   showAmount?: boolean;
 }) => {
   const [sponsorships, sponsorshipsLoading, sponsorshipsError] =
-    useCurrentSubscriptions();
+    useCurrentSponsorships();
   const [myMember] = useCurrentMember();
   <Typography variant="h2">Patrocinios:</Typography>;
+
+  const activeSponsorships = sponsorships?.filter(
+    (sponsorship) => !!sponsorship.paymentsStarted
+  );
   const noSponsorships =
     !sponsorshipsLoading &&
     !sponsorshipsError &&
-    sponsorships &&
-    sponsorships.length == 0;
+    activeSponsorships &&
+    activeSponsorships.length == 0;
 
   return (
     <Fragment>
@@ -149,7 +153,7 @@ const Sponsorships = ({
       )}
       {sponsorshipsLoading && <Typography>Patrocinios: Cargando...</Typography>}
       {noSponsorships && <Typography>No hay patrocinios.</Typography>}
-      {sponsorships && sponsorships?.length > 0 && (
+      {activeSponsorships && activeSponsorships?.length > 0 && (
         <List
           subheader={
             myMember && (
@@ -172,17 +176,15 @@ const Sponsorships = ({
             maxWidth: 500,
           }}
         >
-          {sponsorships
-            ?.filter((sponsorship) => !!sponsorship.paymentsStarted)
-            .map((sponsorship) => (
-              <SponsorshipDisplay
-                type={myMember ? "for" : "from"}
-                sponsorship={sponsorship}
-                key={sponsorship.id}
-                handleCancelSponsorship={handleCancelSponsorship}
-                showAmount={showAmount}
-              />
-            ))}
+          {activeSponsorships.map((sponsorship) => (
+            <SponsorshipDisplay
+              type={myMember ? "for" : "from"}
+              sponsorship={sponsorship}
+              key={sponsorship.id}
+              handleCancelSponsorship={handleCancelSponsorship}
+              showAmount={showAmount}
+            />
+          ))}
         </List>
       )}
     </Fragment>

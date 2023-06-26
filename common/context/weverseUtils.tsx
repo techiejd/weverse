@@ -90,7 +90,7 @@ export const useMyMemberOnce = () => {
   );
 };
 
-export const useCurrentSubscriptions = () => {
+export const useCurrentSponsorships = () => {
   const router = useRouter();
   const appState = useAppState();
   const { makerId, userId: memberId } = router.query;
@@ -108,6 +108,21 @@ export const useCurrentSubscriptions = () => {
       : undefined;
 
   return useCollectionData(sponsorshipCollection);
+};
+
+export const useMySponsorships = () => {
+  const appState = useAppState();
+  const [myMember] = useMyMember();
+  return useCollectionData(
+    myMember && myMember.id && myMember.id != ""
+      ? collection(
+          appState.firestore,
+          "members",
+          myMember.id,
+          "sponsorships"
+        ).withConverter(sponsorshipConverter)
+      : undefined
+  );
 };
 
 export const useMyLikes = () => {
