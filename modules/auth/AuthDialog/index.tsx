@@ -31,6 +31,7 @@ import {
   makerConverter,
   memberConverter,
 } from "../../../common/utils/firebase";
+import { useRouter } from "next/router";
 
 const TabControl = ({
   authDialogState,
@@ -112,6 +113,10 @@ const AuthDialogContent = ({
     );
   }, [authDialogState.authAction, setAuthDialogState]);
 
+  //TODO(techiejd): Look into reducing the logic for authentication.
+  const router = useRouter();
+  const { invitedAsMaker } = router.query;
+
   const handleOtp = async (otp: string) => {
     if (authDialogState.recaptchaConfirmationResult == undefined)
       return "Try restarting";
@@ -125,7 +130,6 @@ const AuthDialogContent = ({
             const updateSuccessful = updateProfile({
               displayName: authDialogState.name,
             });
-
             const makerDocRef = await (async () => {
               // So we assume all users are also makers. They can edit this later.
               const makerEncoded = maker.parse({

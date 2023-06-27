@@ -23,6 +23,7 @@ import { lightConfiguration } from "../components/theme";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
 
 const RegisterModal = () => {
+  //TODO(techiejd): Look into how to consolidate all AuthDialogs into one.
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const router = useRouter();
   const { registerRequested } = router.query;

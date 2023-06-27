@@ -62,6 +62,8 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
       : { image: { src: posiData.media.url } };
   const [logInPromptDialogOpen, setLogInPromptDialogOpen] = useState(false);
   const appState = useAppState();
+  console.log(posiData);
+  console.log(posiData.id);
   return (
     <Card
       sx={{

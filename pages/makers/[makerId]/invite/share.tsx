@@ -46,7 +46,7 @@ function useCopyToClipboard(): [CopiedValue, CopyFn] {
 
 const SharePage = () => {
   const router = useRouter();
-  const { makerName, invitationToken } = router.query;
+  const { makerName, invitedAsMaker } = router.query;
   const [maker] = useCurrentMaker();
   const hostname = useHostname();
   const path = "something";

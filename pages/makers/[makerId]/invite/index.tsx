@@ -24,11 +24,11 @@ const Invite = () => {
   const [makerName, setMakerName] = useState("");
   const [maker] = useCurrentMaker();
   const [loading, setLoading] = useState(false);
-  const invitationToken = v4();
+  const invitedAsMaker = v4();
   const makerDocRef = doc(
     appState.firestore,
     "makers",
-    invitationToken
+    invitedAsMaker
   ).withConverter(makerConverter);
   const incubateeDocRef = maker
     ? doc(
@@ -36,7 +36,7 @@ const Invite = () => {
         "makers",
         maker.id!,
         "incubatees",
-        invitationToken
+        invitedAsMaker
       ).withConverter(incubateeConverter)
     : null;
 
@@ -87,7 +87,7 @@ const Invite = () => {
         disabled={!makerName || loading || !maker}
         href={
           maker
-            ? `/makers/${maker.id!}/invite/share?makerType=${makerType}&makerName=${makerName}&invitationToken=${invitationToken}`
+            ? `/makers/${maker.id!}/invite/share?makerType=${makerType}&makerName=${makerName}&invitedAsMaker=${invitedAsMaker}&registerRequested=true`
             : undefined
         }
         loading={loading}
