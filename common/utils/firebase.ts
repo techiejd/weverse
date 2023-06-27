@@ -8,7 +8,7 @@ import {
   Timestamp,
   FieldValue
 } from "firebase/firestore";
-import { maker, socialProof, member, posiFormData, like, DbBase, content, sponsorship } from '../../functions/shared/src';
+import { maker, socialProof, member, posiFormData, like, DbBase, content, sponsorship, incubatee } from '../../functions/shared/src';
 import { z } from 'zod';
 
 export const creds = {
@@ -48,3 +48,4 @@ export const posiFormDataConverter = makeDataConverter(posiFormData);
 export const likeConverter = makeDataConverter(like);
 export const contentConverter = makeDataConverter(content);
 export const sponsorshipConverter = makeDataConverter(sponsorship);
+export const incubateeConverter = makeDataConverter(incubatee);

@@ -51,7 +51,7 @@ export type DbBase = z.infer<typeof dbBase>;
 
 export const maker = z.object({
   id: z.string().optional(),
-  ownerId: z.string(),
+  ownerId: z.string().or(z.enum(["invited"])),
   type: makerType,
   pic: formUrl.optional(),
   name: z.string().min(1),
@@ -61,6 +61,7 @@ export const maker = z.object({
   about: z.string().optional(),
   ratings: ratings.optional(),
   email: z.string().optional(),
+  incubator: z.string().optional(),
 });
 export type Maker = z.infer<typeof maker>;
 
@@ -204,3 +205,7 @@ export const sponsorship = dbBase.extend({
 });
 
 export type Sponsorship = z.infer<typeof sponsorship>;
+
+export const incubatee = dbBase.extend({
+  acceptedInvite: z.boolean().optional(),
+});
