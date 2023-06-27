@@ -18,7 +18,8 @@ const ShareActionArea = ({
   onClick?: () => void;
 }) => {
   const webShareRef = useRef<HTMLDivElement>(null);
-  const hostname = useHostname();
+  const hostnameIn = useHostname();
+  const hostname = hostnameIn?.endsWith("/") ? hostnameIn : hostnameIn + "/";
   const { title, text, path } = shareProps;
   const shareData = { title, text, url: hostname ? hostname + path : path };
   return (
