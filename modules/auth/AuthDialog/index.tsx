@@ -208,7 +208,7 @@ const AuthDialogContent = ({
     if (
       !phoneNumber.countryCallingCode ||
       !phoneNumber.nationalNumber == null ||
-      phoneNumber.nationalNumber?.length != 10
+      phoneNumber.nationalNumber!.length < 7
     ) {
       setAuthDialogState((aDS) =>
         aDS
