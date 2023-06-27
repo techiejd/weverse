@@ -1,10 +1,3 @@
-// On this page, a user can invite a maker to join the platform.
-// The user first pick's the type of maker they will invite.
-// Then the user fills out the maker's name.
-// Lastly, a button to generate a link is displayed.
-// This button links to the next page where the user can share the invite.
-// This button also creates a new maker document in the firestore and sets the new maker id as part of current maker's incubatee collection.
-
 import {
   FormControl,
   InputLabel,
@@ -16,13 +9,14 @@ import {
 import { useState } from "react";
 import { useCurrentMaker } from "../../../../modules/makers/context";
 import { LoadingButton } from "@mui/lab";
-import { addDoc, collection, setDoc, doc } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import { useAppState } from "../../../../common/context/appState";
 import {
   incubateeConverter,
   makerConverter,
 } from "../../../../common/utils/firebase";
 import { v4 } from "uuid";
+import { organizationType } from "../../../../functions/shared/src";
 
 const Invite = () => {
   const appState = useAppState();
@@ -91,7 +85,11 @@ const Invite = () => {
         variant="contained"
         sx={{ width: "fit-content" }}
         disabled={!makerName || loading || !maker}
-        href={`/makers/${maker?.id}/invite/share?makerType=${makerType}&makerName=${makerName}&invitationToken=${invitationToken}`}
+        href={
+          maker
+            ? `/makers/${maker.id!}/invite/share?makerType=${makerType}&makerName=${makerName}&invitationToken=${invitationToken}`
+            : undefined
+        }
         loading={loading}
         onClick={() => {
           setLoading(true);
@@ -99,6 +97,10 @@ const Invite = () => {
           const setMaker = setDoc(makerDocRef, {
             ownerId: "invited",
             type: makerType == "individual" ? "individual" : "organization",
+            organizationType:
+              makerType == "individual"
+                ? undefined
+                : organizationType.parse(makerType),
             name: makerName,
             incubator: maker?.id,
           });
