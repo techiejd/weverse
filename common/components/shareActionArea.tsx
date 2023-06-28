@@ -1,6 +1,6 @@
-import { ReactNode, useRef } from "react";
+import { ReactNode } from "react";
 import { RWebShare } from "react-web-share";
-import useHostname from "../utils/useHostname";
+import buildUrl from "@googlicius/build-url";
 
 export type ShareProps = {
   title: string;
@@ -17,9 +17,12 @@ const ShareActionArea = ({
   shareProps: ShareProps;
   onClick?: () => void;
 }) => {
-  const hostname = useHostname();
   const { title, text, path } = shareProps;
-  const shareData = { title, text, url: hostname ? hostname + path : path };
+  const shareData = {
+    title,
+    text,
+    url: buildUrl(path, { returnAbsoluteUrl: true }),
+  };
   return (
     <RWebShare data={shareData} onClick={onClick}>
       {children}

@@ -116,6 +116,38 @@ const AuthDialogContent = ({
   //TODO(techiejd): Look into reducing the logic for authentication.
   const router = useRouter();
   const { invitedAsMaker } = router.query;
+  const makersCollection = collection(
+    appState.firestore,
+    "makers"
+  ).withConverter(makerConverter);
+  const invitedMakerDocRef = invitedAsMaker
+    ? doc(makersCollection, invitedAsMaker as string)
+    : null;
+
+  // First we need to maker sure that the invitedAsMaker query param is valid.
+  // The invitedAsMaker is a maker whose ownerId is "invited".
+  useEffect(() => {
+    if (invitedAsMaker) {
+      const makerDoc = doc(
+        appState.firestore,
+        "makers",
+        invitedAsMaker as string
+      ).withConverter(makerConverter);
+      getDoc(makerDoc).then((makerDocSnap) => {
+        if (!makerDocSnap.exists()) {
+          alert(
+            "Este vinculo no es valido. Hay que pedir otro de la incubadora."
+          );
+          router.push("/");
+        }
+        const makerData = makerDocSnap.data();
+        if (makerData!.ownerId != "invited") {
+          alert("Este vinculo ya se usó. Hay que pedir otro de la incubadora.");
+          router.push("/");
+        }
+      });
+    }
+  }, [invitedAsMaker, router, appState.firestore]);
 
   const handleOtp = async (otp: string) => {
     if (authDialogState.recaptchaConfirmationResult == undefined)
@@ -131,18 +163,19 @@ const AuthDialogContent = ({
               displayName: authDialogState.name,
             });
             const makerDocRef = await (async () => {
+              if (invitedMakerDocRef) {
+                return setDoc(
+                  invitedMakerDocRef,
+                  { ownerId: userCred.user.uid },
+                  { merge: true }
+                ).then(() => invitedMakerDocRef);
+              }
               // So we assume all users are also makers. They can edit this later.
-              const makerEncoded = maker.parse({
+              return addDoc(makersCollection, {
                 ownerId: userCred.user.uid,
                 name: authDialogState.name,
                 type: "individual",
               });
-              return await addDoc(
-                collection(appState.firestore, "makers").withConverter(
-                  makerConverter
-                ),
-                makerEncoded
-              );
             })();
 
             const memberDocPromise = setDoc(
@@ -176,7 +209,12 @@ const AuthDialogContent = ({
                 : "";
           };
           await createUserAndMaker();
+        } else {
+          if (invitedAsMaker) {
+            return "You can't login with an invite link.";
+          }
         }
+
         setAuthDialogState((aDS) => ({ ...aDS, otpDialogOpen: false }));
         setOpen(false);
         return error;

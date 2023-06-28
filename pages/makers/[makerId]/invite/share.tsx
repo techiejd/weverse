@@ -11,7 +11,7 @@ import { Check, ContentCopy, Share } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { useCurrentMaker } from "../../../../modules/makers/context";
 import { useState } from "react";
-import useHostname from "../../../../common/utils/useHostname";
+import buildUrl from "@googlicius/build-url";
 
 // From https://usehooks-ts.com/react-hook/use-copy-to-clipboard
 type CopiedValue = string | null;
@@ -46,11 +46,15 @@ function useCopyToClipboard(): [CopiedValue, CopyFn] {
 
 const SharePage = () => {
   const router = useRouter();
-  const { makerName, invitedAsMaker } = router.query;
+  const { invitedAsMaker, makerName } = router.query;
   const [maker] = useCurrentMaker();
-  const hostname = useHostname();
-  const path = "something";
-  const shareLink = hostname + path;
+  const path = buildUrl(`/makers/${invitedAsMaker}`, {
+    queryParams: {
+      invitedAsMaker: invitedAsMaker,
+      registerRequested: true,
+    },
+  });
+  const href = buildUrl(path, { returnAbsoluteUrl: true });
   const [value, copy] = useCopyToClipboard();
   return (
     <Stack
@@ -67,7 +71,7 @@ const SharePage = () => {
         Haz clic para copiar el vinculo o presione boton de {'"Compartir."'}
       </Typography>
       <TextField
-        value={shareLink}
+        value={href}
         label="Vinculo"
         variant="outlined"
         fullWidth
@@ -76,16 +80,12 @@ const SharePage = () => {
           startAdornment: (
             <InputAdornment position="start">
               <IconButton>
-                {value && value.includes(shareLink) ? (
-                  <Check />
-                ) : (
-                  <ContentCopy />
-                )}
+                {value && value.includes(href) ? <Check /> : <ContentCopy />}
               </IconButton>
             </InputAdornment>
           ),
         }}
-        onClick={() => copy(shareLink)}
+        onClick={() => copy(href)}
       />
 
       <ShareActionArea

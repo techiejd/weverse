@@ -32,7 +32,7 @@ import {
   useCurrentImpacts,
   useCurrentMaker,
 } from "../../../modules/makers/context";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import moment from "moment";
 import ImpactCard from "../../../modules/posi/action/card";
 import {
@@ -51,6 +51,14 @@ import { calculateVipState } from "../../../common/utils/vip";
 import { useRouter } from "next/router";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
 import Sponsorships from "../../../modules/makers/sponsor/list";
+
+const IncubatorSection = () => {
+  return (
+    <Fragment>
+      <Typography variant="h2">Acerca de:</Typography>
+    </Fragment>
+  );
+};
 
 const MakerProfile = () => {
   const [maker, makerLoading, makerError] = useCurrentMaker();
@@ -152,16 +160,12 @@ const VipDialog = ({
   setSolicitDialogOpen: Dispatch<SetStateAction<boolean>>;
   myMaker: Maker;
 }) => {
-  const [actions, actionsLoading, actionsError] = useCurrentActions();
-  const [socialProofs, socialProofsLoading, socialProofsError] =
-    useCurrentImpacts();
+  const [actions] = useCurrentActions();
+  const [socialProofs] = useCurrentImpacts();
   const vipState = calculateVipState(myMaker, socialProofs, actions);
   return (
     <Dialog open={open}>
-      <DialogTitle>
-        Para ingresar a la sala VIP y entrar a ganar $100USD en la rifa, realiza
-        cada una de las siguientes tareas:
-      </DialogTitle>
+      <DialogTitle>Para ingresar a la sala VIP:</DialogTitle>
       <DialogContent>
         <Typography>Haz clic en la tarea para comenzar el proceso:</Typography>
         <List>
