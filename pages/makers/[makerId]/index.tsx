@@ -29,6 +29,7 @@ import {
   Close,
   ContentCopy,
   Check,
+  PersonAdd,
 } from "@mui/icons-material";
 import SupportBottomBar from "../../../common/components/supportBottomBar";
 import {
@@ -63,6 +64,7 @@ import {
   buildShareLinks,
   useCopyToClipboard,
 } from "../../../modules/makers/inviteAsMaker";
+import UnderConstruction from "../../../modules/posi/underConstruction";
 //TODO(techiejd): Clean up this file
 
 const IncubatorSection = () => {
@@ -348,6 +350,32 @@ const VipDialog = ({
   );
 };
 
+const IncubateeVIPDialog = ({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const handleClose = () => setOpen(false);
+  return (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>
+        Ahora eres parte de un grupo de élite. OneWe está trabajando con la
+        incubadora para crear la mejor experiencia para los incubados.
+      </DialogTitle>
+      <DialogContent>
+        <UnderConstruction />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} autoFocus>
+          OK
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 const BottomBar = () => {
   const [maker] = useCurrentMaker();
   const [myMaker] = useMyMaker();
@@ -357,13 +385,29 @@ const BottomBar = () => {
   const [vipDialogOpen, setVipDialogOpen] = useState(
     Boolean(queryVipDialogOpen)
   );
+  const [incubateeVIPDialogOpen, setIncubateeVIPDialogOpen] = useState(false);
   const [socialProofs] = useCurrentImpacts();
   const [actions] = useCurrentActions();
   const vipState = calculateVipState(myMaker, socialProofs, actions);
-  const vipButtonBehavior = vipState.entryGiven
+  const vipButtonBehavior = maker?.incubator
+    ? { onClick: () => setIncubateeVIPDialogOpen(true) }
+    : vipState.entryGiven
     ? { href: "/makers/vip" }
     : { onClick: () => setVipDialogOpen(true) };
 
+  const VipCenterBottomFab = () => (
+    <CenterBottomFab color="secondary" {...vipButtonBehavior}>
+      <Typography fontSize={25}>👑</Typography>
+      <Typography fontSize={12}>VIP</Typography>
+    </CenterBottomFab>
+  );
+
+  const IncubatorInviteMakerCenterBottomFab = ({ maker }: { maker: Maker }) => (
+    <CenterBottomFab color="secondary" href={`/makers/${maker.id}/invite`}>
+      <PersonAdd />
+      <Typography fontSize={12}>Invitar</Typography>
+    </CenterBottomFab>
+  );
   return maker == undefined ? (
     <CenterBottomCircularProgress />
   ) : myMaker && myMaker.id == maker.id ? (
@@ -386,6 +430,10 @@ const BottomBar = () => {
         setSolicitDialogOpen={setSolicitDialogOpen}
         myMaker={myMaker}
       />
+      <IncubateeVIPDialog
+        open={incubateeVIPDialogOpen}
+        setOpen={setIncubateeVIPDialogOpen}
+      />
       <Toolbar>
         <IconButtonWithLabel href={`/makers/${maker.id}/edit`}>
           <Edit />
@@ -395,14 +443,11 @@ const BottomBar = () => {
           <SupportIcon />
           <Typography>Apoyo</Typography>
         </IconButtonWithLabel>
-        <CenterBottomFab
-          color="secondary"
-          aria-label="add"
-          {...vipButtonBehavior}
-        >
-          <Typography fontSize={25}>👑</Typography>
-          <Typography fontSize={12}>VIP</Typography>
-        </CenterBottomFab>
+        {maker?.organizationType == "incubator" ? (
+          <IncubatorInviteMakerCenterBottomFab maker={maker} />
+        ) : (
+          <VipCenterBottomFab />
+        )}
         <Box sx={{ flexGrow: 1 }} />
         <ShareActionArea
           shareProps={{
