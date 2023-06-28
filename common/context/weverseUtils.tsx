@@ -18,6 +18,7 @@ import {
   posiFormDataConverter,
   socialProofConverter,
   sponsorshipConverter,
+  incubateeConverter,
 } from "../utils/firebase";
 import { useEffect, useState } from "react";
 import { organizationType, makerType, Maker } from "../../functions/shared/src";
@@ -225,6 +226,7 @@ export const getMakerTypeLabel = (maker: Maker) => {
     [organizationType.Enum.religious]: "Congregación",
     [organizationType.Enum.unincorporated]: "Voluntarios",
     [organizationType.Enum.profit]: "Comercial",
+    [organizationType.Enum.incubator]: "Incubadora",
   };
 
   const makerTypeLabels = {
@@ -236,4 +238,20 @@ export const getMakerTypeLabel = (maker: Maker) => {
     : maker.organizationType
     ? organizationLabels[maker.organizationType]
     : makerTypeLabels[maker.type];
+};
+
+export const useCurrentIncubatees = () => {
+  const router = useRouter();
+  const appState = useAppState();
+  const { makerId } = router.query;
+  return useCollectionData(
+    makerId
+      ? collection(
+          appState.firestore,
+          "makers",
+          makerId as string,
+          "incubatees"
+        ).withConverter(incubateeConverter)
+      : undefined
+  );
 };

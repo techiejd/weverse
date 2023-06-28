@@ -10,6 +10,7 @@ import {
   DialogTitle,
   Divider,
   Grid,
+  IconButton,
   List,
   ListItemButton,
   ListItemIcon,
@@ -25,6 +26,10 @@ import {
   Add,
   CheckBoxOutlineBlank,
   CheckBox,
+  Close,
+  ContentCopy,
+  Check,
+  PersonAdd,
 } from "@mui/icons-material";
 import SupportBottomBar from "../../../common/components/supportBottomBar";
 import {
@@ -32,15 +37,16 @@ import {
   useCurrentImpacts,
   useCurrentMaker,
 } from "../../../modules/makers/context";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import moment from "moment";
 import ImpactCard from "../../../modules/posi/action/card";
 import {
   getMakerTypeLabel,
+  useCurrentIncubatees,
   useMyMaker,
 } from "../../../common/context/weverseUtils";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
-import { Maker } from "../../../functions/shared/src";
+import { Incubatee, Maker } from "../../../functions/shared/src";
 import { Content } from "../../../modules/posi/content";
 import RatingsStack from "../../../common/components/ratings";
 import ShareActionArea from "../../../common/components/shareActionArea";
@@ -51,6 +57,126 @@ import { calculateVipState } from "../../../common/utils/vip";
 import { useRouter } from "next/router";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
 import Sponsorships from "../../../modules/makers/sponsor/list";
+import MakerCard from "../../../modules/makers/MakerCard";
+import { useAppState } from "../../../common/context/appState";
+import { doc, writeBatch } from "firebase/firestore";
+import {
+  buildShareLinks,
+  useCopyToClipboard,
+} from "../../../modules/makers/inviteAsMaker";
+import UnderConstruction from "../../../modules/posi/underConstruction";
+//TODO(techiejd): Clean up this file
+
+const IncubatorSection = () => {
+  const appState = useAppState();
+  const [incubatees] = useCurrentIncubatees();
+  const acceptedIncubatees = incubatees?.filter(
+    (incubatee) => incubatee.acceptedInvite
+  );
+  const notAcceptedIncubatees = incubatees?.filter(
+    (incubatee) => !incubatee.acceptedInvite
+  );
+  const [myMaker] = useMyMaker();
+  const [maker] = useCurrentMaker();
+  const isMyMaker = myMaker && maker && myMaker.id == maker.id;
+  const joinPrompt = `${maker?.name}te invita a unirte a su red de incubadora.`;
+  const [loading, setLoading] = useState(false);
+  const [value, copy] = useCopyToClipboard();
+
+  const InvitedIncubateePortal = ({ incubatee }: { incubatee: Incubatee }) => {
+    const { path, href } = maker
+      ? buildShareLinks(incubatee.id!, maker!.id!)
+      : { path: "", href: "" };
+    return loading ? (
+      <CircularProgress />
+    ) : (
+      <Stack
+        direction={"row"}
+        key={incubatee.id}
+        alignItems={"center"}
+        spacing={2}
+        sx={{ border: "1px solid", borderColor: "grey.300" }}
+      >
+        <IconButton
+          onClick={() => {
+            // Here we delete the maker that had been invited by the incubator
+            // And we delete the incubatee relationship with the incubator
+            if (!maker || !incubatee) return;
+            setLoading(true);
+            const incubateeRef = doc(
+              appState.firestore,
+              "makers",
+              maker.id!,
+              "incubatees",
+              incubatee.id!
+            );
+            const incubateeMakerRef = doc(
+              appState.firestore,
+              "makers",
+              incubatee.id!
+            );
+            const batch = writeBatch(appState.firestore);
+            batch.delete(incubateeRef);
+            batch.delete(incubateeMakerRef);
+            batch.commit();
+            setLoading(false);
+          }}
+        >
+          <Close />
+        </IconButton>
+        <MakerCard makerId={incubatee.id!} key={incubatee.id!} />
+        <Stack spacing={2}>
+          <IconButton onClick={() => copy(href)}>
+            {value && value.includes(href) ? <Check /> : <ContentCopy />}
+          </IconButton>
+          <ShareActionArea
+            shareProps={{
+              title: joinPrompt,
+              text: joinPrompt,
+              path: path,
+            }}
+          >
+            <IconButton>
+              <Share />
+            </IconButton>
+          </ShareActionArea>
+        </Stack>
+      </Stack>
+    );
+  };
+
+  return (
+    <Fragment>
+      <Typography variant="h2">Incubadora:</Typography>
+      <Stack spacing={2}>
+        {acceptedIncubatees && acceptedIncubatees.length > 0 ? (
+          acceptedIncubatees.map((incubatee) => (
+            <MakerCard makerId={incubatee.id!} key={incubatee.id!} />
+          ))
+        ) : (
+          <Typography>No hay incubados.</Typography>
+        )}
+      </Stack>
+      {isMyMaker && (
+        <Fragment>
+          <Typography variant="h2">Invitaciones:</Typography>
+          <Stack spacing={2}>
+            {notAcceptedIncubatees && notAcceptedIncubatees.length > 0 ? (
+              notAcceptedIncubatees.map((incubatee) => (
+                <InvitedIncubateePortal
+                  key={incubatee.id!}
+                  incubatee={incubatee}
+                />
+              ))
+            ) : (
+              <Typography>No hay invitaciones.</Typography>
+            )}
+          </Stack>
+        </Fragment>
+      )}
+    </Fragment>
+  );
+};
 
 const MakerProfile = () => {
   const [maker, makerLoading, makerError] = useCurrentMaker();
@@ -66,6 +192,8 @@ const MakerProfile = () => {
       <Typography>{getMakerTypeLabel(maker)}</Typography>
       <Stack sx={{ width: "100%" }}>
         <Sponsorships showAmount={myMaker && myMaker?.id == maker?.id} />
+        {maker.type == "organization" &&
+          maker.organizationType == "incubator" && <IncubatorSection />}
         <Typography variant="h2">Acerca de:</Typography>
         <Typography>
           {maker.about ? maker.about : "No hay sección 'acerca de'."}
@@ -152,16 +280,12 @@ const VipDialog = ({
   setSolicitDialogOpen: Dispatch<SetStateAction<boolean>>;
   myMaker: Maker;
 }) => {
-  const [actions, actionsLoading, actionsError] = useCurrentActions();
-  const [socialProofs, socialProofsLoading, socialProofsError] =
-    useCurrentImpacts();
+  const [actions] = useCurrentActions();
+  const [socialProofs] = useCurrentImpacts();
   const vipState = calculateVipState(myMaker, socialProofs, actions);
   return (
     <Dialog open={open}>
-      <DialogTitle>
-        Para ingresar a la sala VIP y entrar a ganar $100USD en la rifa, realiza
-        cada una de las siguientes tareas:
-      </DialogTitle>
+      <DialogTitle>Para ingresar a la sala VIP:</DialogTitle>
       <DialogContent>
         <Typography>Haz clic en la tarea para comenzar el proceso:</Typography>
         <List>
@@ -226,23 +350,64 @@ const VipDialog = ({
   );
 };
 
+const IncubateeVIPDialog = ({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const handleClose = () => setOpen(false);
+  return (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>
+        Ahora eres parte de un grupo de élite. OneWe está trabajando con la
+        incubadora para crear la mejor experiencia para los incubados.
+      </DialogTitle>
+      <DialogContent>
+        <UnderConstruction />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} autoFocus>
+          OK
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 const BottomBar = () => {
-  const [maker, makerLoading, makerError] = useCurrentMaker();
-  const [myMaker, myMakerLoading, myMakerError] = useMyMaker();
+  const [maker] = useCurrentMaker();
+  const [myMaker] = useMyMaker();
   const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
   const router = useRouter();
   const { vipDialogOpen: queryVipDialogOpen } = router.query;
   const [vipDialogOpen, setVipDialogOpen] = useState(
     Boolean(queryVipDialogOpen)
   );
-  const [socialProofs, socialProofsLoading, socialProofsError] =
-    useCurrentImpacts();
-  const [actions, actionsLoading, actionsError] = useCurrentActions();
+  const [incubateeVIPDialogOpen, setIncubateeVIPDialogOpen] = useState(false);
+  const [socialProofs] = useCurrentImpacts();
+  const [actions] = useCurrentActions();
   const vipState = calculateVipState(myMaker, socialProofs, actions);
-  const vipButtonBehavior = vipState.entryGiven
+  const vipButtonBehavior = maker?.incubator
+    ? { onClick: () => setIncubateeVIPDialogOpen(true) }
+    : vipState.entryGiven
     ? { href: "/makers/vip" }
     : { onClick: () => setVipDialogOpen(true) };
 
+  const VipCenterBottomFab = () => (
+    <CenterBottomFab color="secondary" {...vipButtonBehavior}>
+      <Typography fontSize={25}>👑</Typography>
+      <Typography fontSize={12}>VIP</Typography>
+    </CenterBottomFab>
+  );
+
+  const IncubatorInviteMakerCenterBottomFab = ({ maker }: { maker: Maker }) => (
+    <CenterBottomFab color="secondary" href={`/makers/${maker.id}/invite`}>
+      <PersonAdd />
+      <Typography fontSize={12}>Invitar</Typography>
+    </CenterBottomFab>
+  );
   return maker == undefined ? (
     <CenterBottomCircularProgress />
   ) : myMaker && myMaker.id == maker.id ? (
@@ -265,6 +430,10 @@ const BottomBar = () => {
         setSolicitDialogOpen={setSolicitDialogOpen}
         myMaker={myMaker}
       />
+      <IncubateeVIPDialog
+        open={incubateeVIPDialogOpen}
+        setOpen={setIncubateeVIPDialogOpen}
+      />
       <Toolbar>
         <IconButtonWithLabel href={`/makers/${maker.id}/edit`}>
           <Edit />
@@ -274,14 +443,11 @@ const BottomBar = () => {
           <SupportIcon />
           <Typography>Apoyo</Typography>
         </IconButtonWithLabel>
-        <CenterBottomFab
-          color="secondary"
-          aria-label="add"
-          {...vipButtonBehavior}
-        >
-          <Typography fontSize={25}>👑</Typography>
-          <Typography fontSize={12}>VIP</Typography>
-        </CenterBottomFab>
+        {maker?.organizationType == "incubator" ? (
+          <IncubatorInviteMakerCenterBottomFab maker={maker} />
+        ) : (
+          <VipCenterBottomFab />
+        )}
         <Box sx={{ flexGrow: 1 }} />
         <ShareActionArea
           shareProps={{

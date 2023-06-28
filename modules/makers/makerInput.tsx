@@ -16,20 +16,21 @@ import {
   useEffect,
   useState,
 } from "react";
-import { FileInput } from "../../posi/input";
-import Section from "../../../common/components/section";
+import Section from "../../common/components/section";
 import {
+  organizationType,
   Maker,
   OrganizationType,
-  organizationType,
   Media,
-} from "../../../functions/shared/src";
+} from "../../functions/shared/src";
+import { FileInput } from "../posi/input";
 
 const organizationExplanations = {
   [organizationType.Enum.nonprofit]: "Fundación u otra ONG",
   [organizationType.Enum.religious]: "Organización Religiosa",
   [organizationType.Enum.unincorporated]: "Voluntarios",
   [organizationType.Enum.profit]: "Organización Comercial",
+  [organizationType.Enum.incubator]: "Incubadora",
 };
 
 const OrganizationTypeInput = ({
