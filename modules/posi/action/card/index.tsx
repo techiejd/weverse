@@ -12,8 +12,6 @@ import OverlayInfo from "./overlayInfo";
 import RatingsStack from "../../../../common/components/ratings";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import LogInPrompt from "../../../../common/components/logInPrompt";
-import { useAppState } from "../../../../common/context/appState";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 
 const LogInPromptDialog = ({
@@ -39,7 +37,7 @@ const MemberLogInTrigger = ({
 }: {
   setLogInPromptDialogOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [myMember, myMemberLoading, myMemberError] = useMyMember();
+  const [myMember] = useMyMember();
   useEffect(() => {
     if (myMember) setLogInPromptDialogOpen(false);
   }, [myMember, setLogInPromptDialogOpen]);
@@ -61,9 +59,6 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
         }
       : { image: { src: posiData.media.url } };
   const [logInPromptDialogOpen, setLogInPromptDialogOpen] = useState(false);
-  const appState = useAppState();
-  console.log(posiData);
-  console.log(posiData.id);
   return (
     <Card
       sx={{
