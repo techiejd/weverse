@@ -10,51 +10,19 @@ import ShareActionArea from "../../../../common/components/shareActionArea";
 import { Check, ContentCopy, Share } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { useCurrentMaker } from "../../../../modules/makers/context";
-import { useState } from "react";
-import buildUrl from "@googlicius/build-url";
-
-// From https://usehooks-ts.com/react-hook/use-copy-to-clipboard
-type CopiedValue = string | null;
-type CopyFn = (text: string) => Promise<boolean>; // Return success
-
-function useCopyToClipboard(): [CopiedValue, CopyFn] {
-  const [copiedText, setCopiedText] = useState<CopiedValue>(null);
-
-  const copy: CopyFn = async (text) => {
-    if (!navigator?.clipboard) {
-      alert(
-        'Copiar al portapapeles no es compatible con tu navegador. Haz clic en "Compartir".'
-      );
-      return false;
-    }
-
-    // Try to save to clipboard then save it in the state if worked
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedText(text);
-      return true;
-    } catch (error) {
-      alert('Copiar al portapapeles falló. Haz clic en "Compartir".');
-      console.warn("Copy failed", error);
-      setCopiedText(null);
-      return false;
-    }
-  };
-
-  return [copiedText, copy];
-}
+import {
+  buildShareLinks,
+  useCopyToClipboard,
+} from "../../../../modules/makers/inviteAsMaker";
 
 const SharePage = () => {
   const router = useRouter();
-  const { invitedAsMaker, makerName } = router.query;
+  const { invitedAsMaker, makerName, inviter } = router.query;
   const [maker] = useCurrentMaker();
-  const path = buildUrl(`/makers/${invitedAsMaker}`, {
-    queryParams: {
-      invitedAsMaker: invitedAsMaker,
-      registerRequested: true,
-    },
-  });
-  const href = buildUrl(path, { returnAbsoluteUrl: true });
+  const { path, href } = buildShareLinks(
+    (invitedAsMaker as string) ?? "",
+    (inviter as string) ?? ""
+  );
   const [value, copy] = useCopyToClipboard();
   return (
     <Stack

@@ -87,7 +87,7 @@ const Invite = () => {
         disabled={!makerName || loading || !maker}
         href={
           maker
-            ? `/makers/${maker.id!}/invite/share?makerType=${makerType}&makerName=${makerName}&invitedAsMaker=${invitedAsMaker}&registerRequested=true`
+            ? `/makers/${maker.id!}/invite/share?makerType=${makerType}&makerName=${makerName}&invitedAsMaker=${invitedAsMaker}&inviter=${maker.id!}&registerRequested=true`
             : undefined
         }
         loading={loading}

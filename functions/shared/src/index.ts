@@ -209,3 +209,5 @@ export type Sponsorship = z.infer<typeof sponsorship>;
 export const incubatee = dbBase.extend({
   acceptedInvite: z.boolean().optional(),
 });
+
+export type Incubatee = z.infer<typeof incubatee>;

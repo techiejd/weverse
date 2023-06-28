@@ -12,8 +12,16 @@ import {
   TextField,
   CircularProgress,
 } from "@mui/material";
-import { useAuthState, useUpdateProfile } from "react-firebase-hooks/auth";
-import { collection, addDoc, setDoc, doc, getDoc } from "firebase/firestore";
+import { useUpdateProfile } from "react-firebase-hooks/auth";
+import {
+  collection,
+  addDoc,
+  setDoc,
+  doc,
+  getDoc,
+  updateDoc,
+  writeBatch,
+} from "firebase/firestore";
 import { Login } from "@mui/icons-material";
 import OtpDialog from "./otpDialog";
 import PhoneInput from "./phoneInput";
@@ -28,6 +36,7 @@ import {
 import { useAppState } from "../../../common/context/appState";
 import { maker } from "../../../functions/shared/src";
 import {
+  incubateeConverter,
   makerConverter,
   memberConverter,
 } from "../../../common/utils/firebase";
@@ -115,7 +124,7 @@ const AuthDialogContent = ({
 
   //TODO(techiejd): Look into reducing the logic for authentication.
   const router = useRouter();
-  const { invitedAsMaker } = router.query;
+  const { invitedAsMaker, inviter } = router.query;
   const makersCollection = collection(
     appState.firestore,
     "makers"
@@ -123,6 +132,16 @@ const AuthDialogContent = ({
   const invitedMakerDocRef = invitedAsMaker
     ? doc(makersCollection, invitedAsMaker as string)
     : null;
+  const incubateeDocRef =
+    inviter && invitedAsMaker
+      ? doc(
+          appState.firestore,
+          "makers",
+          inviter as string,
+          "incubatees",
+          invitedAsMaker as string
+        ).withConverter(incubateeConverter)
+      : null;
 
   // First we need to maker sure that the invitedAsMaker query param is valid.
   // The invitedAsMaker is a maker whose ownerId is "invited".
@@ -158,17 +177,20 @@ const AuthDialogContent = ({
         let error = "";
         if (authDialogState.authAction == AuthAction.register) {
           const createUserAndMaker = async () => {
-            // TODO(techiejd): Look into using transactions or batch writes here.
             const updateSuccessful = updateProfile({
               displayName: authDialogState.name,
             });
             const makerDocRef = await (async () => {
-              if (invitedMakerDocRef) {
-                return setDoc(
-                  invitedMakerDocRef,
-                  { ownerId: userCred.user.uid },
-                  { merge: true }
-                ).then(() => invitedMakerDocRef);
+              if (invitedMakerDocRef && incubateeDocRef) {
+                const batch = writeBatch(appState.firestore);
+                batch.update(invitedMakerDocRef, {
+                  ownerId: userCred.user.uid,
+                });
+                batch.update(incubateeDocRef, {
+                  acceptedInvite: true,
+                });
+                await batch.commit();
+                return invitedMakerDocRef;
               }
               // So we assume all users are also makers. They can edit this later.
               return addDoc(makersCollection, {
@@ -178,6 +200,7 @@ const AuthDialogContent = ({
               });
             })();
 
+            // TODO(techiejd): Look into merging registerdPhoneNumbers and members.
             const memberDocPromise = setDoc(
               doc(
                 appState.firestore,
@@ -196,12 +219,11 @@ const AuthDialogContent = ({
               { ownerId: userCred.user.uid }
             );
 
-            const [finishedUpdateSuccessful, userDoc, registeredPhoneNumber] =
-              await Promise.all([
-                updateSuccessful,
-                memberDocPromise,
-                registeredPhoneNumberPromise,
-              ]);
+            const [finishedUpdateSuccessful] = await Promise.all([
+              updateSuccessful,
+              memberDocPromise,
+              registeredPhoneNumberPromise,
+            ]);
 
             if (!finishedUpdateSuccessful)
               error = updateProfileError?.message

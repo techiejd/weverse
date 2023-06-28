@@ -10,6 +10,7 @@ import {
   DialogTitle,
   Divider,
   Grid,
+  IconButton,
   List,
   ListItemButton,
   ListItemIcon,
@@ -25,6 +26,9 @@ import {
   Add,
   CheckBoxOutlineBlank,
   CheckBox,
+  Close,
+  ContentCopy,
+  Check,
 } from "@mui/icons-material";
 import SupportBottomBar from "../../../common/components/supportBottomBar";
 import {
@@ -37,10 +41,11 @@ import moment from "moment";
 import ImpactCard from "../../../modules/posi/action/card";
 import {
   getMakerTypeLabel,
+  useCurrentIncubatees,
   useMyMaker,
 } from "../../../common/context/weverseUtils";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
-import { Maker } from "../../../functions/shared/src";
+import { Incubatee, Maker } from "../../../functions/shared/src";
 import { Content } from "../../../modules/posi/content";
 import RatingsStack from "../../../common/components/ratings";
 import ShareActionArea from "../../../common/components/shareActionArea";
@@ -51,11 +56,122 @@ import { calculateVipState } from "../../../common/utils/vip";
 import { useRouter } from "next/router";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
 import Sponsorships from "../../../modules/makers/sponsor/list";
+import MakerCard from "../../../modules/makers/MakerCard";
+import { useAppState } from "../../../common/context/appState";
+import { doc, writeBatch } from "firebase/firestore";
+import {
+  buildShareLinks,
+  useCopyToClipboard,
+} from "../../../modules/makers/inviteAsMaker";
+//TODO(techiejd): Clean up this file
 
 const IncubatorSection = () => {
+  const appState = useAppState();
+  const [incubatees] = useCurrentIncubatees();
+  const acceptedIncubatees = incubatees?.filter(
+    (incubatee) => incubatee.acceptedInvite
+  );
+  const notAcceptedIncubatees = incubatees?.filter(
+    (incubatee) => !incubatee.acceptedInvite
+  );
+  const [myMaker] = useMyMaker();
+  const [maker] = useCurrentMaker();
+  const isMyMaker = myMaker && maker && myMaker.id == maker.id;
+  const joinPrompt = `${maker?.name}te invita a unirte a su red de incubadora.`;
+  const [loading, setLoading] = useState(false);
+  const [value, copy] = useCopyToClipboard();
+
+  const InvitedIncubateePortal = ({ incubatee }: { incubatee: Incubatee }) => {
+    const { path, href } = maker
+      ? buildShareLinks(incubatee.id!, maker!.id!)
+      : { path: "", href: "" };
+    return loading ? (
+      <CircularProgress />
+    ) : (
+      <Stack
+        direction={"row"}
+        key={incubatee.id}
+        alignItems={"center"}
+        spacing={2}
+        sx={{ border: "1px solid", borderColor: "grey.300" }}
+      >
+        <IconButton
+          onClick={() => {
+            // Here we delete the maker that had been invited by the incubator
+            // And we delete the incubatee relationship with the incubator
+            if (!maker || !incubatee) return;
+            setLoading(true);
+            const incubateeRef = doc(
+              appState.firestore,
+              "makers",
+              maker.id!,
+              "incubatees",
+              incubatee.id!
+            );
+            const incubateeMakerRef = doc(
+              appState.firestore,
+              "makers",
+              incubatee.id!
+            );
+            const batch = writeBatch(appState.firestore);
+            batch.delete(incubateeRef);
+            batch.delete(incubateeMakerRef);
+            batch.commit();
+            setLoading(false);
+          }}
+        >
+          <Close />
+        </IconButton>
+        <MakerCard makerId={incubatee.id!} key={incubatee.id!} />
+        <Stack spacing={2}>
+          <IconButton onClick={() => copy(href)}>
+            {value && value.includes(href) ? <Check /> : <ContentCopy />}
+          </IconButton>
+          <ShareActionArea
+            shareProps={{
+              title: joinPrompt,
+              text: joinPrompt,
+              path: path,
+            }}
+          >
+            <IconButton>
+              <Share />
+            </IconButton>
+          </ShareActionArea>
+        </Stack>
+      </Stack>
+    );
+  };
+
   return (
     <Fragment>
-      <Typography variant="h2">Acerca de:</Typography>
+      <Typography variant="h2">Incubadora:</Typography>
+      <Stack spacing={2}>
+        {acceptedIncubatees && acceptedIncubatees.length > 0 ? (
+          acceptedIncubatees.map((incubatee) => (
+            <MakerCard makerId={incubatee.id!} key={incubatee.id!} />
+          ))
+        ) : (
+          <Typography>No hay incubados.</Typography>
+        )}
+      </Stack>
+      {isMyMaker && (
+        <Fragment>
+          <Typography variant="h2">Invitaciones:</Typography>
+          <Stack spacing={2}>
+            {notAcceptedIncubatees && notAcceptedIncubatees.length > 0 ? (
+              notAcceptedIncubatees.map((incubatee) => (
+                <InvitedIncubateePortal
+                  key={incubatee.id!}
+                  incubatee={incubatee}
+                />
+              ))
+            ) : (
+              <Typography>No hay invitaciones.</Typography>
+            )}
+          </Stack>
+        </Fragment>
+      )}
     </Fragment>
   );
 };
@@ -74,6 +190,8 @@ const MakerProfile = () => {
       <Typography>{getMakerTypeLabel(maker)}</Typography>
       <Stack sx={{ width: "100%" }}>
         <Sponsorships showAmount={myMaker && myMaker?.id == maker?.id} />
+        {maker.type == "organization" &&
+          maker.organizationType == "incubator" && <IncubatorSection />}
         <Typography variant="h2">Acerca de:</Typography>
         <Typography>
           {maker.about ? maker.about : "No hay sección 'acerca de'."}
@@ -231,17 +349,16 @@ const VipDialog = ({
 };
 
 const BottomBar = () => {
-  const [maker, makerLoading, makerError] = useCurrentMaker();
-  const [myMaker, myMakerLoading, myMakerError] = useMyMaker();
+  const [maker] = useCurrentMaker();
+  const [myMaker] = useMyMaker();
   const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
   const router = useRouter();
   const { vipDialogOpen: queryVipDialogOpen } = router.query;
   const [vipDialogOpen, setVipDialogOpen] = useState(
     Boolean(queryVipDialogOpen)
   );
-  const [socialProofs, socialProofsLoading, socialProofsError] =
-    useCurrentImpacts();
-  const [actions, actionsLoading, actionsError] = useCurrentActions();
+  const [socialProofs] = useCurrentImpacts();
+  const [actions] = useCurrentActions();
   const vipState = calculateVipState(myMaker, socialProofs, actions);
   const vipButtonBehavior = vipState.entryGiven
     ? { href: "/makers/vip" }
