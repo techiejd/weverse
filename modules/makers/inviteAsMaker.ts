@@ -23,7 +23,6 @@ export function useCopyToClipboard(): [CopiedValue, CopyFn] {
       return true;
     } catch (error) {
       alert('Copiar al portapapeles falló. Haz clic en "Compartir".');
-      console.warn("Copy failed", error);
       setCopiedText(null);
       return false;
     }
