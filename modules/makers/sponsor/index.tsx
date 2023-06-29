@@ -4,22 +4,24 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useCurrentMaker } from "../context";
 import { useMyMemberOnce } from "../../../common/context/weverseUtils";
 import InitializeSponsor from "./initialize";
 import RepeatSponsor from "./repeat";
+import { Maker } from "../../../functions/shared/src";
 
 export default function Sponsor({
   exitButtonBehavior,
+  beneficiary,
 }: {
   exitButtonBehavior: { href: string } | { onClick: () => void };
+  //TODO(techiejd): This isn't necessary if we move posi under makers/maker
+  beneficiary: Maker;
 }) {
   const router = useRouter();
   const { isReady, query } = useRouter();
   const { sponsorStep, makerId, ...queryOthers } = query;
   const currPath = router.asPath.split("?")[0];
   const [activeStep, setActiveStep] = React.useState(0);
-  const [maker, makerLoading, makerErrors] = useCurrentMaker();
   const [myMember, myMemberLoading, myMemberErrors] = useMyMemberOnce();
   const isRepeatSponsor = myMember?.stripe?.status === "active";
   React.useEffect(() => {
@@ -108,7 +110,7 @@ export default function Sponsor({
           }}
         >
           <Typography component="h1" variant="h4" align="center">
-            Patrocina a {maker?.name}
+            Patrocina a {beneficiary.name}
           </Typography>
           {isRepeatSponsor ? (
             <RepeatSponsor
@@ -116,6 +118,7 @@ export default function Sponsor({
               sponsorForm={sponsorForm}
               exitButtonBehavior={exitButtonBehavior}
               handleBack={handleBack}
+              beneficiary={beneficiary}
             />
           ) : (
             <InitializeSponsor
@@ -124,6 +127,7 @@ export default function Sponsor({
               exitButtonBehavior={exitButtonBehavior}
               handleBack={handleBack}
               handleNext={handleNext}
+              beneficiary={beneficiary}
             />
           )}
         </form>

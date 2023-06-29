@@ -6,6 +6,7 @@ import Confirm from "./confirm";
 import StepperHeader from "../common/stepperHeader";
 import Final from "../common/final";
 import ChooseSponsorship from "../common/chooseSponsorship";
+import { Maker } from "../../../../functions/shared/src";
 
 const steps = ["Elige", "Confirma"];
 
@@ -14,11 +15,13 @@ const RepeatSponsor = ({
   sponsorForm,
   exitButtonBehavior,
   handleBack,
+  beneficiary,
 }: {
   step: number;
   sponsorForm: Record<string, string>;
   exitButtonBehavior: { href: string } | { onClick: () => void };
   handleBack: () => void;
+  beneficiary: Maker;
 }) => {
   const repeatSponsorStep = step as Step;
   function getStepContent() {
@@ -30,6 +33,7 @@ const RepeatSponsor = ({
           <ChooseSponsorship
             sponsorForm={sponsorForm}
             exitButtonBehavior={exitButtonBehavior}
+            beneficiary={beneficiary}
           />
         );
       case Step.confirm:
@@ -37,9 +41,9 @@ const RepeatSponsor = ({
       case Step.success:
         return (
           <Final
-            sponsorForm={sponsorForm}
             exitButtonBehavior={exitButtonBehavior}
             loading={penultimateStepLoading}
+            beneficiary={beneficiary}
           />
         );
       default:

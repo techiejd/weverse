@@ -18,10 +18,10 @@ import { Fragment, useState } from "react";
 import { feeCharge, feePercentage, sponsorshipLevels, toCop } from "./utils";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 import {
+  Maker,
   SponsorshipLevel,
   sponsorshipLevel,
 } from "../../../../functions/shared/src";
-import { useCurrentMaker } from "../../context";
 
 const sponsorshipLevelLabel = (sponsorshipLevelIn: SponsorshipLevel) => {
   return (
@@ -36,9 +36,11 @@ const sponsorshipLevelLabel = (sponsorshipLevelIn: SponsorshipLevel) => {
 const ChooseSponsorship = ({
   sponsorForm,
   exitButtonBehavior,
+  beneficiary,
 }: {
   sponsorForm: Record<string, string>;
   exitButtonBehavior: { href: string } | { onClick: () => void };
+  beneficiary: Maker;
 }) => {
   const [customAmount, setCustomAmount] = useState(
     sponsorForm.customAmount
@@ -79,7 +81,6 @@ const ChooseSponsorship = ({
   const total = sponsorshipAmount + feeAmount + tipAmount;
   const displayTotal = toCop(total);
 
-  const [maker, makerLoading, makerError] = useCurrentMaker();
   const [myMember, myMemberLoading, myMemberError] = useMyMember();
   return (
     <Fragment>
@@ -89,7 +90,7 @@ const ChooseSponsorship = ({
 
       <input hidden value={"chooseSponsorship"} name="stepString" readOnly />
       <input hidden value={total} name="total" readOnly />
-      <input hidden value={maker?.id ?? ""} name="maker" readOnly />
+      <input hidden value={beneficiary.id} name="maker" readOnly />
       <input hidden value={myMember?.id ?? ""} name="member" readOnly />
 
       <Stack spacing={2} divider={<Divider />}>

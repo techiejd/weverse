@@ -1,26 +1,25 @@
 import { LoadingButton } from "@mui/lab";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Fragment } from "react";
 import { useAppState } from "../../../../common/context/appState";
-import { useCurrentMaker } from "../../context";
+import { Maker } from "../../../../functions/shared/src";
 
 const Final = ({
-  sponsorForm,
   exitButtonBehavior,
   loading,
+  beneficiary,
 }: {
-  sponsorForm: Record<string, string>;
   exitButtonBehavior: { href: string } | { onClick: () => void };
   loading?: boolean;
+  beneficiary: Maker;
 }) => {
   const appState = useAppState();
-  const [maker, makerLoading, makerError] = useCurrentMaker();
   return (
     <Fragment>
       <Box>
         <Typography>
-          {appState.authState.user?.displayName}, ¡Gracias por patrocinar a
-          {maker?.name}!
+          {appState.authState.user?.displayName}, ¡Gracias por patrocinar a{" "}
+          {beneficiary.name}!
         </Typography>
         <Typography>Juntos cambian el mundo.</Typography>
       </Box>

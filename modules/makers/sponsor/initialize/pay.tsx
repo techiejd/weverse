@@ -1,7 +1,7 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import { Box, Stack } from "@mui/material";
+import { Box } from "@mui/material";
 import { doc, writeBatch } from "firebase/firestore";
 import {
   StripeTextFieldCVC,
@@ -22,20 +22,20 @@ import {
   sponsorshipConverter,
   memberConverter,
 } from "../../../../common/utils/firebase";
-import { SponsorshipLevel } from "../../../../functions/shared/src";
-import { useCurrentMaker } from "../../context";
-import { sponsorshipLevels, toCop } from "../common/utils";
 import { Step } from "./utils";
 import Details from "../common/details";
+import { Maker } from "../../../../functions/shared/src";
 
 const Pay = ({
   sponsorForm,
   handleBack,
   handleNext,
+  beneficiary,
 }: {
   sponsorForm: Record<string, string>;
   handleBack: () => void;
   handleNext: () => void;
+  beneficiary: Maker;
 }) => {
   const appState = useAppState();
 
@@ -47,7 +47,6 @@ const Pay = ({
     const [submitting, setSubmitting] = useState(false);
 
     const [myMember] = useMyMember();
-    const [maker] = useCurrentMaker();
 
     const [cc, setCC] = useState({
       cardNumberComplete: false,
@@ -77,7 +76,7 @@ const Pay = ({
     const { cardNumberError, expiredError, cvcError } = cc;
     const handleSubmit: React.MouseEventHandler = async (event) => {
       const submit = async () => {
-        if (elements == null || maker == undefined || myMember == undefined) {
+        if (elements == null || myMember == undefined) {
           return;
         }
 
@@ -120,7 +119,7 @@ const Pay = ({
           doc(
             appState.firestore,
             "makers",
-            maker.id!,
+            beneficiary.id!,
             "sponsorships",
             myMember.id!
           ).withConverter(sponsorshipConverter),
@@ -132,7 +131,7 @@ const Pay = ({
             "members",
             myMember.id!,
             "sponsorships",
-            maker.id!
+            beneficiary.id!
           ).withConverter(sponsorshipConverter),
           updateSponsorshipData
         );

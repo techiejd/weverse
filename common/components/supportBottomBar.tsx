@@ -24,7 +24,12 @@ import Linkify from "react-linkify";
 import ShareActionArea, { ShareProps } from "./shareActionArea";
 import { useRouter } from "next/router";
 import { z } from "zod";
-import { HowToSupport, maker, posiFormData } from "../../functions/shared/src";
+import {
+  HowToSupport,
+  Maker,
+  maker,
+  posiFormData,
+} from "../../functions/shared/src";
 import IconButtonWithLabel from "./iconButtonWithLabel";
 import CenterBottomFab from "./centerBottomFab";
 import Sponsor from "../../modules/makers/sponsor";
@@ -49,12 +54,14 @@ const SponsorDialog = ({
   sponsoring,
   inAddSponsorshipExperience,
   setInAddSponsorshipExperience,
+  beneficiary,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   sponsoring: boolean;
   inAddSponsorshipExperience: boolean;
   setInAddSponsorshipExperience: Dispatch<SetStateAction<boolean>>;
+  beneficiary: Maker;
 }) => {
   const handleClose = () => setOpen(false);
   const [myMember] = useMyMember();
@@ -92,6 +99,7 @@ const SponsorDialog = ({
             setInAddSponsorshipExperience(false);
           },
         }}
+        beneficiary={beneficiary}
       />
     </Dialog>
   );
@@ -268,6 +276,7 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
         sponsoring={sponsoring}
         inAddSponsorshipExperience={inAddSponsorshipExperience}
         setInAddSponsorshipExperience={setInAddSponsorshipExperience}
+        beneficiary={beneficiary.maker}
       />
       <ContactSupportDialog
         open={connectDialogOpen}
@@ -294,6 +303,7 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
           aria-label="add"
           sx={{ width: 70, height: 70 }}
           onClick={() => {
+            //TODO(techiejd): Honestly posi should be under makers/makerId/posi.
             setSponsorDialogOpen(true);
             if (!sponsoring) setInAddSponsorshipExperience(true);
           }}
