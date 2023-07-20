@@ -19,12 +19,7 @@ import {
   useCurrentMember,
 } from "../../../common/context/weverseUtils";
 import { Sponsorship } from "../../../functions/shared/src";
-import {
-  toCop,
-  sponsorshipLevels,
-  feeCharge,
-  feePercentage,
-} from "./common/utils";
+import { feePercentage, toDisplayCurrency, currencyInfo } from "./common/utils";
 
 const SponsorshipDisplay = ({
   sponsorship,
@@ -37,6 +32,7 @@ const SponsorshipDisplay = ({
   handleCancelSponsorship?: (sponsorship: Sponsorship) => Promise<any>;
   showAmount?: boolean;
 }) => {
+  const sponsorshipLevelInfo = currencyInfo.cop.sponsorshipLevelInfo;
   const [maker] = useMaker(type == "for" ? sponsorship.maker : undefined);
   const [member] = useMember(type == "from" ? sponsorship.member : undefined);
   const [loading, setLoading] = useState(false);
@@ -57,6 +53,7 @@ const SponsorshipDisplay = ({
     type == "for"
       ? undefined
       : (() => {
+          const feeCharge = currencyInfo[sponsorship.currency].feeCharge.amount;
           const tipPercent = sponsorship.tipAmount / 100;
           const amountReceivedFromMemberIfFeePaidByMember =
             (sponsorship.total - feeCharge) / (1 + tipPercent + feePercentage);
@@ -69,8 +66,8 @@ const SponsorshipDisplay = ({
         })();
   const amount = showAmount
     ? amountReceivedFromMember
-      ? toCop(amountReceivedFromMember)
-      : toCop(sponsorship.total)
+      ? toDisplayCurrency[sponsorship.currency](amountReceivedFromMember)
+      : toDisplayCurrency[sponsorship.currency](sponsorship.total)
     : "";
 
   return (
@@ -116,7 +113,7 @@ const SponsorshipDisplay = ({
         secondaryTypographyProps={{ fontSize: 12 }}
       />
       <Typography variant="body2">
-        {sponsorshipLevels[sponsorship.sponsorshipLevel].displayName}
+        {sponsorshipLevelInfo[sponsorship.sponsorshipLevel].displayName}
       </Typography>
     </ListItem>
   );

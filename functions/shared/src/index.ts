@@ -1,11 +1,11 @@
-import {z} from "zod";
+import { z } from "zod";
 
 export const timeStamp = z.any().transform((val, ctx) => {
   if (val instanceof Date) {
     return val;
   }
-  if (typeof val.toDate === 'function') {
-    return (val.toDate() as Date);
+  if (typeof val.toDate === "function") {
+    return val.toDate() as Date;
   }
   ctx.addIssue({
     code: z.ZodIssueCode.custom,
@@ -39,7 +39,7 @@ const howToSupport = z.object({
 });
 export type HowToSupport = z.infer<typeof howToSupport>;
 
-export const ratings = z.object({sum: z.number(), count: z.number()});
+export const ratings = z.object({ sum: z.number(), count: z.number() });
 export type Ratings = z.infer<typeof ratings>;
 
 // TODO(techiejd): go through and extend all the db ones.
@@ -99,7 +99,7 @@ export type Member = z.infer<typeof member>;
 export const like = z.object({
   id: z.string().optional(),
   createdAt: z.date().optional(),
-})
+});
 export type Like = z.infer<typeof like>;
 
 export const socialProof = z.object({
@@ -117,46 +117,48 @@ export type SocialProof = z.infer<typeof socialProof>;
 
 // related to
 // / <reference types="google.maps" />
-const location = z.object({
-  /**
-   * A place ID that can be used to retrieve details about this place using
-   * the place details service (see {@link
-   * google.maps.places.PlacesService.getDetails}).
-   */
-  id: z.string(),
-  /**
-   * Structured information about the place's description, divided into a
-   * main text and a secondary text. We remove lots of google info.
-   * (see {@link google.maps.places.StructuredFormatting}).
-   */
-  structuredFormatting: z.object({
-    mainText: z.string(),
-    secondaryText: z.string(),
-  }),
-  /**
-   * Information about individual terms in the above description, from most to
-   * least specific. For example, "Taco Bell", "TOWN",
-   * and "STATE".
-   */
-  terms: z
-    .object({
-      /**
-       * The offset, in unicode characters, of the start of this term in the
-       * description of the place. AKA first term's offset = 0.
-       */
-      offset: z.number(),
-      /**
-       * The value of this term, for example,"Taco Bell".
-       */
-      value: z.string(),
-    })
-    .array(),
-  /**
-   * An array of types that the prediction belongs to, for example
-   * <code>'establishment'</code> or <code>'geocode'</code>.
-   */
-  types: z.string().array(),
-}).deepPartial(); // TODO(techiejd): Look into this error.
+const location = z
+  .object({
+    /**
+     * A place ID that can be used to retrieve details about this place using
+     * the place details service (see {@link
+     * google.maps.places.PlacesService.getDetails}).
+     */
+    id: z.string(),
+    /**
+     * Structured information about the place's description, divided into a
+     * main text and a secondary text. We remove lots of google info.
+     * (see {@link google.maps.places.StructuredFormatting}).
+     */
+    structuredFormatting: z.object({
+      mainText: z.string(),
+      secondaryText: z.string(),
+    }),
+    /**
+     * Information about individual terms in the above description, from most to
+     * least specific. For example, "Taco Bell", "TOWN",
+     * and "STATE".
+     */
+    terms: z
+      .object({
+        /**
+         * The offset, in unicode characters, of the start of this term in the
+         * description of the place. AKA first term's offset = 0.
+         */
+        offset: z.number(),
+        /**
+         * The value of this term, for example,"Taco Bell".
+         */
+        value: z.string(),
+      })
+      .array(),
+    /**
+     * An array of types that the prediction belongs to, for example
+     * <code>'establishment'</code> or <code>'geocode'</code>.
+     */
+    types: z.string().array(),
+  })
+  .deepPartial(); // TODO(techiejd): Look into this error.
 
 // TODO(techiejd): Reshape db. It should go posi
 // {action: Action, impacts: Impact[], makerId}
@@ -173,20 +175,32 @@ export const posiFormData = z.object({
 
 export type PosiFormData = z.infer<typeof posiFormData>;
 
-const parseDBInfo =
-<T extends z.ZodType<DbBase>>(zAny: T) => z.preprocess((val) => {
-  const {createdAt, ...others} = z.object({}).passthrough().parse(val);
-  return {createdAt: createdAt ? (createdAt as any).toDate() : undefined, ...others};
-}, zAny);
+const parseDBInfo = <T extends z.ZodType<DbBase>>(zAny: T) =>
+  z.preprocess((val) => {
+    const { createdAt, ...others } = z.object({}).passthrough().parse(val);
+    return {
+      createdAt: createdAt ? (createdAt as any).toDate() : undefined,
+      ...others,
+    };
+  }, zAny);
 
-const actionContent = dbBase.extend({type: z.literal("action"), data: parseDBInfo(posiFormData)});
-const socialProofContent = dbBase.extend({type: z.literal("socialProof"), data: parseDBInfo(socialProof)});
+const actionContent = dbBase.extend({
+  type: z.literal("action"),
+  data: parseDBInfo(posiFormData),
+});
+const socialProofContent = dbBase.extend({
+  type: z.literal("socialProof"),
+  data: parseDBInfo(socialProof),
+});
 
-export const content = z.discriminatedUnion("type", 
-[actionContent, 
-socialProofContent]);
+export const content = z.discriminatedUnion("type", [
+  actionContent,
+  socialProofContent,
+]);
 export type Content = z.infer<typeof content>;
 
+const currency = z.enum(["cop", "usd", "eur", "gbp"]);
+export type Currency = z.infer<typeof currency>;
 export const sponsorshipLevel = z.enum(["admirer", "fan", "lover", "custom"]);
 export type SponsorshipLevel = z.infer<typeof sponsorshipLevel>;
 
@@ -202,6 +216,7 @@ export const sponsorship = dbBase.extend({
   maker: z.string(),
   member: z.string(),
   memberPublishable: z.boolean().optional(),
+  currency: currency,
 });
 
 export type Sponsorship = z.infer<typeof sponsorship>;

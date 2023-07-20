@@ -5,8 +5,10 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
+  InputLabel,
   ListItem,
   ListItemText,
+  NativeSelect,
   Radio,
   RadioGroup,
   Slider,
@@ -14,24 +16,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Fragment, useState } from "react";
-import { feeCharge, feePercentage, sponsorshipLevels, toCop } from "./utils";
+import { Fragment, useEffect, useState } from "react";
+import { feePercentage, currencyInfo, toDisplayCurrency } from "./utils";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 import {
+  Currency,
   Maker,
   SponsorshipLevel,
   sponsorshipLevel,
 } from "../../../../functions/shared/src";
-
-const sponsorshipLevelLabel = (sponsorshipLevelIn: SponsorshipLevel) => {
-  return (
-    <FormControlLabel
-      value={sponsorshipLevelIn}
-      control={<Radio />}
-      label={`${sponsorshipLevels[sponsorshipLevelIn].displayName}: ${sponsorshipLevels[sponsorshipLevelIn].displayCurrency}`}
-    />
-  );
-};
 
 const ChooseSponsorship = ({
   sponsorForm,
@@ -42,14 +35,26 @@ const ChooseSponsorship = ({
   exitButtonBehavior: { href: string } | { onClick: () => void };
   beneficiary: Maker;
 }) => {
+  const [currency, setCurrency] = useState<Currency>(
+    sponsorForm.currency ? (sponsorForm.currency as Currency) : "cop"
+  );
+  const sponsorshipLevelInfo = currencyInfo[currency].sponsorshipLevelInfo;
   const [customAmount, setCustomAmount] = useState(
     sponsorForm.customAmount
       ? sponsorForm.customAmount
-      : sponsorshipLevels[sponsorshipLevel.Enum.custom].amount.toString()
+      : sponsorshipLevelInfo[sponsorshipLevel.Enum.custom].amount.toString()
   );
   const [customAmountNumber, setCustomAmountNumber] = useState(
     parseInt(customAmount)
   );
+  useEffect(() => {
+    setCustomAmount(
+      sponsorshipLevelInfo[sponsorshipLevel.Enum.custom].amount.toString()
+    );
+    setCustomAmountNumber(
+      sponsorshipLevelInfo[sponsorshipLevel.Enum.custom].amount
+    );
+  }, [sponsorshipLevelInfo]);
   const [sponsorshipLevelIn, setSponsorshipLevelIn] =
     useState<SponsorshipLevel>(
       sponsorForm.sponsorshipLevel
@@ -64,26 +69,66 @@ const ChooseSponsorship = ({
   const sponsorshipAmount =
     sponsorshipLevelIn == sponsorshipLevel.Enum.custom
       ? customAmountNumber
-      : sponsorshipLevels[sponsorshipLevelIn].amount;
-  const feeAmount = makerPaysFee
-    ? 0
-    : Math.ceil(feePercentage * sponsorshipAmount + feeCharge);
-  const feeDisplayAmount = toCop(feeAmount);
+      : sponsorshipLevelInfo[sponsorshipLevelIn].amount;
+  const feeAmount = (() => {
+    const feeAmount =
+      feePercentage * sponsorshipAmount +
+      currencyInfo[currency].feeCharge.amount;
+    return makerPaysFee
+      ? 0
+      : currency == "cop"
+      ? Math.ceil(feeAmount)
+      : Number(feeAmount.toFixed(2));
+  })();
+  const feeDisplayAmount = toDisplayCurrency[currency](feeAmount);
 
   const sponsorshipDisplayAmount =
     sponsorshipLevelIn == sponsorshipLevel.Enum.custom
-      ? toCop(sponsorshipAmount)
-      : sponsorshipLevels[sponsorshipLevelIn].displayCurrency;
+      ? toDisplayCurrency[currency](sponsorshipAmount)
+      : sponsorshipLevelInfo[sponsorshipLevelIn].displayCurrency;
 
-  const tipAmount = Math.floor((sponsorshipAmount * tipPercentage) / 100);
-  const tipDisplayAmount = toCop(tipAmount);
+  const tipAmount = (() => {
+    return currency == "cop"
+      ? Math.ceil((sponsorshipAmount * tipPercentage) / 100)
+      : Number(((sponsorshipAmount * tipPercentage) / 100).toFixed(2));
+  })();
+  const tipDisplayAmount = toDisplayCurrency[currency](tipAmount);
 
   const total = sponsorshipAmount + feeAmount + tipAmount;
-  const displayTotal = toCop(total);
+  const displayTotal = toDisplayCurrency[currency](total);
 
-  const [myMember, myMemberLoading, myMemberError] = useMyMember();
+  const [myMember] = useMyMember();
+
+  const sponsorshipLevelLabel = (sponsorshipLevelIn: SponsorshipLevel) => {
+    return (
+      <FormControlLabel
+        value={sponsorshipLevelIn}
+        control={<Radio />}
+        label={`${sponsorshipLevelInfo[sponsorshipLevelIn].displayName}: ${sponsorshipLevelInfo[sponsorshipLevelIn].displayCurrency}`}
+      />
+    );
+  };
+
   return (
     <Fragment>
+      <Stack direction="row" spacing={2} alignItems="center">
+        <Typography>Escoge tu divisa</Typography>
+        <NativeSelect
+          inputProps={{
+            name: "currency",
+            id: "currency",
+          }}
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value as Currency)}
+          disableUnderline
+          sx={{ border: "1px solid #ccc", borderRadius: 4, pl: 1 }}
+        >
+          <option value="cop">COP 🇨🇴</option>
+          <option value="usd">USD 🇺🇸</option>
+          <option value="eur">EUR 🇪🇺</option>
+          <option value="gbp">GBP 🇬🇧</option>
+        </NativeSelect>
+      </Stack>
       <Typography variant="h6" gutterBottom>
         Elige tu nivel de patrocinio
       </Typography>
@@ -98,7 +143,7 @@ const ChooseSponsorship = ({
           <ListItem sx={{ px: 0 }}>
             <ListItemText
               primary={"Patrocinio"}
-              secondary={`Nivel ${sponsorshipLevels[sponsorshipLevelIn].displayName}`}
+              secondary={`Nivel ${sponsorshipLevelInfo[sponsorshipLevelIn].displayName}`}
             />
             <Typography variant="body2">{sponsorshipDisplayAmount}</Typography>
           </ListItem>
@@ -127,22 +172,32 @@ const ChooseSponsorship = ({
                         }
                         onChange={(e) => {
                           const justNumbers = e.target.value.replace(
-                            /[^0-9]/g,
+                            /[^0-9]*/g,
                             ""
                           );
                           setCustomAmountNumber(parseInt(justNumbers || "0"));
                           setCustomAmount(justNumbers);
                         }}
+                        onKeyDown={(e) => {
+                          var invalidChars = ["-", "+", "e", "."];
+                          if (invalidChars.includes(e.key)) {
+                            e.preventDefault();
+                          }
+                        }}
                         inputMode="numeric"
                         inputProps={{
                           min:
                             sponsorshipLevelIn === sponsorshipLevel.Enum.custom
-                              ? 20_000
+                              ? sponsorshipLevelInfo[
+                                  sponsorshipLevel.Enum.custom
+                                ].amount
                               : undefined,
                           type: "number",
                         }}
                       />
-                      <Typography>{toCop(customAmountNumber)}</Typography>
+                      <Typography>
+                        {toDisplayCurrency[currency](customAmountNumber)}
+                      </Typography>
                     </Stack>
                   }
                 />
@@ -185,9 +240,9 @@ const ChooseSponsorship = ({
           <ListItem sx={{ pt: 1, px: 0 }}>
             <ListItemText
               primary={"Tarifa a la pasarela de pagos"}
-              secondary={`${(feePercentage * 100).toFixed(1)}% + ${toCop(
-                feeCharge
-              )} pesos por transacción.`}
+              secondary={`${(feePercentage * 100).toFixed(1)}% + ${
+                currencyInfo[currency].feeCharge.displayAmount
+              } pesos por transacción.`}
             />
             <Typography variant="body2">{feeDisplayAmount}</Typography>
           </ListItem>

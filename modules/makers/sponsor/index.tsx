@@ -97,9 +97,8 @@ export default function Sponsor({
             form.forEach((value, key) => {
               newSponsorForm[key] = value as string;
             });
-            setSponsorForm((sponsorForm) => {
-              return newSponsorForm;
-            });
+            setSponsorForm(newSponsorForm);
+            console.log(newSponsorForm);
             submit(newSponsorForm);
 
             e.preventDefault();

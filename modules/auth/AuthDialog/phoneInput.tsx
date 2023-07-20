@@ -12,7 +12,7 @@ const PhoneInput = ({
   const [phoneNumberIn, setPhoneNumberIn] = useState("");
 
   const onPhoneNumberChange = (value: string, info: MuiTelInputInfo) => {
-    if (info.nationalNumber == null || info.nationalNumber.length <= 10) {
+    if (info.nationalNumber == null || info.nationalNumber.length <= 7) {
       setAuthDialogState((aDS) => ({
         ...aDS,
         phoneNumber: {

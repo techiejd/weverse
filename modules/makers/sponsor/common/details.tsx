@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Grid, Stack, Typography } from "@mui/material";
-import { SponsorshipLevel } from "../../../../functions/shared/src";
+import { Currency, SponsorshipLevel } from "../../../../functions/shared/src";
 import { Fragment } from "react";
-import { sponsorshipLevels, toCop } from "./utils";
+import { currencyInfo, toDisplayCurrency } from "./utils";
 
 const LineItems = ({
   lineItems,
@@ -36,7 +36,7 @@ const Details = ({
   sponsorship: sponsorshipIn,
   customerDetails: customerDetailsIn,
 }: {
-  sponsorship: { sponsorshipLevel: string; total: string };
+  sponsorship: { sponsorshipLevel: string; total: string; currency: Currency };
   customerDetails?: {
     firstName: string;
     lastName: string;
@@ -50,10 +50,16 @@ const Details = ({
     {
       name: "Tipo de patrocinio",
       detail:
-        sponsorshipLevels[sponsorshipIn.sponsorshipLevel as SponsorshipLevel]
-          .displayName,
+        currencyInfo[sponsorshipIn.currency].sponsorshipLevelInfo[
+          sponsorshipIn.sponsorshipLevel as SponsorshipLevel
+        ].displayName,
     },
-    { name: "Total", detail: toCop(parseInt(sponsorshipIn.total)) },
+    {
+      name: "Total",
+      detail: toDisplayCurrency[sponsorshipIn.currency](
+        Number(sponsorshipIn.total)
+      ),
+    },
   ];
 
   const customerDetails = customerDetailsIn
