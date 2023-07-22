@@ -12,7 +12,8 @@ const PhoneInput = ({
   const [phoneNumberIn, setPhoneNumberIn] = useState("");
 
   const onPhoneNumberChange = (value: string, info: MuiTelInputInfo) => {
-    if (info.nationalNumber == null || info.nationalNumber.length <= 10) {
+    if (info.nationalNumber == null || info.nationalNumber.length <= 12) {
+      // https://www.quora.com/What-is-maximum-and-minimum-length-of-any-mobile-number-across-the-world
       setAuthDialogState((aDS) => ({
         ...aDS,
         phoneNumber: {

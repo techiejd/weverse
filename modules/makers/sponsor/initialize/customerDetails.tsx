@@ -20,12 +20,13 @@ const PhoneInput = ({
 }) => {
   const [phoneIn, setPhoneIn] = useState(sponsorForm.phone ?? "");
   const onPhoneChange = (value: string, info: MuiTelInputInfo) => {
-    if (info.nationalNumber == null || info.nationalNumber.length <= 10) {
+    if (info.nationalNumber == null || info.nationalNumber.length <= 12) {
+      // https://www.quora.com/What-is-maximum-and-minimum-length-of-any-mobile-number-across-the-world
       setPhoneIn(value);
       setPhoneError(
         !info.countryCallingCode ||
-          !info.nationalNumber == null ||
-          info.nationalNumber?.length != 10
+          !info.nationalNumber ||
+          info.nationalNumber?.length < 4
       );
     }
   };

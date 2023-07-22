@@ -272,7 +272,7 @@ const AuthDialogContent = ({
     if (
       !phoneNumber.countryCallingCode ||
       !phoneNumber.nationalNumber == null ||
-      phoneNumber.nationalNumber!.length < 7
+      phoneNumber.nationalNumber!.length < 4 // https://www.quora.com/What-is-maximum-and-minimum-length-of-any-mobile-number-across-the-world
     ) {
       setAuthDialogState((aDS) =>
         aDS
