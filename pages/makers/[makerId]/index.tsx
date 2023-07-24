@@ -192,13 +192,17 @@ const IncubatorSection = () => {
       <Typography variant="h2" sx={{ fontSize: "bold" }}>
         Incubadora:
       </Typography>
-      <Typography variant="h3">Para validar:</Typography>
-      {needsValidation && needsValidation.length > 0 ? (
-        needsValidation.map((action) => (
-          <ValidateActionPortal key={action.id} action={action} />
-        ))
-      ) : (
-        <Typography>No hay nada para validar.</Typography>
+      {isMyMaker && (
+        <Fragment>
+          <Typography variant="h3">Para validar:</Typography>
+          {needsValidation && needsValidation.length > 0 ? (
+            needsValidation.map((action) => (
+              <ValidateActionPortal key={action.id} action={action} />
+            ))
+          ) : (
+            <Typography>No hay nada para validar.</Typography>
+          )}
+        </Fragment>
       )}
       <Typography variant="h3">Incubados:</Typography>
       <Stack spacing={2}>
