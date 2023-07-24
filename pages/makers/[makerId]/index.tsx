@@ -3,6 +3,10 @@ import {
   Avatar,
   Box,
   Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -11,6 +15,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  LinearProgress,
   List,
   ListItemButton,
   ListItemIcon,
@@ -43,10 +48,11 @@ import ImpactCard from "../../../modules/posi/action/card";
 import {
   getMakerTypeLabel,
   useCurrentIncubatees,
+  useCurrentNeedsValidation,
   useMyMaker,
 } from "../../../common/context/weverseUtils";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
-import { Incubatee, Maker } from "../../../functions/shared/src";
+import { Incubatee, Maker, PosiFormData } from "../../../functions/shared/src";
 import { Content } from "../../../modules/posi/content";
 import RatingsStack from "../../../common/components/ratings";
 import ShareActionArea from "../../../common/components/shareActionArea";
@@ -59,12 +65,13 @@ import SocialProofCard from "../../../modules/posi/socialProofCard";
 import Sponsorships from "../../../modules/makers/sponsor/list";
 import MakerCard from "../../../modules/makers/MakerCard";
 import { useAppState } from "../../../common/context/appState";
-import { doc, writeBatch } from "firebase/firestore";
+import { doc, updateDoc, writeBatch } from "firebase/firestore";
 import {
   buildShareLinks,
   useCopyToClipboard,
 } from "../../../modules/makers/inviteAsMaker";
 import UnderConstruction from "../../../modules/posi/underConstruction";
+import { posiFormDataConverter } from "../../../common/utils/firebase";
 //TODO(techiejd): Clean up this file
 
 const IncubatorSection = () => {
@@ -76,10 +83,11 @@ const IncubatorSection = () => {
   const notAcceptedIncubatees = incubatees?.filter(
     (incubatee) => !incubatee.acceptedInvite
   );
+  const [needsValidation] = useCurrentNeedsValidation();
   const [myMaker] = useMyMaker();
   const [maker] = useCurrentMaker();
   const isMyMaker = myMaker && maker && myMaker.id == maker.id;
-  const joinPrompt = `${maker?.name}te invita a unirte a su red de incubadora.`;
+  const joinPrompt = `${maker?.name} te invita a unirte a su red de incubadora.`;
   const [loading, setLoading] = useState(false);
   const [value, copy] = useCopyToClipboard();
 
@@ -145,9 +153,50 @@ const IncubatorSection = () => {
     );
   };
 
+  const ValidateActionPortal = ({ action }: { action: PosiFormData }) => {
+    const [validating, setValidating] = useState(false);
+    return (
+      <Card>
+        <CardHeader title="Es valida esta acción?" />
+        <CardContent>
+          <ImpactCard posiData={action} />
+        </CardContent>
+        <CardActions>
+          {validating ? (
+            <CircularProgress />
+          ) : (
+            <Button
+              variant="contained"
+              onClick={() => {
+                setValidating(true);
+                updateDoc(
+                  doc(appState.firestore, "impacts", action.id!).withConverter(
+                    posiFormDataConverter
+                  ),
+                  {
+                    "validation.validated": true,
+                  }
+                );
+              }}
+            >
+              Sí, es valida.
+            </Button>
+          )}
+        </CardActions>
+      </Card>
+    );
+  };
+
   return (
     <Fragment>
-      <Typography variant="h2">Incubadora:</Typography>
+      <Typography variant="h2" sx={{ fontSize: "bold" }}>
+        Incubadora:
+      </Typography>
+      <Typography variant="h3">Para validar:</Typography>
+      {needsValidation?.map((action) => (
+        <ValidateActionPortal key={action.id} action={action} />
+      ))}
+      <Typography variant="h3">Incubados:</Typography>
       <Stack spacing={2}>
         {acceptedIncubatees && acceptedIncubatees.length > 0 ? (
           acceptedIncubatees.map((incubatee) => (
@@ -159,7 +208,7 @@ const IncubatorSection = () => {
       </Stack>
       {isMyMaker && (
         <Fragment>
-          <Typography variant="h2">Invitaciones:</Typography>
+          <Typography variant="h3">Invitaciones:</Typography>
           <Stack spacing={2}>
             {notAcceptedIncubatees && notAcceptedIncubatees.length > 0 ? (
               notAcceptedIncubatees.map((incubatee) => (

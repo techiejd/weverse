@@ -1,4 +1,11 @@
-import { Box, Stack, Divider, Button, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Stack,
+  Divider,
+  Button,
+  CircularProgress,
+  Typography,
+} from "@mui/material";
 import { User } from "firebase/auth";
 import { doc } from "firebase/firestore";
 import { useEffect, useState } from "react";
@@ -43,6 +50,26 @@ const PosiForm = ({
     }
   }, [myMaker, setFormData]);
 
+  const IncubatorValidationNotice = ({ incubator }: { incubator: string }) => {
+    const [formData, setFormData] = useFormData();
+    useEffect(() => {
+      if (setFormData) {
+        setFormData((fD) => ({
+          ...fD,
+          validation: { validated: false, validator: incubator },
+        }));
+      }
+    }, [incubator, setFormData]);
+    return (
+      <Box sx={{ p: 2 }}>
+        <Typography>
+          Aviso: OneWe buscará la validación de tu incubadora.
+        </Typography>
+        <Button variant={"outlined"}>Más información</Button>
+      </Box>
+    );
+  };
+
   return (
     <Box>
       <form
@@ -78,6 +105,11 @@ const PosiForm = ({
               <Section label="¿Dónde realizaste esta acción?">
                 <CitySearchInput />
               </Section>
+              {myMaker && myMaker.incubator && (
+                <Section label="Trabajando con tu incubadora">
+                  <IncubatorValidationNotice incubator={myMaker.incubator} />
+                </Section>
+              )}
               {uploading || formData.media == "loading" ? (
                 <CircularProgress />
               ) : onInteraction.type == "create" ? (

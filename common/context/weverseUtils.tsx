@@ -255,3 +255,20 @@ export const useCurrentIncubatees = () => {
       : undefined
   );
 };
+
+export const useCurrentNeedsValidation = () => {
+  const router = useRouter();
+  const appState = useAppState();
+  const { makerId } = router.query;
+  return useCollectionData(
+    makerId && makerId != ""
+      ? query(
+          collection(appState.firestore, "impacts").withConverter(
+            posiFormDataConverter
+          ),
+          where("validation.validator", "==", makerId),
+          where("validation.validated", "==", false)
+        )
+      : undefined
+  );
+};
