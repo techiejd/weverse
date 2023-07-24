@@ -7,11 +7,13 @@ import {
   CardHeader,
   Icon,
   CardContent,
+  CardActionArea,
 } from "@mui/material";
 import Media from "./../media";
 import MakerCard from "../../makers/MakerCard";
 import { PosiFormData } from "../../../functions/shared/src";
 import RatingsStack from "../../../common/components/ratings";
+import ValidationInfo from "./card/validationInfo";
 
 const AboutContent = ({
   summary,
@@ -20,6 +22,7 @@ const AboutContent = ({
   howToIdentifyImpactedPeople,
   makerId,
   ratings,
+  validation,
 }: PosiFormData) => {
   // TODO(techiejd): Look into why it's happening.
   return summary && makerId && media ? (
@@ -28,6 +31,11 @@ const AboutContent = ({
         <Typography variant="h1" fontSize={35}>
           {summary}
         </Typography>
+        {validation && (
+          <CardActionArea href={`/makers/${validation.validator}`}>
+            <ValidationInfo {...validation} />
+          </CardActionArea>
+        )}
         <RatingsStack ratings={ratings} />
       </Box>
       <Stack divider={<Divider flexItem />} spacing={1} m={1.5}>

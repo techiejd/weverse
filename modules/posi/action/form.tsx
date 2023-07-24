@@ -1,20 +1,9 @@
-import {
-  Box,
-  Stack,
-  Divider,
-  Button,
-  CircularProgress,
-  Typography,
-} from "@mui/material";
-import { User } from "firebase/auth";
-import { doc } from "firebase/firestore";
+import { Box, Stack, Divider, Button, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useDocumentData } from "react-firebase-hooks/firestore";
 import Section from "../../../common/components/section";
 import { CitySearchInput } from "../input";
 import SummaryInput from "../input/SummaryInput";
 import {
-  useFormData,
   WorkingCopyPosiFormData,
   PosiFormContext,
   PosiFormDispatchContext,
@@ -22,7 +11,8 @@ import {
 import ImpactedPersonsInput from "../input/impactedPersonsInput";
 import ImpactMediaInput from "../input/impactMediaInput";
 import { PosiFormData, posiFormData } from "../../../functions/shared/src";
-import { useMyMaker } from "../../../common/context/weverseUtils";
+import { useMaker, useMyMaker } from "../../../common/context/weverseUtils";
+import ValidatorInput from "../input/validatorInput";
 
 type onInteractionProp =
   | { type: "create"; onSubmit: (posiFormData: PosiFormData) => Promise<void> }
@@ -49,26 +39,6 @@ const PosiForm = ({
       setFormData((fD) => ({ ...fD, makerId: myMaker.id }));
     }
   }, [myMaker, setFormData]);
-
-  const IncubatorValidationNotice = ({ incubator }: { incubator: string }) => {
-    const [formData, setFormData] = useFormData();
-    useEffect(() => {
-      if (setFormData) {
-        setFormData((fD) => ({
-          ...fD,
-          validation: { validated: false, validator: incubator },
-        }));
-      }
-    }, [incubator, setFormData]);
-    return (
-      <Box sx={{ p: 2 }}>
-        <Typography>
-          Aviso: OneWe buscará la validación de tu incubadora.
-        </Typography>
-        <Button variant={"outlined"}>Más información</Button>
-      </Box>
-    );
-  };
 
   return (
     <Box>
@@ -107,7 +77,7 @@ const PosiForm = ({
               </Section>
               {myMaker && myMaker.incubator && (
                 <Section label="Trabajando con tu incubadora">
-                  <IncubatorValidationNotice incubator={myMaker.incubator} />
+                  <ValidatorInput incubator={myMaker.incubator} />
                 </Section>
               )}
               {uploading || formData.media == "loading" ? (

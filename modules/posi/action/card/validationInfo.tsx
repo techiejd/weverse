@@ -1,7 +1,8 @@
 import { Flaky, Verified } from "@mui/icons-material";
-import { Avatar, Icon, Stack, Typography } from "@mui/material";
+import { Icon, Stack, Typography } from "@mui/material";
 import { Validation } from "../../../../functions/shared/src";
 import { useMaker } from "../../../../common/context/weverseUtils";
+import ValidatorBadge from "../../../../common/components/validatorBadge";
 const ValidationInfo = ({ validated, validator: validatorId }: Validation) => {
   const [validator] = useMaker(validatorId);
   const ValidatedIcon = validated ? Verified : Flaky;
@@ -18,12 +19,7 @@ const ValidationInfo = ({ validated, validator: validatorId }: Validation) => {
           {validationStatus}
         </Typography>
       </Stack>
-      <Stack direction="row" alignItems="center" spacing={0.5}>
-        <Avatar src={validator?.pic} sx={{ width: 18, height: 18 }} />
-        <Typography fontSize={15} fontWeight={600} color="#615F5F">
-          {validator?.name || "Espere un momento"}
-        </Typography>
-      </Stack>
+      <ValidatorBadge validator={validator} />
     </Stack>
   );
 };
