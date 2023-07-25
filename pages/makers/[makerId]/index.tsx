@@ -15,7 +15,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  LinearProgress,
   List,
   ListItemButton,
   ListItemIcon,
@@ -196,9 +195,13 @@ const IncubatorSection = () => {
         <Fragment>
           <Typography variant="h3">Para validar:</Typography>
           {needsValidation && needsValidation.length > 0 ? (
-            needsValidation.map((action) => (
-              <ValidateActionPortal key={action.id} action={action} />
-            ))
+            <Grid container spacing={1}>
+              {needsValidation.map((action) => (
+                <Grid item sm={12} md={6} lg={4} xl={3} key={action.id}>
+                  <ValidateActionPortal key={action.id} action={action} />
+                </Grid>
+              ))}
+            </Grid>
           ) : (
             <Typography>No hay nada para validar.</Typography>
           )}
