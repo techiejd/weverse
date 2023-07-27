@@ -62,6 +62,7 @@ export const maker = z.object({
   ratings: ratings.optional(),
   email: z.string().optional(),
   incubator: z.string().optional(),
+  validationProcess: z.string().optional(),
 });
 export type Maker = z.infer<typeof maker>;
 

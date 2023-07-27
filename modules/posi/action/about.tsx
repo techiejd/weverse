@@ -31,11 +31,7 @@ const AboutContent = ({
         <Typography variant="h1" fontSize={35}>
           {summary}
         </Typography>
-        {validation && (
-          <CardActionArea href={`/makers/${validation.validator}`}>
-            <ValidationInfo {...validation} />
-          </CardActionArea>
-        )}
+        {validation && <ValidationInfo {...validation} />}
         <RatingsStack ratings={ratings} />
       </Box>
       <Stack divider={<Divider flexItem />} spacing={1} m={1.5}>
