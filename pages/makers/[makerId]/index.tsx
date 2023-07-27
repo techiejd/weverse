@@ -191,6 +191,11 @@ const IncubatorSection = () => {
       <Typography variant="h2" sx={{ fontSize: "bold" }}>
         Incubadora:
       </Typography>
+      <Typography variant="h3">Proceso de validación:</Typography>
+      <Typography sx={{ whiteSpace: "pre-wrap" }}>
+        {maker?.validationProcess ||
+          "La incubadora no ha subido su proceso de validación"}
+      </Typography>
       {isMyMaker && (
         <Fragment>
           <Typography variant="h3">Para validar:</Typography>
