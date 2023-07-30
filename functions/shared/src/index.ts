@@ -62,6 +62,7 @@ export const maker = z.object({
   ratings: ratings.optional(),
   email: z.string().optional(),
   incubator: z.string().optional(),
+  validationProcess: z.string().optional(),
 });
 export type Maker = z.infer<typeof maker>;
 
@@ -160,6 +161,12 @@ const location = z
   })
   .deepPartial(); // TODO(techiejd): Look into this error.
 
+const validation = z.object({
+  validator: z.string(), // incubator id
+  validated: z.boolean(),
+});
+export type Validation = z.infer<typeof validation>;
+
 // TODO(techiejd): Reshape db. It should go posi
 // {action: Action, impacts: Impact[], makerId}
 export const posiFormData = z.object({
@@ -171,6 +178,7 @@ export const posiFormData = z.object({
   makerId: z.string(), // TODO(techiejd): How many chars is the id?
   createdAt: z.date().optional(),
   ratings: ratings.optional(),
+  validation: validation.optional(),
 });
 
 export type PosiFormData = z.infer<typeof posiFormData>;

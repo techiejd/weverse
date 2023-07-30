@@ -1,13 +1,9 @@
 import { Box, Stack, Divider, Button, CircularProgress } from "@mui/material";
-import { User } from "firebase/auth";
-import { doc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useDocumentData } from "react-firebase-hooks/firestore";
 import Section from "../../../common/components/section";
 import { CitySearchInput } from "../input";
 import SummaryInput from "../input/SummaryInput";
 import {
-  useFormData,
   WorkingCopyPosiFormData,
   PosiFormContext,
   PosiFormDispatchContext,
@@ -15,7 +11,8 @@ import {
 import ImpactedPersonsInput from "../input/impactedPersonsInput";
 import ImpactMediaInput from "../input/impactMediaInput";
 import { PosiFormData, posiFormData } from "../../../functions/shared/src";
-import { useMyMaker } from "../../../common/context/weverseUtils";
+import { useMaker, useMyMaker } from "../../../common/context/weverseUtils";
+import ValidatorInput from "../input/validatorInput";
 
 type onInteractionProp =
   | { type: "create"; onSubmit: (posiFormData: PosiFormData) => Promise<void> }
@@ -78,6 +75,11 @@ const PosiForm = ({
               <Section label="¿Dónde realizaste esta acción?">
                 <CitySearchInput />
               </Section>
+              {myMaker && myMaker.incubator && (
+                <Section label="Trabajando con tu incubadora">
+                  <ValidatorInput incubator={myMaker.incubator} />
+                </Section>
+              )}
               {uploading || formData.media == "loading" ? (
                 <CircularProgress />
               ) : onInteraction.type == "create" ? (

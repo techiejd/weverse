@@ -124,6 +124,10 @@ const DetailedInput = ({
     }));
   };
 
+  const setValidationProcess = (validationProcess: string) => {
+    setVal((maker) => ({ ...maker, validationProcess }));
+  };
+
   const askForInfoMsg =
     val.type == "individual" ? "" : "Cuéntanos un poco sobre tu organización";
 
@@ -131,6 +135,48 @@ const DetailedInput = ({
     val.type == "individual"
       ? "Selecciona una imagen con la que quieras ser identificado por la comunidad OneWe."
       : "Sube una foto de tu logo.";
+
+  const targetedQuestion =
+    val.organizationType == organizationType.Enum.incubator ? (
+      <Section
+        label={`Como valida tu incubadora las acciones de los makers para darle un sello de aprobacion?`}
+      >
+        <TextField
+          fullWidth
+          label="Deja aquí los detalles de cómo se validan las acciones. (500 caracteres.)"
+          name="validationProcess"
+          multiline
+          minRows={2}
+          inputProps={{ maxLength: 500 }}
+          helperText="Recuerda, la integridad depende de que se siga estrictamente este proceso."
+          value={val.validationProcess ? val.validationProcess : ""}
+          onChange={(e) => {
+            setValidationProcess(e.target.value);
+          }}
+        />
+      </Section>
+    ) : (
+      <Section
+        label={`¿Qué tipo de apoyo necesita${
+          val.type == "organization" ? "" : "s"
+        }?`}
+      >
+        <TextField
+          fullWidth
+          label="Deja aquí los datos de contacto para recibir ayudas de cualquier otro
+    tipo y sea explicito a lo que está pidiendo. (500 caracteres.)"
+          name="summary"
+          multiline
+          minRows={2}
+          inputProps={{ maxLength: 500 }}
+          helperText="Si tu iniciativa está listo para recibir voluntarios, hablar con medios de comunicación o con especialistas como abogados, desarrolladores, etc, por favor, indica tu solicitud y los enlaces o los detalles para ponerse en contacto contigo. Por ejemplo: número telefónico, correo electrónico, redes sociales, página web, etc."
+          value={val.howToSupport?.contact ? val.howToSupport.contact : ""}
+          onChange={(e) => {
+            setContactSupport(e.target.value);
+          }}
+        />
+      </Section>
+    );
 
   return (
     <Stack margin={2} spacing={2}>
@@ -187,26 +233,7 @@ const DetailedInput = ({
           onChange={(e) => setAboutInput(e.target.value)}
         />
       </Section>
-      <Section
-        label={`¿Qué tipo de apoyo necesita${
-          val.type == "organization" ? "" : "s"
-        }?`}
-      >
-        <TextField
-          fullWidth
-          label="Deja aquí los datos de contacto para recibir ayudas de cualquier otro
-          tipo y sea explicito a lo que está pidiendo. (500 caracteres.)"
-          name="summary"
-          multiline
-          minRows={2}
-          inputProps={{ maxLength: 500 }}
-          helperText="Si tu iniciativa está listo para recibir voluntarios, hablar con medios de comunicación o con especialistas como abogados, desarrolladores, etc, por favor, indica tu solicitud y los enlaces o los detalles para ponerse en contacto contigo. Por ejemplo: número telefónico, correo electrónico, redes sociales, página web, etc."
-          value={val.howToSupport?.contact ? val.howToSupport.contact : ""}
-          onChange={(e) => {
-            setContactSupport(e.target.value);
-          }}
-        />
-      </Section>
+      {targetedQuestion}
     </Stack>
   );
 };

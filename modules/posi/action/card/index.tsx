@@ -13,6 +13,7 @@ import RatingsStack from "../../../../common/components/ratings";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import LogInPrompt from "../../../../common/components/logInPrompt";
 import { useMyMember } from "../../../../common/context/weverseUtils";
+import ValidationInfo from "./validationInfo";
 
 const LogInPromptDialog = ({
   open,
@@ -110,6 +111,7 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
             {posiData.summary}
           </Typography>
           <RatingsStack ratings={posiData.ratings} />
+          {posiData.validation && <ValidationInfo {...posiData.validation} />}
         </CardContent>
       </CardActionArea>
     </Card>
