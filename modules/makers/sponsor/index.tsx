@@ -98,7 +98,6 @@ export default function Sponsor({
               newSponsorForm[key] = value as string;
             });
             setSponsorForm(newSponsorForm);
-            console.log(newSponsorForm);
             submit(newSponsorForm);
 
             e.preventDefault();

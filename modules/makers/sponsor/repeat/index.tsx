@@ -7,6 +7,8 @@ import StepperHeader from "../common/stepperHeader";
 import Final from "../common/final";
 import ChooseSponsorship from "../common/chooseSponsorship";
 import { Maker } from "../../../../functions/shared/src";
+import { useMyMember } from "../../../../common/context/weverseUtils";
+import { CircularProgress } from "@mui/material";
 
 const steps = ["Elige", "Confirma"];
 
@@ -24,17 +26,21 @@ const RepeatSponsor = ({
   beneficiary: Maker;
 }) => {
   const repeatSponsorStep = step as Step;
+  const [myMember] = useMyMember();
   function getStepContent() {
     const penultimateStepLoading =
       sponsorForm[Step.toString(Step.confirm)] == "loading";
     switch (repeatSponsorStep) {
       case Step.chooseSponsorship:
         return (
-          <ChooseSponsorship
-            sponsorForm={sponsorForm}
-            exitButtonBehavior={exitButtonBehavior}
-            beneficiary={beneficiary}
-          />
+          (myMember && (
+            <ChooseSponsorship
+              sponsorForm={sponsorForm}
+              exitButtonBehavior={exitButtonBehavior}
+              beneficiary={beneficiary}
+              currency={myMember.customer!.currency}
+            />
+          )) || <CircularProgress />
         );
       case Step.confirm:
         return <Confirm sponsorForm={sponsorForm} handleBack={handleBack} />;

@@ -121,29 +121,6 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
     customer: customerIn,
   } = body;
 
-  console.log({
-    member,
-    maker,
-    total,
-    sponsorshipLevel,
-    customAmount,
-    tipAmount,
-    denyFee,
-    memberPublishable,
-    prevSponsorshipPrice,
-    currency,
-    firstName,
-    lastName,
-    email,
-    phone,
-    postalCode,
-    countryCode,
-    country,
-    sponsorshipPriceIn,
-    subscriptionIn,
-    customerIn,
-  });
-
   const makerSponsorshipDoc = firestore
     .doc(`makers/${maker}/sponsorships/${member}`)
     .withConverter(Utils.sponsorshipConverter);
@@ -231,6 +208,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
             country,
             countryCode,
           },
+          currency,
         };
         let customerPromise: Promise<Stripe.Customer>;
         const isAnUpdate = customerIn && subscriptionIn;

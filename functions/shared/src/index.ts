@@ -66,6 +66,9 @@ export const maker = z.object({
 });
 export type Maker = z.infer<typeof maker>;
 
+const currency = z.enum(["cop", "usd", "eur", "gbp"]);
+export type Currency = z.infer<typeof currency>;
+
 const customer = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
@@ -76,6 +79,7 @@ const customer = z.object({
     country: z.string().min(1),
     countryCode: z.string().min(1),
   }),
+  currency: currency,
 });
 
 const stripe = z.object({
@@ -207,8 +211,6 @@ export const content = z.discriminatedUnion("type", [
 ]);
 export type Content = z.infer<typeof content>;
 
-const currency = z.enum(["cop", "usd", "eur", "gbp"]);
-export type Currency = z.infer<typeof currency>;
 export const sponsorshipLevel = z.enum(["admirer", "fan", "lover", "custom"]);
 export type SponsorshipLevel = z.infer<typeof sponsorshipLevel>;
 

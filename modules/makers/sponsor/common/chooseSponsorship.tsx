@@ -5,7 +5,6 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
-  InputLabel,
   ListItem,
   ListItemText,
   NativeSelect,
@@ -30,13 +29,15 @@ const ChooseSponsorship = ({
   sponsorForm,
   exitButtonBehavior,
   beneficiary,
+  currency: currencyIn,
 }: {
   sponsorForm: Record<string, string>;
   exitButtonBehavior: { href: string } | { onClick: () => void };
   beneficiary: Maker;
+  currency?: Currency;
 }) => {
   const [currency, setCurrency] = useState<Currency>(
-    sponsorForm.currency ? (sponsorForm.currency as Currency) : "cop"
+    currencyIn || (sponsorForm.currency as Currency) || ("cop" as Currency)
   );
   const sponsorshipLevelInfo = currencyInfo[currency].sponsorshipLevelInfo;
   const [customAmount, setCustomAmount] = useState(
@@ -109,10 +110,21 @@ const ChooseSponsorship = ({
     );
   };
 
-  return (
-    <Fragment>
-      <Stack direction="row" spacing={2} alignItems="center">
-        <Typography>Escoge tu divisa</Typography>
+  const ChooseCurrency = () => {
+    return (
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ display: currencyIn ? "none" : "flex" }}
+      >
+        <Stack>
+          <Typography>Escoge tu divisa</Typography>
+          <Typography variant="body2" color="text.secondary">
+            Solo puedes elegir la divisa en este primer patrocinio, porque
+            almacenamos este dato.
+          </Typography>
+        </Stack>
         <NativeSelect
           inputProps={{
             name: "currency",
@@ -121,7 +133,12 @@ const ChooseSponsorship = ({
           value={currency}
           onChange={(e) => setCurrency(e.target.value as Currency)}
           disableUnderline
-          sx={{ border: "1px solid #ccc", borderRadius: 4, pl: 1 }}
+          sx={{
+            border: "1px solid #ccc",
+            borderRadius: 4,
+            pl: 1,
+            width: "fit-content",
+          }}
         >
           <option value="cop">COP 🇨🇴</option>
           <option value="usd">USD 🇺🇸</option>
@@ -129,6 +146,12 @@ const ChooseSponsorship = ({
           <option value="gbp">GBP 🇬🇧</option>
         </NativeSelect>
       </Stack>
+    );
+  };
+
+  return (
+    <Fragment>
+      <ChooseCurrency />
       <Typography variant="h6" gutterBottom>
         Elige tu nivel de patrocinio
       </Typography>
