@@ -1,0 +1,22 @@
+{
+  "index": {
+    "explanation": "Supporting actions that change the world.",
+    "callToAction": {
+      "seeActions": "These are the actions that are changing the world",
+      "seeActionsButton": "Actions",
+      "seeMakers": "Our heroes without a cape",
+      "shareAction": "Want to share your action? Do it here!",
+      "shareActionButton": "Add your action",
+      "seeYourMaker": "You",
+      "yourMaker": {
+        "register": "Register as a maker!",
+        "page": "My maker page"
+      }
+    }
+  },
+  "common": {
+    "pageTitle": {
+      "byOneWe": "by OneWe"
+    }
+  }
+}

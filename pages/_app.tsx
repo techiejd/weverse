@@ -3,6 +3,7 @@ import Head from "next/head";
 import "../modules/auth/AuthCode.css";
 import Script from "next/script";
 import AppProvider from "../common/context/appState";
+import { NextIntlClientProvider } from "next-intl";
 
 function WeVerse({ Component, pageProps }: AppProps) {
   return (
@@ -40,9 +41,11 @@ function WeVerse({ Component, pageProps }: AppProps) {
 
           gtag('config', 'G-NN708F3V4T');`}
       </Script>
-      <AppProvider>
-        <Component {...pageProps} />
-      </AppProvider>
+      <NextIntlClientProvider messages={pageProps.messages}>
+        <AppProvider>
+          <Component {...pageProps} />
+        </AppProvider>
+      </NextIntlClientProvider>
     </>
   );
 }
