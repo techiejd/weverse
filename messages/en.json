@@ -14,6 +14,10 @@
       }
     }
   },
+  "auth": {
+    "login": "Log In",
+    "register": "Register"
+  },
   "common": {
     "pageTitle": {
       "byOneWe": "by OneWe"

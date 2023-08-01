@@ -41,6 +41,7 @@ import {
   memberConverter,
 } from "../../../common/utils/firebase";
 import { useRouter } from "next/router";
+import { useTranslations } from "next-intl";
 
 const TabControl = ({
   authDialogState,
@@ -430,6 +431,7 @@ export const AuthDialogButton = ({
   buttonVariant?: "text" | "outlined" | "contained";
 }) => {
   const { user, loading } = useAppState().authState;
+  const t = useTranslations("auth");
   return loading ? (
     <CircularProgress />
   ) : (
@@ -441,7 +443,7 @@ export const AuthDialogButton = ({
         setAuthDialogOpen(true);
       }}
     >
-      {authAction == AuthAction.logIn ? "Iniciar Sesión" : "Registrarme"}
+      {authAction == AuthAction.logIn ? t("login") : t("register")}
     </Button>
   );
 };

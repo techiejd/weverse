@@ -14,6 +14,10 @@
       }
     }
   },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "register": "Registrarme"
+  },
   "common": {
     "pageTitle": {
       "byOneWe": "hecho por OneWe"
