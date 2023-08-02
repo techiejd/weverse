@@ -1,7 +1,11 @@
 import { CircularProgress } from "@mui/material";
 import { useCurrentMaker } from "../../../modules/makers/context";
 import Sponsor from "../../../modules/makers/sponsor";
+import { WithTranslationsStaticProps } from "../../../common/utils/translations";
+import { CachePaths } from "../../../common/utils/staticPaths";
 
+export const getStaticPaths = CachePaths;
+export const getStaticProps = WithTranslationsStaticProps();
 const SponsorPage = () => {
   const [maker] = useCurrentMaker();
   return maker ? (

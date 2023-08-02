@@ -1,6 +1,7 @@
 import { MuiTelInputInfo, MuiTelInput } from "mui-tel-input";
 import { Dispatch, SetStateAction, useState } from "react";
 import { AuthAction, AuthDialogState } from "./context";
+import { useTranslations } from "next-intl";
 
 const PhoneInput = ({
   authDialogState,
@@ -24,16 +25,18 @@ const PhoneInput = ({
       setPhoneNumberIn(value);
     }
   };
+  const inputTranslations = useTranslations("input");
+  const authTranslations = useTranslations("auth");
   return (
     <MuiTelInput
       defaultCountry="CO"
       value={phoneNumberIn}
       error={authDialogState.phoneNumberInputError}
       onChange={onPhoneNumberChange}
-      label="Número telefónico."
-      helperText={`Vas a recibir un código de verificación para completar el ${
-        authDialogState.authAction == AuthAction.logIn ? "ingreso" : "registro"
-      }.`}
+      label={inputTranslations("phoneNumber")}
+      helperText={authTranslations("validationProcess", {
+        action: authDialogState.authAction,
+      })}
     />
   );
 };

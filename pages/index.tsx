@@ -9,16 +9,10 @@ import { User } from "firebase/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import Image from "next/image";
 import { memberConverter } from "../common/utils/firebase";
-import { GetStaticPropsContext } from "next";
 import { useTranslations } from "next-intl";
+import { WithTranslationsStaticProps } from "../common/utils/translations";
 
-export async function getStaticProps({ locale }: GetStaticPropsContext) {
-  return {
-    props: {
-      messages: (await import(`../messages/${locale}.json`)).default,
-    },
-  };
-}
+export const getStaticProps = WithTranslationsStaticProps();
 
 const FrontPageButton = (props: ButtonProps) => {
   return (

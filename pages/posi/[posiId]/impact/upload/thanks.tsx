@@ -1,7 +1,11 @@
 import { Button, CircularProgress, Stack, Typography } from "@mui/material";
 import { useCurrentPosi } from "../../../../../modules/posi/context";
 import { useAppState } from "../../../../../common/context/appState";
+import { WithTranslationsStaticProps } from "../../../../../common/utils/translations";
+import { CachePaths } from "../../../../../common/utils/staticPaths";
 
+export const getStaticPaths = CachePaths;
+export const getStaticProps = WithTranslationsStaticProps();
 const ImpactsButton = () => {
   const [action, actionLoading, actionError] = useCurrentPosi();
   return action ? (

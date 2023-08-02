@@ -71,6 +71,11 @@ import {
 } from "../../../modules/makers/inviteAsMaker";
 import UnderConstruction from "../../../modules/posi/underConstruction";
 import { posiFormDataConverter } from "../../../common/utils/firebase";
+import { WithTranslationsStaticProps } from "../../../common/utils/translations";
+import { CachePaths } from "../../../common/utils/staticPaths";
+
+export const getStaticPaths = CachePaths;
+export const getStaticProps = WithTranslationsStaticProps();
 //TODO(techiejd): Clean up this file
 
 const IncubatorSection = () => {

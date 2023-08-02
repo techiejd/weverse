@@ -6,6 +6,9 @@ import PosiForm from "../../modules/posi/action/form";
 import LogInPrompt from "../../common/components/logInPrompt";
 import { posiFormDataConverter } from "../../common/utils/firebase";
 import { PosiFormData } from "../../functions/shared/src";
+import { WithTranslationsStaticProps } from "../../common/utils/translations";
+
+export const getStaticProps = WithTranslationsStaticProps();
 
 const Upload = () => {
   const appState = useAppState();

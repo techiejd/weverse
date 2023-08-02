@@ -23,7 +23,11 @@ import CenterBottomCircularProgress from "../../../common/components/centerBotto
 import { Maker, PosiFormData } from "../../../functions/shared/src";
 import CenterBottomFab from "../../../common/components/centerBottomFab";
 import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
+import { WithTranslationsStaticProps } from "../../../common/utils/translations";
+import { CachePaths } from "../../../common/utils/staticPaths";
 
+export const getStaticPaths = CachePaths;
+export const getStaticProps = WithTranslationsStaticProps();
 const AdminBottomBar = ({
   action,
   myMaker,

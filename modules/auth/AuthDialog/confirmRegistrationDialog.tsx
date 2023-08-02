@@ -10,6 +10,7 @@ import {
 import { Dispatch, SetStateAction } from "react";
 import { Login } from "@mui/icons-material";
 import { AuthDialogState } from "./context";
+import { useTranslations } from "next-intl";
 
 const ConfirmRegistrationDialog = ({
   authDialogState,
@@ -20,6 +21,8 @@ const ConfirmRegistrationDialog = ({
   setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
   confirm: () => void;
 }) => {
+  const inputTranslations = useTranslations("input");
+  const authTranslations = useTranslations("auth");
   return (
     <Dialog open={authDialogState.confirmRegistrationDialogOpen}>
       <DialogTitle>Revisa la información:</DialogTitle>
@@ -30,11 +33,13 @@ const ConfirmRegistrationDialog = ({
         </Typography>
         <Stack>
           <Typography>
-            <b>Número telefónico:</b>{" "}
+            <b>{inputTranslations("phoneNumber")}</b>{" "}
             {`+${authDialogState.phoneNumber.countryCallingCode} ${authDialogState.phoneNumber.nationalNumber}`}
           </Typography>
           <Typography>
-            Vas a recibir un codigo de verificación a este número.
+            {authTranslations("validationProcess", {
+              action: authDialogState.authAction,
+            })}
           </Typography>
         </Stack>
       </DialogContent>

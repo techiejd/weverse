@@ -3,6 +3,9 @@
 import type { NextPage } from "next";
 import React from "react";
 import aboutUsStyle from "./../styles/aboutUs.module.css";
+import { WithTranslationsStaticProps } from "../common/utils/translations";
+
+export const getStaticProps = WithTranslationsStaticProps();
 
 const AboutUs: NextPage = () => {
   return (

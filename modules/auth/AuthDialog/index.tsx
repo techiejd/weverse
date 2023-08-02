@@ -27,14 +27,8 @@ import OtpDialog from "./otpDialog";
 import PhoneInput from "./phoneInput";
 import RecaptchaDialog from "./recaptchaDialog";
 import ConfirmRegistrationDialog from "./confirmRegistrationDialog";
-import {
-  AuthAction,
-  AuthDialogState,
-  encodePhoneNumber,
-  prompts,
-} from "./context";
+import { AuthAction, AuthDialogState, encodePhoneNumber } from "./context";
 import { useAppState } from "../../../common/context/appState";
-import { maker } from "../../../functions/shared/src";
 import {
   incubateeConverter,
   makerConverter,
@@ -43,6 +37,14 @@ import {
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
 
+const usePrompts = () => {
+  const t = useTranslations("auth");
+  return {
+    [AuthAction.logIn]: t("login"),
+    [AuthAction.register]: t("register"),
+  };
+};
+
 const TabControl = ({
   authDialogState,
   setAuthDialogState,
@@ -50,7 +52,8 @@ const TabControl = ({
   authDialogState: AuthDialogState;
   setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
 }) => {
-  const { user, loading } = useAppState().authState;
+  const { loading } = useAppState().authState;
+  const prompts = usePrompts();
   return (
     <Tabs
       value={authDialogState.authAction}
@@ -332,6 +335,12 @@ const AuthDialogContent = ({
     }));
   };
 
+  const prompts = usePrompts();
+  const authTranslations = useTranslations("auth");
+  const inputTranslations = useTranslations("input");
+  const { locale } = router;
+  console.log(locale);
+
   return (
     <Box>
       <OtpDialog
@@ -377,8 +386,8 @@ const AuthDialogContent = ({
                   }));
                 }}
                 required
-                helperText="¿Con qué nombre te identificas? Ej: Fula, Fulano, Fulano Detal, etc. Este nombre lo usará la comunidad OneWe para conocerte y conocer tu iniciativa."
-                label="¿Cómo te llamas?"
+                helperText={authTranslations("nameHelperText")}
+                label={authTranslations("namePlaceholder")}
                 key={"register-name"}
               />,
             ]}
@@ -405,7 +414,7 @@ const AuthDialogContent = ({
               setOpen(false);
             }}
           >
-            Cancelar
+            {inputTranslations("cancel")}
           </Button>
           <Button
             disabled={userLoading || authDialogState.checkingUserRegistered}

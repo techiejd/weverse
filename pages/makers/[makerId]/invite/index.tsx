@@ -20,7 +20,11 @@ import { v4 } from "uuid";
 import { Maker, organizationType } from "../../../../functions/shared/src";
 import { Add, Remove } from "@mui/icons-material";
 import buildUrl from "@googlicius/build-url";
+import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
+import { CachePaths } from "../../../../common/utils/staticPaths";
 
+export const getStaticPaths = CachePaths;
+export const getStaticProps = WithTranslationsStaticProps();
 const Invite = () => {
   const appState = useAppState();
   const [maker] = useCurrentMaker();

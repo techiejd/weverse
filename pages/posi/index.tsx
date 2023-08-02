@@ -22,7 +22,9 @@ import { posiFormDataConverter } from "../../common/utils/firebase";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useCallback, useEffect, useState } from "react";
 import ImpactCard from "../../modules/posi/action/card";
+import { WithTranslationsStaticProps } from "../../common/utils/translations";
 
+export const getStaticProps = WithTranslationsStaticProps();
 const IndexPage = () => {
   const appState = useAppState();
   const [latestDoc, setLatestDoc] = useState<

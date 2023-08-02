@@ -9,7 +9,11 @@ import {
   posiFormDataConverter,
 } from "../../../../common/utils/firebase";
 import { useCurrentPosiId } from "../../../../modules/posi/context";
+import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
+import { CachePaths } from "../../../../common/utils/staticPaths";
 
+export const getStaticPaths = CachePaths;
+export const getStaticProps = WithTranslationsStaticProps();
 const Solicit = () => {
   const posiId = useCurrentPosiId();
   const appState = useAppState();

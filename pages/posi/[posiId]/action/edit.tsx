@@ -8,7 +8,11 @@ import PosiForm from "../../../../modules/posi/action/form";
 import { posiFormDataConverter } from "../../../../common/utils/firebase";
 import { PosiFormData, posiFormData } from "../../../../functions/shared/src";
 import { useCurrentPosiId } from "../../../../modules/posi/context";
-import { useEffect } from "react";
+import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
+import { CachePaths } from "../../../../common/utils/staticPaths";
+
+export const getStaticPaths = CachePaths;
+export const getStaticProps = WithTranslationsStaticProps();
 
 const Edit = () => {
   const appState = useAppState();

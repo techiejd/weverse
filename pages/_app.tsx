@@ -3,9 +3,10 @@ import Head from "next/head";
 import "../modules/auth/AuthCode.css";
 import Script from "next/script";
 import AppProvider from "../common/context/appState";
-import { NextIntlClientProvider } from "next-intl";
+import { useLocale, NextIntlClientProvider } from "next-intl";
 
 function WeVerse({ Component, pageProps }: AppProps) {
+  // const locale = useLocale();
   return (
     <>
       <Head>

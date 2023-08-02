@@ -9,7 +9,11 @@ import { pickBy, identity } from "lodash";
 import { makerConverter } from "../../../common/utils/firebase";
 import { Maker, maker as makerSchema } from "../../../functions/shared/src";
 import MakerInput from "../../../modules/makers/makerInput";
+import { WithTranslationsStaticProps } from "../../../common/utils/translations";
+import { CachePaths } from "../../../common/utils/staticPaths";
 
+export const getStaticPaths = CachePaths;
+export const getStaticProps = WithTranslationsStaticProps();
 const Edit = () => {
   const appState = useAppState();
   const router = useRouter();

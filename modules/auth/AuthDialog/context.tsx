@@ -14,11 +14,6 @@ export enum AuthAction {
   register = 1,
 }
 
-export const prompts = {
-  [AuthAction.logIn]: "Inicia sesión",
-  [AuthAction.register]: "Regístrate",
-};
-
 export type AuthDialogState = {
   phoneNumber: PhoneNumber;
   phoneNumberInputError: boolean;

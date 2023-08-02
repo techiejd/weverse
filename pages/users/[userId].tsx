@@ -9,6 +9,11 @@ import { useSignOut } from "react-firebase-hooks/auth";
 import Sponsorships from "../../modules/makers/sponsor/list";
 import { Sponsorship } from "../../functions/shared/src";
 import { useMyMember } from "../../common/context/weverseUtils";
+import { WithTranslationsStaticProps } from "../../common/utils/translations";
+import { CachePaths } from "../../common/utils/staticPaths";
+
+export const getStaticPaths = CachePaths;
+export const getStaticProps = WithTranslationsStaticProps();
 
 const UserPage = () => {
   // TODO(techiejd): Do admin story so that user page can be protected.

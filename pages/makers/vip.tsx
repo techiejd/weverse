@@ -1,11 +1,4 @@
-import {
-  Button,
-  CircularProgress,
-  Link,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { useAppState } from "../../common/context/appState";
+import { Button, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import {
   useActions,
@@ -15,7 +8,9 @@ import {
 import LogInPrompt from "../../common/components/logInPrompt";
 import { calculateVipState } from "../../common/utils/vip";
 import { useEffect } from "react";
+import { WithTranslationsStaticProps } from "../../common/utils/translations";
 
+export const getStaticProps = WithTranslationsStaticProps();
 const Vip = () => {
   const router = useRouter();
   const [myMaker, myMakerLoading, myMakerError] = useMyMaker();

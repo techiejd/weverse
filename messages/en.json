@@ -16,7 +16,14 @@
   },
   "auth": {
     "login": "Log In",
-    "register": "Register"
+    "register": "Register",
+    "validationProcess": "We are verifying your phone number. You will receive a verification code to this number to finish the {action, select, 0 {login} other {registration}} process.",
+    "namePlaceholder": "What's your name?",
+    "nameHelperText": "What do you like to be called? This is how you will be known in the community."
+  },
+  "input": {
+    "cancel": "Cancel",
+    "phoneNumber": "Phone number"
   },
   "common": {
     "pageTitle": {

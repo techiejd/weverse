@@ -8,6 +8,7 @@ import { useState } from "react";
 
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Step } from "./utils";
+import { useTranslations } from "next-intl";
 
 const PhoneInput = ({
   sponsorForm,
@@ -30,6 +31,7 @@ const PhoneInput = ({
       );
     }
   };
+  const t = useTranslations("input");
   return (
     <Box>
       <MuiTelInput
@@ -38,7 +40,7 @@ const PhoneInput = ({
         name="phone"
         value={phoneIn}
         onChange={onPhoneChange}
-        label="Número telefónico"
+        label={t("phoneNumber")}
         required
         error={phoneError}
         fullWidth

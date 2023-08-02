@@ -15,7 +15,11 @@ import {
   useCopyToClipboard,
 } from "../../../../modules/makers/inviteAsMaker";
 import { Fragment } from "react";
+import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
+import { CachePaths } from "../../../../common/utils/staticPaths";
 
+export const getStaticPaths = CachePaths;
+export const getStaticProps = WithTranslationsStaticProps();
 const SharePage = () => {
   const router = useRouter();
   const {

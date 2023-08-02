@@ -1,7 +1,10 @@
 import { Button, CircularProgress, Stack, Typography } from "@mui/material";
-import { useAppState } from "../../../../../common/context/appState";
 import { useCurrentMaker } from "../../../../../modules/makers/context";
+import { WithTranslationsStaticProps } from "../../../../../common/utils/translations";
+import { CachePaths } from "../../../../../common/utils/staticPaths";
 
+export const getStaticPaths = CachePaths;
+export const getStaticProps = WithTranslationsStaticProps();
 //TODO(techiejd): WET -> DRY
 const MakerButton = () => {
   const [maker, makerLoading, makerError] = useCurrentMaker();
