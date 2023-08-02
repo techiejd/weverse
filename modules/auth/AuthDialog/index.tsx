@@ -39,8 +39,9 @@ import { useTranslations } from "next-intl";
 
 const usePrompts = () => {
   const t = useTranslations("auth");
+  const commonTranslations = useTranslations("common");
   return {
-    [AuthAction.logIn]: t("login"),
+    [AuthAction.logIn]: commonTranslations("callToAction.login"),
     [AuthAction.register]: t("register"),
   };
 };
@@ -441,6 +442,7 @@ export const AuthDialogButton = ({
 }) => {
   const { user, loading } = useAppState().authState;
   const t = useTranslations("auth");
+  const commonTranslations = useTranslations("common");
   return loading ? (
     <CircularProgress />
   ) : (
@@ -452,7 +454,9 @@ export const AuthDialogButton = ({
         setAuthDialogOpen(true);
       }}
     >
-      {authAction == AuthAction.logIn ? t("login") : t("register")}
+      {authAction == AuthAction.logIn
+        ? commonTranslations("callToAction.login")
+        : t("register")}
     </Button>
   );
 };

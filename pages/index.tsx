@@ -25,7 +25,9 @@ const FrontPageButton = (props: ButtonProps) => {
 };
 
 const MakerPortal = () => {
-  const t = useTranslations("index.callToAction.yourMaker");
+  const callToActionTranslations = useTranslations(
+    "common.callToAction.yourMaker"
+  );
   const appState = useAppState();
   const { user } = useAppState().authState;
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
@@ -39,7 +41,7 @@ const MakerPortal = () => {
 
     return (
       <FrontPageButton href={`/makers/${member?.makerId}`} disabled={!member}>
-        📛 {t("page")}
+        📛 {callToActionTranslations("page")}
       </FrontPageButton>
     );
   };
@@ -62,7 +64,7 @@ const MakerPortal = () => {
               setAuthDialogOpen(true);
             }}
           >
-            🧑 {t("register")}
+            🧑 {callToActionTranslations("register")}
           </FrontPageButton>
         )}
       </Stack>
@@ -71,7 +73,8 @@ const MakerPortal = () => {
 };
 
 const WeVerse = () => {
-  const t = useTranslations("index");
+  const indexTranslations = useTranslations("index");
+  const commonTranslations = useTranslations("common");
   return (
     <Box>
       <Stack
@@ -92,33 +95,41 @@ const WeVerse = () => {
             </>
           }
         />
-        <Typography>{t("explanation")}</Typography>
+        <Typography>{indexTranslations("explanation")}</Typography>
         <Stack
           sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
         >
-          <Typography>{t("callToAction.seeActions")}:</Typography>
+          <Typography>
+            {indexTranslations("callToActionExplanations.actions.list")}:
+          </Typography>
           <FrontPageButton href="/posi">
-            🤸‍♀️ {t("callToAction.seeActionsButton")}
+            🤸‍♀️ {commonTranslations("callToAction.actions.list")}
           </FrontPageButton>
         </Stack>
         <Stack
           sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
         >
-          {t("callToAction.seeMakers")}:
-          <FrontPageButton href="/makers">💪 Makers</FrontPageButton>
+          {indexTranslations("callToActionExplanations.seeMakers")}:
+          <FrontPageButton href="/makers">
+            💪 {commonTranslations("callToAction.listMakers")}
+          </FrontPageButton>
         </Stack>
         <Stack
           sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
         >
-          <Typography>{t("callToAction.shareAction")}:</Typography>
+          <Typography>
+            {indexTranslations("callToActionExplanations.actions.add")}:
+          </Typography>
           <FrontPageButton href="/posi/upload">
-            🤸‍♀️ {t("callToAction.shareActionButton")}
+            🤸‍♀️ {commonTranslations("callToAction.actions.add")}
           </FrontPageButton>
         </Stack>
         <Stack
           sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
         >
-          <Typography>{t("callToAction.seeYourMaker")}:</Typography>
+          <Typography>
+            {indexTranslations("callToActionExplanations.yourMaker")}:
+          </Typography>
           <MakerPortal />
         </Stack>
       </Stack>

@@ -21,12 +21,14 @@ import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import Image from "next/image";
 import LinkBehavior from "../utils/linkBehavior";
 import { useMyMaker } from "../context/weverseUtils";
+import { useTranslations } from "next-intl";
 
 export const MenuComponent = (props: BoxProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const menuOpen = Boolean(anchorEl);
   const closeMenu = () => setAnchorEl(null);
+  const t = useTranslations("common.callToAction");
   const UserPortal = () => {
     const { user } = useAppState().authState;
     return user ? (
@@ -41,7 +43,7 @@ export const MenuComponent = (props: BoxProps) => {
         <ListItemIcon>
           <AccountCircle />
         </ListItemIcon>
-        <ListItemText>Mi pagina</ListItemText>
+        <ListItemText>{t("yourMemberPage")}</ListItemText>
       </MenuItem>
     ) : (
       <MenuItem
@@ -53,7 +55,7 @@ export const MenuComponent = (props: BoxProps) => {
         <ListItemIcon>
           <Login />
         </ListItemIcon>
-        <ListItemText>Log In</ListItemText>
+        <ListItemText>{t("login")}</ListItemText>
       </MenuItem>
     );
   };
@@ -68,7 +70,7 @@ export const MenuComponent = (props: BoxProps) => {
           <ListItemIcon>
             <Home />
           </ListItemIcon>
-          <ListItemText>Inicio </ListItemText>
+          <ListItemText>{t("home")}</ListItemText>
         </MenuItem>
         <MenuItem
           href="/posi"
@@ -80,7 +82,7 @@ export const MenuComponent = (props: BoxProps) => {
               <b>🤸</b>
             </Typography>
           </ListItemIcon>
-          <ListItemText>Acciones</ListItemText>
+          <ListItemText>{t("actions.list")}</ListItemText>
         </MenuItem>
         <MenuItem
           href="/posi/upload"
@@ -90,7 +92,7 @@ export const MenuComponent = (props: BoxProps) => {
           <ListItemIcon>
             <PlusOne />
           </ListItemIcon>
-          <ListItemText>Agrega tu Action!</ListItemText>
+          <ListItemText>{t("actions.add")}</ListItemText>
         </MenuItem>
         <UserPortal />
       </Menu>

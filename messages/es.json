@@ -1,21 +1,16 @@
 {
   "index": {
     "explanation": "Apoyando acciones que cambian el mundo.",
-    "callToAction": {
-      "seeActions": "Estas son las acciones que están cambiando el mundo",
-      "seeActionsButton": "Acciones",
+    "callToActionExplanations": {
+      "actions": {
+        "list":  "Estas son las acciones que están cambiando el mundo",
+        "add": "¿Quieres compartir tu acción? ¡Hazlo aquí!"
+      },
       "seeMakers": "Ellos son nuestros héroes sin capa",
-      "shareAction": "¿Quieres compartir tu acción? ¡Hazlo aquí!",
-      "shareActionButton": "Agrega tu Acción",
-      "seeYourMaker": "Tú",
-      "yourMaker": {
-        "register": "¡Regístrate como maker!",
-        "page": "Mi Página Maker"
-      }
+      "yourMaker": "Tú"
     }
   },
   "auth": {
-    "login": "Iniciar Sesión",
     "register": "Registrarme",
     "validationProcess": "Estamos verificando tu número de teléfono. Vas a recibir un código de verificación para completar el {action, select, 0 {inicio de sesión} other {registro}}.",
     "namePlaceholder": "¿Cómo te llamas?",
@@ -28,6 +23,20 @@
   "common": {
     "pageTitle": {
       "byOneWe": "hecho por OneWe"
+    },
+    "callToAction": {
+      "actions": {
+        "list": "Acciones",
+        "add": "Agrega tu Acción"
+      },
+      "home": "Inicio",
+      "listMakers": "Makers",
+      "login": "Iniciar Sesión",
+      "yourMaker": {
+        "register": "¡Regístrate como maker!",
+        "page": "Mi Página Maker"
+      },
+      "yourMemberPage": "Mi Página de Miembro" 
     }
   }
 }

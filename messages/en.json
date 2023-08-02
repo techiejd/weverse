@@ -1,21 +1,16 @@
 {
   "index": {
     "explanation": "Supporting actions that change the world.",
-    "callToAction": {
-      "seeActions": "These are the actions that are changing the world",
-      "seeActionsButton": "Actions",
-      "seeMakers": "Our heroes without a cape",
-      "shareAction": "Want to share your action? Do it here!",
-      "shareActionButton": "Add your action",
-      "seeYourMaker": "You",
-      "yourMaker": {
-        "register": "Register as a maker!",
-        "page": "My maker page"
-      }
+    "callToActionExplanations": {
+      "actions": {
+        "list": "See all the actions that are changing the world",
+        "add": "Want to share your action? Do it here!"
+      },
+      "seeMakers": "See our heroes without a cape",
+      "yourMaker": "You"
     }
   },
   "auth": {
-    "login": "Log In",
     "register": "Register",
     "validationProcess": "We are verifying your phone number. You will receive a verification code to this number to finish the {action, select, 0 {login} other {registration}} process.",
     "namePlaceholder": "What's your name?",
@@ -28,6 +23,20 @@
   "common": {
     "pageTitle": {
       "byOneWe": "by OneWe"
-    }
+    },
+    "callToAction": {
+      "actions": {
+        "list": "Actions",
+        "add": "Add your action"
+      },
+      "home": "Home",
+      "listMakers": "Makers",
+      "login": "Log In",
+      "yourMaker": {
+        "register": "Register as a maker!",
+        "page": "My maker page"
+      },
+      "yourMemberPage": "Mi Member Page" 
+    } 
   }
 }
