@@ -1,6 +1,5 @@
 {
   "index": {
-    "explanation": "Apoyando acciones que cambian el mundo.",
     "callToActionExplanations": {
       "actions": {
         "list":  "Estas son las acciones que están cambiando el mundo",
@@ -21,6 +20,7 @@
     "phoneNumber": "Número telefónico"
   },
   "common": {
+    "motto": "Apoyando acciones que cambian el mundo",
     "pageTitle": {
       "byOneWe": "hecho por OneWe"
     },
@@ -38,5 +38,8 @@
       },
       "yourMemberPage": "Mi Página de Miembro" 
     }
+  },
+  "actions": {
+    "testimonials": "Testimonios"
   }
 }

@@ -23,6 +23,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useCallback, useEffect, useState } from "react";
 import ImpactCard from "../../modules/posi/action/card";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
+import { useTranslations } from "next-intl";
 
 export const getStaticProps = WithTranslationsStaticProps();
 const IndexPage = () => {
@@ -100,7 +101,7 @@ const IndexPage = () => {
 };
 
 const Index = () => {
-  const appState = useAppState();
+  const commonTranslations = useTranslations("common");
   const fullHeightPage = (
     <style global jsx>{`
       html,
@@ -127,7 +128,7 @@ const Index = () => {
         pt={3}
       >
         <Typography fontSize={25} variant="h2" textAlign="center" pb={1}>
-          Apoyando acciones que cambian el mundo
+          {commonTranslations("motto")}
         </Typography>
         <Fab
           variant="extended"
@@ -136,7 +137,9 @@ const Index = () => {
           sx={{ width: "fit-content" }}
         >
           <PlusOne sx={{ mr: 1 }} />
-          <Typography>Agrega tu acción!</Typography>
+          <Typography>
+            {commonTranslations("callToAction.actions.add")}
+          </Typography>
         </Fab>
         <IndexPage />
       </Stack>

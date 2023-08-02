@@ -95,7 +95,7 @@ const WeVerse = () => {
             </>
           }
         />
-        <Typography>{indexTranslations("explanation")}</Typography>
+        <Typography>{commonTranslations("motto")}</Typography>
         <Stack
           sx={{ width: "100%", justifyContent: "center", alignItems: "center" }}
         >

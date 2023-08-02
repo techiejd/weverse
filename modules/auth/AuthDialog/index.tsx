@@ -339,8 +339,6 @@ const AuthDialogContent = ({
   const prompts = usePrompts();
   const authTranslations = useTranslations("auth");
   const inputTranslations = useTranslations("input");
-  const { locale } = router;
-  console.log(locale);
 
   return (
     <Box>

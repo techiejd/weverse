@@ -1,6 +1,5 @@
 {
   "index": {
-    "explanation": "Supporting actions that change the world.",
     "callToActionExplanations": {
       "actions": {
         "list": "See all the actions that are changing the world",
@@ -21,6 +20,7 @@
     "phoneNumber": "Phone number"
   },
   "common": {
+    "motto": "Supporting actions that change the world",
     "pageTitle": {
       "byOneWe": "by OneWe"
     },
@@ -38,5 +38,8 @@
       },
       "yourMemberPage": "Mi Member Page" 
     } 
+  },
+  "actions": {
+    "testimonials": "Testimonials"
   }
 }
