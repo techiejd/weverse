@@ -11,6 +11,7 @@ import { useState } from "react";
 import PlacesAutocomplete, { Suggestion } from "react-places-autocomplete";
 import { useFormData } from "./context";
 import Script from "next/script";
+import { useTranslations } from "next-intl";
 
 const CitySearchInput = () => {
   const [formData, setFormData] = useFormData();
@@ -54,6 +55,8 @@ const CitySearchInput = () => {
     }
   };
 
+  const inputTranslations = useTranslations("input");
+
   return (
     <Box>
       <Script
@@ -71,7 +74,7 @@ const CitySearchInput = () => {
           <Box>
             <Input
               {...getInputProps({
-                placeholder: "Buscar ubicaciones ...",
+                placeholder: inputTranslations("location"),
                 onBlur: () => {
                   if (
                     formData.location &&

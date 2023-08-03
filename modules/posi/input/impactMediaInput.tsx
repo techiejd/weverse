@@ -3,6 +3,7 @@ import FileInput from "./fileInput";
 import { useFormData } from "./context";
 import { Box, Typography } from "@mui/material";
 import { Media } from "../../../functions/shared/src";
+import { useTranslations } from "next-intl";
 
 const ImpactMediaInput = () => {
   const [formData, setFormData] = useFormData();
@@ -17,9 +18,10 @@ const ImpactMediaInput = () => {
       }));
     }
   }, [media, setFormData]);
+  const t = useTranslations("actions.upload.sections.media");
   return (
     <Box>
-      <Typography>Sube un video o imagen de tu acción.</Typography>
+      <Typography>{t("prompt")}</Typography>
       <FileInput
         initialMedia={formData.media == "loading" ? undefined : formData.media}
         setMedia={setMedia}

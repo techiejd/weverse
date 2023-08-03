@@ -9,6 +9,7 @@ import {
 import { Dispatch, SetStateAction, useState } from "react";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import { AuthAction } from "../../modules/auth/AuthDialog/context";
+import { useTranslations } from "next-intl";
 
 const LogInPrompt = ({
   title,
@@ -26,6 +27,8 @@ const LogInPrompt = ({
         },
       }
     : { href: "/" };
+  const t = useTranslations("common");
+  const inputTranslations = useTranslations("input");
   return (
     <Box
       sx={{
@@ -45,12 +48,10 @@ const LogInPrompt = ({
       />
       <Stack alignItems={"center"} justifyItems={"center"}>
         <Typography variant="h3">{title}</Typography>
-        <DialogContentText>
-          Regístrate si no lo has hecho. Inicia sesión si ya estás registrado.
-        </DialogContentText>
+        <DialogContentText>{t("logInPrompt")}</DialogContentText>
         <DialogActions>
           <Button {...behavior} size="small">
-            Cancelar
+            {inputTranslations("cancel")}
           </Button>
           <AuthDialogButton setAuthDialogOpen={setLogInDialogOpen} />
           <AuthDialogButton

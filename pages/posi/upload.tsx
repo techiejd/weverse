@@ -7,45 +7,42 @@ import LogInPrompt from "../../common/components/logInPrompt";
 import { posiFormDataConverter } from "../../common/utils/firebase";
 import { PosiFormData } from "../../functions/shared/src";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
+import { useTranslations } from "next-intl";
 
 export const getStaticProps = WithTranslationsStaticProps();
 
 const Upload = () => {
   const appState = useAppState();
   const router = useRouter();
-  const UploadContent = () => {
-    const { user } = useAppState().authState;
-    const onSubmit = async (usersPosi: PosiFormData) => {
-      const docRef = await addDoc(
-        collection(appState.firestore, "impacts").withConverter(
-          posiFormDataConverter
-        ),
-        usersPosi
-      );
-      router.push(`/posi/${docRef.id}/impact/solicit`);
-    };
-    return (
-      <Stack>
-        <Stack
-          spacing={1}
-          justifyContent={"center"}
-          alignItems={"center"}
-          textAlign={"center"}
-        >
-          <Typography variant="h1">¡Publica tu acción! 🪧</Typography>
-        </Stack>
-        {user ? (
-          <PosiForm onInteraction={{ type: "create", onSubmit }} />
-        ) : (
-          <LogInPrompt
-            title={"Para cargar una acción, debes ingresar al sistem."}
-          />
-        )}
-      </Stack>
+  const { user } = useAppState().authState;
+  const onSubmit = async (usersPosi: PosiFormData) => {
+    const docRef = await addDoc(
+      collection(appState.firestore, "impacts").withConverter(
+        posiFormDataConverter
+      ),
+      usersPosi
     );
+    router.push(`/posi/${docRef.id}/impact/solicit`);
   };
+  const t = useTranslations("actions.upload");
 
-  return <UploadContent />;
+  return (
+    <Stack>
+      <Stack
+        spacing={1}
+        justifyContent={"center"}
+        alignItems={"center"}
+        textAlign={"center"}
+      >
+        <Typography variant="h1">{t("title")}</Typography>
+      </Stack>
+      {user ? (
+        <PosiForm onInteraction={{ type: "create", onSubmit }} />
+      ) : (
+        <LogInPrompt title={t("logInPrompt")} />
+      )}
+    </Stack>
+  );
 };
 
 export default Upload;

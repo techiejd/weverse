@@ -17,10 +17,13 @@
   },
   "input": {
     "cancel": "Cancel",
-    "phoneNumber": "Phone number"
+    "phoneNumber": "Phone number",
+    "location": "Search location ...",
+    "numChars": "{numChars} characters"
   },
   "common": {
     "motto": "Supporting actions that change the world",
+    "logInPrompt": "Register if you haven't already. Log in if you have.",
     "pageTitle": {
       "byOneWe": "by OneWe"
     },
@@ -36,10 +39,38 @@
         "register": "Register as a maker!",
         "page": "My maker page"
       },
-      "yourMemberPage": "Mi Member Page" 
+      "yourMemberPage": "My Member Page" 
     } 
   },
   "actions": {
-    "testimonials": "Testimonials"
+    "testimonials": "Testimonials",
+    "upload": {
+      "submit": "Publish",
+      "title": "¡Publish your action! 🪧",
+      "logInPrompt": "In order to publish an action, you must first register as a member.",
+      "sections": {
+        "media": {
+          "title": "Show us a bit of what you've done",
+          "prompt": "Upload a photo or video of your action."
+        },
+        "summary": {
+          "title": "Summarize your action",
+          "examples": {
+            "title": "Good summary examples",
+            "1": "We taught 150 children from a low-income school to use AI to better their lives.",
+            "2": "I filled 1 bag with garbage from the river near my house.",
+            "3": "We built an irrigation system for a community of 200 people in the Amazon."
+          },
+          "prompt": "This summary will become your action's title."
+        },
+        "impactedPersons": {
+          "title": "Whom have you helped?",
+          "example": "Ex: San Ignacio High School class of 2023, San Francisco, California."
+        },
+        "location": {
+          "title": "Where was this action done?"
+        }
+      }
+    }
   }
 }

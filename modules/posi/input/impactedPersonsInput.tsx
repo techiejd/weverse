@@ -1,5 +1,6 @@
 import { Typography, TextField, Stack } from "@mui/material";
 import { useFormData } from "./context";
+import { useTranslations } from "next-intl";
 
 const ImpactedPersonsInput = () => {
   const [formData, setFormData] = useFormData();
@@ -20,12 +21,19 @@ const ImpactedPersonsInput = () => {
     }
   };
 
+  const inputTranslations = useTranslations("input");
+  const impactedPersonsTranslations = useTranslations(
+    "actions.upload.sections.impactedPersons"
+  );
+
   return (
     <Stack spacing={2} margin={2} justifyContent={"space-between"}>
-      <Typography>({`${maxLength}`} caracteres)</Typography>
+      <Typography>
+        ({inputTranslations("numChars", { numChars: maxLength })})
+      </Typography>
       <TextField
         fullWidth
-        label="Ej: La clase 2023 del colegio San Ignacio en el barrio Laureles."
+        label={impactedPersonsTranslations("example")}
         name="impactedPersons-identification"
         margin="normal"
         inputProps={{ maxLength: maxLength }}

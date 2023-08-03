@@ -13,6 +13,7 @@ import ImpactMediaInput from "../input/impactMediaInput";
 import { PosiFormData, posiFormData } from "../../../functions/shared/src";
 import { useMaker, useMyMaker } from "../../../common/context/weverseUtils";
 import ValidatorInput from "../input/validatorInput";
+import { useTranslations } from "next-intl";
 
 type onInteractionProp =
   | { type: "create"; onSubmit: (posiFormData: PosiFormData) => Promise<void> }
@@ -39,6 +40,7 @@ const PosiForm = ({
       setFormData((fD) => ({ ...fD, makerId: myMaker.id }));
     }
   }, [myMaker, setFormData]);
+  const t = useTranslations("actions.upload");
 
   return (
     <Box>
@@ -63,16 +65,16 @@ const PosiForm = ({
               alignItems={"center"}
               justifyContent={"space-between"}
             >
-              <Section label="Muéstranos un poco de lo que has hecho">
+              <Section label={t("sections.media.title")}>
                 <ImpactMediaInput />
               </Section>
-              <Section label="Describe tu acción">
+              <Section label={t("sections.summary.title")}>
                 <SummaryInput />
               </Section>
-              <Section label="¿A quiénes ayudaste?">
+              <Section label={t("sections.impactedPersons.title")}>
                 <ImpactedPersonsInput />
               </Section>
-              <Section label="¿Dónde realizaste esta acción?">
+              <Section label={t("sections.location.title")}>
                 <CitySearchInput />
               </Section>
               {myMaker && myMaker.incubator && (
@@ -84,7 +86,7 @@ const PosiForm = ({
                 <CircularProgress />
               ) : onInteraction.type == "create" ? (
                 <Button variant="contained" sx={{ mt: 3 }} type="submit">
-                  Publicar
+                  {t("submit")}
                 </Button>
               ) : (
                 <Stack direction={"row"} sx={{ mt: 3 }} spacing={1}>

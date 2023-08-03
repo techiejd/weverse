@@ -11,6 +11,7 @@ import {
 import { useState, useEffect } from "react";
 import { useFormData } from "./context";
 import { Expand, ExpandMore } from "@mui/icons-material";
+import { useTranslations } from "next-intl";
 
 const SummaryInput = () => {
   const [formData, setFormData] = useFormData();
@@ -21,13 +22,19 @@ const SummaryInput = () => {
       });
     }
   };
-
+  const inputTranslations = useTranslations("input");
+  const summaryTranslations = useTranslations(
+    "actions.upload.sections.summary"
+  );
+  const maxLength = 180;
   return (
     <Box>
-      <Typography>(180 caracteres)</Typography>
+      <Typography>
+        {inputTranslations("numChars", { numChars: maxLength })}
+      </Typography>
       <Accordion sx={{ mt: 1, mb: 2 }}>
         <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography>Buenos ejemplos de descripciones.</Typography>
+          <Typography>{summaryTranslations("examples.title")}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <List
@@ -39,25 +46,17 @@ const SummaryInput = () => {
               },
             }}
           >
-            <ListItem>
-              Ayudamos a 150 niños de un colegio de escasos recursos a utilizar
-              inteligencia aritificial para cambiarles la vida de manera
-              positiva.
-            </ListItem>
-            <ListItem>
-              Llené 1 bolsa con basura por la canalización cerca mi casa.
-            </ListItem>
-            <ListItem>
-              Realizamos clases extraescolares para 50 niños este verano pasado.
-            </ListItem>
+            <ListItem>{summaryTranslations("examples.1")}</ListItem>
+            <ListItem>{summaryTranslations("examples.2")}</ListItem>
+            <ListItem>{summaryTranslations("examples.3")}</ListItem>
           </List>
         </AccordionDetails>
       </Accordion>
       <TextField
         required
         fullWidth
-        label="Esta descripción será el título."
-        inputProps={{ maxLength: 180 }}
+        label={summaryTranslations("prompt")}
+        inputProps={{ maxLength }}
         value={formData.summary ? formData.summary : ""}
         onChange={(e) => {
           setSummaryInput(e.target.value);

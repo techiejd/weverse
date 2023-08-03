@@ -17,10 +17,13 @@
   },
   "input": {
     "cancel": "Cancelar",
-    "phoneNumber": "Número telefónico"
+    "phoneNumber": "Número telefónico",
+    "location": "Buscar ubicaciones ...",
+    "numChars": "{numChars} caracteres"
   },
   "common": {
     "motto": "Apoyando acciones que cambian el mundo",
+    "logInPrompt": "Regístrate si no lo has hecho. Inicia sesión si ya estás registrado.",
     "pageTitle": {
       "byOneWe": "hecho por OneWe"
     },
@@ -40,6 +43,34 @@
     }
   },
   "actions": {
-    "testimonials": "Testimonios"
+    "testimonials": "Testimonios",
+    "upload": {
+      "submit": "Publicar",
+      "title": "¡Publica tu acción! 🪧",
+      "logInPrompt": "Para publicar tu acción, registrarte como miembro.",
+      "sections": {
+        "media": {
+          "title": "Muéstranos un poco de lo que has hecho",
+          "prompt": "Sube un video o imagen de tu acción."
+        },
+        "summary": {
+          "title": "Describe tu acción",
+          "examples": {
+            "title": "Buenos ejemplos de descripciones.",
+            "1": "Ayudamos a 150 niños de un colegio de escasos recursos a utilizar inteligencia aritificial para cambiarles la vida de manera positiva.",
+            "2": "Llené 1 bolsa con basura por la canalización cerca mi casa.",
+            "3": "Construimos un sistema de riego para una comunidad de 200 personas en el Amazonas."
+          },
+          "prompt": "Esta descripción será el título."
+        },
+        "impactedPersons": {
+          "title": "¿A quiénes ayudaste?",
+          "example": "Ej: La clase 2023 del colegio San Ignacio en el barrio Laureles."
+        },
+        "location": {
+          "title": "¿Dónde realizaste esta acción?"
+        }
+      }
+    }
   }
 }
