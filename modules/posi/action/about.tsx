@@ -1,4 +1,9 @@
-import { PlayCircle, Image as ImageIcon, Place } from "@mui/icons-material";
+import {
+  PlayCircle,
+  Image as ImageIcon,
+  Place,
+  EmojiPeople,
+} from "@mui/icons-material";
 import {
   Box,
   Typography,
@@ -14,6 +19,7 @@ import MakerCard from "../../makers/MakerCard";
 import { PosiFormData } from "../../../functions/shared/src";
 import RatingsStack from "../../../common/components/ratings";
 import ValidationInfo from "./card/validationInfo";
+import { useTranslations } from "next-intl";
 
 const AboutContent = ({
   summary,
@@ -24,10 +30,11 @@ const AboutContent = ({
   ratings,
   validation,
 }: PosiFormData) => {
-  // TODO(techiejd): Look into why it's happening.
-  return summary && makerId && media ? (
+  const t = useTranslations("actions.about");
+  return (
     <Box>
       <Box sx={{ boxShadow: 1 }} padding={2}>
+        <Typography>{t("explanation")}</Typography>
         <Typography variant="h1" fontSize={35}>
           {summary}
         </Typography>
@@ -43,7 +50,7 @@ const AboutContent = ({
                   <PlayCircle />
                 </Icon>
               }
-              title={"Video de Portada"}
+              title={t("coverVideo")}
             />
           ) : (
             <CardHeader
@@ -52,7 +59,7 @@ const AboutContent = ({
                   <ImageIcon />
                 </Icon>
               }
-              title={"Imagen de Portada"}
+              title={t("coverImage")}
             />
           )}
           <Box
@@ -86,7 +93,7 @@ const AboutContent = ({
                   <Place />
                 </Icon>
               }
-              title={"Ubicación"}
+              title={t("location")}
             />
 
             <CardContent>
@@ -106,10 +113,10 @@ const AboutContent = ({
             <CardHeader
               avatar={
                 <Icon>
-                  <Place />
+                  <EmojiPeople />
                 </Icon>
               }
-              title={"¿A quiénes ayudó?"}
+              title={t("impactedPersons")}
             />
             <CardContent>
               <Typography>{howToIdentifyImpactedPeople}</Typography>
@@ -119,8 +126,6 @@ const AboutContent = ({
         <MakerCard makerId={makerId} />
       </Stack>
     </Box>
-  ) : (
-    <></>
   );
 };
 

@@ -17,6 +17,7 @@
   },
   "input": {
     "cancel": "Cancelar",
+    "close": "Cerrar",
     "phoneNumber": "Número telefónico",
     "location": "Buscar ubicaciones ...",
     "numChars": "{numChars} caracteres"
@@ -28,6 +29,7 @@
       "byOneWe": "hecho por OneWe"
     },
     "callToAction": {
+      "edit": "Editar",
       "actions": {
         "list": "Acciones",
         "add": "Agrega tu Acción"
@@ -39,11 +41,35 @@
         "register": "¡Regístrate como maker!",
         "page": "Mi Página Maker"
       },
-      "yourMemberPage": "Mi Página de Miembro" 
+      "yourMemberPage": "Mi Página de Miembro",
+      "share": "Compartir"
+    },
+    "solicitHelpDialog": {
+      "title": "Solicita Apoyo",
+      "reminderThatTheyCanSolicitMoreByEditingMakerPath": "Recuerda que puedes solicitar apoyo de otro tipo (no financiero) <link>agregándolo en tu perfil de Maker</link>.",
+      "solicit": {
+        "all": {
+          "title": "Solicitar todos",
+          "prompt": "Me encantaría recibir tu colaboración para mi impacto social."
+        },
+        "testimonial": {
+          "title": "Solicitar testimonio",
+          "prompt": "Por favor dame tu testimonio sobre mi impacto social"
+        },
+        "sponsorship": {
+          "title": "Solicitar patrocinio",
+          "prompt": "Busco patrocinio para mi impacto social"
+        },
+        "connect": {
+          "title": "Solicitar conectar",
+          "prompt": "Por favor conectemos sobre mi impacto social"
+        }
+      }
     }
   },
   "actions": {
     "testimonials": "Testimonios",
+    "emptyTestimonials": "No hay testimonios aún. ¡Agrega uno!",
     "upload": {
       "submit": "Publicar",
       "title": "¡Publica tu acción! 🪧",
@@ -79,6 +105,22 @@
         "noTarget": "No indicaste a quien mandarle la encuesta, pero confiamos en tí de encontrarlos.",
         "solicitText": "Por favor dame tu opinion sobre mi acción social: {for}",
         "clickOnEarToSolicit": "Haz clic en la oreja para enviarles una encuesta sobre esta acción."
+      }
+    },
+    "about": {
+      "explanation": "Acerca de esta acción",
+      "coverImage": "Imagen de portada",
+      "coverVideo": "Video de portada",
+      "location": "Ubicación",
+      "impactedPersons": "¿A quiénes ayudó?"
+    },
+    "empty": "No hay acciones aún. ¡Agrega una!",
+    "solicit": {
+      "support": "Apoyo",
+      "testimonial": "Escuchar",
+      "requests": {
+        "opinion": "Por favor dame tu opinion sobre mi acción social: {summary}",
+        "look": "Mira mi acción social."
       }
     }
   }

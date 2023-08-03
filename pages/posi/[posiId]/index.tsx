@@ -25,9 +25,11 @@ import CenterBottomFab from "../../../common/components/centerBottomFab";
 import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
 import { WithTranslationsStaticProps } from "../../../common/utils/translations";
 import { CachePaths } from "../../../common/utils/staticPaths";
+import { useTranslations } from "next-intl";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
+
 const AdminBottomBar = ({
   action,
   myMaker,
@@ -37,6 +39,8 @@ const AdminBottomBar = ({
 }) => {
   const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
   const solicitOpinionPath = `/posi/${action.id}/impact/upload`;
+  const callToActionTranslations = useTranslations("common.callToAction");
+  const solicitTranslations = useTranslations("actions.solicit");
   return (
     <AppBar
       position="fixed"
@@ -54,39 +58,48 @@ const AdminBottomBar = ({
       <Toolbar>
         <IconButtonWithLabel href={`/posi/${action.id}/action/edit`}>
           <Edit />
-          <Typography>Editar</Typography>
+          <Typography>{callToActionTranslations("edit")}</Typography>
         </IconButtonWithLabel>
         <CenterBottomFab
           color="secondary"
           aria-label="add"
           sx={{ width: 70, height: 70 }}
+          onClick={() => {
+            setSolicitDialogOpen(true);
+          }}
         >
           <Handshake fontSize="large" />
-          <Typography fontSize={12}>Apoyo</Typography>
+          <Typography fontSize={12}>
+            {solicitTranslations("support")}
+          </Typography>
         </CenterBottomFab>
         <Box sx={{ flexGrow: 1 }} />
         <ShareActionArea
           shareProps={{
             path: solicitOpinionPath,
-            title: `Por favor dame tu opinion sobre mi acción social: ${action.summary}`,
-            text: `Por favor dame tu opinion sobre mi acción social: ${action.summary}`,
+            title: solicitTranslations("requests.opinion", {
+              summary: action.summary,
+            }),
           }}
         >
           <IconButtonWithLabel>
             <Hearing fontSize="large" />
-            <Typography fontSize={12}>Escuchar</Typography>
+            <Typography fontSize={12}>
+              {solicitTranslations("testimonial")}
+            </Typography>
           </IconButtonWithLabel>
         </ShareActionArea>
         <ShareActionArea
           shareProps={{
             path: `/posi/${action.id}`,
-            text: "Mira mi acción social.",
-            title: "Mira mi acción social.",
+            title: solicitTranslations("requests.look"),
           }}
         >
           <IconButtonWithLabel>
             <Share fontSize="large" />
-            <Typography fontSize={12}>Compartir</Typography>
+            <Typography fontSize={12}>
+              {callToActionTranslations("share")}
+            </Typography>
           </IconButtonWithLabel>
         </ShareActionArea>
       </Toolbar>
@@ -96,10 +109,9 @@ const AdminBottomBar = ({
 
 const Index = () => {
   const [posiData, loading, error] = useCurrentPosi();
-  const [socialProofs, socialProofsLoading, socialProofsError] =
-    useCurrentSocialProofs();
-  const [myMaker, myMakerLoading, myMakerError] = useMyMaker();
-  const [maker, makerLoading, makerError] = useMaker(posiData?.makerId);
+  const [socialProofs] = useCurrentSocialProofs();
+  const [myMaker] = useMyMaker();
+  const [maker] = useMaker(posiData?.makerId);
 
   const Loading = () => {
     return (
@@ -110,6 +122,8 @@ const Index = () => {
     );
   };
 
+  const t = useTranslations("actions");
+
   return posiData ? (
     <Box>
       {error && (
@@ -117,16 +131,16 @@ const Index = () => {
       )}
       {loading && <Loading />}
       {!loading && !error && posiData == undefined && (
-        <Typography>No hay ninguna Action aquí.</Typography>
+        <Typography>{t("empty")}</Typography>
       )}
       {posiData && (
         /** Padding for bottom bar. */ <Box pb={15}>
           <AboutContent {...posiData} />
           {socialProofs && (
             <Stack spacing={1} m={1.5}>
-              <Typography variant="h3">Testimonios</Typography>
+              <Typography variant="h3">{t("testimonials")}</Typography>
               {socialProofs.length == 0 && (
-                <Typography>No hay testimonios.</Typography>
+                <Typography>{t("emptyTestimonials")}</Typography>
               )}
               <Grid container spacing={1}>
                 {socialProofs.map((socialProof) => {

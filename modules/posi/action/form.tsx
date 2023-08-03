@@ -11,7 +11,7 @@ import {
 import ImpactedPersonsInput from "../input/impactedPersonsInput";
 import ImpactMediaInput from "../input/impactMediaInput";
 import { PosiFormData, posiFormData } from "../../../functions/shared/src";
-import { useMaker, useMyMaker } from "../../../common/context/weverseUtils";
+import { useMyMaker } from "../../../common/context/weverseUtils";
 import ValidatorInput from "../input/validatorInput";
 import { useTranslations } from "next-intl";
 

@@ -3,10 +3,8 @@ import Head from "next/head";
 import "../modules/auth/AuthCode.css";
 import Script from "next/script";
 import AppProvider from "../common/context/appState";
-import { useLocale, NextIntlClientProvider } from "next-intl";
 
 function WeVerse({ Component, pageProps }: AppProps) {
-  // const locale = useLocale();
   return (
     <>
       <Head>
@@ -42,11 +40,9 @@ function WeVerse({ Component, pageProps }: AppProps) {
 
           gtag('config', 'G-NN708F3V4T');`}
       </Script>
-      <NextIntlClientProvider messages={pageProps.messages}>
-        <AppProvider>
-          <Component {...pageProps} />
-        </AppProvider>
-      </NextIntlClientProvider>
+      <AppProvider messages={pageProps.messages}>
+        <Component {...pageProps} />
+      </AppProvider>
     </>
   );
 }

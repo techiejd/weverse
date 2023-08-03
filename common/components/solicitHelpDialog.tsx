@@ -17,6 +17,7 @@ import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
 import ShareActionArea from "./shareActionArea";
 import { HowToSupport } from "../../functions/shared/src";
+import { useTranslations } from "next-intl";
 
 const SolicitDialog = ({
   open,
@@ -34,68 +35,68 @@ const SolicitDialog = ({
   editMakerPath: string;
 }) => {
   const queryKeyExt = `?openSupport=`;
+  const dialogTranslations = useTranslations("common.solicitHelpDialog");
+  const t = useTranslations("input");
   return (
     <Dialog open={open}>
-      <DialogTitle>Solicita Apoyo:</DialogTitle>
+      <DialogTitle>{dialogTranslations("title")}:</DialogTitle>
       <DialogContent>
         <Stack spacing={1}>
           <ShareActionArea
             shareProps={{
               path: pathUnderSupport + queryKeyExt + "generic",
-              text: "Me encantaría recibir tu colaboración para mi impacto social.",
-              title:
-                "Me encantaría recibir tu colaboración para mi impacto social.",
+              title: dialogTranslations("solicit.all.prompt"),
             }}
           >
             <Button variant="outlined" startIcon={<Support />}>
-              Solicitar todos
+              {dialogTranslations("solicit.all.title")}
             </Button>
           </ShareActionArea>
           <ShareActionArea
             shareProps={{
               path: solicitOpinionPath,
-              text: "Por favor dame tu testimonio sobre mi impacto social",
-              title: "Por favor dame tu testimonio sobre mi impacto social",
+              title: dialogTranslations("solicit.testimonial.prompt"),
             }}
           >
             <Button variant="outlined" startIcon={<Hearing />}>
-              Solicitar testimonio
+              {dialogTranslations("solicit.testimonial.title")}
             </Button>
           </ShareActionArea>
           <ShareActionArea
             shareProps={{
               path: pathUnderSupport + queryKeyExt + "sponsor",
-              text: "Busco patrocinio para mi impacto social",
-              title: "Busco patrocinio para mi impacto social",
+              title: dialogTranslations("solicit.sponsorship.prompt"),
             }}
           >
             <Button variant="outlined" startIcon={<CardGiftcard />}>
-              Solicitar Patrocinio
+              {dialogTranslations("solicit.sponsorship.title")}
             </Button>
           </ShareActionArea>
           {howToSupport.contact && (
             <ShareActionArea
               shareProps={{
                 path: pathUnderSupport + queryKeyExt + "connect",
-                text: "Por favor conectemos sobre mi impacto social",
-                title: "Por favor conectemos sobre mi impacto social",
+                title: dialogTranslations("solicit.connect.prompt"),
               }}
             >
               <Button variant="outlined" startIcon={<ConnectWithoutContact />}>
-                Solicitar Conectar
+                {dialogTranslations("solicit.connect.title")}
               </Button>
             </ShareActionArea>
           )}
         </Stack>
         <Typography>
-          Recuerda que puedes solicitar apoyo de otro tipo (no financiero)
-          <Link href={editMakerPath}> agregándolo en tu perfil de creador</Link>
-          .
+          {dialogTranslations.rich(
+            "reminderThatTheyCanSolicitMoreByEditingMakerPath",
+            {
+              link: (chunks) => <Link href={editMakerPath}>{chunks}</Link>,
+            }
+          )}
         </Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setOpen(false)} autoFocus>
-          Cerrar
+          {t("close")}
         </Button>
       </DialogActions>
     </Dialog>

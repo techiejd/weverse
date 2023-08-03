@@ -17,6 +17,7 @@
   },
   "input": {
     "cancel": "Cancel",
+    "close": "Close",
     "phoneNumber": "Phone number",
     "location": "Search location ...",
     "numChars": "{numChars} characters"
@@ -28,6 +29,7 @@
       "byOneWe": "by OneWe"
     },
     "callToAction": {
+      "edit": "Edit",
       "actions": {
         "list": "Actions",
         "add": "Add your action"
@@ -39,11 +41,35 @@
         "register": "Register as a maker!",
         "page": "My maker page"
       },
-      "yourMemberPage": "My Member Page" 
-    } 
+      "yourMemberPage": "My Member Page",
+      "share": "Share"
+    },
+    "solicitHelpDialog": {
+      "title": "Ask for support",
+      "reminderThatTheyCanSolicitMoreByEditingMakerPath": "Remember, you can ask for other types of (non-financial) help <link>by requesting it in your maker page</link>.",
+      "solicit": {
+        "all": {
+          "title": "Ask for all",
+          "prompt": "I would love to collaborate on my social impact."
+        },
+        "testimonial": {
+          "title": "Ask for a testimonial",
+          "prompt": "Please give me a testimonial on my social impact."
+        },
+        "sponsorship": {
+          "title": "Ask for sponsorship",
+          "prompt": "I am looking for sponsorships of my social impact."
+        },
+        "connect": {
+          "title": "Ask to connect",
+          "prompt": "Let's connect over my social impact"
+        }
+      }
+    }
   },
   "actions": {
     "testimonials": "Testimonials",
+    "emptyTestimonials": "There are no testimonials, yet. Add one!",
     "upload": {
       "submit": "Publish",
       "title": "¡Publish your action! 🪧",
@@ -79,6 +105,22 @@
         "noTarget": "You did not indicate the beneficiary community to send this survey, but we trust you to find the right people.",
         "solicitText": "Please give me your opinion on my action: {for}",
         "clickOnEarToSolicit": "Click on the ear to send them a survey asking for a testimonials."
+      }
+    },
+    "about": {
+      "explanation": "About this action",
+      "coverImage": "Cover image",
+      "coverVideo": "Cover video",
+      "location": "Location",
+      "impactedPersons": "Who did they help?"
+    },
+    "empty": "There are no actions, yet. Add one!",
+    "solicit": {
+      "support": "Support",
+      "testimonial": "Listen",
+      "requests": {
+        "opinion": "Please give me your opinion on my social impact for my action: {summary}",
+        "look": "Take a look at my social action."
       }
     }
   }

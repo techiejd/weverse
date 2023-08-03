@@ -21,6 +21,8 @@ import { AuthAction } from "../../modules/auth/AuthDialog/context";
 import { Header } from "../components/header";
 import { lightConfiguration } from "../components/theme";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
+import { AbstractIntlMessages } from "next-intl";
+import { NextIntlClientProvider } from "next-intl";
 
 const RegisterModal = () => {
   //TODO(techiejd): Look into how to consolidate all AuthDialogs into one.
@@ -98,7 +100,8 @@ const AppStateContext = createContext(weverse);
 
 const AppProvider: React.FC<{
   children: React.ReactNode;
-}> = ({ children }) => {
+  messages?: AbstractIntlMessages;
+}> = ({ children, messages }) => {
   const [appState, setAppState] = useState(weverse);
   const [user, loading, error] = useAuthState(appState.auth);
   // TODO(techiejd): Do something about errors.
@@ -109,15 +112,18 @@ const AppProvider: React.FC<{
     }));
   }, [setAppState, user, loading]);
 
+  //TODO(techiejd): Look into removing registermodal and header into somewhere else so that getstaticprops can be used.
   return (
     <AppStateContext.Provider value={appState}>
-      <ThemeProvider theme={createTheme(lightConfiguration)}>
-        <CssBaseline>
-          <RegisterModal />
-          <Header />
-          <main>{children}</main>
-        </CssBaseline>
-      </ThemeProvider>
+      <NextIntlClientProvider messages={messages}>
+        <ThemeProvider theme={createTheme(lightConfiguration)}>
+          <CssBaseline>
+            <RegisterModal />
+            <Header />
+            <main>{children}</main>
+          </CssBaseline>
+        </ThemeProvider>
+      </NextIntlClientProvider>
     </AppStateContext.Provider>
   );
 };
