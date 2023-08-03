@@ -11,6 +11,7 @@ import {
 import { useCurrentPosiId } from "../../../../modules/posi/context";
 import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
+import { useTranslations } from "next-intl";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -24,6 +25,7 @@ const Solicit = () => {
     String(posiId)
   ).withConverter(posiFormDataConverter);
   const [posi, posiLoading, posiError] = useDocumentData(posiDocRef);
+  const t = useTranslations("actions.impact.solicit");
   const PromptMaker = ({ makerId }: { makerId: string }) => {
     const makerDocRef = doc(
       appState.firestore,
@@ -33,7 +35,7 @@ const Solicit = () => {
     const [maker, makerLoading, makerError] = useDocumentData(makerDocRef);
     return maker ? (
       <Typography variant="h1">
-        {maker.name}, ¡Obten los comentarios y obten más participación!
+        {t("title", { makerName: maker.name })}
       </Typography>
     ) : (
       <CircularProgress />
@@ -47,26 +49,22 @@ const Solicit = () => {
       <PromptMaker makerId={posi.makerId!} />
       {posi.howToIdentifyImpactedPeople ? (
         <Typography variant="h2">
-          Escuchemos a los siguientes: {posi.howToIdentifyImpactedPeople}
+          {t("target", {
+            howToIdentifyImpactedPeople: posi.howToIdentifyImpactedPeople,
+          })}
         </Typography>
       ) : (
-        <Typography>
-          No indicaste a quien mandarle la encuesta, pero confiamos en tí de
-          encontrarlos.
-        </Typography>
+        <Typography>{t("noTarget")}</Typography>
       )}
       <ShareActionArea
         shareProps={{
-          title: `Por favor dame tu opinion sobre mi acción social: ${posi.summary}`,
-          text: `Por favor dame tu opinion sobre mi acción social: ${posi.summary}`,
+          title: t("solicitText", { for: posi.summary }),
           path: `/posi/${posiId}/impact/upload`,
         }}
       >
         <Hearing sx={{ fontSize: 160 }} />
       </ShareActionArea>
-      <Typography>
-        Haz clic en la oreja para enviarles una encuesta sobre esta acción.
-      </Typography>
+      <Typography>{t("clickOnEarToSolicit")}</Typography>
     </Stack>
   ) : (
     <CircularProgress />

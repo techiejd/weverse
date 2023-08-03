@@ -71,6 +71,15 @@
           "title": "¿Dónde realizaste esta acción?"
         }
       }
+    },
+    "impact": {
+      "solicit": {
+        "title": "{makerName}, ¡Obten los comentarios y obten más participación!",
+        "target": "Escuchemos a los siguientes: {howToIdentifyImpactedPeople}",
+        "noTarget": "No indicaste a quien mandarle la encuesta, pero confiamos en tí de encontrarlos.",
+        "solicitText": "Por favor dame tu opinion sobre mi acción social: {for}",
+        "clickOnEarToSolicit": "Haz clic en la oreja para enviarles una encuesta sobre esta acción."
+      }
     }
   }
 }

@@ -4,7 +4,7 @@ import buildUrl from "@googlicius/build-url";
 
 export type ShareProps = {
   title: string;
-  text: string;
+  text?: string;
   path: string;
 };
 
@@ -17,7 +17,8 @@ const ShareActionArea = ({
   shareProps: ShareProps;
   onClick?: () => void;
 }) => {
-  const { title, text, path } = shareProps;
+  const { title, text: textIn, path } = shareProps;
+  const text = textIn ? textIn : title;
   const shareData = {
     title,
     text,

@@ -71,6 +71,15 @@
           "title": "Where was this action done?"
         }
       }
+    },
+    "impact": {
+      "solicit": {
+        "title": "{makerName}, Get testimonials and get more engagement!",
+        "target": "Let's listen to the following: {howToIdentifyImpactedPeople}",
+        "noTarget": "You did not indicate the beneficiary community to send this survey, but we trust you to find the right people.",
+        "solicitText": "Please give me your opinion on my action: {for}",
+        "clickOnEarToSolicit": "Click on the ear to send them a survey asking for a testimonials."
+      }
     }
   }
 }
