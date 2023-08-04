@@ -36,6 +36,7 @@ import Sponsor from "../../modules/makers/sponsor";
 import { useMyMember, useMySponsorships } from "../context/weverseUtils";
 import UnderConstruction from "../../modules/posi/underConstruction";
 import LogInPrompt from "./logInPrompt";
+import { useTranslations } from "next-intl";
 
 const supportDialogs = z.enum(["connect", "sponsor", "generic"]);
 export type SupportDialogs = z.infer<typeof supportDialogs>;
@@ -115,12 +116,15 @@ const ContactSupportDialog = ({
   inputText?: string;
 }) => {
   const handleClose = () => setOpen(false);
+  const contactSupportDialogTranslations = useTranslations(
+    "common.contactSupportDialog"
+  );
   const title = !inputText
-    ? "El o la Maker aún no ha terminado su perfil."
-    : "El o la Maker dice que busca el siguiente tipo de ayuda y con estos canales de contacto:";
+    ? contactSupportDialogTranslations("missingInfoTitle")
+    : contactSupportDialogTranslations("title");
   const text = inputText
     ? inputText
-    : `¡Gracias por querer apoyar! Le hemos mandado un mensaje al o la Maker de tu interes y esperamos que tu solicitud le anime a terminar pronto.`;
+    : contactSupportDialogTranslations("missingInfoText");
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>{title}</DialogTitle>
@@ -155,9 +159,12 @@ const GenericSupportDialog = ({
 }) => {
   const [o, setO] = useState(open);
   const handleClose = () => setO(false);
+  const callToActionTranslations = useTranslations("common.callToAction");
+  const supportDialogTranslations = useTranslations("common.supportDialog");
+  const inputTranslations = useTranslations("input");
   return (
     <Dialog open={o} onClose={handleClose}>
-      <DialogTitle>¡Gracias por tu apoyo!</DialogTitle>
+      <DialogTitle>{supportDialogTranslations("title")}</DialogTitle>
       <DialogContent>
         <Stack spacing={1}>
           {/** Speak, Fund, Contact, Share */}
@@ -166,7 +173,7 @@ const GenericSupportDialog = ({
             startIcon={<Campaign />}
             variant="outlined"
           >
-            Dar tu opinión
+            {callToActionTranslations("testify")}
           </Button>
           <Button
             onClick={() => {
@@ -176,7 +183,7 @@ const GenericSupportDialog = ({
             startIcon={<CardGiftcard />}
             variant="outlined"
           >
-            Patrocinar
+            {callToActionTranslations("sponsor")}
           </Button>
           {howToSupport.contact && (
             <Button
@@ -187,7 +194,7 @@ const GenericSupportDialog = ({
               startIcon={<ConnectWithoutContact />}
               variant="outlined"
             >
-              Conectar
+              {callToActionTranslations("connect")}
             </Button>
           )}
           <ShareActionArea shareProps={shareProps}>
@@ -196,14 +203,14 @@ const GenericSupportDialog = ({
               startIcon={<Share />}
               variant="outlined"
             >
-              Compartir
+              {callToActionTranslations("share")}
             </Button>
           </ShareActionArea>
         </Stack>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} autoFocus>
-          Cerrar
+          {inputTranslations("cancel")}
         </Button>
       </DialogActions>
     </Dialog>
@@ -216,6 +223,7 @@ const beneficiaryType = z.object({
 });
 type Beneficiary = z.infer<typeof beneficiaryType>;
 const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
+  // TODO(techiejd): Missing button for connect to maker (generic support dialog has it).
   const openSupportDialog = useOpenSupportDialog();
   const genericDialogOpen = openSupportDialog == "generic";
   const [connectDialogOpen, setConnectDialogOpen] = useState(
@@ -224,22 +232,21 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
   const [sponsorDialogOpen, setSponsorDialogOpen] = useState(
     openSupportDialog == "sponsor"
   );
+  const callToActionTranslations = useTranslations("common.callToAction");
+  const supportDialogTranslations = useTranslations("common.supportDialog");
 
   const addSocialProofPath = beneficiary.action
     ? `/posi/${beneficiary.action.id}/impact/upload`
     : `/makers/${beneficiary.maker.id}/impact/upload`;
 
-  const shareProps = beneficiary.action
-    ? {
-        title: "Mira esta acción social tan chévere. ¡Apoyemosla!",
-        text: "Mira esta acción social tan chévere. ¡Apoyemosla!",
-        path: `/posi/${beneficiary.action.id}`,
-      }
-    : {
-        title: "Mira esta Maker tan chévere. ¡Apoyemosla!",
-        text: "Mira esta Maker tan chévere. ¡Apoyemosla!",
-        path: `/makers/${beneficiary.maker.id}`,
-      };
+  const shareProps = {
+    title: supportDialogTranslations("share", {
+      beneficiaryType: beneficiary.action ? "action" : "maker",
+    }),
+    path: beneficiary.action
+      ? `/posi/${beneficiary.action.id}`
+      : `/makers/${beneficiary.maker.id}`,
+  };
 
   const [sponsorships] = useMySponsorships();
   const sponsoring = sponsorships
@@ -259,7 +266,9 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
     ) : (
       <Fragment>
         <VolunteerActivism fontSize="large" />
-        <Typography fontSize={12}>Patrocinar</Typography>
+        <Typography fontSize={12}>
+          {callToActionTranslations("sponsor")}
+        </Typography>
       </Fragment>
     );
   };
@@ -296,7 +305,9 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
       <Toolbar>
         <IconButtonWithLabel href={addSocialProofPath}>
           <Campaign fontSize="large" />
-          <Typography fontSize={12}>Dar Testimonio</Typography>
+          <Typography fontSize={12}>
+            {callToActionTranslations("testify")}
+          </Typography>
         </IconButtonWithLabel>
         <CenterBottomFab
           color="secondary"
@@ -313,12 +324,16 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
         <Box sx={{ flexGrow: 1 }} />
         <IconButtonWithLabel onClick={() => setConnectDialogOpen(true)}>
           <Add fontSize="large" />
-          <Typography fontSize={12}>Apoyar</Typography>
+          <Typography fontSize={12}>
+            {callToActionTranslations("support")}
+          </Typography>
         </IconButtonWithLabel>
         <ShareActionArea shareProps={shareProps}>
           <IconButtonWithLabel>
             <Share fontSize="large" />
-            <Typography fontSize={12}>Compartir</Typography>
+            <Typography fontSize={12}>
+              {callToActionTranslations("share")}
+            </Typography>
           </IconButtonWithLabel>
         </ShareActionArea>
       </Toolbar>

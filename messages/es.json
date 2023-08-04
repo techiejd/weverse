@@ -42,7 +42,11 @@
         "page": "Mi Página Maker"
       },
       "yourMemberPage": "Mi Página de Miembro",
-      "share": "Compartir"
+      "share": "Compartir",
+      "support": "Apoyar",
+      "sponsor": "Patrocinar",
+      "testify": "Dar testimonio",
+      "connect": "Conectar"
     },
     "solicitHelpDialog": {
       "title": "Solicita Apoyo",
@@ -65,6 +69,15 @@
           "prompt": "Por favor conectemos sobre mi impacto social"
         }
       }
+    },
+    "supportDialog": {
+      "title": "¡Gracias por tu apoyo!",
+      "share": "{beneficiaryType, select, action {Mira esta acción social tan chévere. ¡Apoyemosla!} other {Mira este Maker tan chévere. ¡Apoyemoslo!}}"
+    },
+    "contactSupportDialog": {
+      "missingInfoTitle": "El o la Maker aún no ha terminado su perfil.",
+      "title": "El o la Maker dice que busca el siguiente tipo de ayuda y con estos canales de contacto:",
+      "missingInfoText": "¡Gracias por querer apoyar! Le hemos mandado un mensaje al o la Maker de tu interes y esperamos que tu solicitud le anime a terminar pronto."
     }
   },
   "actions": {

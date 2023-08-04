@@ -42,7 +42,11 @@
         "page": "My maker page"
       },
       "yourMemberPage": "My Member Page",
-      "share": "Share"
+      "share": "Share",
+      "support": "Support",
+      "sponsor": "Sponsor",
+      "testify": "Give testimonial",
+      "connect": "Connect"
     },
     "solicitHelpDialog": {
       "title": "Ask for support",
@@ -65,6 +69,15 @@
           "prompt": "Let's connect over my social impact"
         }
       }
+    },
+    "supportDialog": {
+      "title": "Thank you for the support!",
+      "share": "{beneficiaryType, select, action {Take a look at this cool social action. Let's support it!} other {Take a look at this awesome Maker. Let's support them!}}"
+    },
+    "contactSupportDialog": {
+      "missingInfoTitle": "The maker has yet to finish their profile.",
+      "title": "The maker says you can contact them through these ways:",
+      "missingInfoText": "¡Thanks for wanting to support! We have alerted the maker about your interest and we hope your ask convinces them to finish quickly."
     }
   },
   "actions": {
