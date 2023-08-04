@@ -43,25 +43,6 @@ const AboutContent = ({
       </Box>
       <Stack divider={<Divider flexItem />} spacing={1} m={1.5}>
         <Box>
-          {media.type == "video" ? (
-            <CardHeader
-              avatar={
-                <Icon>
-                  <PlayCircle />
-                </Icon>
-              }
-              title={t("coverVideo")}
-            />
-          ) : (
-            <CardHeader
-              avatar={
-                <Icon>
-                  <ImageIcon />
-                </Icon>
-              }
-              title={t("coverImage")}
-            />
-          )}
           <Box
             sx={{
               height: "50vh",
