@@ -20,6 +20,7 @@ import {
 } from "../../../common/context/weverseUtils";
 import { Sponsorship } from "../../../functions/shared/src";
 import { feePercentage, toDisplayCurrency, currencyInfo } from "./common/utils";
+import { useTranslations } from "next-intl";
 
 const SponsorshipDisplay = ({
   sponsorship,
@@ -32,6 +33,7 @@ const SponsorshipDisplay = ({
   handleCancelSponsorship?: (sponsorship: Sponsorship) => Promise<any>;
   showAmount?: boolean;
 }) => {
+  const sponsorTranslations = useTranslations("common.sponsor");
   const sponsorshipLevelInfo = currencyInfo.cop.sponsorshipLevelInfo;
   const [maker] = useMaker(type == "for" ? sponsorship.maker : undefined);
   const [member] = useMember(type == "from" ? sponsorship.member : undefined);
@@ -113,7 +115,7 @@ const SponsorshipDisplay = ({
         secondaryTypographyProps={{ fontSize: 12 }}
       />
       <Typography variant="body2">
-        {sponsorshipLevelInfo[sponsorship.sponsorshipLevel].displayName}
+        {sponsorTranslations("levels." + sponsorship.sponsorshipLevel)}
       </Typography>
     </ListItem>
   );

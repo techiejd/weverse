@@ -2,6 +2,7 @@ import { Box, CircularProgress, Grid, Stack, Typography } from "@mui/material";
 import { Currency, SponsorshipLevel } from "../../../../functions/shared/src";
 import { Fragment } from "react";
 import { currencyInfo, toDisplayCurrency } from "./utils";
+import { useTranslations } from "next-intl";
 
 const LineItems = ({
   lineItems,
@@ -46,13 +47,11 @@ const Details = ({
     postalCode: string;
   };
 }) => {
+  const sponsorTranslations = useTranslations("common.sponsor");
   const sponsorship = [
     {
       name: "Tipo de patrocinio",
-      detail:
-        currencyInfo[sponsorshipIn.currency].sponsorshipLevelInfo[
-          sponsorshipIn.sponsorshipLevel as SponsorshipLevel
-        ].displayName,
+      detail: sponsorTranslations("levels." + sponsorshipIn.sponsorshipLevel),
     },
     {
       name: "Total",
