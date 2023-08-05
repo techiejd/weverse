@@ -47,14 +47,15 @@ const Details = ({
     postalCode: string;
   };
 }) => {
+  const inputTranslations = useTranslations("input");
   const sponsorTranslations = useTranslations("common.sponsor");
   const sponsorship = [
     {
-      name: "Tipo de patrocinio",
+      name: sponsorTranslations("details.sponsorshipSummary.level"),
       detail: sponsorTranslations("levels." + sponsorshipIn.sponsorshipLevel),
     },
     {
-      name: "Total",
+      name: sponsorTranslations("total"),
       detail: toDisplayCurrency[sponsorshipIn.currency](
         Number(sponsorshipIn.total)
       ),
@@ -64,23 +65,32 @@ const Details = ({
   const customerDetails = customerDetailsIn
     ? [
         {
-          name: "Titular de la tarjeta",
+          name: sponsorTranslations("details.payment.holder"),
           detail: `${customerDetailsIn.firstName} ${customerDetailsIn.lastName}`,
         },
-        { name: "Correo electrónico", detail: customerDetailsIn.email },
-        { name: "Número de teléfono", detail: customerDetailsIn.phone },
-        { name: "Pais", detail: customerDetailsIn.country },
-        { name: "Codigo Postal", detail: customerDetailsIn.postalCode },
+        { name: inputTranslations("email"), detail: customerDetailsIn.email },
+        {
+          name: inputTranslations("phoneNumber"),
+          detail: customerDetailsIn.phone,
+        },
+        {
+          name: inputTranslations("country"),
+          detail: customerDetailsIn.country,
+        },
+        {
+          name: inputTranslations("postalCode"),
+          detail: customerDetailsIn.postalCode,
+        },
       ]
     : undefined;
   return (
     <Stack spacing={2}>
       <Typography variant="h6" gutterBottom>
-        Resumen de patrocinio
+        {sponsorTranslations("details.sponsorshipSummary.title")}
       </Typography>
       <LineItems lineItems={sponsorship} />
       <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-        Detalles de pago
+        {sponsorTranslations("details.payment.title")}
       </Typography>
       {customerDetails ? (
         <LineItems lineItems={customerDetails} />

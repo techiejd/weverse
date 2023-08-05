@@ -27,7 +27,8 @@
     "location": "Buscar ubicaciones ...",
     "numChars": "{numChars} caracteres",
     "next": "Siguiente",
-    "back": "Atras"
+    "back": "Atras",
+    "ok": "Listo"
   },
   "common": {
     "motto": "Apoyando acciones que cambian el mundo",
@@ -128,10 +129,24 @@
           "title": "Datos de cliente"
         },
         "payment": {
-          "short": "Pago"
+          "short": "Pago",
+          "card": {
+            "number": "Número de tarjeta",
+            "expires": "Expira"
+          }
         },
         "confirm": {
           "short": "Confirma"
+        }
+      },
+      "details": {
+        "sponsorshipSummary": {
+          "title": "Resumen de patrocinio",
+          "level":  "Nivel de patrocinio"
+        },
+        "payment": {
+          "title": "Detalles de pago",
+          "holder": "Titular de la tarjeta"
         }
       }
     }

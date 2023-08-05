@@ -27,7 +27,8 @@
     "location": "Search location ...",
     "numChars": "{numChars} characters",
     "next": "Next",
-    "back": "Back"
+    "back": "Back",
+    "ok": "Ok"
   },
   "common": {
     "motto": "Supporting actions that change the world",
@@ -129,10 +130,24 @@
           "title": "Customer Information"
         },
         "payment": {
-          "short": "Payment"
+          "short": "Payment",
+          "card": {
+            "number": "Card number",
+            "expiry": "Expiry"
+          }
         },
         "confirm": {
           "short": "Confirm"
+        }
+      },
+      "details": {
+        "sponsorshipSummary": {
+          "title": "Sponsorship summary",
+          "level":  "Sponsorship level"
+        },
+        "payment": {
+          "title": "Payment details",
+          "holder": "Card holder name"
         }
       }
     }

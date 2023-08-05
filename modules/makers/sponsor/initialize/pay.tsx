@@ -25,6 +25,7 @@ import {
 import { Step } from "./utils";
 import Details from "../common/details";
 import { Maker } from "../../../../functions/shared/src";
+import { useTranslations } from "next-intl";
 
 const Pay = ({
   sponsorForm,
@@ -163,6 +164,7 @@ const Pay = ({
       !cc.cvcComplete ||
       loading;
 
+    const inputTranslations = useTranslations("input");
     return (
       <React.Fragment>
         <Grid container spacing={3} mt={3}>
@@ -205,7 +207,7 @@ const Pay = ({
               disabled={loading}
               loading={loading}
             >
-              <span>Atras</span>
+              <span>{inputTranslations("back")}</span>
             </LoadingButton>
             <LoadingButton
               variant="contained"
@@ -214,7 +216,7 @@ const Pay = ({
               disabled={disableSubmit}
               loading={loading}
             >
-              <span>Listo</span>
+              <span>{inputTranslations("ok")}</span>
             </LoadingButton>
           </React.Fragment>
         </Box>

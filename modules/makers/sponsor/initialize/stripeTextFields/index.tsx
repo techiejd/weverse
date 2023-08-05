@@ -11,6 +11,7 @@ import {
 } from "@stripe/react-stripe-js";
 import StripeInput from "./stripeInput";
 import { TextField, TextFieldProps } from "@mui/material";
+import { useTranslations } from "next-intl";
 
 export type StripeElement =
   | typeof AuBankAccountElement
@@ -83,10 +84,11 @@ StripeTextField.defaultProps = StripeTextDefaultProps;
 export function StripeTextFieldNumber(
   props: StripeTextFieldProps<typeof CardNumberElement>
 ): JSX.Element {
+  const cardTranslations = useTranslations("common.sponsor.steps.payment.card");
   return (
     <StripeTextField
       {...props}
-      label="Numero de tarjeta"
+      label={cardTranslations("number")}
       stripeElement={CardNumberElement}
     />
   );
@@ -97,10 +99,11 @@ StripeTextFieldNumber.defaultProps = StripeTextDefaultProps;
 export function StripeTextFieldExpiry(
   props: StripeTextFieldProps<typeof CardExpiryElement>
 ): JSX.Element {
+  const cardTranslations = useTranslations("common.sponsor.steps.payment.card");
   return (
     <StripeTextField
       {...props}
-      label="Expira"
+      label={cardTranslations("expiry")}
       stripeElement={CardExpiryElement}
     />
   );
