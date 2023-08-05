@@ -8,6 +8,7 @@ import { useMyMemberOnce } from "../../../common/context/weverseUtils";
 import InitializeSponsor from "./initialize";
 import RepeatSponsor from "./repeat";
 import { Maker } from "../../../functions/shared/src";
+import { useTranslations } from "next-intl";
 
 export default function Sponsor({
   exitButtonBehavior,
@@ -17,6 +18,7 @@ export default function Sponsor({
   //TODO(techiejd): This isn't necessary if we move posi under makers/maker
   beneficiary: Maker;
 }) {
+  const sponsorTranslations = useTranslations("common.sponsor");
   const router = useRouter();
   const { isReady, query } = useRouter();
   const { sponsorStep, makerId, ...queryOthers } = query;
@@ -108,7 +110,7 @@ export default function Sponsor({
           }}
         >
           <Typography component="h1" variant="h4" align="center">
-            Patrocina a {beneficiary.name}
+            {sponsorTranslations("title", { makerName: beneficiary.name })}
           </Typography>
           {isRepeatSponsor ? (
             <RepeatSponsor

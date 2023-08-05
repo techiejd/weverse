@@ -19,6 +19,7 @@ const PhoneInput = ({
   setPhoneError: React.Dispatch<React.SetStateAction<boolean>>;
   phoneError: boolean;
 }) => {
+  //TODO(techiejd): WET -> DRY
   const [phoneIn, setPhoneIn] = useState(sponsorForm.phone ?? "");
   const onPhoneChange = (value: string, info: MuiTelInputInfo) => {
     if (info.nationalNumber == null || info.nationalNumber.length <= 12) {
@@ -56,6 +57,8 @@ const CustomerDetails = ({
   sponsorForm: Record<string, string>;
   handleBack: () => void;
 }) => {
+  const customerTranslations = useTranslations("common.sponsor.steps.customer");
+  const inputTranslations = useTranslations("input");
   const [phoneError, setPhoneError] = React.useState(false);
   const [forwardDisabled, setForwardDisabled] = React.useState(false);
 
@@ -78,7 +81,7 @@ const CustomerDetails = ({
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Detalles de pago
+        {customerTranslations("title")}
       </Typography>
       <input hidden value={"customerDetails"} name="stepString" readOnly />
       <input hidden readOnly value={countryInfo.code} name="countryCode" />
@@ -86,7 +89,7 @@ const CustomerDetails = ({
         <Grid item xs={12} md={6}>
           <TextField
             defaultValue={sponsorForm.firstName ?? ""}
-            label="Nombres"
+            label={inputTranslations("firstName")}
             name="firstName"
             variant="standard"
             required
@@ -96,7 +99,7 @@ const CustomerDetails = ({
         <Grid item xs={12} md={6}>
           <TextField
             defaultValue={sponsorForm.lastName ?? ""}
-            label="Apellidos"
+            label={inputTranslations("lastName")}
             name="lastName"
             variant="standard"
             required
@@ -106,7 +109,7 @@ const CustomerDetails = ({
         <Grid item xs={12} md={6}>
           <TextField
             defaultValue={sponsorForm.email ?? ""}
-            label="Correo"
+            label={inputTranslations("email")}
             type="email"
             name="email"
             variant="standard"
@@ -137,7 +140,7 @@ const CustomerDetails = ({
             getOptionLabel={(option) => option.country}
             renderInput={(params) => (
               <TextField
-                label="Pais"
+                label={inputTranslations("country")}
                 variant="outlined"
                 name="country"
                 required
@@ -161,7 +164,7 @@ const CustomerDetails = ({
             loading={prevStepLoading}
             disabled={prevStepLoading}
           >
-            <span>Atras</span>
+            <span>{inputTranslations("back")}</span>
           </LoadingButton>
           <LoadingButton
             variant="contained"
@@ -170,7 +173,7 @@ const CustomerDetails = ({
             loading={prevStepLoading}
             disabled={prevStepLoading || forwardDisabled}
           >
-            <span>Siguiente</span>
+            <span>{inputTranslations("next")}</span>
           </LoadingButton>
         </React.Fragment>
       </Box>

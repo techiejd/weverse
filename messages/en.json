@@ -19,9 +19,15 @@
     "cancel": "Cancel",
     "close": "Close",
     "phoneNumber": "Phone number",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "postalCode": "Postal code",
+    "country": "Country",
     "location": "Search location ...",
     "numChars": "{numChars} characters",
-    "next": "Next"
+    "next": "Next",
+    "back": "Back"
   },
   "common": {
     "motto": "Supporting actions that change the world",
@@ -119,7 +125,8 @@
           }
         },
         "customer": {
-          "short": "Customer info"
+          "short": "Customer info",
+          "title": "Customer Information"
         },
         "payment": {
           "short": "Payment"

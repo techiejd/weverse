@@ -19,9 +19,15 @@
     "cancel": "Cancelar",
     "close": "Cerrar",
     "phoneNumber": "Número telefónico",
+    "firstName": "Nombres",
+    "lastName": "Apellido",
+    "email": "Correo",
+    "postalCode": "Código postal",
+    "country": "Pais",
     "location": "Buscar ubicaciones ...",
     "numChars": "{numChars} caracteres",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "back": "Atras"
   },
   "common": {
     "motto": "Apoyando acciones que cambian el mundo",
@@ -118,7 +124,8 @@
           }
         },
         "customer": {
-          "short": "Datos"
+          "short": "Datos",
+          "title": "Datos de cliente"
         },
         "payment": {
           "short": "Pago"
