@@ -4,6 +4,7 @@ import {
   sponsorshipLevel,
 } from "../../../../functions/shared/src";
 
+// TODO(techiejd): Move this to be done in translations (next-intl useFormatting).
 const toCop = (amount: number) =>
   amount.toLocaleString("es-CO", { style: "currency", currency: "COP" });
 const toUsd = (amount: number) =>
@@ -26,7 +27,7 @@ type CurrencyInfo = Record<
     feeCharge: { amount: number; displayAmount: string };
     sponsorshipLevelInfo: Record<
       SponsorshipLevel,
-      { displayName: string; amount: number; displayCurrency: string }
+      { amount: number; displayCurrency: string }
     >;
   }
 >;
@@ -35,8 +36,8 @@ export const currencyInfo: CurrencyInfo = (() => {
   const displayNames = {
     [sponsorshipLevel.Enum.admirer]: "Admirador",
     [sponsorshipLevel.Enum.fan]: "Aficionado",
-    [sponsorshipLevel.Enum.lover]: "Aficionado",
-    [sponsorshipLevel.Enum.custom]: "Aficionado",
+    [sponsorshipLevel.Enum.lover]: "Amante",
+    [sponsorshipLevel.Enum.custom]: "Personalizado",
   };
   const applySponsorshipLevelInfo = (
     currency: "cop" | "usd" | "eur" | "gbp",
@@ -45,11 +46,10 @@ export const currencyInfo: CurrencyInfo = (() => {
     Object.entries(sponsorshipLevelInfo).reduce((acc, [key, value]) => {
       acc[key as SponsorshipLevel] = {
         amount: value,
-        displayName: displayNames[key as SponsorshipLevel],
         displayCurrency: toDisplayCurrency[currency](value),
       };
       return acc;
-    }, {} as Record<SponsorshipLevel, { displayName: string; amount: number; displayCurrency: string }>);
+    }, {} as Record<SponsorshipLevel, { amount: number; displayCurrency: string }>);
   const copAmounts = {
     [sponsorshipLevel.Enum.admirer]: 5_000,
     [sponsorshipLevel.Enum.fan]: 10_000,

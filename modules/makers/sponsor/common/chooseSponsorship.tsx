@@ -24,6 +24,7 @@ import {
   SponsorshipLevel,
   sponsorshipLevel,
 } from "../../../../functions/shared/src";
+import { useTranslations } from "next-intl";
 
 const ChooseSponsorship = ({
   sponsorForm,
@@ -36,6 +37,9 @@ const ChooseSponsorship = ({
   beneficiary: Maker;
   currency?: Currency;
 }) => {
+  const sponsorTranslations = useTranslations("common.sponsor");
+  const chooseTranslations = useTranslations("common.sponsor.steps.choose");
+  const inputTranslations = useTranslations("input");
   const [currency, setCurrency] = useState<Currency>(
     currencyIn || (sponsorForm.currency as Currency) || ("cop" as Currency)
   );
@@ -105,7 +109,9 @@ const ChooseSponsorship = ({
       <FormControlLabel
         value={sponsorshipLevelIn}
         control={<Radio />}
-        label={`${sponsorshipLevelInfo[sponsorshipLevelIn].displayName}: ${sponsorshipLevelInfo[sponsorshipLevelIn].displayCurrency}`}
+        label={`${sponsorTranslations("levels." + sponsorshipLevelIn)}: ${
+          sponsorshipLevelInfo[sponsorshipLevelIn].displayCurrency
+        }`}
       />
     );
   };
@@ -119,10 +125,9 @@ const ChooseSponsorship = ({
         sx={{ display: currencyIn ? "none" : "flex" }}
       >
         <Stack>
-          <Typography>Escoge tu divisa</Typography>
+          <Typography>{chooseTranslations("currency.prompt")}</Typography>
           <Typography variant="body2" color="text.secondary">
-            Solo puedes elegir la divisa en este primer patrocinio, porque
-            almacenamos este dato.
+            {chooseTranslations("currency.chooseWiselyWarning")}
           </Typography>
         </Stack>
         <NativeSelect
@@ -153,7 +158,7 @@ const ChooseSponsorship = ({
     <Fragment>
       <ChooseCurrency />
       <Typography variant="h6" gutterBottom>
-        Elige tu nivel de patrocinio
+        {chooseTranslations("title")}
       </Typography>
 
       <input hidden value={"chooseSponsorship"} name="stepString" readOnly />
@@ -165,8 +170,10 @@ const ChooseSponsorship = ({
         <Stack>
           <ListItem sx={{ px: 0 }}>
             <ListItemText
-              primary={"Patrocinio"}
-              secondary={`Nivel ${sponsorshipLevelInfo[sponsorshipLevelIn].displayName}`}
+              primary={sponsorTranslations("sponsorship")}
+              secondary={chooseTranslations("level", {
+                level: sponsorTranslations("levels." + sponsorshipLevelIn),
+              })}
             />
             <Typography variant="body2">{sponsorshipDisplayAmount}</Typography>
           </ListItem>
@@ -231,11 +238,11 @@ const ChooseSponsorship = ({
         <Stack>
           <ListItem sx={{ px: 0 }}>
             <ListItemText
-              primary={"Propina a OneWe"}
+              primary={chooseTranslations("tip.prompt")}
               secondary={
                 <>
-                  ¡Muéstranos!, cuánto nos amas. <br /> Por los servicios
-                  brindados en la plataforma.
+                  {chooseTranslations("tip.showUsYourLove")}
+                  <br /> {chooseTranslations("tip.forTheService")}
                 </>
               }
             />
@@ -262,10 +269,14 @@ const ChooseSponsorship = ({
         <Stack>
           <ListItem sx={{ pt: 1, px: 0 }}>
             <ListItemText
-              primary={"Tarifa a la pasarela de pagos"}
-              secondary={`${(feePercentage * 100).toFixed(1)}% + ${
-                currencyInfo[currency].feeCharge.displayAmount
-              } pesos por transacción.`}
+              primary={chooseTranslations("fee.prompt")}
+              secondary={
+                /*TODO(techiejd): look into formatting with next-intl*/
+                chooseTranslations("fee.feeExplanation", {
+                  feePercentage: `${(feePercentage * 100).toFixed(1)}`,
+                  feeAmount: feeDisplayAmount,
+                })
+              }
             />
             <Typography variant="body2">{feeDisplayAmount}</Typography>
           </ListItem>
@@ -279,15 +290,23 @@ const ChooseSponsorship = ({
                   onChange={(e) => setMakerPaysFee(e.target.checked)}
                 />
               }
-              label="Prefiero que el Maker pague la tarifa."
+              label={chooseTranslations("fee.preferMakerPays")}
             />
           </ListItem>
         </Stack>
         <Stack>
           <ListItem sx={{ pt: 1, px: 0 }}>
             <ListItemText
-              primary={"¿Le contamos a la comunidad OneWe?"}
-              secondary={"El o la Maker siempre sabrá quien le patrocina."}
+              primary={chooseTranslations("publicizeSupporter.prompt")}
+              secondary={
+                <>
+                  {chooseTranslations("publicizeSupporter.makerKnows")}
+                  <br />{" "}
+                  {chooseTranslations(
+                    "publicizeSupporter.publicizeSupporterExplanation"
+                  )}
+                </>
+              }
             />
           </ListItem>
           <ListItem sx={{ pb: 1, px: 2 }}>
@@ -300,12 +319,15 @@ const ChooseSponsorship = ({
                   checked={memberPublishable}
                 />
               }
-              label="Quiero que la comunidad OneWe sepa que yo apoyo a este o esta Maker."
+              label={chooseTranslations("publicizeSupporter.publish")}
             />
           </ListItem>
         </Stack>
         <ListItem sx={{ py: 1, px: 0 }}>
-          <ListItemText primary="Total" secondary={"Al mes"} />
+          <ListItemText
+            primary={sponsorTranslations("total")}
+            secondary={sponsorTranslations("monthly")}
+          />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
             {displayTotal}
           </Typography>
@@ -313,10 +335,10 @@ const ChooseSponsorship = ({
       </Stack>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Button {...exitButtonBehavior} sx={{ mt: 3 }}>
-          Cancelar
+          {inputTranslations("cancel")}
         </Button>
         <Button variant="contained" type="submit" sx={{ mt: 3, ml: 1 }}>
-          Siguiente
+          {inputTranslations("next")}
         </Button>
       </Box>
     </Fragment>

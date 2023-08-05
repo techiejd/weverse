@@ -20,7 +20,8 @@
     "close": "Close",
     "phoneNumber": "Phone number",
     "location": "Search location ...",
-    "numChars": "{numChars} characters"
+    "numChars": "{numChars} characters",
+    "next": "Next"
   },
   "common": {
     "motto": "Supporting actions that change the world",
@@ -48,6 +49,7 @@
       "testify": "Give testimonial",
       "connect": "Connect"
     },
+    "meta_comment": "TODO(techiejd): Move all things that are Actions under a Maker and move their common components under maker.",
     "solicitHelpDialog": {
       "title": "Ask for support",
       "reminderThatTheyCanSolicitMoreByEditingMakerPath": "Remember, you can ask for other types of (non-financial) help <link>by requesting it in your maker page</link>.",
@@ -78,6 +80,54 @@
       "missingInfoTitle": "The maker has yet to finish their profile.",
       "title": "The maker says you can contact them through these ways:",
       "missingInfoText": "¡Thanks for wanting to support! We have alerted the maker about your interest and we hope your ask convinces them to finish quickly."
+    },
+    "sponsor": {
+      "sponsorship": "Sponsorship",
+      "title": "Sponsor {makerName}",
+      "total": "Total",
+      "monthly": "Monthly",
+      "levels": {
+        "admirer": "Admirer",
+        "fan": "Fan",
+        "lover": "Lover",
+        "custom": "Custom"
+      },
+      "steps": {
+        "choose": {
+          "short": "Choose",
+          "title": "Choose your sponsorship level",
+          "level": "Level {level}",
+          "currency": {
+            "prompt": "Escoge tu divisa",
+            "chooseWiselyWarning": "Elige sabiamente. Solo puedes elegir la divisa en este primer patrocinio, porque almacenamos este dato."
+          },
+          "tip": {
+            "prompt": "Want to leave a tip for OneWe?",
+            "showUsYourLove": "Show us!, how much you love us.",
+            "forTheService": "For the service we provide you through the platform."
+          },
+          "fee": {
+            "prompt": "Want to cover the payment processing fee?",
+            "feeExplanation": "{feePercentage}% + {feeAmount} per transacción.",
+            "preferMakerPays": "I prefer the maker pays the fee"
+          },
+          "publicizeSupporter": {
+            "prompt": "Shall we tell the OneWe Community?",
+            "makerKnows": "The Maker always knows who sponsors them",
+            "publicizeSupporterExplanation": "If you choose to publicize your sponsorship, your name and profile picture will be visible to the greater OneWe community.",
+            "publish": "I want the OneWe community to know I sponsor this Maker."
+          }
+        },
+        "customer": {
+          "short": "Customer info"
+        },
+        "payment": {
+          "short": "Payment"
+        },
+        "confirm": {
+          "short": "Confirm"
+        }
+      }
     }
   },
   "actions": {

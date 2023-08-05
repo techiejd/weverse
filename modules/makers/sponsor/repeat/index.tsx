@@ -9,8 +9,7 @@ import ChooseSponsorship from "../common/chooseSponsorship";
 import { Maker } from "../../../../functions/shared/src";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 import { CircularProgress } from "@mui/material";
-
-const steps = ["Elige", "Confirma"];
+import { useTranslations } from "next-intl";
 
 const RepeatSponsor = ({
   step,
@@ -25,6 +24,11 @@ const RepeatSponsor = ({
   handleBack: () => void;
   beneficiary: Maker;
 }) => {
+  const sponsorTranslations = useTranslations("common.sponsor");
+  const steps = [
+    sponsorTranslations("steps.choose.short"),
+    sponsorTranslations("steps.confirm.short"),
+  ];
   const repeatSponsorStep = step as Step;
   const [myMember] = useMyMember();
   function getStepContent() {

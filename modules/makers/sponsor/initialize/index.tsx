@@ -6,8 +6,7 @@ import ChooseSponsorship from "../common/chooseSponsorship";
 import Final from "../common/final";
 import StepperHeader from "../common/stepperHeader";
 import { Maker } from "../../../../functions/shared/src";
-
-const steps = ["Elige", "Datos", "Pago"];
+import { useTranslations } from "next-intl";
 
 const InitializeSponsor = ({
   step,
@@ -24,6 +23,12 @@ const InitializeSponsor = ({
   handleNext: () => void;
   beneficiary: Maker;
 }) => {
+  const sponsorTranslations = useTranslations("common.sponsor");
+  const steps = [
+    sponsorTranslations("steps.choose.short"),
+    sponsorTranslations("steps.customer.short"),
+    sponsorTranslations("steps.payment.short"),
+  ];
   const getStepContent = () => {
     switch (step as Step) {
       case Step.chooseSponsorship:

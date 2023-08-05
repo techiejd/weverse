@@ -20,7 +20,8 @@
     "close": "Cerrar",
     "phoneNumber": "Número telefónico",
     "location": "Buscar ubicaciones ...",
-    "numChars": "{numChars} caracteres"
+    "numChars": "{numChars} caracteres",
+    "next": "Siguiente"
   },
   "common": {
     "motto": "Apoyando acciones que cambian el mundo",
@@ -78,6 +79,54 @@
       "missingInfoTitle": "El o la Maker aún no ha terminado su perfil.",
       "title": "El o la Maker dice que busca el siguiente tipo de ayuda y con estos canales de contacto:",
       "missingInfoText": "¡Gracias por querer apoyar! Le hemos mandado un mensaje al o la Maker de tu interes y esperamos que tu solicitud le anime a terminar pronto."
+    },
+    "sponsor": {
+      "sponsorship": "Patrocinio",
+      "title": "Patrocina a {makerName}",
+      "total": "Total",
+      "monthly": "Al mes",
+      "levels": {
+        "admirer": "Admirador",
+        "fan": "Aficionado",
+        "lover": "Amante",
+        "custom": "Personalizado"
+      },
+      "steps": {
+        "choose": {
+          "short": "Elige",
+          "title": "Elige tu nivel de patrocinio",
+          "level": "Nivel {level}",
+          "currency": {
+            "prompt": "Escoge tu divisa",
+            "chooseWiselyWarning": "Elige sabiamente. Solo puedes elegir la divisa en este primer patrocinio, porque almacenamos este dato."
+          },
+          "tip": {
+            "prompt": "¿Quieres dejar una propina para OneWe?",
+            "showUsYourLove": "¡Muéstranos!, cuánto nos amas.",
+            "forTheService": "Por los servicios que te estamos brindando."
+          },
+          "fee": {
+            "prompt": "¿Quieres cubrir la tarifa de la pasarela de pagos?",
+            "feeExplanation": "{feePercentage}% + {feeAmount} por transacción.",
+            "preferMakerPays": "Prefiero que el Maker pague la tarifa."
+          },
+          "publicizeSupporter": {
+            "prompt": "¿Le contamos a la comunidad OneWe?",
+            "makerKnows": "El Maker siempre sabrá quien le patrocina.",
+            "publicizeSupporterExplanation": "Si eliges que tu apoyo sea público, tu nombre aparece para el resto de la comunidad OneWe.",
+            "publish": "Quiero que la comunidad OneWe sepa que yo apoyo a este o esta Maker."
+          }
+        },
+        "customer": {
+          "short": "Datos"
+        },
+        "payment": {
+          "short": "Pago"
+        },
+        "confirm": {
+          "short": "Confirma"
+        }
+      }
     }
   },
   "actions": {
