@@ -149,6 +149,10 @@
           "title": "Payment details",
           "holder": "Card holder name"
         }
+      },
+      "thanks": {
+        "title": "{sponsorName}, thanks for sponsoring {beneficiaryName}!",
+        "togetherYouChangeTheWorld": "Together, you change the world."
       }
     }
   },

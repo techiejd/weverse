@@ -148,6 +148,10 @@
           "title": "Detalles de pago",
           "holder": "Titular de la tarjeta"
         }
+      },
+      "thanks": {
+        "title": "{sponsorName}, ¡Gracias por patrocinar a {beneficiaryName}!",
+        "togetherYouChangeTheWorld": "Juntos cambiamos el mundo."
       }
     }
   },

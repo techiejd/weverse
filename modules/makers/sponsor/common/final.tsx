@@ -3,6 +3,7 @@ import { Box, Typography } from "@mui/material";
 import { Fragment } from "react";
 import { useAppState } from "../../../../common/context/appState";
 import { Maker } from "../../../../functions/shared/src";
+import { useTranslations } from "next-intl";
 
 const Final = ({
   exitButtonBehavior,
@@ -14,14 +15,19 @@ const Final = ({
   beneficiary: Maker;
 }) => {
   const appState = useAppState();
+  const thanksTranslations = useTranslations("common.sponsor.thanks");
   return (
     <Fragment>
       <Box>
         <Typography>
-          {appState.authState.user?.displayName}, ¡Gracias por patrocinar a{" "}
-          {beneficiary.name}!
+          {thanksTranslations("title", {
+            sponsorName: appState.authState.user?.displayName,
+            beneficiaryName: beneficiary.name,
+          })}
         </Typography>
-        <Typography>Juntos cambian el mundo.</Typography>
+        <Typography>
+          {thanksTranslations("togetherYouChangeTheWorld")}
+        </Typography>
       </Box>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <LoadingButton
