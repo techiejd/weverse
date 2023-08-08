@@ -246,11 +246,35 @@
       }
     },
     "bottomBar": {
-      "VIP": "VIP",
+      "vip": "VIP",
       "invite": "Invite",
       "sharePrompt": "Please take a look at my Maker page!",
       "solicitSupportShort": "Get support",
       "addActionShort": "Action"
+    },
+    "vip": {
+      "logInPrompt": "To enter the VIP lounge, you must log in as a member.",
+      "welcome": "Welcome to the VIP lounge!",
+      "underConstruction": "Right now we are working on making this experience better",
+      "dialog": {
+        "title": "To enter the VIP lounge:",
+        "startProcessPrompt": "Click on each task to start the process:",
+        "oneActionDone": {
+          "primary": "Add an action.",
+          "secondary": "We show our changes in the world by adding actions."
+        },
+        "getThreeTestimonials": {
+          "primary": "Listen to 3 impacted people by getting their testimonial or opinion.",
+          "secondary": "We get the community involved in the discussion. {numSocialProofsDone}/3 testimonials received."
+        },
+        "finishMakerProfile": {
+          "primary": "Finish filling out your Maker profile.",
+          "secondary": {
+            "finished": "You're done.",
+            "missingTheseFields": "Following fields empty: {fields}"
+          }
+        }
+      }
     }
   }
 }

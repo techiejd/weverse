@@ -9,15 +9,17 @@ import LogInPrompt from "../../common/components/logInPrompt";
 import { calculateVipState } from "../../common/utils/vip";
 import { useEffect } from "react";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
+import { useTranslations } from "next-intl";
+import UnderConstruction from "../../modules/posi/underConstruction";
 
 export const getStaticProps = WithTranslationsStaticProps();
 const Vip = () => {
   const router = useRouter();
-  const [myMaker, myMakerLoading, myMakerError] = useMyMaker();
-  const [socialProofs, socialProofsLoading, socialProofsError] =
-    useSocialProofs(myMaker?.id, "maker");
-  const [actions, actionsLoading, actionsError] = useActions(myMaker?.id);
+  const [myMaker] = useMyMaker();
+  const [socialProofs] = useSocialProofs(myMaker?.id, "maker");
+  const [actions] = useActions(myMaker?.id);
   const vipState = calculateVipState(myMaker, socialProofs, actions);
+  const vipTranslations = useTranslations("makers.vip");
 
   useEffect(() => {
     if (
@@ -32,23 +34,13 @@ const Vip = () => {
   return myMaker ? (
     <Stack spacing={2} p={2} alignItems="center">
       <Typography variant="h1" textAlign="center">
-        ¡Bienvenidos a la sala VIP de OneWe!
+        {vipTranslations("welcome")}
       </Typography>
-      <Typography variant="h2" textAlign="center">
-        Para recibir los premios (el dinero y entrar a la rifa) y ser parte del
-        VIP Makers, ingrese al grupo VIP WhatsApp:
-      </Typography>
-      <Button
-        href="https://chat.whatsapp.com/Bi3PenMNgDZJJNdX6rw5HA"
-        variant="contained"
-      >
-        Ingresar
-      </Button>
+      <Typography>{vipTranslations("underConstruction")}</Typography>
+      <UnderConstruction />
     </Stack>
   ) : (
-    <LogInPrompt
-      title={"Para ingresar a la sala VIP, debes ingresar al sistem."}
-    />
+    <LogInPrompt title={vipTranslations("logInPrompt")} />
   );
 };
 

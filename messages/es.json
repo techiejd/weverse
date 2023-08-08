@@ -245,11 +245,35 @@
       }
     },
     "bottomBar": {
-      "VIP": "VIP",
+      "vip": "VIP",
       "invite": "Invitar",
       "sharePrompt": "Por favor, eche un vistazo a mi página de Maker.",
       "solicitSupportShort": "Apoyo",
       "addActionShort": "Acción"
+    },
+    "vip": {
+      "logInPrompt": "Para ingresar a la sala VIP, debes ingresar al sistem.",
+      "welcome": "¡Bienvenidos a la sala VIP de OneWe!",
+      "underConstruction": "En este entonces estamos trabajando en mejorar esta experiencia.",
+      "dialog": {
+        "title": "Para ingresar a la sala VIP:",
+        "startProcessPrompt": "Haz clic en la tarea para comenzar el proceso:",
+        "oneActionDone": {
+          "primary": "Agregar una acción.",
+          "secondary": "Mostramos cambios en el mundo agregando acciones."
+        },
+        "getThreeTestimonials": {
+          "primary": "Escuchar a 3 personas impactadas solicitandoles el testimonio y/o opinión.",
+          "secondary": "Involucramos a la comunidad en la discusión. {numSocialProofsDone}/3 Testimonios recibido."
+        },
+        "finishMakerProfile": {
+          "primary": "Configurar tu perfil de Maker.",
+          "secondary": {
+            "finished": "Ya has terminado.",
+            "missingTheseFields": "Hacen falta los siguientes campos: {fields}"
+          }
+        }
+      }
     }
   }
 }

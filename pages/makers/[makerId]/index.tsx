@@ -364,22 +364,23 @@ const VipDialog = ({
   setSolicitDialogOpen: Dispatch<SetStateAction<boolean>>;
   myMaker: Maker;
 }) => {
+  const vipDialogTranslations = useTranslations("makers.vip.dialog");
   const [actions] = useCurrentActions();
   const [socialProofs] = useCurrentImpacts();
   const vipState = calculateVipState(myMaker, socialProofs, actions);
   return (
     <Dialog open={open}>
-      <DialogTitle>Para ingresar a la sala VIP:</DialogTitle>
+      <DialogTitle>{vipDialogTranslations("title")}</DialogTitle>
       <DialogContent>
-        <Typography>Haz clic en la tarea para comenzar el proceso:</Typography>
+        <Typography>{vipDialogTranslations("startProcessPrompt")}</Typography>
         <List>
           <ListItemButton href="/posi/upload" disabled={vipState.oneActionDone}>
             <ListItemIcon>
               {vipState.oneActionDone ? <CheckBox /> : <CheckBoxOutlineBlank />}
             </ListItemIcon>
             <ListItemText
-              primary="Agregar una acción."
-              secondary="Mostramos cambios en el mundo agregando acciones."
+              primary={vipDialogTranslations("oneActionDone.primary")}
+              secondary={vipDialogTranslations("oneActionDone.secondary")}
             />
           </ListItemButton>
           <ListItemButton
@@ -397,8 +398,11 @@ const VipDialog = ({
               )}
             </ListItemIcon>
             <ListItemText
-              primary="Escuchar a 3 personas impactadas solicitandoles el testimonio y/o opinión."
-              secondary={`Involucramos a la comunidad en la discusión. ${vipState.numSocialProofsDoneForVIP}/3 Testimonios recibido.`}
+              primary={vipDialogTranslations("getThreeTestimonials.primary")}
+              secondary={vipDialogTranslations(
+                "getThreeTestimonials.secondary",
+                { numSocialProofsDone: vipState.numSocialProofsDoneForVIP }
+              )}
             />
           </ListItemButton>
           <ListItemButton
@@ -413,13 +417,16 @@ const VipDialog = ({
               )}
             </ListItemIcon>
             <ListItemText
-              primary="Configurar tu perfil de Maker."
+              primary={vipDialogTranslations("finishMakerProfile.primary")}
               secondary={
                 vipState.allFieldsFinished
-                  ? "Ya has terminado."
-                  : `Hacen falta los siguientes campos: ${vipState.unfinishedFields!.join(
-                      ", "
-                    )}.`
+                  ? vipDialogTranslations(
+                      "finishMakerProfile.secondary.finished"
+                    )
+                  : vipDialogTranslations(
+                      "finishMakerProfile.secondary.missingTheseFields",
+                      { fields: vipState.unfinishedFields!.join(", ") }
+                    )
               }
             />
           </ListItemButton>
@@ -484,7 +491,7 @@ const BottomBar = () => {
   const VipCenterBottomFab = () => (
     <CenterBottomFab color="secondary" {...vipButtonBehavior}>
       <Typography fontSize={25}>👑</Typography>
-      <Typography fontSize={12}>{bottomBarTranslations("VIP")}</Typography>
+      <Typography fontSize={12}>{bottomBarTranslations("vip")}</Typography>
     </CenterBottomFab>
   );
 
