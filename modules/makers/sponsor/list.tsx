@@ -21,6 +21,14 @@ import {
 import { Sponsorship } from "../../../functions/shared/src";
 import { feePercentage, toDisplayCurrency, currencyInfo } from "./common/utils";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/router";
+
+function useLocalizedDateFormat() {
+  const router = useRouter();
+  const { locale: localeIn, defaultLocale } = router;
+  const locale = localeIn || defaultLocale;
+  return new Intl.DateTimeFormat(locale).format;
+}
 
 const SponsorshipDisplay = ({
   sponsorship,
@@ -33,8 +41,8 @@ const SponsorshipDisplay = ({
   handleCancelSponsorship?: (sponsorship: Sponsorship) => Promise<any>;
   showAmount?: boolean;
 }) => {
+  const localizedDateFormat = useLocalizedDateFormat();
   const sponsorTranslations = useTranslations("common.sponsor");
-  const sponsorshipLevelInfo = currencyInfo.cop.sponsorshipLevelInfo;
   const [maker] = useMaker(type == "for" ? sponsorship.maker : undefined);
   const [member] = useMember(type == "from" ? sponsorship.member : undefined);
   const [loading, setLoading] = useState(false);
@@ -48,9 +56,7 @@ const SponsorshipDisplay = ({
           name: member?.name,
           pic: member?.pic,
         };
-  const dateStarted = new Intl.DateTimeFormat("es-CO").format(
-    sponsorship.paymentsStarted!
-  );
+  const dateStarted = localizedDateFormat(sponsorship.paymentsStarted!);
   const amountReceivedFromMember =
     type == "for"
       ? undefined
@@ -128,10 +134,11 @@ const Sponsorships = ({
   handleCancelSponsorship?: (sponsorship: Sponsorship) => Promise<any>;
   showAmount?: boolean;
 }) => {
+  const sponsorshipsTranslations = useTranslations("makers.sponsorships");
+  const localizedDateFormat = useLocalizedDateFormat();
   const [sponsorships, sponsorshipsLoading, sponsorshipsError] =
     useCurrentSponsorships();
   const [myMember] = useCurrentMember();
-  <Typography variant="h2">Patrocinios:</Typography>;
 
   const activeSponsorships = sponsorships?.filter(
     (sponsorship) => !!sponsorship.paymentsStarted
@@ -141,26 +148,28 @@ const Sponsorships = ({
     !sponsorshipsError &&
     activeSponsorships &&
     activeSponsorships.length == 0;
-
   return (
     <Fragment>
-      <Typography variant="h2">Patrocinios:</Typography>
+      <Typography variant="h2">{sponsorshipsTranslations("list")}</Typography>
       {sponsorshipsError && (
         <Typography color={"red"}>
           Error: {JSON.stringify(sponsorshipsError)}
         </Typography>
       )}
-      {sponsorshipsLoading && <Typography>Patrocinios: Cargando...</Typography>}
-      {noSponsorships && <Typography>No hay patrocinios.</Typography>}
+      {sponsorshipsLoading && (
+        <Typography>{sponsorshipsTranslations("loading")}</Typography>
+      )}
+      {noSponsorships && <Typography></Typography>}
       {activeSponsorships && activeSponsorships?.length > 0 && (
         <List
           subheader={
             myMember && (
               <ListSubheader>
-                Ciclo de facturación iniciado:{" "}
-                {new Intl.DateTimeFormat("es-CO").format(
-                  myMember.stripe?.billingCycleAnchor
-                )}
+                {sponsorshipsTranslations("billingCycleStarted", {
+                  formattedDate: localizedDateFormat(
+                    myMember.stripe?.billingCycleAnchor
+                  ),
+                })}
               </ListSubheader>
             )
           }

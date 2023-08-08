@@ -211,5 +211,46 @@
         "look": "Take a look at my social action."
       }
     }
+  },
+  "makers": {
+    "sponsorships": {
+      "list": "Sponsorships:",
+      "loading": "Sponsorships: Cargando...",
+      "none": "There are no sponsorships.",
+      "billingCycleStarted": "Billing cycle date started: {formattedDate}"
+    },
+    "about": {
+      "title": "About:",
+      "none": "The maker has not filled out their 'about section'."
+    },
+    "incubator": {
+      "title": "Incubator:",
+      "joinPrompt": "{makerName} is inviting you to be a part of their network as an incubator.",
+      "isThisActionValid": "Is this action valid?",
+      "actionIsValid": "Yes, it's valid.",
+      "validationProcess": {
+        "title": "Validation process:",
+        "none": "The incubator has not uploaded their validation process."
+      },
+      "pendingValidation": {
+        "title": "Pending validation:",
+        "none": "There is nothing pending validation."
+      },
+      "incubatees": {
+        "title": "Incubatees:",
+        "none": "There are no incubatees."
+      },
+      "invited": {
+        "title": "Invited:",
+        "none": "No one has been invited."
+      }
+    },
+    "bottomBar": {
+      "VIP": "VIP",
+      "invite": "Invite",
+      "sharePrompt": "Please take a look at my Maker page!",
+      "solicitSupportShort": "Get support",
+      "addActionShort": "Action"
+    }
   }
 }

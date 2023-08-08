@@ -210,5 +210,46 @@
         "look": "Mira mi acción social."
       }
     }
+  },
+  "makers": {
+    "sponsorships": {
+      "list": "Patrocinios:",
+      "loading": "Patrocinios: Cargando...",
+      "none": "No hay patrocinios.",
+      "billingCycleStarted": "Ciclo de facturación iniciado: {formattedDate}"
+    },
+    "about": {
+      "title": "Acerca de:",
+      "none": "El/la Maker no ha agregado información de la sección 'acerca de'."
+    },
+    "incubator": {
+      "title": "Incubadora:",
+      "joinPrompt": "{makerName} te invita a unirte a su red de incubadora.",
+      "isThisActionValid": "¿Esta acción es válida?",
+      "actionIsValid": "Sí, es valida",
+      "validationProcess": {
+        "title": "Proceso de validación:",
+        "none": "La incubadora no ha subido su proceso de validación."
+      },
+      "pendingValidation": {
+        "title": "Para validar:",
+        "none": "No hay nada para validar"
+      },
+      "incubatees": {
+        "title": "Incubados:",
+        "none": "No hay incubados."
+      },
+      "invited": {
+        "title": "Invitados:",
+        "none": "No hay invitados."
+      }
+    },
+    "bottomBar": {
+      "VIP": "VIP",
+      "invite": "Invitar",
+      "sharePrompt": "Por favor, eche un vistazo a mi página de Maker.",
+      "solicitSupportShort": "Apoyo",
+      "addActionShort": "Acción"
+    }
   }
 }

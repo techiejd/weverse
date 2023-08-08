@@ -73,12 +73,14 @@ import UnderConstruction from "../../../modules/posi/underConstruction";
 import { posiFormDataConverter } from "../../../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../../../common/utils/translations";
 import { CachePaths } from "../../../common/utils/staticPaths";
+import { useTranslations } from "next-intl";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 //TODO(techiejd): Clean up this file
 
 const IncubatorSection = () => {
+  const incubatorTranslations = useTranslations("makers.incubator");
   const appState = useAppState();
   const [incubatees] = useCurrentIncubatees();
   const acceptedIncubatees = incubatees?.filter(
@@ -91,7 +93,9 @@ const IncubatorSection = () => {
   const [myMaker] = useMyMaker();
   const [maker] = useCurrentMaker();
   const isMyMaker = myMaker && maker && myMaker.id == maker.id;
-  const joinPrompt = `${maker?.name} te invita a unirte a su red de incubadora.`;
+  const joinPrompt = incubatorTranslations("joinPrompt", {
+    makerName: maker?.name,
+  });
   const [loading, setLoading] = useState(false);
   const [value, copy] = useCopyToClipboard();
 
@@ -144,7 +148,6 @@ const IncubatorSection = () => {
           <ShareActionArea
             shareProps={{
               title: joinPrompt,
-              text: joinPrompt,
               path: path,
             }}
           >
@@ -161,7 +164,7 @@ const IncubatorSection = () => {
     const [validating, setValidating] = useState(false);
     return (
       <Card>
-        <CardHeader title="Es valida esta acción?" />
+        <CardHeader title={incubatorTranslations("isThisActionValid")} />
         <CardContent>
           <ImpactCard posiData={action} />
         </CardContent>
@@ -183,7 +186,7 @@ const IncubatorSection = () => {
                 );
               }}
             >
-              Sí, es valida.
+              {incubatorTranslations("actionIsValid")}
             </Button>
           )}
         </CardActions>
@@ -194,16 +197,20 @@ const IncubatorSection = () => {
   return (
     <Fragment>
       <Typography variant="h2" sx={{ fontSize: "bold" }}>
-        Incubadora:
+        {incubatorTranslations("title")}
       </Typography>
-      <Typography variant="h3">Proceso de validación:</Typography>
+      <Typography variant="h3">
+        {incubatorTranslations("validationProcess.title")}
+      </Typography>
       <Typography sx={{ whiteSpace: "pre-wrap" }}>
         {maker?.validationProcess ||
-          "La incubadora no ha subido su proceso de validación"}
+          incubatorTranslations("validationProcess.none")}
       </Typography>
       {isMyMaker && (
         <Fragment>
-          <Typography variant="h3">Para validar:</Typography>
+          <Typography variant="h3">
+            {incubatorTranslations("pendingValidation.title")}
+          </Typography>
           {needsValidation && needsValidation.length > 0 ? (
             <Grid container spacing={1}>
               {needsValidation.map((action) => (
@@ -213,23 +220,29 @@ const IncubatorSection = () => {
               ))}
             </Grid>
           ) : (
-            <Typography>No hay nada para validar.</Typography>
+            <Typography>
+              {incubatorTranslations("pendingValidation.none")}
+            </Typography>
           )}
         </Fragment>
       )}
-      <Typography variant="h3">Incubados:</Typography>
+      <Typography variant="h3">
+        {incubatorTranslations("incubatees.title")}
+      </Typography>
       <Stack spacing={2}>
         {acceptedIncubatees && acceptedIncubatees.length > 0 ? (
           acceptedIncubatees.map((incubatee) => (
             <MakerCard makerId={incubatee.id!} key={incubatee.id!} />
           ))
         ) : (
-          <Typography>No hay incubados.</Typography>
+          <Typography>{incubatorTranslations("incubatees.none")}</Typography>
         )}
       </Stack>
       {isMyMaker && (
         <Fragment>
-          <Typography variant="h3">Invitaciones:</Typography>
+          <Typography variant="h3">
+            {incubatorTranslations("invited.title")}
+          </Typography>
           <Stack spacing={2}>
             {notAcceptedIncubatees && notAcceptedIncubatees.length > 0 ? (
               notAcceptedIncubatees.map((incubatee) => (
@@ -239,7 +252,7 @@ const IncubatorSection = () => {
                 />
               ))
             ) : (
-              <Typography>No hay invitaciones.</Typography>
+              <Typography>{incubatorTranslations("invited.none")}</Typography>
             )}
           </Stack>
         </Fragment>
@@ -251,6 +264,7 @@ const IncubatorSection = () => {
 const MakerProfile = () => {
   const [maker, makerLoading, makerError] = useCurrentMaker();
   const [myMaker] = useMyMaker();
+  const aboutTranslations = useTranslations("makers.about");
   return maker ? (
     <Stack
       spacing={2}
@@ -264,9 +278,9 @@ const MakerProfile = () => {
         <Sponsorships showAmount={myMaker && myMaker?.id == maker?.id} />
         {maker.type == "organization" &&
           maker.organizationType == "incubator" && <IncubatorSection />}
-        <Typography variant="h2">Acerca de:</Typography>
+        <Typography variant="h2">{aboutTranslations("title")}</Typography>
         <Typography>
-          {maker.about ? maker.about : "No hay sección 'acerca de'."}
+          {maker.about ? maker.about : aboutTranslations("none")}
         </Typography>
       </Stack>
     </Stack>
@@ -447,6 +461,8 @@ const IncubateeVIPDialog = ({
 };
 
 const BottomBar = () => {
+  const bottomBarTranslations = useTranslations("makers.bottomBar");
+  const callToActionTranslations = useTranslations("common.callToAction");
   const [maker] = useCurrentMaker();
   const [myMaker] = useMyMaker();
   const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
@@ -468,14 +484,14 @@ const BottomBar = () => {
   const VipCenterBottomFab = () => (
     <CenterBottomFab color="secondary" {...vipButtonBehavior}>
       <Typography fontSize={25}>👑</Typography>
-      <Typography fontSize={12}>VIP</Typography>
+      <Typography fontSize={12}>{bottomBarTranslations("VIP")}</Typography>
     </CenterBottomFab>
   );
 
   const IncubatorInviteMakerCenterBottomFab = ({ maker }: { maker: Maker }) => (
     <CenterBottomFab color="secondary" href={`/makers/${maker.id}/invite`}>
       <PersonAdd />
-      <Typography fontSize={12}>Invitar</Typography>
+      <Typography fontSize={12}>{bottomBarTranslations("invite")}</Typography>
     </CenterBottomFab>
   );
   return maker == undefined ? (
@@ -507,11 +523,13 @@ const BottomBar = () => {
       <Toolbar>
         <IconButtonWithLabel href={`/makers/${maker.id}/edit`}>
           <Edit />
-          <Typography>Editar</Typography>
+          <Typography>{callToActionTranslations("edit")}</Typography>
         </IconButtonWithLabel>
         <IconButtonWithLabel onClick={() => setSolicitDialogOpen(true)}>
           <SupportIcon />
-          <Typography>Apoyo</Typography>
+          <Typography>
+            {bottomBarTranslations("solicitSupportShort")}
+          </Typography>
         </IconButtonWithLabel>
         {maker?.organizationType == "incubator" ? (
           <IncubatorInviteMakerCenterBottomFab maker={maker} />
@@ -521,19 +539,18 @@ const BottomBar = () => {
         <Box sx={{ flexGrow: 1 }} />
         <ShareActionArea
           shareProps={{
-            title: "Por favor, eche un vistazo a mi página de Maker.",
-            text: "Por favor, eche un vistazo a mi página de Maker.",
+            title: bottomBarTranslations("sharePrompt"),
             path: `makers/${maker.id}`,
           }}
         >
           <IconButtonWithLabel>
             <Share />
-            <Typography>Compartir</Typography>
+            <Typography>{callToActionTranslations("share")}</Typography>
           </IconButtonWithLabel>
         </ShareActionArea>
         <IconButtonWithLabel href={`/posi/upload`}>
           <Add />
-          <Typography>Acción</Typography>
+          <Typography>{bottomBarTranslations("addActionShort")}</Typography>
         </IconButtonWithLabel>
       </Toolbar>
     </AppBar>
