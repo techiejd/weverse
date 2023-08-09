@@ -216,6 +216,34 @@
       "title": "Edita tu acción"
     }
   },
+  "testimonials": {
+    "prompt": {
+      "title": "<makerNameTag>{makerName}</makerNameTag> <prompt>quiere saber ¿cómo {forAction, select, true {hizo esta acción} other {hicieron sus acciones}} un cambio en tu vida?</prompt>",
+      "share": "Comparte tu testimonio sobre esta acción",
+      "callToAction": "Listo para hacer el testimonio",
+      "logInPrompt": "Para hacer un testimonio, registrate como miembro.",
+      "for": "{forAction, select, true {Acción en cuestión:} other {Sus acciones:}}"
+    },
+    "form": {
+      "rate": "Califica {forAction, select, true {la acción} other {la maker}}:",
+      "inVideoFormat": "En selfie video",
+      "videoSuggestions": "30 segundos a 5 minutos y opcional.",
+      "inTextFormat": "En forma escrita",
+      "andOptional": "{numChars} y opcional.",
+      "writtenTestimonial": "Testimonio escrito",
+      "whatImpactPrompt": "cuentenos con detalle ¿qué impacto {forAction, select, true {tuvo esta acción} other {este Maker}} en tu vida?",
+      "submit": "Publicar testimonio"
+    },
+    "thanks": {
+      "title": "Gracias por tu testimonio",
+      "thisIsHowWeChangeTheWorld": "¡Así mejoramos el mundo!",
+      "theInformationIsValuable": "La información que nos has dado es muy valiosa para la comunidad OneWe.",
+      "whatWouldYouLikeToDoNow": "¿Qué te gustaría hacer ahora?",
+      "seeWhatOthersSaidAboutThisAction": "Ver lo que han dicho los demas de esta acción",
+      "seeOtherActionsAndImpactsByMaker": "Ver otras acciones e impactos del Maker",
+      "goToHomePage": "Ir a la página principal"
+    }
+  },
   "makers": {
     "sponsorships": {
       "list": "Patrocinios:",

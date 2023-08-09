@@ -6,6 +6,7 @@ import { useActions } from "../../context/weverseUtils";
 import LogInPrompt from "../logInPrompt";
 import { useEffect, useState } from "react";
 import { useAppState } from "../../context/appState";
+import { useTranslations } from "next-intl";
 
 const UploadSocialProofPrompt = ({
   forMaker,
@@ -26,6 +27,8 @@ const UploadSocialProofPrompt = ({
     if (makerActions) setActions(makerActions);
   }, [makerActions, setActions]);
 
+  const promptTranslations = useTranslations("testimonials.prompt");
+
   return (
     <Stack>
       <Stack
@@ -36,17 +39,24 @@ const UploadSocialProofPrompt = ({
         {forMaker.pic && (
           <Avatar src={forMaker.pic} sx={{ width: 112, height: 112 }} />
         )}
-        <Typography variant="h2">
-          <Link
-            href={`/makers/${forMaker.id}`}
-            sx={{ color: "black" }}
-          >{`${forMaker.name}`}</Link>
-        </Typography>
-        <Typography variant="h2" textAlign="center">
-          {`quiere saber ¿cómo ${
-            forAction ? `hizo esta acción` : `hicieron sus acciones`
-          } un cambio en tu vida?`}
-        </Typography>
+        {promptTranslations.rich("title", {
+          makerName: forMaker.name,
+          makerNameTag: (makerName) => (
+            <Typography variant="h2">
+              <Link
+                href={`/makers/${forMaker.id}`}
+                sx={{ color: "black" }}
+              >{`${makerName}`}</Link>
+            </Typography>
+          ),
+          prompt: (p) => (
+            <Typography variant="h2" textAlign="center">
+              {p}
+            </Typography>
+          ),
+          forAction: !!forAction,
+        })}
+
         {user && (
           <Stack
             spacing={2}
@@ -60,7 +70,7 @@ const UploadSocialProofPrompt = ({
               p: 2,
             }}
           >
-            <Typography>Comparte tu testimonio sobre esta acción</Typography>
+            <Typography>{promptTranslations("share")}</Typography>
             <Button
               variant="contained"
               sx={{ width: "fit-content" }}
@@ -70,13 +80,11 @@ const UploadSocialProofPrompt = ({
                   : `/makers/${forMaker.id}/impact/upload/form`
               }
             >
-              Listo para hacer el testimonio
+              {promptTranslations("callToAction")}
             </Button>
           </Stack>
         )}
-        {!user && (
-          <LogInPrompt title="Para compartir tu testimonio, hay que ingresar al sistema." />
-        )}
+        {!user && <LogInPrompt title={promptTranslations("logInPrompt")} />}
       </Stack>
       <Stack
         spacing={2}
@@ -87,8 +95,8 @@ const UploadSocialProofPrompt = ({
           p: 2,
         }}
       >
-        <Typography variant="h2" key={"actionInQuestionTitle"}>
-          {forAction ? `Acción en cuestión:` : `Sus acciones:`}
+        <Typography variant="h2" key={"for"}>
+          {promptTranslations("for", { forAction: !!forAction })}
         </Typography>
         <Grid key="actionsGridUploadSocialProofPrompt" container spacing={1}>
           {actions.map((a, idx) => (

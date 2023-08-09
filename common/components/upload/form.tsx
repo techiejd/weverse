@@ -16,6 +16,7 @@ import { useMyMaker } from "../../context/weverseUtils";
 import { socialProofConverter } from "../../utils/firebase";
 import { PosiFormData } from "../../../functions/shared/lib";
 import { useAppState } from "../../context/appState";
+import { useTranslations } from "next-intl";
 
 const UploadSocialProofForm = ({
   forMaker,
@@ -33,14 +34,14 @@ const UploadSocialProofForm = ({
   const [uploading, setUploading] = useState(false);
   const needsRatingMsg = "Calificación necesaria.";
   const router = useRouter();
+  const formTranslations = useTranslations("testimonials.form");
+  const inputTranslations = useTranslations("input");
+  const maxLength = 500;
   useEffect(() => {
     if (error == needsRatingMsg && rating != null) {
       setError("");
     }
   }, [rating, setError, error]);
-  const whatImpactPrompt = `En forma escrita, cuentenos con detalle qué impacto ${
-    forAction ? `ha tenido la acción` : `han tenido las acciones de la Maker`
-  } hasta ahora en tu vida.`;
   return (
     <form
       onSubmit={async (e) => {
@@ -86,9 +87,9 @@ const UploadSocialProofForm = ({
         sx={{ justifyContent: "center", alignItems: "center" }}
         p={2}
       >
-        <Typography variant="h2">{`Califica ${
-          forAction ? `la acción` : `la Maker`
-        }:`}</Typography>
+        <Typography variant="h2">
+          {formTranslations("rate", { forAction: !!forAction })}
+        </Typography>
         <Rating
           value={rating}
           aria-required={true}
@@ -98,8 +99,11 @@ const UploadSocialProofForm = ({
         />
         {error != "" && <Typography color="red">{error}</Typography>}
         <Typography>
-          {whatImpactPrompt} <br />
-          (30 segundos a 5 minutos y opcional.)
+          {`${formTranslations("inVideoFormat")}, ${formTranslations(
+            "whatImpactPrompt",
+            { forAction: !!forAction }
+          )}`}
+          <br />({formTranslations("videoSuggestions")})
         </Typography>
         <FileInput
           setMedia={setMedia}
@@ -108,14 +112,21 @@ const UploadSocialProofForm = ({
           metadata={{ impactId: "", isTestimonial: "true", from: "" }}
         />
         <Typography>
-          {whatImpactPrompt} <br />
-          (500 caracteres y opcional.)
+          {`${formTranslations("inTextFormat")}, ${formTranslations(
+            "whatImpactPrompt",
+            { forAction: !!forAction }
+          )}`}
+          <br />(
+          {formTranslations("andOptional", {
+            numChars: inputTranslations("numChars", { numChars: maxLength }),
+          })}
+          )
         </Typography>
         <TextField
-          label="Testimonio escrita."
+          label={formTranslations("writtenTestimonial")}
           multiline
           rows={4}
-          inputProps={{ maxLength: 500 }}
+          inputProps={{ maxLength }}
           value={text}
           onChange={(e) => setText(e.target.value)}
           sx={{ maxWidth: 700, width: "100%" }}
@@ -125,7 +136,7 @@ const UploadSocialProofForm = ({
             <CircularProgress />
           ) : (
             <Button type="submit" variant="contained">
-              Dar opinión
+              {formTranslations("submit")}
             </Button>
           ))}
       </Stack>

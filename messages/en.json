@@ -217,6 +217,34 @@
       "title": "Edit your action"
     }
   },
+  "testimonials": {
+    "prompt": {
+      "title": "<makerNameTag>{makerName}</makerNameTag> <prompt>wants to know how their action{forAction, select, true { has} other {s have}} had an impact on your life?</prompt>",
+      "share": "Share your testimonial on this action",
+      "callToAction": "Ready to do the testimonial",
+      "logInPrompt": "To do a testimonial, you must first register as a member.",
+      "for": "{forAction, select, true {The action in question:} other {Their actions:}}"
+    },
+    "form": {
+      "rate": "Rate the {forAction, select, true {action} other {maker}}:",
+      "inVideoFormat": "In a selfie video",
+      "videoSuggestions": "30 seconds to 5 minutes and optional.",
+      "inTextFormat": "In your own words",
+      "andOptional": "{numChars} and optional.",
+      "writtenTestimonial": "Written testiomonial",
+      "whatImpactPrompt": "with details, what impact did this {forAction, select, true {action} other {Maker}} have in your life?",
+      "submit": "Publish testimonial"
+    },
+    "thanks": {
+      "title": "Thanks for your testimonial",
+      "thisIsHowWeChangeTheWorld": "This is how we change the world!",
+      "theInformationIsValuable": "The information you provided is valuable to the OneWe community.",
+      "whatWouldYouLikeToDoNow": "What would you like to do now?",
+      "seeWhatOthersSaidAboutThisAction": "See what others said about this action",
+      "seeOtherActionsAndImpactsByMaker": "See other actions and impacts by this Maker",
+      "goToHomePage": "Go to the home page"
+    }
+  },
   "makers": {
     "sponsorships": {
       "list": "Sponsorships:",
