@@ -55,7 +55,8 @@
       "sponsor": "Sponsor",
       "testify": "Give testimonial",
       "connect": "Connect",
-      "update": "Update"
+      "update": "Update",
+      "delete": "Delete"
     },
     "meta_comment": "TODO(techiejd): Move all things that are Actions under a Maker and move their common components under maker.",
     "solicitHelpDialog": {
@@ -211,6 +212,9 @@
         "opinion": "Please give me your opinion on my social impact for my action: {summary}",
         "look": "Take a look at my social action."
       }
+    },
+    "edit": {
+      "title": "Edit your action"
     }
   },
   "makers": {

@@ -10,11 +10,13 @@ import { PosiFormData, posiFormData } from "../../../../functions/shared/src";
 import { useCurrentPosiId } from "../../../../modules/posi/context";
 import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
+import { useTranslations } from "next-intl";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 
 const Edit = () => {
+  const editTranslations = useTranslations("actions.edit");
   const appState = useAppState();
   const router = useRouter();
   const posiId = useCurrentPosiId();
@@ -51,7 +53,7 @@ const Edit = () => {
         alignItems={"center"}
         textAlign={"center"}
       >
-        <Typography variant="h1">Edita tu acción. 🤸 </Typography>
+        <Typography variant="h1">{editTranslations("title")} 🤸 </Typography>
       </Stack>
       {posi ? (
         <PosiForm

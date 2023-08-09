@@ -41,6 +41,7 @@ const PosiForm = ({
     }
   }, [myMaker, setFormData]);
   const t = useTranslations("actions.upload");
+  const callToActionTranslations = useTranslations("common.callToAction");
 
   return (
     <Box>
@@ -91,10 +92,10 @@ const PosiForm = ({
               ) : (
                 <Stack direction={"row"} sx={{ mt: 3 }} spacing={1}>
                   <Button variant="outlined" onClick={onInteraction.onDelete}>
-                    Borrar
+                    {callToActionTranslations("delete")}
                   </Button>
                   <Button variant="contained" type="submit">
-                    Actualizar
+                    {callToActionTranslations("update")}
                   </Button>
                 </Stack>
               )}

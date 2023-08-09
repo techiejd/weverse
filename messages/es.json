@@ -55,7 +55,8 @@
       "sponsor": "Patrocinar",
       "testify": "Dar testimonio",
       "connect": "Conectar",
-      "update": "Actualizar"
+      "update": "Actualizar",
+      "delete": "Borrar"
     },
     "solicitHelpDialog": {
       "title": "Solicita Apoyo",
@@ -210,6 +211,9 @@
         "opinion": "Por favor dame tu opinion sobre mi acción social: {summary}",
         "look": "Mira mi acción social."
       }
+    },
+    "edit":{
+      "title": "Edita tu acción"
     }
   },
   "makers": {
