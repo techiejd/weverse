@@ -24,14 +24,7 @@ import {
   Media,
 } from "../../functions/shared/src";
 import { FileInput } from "../posi/input";
-
-const organizationExplanations = {
-  [organizationType.Enum.nonprofit]: "Fundación u otra ONG",
-  [organizationType.Enum.religious]: "Organización Religiosa",
-  [organizationType.Enum.unincorporated]: "Voluntarios",
-  [organizationType.Enum.profit]: "Organización Comercial",
-  [organizationType.Enum.incubator]: "Incubadora",
-};
+import { useTranslations } from "next-intl";
 
 const OrganizationTypeInput = ({
   val,
@@ -40,6 +33,10 @@ const OrganizationTypeInput = ({
   val: Maker;
   setVal: Dispatch<SetStateAction<Maker>>;
 }) => {
+  const organizationTypeTranslations = useTranslations(
+    "makers.edit.chooseMakerType.organizationType"
+  );
+  const inputTranslations = useTranslations("input");
   const organizationTypeChange = (
     e: ChangeEvent<HTMLInputElement>,
     value: string
@@ -56,7 +53,9 @@ const OrganizationTypeInput = ({
       <TextField
         required
         fullWidth
-        label={`¿Cómo se llama la organización? (75 caracteres)`}
+        label={`${organizationTypeTranslations(
+          "namePrompt"
+        )} (${inputTranslations("numChars", { numChars: 75 })})`}
         margin="normal"
         inputProps={{ maxLength: 75 }}
         value={val.name ? val.name : ""}
@@ -68,7 +67,7 @@ const OrganizationTypeInput = ({
         }}
       />
       <FormControl>
-        <FormLabel>Tipo de organización:</FormLabel>
+        <FormLabel>{inputTranslations("title")}</FormLabel>
         <RadioGroup
           name="chooseOrganizationType"
           onChange={organizationTypeChange}
@@ -81,7 +80,7 @@ const OrganizationTypeInput = ({
                 key={oType}
                 value={oType}
                 control={<Radio required />}
-                label={organizationExplanations[oType]}
+                label={organizationTypeTranslations(oType)}
               />
             );
           })}
@@ -98,6 +97,10 @@ const DetailedInput = ({
   val: Maker;
   setVal: Dispatch<SetStateAction<Maker>>;
 }) => {
+  const detailedInputTranslations = useTranslations(
+    "makers.edit.detailedInput"
+  );
+  const inputTranslations = useTranslations("input");
   const [media, setMedia] = useState<Media | undefined | "loading">(
     val.pic ? { type: "img", url: val.pic } : undefined
   );
@@ -128,27 +131,33 @@ const DetailedInput = ({
     setVal((maker) => ({ ...maker, validationProcess }));
   };
 
-  const askForInfoMsg =
-    val.type == "individual" ? "" : "Cuéntanos un poco sobre tu organización";
+  const askForInfoMsg = detailedInputTranslations("askForInfoMsg", {
+    makerType: val.type,
+  });
 
-  const askForImage =
-    val.type == "individual"
-      ? "Selecciona una imagen con la que quieras ser identificado por la comunidad OneWe."
-      : "Sube una foto de tu logo.";
+  const askForImage = detailedInputTranslations("askForImage", {
+    makerType: val.type,
+  });
 
   const targetedQuestion =
     val.organizationType == organizationType.Enum.incubator ? (
       <Section
-        label={`Como valida tu incubadora las acciones de los makers para darle un sello de aprobacion?`}
+        label={detailedInputTranslations(
+          "incubator.whatIsYourValidationProcess"
+        )}
       >
         <TextField
           fullWidth
-          label="Deja aquí los detalles de cómo se validan las acciones. (500 caracteres.)"
+          label={`${detailedInputTranslations(
+            "incubator.leaveDetails"
+          )} (${inputTranslations("numChars", { numChars: 500 })}).`}
           name="validationProcess"
           multiline
           minRows={2}
           inputProps={{ maxLength: 500 }}
-          helperText="Recuerda, la integridad depende de que se siga estrictamente este proceso."
+          helperText={detailedInputTranslations(
+            "incubator.devilIsInTheDetailsReminder"
+          )}
           value={val.validationProcess ? val.validationProcess : ""}
           onChange={(e) => {
             setValidationProcess(e.target.value);
@@ -157,19 +166,21 @@ const DetailedInput = ({
       </Section>
     ) : (
       <Section
-        label={`¿Qué tipo de apoyo necesita${
-          val.type == "organization" ? "" : "s"
-        }?`}
+        label={detailedInputTranslations(
+          "nonFinancialHelp.whatOtherHelpDoYouNeed",
+          { makerType: val.type }
+        )}
       >
         <TextField
           fullWidth
-          label="Deja aquí los datos de contacto para recibir ayudas de cualquier otro
-    tipo y sea explicito a lo que está pidiendo. (500 caracteres.)"
+          label={`${detailedInputTranslations(
+            "nonFinancialHelp.leaveContactDetails"
+          )} (${inputTranslations("numChars", { numChars: 500 })}).`}
           name="summary"
           multiline
           minRows={2}
           inputProps={{ maxLength: 500 }}
-          helperText="Si tu iniciativa está listo para recibir voluntarios, hablar con medios de comunicación o con especialistas como abogados, desarrolladores, etc, por favor, indica tu solicitud y los enlaces o los detalles para ponerse en contacto contigo. Por ejemplo: número telefónico, correo electrónico, redes sociales, página web, etc."
+          helperText={detailedInputTranslations("nonFinancialHelp.helperText")}
           value={val.howToSupport?.contact ? val.howToSupport.contact : ""}
           onChange={(e) => {
             setContactSupport(e.target.value);
@@ -184,13 +195,9 @@ const DetailedInput = ({
       {val.type == "organization" && (
         <OrganizationTypeInput val={val} setVal={setVal} />
       )}
-      <Section
-        label={
-          "OneWe se comunicará contigo por correo electrónico acerca de la información relacionada con Maker"
-        }
-      >
+      <Section label={detailedInputTranslations("email")}>
         <TextField
-          label="Correo Electronico"
+          label={inputTranslations("email")}
           type="email"
           fullWidth
           value={val.email ? val.email : ""}
@@ -199,11 +206,9 @@ const DetailedInput = ({
       </Section>
 
       <Section
-        label={
-          val.type == "organization"
-            ? "Elige la foto de perfil de la organización"
-            : "Elige tu foto de perfil"
-        }
+        label={detailedInputTranslations("profileImage", {
+          makerType: val.type,
+        })}
       >
         <Typography>{askForImage}</Typography>
         <FileInput
@@ -215,20 +220,20 @@ const DetailedInput = ({
         />
       </Section>
       <Section
-        label={
-          val.type == "organization"
-            ? "Cuéntanos acerca de la organización y sus iniciativas"
-            : "Cuéntanos acerca de tí y tus iniciativas"
-        }
+        label={detailedInputTranslations("story.title", {
+          makerType: val.type,
+        })}
       >
         <TextField
           fullWidth
-          label="Danos una historia (1000 caracteres)"
+          label={`${detailedInputTranslations(
+            "story.prompt"
+          )} (${inputTranslations("numChars", { numChars: 1000 })})`}
           name="summary"
           multiline
           minRows={3}
           inputProps={{ maxLength: 1000 }}
-          helperText="Es aquí donde puedes dar detalles"
+          helperText={detailedInputTranslations("story.helperText")}
           value={val.about ? val.about : ""}
           onChange={(e) => setAboutInput(e.target.value)}
         />
@@ -258,6 +263,9 @@ const MakerInput = ({
       name: type == "organization" ? val.name : userName,
     }));
   };
+  const chooseMakerTypeTranslations = useTranslations(
+    "makers.edit.chooseMakerType"
+  );
 
   return (
     <Stack alignItems={"center"}>
@@ -271,12 +279,12 @@ const MakerInput = ({
           <FormControlLabel
             value="individual"
             control={<Radio required />}
-            label="Trabajo solo"
+            label={chooseMakerTypeTranslations("individual")}
           />
           <FormControlLabel
             value="organization"
             control={<Radio required />}
-            label="Pertenezco a una organización"
+            label={chooseMakerTypeTranslations("organization")}
           />
         </RadioGroup>
       </FormControl>

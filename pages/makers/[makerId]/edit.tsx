@@ -11,10 +11,12 @@ import { Maker, maker as makerSchema } from "../../../functions/shared/src";
 import MakerInput from "../../../modules/makers/makerInput";
 import { WithTranslationsStaticProps } from "../../../common/utils/translations";
 import { CachePaths } from "../../../common/utils/staticPaths";
+import { useTranslations } from "next-intl";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 const Edit = () => {
+  const editMakerTranslations = useTranslations("makers.edit");
   const appState = useAppState();
   const router = useRouter();
   const { makerId } = router.query;
@@ -37,6 +39,7 @@ const Edit = () => {
       user: User;
       makerIn: Maker;
     }) => {
+      const callToActionTranslations = useTranslations("common.callToAction");
       const [maker, setMaker] = useState<Maker>(makerIn);
       const [uploading, setUploading] = useState(false);
       return (
@@ -67,7 +70,7 @@ const Edit = () => {
               <CircularProgress />
             ) : (
               <Button type="submit" variant="contained">
-                Actualizar
+                {callToActionTranslations("update")}
               </Button>
             )}
           </Stack>
@@ -75,16 +78,17 @@ const Edit = () => {
       );
     };
 
-    if (user && maker) {
-      // Using if instead of tertiary to avoid ts issues.
-      return <MakerFormContent user={user} makerIn={maker} />;
-    } else return <CircularProgress />;
+    return (
+      (user && maker && <MakerFormContent user={user} makerIn={maker} />) || (
+        <CircularProgress />
+      )
+    );
   };
   return (
     <Stack sx={{ justifyContent: "center", alignItems: "center" }} spacing={2}>
-      <Typography variant="h1">Editar tu página Maker.</Typography>
+      <Typography variant="h1">{editMakerTranslations("title")}</Typography>
       <Typography variant="h2">
-        Maker = creador de impacto social a través de sus acciones.
+        {editMakerTranslations("makerDefinition")}
       </Typography>
       {makerId ? <MakerForm makerId={String(makerId)} /> : <CircularProgress />}
     </Stack>
