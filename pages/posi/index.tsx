@@ -16,7 +16,7 @@ import {
   startAfter,
 } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
-import { PlusOne } from "@mui/icons-material";
+import PlusOne from "@mui/icons-material/PlusOne";
 import { PosiFormData } from "../../functions/shared/src";
 import { posiFormDataConverter } from "../../common/utils/firebase";
 import InfiniteScroll from "react-infinite-scroll-component";

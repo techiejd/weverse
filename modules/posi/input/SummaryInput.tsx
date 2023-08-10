@@ -8,9 +8,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState, useEffect } from "react";
 import { useFormData } from "./context";
-import { Expand, ExpandMore } from "@mui/icons-material";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useTranslations } from "next-intl";
 
 const SummaryInput = () => {

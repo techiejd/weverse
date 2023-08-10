@@ -22,7 +22,7 @@ import {
   updateDoc,
   writeBatch,
 } from "firebase/firestore";
-import { Login } from "@mui/icons-material";
+import Login from "@mui/icons-material/Login";
 import OtpDialog from "./otpDialog";
 import PhoneInput from "./phoneInput";
 import RecaptchaDialog from "./recaptchaDialog";

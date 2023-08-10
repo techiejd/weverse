@@ -7,7 +7,9 @@ import {
   Typography,
 } from "@mui/material";
 import ShareActionArea from "../../../../common/components/shareActionArea";
-import { Check, ContentCopy, Share } from "@mui/icons-material";
+import Check from "@mui/icons-material/Check";
+import ContentCopy from "@mui/icons-material/ContentCopy";
+import Share from "@mui/icons-material/Share";
 import { useRouter } from "next/router";
 import { useCurrentMaker } from "../../../../modules/makers/context";
 import {

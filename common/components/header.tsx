@@ -15,7 +15,10 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
-import { AccountCircle, Home, Login, PlusOne } from "@mui/icons-material";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import Home from "@mui/icons-material/Home";
+import Login from "@mui/icons-material/Login";
+import PlusOne from "@mui/icons-material/PlusOne";
 import { useAppState } from "../context/appState";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import Image from "next/image";

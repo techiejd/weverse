@@ -1,6 +1,6 @@
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import ShareActionArea from "../../../../common/components/shareActionArea";
-import { Hearing } from "@mui/icons-material";
+import Hearing from "@mui/icons-material/Hearing";
 import { doc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useAppState } from "../../../../common/context/appState";

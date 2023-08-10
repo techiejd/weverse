@@ -18,7 +18,8 @@ import {
 } from "../../../../common/utils/firebase";
 import { v4 } from "uuid";
 import { organizationType } from "../../../../functions/shared/src";
-import { Add, Remove } from "@mui/icons-material";
+import Add from "@mui/icons-material/Add";
+import Remove from "@mui/icons-material/Remove";
 import buildUrl from "@googlicius/build-url";
 import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";

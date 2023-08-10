@@ -1,4 +1,4 @@
-import { Login } from "@mui/icons-material";
+import Login from "@mui/icons-material/Login";
 import {
   Dialog,
   DialogTitle,

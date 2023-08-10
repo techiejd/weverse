@@ -1,4 +1,4 @@
-import { Pending } from "@mui/icons-material";
+import Pending from "@mui/icons-material/Pending";
 import { Fab, Typography } from "@mui/material";
 
 const LoadingFab = () => {

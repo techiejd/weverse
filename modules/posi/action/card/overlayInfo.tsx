@@ -1,4 +1,6 @@
-import { Favorite, FavoriteBorder, FmdGood } from "@mui/icons-material";
+import Favorite from "@mui/icons-material/Favorite";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import FmdGood from "@mui/icons-material/FmdGood";
 import {
   Stack,
   Typography,

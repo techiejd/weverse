@@ -14,7 +14,10 @@ import {
 import { useEffect, useState } from "react";
 import MakerCard from "../../modules/makers/MakerCard";
 import PageTitle from "../../common/components/pageTitle";
-import { Edit, PlusOne, Share, Visibility } from "@mui/icons-material";
+import Edit from "@mui/icons-material/Edit";
+import PlusOne from "@mui/icons-material/PlusOne";
+import Share from "@mui/icons-material/Share";
+import Visibility from "@mui/icons-material/Visibility";
 import AuthDialog from "../../modules/auth/AuthDialog";
 import { User } from "firebase/auth";
 import { doc } from "firebase/firestore";

@@ -8,7 +8,7 @@ import {
   Button,
 } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
-import { Login } from "@mui/icons-material";
+import Login from "@mui/icons-material/Login";
 import { AuthDialogState } from "./context";
 import { useTranslations } from "next-intl";
 

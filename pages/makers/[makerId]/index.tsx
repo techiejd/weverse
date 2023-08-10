@@ -23,18 +23,16 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import {
-  Edit,
-  Support as SupportIcon,
-  Share,
-  Add,
-  CheckBoxOutlineBlank,
-  CheckBox,
-  Close,
-  ContentCopy,
-  Check,
-  PersonAdd,
-} from "@mui/icons-material";
+import Edit from "@mui/icons-material/Edit";
+import { default as SupportIcon } from "@mui/icons-material/Support";
+import Share from "@mui/icons-material/Share";
+import Add from "@mui/icons-material/Add";
+import CheckBoxOutlineBlank from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBox from "@mui/icons-material/CheckBox";
+import Close from "@mui/icons-material/Close";
+import ContentCopy from "@mui/icons-material/ContentCopy";
+import Check from "@mui/icons-material/Check";
+import PersonAdd from "@mui/icons-material/PersonAdd";
 import SupportBottomBar from "../../../common/components/supportBottomBar";
 import {
   useCurrentActions,
