@@ -28,7 +28,6 @@ export const MenuComponent = (props: BoxProps) => {
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const menuOpen = Boolean(anchorEl);
   const closeMenu = () => setAnchorEl(null);
-  const messages = useMessages();
   const t = useTranslations("common.callToAction");
   const UserPortal = () => {
     const { user } = useAppState().authState;

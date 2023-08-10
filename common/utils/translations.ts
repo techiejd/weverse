@@ -23,6 +23,9 @@ export function WithTranslationsStaticProps(
     const isProps = (o: typeof others): o is PropsResult => {
       return (others as PropsResult).props !== undefined;
     };
+    console.log("others", others);
+    console.log("messages", messages);
+    console.log("isProps", isProps(others));
     return isProps(others)
       ? {
           props: {
