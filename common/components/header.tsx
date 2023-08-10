@@ -29,7 +29,6 @@ export const MenuComponent = (props: BoxProps) => {
   const menuOpen = Boolean(anchorEl);
   const closeMenu = () => setAnchorEl(null);
   const messages = useMessages();
-  console.log(messages);
   const t = useTranslations("common.callToAction");
   const UserPortal = () => {
     const { user } = useAppState().authState;
