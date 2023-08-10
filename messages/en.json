@@ -370,5 +370,17 @@
         }
       }
     }
+  },
+  "members": {
+    "yours": {
+      "title": "Your member page",
+      "makers": {
+        "title": "Your Makers",
+        "none": "There are no Maker.",
+        "loading": "Loading Makers..."
+      },
+      "signOut": "Sign Out",
+      "failedToCancelSponsorship": "Failed to cancel sponsorship: {error}"
+    }
   }
 }

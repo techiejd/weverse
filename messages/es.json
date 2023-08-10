@@ -369,5 +369,17 @@
         }
       }
     }
+  },
+  "members": {
+    "yours": {
+      "title": "Tu página de miembro",
+      "makers": {
+        "title": "Tus Makers",
+        "none": "No hay makers.",
+        "loading": "Cargando Makers..."
+      },
+      "signOut": "Desconectar",
+      "failedToCancelSponsorship": "No se pudo cancelar el patrocinio: {error}"
+    }
   }
 }

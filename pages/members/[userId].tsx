@@ -12,12 +12,14 @@ import { useMyMember } from "../../common/context/weverseUtils";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
 import { CachePaths } from "../../common/utils/staticPaths";
 import { asOneWePage } from "../../common/components/onewePage";
+import { useTranslations } from "next-intl";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 
 const UserPage = asOneWePage(() => {
   // TODO(techiejd): Do admin story so that user page can be protected.
+  const yourMemberTranslations = useTranslations("members.yours");
   const router = useRouter();
   const appState = useAppState();
   const userId = (() => {
@@ -53,14 +55,14 @@ const UserPage = asOneWePage(() => {
       {user &&
         userId == user.uid && [
           <Typography key="user title" variant="h2">
-            Usuario:
+            {yourMemberTranslations("title")}
           </Typography>,
           <Button
             key="disconnect button"
             variant="contained"
             onClick={() => signOut()}
           >
-            Desconectar
+            {yourMemberTranslations("signOut")}
           </Button>,
         ]}
       <Sponsorships
@@ -80,21 +82,27 @@ const UserPage = asOneWePage(() => {
                   }),
                 }).then((res) => {
                   if (res.status != 200) {
-                    alert("Failed to cancel sponsorship.");
+                    alert(
+                      yourMemberTranslations("failedToCancelSponsorship", {
+                        error: res.statusText,
+                      })
+                    );
                   }
                 });
               })
         }
       />
-      <Typography variant="h2">Los Makers:</Typography>
+      <Typography variant="h2">
+        {yourMemberTranslations("makers.title")}
+      </Typography>
       {makersError && (
-        <Typography color={"red"}>
-          Error: {JSON.stringify(makersError)}
-        </Typography>
+        <Typography color={"red"}>{JSON.stringify(makersError)}</Typography>
       )}
-      {loading && <Typography>Makers: Loading...</Typography>}
+      {loading && (
+        <Typography>{yourMemberTranslations("makers.loading")}</Typography>
+      )}
       {!loading && !makersError && makerIds.length == 0 && (
-        <Typography>No hay maker aquí.</Typography>
+        <Typography>{yourMemberTranslations("makers.none")}</Typography>
       )}
       {makerIds.map((makerId) => (
         <MakerCard makerId={makerId} key={makerId} />
