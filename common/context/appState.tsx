@@ -18,7 +18,6 @@ import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import AuthDialog from "../../modules/auth/AuthDialog";
 import { AuthAction } from "../../modules/auth/AuthDialog/context";
-import { Header } from "../components/header";
 import { lightConfiguration } from "../components/theme";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
 import { AbstractIntlMessages } from "next-intl";
@@ -118,8 +117,6 @@ const AppProvider: React.FC<{
       <NextIntlClientProvider messages={messages}>
         <ThemeProvider theme={createTheme(lightConfiguration)}>
           <CssBaseline>
-            <RegisterModal />
-            <Header />
             <main>{children}</main>
           </CssBaseline>
         </ThemeProvider>

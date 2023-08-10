@@ -11,11 +11,12 @@ import { useCurrentPosiId } from "../../../../modules/posi/context";
 import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
+import { asOneWePage } from "../../../../common/components/onewePage";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 
-const Edit = () => {
+const Edit = asOneWePage(() => {
   const editTranslations = useTranslations("actions.edit");
   const appState = useAppState();
   const router = useRouter();
@@ -65,5 +66,5 @@ const Edit = () => {
       )}
     </Stack>
   );
-};
+});
 export default Edit;

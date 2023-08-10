@@ -17,10 +17,11 @@ import {
 import { Fragment } from "react";
 import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
+import { asOneWePage } from "../../../../common/components/onewePage";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
-const SharePage = () => {
+const SharePage = asOneWePage(() => {
   const router = useRouter();
   const {
     invitedAsMakers: invitedAsMakersIn,
@@ -119,6 +120,6 @@ const SharePage = () => {
       </Button>
     </Stack>
   );
-};
+});
 
 export default SharePage;

@@ -26,6 +26,7 @@ import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel"
 import { WithTranslationsStaticProps } from "../../../common/utils/translations";
 import { CachePaths } from "../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
+import { asOneWePage } from "../../../common/components/onewePage";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -107,7 +108,7 @@ const AdminBottomBar = ({
   );
 };
 
-const Index = () => {
+const Index = asOneWePage(() => {
   const [posiData, loading, error] = useCurrentPosi();
   const [socialProofs] = useCurrentSocialProofs();
   const [myMaker] = useMyMaker();
@@ -182,6 +183,6 @@ const Index = () => {
   ) : (
     <CircularProgress />
   );
-};
+});
 
 export default Index;

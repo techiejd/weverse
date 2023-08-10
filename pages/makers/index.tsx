@@ -23,6 +23,7 @@ import SharingSpeedDialAction from "../../modules/makers/sharingSpeedDialAction"
 import { Maker } from "../../functions/shared/src";
 import { makerConverter, memberConverter } from "../../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
+import { asOneWePage } from "../../common/components/onewePage";
 
 export const getStaticProps = WithTranslationsStaticProps();
 const makerFab = (maker: Maker) => {
@@ -152,7 +153,7 @@ const MyMakerPortal = () => {
   );
 };
 
-const Makers = () => {
+const Makers = asOneWePage(() => {
   const appState = useAppState();
   const [makersSnapshot, makersLoading, makersError] = useCollection(
     collection(appState.firestore, "makers").withConverter(makerConverter)
@@ -197,6 +198,6 @@ const Makers = () => {
       <MyMakerPortal />
     </Box>
   );
-};
+});
 
 export default Makers;

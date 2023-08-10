@@ -11,11 +11,12 @@ import { Sponsorship } from "../../functions/shared/src";
 import { useMyMember } from "../../common/context/weverseUtils";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
 import { CachePaths } from "../../common/utils/staticPaths";
+import { asOneWePage } from "../../common/components/onewePage";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 
-const UserPage = () => {
+const UserPage = asOneWePage(() => {
   // TODO(techiejd): Do admin story so that user page can be protected.
   const router = useRouter();
   const appState = useAppState();
@@ -36,7 +37,7 @@ const UserPage = () => {
   }, [makersSnapshot, setMakerIds]);
 
   const { user } = appState.authState;
-  const [signOut, signOutLoading, signOutError] = useSignOut(appState.auth);
+  const [signOut] = useSignOut(appState.auth);
   const [myMember] = useMyMember();
 
   return (
@@ -100,6 +101,6 @@ const UserPage = () => {
       ))}
     </Stack>
   );
-};
+});
 
 export default UserPage;

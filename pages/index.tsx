@@ -11,6 +11,7 @@ import Image from "next/image";
 import { memberConverter } from "../common/utils/firebase";
 import { useTranslations } from "next-intl";
 import { WithTranslationsStaticProps } from "../common/utils/translations";
+import { asOneWePage } from "../common/components/onewePage";
 
 export const getStaticProps = WithTranslationsStaticProps();
 
@@ -72,7 +73,7 @@ const MakerPortal = () => {
   );
 };
 
-const WeVerse = () => {
+const WeVerse = asOneWePage(() => {
   const indexTranslations = useTranslations("index");
   const commonTranslations = useTranslations("common");
   return (
@@ -135,6 +136,6 @@ const WeVerse = () => {
       </Stack>
     </Box>
   );
-};
+});
 
 export default WeVerse;

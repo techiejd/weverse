@@ -24,6 +24,7 @@ import { useCallback, useEffect, useState } from "react";
 import ImpactCard from "../../modules/posi/action/card";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
 import { useTranslations } from "next-intl";
+import { asOneWePage } from "../../common/components/onewePage";
 
 export const getStaticProps = WithTranslationsStaticProps();
 const IndexPage = () => {
@@ -100,7 +101,7 @@ const IndexPage = () => {
   );
 };
 
-const Index = () => {
+const Index = asOneWePage(() => {
   const commonTranslations = useTranslations("common");
   const fullHeightPage = (
     <style global jsx>{`
@@ -145,6 +146,6 @@ const Index = () => {
       </Stack>
     </Box>
   );
-};
+});
 
 export default Index;

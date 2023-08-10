@@ -8,10 +8,11 @@ import { posiFormDataConverter } from "../../common/utils/firebase";
 import { PosiFormData } from "../../functions/shared/src";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
 import { useTranslations } from "next-intl";
+import { asOneWePage } from "../../common/components/onewePage";
 
 export const getStaticProps = WithTranslationsStaticProps();
 
-const Upload = () => {
+const Upload = asOneWePage(() => {
   const appState = useAppState();
   const router = useRouter();
   const { user } = useAppState().authState;
@@ -43,6 +44,6 @@ const Upload = () => {
       )}
     </Stack>
   );
-};
+});
 
 export default Upload;

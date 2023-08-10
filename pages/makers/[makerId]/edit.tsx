@@ -12,10 +12,11 @@ import MakerInput from "../../../modules/makers/makerInput";
 import { WithTranslationsStaticProps } from "../../../common/utils/translations";
 import { CachePaths } from "../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
+import { asOneWePage } from "../../../common/components/onewePage";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
-const Edit = () => {
+const Edit = asOneWePage(() => {
   const editMakerTranslations = useTranslations("makers.edit");
   const appState = useAppState();
   const router = useRouter();
@@ -93,6 +94,6 @@ const Edit = () => {
       {makerId ? <MakerForm makerId={String(makerId)} /> : <CircularProgress />}
     </Stack>
   );
-};
+});
 
 export default Edit;

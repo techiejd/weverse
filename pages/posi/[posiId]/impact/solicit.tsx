@@ -12,10 +12,11 @@ import { useCurrentPosiId } from "../../../../modules/posi/context";
 import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
+import { asOneWePage } from "../../../../common/components/onewePage";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
-const Solicit = () => {
+const Solicit = asOneWePage(() => {
   const posiId = useCurrentPosiId();
   const appState = useAppState();
 
@@ -69,6 +70,6 @@ const Solicit = () => {
   ) : (
     <CircularProgress />
   );
-};
+});
 
 export default Solicit;

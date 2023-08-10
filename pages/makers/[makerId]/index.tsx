@@ -74,6 +74,7 @@ import { posiFormDataConverter } from "../../../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../../../common/utils/translations";
 import { CachePaths } from "../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
+import { asOneWePage } from "../../../common/components/onewePage";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -566,7 +567,7 @@ const BottomBar = () => {
   );
 };
 
-const MakerPage = () => {
+const MakerPage = asOneWePage(() => {
   return (
     <Box mb={12}>
       <Stack p={2} divider={<Divider />}>
@@ -576,6 +577,6 @@ const MakerPage = () => {
       <BottomBar />
     </Box>
   );
-};
+});
 
 export default MakerPage;

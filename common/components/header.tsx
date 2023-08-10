@@ -21,13 +21,15 @@ import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import Image from "next/image";
 import LinkBehavior from "../utils/linkBehavior";
 import { useMyMaker } from "../context/weverseUtils";
-import { useTranslations } from "next-intl";
+import { useMessages, useTranslations } from "next-intl";
 
 export const MenuComponent = (props: BoxProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const menuOpen = Boolean(anchorEl);
   const closeMenu = () => setAnchorEl(null);
+  const messages = useMessages();
+  console.log(messages);
   const t = useTranslations("common.callToAction");
   const UserPortal = () => {
     const { user } = useAppState().authState;

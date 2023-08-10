@@ -17,15 +17,16 @@ import {
   makerConverter,
 } from "../../../../common/utils/firebase";
 import { v4 } from "uuid";
-import { Maker, organizationType } from "../../../../functions/shared/src";
+import { organizationType } from "../../../../functions/shared/src";
 import { Add, Remove } from "@mui/icons-material";
 import buildUrl from "@googlicius/build-url";
 import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
+import { asOneWePage } from "../../../../common/components/onewePage";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
-const Invite = () => {
+const Invite = asOneWePage(() => {
   const appState = useAppState();
   const [maker] = useCurrentMaker();
   const [loading, setLoading] = useState(false);
@@ -197,6 +198,6 @@ const Invite = () => {
       </LoadingButton>
     </Stack>
   );
-};
+});
 
 export default Invite;

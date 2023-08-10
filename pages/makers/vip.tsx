@@ -11,9 +11,10 @@ import { useEffect } from "react";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
 import { useTranslations } from "next-intl";
 import UnderConstruction from "../../modules/posi/underConstruction";
+import { asOneWePage } from "../../common/components/onewePage";
 
 export const getStaticProps = WithTranslationsStaticProps();
-const Vip = () => {
+const Vip = asOneWePage(() => {
   const router = useRouter();
   const [myMaker] = useMyMaker();
   const [socialProofs] = useSocialProofs(myMaker?.id, "maker");
@@ -42,6 +43,6 @@ const Vip = () => {
   ) : (
     <LogInPrompt title={vipTranslations("logInPrompt")} />
   );
-};
+});
 
 export default Vip;
