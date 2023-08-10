@@ -1,9 +1,6 @@
-import {
-  PlayCircle,
-  Image as ImageIcon,
-  Place,
-  EmojiPeople,
-} from "@mui/icons-material";
+import Place from "@mui/icons-material/Place";
+import EmojiPeople from "@mui/icons-material/EmojiPeople";
+
 import {
   Box,
   Typography,
@@ -12,7 +9,6 @@ import {
   CardHeader,
   Icon,
   CardContent,
-  CardActionArea,
 } from "@mui/material";
 import Media from "./../media";
 import MakerCard from "../../makers/MakerCard";

@@ -1,9 +1,7 @@
-import {
-  Hearing,
-  CardGiftcard,
-  ConnectWithoutContact,
-  Support,
-} from "@mui/icons-material";
+import Hearing from "@mui/icons-material/Hearing";
+import CardGiftcard from "@mui/icons-material/CardGiftcard";
+import ConnectWithoutContact from "@mui/icons-material/ConnectWithoutContact";
+import Support from "@mui/icons-material/Support";
 import {
   Dialog,
   DialogTitle,

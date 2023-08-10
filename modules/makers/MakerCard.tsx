@@ -1,4 +1,4 @@
-import { SentimentVerySatisfied } from "@mui/icons-material";
+import SentimentVerySatisfied from "@mui/icons-material/SentimentVerySatisfied";
 import {
   CircularProgress,
   Stack,

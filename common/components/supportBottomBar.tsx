@@ -1,11 +1,9 @@
-import {
-  Share,
-  ConnectWithoutContact,
-  CardGiftcard,
-  Campaign,
-  Add,
-  VolunteerActivism,
-} from "@mui/icons-material";
+import Share from "@mui/icons-material/Share";
+import ConnectWithoutContact from "@mui/icons-material/ConnectWithoutContact";
+import CardGiftcard from "@mui/icons-material/CardGiftcard";
+import Campaign from "@mui/icons-material/Campaign";
+import Add from "@mui/icons-material/Add";
+import VolunteerActivism from "@mui/icons-material/VolunteerActivism";
 import {
   Dialog,
   DialogTitle,

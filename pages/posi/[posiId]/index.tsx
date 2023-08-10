@@ -7,7 +7,10 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { Edit, Handshake, Hearing, Share } from "@mui/icons-material";
+import Edit from "@mui/icons-material/Edit";
+import Handshake from "@mui/icons-material/Handshake";
+import Hearing from "@mui/icons-material/Hearing";
+import Share from "@mui/icons-material/Share";
 import { useState } from "react";
 import ShareActionArea from "../../../common/components/shareActionArea";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";

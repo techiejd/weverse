@@ -1,4 +1,5 @@
-import { Flaky, Verified } from "@mui/icons-material";
+import Flaky from "@mui/icons-material/Flaky";
+import Verified from "@mui/icons-material/Verified";
 import { CardActionArea, Icon, Stack, Typography } from "@mui/material";
 import { Validation } from "../../../../functions/shared/src";
 import { useMaker } from "../../../../common/context/weverseUtils";
@@ -6,6 +7,7 @@ import ValidatorBadge, {
   ValidationProcessDialog,
 } from "../../../../common/components/validatorBadge";
 import { useState } from "react";
+
 const ValidationInfo = ({ validated, validator: validatorId }: Validation) => {
   const [validator] = useMaker(validatorId);
   const ValidatedIcon = validated ? Verified : Flaky;

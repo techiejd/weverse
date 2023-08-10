@@ -1,7 +1,6 @@
 import {
   Avatar,
   Button,
-  CardActionArea,
   CardActions,
   CardContent,
   Dialog,

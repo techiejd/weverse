@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import { MutableRefObject, useEffect, useMemo, useRef, useState } from "react";
 import PageInteractionListener from "@iroomit/page-interaction-listener";
 
