@@ -36,7 +36,7 @@ export const MenuComponent = (props: BoxProps) => {
     const { user } = useAppState().authState;
     return user ? (
       <MenuItem
-        href={`/users/${user.uid}`}
+        href={`/members/${user.uid}`}
         onClick={closeMenu}
         component={
           //TODO(techiejd): Look into why the href isn't rendered as an 'a'
