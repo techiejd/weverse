@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useRef, useState, useEffect } from "react";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { AuthDialogState, encodePhoneNumber } from "./context";
 import { useAppState } from "../../../common/context/appState";
+import { useTranslations } from "next-intl";
 
 const RecaptchaDialog = ({
   authDialogState,
@@ -12,6 +13,7 @@ const RecaptchaDialog = ({
   authDialogState: AuthDialogState;
   setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
 }) => {
+  const t = useTranslations("auth.recaptchaDialog");
   const appState = useAppState();
   const recaptchaContainer = useRef<HTMLElement | null>(null);
   const [recaptchaContainerReady, setRecaptchaContainerReady] = useState(false);
@@ -68,11 +70,12 @@ const RecaptchaDialog = ({
     authDialogState.recaptchaDialogOpen,
     setAuthDialogState,
     recaptchaContainerReady,
+    appState.auth,
   ]);
 
   return (
     <Dialog open={authDialogState.recaptchaDialogOpen} fullWidth>
-      <DialogTitle>Verifiquemos tu humanidad</DialogTitle>
+      <DialogTitle>{t("title")}</DialogTitle>
       <center>
         <Box
           ref={(r) => {
@@ -84,8 +87,9 @@ const RecaptchaDialog = ({
         ></Box>
       </center>
       <DialogContentText>
-        En caso tal de no poder avanzar, refresca tu pagina o contactanos a:
-        community@onewe.co.
+        {t.rich("inCaseCantGoOnContactCommunity", {
+          email: (chunks) => <a href="mailto:community@onewe.co">{chunks}</a>,
+        })}
       </DialogContentText>
     </Dialog>
   );

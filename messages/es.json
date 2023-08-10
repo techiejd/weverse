@@ -13,7 +13,30 @@
     "register": "Registrarme",
     "validationProcess": "Estamos verificando tu número de teléfono. Vas a recibir un código de verificación para completar el {action, select, 0 {inicio de sesión} other {registro}}.",
     "namePlaceholder": "¿Cómo te llamas?",
-    "nameHelperText": "¿Con qué nombre te identificas? Ej: Fula, Fulano, Fulano Detal, etc. Este nombre lo usará la comunidad OneWe para conocerte."
+    "nameHelperText": "¿Con qué nombre te identificas? Ej: Fula, Fulano, Fulano Detal, etc. Este nombre lo usará la comunidad OneWe para conocerte.",
+    "pleaseWaitWhileWeCheckUserStatus": "Un momento mientras verificamos que {authAction, select, 0 {ya} other {no}} estes registrado.",
+    "userRegisteredError": "Hola, {authAction, select, 0 {no} other {ya}} estas registrado.",
+    "confirmRegistrationDialog": {
+      "review": "Por favor revisa tu información",
+      "name": "Nombre:"
+    },
+    "invitedAsMaker": {
+      "invalidInvitationLinkAskForAnother": "Este vinculo no es valido. Hay que pedir otro de la incubadora.",
+      "usedInvitationLink": "Este vinculo ya fue usado. Hay que pedir otro de la incubadora."
+    },
+    "handleOtp": {
+      "restartPrompt": "Intenta de nuevo.",
+      "invitedAsMakerNotPossible": "No es posible registrarse con enlace de invitado.",
+      "invalidOtp": "El código de verificación no es válido."
+    },
+    "otpDialog": {
+      "prompt": "Ingresa el código de verificación que recibiste.",
+      "checkSpam": "¿No recibiste el código? Revisa tu carpeta de spam."
+    },
+    "recaptchaDialog": {
+      "title": "Verifiquemos que no eres un robot",
+      "inCaseCantGoOnContactCommunity": "En caso tal de no poder avanzar, refresca tu pagina o contactanos a <email>community@onewe.co</email>."
+    }
   },
   "input": {
     "cancel": "Cancelar",

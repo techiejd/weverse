@@ -23,13 +23,13 @@ const ConfirmRegistrationDialog = ({
 }) => {
   const inputTranslations = useTranslations("input");
   const authTranslations = useTranslations("auth");
+  const t = useTranslations("auth.confirmRegistrationDialog");
   return (
     <Dialog open={authDialogState.confirmRegistrationDialogOpen}>
-      <DialogTitle>Revisa la información:</DialogTitle>
+      <DialogTitle>{t("review")}</DialogTitle>
       <DialogContent>
         <Typography>
-          <b>Nombre: </b>
-          {authDialogState.name}
+          <b>{t("name")}</b> {authDialogState.name}
         </Typography>
         <Stack>
           <Typography>
@@ -54,7 +54,7 @@ const ConfirmRegistrationDialog = ({
             }));
           }}
         >
-          Cancelar
+          {inputTranslations("cancel")}
         </Button>
         <Button
           variant="contained"
@@ -63,7 +63,7 @@ const ConfirmRegistrationDialog = ({
             confirm();
           }}
         >
-          Listo
+          {inputTranslations("ok")}
         </Button>
       </DialogActions>
     </Dialog>

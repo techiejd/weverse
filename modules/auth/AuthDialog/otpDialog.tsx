@@ -12,6 +12,7 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import AuthCode from "react-auth-code-input";
 import { AuthDialogState } from "./context";
+import { useTranslations } from "next-intl";
 
 const OtpDialog = ({
   authDialogState,
@@ -22,6 +23,8 @@ const OtpDialog = ({
   setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
   handleVerification: (otp: string) => Promise<string>;
 }) => {
+  const otpDialogTranslations = useTranslations("auth.otpDialog");
+  const inputTranslations = useTranslations("input");
   const [authCodeInput, setAuthCodeInput] = useState<string>("");
   const [verifyButtonDisabled, setVerifyButtonDisabled] = useState(true);
   const [error, setError] = useState("");
@@ -34,9 +37,9 @@ const OtpDialog = ({
   return (
     <Dialog open={authDialogState.otpDialogOpen} fullWidth>
       <DialogTitle>
-        Ingresa el código de verificación que recibiste.
+        {otpDialogTranslations("prompt")}
         <Typography color={"gray"} fontSize={12}>
-          (Es posible que el código vaya a la carpeta SPAM de tus mensajes.)
+          ({otpDialogTranslations("checkSpam")})
         </Typography>
       </DialogTitle>
       <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
@@ -62,7 +65,7 @@ const OtpDialog = ({
           }
           disabled={waitingVerificationResult}
         >
-          Cancelar
+          {inputTranslations("cancel")}
         </Button>
         <Button
           variant="contained"
@@ -80,7 +83,7 @@ const OtpDialog = ({
           }}
           disabled={verifyButtonDisabled || waitingVerificationResult}
         >
-          Listo
+          {inputTranslations("ok")}
         </Button>
       </DialogActions>
     </Dialog>

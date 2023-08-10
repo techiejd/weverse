@@ -19,7 +19,6 @@ import {
   setDoc,
   doc,
   getDoc,
-  updateDoc,
   writeBatch,
 } from "firebase/firestore";
 import Login from "@mui/icons-material/Login";
@@ -36,6 +35,7 @@ import {
 } from "../../../common/utils/firebase";
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
+import { auth } from "firebase-admin";
 
 const usePrompts = () => {
   const t = useTranslations("auth");
@@ -68,16 +68,17 @@ const TabControl = ({
   );
 };
 
-const CheckingUserRegisteredExplanation = ({
+const CheckingUserStatusExplanation = ({
   authAction,
 }: {
   authAction: AuthAction;
 }) => {
+  const t = useTranslations("auth");
+  console.log("authAction", authAction);
   return (
     <Box>
       <Typography>
-        Un momento mientras verificamos que{" "}
-        {authAction == AuthAction.logIn ? "ya" : "no"} estes registrado.
+        {t("pleaseWaitWhileWeCheckUserStatus", { authAction: authAction })}
       </Typography>
       <CircularProgress />
     </Box>
@@ -85,9 +86,10 @@ const CheckingUserRegisteredExplanation = ({
 };
 
 const UserRegisteredError = ({ authAction }: { authAction: AuthAction }) => {
+  const t = useTranslations("auth");
   return (
     <Typography color={"red"}>
-      Hola, {authAction == AuthAction.logIn ? "no" : "ya"} estas registrado.
+      {t("userRegisteredError", { authAction: authAction })}
     </Typography>
   );
 };
@@ -99,9 +101,11 @@ const AuthDialogContent = ({
   setOpen: Dispatch<SetStateAction<boolean>>;
   initialAuthAction: AuthAction;
 }) => {
+  const authTranslations = useTranslations("auth");
+  const inputTranslations = useTranslations("input");
   const appState = useAppState();
-  const { user, loading: userLoading } = appState.authState;
-  const [updateProfile, updating, updateProfileError] = useUpdateProfile(
+  const { loading: userLoading } = appState.authState;
+  const [updateProfile, _, updateProfileError] = useUpdateProfile(
     appState.auth
   );
   const [authDialogState, setAuthDialogState] = useState<AuthDialogState>({
@@ -160,22 +164,24 @@ const AuthDialogContent = ({
       getDoc(makerDoc).then((makerDocSnap) => {
         if (!makerDocSnap.exists()) {
           alert(
-            "Este vinculo no es valido. Hay que pedir otro de la incubadora."
+            authTranslations(
+              "invitedAsMaker.invalidInvitationLinkAskForAnother"
+            )
           );
           router.push("/");
         }
         const makerData = makerDocSnap.data();
         if (makerData!.ownerId != "invited") {
-          alert("Este vinculo ya se usó. Hay que pedir otro de la incubadora.");
+          alert("invitedAsMaker.usedInvitationLink");
           router.push("/");
         }
       });
     }
-  }, [invitedAsMaker, router, appState.firestore]);
+  }, [invitedAsMaker, router, appState.firestore, authTranslations]);
 
   const handleOtp = async (otp: string) => {
     if (authDialogState.recaptchaConfirmationResult == undefined)
-      return "Try restarting";
+      return authTranslations("handleOtp.restartPrompt");
     return authDialogState.recaptchaConfirmationResult
       .confirm(otp)
       .then(async (userCred) => {
@@ -238,7 +244,7 @@ const AuthDialogContent = ({
           await createUserAndMaker();
         } else {
           if (invitedAsMaker) {
-            return "You can't login with an invite link.";
+            return authTranslations("handleOtp.invitedAsMakerNotPossible");
           }
         }
 
@@ -247,7 +253,7 @@ const AuthDialogContent = ({
         return error;
       })
       .catch((err) => {
-        return "Wrong code!";
+        return authTranslations("handleOtp.invalidOtp");
       });
   };
 
@@ -337,8 +343,6 @@ const AuthDialogContent = ({
   };
 
   const prompts = usePrompts();
-  const authTranslations = useTranslations("auth");
-  const inputTranslations = useTranslations("input");
 
   return (
     <Box>
@@ -395,7 +399,7 @@ const AuthDialogContent = ({
               setAuthDialogState={setAuthDialogState}
             />
             {authDialogState.checkingUserRegistered && (
-              <CheckingUserRegisteredExplanation
+              <CheckingUserStatusExplanation
                 authAction={authDialogState.authAction}
               />
             )}

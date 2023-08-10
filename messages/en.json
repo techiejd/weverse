@@ -11,9 +11,32 @@
   },
   "auth": {
     "register": "Register",
-    "validationProcess": "We are verifying your phone number. You will receive a verification code to this number to finish the {action, select, 0 {login} other {registration}} process.",
+    "validationProcess": "We will verify your phone number and you will receive a verification code to this number to finish the {action, select, 0 {login} other {registration}} process.",
     "namePlaceholder": "What's your name?",
-    "nameHelperText": "What do you like to be called? This is how you will be known in the community."
+    "nameHelperText": "What do you like to be called? This is how you will be known in the community.",
+    "pleaseWaitWhileWeCheckUserStatus": "One second while we verify that you are {authAction, select, 0 {already} other {not}} registered.",
+    "userRegisteredError": "Hi, you are {authAction, select, 0 {not} other {already}} registered.",
+    "confirmRegistrationDialog": {
+      "review": "Please review your information",
+      "name": "Name:"
+    },
+    "invitedAsMaker": {
+      "invalidInvitationLinkAskForAnother": "This link is not valid. Ask your incubator for another invite link.",
+      "usedInvitationLink": "This link has already been used. Ask your incubator for another invite link."
+    },
+    "handleOtp": {
+      "restartPrompt": "Please try again.",
+      "invitedAsMakerNotPossible": "It is not possible to register with an invite link.",
+      "invalidOtp": "Verification code is not valid."
+    },
+    "otpDialog": {
+      "prompt": "Please enter the verification code you received via SMS.",
+      "checkSpam": "If you don't receive it, check your spam folder."
+    },
+    "recaptchaDialog": {
+      "title": "Please prove you are not a robot",
+      "inCaseCantGoOnContactCommunity": "In case you can't go on, please contact <email>community@onewe.co</email>."
+    } 
   },
   "input": {
     "cancel": "Cancel",
