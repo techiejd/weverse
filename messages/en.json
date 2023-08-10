@@ -36,7 +36,7 @@
     "recaptchaDialog": {
       "title": "Please prove you are not a robot",
       "inCaseCantGoOnContactCommunity": "In case you can't go on, please contact <email>community@onewe.co</email>."
-    } 
+    }
   },
   "input": {
     "defaultCountry": "US",
@@ -132,8 +132,8 @@
           "title": "Choose your sponsorship level",
           "level": "Level {level}",
           "currency": {
-            "prompt": "Escoge tu divisa",
-            "chooseWiselyWarning": "Elige sabiamente. Solo puedes elegir la divisa en este primer patrocinio, porque almacenamos este dato."
+            "prompt": "Choose your currency",
+            "chooseWiselyWarning": "Choose wisely. You can only choose your currency in this first sponsor, since we save this information."
           },
           "tip": {
             "prompt": "Want to leave a tip for OneWe?",
@@ -170,7 +170,7 @@
       "details": {
         "sponsorshipSummary": {
           "title": "Sponsorship summary",
-          "level":  "Sponsorship level"
+          "level": "Sponsorship level"
         },
         "payment": {
           "title": "Payment details",
@@ -356,7 +356,7 @@
         "incubator": {
           "whatIsYourValidationProcess": "How does the incubator validate actions in order to give out seals of approval?",
           "leaveDetails": "Leave details about your validation process here.",
-          "devilIsInTheDetailsReminder": "The devil is in the details. The more details you give and follow, the more trust you'll build with the community." 
+          "devilIsInTheDetailsReminder": "The devil is in the details. The more details you give and follow, the more trust you'll build with the community."
         },
         "nonFinancialHelp": {
           "whatOtherHelpDoYouNeed": "What type of non-financial help do{makerType, select, individual { you} other {es the organization}} need?",
