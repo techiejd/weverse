@@ -1,4 +1,8 @@
-import { MuiTelInputInfo, MuiTelInput } from "mui-tel-input";
+import {
+  MuiTelInputInfo,
+  MuiTelInput,
+  MuiTelInputCountry,
+} from "mui-tel-input";
 import { Dispatch, SetStateAction, useState } from "react";
 import { AuthAction, AuthDialogState } from "./context";
 import { useTranslations } from "next-intl";
@@ -29,7 +33,7 @@ const PhoneInput = ({
   const authTranslations = useTranslations("auth");
   return (
     <MuiTelInput
-      defaultCountry="CO"
+      defaultCountry={inputTranslations("defaultCountry") as MuiTelInputCountry}
       value={phoneNumberIn}
       error={authDialogState.phoneNumberInputError}
       onChange={onPhoneNumberChange}

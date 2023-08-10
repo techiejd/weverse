@@ -41,7 +41,9 @@ const ChooseSponsorship = ({
   const chooseTranslations = useTranslations("common.sponsor.steps.choose");
   const inputTranslations = useTranslations("input");
   const [currency, setCurrency] = useState<Currency>(
-    currencyIn || (sponsorForm.currency as Currency) || ("cop" as Currency)
+    currencyIn ||
+      (sponsorForm.currency as Currency) ||
+      (chooseTranslations("defaultCurrency") as Currency)
   );
   const sponsorshipLevelInfo = currencyInfo[currency].sponsorshipLevelInfo;
   const [customAmount, setCustomAmount] = useState(

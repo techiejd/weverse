@@ -39,6 +39,7 @@
     }
   },
   "input": {
+    "defaultCountry": "CO",
     "cancel": "Cancelar",
     "close": "Cerrar",
     "phoneNumber": "Número telefónico",
@@ -125,6 +126,7 @@
       },
       "steps": {
         "choose": {
+          "defaultCurrency": "cop",
           "short": "Elige",
           "title": "Elige tu nivel de patrocinio",
           "level": "Nivel {level}",

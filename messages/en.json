@@ -39,6 +39,7 @@
     } 
   },
   "input": {
+    "defaultCountry": "US",
     "cancel": "Cancel",
     "close": "Close",
     "phoneNumber": "Phone number",
@@ -126,6 +127,7 @@
       },
       "steps": {
         "choose": {
+          "defaultCurrency": "usd",
           "short": "Choose",
           "title": "Choose your sponsorship level",
           "level": "Level {level}",

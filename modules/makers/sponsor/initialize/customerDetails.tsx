@@ -3,7 +3,11 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 
 import { Autocomplete, Box, TextField } from "@mui/material";
-import { MuiTelInput, MuiTelInputInfo } from "mui-tel-input";
+import {
+  MuiTelInput,
+  MuiTelInputCountry,
+  MuiTelInputInfo,
+} from "mui-tel-input";
 import { useState } from "react";
 
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -37,7 +41,7 @@ const PhoneInput = ({
     <Box>
       <MuiTelInput
         variant="standard"
-        defaultCountry="CO"
+        defaultCountry={t("defaultCountry") as MuiTelInputCountry}
         name="phone"
         value={phoneIn}
         onChange={onPhoneChange}
