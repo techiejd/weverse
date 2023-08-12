@@ -17,13 +17,19 @@ import {
   makerConverter,
 } from "../../../../common/utils/firebase";
 import { v4 } from "uuid";
-import { organizationType } from "../../../../functions/shared/src";
+import {
+  organizationType,
+  makerType as makerTypeSchema,
+  MakerType,
+  OrganizationType,
+} from "../../../../functions/shared/src";
 import Add from "@mui/icons-material/Add";
 import Remove from "@mui/icons-material/Remove";
 import buildUrl from "@googlicius/build-url";
 import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
 import { asOneWePage } from "../../../../common/components/onewePage";
+import { useTranslations } from "next-intl";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -33,25 +39,42 @@ const Invite = asOneWePage(() => {
   const [loading, setLoading] = useState(false);
   const [invitedAsMakers, setInvitedAsMakers] = useState([v4()]);
 
-  const [makerTypes, setMakerTypes] = useState(["nonprofit"]);
+  const [makerTypes, setMakerTypes] = useState<
+    (MakerType | OrganizationType)[]
+  >(["nonprofit" as OrganizationType]);
   const [makerNames, setMakerNames] = useState([""]);
 
+  const inviteTranslations = useTranslations("makers.invite");
+
   const InviteMakerInput = ({ index }: { index: number }) => {
+    const inviteTranslations = useTranslations("makers.invite");
+    const makerTypesTranslations = useTranslations("makers.types");
+    const makeTypeOption = (t: MakerType | OrganizationType) => {
+      const translateType = (t: MakerType | OrganizationType) =>
+        makerTypesTranslations("long." + t);
+      return <option value={t}>{translateType(t)}</option>;
+    };
     //TODO(techiejd): React's not updating the states through array manipulation.
     const [makerName, setMakerName] = useState(makerNames[index] ?? "");
     const [makerType, setMakerType] = useState(
-      makerTypes[index] ?? "nonprofit"
+      makerTypes[index] ?? organizationType.Enum.nonprofit
     );
     const onSelectMakerType = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setMakerType(event.target.value);
+      setMakerType(event.target.value as MakerType | OrganizationType);
       setMakerTypes((makerTypes) =>
-        makerTypes.map((type, i) => (i === index ? event.target.value : type))
+        makerTypes.map((type, i) =>
+          i === index
+            ? (event.target.value as MakerType | OrganizationType)
+            : type
+        )
       );
     };
     return (
       <Fragment>
         <FormControl fullWidth sx={{ maxWidth: 600 }}>
-          <InputLabel htmlFor="makerType">Tipo de maker</InputLabel>
+          <InputLabel htmlFor="makerType">
+            {makerTypesTranslations("title")}
+          </InputLabel>
           <NativeSelect
             sx={{ width: "100%" }}
             value={makerType}
@@ -61,20 +84,18 @@ const Invite = asOneWePage(() => {
               id: "makerType",
             }}
           >
-            <option value="individual">Individuo</option>
-            <option value="nonprofit">Fundación u otra ONG</option>
-            <option value="religious">Organización Religiosa</option>
-            <option value="unincorporated">Voluntarios</option>
-            <option value="profit">Organización Comercial</option>
+            {makeTypeOption(makerTypeSchema.Enum.individual)}
+            {makeTypeOption(organizationType.Enum.nonprofit)}
+            {makeTypeOption(organizationType.Enum.religious)}
+            {makeTypeOption(organizationType.Enum.unincorporated)}
+            {makeTypeOption(organizationType.Enum.profit)}
           </NativeSelect>
         </FormControl>
         <TextField
           required
-          label={`¿Cómo se llama ${
-            makerTypes[index] == "individual"
-              ? "el individuo"
-              : "la organización?"
-          }`}
+          label={inviteTranslations("whatIsMakersName", {
+            makerType: makerTypes[index],
+          })}
           margin="normal"
           inputProps={{ maxLength: 75 }}
           fullWidth
@@ -103,9 +124,9 @@ const Invite = asOneWePage(() => {
       spacing={4}
     >
       <Typography variant="h2" textAlign="center">
-        Invita a un maker (o más) a tu red de OneWe.
+        {inviteTranslations("title")}
       </Typography>
-      {inviteMakerInputs.map((input) => input)}
+      {inviteMakerInputs}
       <Stack direction="row" spacing={2}>
         <IconButton
           disabled={inviteMakerInputs.length <= 1}
@@ -195,7 +216,7 @@ const Invite = asOneWePage(() => {
           setLoading(false);
         }}
       >
-        Generar vinculo
+        {inviteTranslations("makeLink")}
       </LoadingButton>
     </Stack>
   );

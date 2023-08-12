@@ -36,6 +36,7 @@ const OrganizationTypeInput = ({
   const organizationTypeTranslations = useTranslations(
     "makers.edit.chooseMakerType.organizationType"
   );
+  const makerTypesTranslations = useTranslations("makers.types.long");
   const inputTranslations = useTranslations("input");
   const organizationTypeChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -80,7 +81,7 @@ const OrganizationTypeInput = ({
                 key={oType}
                 value={oType}
                 control={<Radio required />}
-                label={organizationTypeTranslations(oType)}
+                label={makerTypesTranslations(oType)}
               />
             );
           })}

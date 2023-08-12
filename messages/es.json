@@ -341,12 +341,7 @@
         "organization": "Pertenezco a una organización",
         "organizationType": {
           "namePrompt": "¿Cómo se llama la organización?",
-          "title": "Tipo de organización",
-          "nonprofit": "Fundación u otra ONG",
-          "religious": "Organización Religiosa",
-          "unincorporated": "Voluntarios",
-          "profit": "Organización Comercial",
-          "incubator": "Incubadora"
+          "title": "Tipo de organización"
         }
       },
       "detailedInput": {
@@ -369,6 +364,32 @@
           "prompt": "Danos una historia",
           "helperText": "Es aquí donde puedes dar detalles"
         }
+      }
+    },
+    "invite": {
+      "title": "Invita a un maker (o más) a tu red de OneWe.",
+      "whatIsMakersName": "¿Cómo se llama {makerType, select, individual {el individuo} other {la organización}}?",
+      "makeLink": "Generar vinculo"
+    },
+    "types": {
+      "title": "Tipo de Maker",
+      "long": {
+        "individual": "Individuo",
+        "organization": "Organización",
+        "nonprofit": "Fundación u otra ONG",
+        "religious": "Organización Religiosa",
+        "unincorporated": "Organización de voluntarios",
+        "profit": "Organización Comercial",
+        "incubator": "Incubadora"
+      },
+      "short": {
+        "individual": "Individuo",
+        "organization": "Organización",
+        "nonprofit": "ONG",
+        "religious": "Religión",
+        "unincorporated": "Voluntarios",
+        "profit": "Negocio",
+        "incubator": "Incubadora"
       }
     }
   },

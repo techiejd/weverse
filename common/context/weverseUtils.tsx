@@ -21,8 +21,15 @@ import {
   incubateeConverter,
 } from "../utils/firebase";
 import { useEffect, useState } from "react";
-import { organizationType, makerType, Maker } from "../../functions/shared/src";
+import {
+  organizationType,
+  makerType,
+  Maker,
+  OrganizationType,
+  MakerType,
+} from "../../functions/shared/src";
 import { useRouter } from "next/router";
+import { useTranslations } from "next-intl";
 
 export const useMyMaker = () => {
   const appState = useAppState();
@@ -220,19 +227,24 @@ export const useActions = (maker: string | undefined) => {
   );
 };
 
-export const getMakerTypeLabel = (maker: Maker) => {
-  const organizationLabels = {
-    [organizationType.Enum.nonprofit]: "ONG",
-    [organizationType.Enum.religious]: "Congregación",
-    [organizationType.Enum.unincorporated]: "Voluntarios",
-    [organizationType.Enum.profit]: "Comercial",
-    [organizationType.Enum.incubator]: "Incubadora",
-  };
+export const useMakerTypeLabel = (maker?: Maker) => {
+  const makerTypesTranslations = useTranslations("makers.types.short");
+  if (!maker) {
+    return "";
+  }
+  const organizationLabels = Object.keys(organizationType.Enum).reduce(
+    (acc, key) => {
+      acc[key as OrganizationType] = makerTypesTranslations(key);
+      return acc;
+    },
+    {} as Record<OrganizationType, string>
+  );
 
-  const makerTypeLabels = {
-    [makerType.Enum.individual]: "Individuo",
-    [makerType.Enum.organization]: "Organización",
-  };
+  const makerTypeLabels = Object.keys(makerType.Enum).reduce((acc, key) => {
+    acc[key as MakerType] = makerTypesTranslations(key);
+    return acc;
+  }, {} as Record<MakerType, string>);
+
   return maker.type == "individual"
     ? makerTypeLabels[maker.type]
     : maker.organizationType

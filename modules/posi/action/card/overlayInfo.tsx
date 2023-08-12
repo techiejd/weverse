@@ -12,7 +12,7 @@ import { writeBatch, doc } from "firebase/firestore";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { useAppState } from "../../../../common/context/appState";
 import {
-  getMakerTypeLabel,
+  useMakerTypeLabel,
   useLikesCount,
   useMaker,
   useMyLikes,
@@ -137,7 +137,8 @@ const OverlayInfo = ({
   action: PosiFormData;
   setLogInPromptOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [maker, makerLoading, makerError] = useMaker(action.makerId);
+  const [maker] = useMaker(action.makerId);
+  const makerTypeLabel = useMakerTypeLabel(maker);
 
   return (
     <Stack
@@ -186,7 +187,7 @@ const OverlayInfo = ({
                 p: 1,
               }}
             >
-              {getMakerTypeLabel(maker)}
+              {makerTypeLabel}
             </Typography>,
           ]
         ) : (

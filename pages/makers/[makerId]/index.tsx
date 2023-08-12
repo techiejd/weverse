@@ -43,7 +43,7 @@ import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import moment from "moment";
 import ImpactCard from "../../../modules/posi/action/card";
 import {
-  getMakerTypeLabel,
+  useMakerTypeLabel,
   useCurrentIncubatees,
   useCurrentNeedsValidation,
   useMyMaker,
@@ -261,9 +261,10 @@ const IncubatorSection = () => {
 };
 
 const MakerProfile = () => {
-  const [maker, makerLoading, makerError] = useCurrentMaker();
+  const [maker] = useCurrentMaker();
   const [myMaker] = useMyMaker();
   const aboutTranslations = useTranslations("makers.about");
+  const makerTypeLabel = useMakerTypeLabel(maker);
   return maker ? (
     <Stack
       spacing={2}
@@ -272,7 +273,7 @@ const MakerProfile = () => {
       <Typography variant="h1">{maker.name}</Typography>
       <RatingsStack ratings={maker.ratings} />
       <Avatar src={maker.pic} sx={{ width: 225, height: 225 }} />
-      <Typography>{getMakerTypeLabel(maker)}</Typography>
+      <Typography>{makerTypeLabel}</Typography>
       <Stack sx={{ width: "100%" }}>
         <Sponsorships showAmount={myMaker && myMaker?.id == maker?.id} />
         {maker.type == "organization" &&

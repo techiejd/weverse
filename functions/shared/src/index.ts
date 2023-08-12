@@ -25,6 +25,7 @@ export const media = z.object({
 export type Media = z.infer<typeof media>;
 
 export const makerType = z.enum(["individual", "organization"]);
+export type MakerType = z.infer<typeof makerType>;
 export const organizationType = z.enum([
   "nonprofit",
   "religious",
