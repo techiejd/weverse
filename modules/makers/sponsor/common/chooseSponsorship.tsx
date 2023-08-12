@@ -144,7 +144,7 @@ const ChooseSponsorship = ({
             border: "1px solid #ccc",
             borderRadius: 4,
             pl: 1,
-            width: "fit-content",
+            minWidth: 90,
           }}
         >
           <option value="cop">COP 🇨🇴</option>

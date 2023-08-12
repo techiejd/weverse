@@ -342,7 +342,12 @@
         "organization": "I'm part of an organization",
         "organizationType": {
           "namePrompt": "What's the organization's name?",
-          "title": "Organization type"
+          "title": "Organization type",
+          "nonprofit": "Charity or NGO",
+          "religious": "Religious organization",
+          "unincorporated": "Volunteers",
+          "profit": "Private organization",
+          "incubator": "Incubator"
         }
       },
       "detailedInput": {
@@ -365,32 +370,6 @@
           "prompt": "Give us a story",
           "helperText": "Here you can be as detailed as you wish."
         }
-      }
-    },
-    "invite": {
-      "title": "Invite a maker (o more) to your OneWe network.",
-      "whatIsMakersName": "What's the name of the {makerType, select, individual {person} other {organization}}?",
-      "makeLink": "Make link"
-    },
-    "types": {
-      "title": "Maker type",
-      "long": {
-        "individual": "Individual",
-        "organization": "Organization",
-        "nonprofit": "Charity or NGO",
-        "religious": "Religious organization",
-        "unincorporated": "Volunteer organization",
-        "profit": "Commercial enterprise",
-        "incubator": "Incubator"
-      },
-      "short": {
-        "individual": "Individual",
-        "organization": "Organization",
-        "nonprofit": "NGO",
-        "religious": "Religion",
-        "unincorporated": "Volunteers",
-        "profit": "Business",
-        "incubator": "Incubator"
       }
     }
   },

@@ -2,7 +2,7 @@
   "index": {
     "callToActionExplanations": {
       "actions": {
-        "list":  "Estas son las acciones que están cambiando el mundo",
+        "list": "Estas son las acciones que están cambiando el mundo",
         "add": "¿Quieres compartir tu acción? ¡Hazlo aquí!"
       },
       "seeMakers": "Ellos son nuestros héroes sin capa",
@@ -82,6 +82,7 @@
       "update": "Actualizar",
       "delete": "Borrar"
     },
+    "meta_comment": "TODO(techiejd): meta_comment.",
     "solicitHelpDialog": {
       "title": "Solicita Apoyo",
       "reminderThatTheyCanSolicitMoreByEditingMakerPath": "Recuerda que puedes solicitar apoyo de otro tipo (no financiero) <link>agregándolo en tu perfil de Maker</link>.",
@@ -159,7 +160,7 @@
           "short": "Pago",
           "card": {
             "number": "Número de tarjeta",
-            "expires": "Expira"
+            "expiry": "Expiración"
           }
         },
         "confirm": {
@@ -169,7 +170,7 @@
       "details": {
         "sponsorshipSummary": {
           "title": "Resumen de patrocinio",
-          "level":  "Nivel de patrocinio"
+          "level": "Nivel de patrocinio"
         },
         "payment": {
           "title": "Detalles de pago",
@@ -237,7 +238,7 @@
         "look": "Mira mi acción social."
       }
     },
-    "edit":{
+    "edit": {
       "title": "Edita tu acción"
     }
   },
@@ -350,7 +351,7 @@
         "incubator": {
           "whatIsYourValidationProcess": "Como valida tu incubadora las acciones de los makers para darle un sello de aprobacion?",
           "leaveDetails": "Deja aquí los detalles de cómo se validan las acciones.",
-          "devilIsInTheDetailsReminder": "Recuerda, la integridad depende de que se siga estrictamente este proceso." 
+          "devilIsInTheDetailsReminder": "Recuerda, la integridad depende de que se siga estrictamente este proceso."
         },
         "nonFinancialHelp": {
           "whatOtherHelpDoYouNeed": "¿Qué tipo de apoyo necesita{makerType, select, individual {s} other {}}?",
