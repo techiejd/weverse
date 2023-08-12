@@ -1,9 +1,11 @@
 import { Stack, Typography, Box } from "@mui/material";
+import { useTranslations } from "next-intl";
 
 const UnderConstruction = () => {
+  const t = useTranslations("common.underConstruction");
   return (
     <Stack alignItems={"center"} justifyContent={"center"}>
-      <Typography variant="h1">Vuelva pronto!</Typography>
+      <Typography variant="h1">{t("title")}</Typography>
       <Box
         display="flex"
         justifyContent="center"

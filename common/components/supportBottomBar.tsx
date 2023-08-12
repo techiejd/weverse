@@ -62,13 +62,15 @@ const SponsorDialog = ({
   setInAddSponsorshipExperience: Dispatch<SetStateAction<boolean>>;
   beneficiary: Maker;
 }) => {
+  const sponsorDialogTranslations = useTranslations("common.sponsorDialog");
+  const inputTranslations = useTranslations("input");
   const handleClose = () => setOpen(false);
   const [myMember] = useMyMember();
   if (!myMember) {
     return (
       <Dialog open={open} onClose={handleClose}>
         <LogInPrompt
-          title={"Debes ser miembro registrado para poder patrocinar."}
+          title={sponsorDialogTranslations("logInPrompt")}
           setOpen={setOpen}
         />
       </Dialog>
@@ -76,16 +78,16 @@ const SponsorDialog = ({
   }
   return sponsoring && !inAddSponsorshipExperience ? (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>
-        Gracias por patrocinar. OneWe está trabajando con el/la Maker para crear
-        la mejor experiencia de patrocinio.
-      </DialogTitle>
+      <DialogTitle>{sponsorDialogTranslations("title")}</DialogTitle>
       <DialogContent>
+        <Typography>
+          {sponsorDialogTranslations("oneWeIsWorkingOnMakingAGoodExp")}
+        </Typography>
         <UnderConstruction />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} autoFocus>
-          OK
+          {inputTranslations("ok")}
         </Button>
       </DialogActions>
     </Dialog>

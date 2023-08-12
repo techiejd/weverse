@@ -114,6 +114,14 @@
       "title": "The maker says you can contact them through these ways:",
       "missingInfoText": "¡Thanks for wanting to support! We have alerted the maker about your interest and we hope your ask convinces them to finish quickly."
     },
+    "sponsorDialog": {
+      "title": "Thank you for your sponsorship!",
+      "oneWeIsWorkingOnMakingAGoodExp": "We are working with the Maker on making a good experience for you.",
+      "logInPrompt": "You must be a registered member to sponsor."
+    },
+    "underConstruction": {
+      "title": "Come back soon!"
+    },
     "sponsor": {
       "sponsorship": "Sponsorship",
       "title": "Sponsor {makerName}",
