@@ -41,7 +41,7 @@ const PhoneInput = ({
     <Box>
       <MuiTelInput
         variant="standard"
-        defaultCountry={t("defaultCountry") as MuiTelInputCountry}
+        defaultCountry={t("defaultCountry.short") as MuiTelInputCountry}
         name="phone"
         value={phoneIn}
         onChange={onPhoneChange}
@@ -76,7 +76,10 @@ const CustomerDetails = ({
           country: sponsorForm.country,
           code: sponsorForm.countryCode,
         }
-      : { country: "Colombia", code: "CO" }
+      : {
+          country: inputTranslations("defaultCountry.long"),
+          code: inputTranslations("defaultCountry.short"),
+        }
   );
 
   const prevStepLoading =
@@ -131,7 +134,7 @@ const CustomerDetails = ({
         <Grid item xs={12} md={6}>
           <TextField
             defaultValue={sponsorForm.postalCode ?? ""}
-            label="Código postal"
+            label={inputTranslations("postalCode")}
             name="postalCode"
             variant="standard"
             required

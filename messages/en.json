@@ -39,7 +39,10 @@
     }
   },
   "input": {
-    "defaultCountry": "US",
+    "defaultCountry": {
+      "long": "United States",
+      "short": "US"
+    },
     "cancel": "Cancel",
     "close": "Close",
     "phoneNumber": "Phone number",

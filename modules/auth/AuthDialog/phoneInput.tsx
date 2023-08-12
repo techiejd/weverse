@@ -33,7 +33,9 @@ const PhoneInput = ({
   const authTranslations = useTranslations("auth");
   return (
     <MuiTelInput
-      defaultCountry={inputTranslations("defaultCountry") as MuiTelInputCountry}
+      defaultCountry={
+        inputTranslations("defaultCountry.short") as MuiTelInputCountry
+      }
       value={phoneNumberIn}
       error={authDialogState.phoneNumberInputError}
       onChange={onPhoneNumberChange}

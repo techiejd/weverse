@@ -39,7 +39,10 @@
     }
   },
   "input": {
-    "defaultCountry": "CO",
+    "defaultCountry": {
+      "long": "Colombia",
+      "short": "CO"
+    },
     "cancel": "Cancelar",
     "close": "Cerrar",
     "phoneNumber": "Número telefónico",
