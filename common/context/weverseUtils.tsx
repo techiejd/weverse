@@ -103,7 +103,6 @@ export const useCurrentSponsorships = () => {
   const appState = useAppState();
   const { makerId, userId: memberId } = router.query;
   const id = (makerId ? makerId : memberId) as string;
-  const subscriptionsType = makerId ? "for" : "from";
 
   const sponsorshipCollection =
     makerId || memberId
