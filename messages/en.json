@@ -58,6 +58,7 @@
     "ok": "Ok"
   },
   "common": {
+    "loading": "Loading",
     "motto": "Supporting actions that change the world",
     "logInPrompt": "Register if you haven't already. Log in if you have.",
     "pageTitle": {
@@ -402,6 +403,13 @@
         "unincorporated": "Volunteers",
         "profit": "Business",
         "incubator": "Incubator"
+      }
+    },
+    "myMakerPortal": {
+      "join": "Join!",
+      "myMakerSpeedDial": {
+        "view": "View",
+        "mine": "Mine"
       }
     }
   },

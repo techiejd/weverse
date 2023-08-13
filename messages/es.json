@@ -58,6 +58,7 @@
     "ok": "Listo"
   },
   "common": {
+    "loading": "Cargando",
     "motto": "Apoyando acciones que cambian el mundo",
     "logInPrompt": "Regístrate si no lo has hecho. Inicia sesión si ya estás registrado.",
     "pageTitle": {
@@ -402,6 +403,13 @@
         "unincorporated": "Voluntarios",
         "profit": "Negocio",
         "incubator": "Incubadora"
+      }
+    },
+    "myMakerPortal": {
+      "join": "¡Sumáte!",
+      "myMakerSpeedDial": {
+        "view": "Ver",
+        "mine": "Mio"
       }
     }
   },

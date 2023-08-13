@@ -1,4 +1,4 @@
-import { useCollection, useDocumentData } from "react-firebase-hooks/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
 import { collection } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import {
@@ -19,17 +19,19 @@ import PlusOne from "@mui/icons-material/PlusOne";
 import Share from "@mui/icons-material/Share";
 import Visibility from "@mui/icons-material/Visibility";
 import AuthDialog from "../../modules/auth/AuthDialog";
-import { User } from "firebase/auth";
-import { doc } from "firebase/firestore";
 import LoadingFab from "../../common/components/loadingFab";
 import SharingSpeedDialAction from "../../modules/makers/sharingSpeedDialAction";
 import { Maker } from "../../functions/shared/src";
-import { makerConverter, memberConverter } from "../../common/utils/firebase";
+import { makerConverter } from "../../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
 import { asOneWePage } from "../../common/components/onewePage";
+import { useTranslations } from "next-intl";
+import { useMyMaker } from "../../common/context/weverseUtils";
 
 export const getStaticProps = WithTranslationsStaticProps();
-const makerFab = (maker: Maker) => {
+const MyMakerSpeedDial = ({ maker }: { maker: Maker }) => {
+  const callToActionTranslations = useTranslations("common.callToAction");
+  const t = useTranslations("makers.myMakerPortal.myMakerSpeedDial");
   const actions = [
     <SpeedDialAction
       key="Ver"
@@ -40,7 +42,7 @@ const makerFab = (maker: Maker) => {
       }
       tooltipTitle={
         <Link href={`/makers/${maker.id}`} style={{ textDecoration: "none" }}>
-          Ver
+          {t("view")}
         </Link>
       }
       tooltipOpen
@@ -60,7 +62,7 @@ const makerFab = (maker: Maker) => {
           href={`/makers/${maker.id}/edit`}
           style={{ textDecoration: "none" }}
         >
-          Editar
+          {callToActionTranslations("edit")}
         </Link>
       }
       tooltipOpen
@@ -68,16 +70,15 @@ const makerFab = (maker: Maker) => {
     <SharingSpeedDialAction
       key={"Compartir"}
       icon={<Share />}
-      tooltipTitle={"Compartir"}
+      tooltipTitle={callToActionTranslations("share")}
       tooltipOpen
       title={`Echa un vistazo a la página Maker de ${maker.name}`}
-      text={`Echa un vistazo a la página Maker de ${maker.name}`}
       path={`/makers/${maker.id}`}
     />,
   ];
   return (
     <SpeedDial
-      ariaLabel="Support"
+      ariaLabel="My Maker Speed Dial"
       sx={{
         position: "fixed",
         bottom: 64,
@@ -86,7 +87,7 @@ const makerFab = (maker: Maker) => {
       icon={
         <div>
           <Typography fontSize={22}>💪</Typography>
-          <Typography fontSize={10}>Mio</Typography>
+          <Typography fontSize={10}>{t("mine")}</Typography>
         </div>
       }
     >
@@ -95,34 +96,10 @@ const makerFab = (maker: Maker) => {
   );
 };
 
-const MyMakerSpeedDial = ({ user }: { user: User }) => {
-  const appState = useAppState();
-  const MyMakerSpeedDialContent = ({ makerId }: { makerId: string }) => {
-    const makerDocRef = doc(
-      appState.firestore,
-      "makers",
-      makerId
-    ).withConverter(makerConverter);
-    const [maker, makerLoading, makerError] = useDocumentData(makerDocRef);
-    return maker ? makerFab(maker) : <LoadingFab />;
-  };
-  const memberDocRef = doc(
-    appState.firestore,
-    "members",
-    user.uid
-  ).withConverter(memberConverter);
-  const [member, memberLoading, memberError] = useDocumentData(memberDocRef);
-
-  return member ? (
-    <MyMakerSpeedDialContent makerId={member!.makerId!} />
-  ) : (
-    <LoadingFab />
-  );
-};
-
 const MyMakerPortal = () => {
-  const { user, loading: userLoading } = useAppState().authState;
+  const [myMaker, myMakerLoading] = useMyMaker();
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const t = useTranslations("makers.myMakerPortal");
 
   const registerFab = (
     <Fab
@@ -138,17 +115,17 @@ const MyMakerPortal = () => {
       }}
     >
       <PlusOne sx={{ mr: 1 }} />
-      <Typography>¡Sumáte!</Typography>
+      <Typography>{t("join")}</Typography>
     </Fab>
   );
 
   return (
     <Box>
       <AuthDialog open={authDialogOpen} setOpen={setAuthDialogOpen} />
-      {userLoading ? (
+      {myMakerLoading ? (
         <LoadingFab />
-      ) : user ? (
-        <MyMakerSpeedDial user={user} />
+      ) : myMaker ? (
+        <MyMakerSpeedDial maker={myMaker} />
       ) : (
         registerFab
       )}
@@ -163,15 +140,6 @@ const Makers = asOneWePage(() => {
   );
 
   const [makers, setMakers] = useState<string[]>([]);
-
-  const Loading = () => {
-    return (
-      <Box>
-        <Typography>Makers: Loading...</Typography>
-        <CircularProgress />
-      </Box>
-    );
-  };
 
   useEffect(() => {
     makersSnapshot?.docChanges().forEach((docChange) => {
@@ -189,11 +157,9 @@ const Makers = asOneWePage(() => {
       >
         <PageTitle title={<b>💪 Makers</b>} />
         {makersError && (
-          <Typography color={"red"}>
-            Error: {JSON.stringify(makersError)}
-          </Typography>
+          <Typography color={"red"}>{JSON.stringify(makersError)}</Typography>
         )}
-        {makersLoading && <Loading />}
+        {makersLoading && <CircularProgress />}
         {makers.map((maker) => (
           <MakerCard makerId={maker} key={maker} />
         ))}
