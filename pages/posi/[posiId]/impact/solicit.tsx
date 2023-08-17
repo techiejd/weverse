@@ -5,8 +5,8 @@ import { doc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useAppState } from "../../../../common/context/appState";
 import {
-  makerConverter,
-  posiFormDataConverter,
+  useMakerConverter,
+  usePosiFormDataConverter,
 } from "../../../../common/utils/firebase";
 import { useCurrentPosiId } from "../../../../modules/posi/context";
 import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
@@ -19,13 +19,15 @@ export const getStaticProps = WithTranslationsStaticProps();
 const Solicit = asOneWePage(() => {
   const posiId = useCurrentPosiId();
   const appState = useAppState();
+  const posiFormDataConverter = usePosiFormDataConverter();
+  const makerConverter = useMakerConverter();
 
   const posiDocRef = doc(
     appState.firestore,
     "impacts",
     String(posiId)
   ).withConverter(posiFormDataConverter);
-  const [posi, posiLoading, posiError] = useDocumentData(posiDocRef);
+  const [posi] = useDocumentData(posiDocRef);
   const t = useTranslations("actions.impact.solicit");
   const PromptMaker = ({ makerId }: { makerId: string }) => {
     const makerDocRef = doc(

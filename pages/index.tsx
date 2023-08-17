@@ -8,7 +8,7 @@ import { doc } from "firebase/firestore";
 import { User } from "firebase/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import Image from "next/image";
-import { memberConverter } from "../common/utils/firebase";
+import { useMemberConverter } from "../common/utils/firebase";
 import { useTranslations } from "next-intl";
 import { WithTranslationsStaticProps } from "../common/utils/translations";
 import { asOneWePage } from "../common/components/onewePage";
@@ -33,6 +33,7 @@ const MakerPortal = () => {
   const { user } = useAppState().authState;
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const MakerPortalBtn = ({ user }: { user: User }) => {
+    const memberConverter = useMemberConverter();
     const memberDocRef = doc(
       appState.firestore,
       "members",

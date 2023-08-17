@@ -68,7 +68,7 @@ import {
   useCopyToClipboard,
 } from "../../../modules/makers/inviteAsMaker";
 import UnderConstruction from "../../../modules/posi/underConstruction";
-import { posiFormDataConverter } from "../../../common/utils/firebase";
+import { usePosiFormDataConverter } from "../../../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../../../common/utils/translations";
 import { CachePaths } from "../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
@@ -161,6 +161,7 @@ const IncubatorSection = () => {
 
   const ValidateActionPortal = ({ action }: { action: PosiFormData }) => {
     const [validating, setValidating] = useState(false);
+    const posiFormDataConverter = usePosiFormDataConverter();
     return (
       <Card>
         <CardHeader title={incubatorTranslations("isThisActionValid")} />

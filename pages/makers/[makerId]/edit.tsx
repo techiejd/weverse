@@ -6,7 +6,7 @@ import { useAppState } from "../../../common/context/appState";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { User } from "firebase/auth";
 import { pickBy, identity } from "lodash";
-import { makerConverter } from "../../../common/utils/firebase";
+import { useMakerConverter } from "../../../common/utils/firebase";
 import { Maker, maker as makerSchema } from "../../../functions/shared/src";
 import MakerInput from "../../../modules/makers/makerInput";
 import { WithTranslationsStaticProps } from "../../../common/utils/translations";
@@ -24,6 +24,7 @@ const Edit = asOneWePage(() => {
 
   const MakerForm = ({ makerId }: { makerId: string }) => {
     const { user } = useAppState().authState;
+    const makerConverter = useMakerConverter();
     const makerDocRef = doc(
       appState.firestore,
       "makers",

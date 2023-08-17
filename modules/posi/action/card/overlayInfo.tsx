@@ -18,7 +18,7 @@ import {
   useMyLikes,
   useMyMember,
 } from "../../../../common/context/weverseUtils";
-import { likeConverter } from "../../../../common/utils/firebase";
+import { useLikeConverter } from "../../../../common/utils/firebase";
 import { PosiFormData } from "../../../../functions/shared/src";
 
 const transaparentPillBox = {
@@ -49,6 +49,7 @@ const LikesDisplay = ({
     (localChange == undefined ? 0 : localChange == "increment" ? 1 : -1);
   const myLikes = useMyLikes();
   const liked = myLikes.includes(String(action.id));
+  const likeConverter = useLikeConverter();
   const updateLikes = async (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();

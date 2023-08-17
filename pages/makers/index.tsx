@@ -22,7 +22,7 @@ import AuthDialog from "../../modules/auth/AuthDialog";
 import LoadingFab from "../../common/components/loadingFab";
 import SharingSpeedDialAction from "../../modules/makers/sharingSpeedDialAction";
 import { Maker } from "../../functions/shared/src";
-import { makerConverter } from "../../common/utils/firebase";
+import { useMakerConverter } from "../../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
 import { asOneWePage } from "../../common/components/onewePage";
 import { useTranslations } from "next-intl";
@@ -135,6 +135,7 @@ const MyMakerPortal = () => {
 
 const Makers = asOneWePage(() => {
   const appState = useAppState();
+  const makerConverter = useMakerConverter();
   const [makersSnapshot, makersLoading, makersError] = useCollection(
     collection(appState.firestore, "makers").withConverter(makerConverter)
   );

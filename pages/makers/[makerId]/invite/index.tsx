@@ -13,8 +13,8 @@ import { LoadingButton } from "@mui/lab";
 import { doc, writeBatch } from "firebase/firestore";
 import { useAppState } from "../../../../common/context/appState";
 import {
-  incubateeConverter,
-  makerConverter,
+  useIncubateeConverter,
+  useMakerConverter,
 } from "../../../../common/utils/firebase";
 import { v4 } from "uuid";
 import {
@@ -38,6 +38,8 @@ const Invite = asOneWePage(() => {
   const [maker] = useCurrentMaker();
   const [loading, setLoading] = useState(false);
   const [invitedAsMakers, setInvitedAsMakers] = useState([v4()]);
+  const makerConverter = useMakerConverter();
+  const incubateeConverter = useIncubateeConverter();
 
   const [makerTypes, setMakerTypes] = useState<
     (MakerType | OrganizationType)[]

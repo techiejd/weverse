@@ -5,7 +5,7 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { useAppState } from "../../../../common/context/appState";
 import PosiForm from "../../../../modules/posi/action/form";
-import { posiFormDataConverter } from "../../../../common/utils/firebase";
+import { usePosiFormDataConverter } from "../../../../common/utils/firebase";
 import { PosiFormData, posiFormData } from "../../../../functions/shared/src";
 import { useCurrentPosiId } from "../../../../modules/posi/context";
 import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
@@ -21,12 +21,13 @@ const Edit = asOneWePage(() => {
   const appState = useAppState();
   const router = useRouter();
   const posiId = useCurrentPosiId();
+  const posiFormDataConverter = usePosiFormDataConverter();
   const posiDocRef = doc(
     appState.firestore,
     "impacts",
     String(posiId)
   ).withConverter(posiFormDataConverter);
-  const [posi, posiLoading, posiError] = useDocumentData(posiDocRef);
+  const [posi] = useDocumentData(posiDocRef);
 
   const onUpdate = async (usersPosi: PosiFormData) => {
     const cleanedPosi = pickBy(usersPosi, identity);

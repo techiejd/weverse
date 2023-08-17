@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { Maker, Media, socialProof } from "../../../functions/shared/src";
 import { useMyMaker } from "../../context/weverseUtils";
-import { socialProofConverter } from "../../utils/firebase";
+import { useSocialProofConverter } from "../../utils/firebase";
 import { PosiFormData } from "../../../functions/shared/lib";
 import { useAppState } from "../../context/appState";
 import { useTranslations } from "next-intl";
@@ -37,6 +37,7 @@ const UploadSocialProofForm = ({
   const formTranslations = useTranslations("testimonials.form");
   const inputTranslations = useTranslations("input");
   const maxLength = 500;
+  const socialProofConverter = useSocialProofConverter();
   useEffect(() => {
     if (error == needsRatingMsg && rating != null) {
       setError("");

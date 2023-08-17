@@ -13,14 +13,14 @@ import {
   where,
 } from "firebase/firestore";
 import {
-  memberConverter,
-  makerConverter,
-  posiFormDataConverter,
-  socialProofConverter,
-  sponsorshipConverter,
-  incubateeConverter,
+  useMemberConverter,
+  useMakerConverter,
+  usePosiFormDataConverter,
+  useSocialProofConverter,
+  useSponsorshipConverter,
+  useIncubateeConverter,
 } from "../utils/firebase";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
   organizationType,
   makerType,
@@ -34,7 +34,9 @@ import { useTranslations } from "next-intl";
 export const useMyMaker = () => {
   const appState = useAppState();
   const { user } = appState.authState;
-  const [member, memberLoading, memberError] = useDocumentData(
+  const memberConverter = useMemberConverter();
+  const makerConverter = useMakerConverter();
+  const [member] = useDocumentData(
     user
       ? doc(appState.firestore, "members", user.uid).withConverter(
           memberConverter
@@ -52,6 +54,7 @@ export const useMyMaker = () => {
 
 export const useMember = (memberId: string | undefined) => {
   const appState = useAppState();
+  const memberConverter = useMemberConverter();
   return useDocumentData(
     memberId
       ? doc(appState.firestore, "members", memberId).withConverter(
@@ -64,6 +67,7 @@ export const useMember = (memberId: string | undefined) => {
 export const useMyMember = () => {
   const appState = useAppState();
   const { user } = appState.authState;
+  const memberConverter = useMemberConverter();
   return useDocumentData(
     user
       ? doc(appState.firestore, "members", user.uid).withConverter(
@@ -77,6 +81,7 @@ export const useCurrentMember = () => {
   const router = useRouter();
   const appState = useAppState();
   const { userId: memberId } = router.query;
+  const memberConverter = useMemberConverter();
   return useDocumentData(
     memberId
       ? doc(appState.firestore, "members", memberId as string).withConverter(
@@ -89,6 +94,7 @@ export const useCurrentMember = () => {
 export const useMyMemberOnce = () => {
   const appState = useAppState();
   const { user } = appState.authState;
+  const memberConverter = useMemberConverter();
   return useDocumentDataOnce(
     user
       ? doc(appState.firestore, "members", user.uid).withConverter(
@@ -103,6 +109,7 @@ export const useCurrentSponsorships = () => {
   const appState = useAppState();
   const { makerId, userId: memberId } = router.query;
   const id = (makerId ? makerId : memberId) as string;
+  const sponsorshipConverter = useSponsorshipConverter();
 
   const sponsorshipCollection =
     makerId || memberId
@@ -120,6 +127,7 @@ export const useCurrentSponsorships = () => {
 export const useMySponsorships = () => {
   const appState = useAppState();
   const [myMember] = useMyMember();
+  const sponsorshipConverter = useSponsorshipConverter();
   return useCollectionData(
     myMember && myMember.id && myMember.id != ""
       ? collection(
@@ -173,6 +181,7 @@ export const useLikesCount = (actionId: string | undefined) => {
 
 export const useMaker = (makerId: string | undefined) => {
   const appState = useAppState();
+  const makerConverter = useMakerConverter();
   return useDocumentData(
     makerId
       ? doc(appState.firestore, "makers", makerId).withConverter(makerConverter)
@@ -182,6 +191,7 @@ export const useMaker = (makerId: string | undefined) => {
 
 export const useAction = (posiId: string | undefined) => {
   const appState = useAppState();
+  const posiFormDataConverter = usePosiFormDataConverter();
   return useDocumentData(
     posiId
       ? doc(appState.firestore, "impacts", posiId).withConverter(
@@ -196,6 +206,7 @@ export const useSocialProofs = (
   beneficiaryType: "action" | "maker"
 ) => {
   const appState = useAppState();
+  const socialProofConverter = useSocialProofConverter();
   return useCollectionData(
     beneficiary
       ? query(
@@ -214,6 +225,7 @@ export const useSocialProofs = (
 
 export const useActions = (maker: string | undefined) => {
   const appState = useAppState();
+  const posiFormDataConverter = usePosiFormDataConverter();
   return useCollectionData(
     maker
       ? query(
@@ -255,6 +267,7 @@ export const useCurrentIncubatees = () => {
   const router = useRouter();
   const appState = useAppState();
   const { makerId } = router.query;
+  const incubateeConverter = useIncubateeConverter();
   return useCollectionData(
     makerId
       ? collection(
@@ -271,6 +284,7 @@ export const useCurrentNeedsValidation = () => {
   const router = useRouter();
   const appState = useAppState();
   const { makerId } = router.query;
+  const posiFormDataConverter = usePosiFormDataConverter();
   return useCollectionData(
     makerId && makerId != ""
       ? query(

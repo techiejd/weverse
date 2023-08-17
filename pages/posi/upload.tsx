@@ -4,7 +4,7 @@ import { useAppState } from "../../common/context/appState";
 import { useRouter } from "next/router";
 import PosiForm from "../../modules/posi/action/form";
 import LogInPrompt from "../../common/components/logInPrompt";
-import { posiFormDataConverter } from "../../common/utils/firebase";
+import { usePosiFormDataConverter } from "../../common/utils/firebase";
 import { PosiFormData } from "../../functions/shared/src";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
 import { useTranslations } from "next-intl";
@@ -16,6 +16,7 @@ const Upload = asOneWePage(() => {
   const appState = useAppState();
   const router = useRouter();
   const { user } = useAppState().authState;
+  const posiFormDataConverter = usePosiFormDataConverter();
   const onSubmit = async (usersPosi: PosiFormData) => {
     const docRef = await addDoc(
       collection(appState.firestore, "impacts").withConverter(

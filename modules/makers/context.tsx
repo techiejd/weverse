@@ -3,8 +3,8 @@ import { useMaker } from "../../common/context/weverseUtils";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { query, collection, where } from "firebase/firestore";
 import {
-  posiFormDataConverter,
-  socialProofConverter,
+  usePosiFormDataConverter,
+  useSocialProofConverter,
 } from "../../common/utils/firebase";
 import { useAppState } from "../../common/context/appState";
 
@@ -16,7 +16,8 @@ export const useCurrentMaker = () => {
 
 export const useCurrentActions = () => {
   const appState = useAppState();
-  const [maker, makerLoading, makerError] = useCurrentMaker();
+  const posiFormDataConverter = usePosiFormDataConverter();
+  const [maker] = useCurrentMaker();
   return useCollectionData(
     maker
       ? query(
@@ -29,7 +30,8 @@ export const useCurrentActions = () => {
 
 export const useCurrentImpacts = () => {
   const appState = useAppState();
-  const [maker, makerLoading, makerError] = useCurrentMaker();
+  const [maker] = useCurrentMaker();
+  const socialProofConverter = useSocialProofConverter();
   return useCollectionData(
     maker
       ? query(
