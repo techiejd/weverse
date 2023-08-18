@@ -245,7 +245,9 @@ const DetailedInput = ({
       >
         <Stack spacing={2}>
           <Box>
-            <Typography variant="h3">Presentation video:</Typography>
+            <Typography variant="h3">
+              {detailedInputTranslations("story.video.title")}
+            </Typography>
             <FileInput
               initialMedia={
                 presentationVideo != "loading" ? presentationVideo : undefined
@@ -256,21 +258,23 @@ const DetailedInput = ({
               metadata={{ makerId: "", userID: "" }}
             />
             <Typography>
-              Tell us about yourself and why you should be sponsored.
+              {detailedInputTranslations("story.video.prompt")}
             </Typography>
           </Box>
           <Box>
-            <Typography variant="h3">Presentation blurb:</Typography>
+            <Typography variant="h3">
+              {detailedInputTranslations("story.blurb.title")}
+            </Typography>
             <TextField
               fullWidth
               label={`${detailedInputTranslations(
-                "story.prompt"
+                "story.blurb.prompt"
               )} (${inputTranslations("numChars", { numChars: 1000 })})`}
               name="summary"
               multiline
               minRows={3}
               inputProps={{ maxLength: 1000 }}
-              helperText={detailedInputTranslations("story.helperText")}
+              helperText={detailedInputTranslations("story.blurb.helperText")}
               value={val.about ? val.about : ""}
               onChange={(e) => setAboutInput(e.target.value)}
             />

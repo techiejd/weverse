@@ -320,9 +320,8 @@ const MakerProfile = () => {
 };
 
 const MakerContent = () => {
-  const [actions, actionsLoading, actionsError] = useCurrentActions();
-  const [socialProofs, socialProofsLoading, socialProofsError] =
-    useCurrentImpacts();
+  const [actions] = useCurrentActions();
+  const [socialProofs] = useCurrentImpacts();
   const [actionsContent, setActionsContent] = useState<Content[]>([]);
   const [socialProofsContent, setSocialProofsContent] = useState<Content[]>([]);
   const [content, setContent] = useState<Content[]>([]);
