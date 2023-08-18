@@ -7,8 +7,15 @@ import LogInPrompt from "../../common/components/logInPrompt";
 import { usePosiFormDataConverter } from "../../common/utils/firebase";
 import { PosiFormData } from "../../functions/shared/src";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
-import { useTranslations } from "next-intl";
+import {
+  AbstractIntlMessages,
+  NextIntlClientProvider,
+  useLocale,
+  useMessages,
+  useTranslations,
+} from "next-intl";
 import { asOneWePage } from "../../common/components/onewePage";
+import { useEffect, useState } from "react";
 
 export const getStaticProps = WithTranslationsStaticProps();
 
@@ -27,6 +34,22 @@ const Upload = asOneWePage(() => {
     router.push(`/posi/${docRef.id}/impact/solicit`);
   };
   const t = useTranslations("actions.upload");
+  // TODO: useTranslations doesn't work with dynamic imports
+  // How to get messages from a dynamic import?
+  // Maybe I can look into getStaticProps and getServerSideProps.
+  const messagesIn = useMessages();
+  const locale = useLocale();
+  console.log(locale);
+  const [messages, setMessages] = useState<AbstractIntlMessages | undefined>(
+    messagesIn
+  );
+  useEffect(() => {
+    (async () => {
+      setMessages(await import(`../../messages/es.json`));
+    })();
+  }, [setMessages]);
+
+  console.log(messages);
 
   return (
     <Stack>
@@ -38,11 +61,13 @@ const Upload = asOneWePage(() => {
       >
         <Typography variant="h1">{t("title")}</Typography>
       </Stack>
-      {user ? (
-        <PosiForm onInteraction={{ type: "create", onSubmit }} />
-      ) : (
-        <LogInPrompt title={t("logInPrompt")} />
-      )}
+      <NextIntlClientProvider locale="es" messages={messages}>
+        {user ? (
+          <PosiForm onInteraction={{ type: "create", onSubmit }} />
+        ) : (
+          <LogInPrompt title={t("logInPrompt")} />
+        )}
+      </NextIntlClientProvider>
     </Stack>
   );
 });

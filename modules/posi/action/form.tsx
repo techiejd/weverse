@@ -13,7 +13,7 @@ import ImpactMediaInput from "../input/impactMediaInput";
 import { PosiFormData, posiFormData } from "../../../functions/shared/src";
 import { useMyMaker } from "../../../common/context/weverseUtils";
 import ValidatorInput from "../input/validatorInput";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 type onInteractionProp =
   | { type: "create"; onSubmit: (posiFormData: PosiFormData) => Promise<void> }
@@ -33,6 +33,8 @@ const PosiForm = ({
   const [formData, setFormData] =
     useState<WorkingCopyPosiFormData>(initialPosi);
   const [uploading, setUploading] = useState(false);
+  const locale = useLocale();
+  console.log(locale);
 
   const [myMaker, myMakerLoading, myMakerErrors] = useMyMaker();
   useEffect(() => {
