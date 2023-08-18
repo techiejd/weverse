@@ -199,7 +199,7 @@
     "emptyTestimonials": "There are no testimonials, yet. Add one!",
     "upload": {
       "submit": "Publish",
-      "title": "¡Publish your action! 🪧",
+      "title": "Publish your action! 🪧",
       "logInPrompt": "In order to publish an action, you must first register as a member.",
       "sections": {
         "media": {
