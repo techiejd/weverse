@@ -378,9 +378,9 @@
             "prompt": "Cuéntanos acerca de ti y por qué deberías ser patrocinado."
           },
           "blurb": {
-            "title": "Presentation blurb:",
-            "prompt": "Give us a story",
-            "helperText": "Here you can be as detailed as you wish."
+            "title": "Texto de presentación:",
+            "prompt": "Danos una historia",
+            "helperText": "Es aquí donde puedes dar detalles."
           }
         }
       }
