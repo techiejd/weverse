@@ -375,8 +375,7 @@
           "title": "{makerType, select, individual {Tell us about yourself and your initiatives} other {Tell us about the organization and its intiatives.}}",
           "video": {
             "title": "Presentation video:",
-            "prompt": "Tell us about yourself and why you should be sponsored.",
-            "helperText": "If you don't have a video, you can upload an image."
+            "prompt": "Tell us about yourself and why you should be sponsored."
           },
           "blurb": {
             "title": "Presentation blurb:",
