@@ -55,6 +55,7 @@ export const maker = z.object({
   ownerId: z.string().or(z.enum(["invited"])),
   type: makerType,
   pic: formUrl.optional(),
+  presentationVideo: formUrl.optional(),
   name: z.string().min(1),
   organizationType: organizationType.optional(),
   createdAt: z.date().optional(),

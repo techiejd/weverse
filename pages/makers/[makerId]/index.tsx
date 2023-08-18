@@ -73,6 +73,7 @@ import { WithTranslationsStaticProps } from "../../../common/utils/translations"
 import { CachePaths } from "../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
 import { asOneWePage } from "../../../common/components/onewePage";
+import Media from "../../../modules/posi/media";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -260,10 +261,42 @@ const IncubatorSection = () => {
   );
 };
 
+const AboutSection = ({ maker }: { maker?: Maker }) => {
+  const aboutTranslations = useTranslations("makers.about");
+  const noAboutInfo = !maker?.presentationVideo && !maker?.about;
+  return (
+    <Fragment>
+      <Typography variant="h2">{aboutTranslations("title")}</Typography>
+      {maker?.presentationVideo && (
+        <Box
+          sx={{
+            height: "50vh",
+            width: "100%",
+          }}
+        >
+          <Media
+            video={{
+              threshold: 0.9,
+              muted: false,
+              controls: true,
+              controlsList:
+                "play volume fullscreen nodownload noplaybackrate notimeline",
+              disablePictureInPicture: true,
+              src: maker.presentationVideo,
+            }}
+          />
+        </Box>
+      )}
+      <Typography>
+        {noAboutInfo ? aboutTranslations("none") : maker.about}
+      </Typography>
+    </Fragment>
+  );
+};
+
 const MakerProfile = () => {
   const [maker] = useCurrentMaker();
   const [myMaker] = useMyMaker();
-  const aboutTranslations = useTranslations("makers.about");
   const makerTypeLabel = useMakerTypeLabel(maker);
   return maker ? (
     <Stack
@@ -274,14 +307,11 @@ const MakerProfile = () => {
       <RatingsStack ratings={maker.ratings} />
       <Avatar src={maker.pic} sx={{ width: 225, height: 225 }} />
       <Typography>{makerTypeLabel}</Typography>
+      <AboutSection maker={myMaker} />
       <Stack sx={{ width: "100%" }}>
-        <Sponsorships showAmount={myMaker && myMaker?.id == maker?.id} />
         {maker.type == "organization" &&
           maker.organizationType == "incubator" && <IncubatorSection />}
-        <Typography variant="h2">{aboutTranslations("title")}</Typography>
-        <Typography>
-          {maker.about ? maker.about : aboutTranslations("none")}
-        </Typography>
+        <Sponsorships showAmount={myMaker && myMaker?.id == maker?.id} />
       </Stack>
     </Stack>
   ) : (
