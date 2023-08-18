@@ -307,7 +307,7 @@ const MakerProfile = () => {
       <RatingsStack ratings={maker.ratings} />
       <Avatar src={maker.pic} sx={{ width: 225, height: 225 }} />
       <Typography>{makerTypeLabel}</Typography>
-      <AboutSection maker={myMaker} />
+      <AboutSection maker={maker} />
       <Stack sx={{ width: "100%" }}>
         {maker.type == "organization" &&
           maker.organizationType == "incubator" && <IncubatorSection />}
