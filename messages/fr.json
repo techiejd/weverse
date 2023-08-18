@@ -39,7 +39,10 @@
     }
   },
   "input": {
-    "defaultCountry": "US",
+    "defaultCountry": {
+      "long": "United States",
+      "short": "US"
+    },
     "cancel": "Cancel",
     "close": "Close",
     "phoneNumber": "Phone number",
@@ -113,6 +116,14 @@
       "missingInfoTitle": "The maker has yet to finish their profile.",
       "title": "The maker says you can contact them through these ways:",
       "missingInfoText": "¡Thanks for wanting to support! We have alerted the maker about your interest and we hope your ask convinces them to finish quickly."
+    },
+    "sponsorDialog": {
+      "title": "Thank you for your sponsorship!",
+      "oneWeIsWorkingOnMakingAGoodExp": "We are working with the Maker on making a good experience for you.",
+      "logInPrompt": "You must be a registered member to sponsor."
+    },
+    "underConstruction": {
+      "title": "Come back soon!"
     },
     "sponsor": {
       "sponsorship": "Sponsorship",
@@ -188,7 +199,7 @@
     "emptyTestimonials": "There are no testimonials, yet. Add one!",
     "upload": {
       "submit": "Publish",
-      "title": "¡Publish your action! 🪧",
+      "title": "Publish your action! 🪧",
       "logInPrompt": "In order to publish an action, you must first register as a member.",
       "sections": {
         "media": {
@@ -342,12 +353,7 @@
         "organization": "I'm part of an organization",
         "organizationType": {
           "namePrompt": "What's the organization's name?",
-          "title": "Organization type",
-          "nonprofit": "Charity or NGO",
-          "religious": "Religious organization",
-          "unincorporated": "Volunteers",
-          "profit": "Private organization",
-          "incubator": "Incubator"
+          "title": "Organization type"
         }
       },
       "detailedInput": {
@@ -367,9 +373,43 @@
         "profileImage": "{makerType, select, individual {Select your profile picture} other {Select your organization's profile picture}}",
         "story": {
           "title": "{makerType, select, individual {Tell us about yourself and your initiatives} other {Tell us about the organization and its intiatives.}}",
-          "prompt": "Give us a story",
-          "helperText": "Here you can be as detailed as you wish."
+          "video": {
+            "title": "Presentation video:",
+            "prompt": "Tell us about yourself and why you should be sponsored.",
+            "helperText": "If you don't have a video, you can upload an image."
+          },
+          "blurb": {
+            "title": "Presentation blurb:",
+            "prompt": "Give us a story",
+            "helperText": "Here you can be as detailed as you wish."
+          }
         }
+      }
+    },
+    "invite": {
+      "title": "Invite a maker (o more) to your OneWe network.",
+      "whatIsMakersName": "What's the name of the {makerType, select, individual {person} other {organization}}?",
+      "makeLink": "Make link"
+    },
+    "types": {
+      "title": "Maker type",
+      "long": {
+        "individual": "Individual",
+        "organization": "Organization",
+        "nonprofit": "Charity or NGO",
+        "religious": "Religious organization",
+        "unincorporated": "Volunteer organization",
+        "profit": "Commercial enterprise",
+        "incubator": "Incubator"
+      },
+      "short": {
+        "individual": "Individual",
+        "organization": "Organization",
+        "nonprofit": "NGO",
+        "religious": "Religion",
+        "unincorporated": "Volunteers",
+        "profit": "Business",
+        "incubator": "Incubator"
       }
     }
   },
