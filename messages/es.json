@@ -374,9 +374,8 @@
         "story": {
           "title": "{makerType, select, individual {Cuéntanos acerca de tí y tus iniciativas} other {Cuéntanos acerca de la organización y sus iniciativas}}",
           "video": {
-            "title": "Presentation video:",
-            "prompt": "Tell us about yourself and why you should be sponsored.",
-            "helperText": "If you don't have a video, you can upload an image."
+            "title": "Vídeo de presentación:",
+            "prompt": "Cuéntanos acerca de ti y por qué deberías ser patrocinado."
           },
           "blurb": {
             "title": "Presentation blurb:",
