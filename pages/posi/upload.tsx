@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { Box, NativeSelect, Stack, Typography } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import { useRouter } from "next/router";
@@ -17,9 +17,22 @@ import {
 import { asOneWePage } from "../../common/components/onewePage";
 import { useEffect, useState } from "react";
 
-export const getStaticProps = WithTranslationsStaticProps();
+type Messages = typeof import("../../messages/en.json");
 
-const Upload = asOneWePage(() => {
+export const getStaticProps = WithTranslationsStaticProps(async (context) => {
+  const [en, es] = await Promise.all([
+    import("../../messages/en.json"),
+    import("../../messages/es.json"),
+  ]);
+  return {
+    props: {
+      en,
+      es,
+    },
+  };
+});
+
+const Upload = asOneWePage(({ en, es }: { en: Messages; es: Messages }) => {
   const appState = useAppState();
   const router = useRouter();
   const { user } = useAppState().authState;
@@ -53,14 +66,31 @@ const Upload = asOneWePage(() => {
 
   return (
     <Stack>
-      <Stack
-        spacing={1}
-        justifyContent={"center"}
-        alignItems={"center"}
-        textAlign={"center"}
+      <Box
+        width="100%"
+        alignItems="center"
+        justifyContent="center"
+        display="flex"
       >
-        <Typography variant="h1">{t("title")}</Typography>
-      </Stack>
+        <Box textAlign={"center"} width="fit-content">
+          <Typography variant="h1">{t("title")}</Typography>
+          <Stack
+            alignItems="center"
+            direction="row"
+            justifyContent="end"
+            spacing={1}
+          >
+            <Typography>Publishing in the </Typography>
+            {/** Using a mui Select, allow for user to choose between 'English' and 'Español' */}
+            <NativeSelect>
+              <option value="en">English</option>
+              <option value="es">Español</option>
+            </NativeSelect>
+            <Typography>channel.</Typography>
+          </Stack>
+        </Box>
+      </Box>
+
       <NextIntlClientProvider locale="es" messages={messages}>
         {user ? (
           <PosiForm onInteraction={{ type: "create", onSubmit }} />
