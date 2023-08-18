@@ -34,7 +34,6 @@ const PosiForm = ({
     useState<WorkingCopyPosiFormData>(initialPosi);
   const [uploading, setUploading] = useState(false);
   const locale = useLocale();
-  console.log(locale);
 
   const [myMaker, myMakerLoading, myMakerErrors] = useMyMaker();
   useEffect(() => {

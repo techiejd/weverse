@@ -26,8 +26,8 @@ export const getStaticProps = WithTranslationsStaticProps(async (context) => {
   ]);
   return {
     props: {
-      en,
-      es,
+      en: en.default,
+      es: es.default,
     },
   };
 });
@@ -37,6 +37,8 @@ const Upload = asOneWePage(({ en, es }: { en: Messages; es: Messages }) => {
   const router = useRouter();
   const { user } = useAppState().authState;
   const posiFormDataConverter = usePosiFormDataConverter();
+  const locale = useLocale();
+  const [chosenLocale, setChosenLocale] = useState(locale);
   const onSubmit = async (usersPosi: PosiFormData) => {
     const docRef = await addDoc(
       collection(appState.firestore, "impacts").withConverter(
@@ -47,22 +49,6 @@ const Upload = asOneWePage(({ en, es }: { en: Messages; es: Messages }) => {
     router.push(`/posi/${docRef.id}/impact/solicit`);
   };
   const t = useTranslations("actions.upload");
-  // TODO: useTranslations doesn't work with dynamic imports
-  // How to get messages from a dynamic import?
-  // Maybe I can look into getStaticProps and getServerSideProps.
-  const messagesIn = useMessages();
-  const locale = useLocale();
-  console.log(locale);
-  const [messages, setMessages] = useState<AbstractIntlMessages | undefined>(
-    messagesIn
-  );
-  useEffect(() => {
-    (async () => {
-      setMessages(await import(`../../messages/es.json`));
-    })();
-  }, [setMessages]);
-
-  console.log(messages);
 
   return (
     <Stack>
@@ -81,8 +67,12 @@ const Upload = asOneWePage(({ en, es }: { en: Messages; es: Messages }) => {
             spacing={1}
           >
             <Typography>Publishing in the </Typography>
-            {/** Using a mui Select, allow for user to choose between 'English' and 'Español' */}
-            <NativeSelect>
+            <NativeSelect
+              value={chosenLocale}
+              onChange={(e) => {
+                setChosenLocale(e.target.value);
+              }}
+            >
               <option value="en">English</option>
               <option value="es">Español</option>
             </NativeSelect>
@@ -91,7 +81,7 @@ const Upload = asOneWePage(({ en, es }: { en: Messages; es: Messages }) => {
         </Box>
       </Box>
 
-      <NextIntlClientProvider locale="es" messages={messages}>
+      <NextIntlClientProvider messages={eval(chosenLocale)}>
         {user ? (
           <PosiForm onInteraction={{ type: "create", onSubmit }} />
         ) : (

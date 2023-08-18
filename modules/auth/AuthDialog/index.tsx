@@ -74,7 +74,6 @@ const CheckingUserStatusExplanation = ({
   authAction: AuthAction;
 }) => {
   const t = useTranslations("auth");
-  console.log("authAction", authAction);
   return (
     <Box>
       <Typography>
