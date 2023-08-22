@@ -43,21 +43,21 @@ export type HowToSupport = z.infer<typeof howToSupport>;
 export const ratings = z.object({ sum: z.number(), count: z.number() });
 export type Ratings = z.infer<typeof ratings>;
 
-// TODO(techiejd): go through and extend all the db ones.
+export const locale = z.enum(["en", "es"]);
+
 const dbBase = z.object({
   id: z.string().optional(),
+  locale: locale.optional(),
   createdAt: z.date().optional(), // from db iff exists
 });
 export type DbBase = z.infer<typeof dbBase>;
 
-export const maker = z.object({
-  id: z.string().optional(),
+export const maker = dbBase.extend({
   ownerId: z.string().or(z.enum(["invited"])),
   type: makerType,
   pic: formUrl.optional(),
   name: z.string().min(1),
   organizationType: organizationType.optional(),
-  createdAt: z.date().optional(),
   howToSupport: howToSupport.optional(),
   about: z.string().optional(),
   ratings: ratings.optional(),
@@ -90,10 +90,8 @@ const stripe = z.object({
   status: z.enum(["active", "incomplete", "canceled"]),
 });
 
-export const member = z.object({
+export const member = dbBase.extend({
   makerId: z.string(),
-  id: z.string().optional(),
-  createdAt: z.date().optional(),
   customer: customer.optional(),
   stripe: stripe.optional(),
   pic: formUrl.optional(),
@@ -102,20 +100,15 @@ export const member = z.object({
 export type Member = z.infer<typeof member>;
 
 // This is an edge.
-export const like = z.object({
-  id: z.string().optional(),
-  createdAt: z.date().optional(),
-});
+export const like = dbBase;
 export type Like = z.infer<typeof like>;
 
-export const socialProof = z.object({
-  id: z.string().optional(),
+export const socialProof = dbBase.extend({
   rating: z.number(),
   videoUrl: formUrl.optional(),
   byMaker: z.string(),
   forMaker: z.string(),
   forAction: z.string().optional(),
-  createdAt: z.date().optional(),
   text: z.string().optional(),
 });
 
@@ -174,14 +167,12 @@ export type Validation = z.infer<typeof validation>;
 
 // TODO(techiejd): Reshape db. It should go posi
 // {action: Action, impacts: Impact[], makerId}
-export const posiFormData = z.object({
-  id: z.string().optional(), // If it exists, then it exists in the db.
+export const posiFormData = dbBase.extend({
   summary: z.string().min(1),
   howToIdentifyImpactedPeople: z.string().min(1).optional(),
   location: location.optional(),
   media: media,
   makerId: z.string(), // TODO(techiejd): How many chars is the id?
-  createdAt: z.date().optional(),
   ratings: ratings.optional(),
   validation: validation.optional(),
 });
