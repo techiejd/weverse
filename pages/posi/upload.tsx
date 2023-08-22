@@ -5,17 +5,11 @@ import { useRouter } from "next/router";
 import PosiForm from "../../modules/posi/action/form";
 import LogInPrompt from "../../common/components/logInPrompt";
 import { usePosiFormDataConverter } from "../../common/utils/firebase";
-import { PosiFormData } from "../../functions/shared/src";
+import { PosiFormData, locale } from "../../functions/shared/src";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
-import {
-  AbstractIntlMessages,
-  NextIntlClientProvider,
-  useLocale,
-  useMessages,
-  useTranslations,
-} from "next-intl";
+import { NextIntlClientProvider, useLocale, useTranslations } from "next-intl";
 import { asOneWePage } from "../../common/components/onewePage";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 type Messages = typeof import("../../messages/en.json");
 
@@ -37,18 +31,25 @@ const Upload = asOneWePage(({ en, es }: { en: Messages; es: Messages }) => {
   const router = useRouter();
   const { user } = useAppState().authState;
   const posiFormDataConverter = usePosiFormDataConverter();
-  const locale = useLocale();
-  const [chosenLocale, setChosenLocale] = useState(locale);
-  const onSubmit = async (usersPosi: PosiFormData) => {
-    const docRef = await addDoc(
-      collection(appState.firestore, "impacts").withConverter(
-        posiFormDataConverter
-      ),
-      usersPosi
-    );
-    router.push(`/posi/${docRef.id}/impact/solicit`);
-  };
+  const localeIn = useLocale();
+  const [chosenLocale, setChosenLocale] = useState(localeIn);
+  const onSubmit = useCallback(
+    async (usersPosi: PosiFormData) => {
+      const docRef = await addDoc(
+        collection(appState.firestore, "impacts").withConverter(
+          posiFormDataConverter
+        ),
+        { ...usersPosi, locale: locale.parse(chosenLocale) }
+      );
+      router.push(`/posi/${docRef.id}/impact/solicit`);
+    },
+    [appState.firestore, chosenLocale, posiFormDataConverter, router]
+  );
   const t = useTranslations("actions.upload");
+  const localeDisplayNames = {
+    [locale.Values.en]: "English",
+    [locale.Values.es]: "Español",
+  };
 
   return (
     <Stack>
@@ -73,8 +74,11 @@ const Upload = asOneWePage(({ en, es }: { en: Messages; es: Messages }) => {
                 setChosenLocale(e.target.value);
               }}
             >
-              <option value="en">English</option>
-              <option value="es">Español</option>
+              {Object.keys(locale.Enum).map((l) => (
+                <option value={l} key={l}>
+                  {localeDisplayNames[locale.parse(l)]}
+                </option>
+              ))}
             </NativeSelect>
             <Typography>channel.</Typography>
           </Stack>

@@ -39,17 +39,17 @@ const createUseLocalizedDataConverterFor = <T extends z.ZodType<DbBase>>(
   zAny: T
 ): (() => FirestoreDataConverter<z.infer<typeof zAny>>) => {
   const useLocalizedDataConverter = () => {
-    const { locale } = useRouter();
+    const { locale: localeIn } = useRouter();
     return useMemo(
       () => ({
         toFirestore: (
           data: WithFieldValue<z.infer<typeof zAny>>
         ): DocumentData => {
-          const { createdAt, ...others } = data;
+          const { locale, createdAt, ...others } = data;
           const localizedData = {
             ...others,
             createdAt: createdAt ? createdAt : serverTimestamp(),
-            locale: locale ?? "undefined", // Add the locale field to the data being sent
+            locale: locale ? locale : localeIn ?? "undefined", // Add the locale field to the data being sent
           };
           return localizedData;
         },
@@ -64,7 +64,7 @@ const createUseLocalizedDataConverterFor = <T extends z.ZodType<DbBase>>(
           });
         },
       }),
-      [locale]
+      [localeIn]
     );
   };
   return useLocalizedDataConverter;

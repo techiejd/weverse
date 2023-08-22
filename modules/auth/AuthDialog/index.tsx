@@ -179,7 +179,13 @@ const AuthDialogContent = ({
         }
       });
     }
-  }, [invitedAsMaker, router, appState.firestore, authTranslations]);
+  }, [
+    invitedAsMaker,
+    router,
+    appState.firestore,
+    authTranslations,
+    makerConverter,
+  ]);
 
   const handleOtp = async (otp: string) => {
     if (authDialogState.recaptchaConfirmationResult == undefined)
