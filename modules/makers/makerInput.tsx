@@ -102,14 +102,30 @@ const DetailedInput = ({
     "makers.edit.detailedInput"
   );
   const inputTranslations = useTranslations("input");
-  const [media, setMedia] = useState<Media | undefined | "loading">(
+  const [pic, setPic] = useState<Media | undefined | "loading">(
     val.pic ? { type: "img", url: val.pic } : undefined
   );
   useEffect(() => {
-    if (media && media != "loading") {
-      setVal((maker) => ({ ...maker, pic: media.url }));
+    if (pic && pic != "loading") {
+      setVal((maker) => ({ ...maker, pic: pic.url }));
     }
-  }, [media, setVal]);
+  }, [pic, setVal]);
+
+  const [presentationVideo, setPresentationVideo] = useState<
+    Media | undefined | "loading"
+  >(
+    val.presentationVideo
+      ? { type: "video", url: val.presentationVideo }
+      : undefined
+  );
+  useEffect(() => {
+    if (presentationVideo && presentationVideo != "loading") {
+      setVal((maker) => ({
+        ...maker,
+        presentationVideo: presentationVideo.url,
+      }));
+    }
+  }, [presentationVideo, setVal]);
 
   const setAboutInput = (about: string) => {
     setVal((maker) => ({ ...maker, about: about }));
@@ -139,6 +155,8 @@ const DetailedInput = ({
   const askForImage = detailedInputTranslations("askForImage", {
     makerType: val.type,
   });
+
+  //TODO(techiejd): Fix videos story. All the videos should have refs (not just links) and the metadata should include maker id.
 
   const targetedQuestion =
     val.organizationType == organizationType.Enum.incubator ? (
@@ -213,8 +231,8 @@ const DetailedInput = ({
       >
         <Typography>{askForImage}</Typography>
         <FileInput
-          initialMedia={val.pic ? { type: "img", url: val.pic } : undefined}
-          setMedia={setMedia}
+          initialMedia={pic != "loading" ? pic : undefined}
+          setMedia={setPic}
           maxFileSize={10485760 /** 10MB */}
           accept={"img"}
           metadata={{ makerId: "", userID: "" }}
@@ -225,19 +243,43 @@ const DetailedInput = ({
           makerType: val.type,
         })}
       >
-        <TextField
-          fullWidth
-          label={`${detailedInputTranslations(
-            "story.prompt"
-          )} (${inputTranslations("numChars", { numChars: 1000 })})`}
-          name="summary"
-          multiline
-          minRows={3}
-          inputProps={{ maxLength: 1000 }}
-          helperText={detailedInputTranslations("story.helperText")}
-          value={val.about ? val.about : ""}
-          onChange={(e) => setAboutInput(e.target.value)}
-        />
+        <Stack spacing={2}>
+          <Box>
+            <Typography variant="h3">
+              {detailedInputTranslations("story.video.title")}
+            </Typography>
+            <FileInput
+              initialMedia={
+                presentationVideo != "loading" ? presentationVideo : undefined
+              }
+              setMedia={setPresentationVideo}
+              maxFileSize={10485760 /** 10MB */}
+              accept={"video"}
+              metadata={{ makerId: "", userID: "" }}
+            />
+            <Typography>
+              {detailedInputTranslations("story.video.prompt")}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h3">
+              {detailedInputTranslations("story.blurb.title")}
+            </Typography>
+            <TextField
+              fullWidth
+              label={`${detailedInputTranslations(
+                "story.blurb.prompt"
+              )} (${inputTranslations("numChars", { numChars: 1000 })})`}
+              name="summary"
+              multiline
+              minRows={3}
+              inputProps={{ maxLength: 1000 }}
+              helperText={detailedInputTranslations("story.blurb.helperText")}
+              value={val.about ? val.about : ""}
+              onChange={(e) => setAboutInput(e.target.value)}
+            />
+          </Box>
+        </Stack>
       </Section>
       {targetedQuestion}
     </Stack>

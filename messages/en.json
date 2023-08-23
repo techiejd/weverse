@@ -200,7 +200,7 @@
     "emptyTestimonials": "There are no testimonials, yet. Add one!",
     "upload": {
       "submit": "Publish",
-      "title": "¡Publish your action! 🪧",
+      "title": "Publish your action! 🪧",
       "logInPrompt": "In order to publish an action, you must first register as a member.",
       "sections": {
         "media": {
@@ -374,8 +374,15 @@
         "profileImage": "{makerType, select, individual {Select your profile picture} other {Select your organization's profile picture}}",
         "story": {
           "title": "{makerType, select, individual {Tell us about yourself and your initiatives} other {Tell us about the organization and its intiatives.}}",
-          "prompt": "Give us a story",
-          "helperText": "Here you can be as detailed as you wish."
+          "video": {
+            "title": "Presentation video:",
+            "prompt": "Tell us about yourself and why you should be sponsored."
+          },
+          "blurb": {
+            "title": "Presentation blurb:",
+            "prompt": "Give us a story",
+            "helperText": "Here you can be as detailed as you wish."
+          }
         }
       }
     },

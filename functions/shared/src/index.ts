@@ -56,6 +56,7 @@ export const maker = dbBase.extend({
   ownerId: z.string().or(z.enum(["invited"])),
   type: makerType,
   pic: formUrl.optional(),
+  presentationVideo: formUrl.optional(),
   name: z.string().min(1),
   organizationType: organizationType.optional(),
   howToSupport: howToSupport.optional(),
