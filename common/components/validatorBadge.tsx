@@ -18,12 +18,15 @@ const ValidationProcessDialog = ({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) => {
+  const presentationInfo = validator
+    ? validator[validator?.locale!]
+    : undefined;
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <CardContent>
         <Typography variant="h6">Proceso de validación</Typography>
         <Typography sx={{ whiteSpace: "pre-wrap" }}>
-          {validator?.validationProcess ||
+          {presentationInfo?.validationProcess ||
             "La incubadora no ha subido su proceso de validación"}
         </Typography>
         <CardActions>

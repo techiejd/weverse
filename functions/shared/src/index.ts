@@ -44,6 +44,7 @@ export const ratings = z.object({ sum: z.number(), count: z.number() });
 export type Ratings = z.infer<typeof ratings>;
 
 export const locale = z.enum(["en", "es"]);
+export type Locale = z.infer<typeof locale>;
 
 const dbBase = z.object({
   id: z.string().optional(),
@@ -52,20 +53,40 @@ const dbBase = z.object({
 });
 export type DbBase = z.infer<typeof dbBase>;
 
-export const maker = dbBase.extend({
-  ownerId: z.string().or(z.enum(["invited"])),
-  type: makerType,
-  pic: formUrl.optional(),
+const makerPresentationExtension = z.object({
   presentationVideo: formUrl.optional(),
-  name: z.string().min(1),
-  organizationType: organizationType.optional(),
   howToSupport: howToSupport.optional(),
   about: z.string().optional(),
-  ratings: ratings.optional(),
-  email: z.string().optional(),
-  incubator: z.string().optional(),
   validationProcess: z.string().optional(),
+  locale: locale.optional(),
 });
+
+export type MakerPresentationExtension = z.infer<
+  typeof makerPresentationExtension
+>;
+
+function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(
+  itemSchema: ItemType
+) {
+  // Look into a way to make these keys programmaticly
+  return z.object({
+    en: itemSchema,
+    es: itemSchema,
+  });
+}
+
+export const maker = dbBase
+  .extend({
+    ownerId: z.string().or(z.enum(["invited"])),
+    type: makerType,
+    organizationType: organizationType.optional(),
+    name: z.string().min(1),
+    pic: formUrl.optional(),
+    email: z.string().optional(),
+    incubator: z.string().optional(),
+    ratings: ratings.optional(),
+  })
+  .merge(createNestedLocalizedSchema(makerPresentationExtension.optional()));
 export type Maker = z.infer<typeof maker>;
 
 const currency = z.enum(["cop", "usd", "eur", "gbp"]);

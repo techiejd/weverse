@@ -54,7 +54,7 @@ const AdminBottomBar = ({
       <SolicitDialog
         open={solicitDialogOpen}
         setOpen={setSolicitDialogOpen}
-        howToSupport={myMaker.howToSupport ? myMaker.howToSupport : {}}
+        howToSupport={(myMaker && myMaker[myMaker.locale!]?.howToSupport) || {}}
         solicitOpinionPath={`/posi/${action.id}/impact/upload`}
         pathUnderSupport={`/posi/${action.id}`}
         editMakerPath={`/makers/${myMaker.id}/edit`}

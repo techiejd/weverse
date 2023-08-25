@@ -1,7 +1,11 @@
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
+import { Locale } from "../../functions/shared/src";
 type StaticProps = {
   [x: string | number | symbol]: unknown;
 };
+
+export type Messages = typeof import("../../messages/en.json");
+export type Locale2Messages = { [key in Locale]: Messages };
 
 export function WithTranslationsStaticProps(
   gsp?: (
@@ -34,3 +38,19 @@ export function WithTranslationsStaticProps(
       : others;
   };
 }
+
+//TODO(techiejd): Create a context that allows for useLocale2Messages hook.
+export const spreadTranslationsStaticProps = async (
+  context: GetStaticPropsContext
+) => {
+  const [en, es] = await Promise.all([
+    import("../../messages/en.json"),
+    import("../../messages/es.json"),
+  ]);
+  return {
+    props: {
+      en: en.default,
+      es: es.default,
+    },
+  };
+};

@@ -5,34 +5,27 @@ import { useRouter } from "next/router";
 import PosiForm from "../../modules/posi/action/form";
 import LogInPrompt from "../../common/components/logInPrompt";
 import { usePosiFormDataConverter } from "../../common/utils/firebase";
-import { PosiFormData, locale } from "../../functions/shared/src";
-import { WithTranslationsStaticProps } from "../../common/utils/translations";
+import { Locale, PosiFormData, locale } from "../../functions/shared/src";
+import {
+  Locale2Messages,
+  WithTranslationsStaticProps,
+  spreadTranslationsStaticProps,
+} from "../../common/utils/translations";
 import { NextIntlClientProvider, useLocale, useTranslations } from "next-intl";
 import { asOneWePage } from "../../common/components/onewePage";
 import { useCallback, useState } from "react";
 
-type Messages = typeof import("../../messages/en.json");
+export const getStaticProps = WithTranslationsStaticProps(
+  spreadTranslationsStaticProps
+);
 
-export const getStaticProps = WithTranslationsStaticProps(async (context) => {
-  const [en, es] = await Promise.all([
-    import("../../messages/en.json"),
-    import("../../messages/es.json"),
-  ]);
-  return {
-    props: {
-      en: en.default,
-      es: es.default,
-    },
-  };
-});
-
-const Upload = asOneWePage(({ en, es }: { en: Messages; es: Messages }) => {
+const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
   const appState = useAppState();
   const router = useRouter();
   const { user } = useAppState().authState;
   const posiFormDataConverter = usePosiFormDataConverter();
   const localeIn = useLocale();
-  const [chosenLocale, setChosenLocale] = useState(localeIn);
+  const [chosenLocale, setChosenLocale] = useState<Locale>(localeIn as Locale);
   const onSubmit = useCallback(
     async (usersPosi: PosiFormData) => {
       const docRef = await addDoc(
@@ -71,7 +64,7 @@ const Upload = asOneWePage(({ en, es }: { en: Messages; es: Messages }) => {
             <NativeSelect
               value={chosenLocale}
               onChange={(e) => {
-                setChosenLocale(e.target.value);
+                setChosenLocale(e.target.value as Locale);
               }}
             >
               {Object.keys(locale.Enum).map((l) => (
@@ -85,7 +78,7 @@ const Upload = asOneWePage(({ en, es }: { en: Messages; es: Messages }) => {
         </Box>
       </Box>
 
-      <NextIntlClientProvider messages={eval(chosenLocale)}>
+      <NextIntlClientProvider messages={locale2Messages[chosenLocale]}>
         {user ? (
           <PosiForm onInteraction={{ type: "create", onSubmit }} />
         ) : (

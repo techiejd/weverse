@@ -273,6 +273,8 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
     );
   };
 
+  const makerPresentationInfo = beneficiary.maker[beneficiary.maker.locale!];
+
   return (
     <AppBar
       position="fixed"
@@ -290,14 +292,16 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
       <ContactSupportDialog
         open={connectDialogOpen}
         setOpen={setConnectDialogOpen}
-        inputText={beneficiary.maker.howToSupport?.contact}
+        inputText={makerPresentationInfo?.howToSupport?.contact}
       />
       <GenericSupportDialog
         open={genericDialogOpen}
         setSponsorDialogOpen={setSponsorDialogOpen}
         setConnectDialogOpen={setConnectDialogOpen}
         howToSupport={
-          beneficiary.maker.howToSupport ? beneficiary.maker.howToSupport : {}
+          makerPresentationInfo?.howToSupport
+            ? makerPresentationInfo.howToSupport
+            : {}
         }
         shareProps={shareProps}
         addSocialProofPath={addSocialProofPath}
