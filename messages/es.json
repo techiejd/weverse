@@ -50,7 +50,7 @@
     "lastName": "Apellido",
     "email": "Correo",
     "postalCode": "Código postal",
-    "country": "Pais",
+    "country": "País",
     "location": "Buscar ubicaciones ...",
     "numChars": "{numChars} caracteres",
     "next": "Siguiente",
@@ -374,8 +374,15 @@
         "profileImage": "{makerType, select, individual {Elige tu foto de perfil} other {Elige la foto de perfil de la organización}}",
         "story": {
           "title": "{makerType, select, individual {Cuéntanos acerca de tí y tus iniciativas} other {Cuéntanos acerca de la organización y sus iniciativas}}",
-          "prompt": "Danos una historia",
-          "helperText": "Es aquí donde puedes dar detalles"
+          "video": {
+            "title": "Vídeo de presentación:",
+            "prompt": "Cuéntanos acerca de ti y por qué deberías ser patrocinado."
+          },
+          "blurb": {
+            "title": "Texto de presentación:",
+            "prompt": "Danos una historia",
+            "helperText": "Es aquí donde puedes dar detalles."
+          }
         }
       }
     },
