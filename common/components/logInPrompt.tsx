@@ -10,6 +10,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import { AuthAction } from "../../modules/auth/AuthDialog/context";
 import { useTranslations } from "next-intl";
+import { sectionStyles } from "./theme";
 
 const LogInPrompt = ({
   title,
@@ -30,16 +31,7 @@ const LogInPrompt = ({
   const t = useTranslations("common");
   const inputTranslations = useTranslations("input");
   return (
-    <Box
-      sx={{
-        border: 1,
-        p: 2,
-        m: 2,
-        backgroundColor: "#f5f8ff",
-        borderRadius: 2,
-        borderColor: "#d9e1ec",
-      }}
-    >
+    <Box sx={sectionStyles}>
       <AuthDialog open={logInDialogOpen} setOpen={setLogInDialogOpen} />
       <AuthDialog
         open={registerDialogOpen}

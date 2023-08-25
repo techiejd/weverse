@@ -34,6 +34,7 @@ import {
 import { FileInput } from "../posi/input";
 import { NextIntlClientProvider, useTranslations } from "next-intl";
 import { Locale2Messages } from "../../common/utils/translations";
+import { sectionStyles } from "../../common/components/theme";
 
 const OrganizationTypeInput = ({
   val,
@@ -45,7 +46,7 @@ const OrganizationTypeInput = ({
   const organizationTypeTranslations = useTranslations(
     "makers.edit.chooseMakerType.organizationType"
   );
-  const makerTypesTranslations = useTranslations("makers.types.long");
+  const makerTypesTranslations = useTranslations("makers.types");
   const inputTranslations = useTranslations("input");
   const organizationTypeChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -77,7 +78,7 @@ const OrganizationTypeInput = ({
         }}
       />
       <FormControl>
-        <FormLabel>{inputTranslations("title")}</FormLabel>
+        <FormLabel>{makerTypesTranslations("title")}</FormLabel>
         <RadioGroup
           name="chooseOrganizationType"
           onChange={organizationTypeChange}
@@ -90,7 +91,7 @@ const OrganizationTypeInput = ({
                 key={oType}
                 value={oType}
                 control={<Radio required />}
-                label={makerTypesTranslations(oType)}
+                label={makerTypesTranslations("long." + oType)}
               />
             );
           })}

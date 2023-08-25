@@ -86,3 +86,12 @@ export const lightConfiguration = {
   ...baseConfiguration,
   palette: lightPalette,
 };
+
+export const sectionStyles = {
+  border: 1,
+  p: 2,
+  m: 2,
+  backgroundColor: "#f5f8ff",
+  borderRadius: 2,
+  borderColor: "#d9e1ec",
+};
