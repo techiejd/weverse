@@ -216,10 +216,6 @@
           },
           "prompt": "Esta descripción será el título."
         },
-        "impactedPersons": {
-          "title": "¿A quiénes ayudaste?",
-          "example": "Ej: La clase 2023 del colegio San Ignacio en el barrio Laureles."
-        },
         "location": {
           "title": "¿Dónde realizaste esta acción?"
         }
@@ -228,8 +224,6 @@
     "impact": {
       "solicit": {
         "title": "{makerName}, ¡Obten los comentarios y obten más participación!",
-        "target": "Escuchemos a los siguientes: {howToIdentifyImpactedPeople}",
-        "noTarget": "No indicaste a quien mandarle la encuesta, pero confiamos en tí de encontrarlos.",
         "solicitText": "Por favor dame tu opinion sobre mi acción social: {for}",
         "clickOnEarToSolicit": "Haz clic en la oreja para enviarles una encuesta sobre esta acción."
       }
@@ -237,8 +231,7 @@
     "about": {
       "explanation": "Acerca de esta acción",
       "coverVideo": "Video de portada",
-      "location": "Ubicación",
-      "impactedPersons": "¿A quiénes ayudó?"
+      "location": "Ubicación"
     },
     "empty": "No hay acciones aún. ¡Agrega una!",
     "solicit": {

@@ -48,15 +48,6 @@ const Solicit = asOneWePage(() => {
       sx={{ justifyContent: "center", alignItems: "center", p: 2 }}
     >
       <PromptMaker makerId={posi.makerId!} />
-      {posi.howToIdentifyImpactedPeople ? (
-        <Typography variant="h2">
-          {t("target", {
-            howToIdentifyImpactedPeople: posi.howToIdentifyImpactedPeople,
-          })}
-        </Typography>
-      ) : (
-        <Typography>{t("noTarget")}</Typography>
-      )}
       <ShareActionArea
         shareProps={{
           title: t("solicitText", { for: posi.summary }),

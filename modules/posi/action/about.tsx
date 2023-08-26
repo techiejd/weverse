@@ -21,7 +21,6 @@ const AboutContent = ({
   summary,
   media,
   location,
-  howToIdentifyImpactedPeople,
   makerId,
   ratings,
   validation,
@@ -82,21 +81,6 @@ const AboutContent = ({
                   {location.structuredFormatting!.secondaryText}
                 </Typography>
               </Stack>
-            </CardContent>
-          </Box>
-        )}
-        {howToIdentifyImpactedPeople && (
-          <Box>
-            <CardHeader
-              avatar={
-                <Icon>
-                  <EmojiPeople />
-                </Icon>
-              }
-              title={t("impactedPersons")}
-            />
-            <CardContent>
-              <Typography>{howToIdentifyImpactedPeople}</Typography>
             </CardContent>
           </Box>
         )}

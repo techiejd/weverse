@@ -8,7 +8,6 @@ import {
   PosiFormContext,
   PosiFormDispatchContext,
 } from "../input/context";
-import ImpactedPersonsInput from "../input/impactedPersonsInput";
 import ImpactMediaInput from "../input/impactMediaInput";
 import { PosiFormData, posiFormData } from "../../../functions/shared/src";
 import { useMyMaker } from "../../../common/context/weverseUtils";
@@ -71,9 +70,6 @@ const PosiForm = ({
               </Section>
               <Section label={t("sections.summary.title")}>
                 <SummaryInput />
-              </Section>
-              <Section label={t("sections.impactedPersons.title")}>
-                <ImpactedPersonsInput />
               </Section>
               <Section label={t("sections.location.title")}>
                 <CitySearchInput />
