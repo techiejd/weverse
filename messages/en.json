@@ -217,10 +217,6 @@
           },
           "prompt": "This summary will become your action's title."
         },
-        "impactedPersons": {
-          "title": "Whom have you helped?",
-          "example": "Ex: San Ignacio High School class of 2023, San Francisco, California."
-        },
         "location": {
           "title": "Where was this action done?"
         }
@@ -229,8 +225,6 @@
     "impact": {
       "solicit": {
         "title": "{makerName}, Get testimonials and get more engagement!",
-        "target": "Let's listen to the following: {howToIdentifyImpactedPeople}",
-        "noTarget": "You did not indicate the beneficiary community to send this survey, but we trust you to find the right people.",
         "solicitText": "Please give me your opinion on my action: {for}",
         "clickOnEarToSolicit": "Click on the ear to send them a survey asking for a testimonials."
       }
@@ -238,8 +232,7 @@
     "about": {
       "explanation": "About this action",
       "coverVideo": "Cover video",
-      "location": "Location",
-      "impactedPersons": "Who did they help?"
+      "location": "Location"
     },
     "empty": "There are no actions, yet. Add one!",
     "solicit": {

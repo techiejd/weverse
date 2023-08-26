@@ -191,7 +191,7 @@ export type Validation = z.infer<typeof validation>;
 // {action: Action, impacts: Impact[], makerId}
 export const posiFormData = dbBase.extend({
   summary: z.string().min(1),
-  howToIdentifyImpactedPeople: z.string().min(1).optional(),
+  // retired - howToIdentifyImpactedPeople: z.string().min(1).optional(),
   location: location.optional(),
   media: media,
   makerId: z.string(), // TODO(techiejd): How many chars is the id?
