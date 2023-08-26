@@ -9,6 +9,7 @@ import { Locale, PosiFormData, locale } from "../../functions/shared/src";
 import {
   Locale2Messages,
   WithTranslationsStaticProps,
+  localeDisplayNames,
   spreadTranslationsStaticProps,
 } from "../../common/utils/translations";
 import { NextIntlClientProvider, useLocale, useTranslations } from "next-intl";
@@ -39,10 +40,6 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
     [appState.firestore, chosenLocale, posiFormDataConverter, router]
   );
   const t = useTranslations("actions.upload");
-  const localeDisplayNames = {
-    [locale.Values.en]: "English",
-    [locale.Values.es]: "Español",
-  };
 
   return (
     <Stack>

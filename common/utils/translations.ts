@@ -1,5 +1,5 @@
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
-import { Locale } from "../../functions/shared/src";
+import { Locale, locale } from "../../functions/shared/src";
 type StaticProps = {
   [x: string | number | symbol]: unknown;
 };
@@ -53,4 +53,9 @@ export const spreadTranslationsStaticProps = async (
       es: es.default,
     },
   };
+};
+
+export const localeDisplayNames = {
+  [locale.Values.en]: "English",
+  [locale.Values.es]: "Español",
 };

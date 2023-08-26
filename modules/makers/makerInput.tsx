@@ -4,6 +4,7 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  IconButton,
   NativeSelect,
   Radio,
   RadioGroup,
@@ -33,8 +34,13 @@ import {
 } from "../../functions/shared/src";
 import { FileInput } from "../posi/input";
 import { NextIntlClientProvider, useTranslations } from "next-intl";
-import { Locale2Messages } from "../../common/utils/translations";
+import {
+  Locale2Messages,
+  localeDisplayNames,
+} from "../../common/utils/translations";
 import { sectionStyles } from "../../common/components/theme";
+import Close from "@mui/icons-material/Close";
+import Delete from "@mui/icons-material/Delete";
 
 const OrganizationTypeInput = ({
   val,
@@ -181,7 +187,6 @@ const DetailedInput = ({
         )}
       >
         <TextField
-          fullWidth
           label={`${detailedInputTranslations(
             "incubator.leaveDetails"
           )} (${inputTranslations("numChars", { numChars: 500 })}).`}
@@ -210,7 +215,6 @@ const DetailedInput = ({
         )}
       >
         <TextField
-          fullWidth
           label={`${detailedInputTranslations(
             "nonFinancialHelp.leaveContactDetails"
           )} (${inputTranslations("numChars", { numChars: 500 })}).`}
@@ -232,7 +236,7 @@ const DetailedInput = ({
     );
 
   return (
-    <Stack margin={2} spacing={2}>
+    <Stack spacing={2} sx={sectionStyles}>
       <Section
         label={detailedInputTranslations("story.title", {
           makerType: val.type,
@@ -307,14 +311,43 @@ const AddInternationalizedDetailedInput = ({
   // In this section, we will make a box that holds in it
   // 1. A title that says "Detailed info in other languages"
   return (
-    <Box>
+    <Stack
+      sx={[
+        sectionStyles,
+        {
+          backgroundColor: "background.paper",
+        },
+      ]}
+      spacing={2}
+    >
       <Typography variant="h3"> Detailed info in other languages</Typography>
       {
         // In this section, we will make a box that holds in it
         // 1. A list of the choosen locales with the detailed info form for each
         chosenLocales.map((l) => (
           <Box key={l}>
-            <Typography variant="h3">{locale.Enum[l]}</Typography>
+            <Stack
+              direction="row"
+              sx={{ ml: 2, alignItems: "center" }}
+              spacing={2}
+            >
+              <IconButton
+                onClick={() => {
+                  // Remove the locale from the chosen locales
+                  // And setVal to remove the detailed info for that locale
+                  setChosenLocales((prev) => prev.filter((cl) => cl != l));
+                  setChoosableLocales((prev) => [...prev, l]);
+                  setVal((prev) => {
+                    const newPrev = { ...prev };
+                    delete newPrev[l];
+                    return newPrev;
+                  });
+                }}
+              >
+                <Delete />
+              </IconButton>
+              <Typography variant="h3">{localeDisplayNames[l]}</Typography>
+            </Stack>
             <NextIntlClientProvider messages={locale2Messages[l]}>
               <DetailedInput val={val} setVal={setVal} locale={l} />
             </NextIntlClientProvider>
@@ -359,7 +392,7 @@ const AddInternationalizedDetailedInput = ({
           </Fragment>
         )
       }
-    </Box>
+    </Stack>
   );
 };
 
@@ -417,52 +450,55 @@ const MakerInput = ({
   });
   return (
     <Stack alignItems={"center"}>
-      <FormControl>
-        <RadioGroup
-          name="chooseMakerType"
-          row
-          onChange={makerChange}
-          value={val.type}
+      <Stack sx={sectionStyles}>
+        <Typography variant="h2">Entity information</Typography>
+        <FormControl>
+          <RadioGroup
+            name="chooseMakerType"
+            row
+            onChange={makerChange}
+            value={val.type}
+          >
+            <FormControlLabel
+              value="individual"
+              control={<Radio required />}
+              label={chooseMakerTypeTranslations("individual")}
+            />
+            <FormControlLabel
+              value="organization"
+              control={<Radio required />}
+              label={chooseMakerTypeTranslations("organization")}
+            />
+          </RadioGroup>
+        </FormControl>
+        <Typography variant="h3">{askForInfoMsg}</Typography>
+        {val.type == "organization" && (
+          <OrganizationTypeInput val={val} setVal={setVal} />
+        )}
+        <Section label={"Whatever put yor email here"}>
+          <TextField
+            label={"email dawg"}
+            type="email"
+            fullWidth
+            value={val.email ? val.email : ""}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </Section>
+        <Section
+          label={detailedInputTranslations("profileImage", {
+            makerType: val.type,
+          })}
         >
-          <FormControlLabel
-            value="individual"
-            control={<Radio required />}
-            label={chooseMakerTypeTranslations("individual")}
+          <Typography>{askForImage}</Typography>
+          <FileInput
+            initialMedia={pic != "loading" ? pic : undefined}
+            setMedia={setPic}
+            maxFileSize={10485760 /** 10MB */}
+            accept={"img"}
+            metadata={{ makerId: "", userID: "" }}
           />
-          <FormControlLabel
-            value="organization"
-            control={<Radio required />}
-            label={chooseMakerTypeTranslations("organization")}
-          />
-        </RadioGroup>
-      </FormControl>
-      <Typography variant="h3">{askForInfoMsg}</Typography>
-      {val.type == "organization" && (
-        <OrganizationTypeInput val={val} setVal={setVal} />
-      )}
-      <Section label={"Whatever put yor email here"}>
-        <TextField
-          label={"email dawg"}
-          type="email"
-          fullWidth
-          value={val.email ? val.email : ""}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </Section>
-      <Section
-        label={detailedInputTranslations("profileImage", {
-          makerType: val.type,
-        })}
-      >
-        <Typography>{askForImage}</Typography>
-        <FileInput
-          initialMedia={pic != "loading" ? pic : undefined}
-          setMedia={setPic}
-          maxFileSize={10485760 /** 10MB */}
-          accept={"img"}
-          metadata={{ makerId: "", userID: "" }}
-        />
-      </Section>
+        </Section>
+      </Stack>
       <DetailedInput val={val} setVal={setVal} locale={val.locale!} />
       <AddInternationalizedDetailedInput
         val={val}
