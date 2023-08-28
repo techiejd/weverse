@@ -78,7 +78,10 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
 
       <NextIntlClientProvider messages={locale2Messages[chosenLocale]}>
         {user ? (
-          <PosiForm onInteraction={{ type: "create", onSubmit }} />
+          <PosiForm
+            onInteraction={{ type: "create", onSubmit }}
+            locale2Messages={locale2Messages}
+          />
         ) : (
           <LogInPrompt title={t("logInPrompt")} />
         )}

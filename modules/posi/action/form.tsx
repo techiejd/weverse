@@ -1,5 +1,5 @@
 import { Box, Stack, Divider, Button, CircularProgress } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, FC } from "react";
 import Section from "../../../common/components/section";
 import { CitySearchInput } from "../input";
 import SummaryInput from "../input/SummaryInput";
@@ -12,8 +12,12 @@ import ImpactMediaInput from "../input/impactMediaInput";
 import { PosiFormData, posiFormData } from "../../../functions/shared/src";
 import { useMyMaker } from "../../../common/context/weverseUtils";
 import ValidatorInput from "../input/validatorInput";
-import { useTranslations } from "next-intl";
+import { NextIntlClientProvider, useTranslations } from "next-intl";
 import { sectionStyles } from "../../../common/components/theme";
+import AddInternationalizedDetailedInput, {
+  DetailedInputProps,
+} from "../../../common/components/addInternationalizedDetailedInput";
+import { Locale2Messages } from "../../../common/utils/translations";
 
 type onInteractionProp =
   | { type: "create"; onSubmit: (posiFormData: PosiFormData) => Promise<void> }
@@ -26,9 +30,11 @@ type onInteractionProp =
 const PosiForm = ({
   onInteraction,
   initialPosi = {},
+  locale2Messages,
 }: {
   onInteraction: onInteractionProp;
   initialPosi?: WorkingCopyPosiFormData;
+  locale2Messages: Locale2Messages;
 }) => {
   const [formData, setFormData] =
     useState<WorkingCopyPosiFormData>(initialPosi);
@@ -42,6 +48,21 @@ const PosiForm = ({
   }, [myMaker, setFormData]);
   const t = useTranslations("actions.upload");
   const callToActionTranslations = useTranslations("common.callToAction");
+
+  const DetailedInput: FC<DetailedInputProps<WorkingCopyPosiFormData>> = ({
+    locale,
+  }: DetailedInputProps<WorkingCopyPosiFormData>) => {
+    return (
+      <Stack sx={sectionStyles}>
+        <Section label={t("sections.media.title")}>
+          <ImpactMediaInput locale={locale} />
+        </Section>
+        <Section label={t("sections.summary.title")}>
+          <SummaryInput locale={locale} />
+        </Section>
+      </Stack>
+    );
+  };
 
   return (
     <Box>
@@ -66,17 +87,18 @@ const PosiForm = ({
               alignItems={"center"}
               justifyContent={"space-between"}
             >
-              <Section label={t("sections.location.title")}>
-                <CitySearchInput />
-              </Section>
-              <Stack sx={sectionStyles}>
-                <Section label={t("sections.media.title")}>
-                  <ImpactMediaInput locale={"en"} />
+              <Box sx={sectionStyles}>
+                <Section label={t("sections.location.title")}>
+                  <CitySearchInput />
                 </Section>
-                <Section label={t("sections.summary.title")}>
-                  <SummaryInput locale={"en"} />
-                </Section>
-              </Stack>
+              </Box>
+              <DetailedInput val={formData} setVal={setFormData} locale="es" />
+              <AddInternationalizedDetailedInput
+                val={formData}
+                setVal={setFormData}
+                locale2Messages={locale2Messages}
+                detailedInput={DetailedInput}
+              />
               {myMaker && myMaker.incubator && (
                 <Section label="Trabajando con tu incubadora">
                   <ValidatorInput incubator={myMaker.incubator} />
