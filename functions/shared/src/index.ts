@@ -189,15 +189,20 @@ export type Validation = z.infer<typeof validation>;
 
 // TODO(techiejd): Reshape db. It should go posi
 // {action: Action, impacts: Impact[], makerId}
-export const posiFormData = dbBase.extend({
-  summary: z.string().min(1),
-  // retired - howToIdentifyImpactedPeople: z.string().min(1).optional(),
-  location: location.optional(),
+const actionPresentationExtension = z.object({
   media: media,
-  makerId: z.string(), // TODO(techiejd): How many chars is the id?
-  ratings: ratings.optional(),
-  validation: validation.optional(),
+  summary: z.string().min(1),
 });
+
+export const posiFormData = dbBase
+  .extend({
+    makerId: z.string(),
+    location: location.optional(),
+    ratings: ratings.optional(),
+    validation: validation.optional(),
+    // retired - howToIdentifyImpactedPeople: z.string().min(1).optional(),
+  })
+  .merge(createNestedLocalizedSchema(actionPresentationExtension.optional()));
 
 export type PosiFormData = z.infer<typeof posiFormData>;
 

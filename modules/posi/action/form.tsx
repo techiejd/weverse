@@ -13,6 +13,7 @@ import { PosiFormData, posiFormData } from "../../../functions/shared/src";
 import { useMyMaker } from "../../../common/context/weverseUtils";
 import ValidatorInput from "../input/validatorInput";
 import { useTranslations } from "next-intl";
+import { sectionStyles } from "../../../common/components/theme";
 
 type onInteractionProp =
   | { type: "create"; onSubmit: (posiFormData: PosiFormData) => Promise<void> }
@@ -65,15 +66,17 @@ const PosiForm = ({
               alignItems={"center"}
               justifyContent={"space-between"}
             >
-              <Section label={t("sections.media.title")}>
-                <ImpactMediaInput />
-              </Section>
-              <Section label={t("sections.summary.title")}>
-                <SummaryInput />
-              </Section>
               <Section label={t("sections.location.title")}>
                 <CitySearchInput />
               </Section>
+              <Stack sx={sectionStyles}>
+                <Section label={t("sections.media.title")}>
+                  <ImpactMediaInput locale={"en"} />
+                </Section>
+                <Section label={t("sections.summary.title")}>
+                  <SummaryInput locale={"en"} />
+                </Section>
+              </Stack>
               {myMaker && myMaker.incubator && (
                 <Section label="Trabajando con tu incubadora">
                   <ValidatorInput incubator={myMaker.incubator} />

@@ -46,19 +46,20 @@ const MemberLogInTrigger = ({
 };
 
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
+  const presentationInfo = posiData[posiData.locale!]!;
   const media =
-    posiData.media.type == "video"
+    presentationInfo.media.type == "video"
       ? {
           video: {
             threshold: 0.9,
             muted: true,
             disablePictureInPicture: true,
-            src: posiData.media.url,
+            src: presentationInfo.media.url,
             controls: false,
             objectFit: "cover" as "cover",
           },
         }
-      : { image: { src: posiData.media.url } };
+      : { image: { src: presentationInfo.media.url } };
   const [logInPromptDialogOpen, setLogInPromptDialogOpen] = useState(false);
   return (
     <Card
@@ -108,7 +109,7 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
               fontSize: 18,
             }}
           >
-            {posiData.summary}
+            {presentationInfo.summary}
           </Typography>
           <RatingsStack ratings={posiData.ratings} />
           {posiData.validation && <ValidationInfo {...posiData.validation} />}

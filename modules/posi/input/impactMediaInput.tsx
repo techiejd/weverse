@@ -2,22 +2,25 @@ import { useEffect, useState } from "react";
 import FileInput from "./fileInput";
 import { useFormData } from "./context";
 import { Box, Typography } from "@mui/material";
-import { Media } from "../../../functions/shared/src";
+import { Locale, Media } from "../../../functions/shared/src";
 import { useTranslations } from "next-intl";
 
-const ImpactMediaInput = () => {
+const ImpactMediaInput = ({ locale }: { locale: Locale }) => {
   const [formData, setFormData] = useFormData();
   const [media, setMedia] = useState<Media | undefined | "loading">(
     formData.media
   );
   useEffect(() => {
     if (setFormData) {
-      setFormData((fD) => ({
-        ...fD,
-        media: media,
-      }));
+      setFormData((fD) => {
+        const localizedInfo = fD[locale] || {};
+        return {
+          ...fD,
+          [locale]: { ...localizedInfo, media: media },
+        };
+      });
     }
-  }, [media, setFormData]);
+  }, [locale, media, setFormData]);
   const t = useTranslations("actions.upload.sections.media");
   return (
     <Box>

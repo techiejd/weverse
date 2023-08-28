@@ -29,6 +29,7 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
   const [chosenLocale, setChosenLocale] = useState<Locale>(localeIn as Locale);
   const onSubmit = useCallback(
     async (usersPosi: PosiFormData) => {
+      console.log({ usersPosi, chosenLocale });
       const docRef = await addDoc(
         collection(appState.firestore, "impacts").withConverter(
           posiFormDataConverter
