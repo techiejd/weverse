@@ -1,20 +1,19 @@
-import { Box, NativeSelect, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import { useRouter } from "next/router";
 import PosiForm from "../../modules/posi/action/form";
 import LogInPrompt from "../../common/components/logInPrompt";
 import { usePosiFormDataConverter } from "../../common/utils/firebase";
-import { Locale, PosiFormData, locale } from "../../functions/shared/src";
+import { PosiFormData, locale } from "../../functions/shared/src";
 import {
   Locale2Messages,
   WithTranslationsStaticProps,
-  localeDisplayNames,
   spreadTranslationsStaticProps,
 } from "../../common/utils/translations";
-import { NextIntlClientProvider, useLocale, useTranslations } from "next-intl";
 import { asOneWePage } from "../../common/components/onewePage";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 export const getStaticProps = WithTranslationsStaticProps(
   spreadTranslationsStaticProps
@@ -26,19 +25,18 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
   const { user } = useAppState().authState;
   const posiFormDataConverter = usePosiFormDataConverter();
   const localeIn = useLocale();
-  const [chosenLocale, setChosenLocale] = useState<Locale>(localeIn as Locale);
   const onSubmit = useCallback(
     async (usersPosi: PosiFormData) => {
-      console.log({ usersPosi, chosenLocale });
+      console.log({ usersPosi, localeIn });
       const docRef = await addDoc(
         collection(appState.firestore, "impacts").withConverter(
           posiFormDataConverter
         ),
-        { ...usersPosi, locale: locale.parse(chosenLocale) }
+        { ...usersPosi, locale: locale.parse(localeIn) }
       );
       router.push(`/posi/${docRef.id}/impact/solicit`);
     },
-    [appState.firestore, chosenLocale, posiFormDataConverter, router]
+    [appState.firestore, localeIn, posiFormDataConverter, router]
   );
   const t = useTranslations("actions.upload");
 
@@ -52,40 +50,16 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
       >
         <Box textAlign={"center"} width="fit-content">
           <Typography variant="h1">{t("title")}</Typography>
-          <Stack
-            alignItems="center"
-            direction="row"
-            justifyContent="end"
-            spacing={1}
-          >
-            <Typography>Publishing in the </Typography>
-            <NativeSelect
-              value={chosenLocale}
-              onChange={(e) => {
-                setChosenLocale(e.target.value as Locale);
-              }}
-            >
-              {Object.keys(locale.Enum).map((l) => (
-                <option value={l} key={l}>
-                  {localeDisplayNames[locale.parse(l)]}
-                </option>
-              ))}
-            </NativeSelect>
-            <Typography>channel.</Typography>
-          </Stack>
         </Box>
       </Box>
-
-      <NextIntlClientProvider messages={locale2Messages[chosenLocale]}>
-        {user ? (
-          <PosiForm
-            onInteraction={{ type: "create", onSubmit }}
-            locale2Messages={locale2Messages}
-          />
-        ) : (
-          <LogInPrompt title={t("logInPrompt")} />
-        )}
-      </NextIntlClientProvider>
+      {user ? (
+        <PosiForm
+          onInteraction={{ type: "create", onSubmit }}
+          locale2Messages={locale2Messages}
+        />
+      ) : (
+        <LogInPrompt title={t("logInPrompt")} />
+      )}
     </Stack>
   );
 });
