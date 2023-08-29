@@ -8,15 +8,21 @@ import PosiForm from "../../../../modules/posi/action/form";
 import { usePosiFormDataConverter } from "../../../../common/utils/firebase";
 import { PosiFormData, posiFormData } from "../../../../functions/shared/src";
 import { useCurrentPosiId } from "../../../../modules/posi/context";
-import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
+import {
+  Locale2Messages,
+  WithTranslationsStaticProps,
+  spreadTranslationsStaticProps,
+} from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
 import { asOneWePage } from "../../../../common/components/onewePage";
 
 export const getStaticPaths = CachePaths;
-export const getStaticProps = WithTranslationsStaticProps();
+export const getStaticProps = WithTranslationsStaticProps(
+  spreadTranslationsStaticProps
+);
 
-const Edit = asOneWePage(() => {
+const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
   const editTranslations = useTranslations("actions.edit");
   const appState = useAppState();
   const router = useRouter();
@@ -61,6 +67,7 @@ const Edit = asOneWePage(() => {
         <PosiForm
           onInteraction={{ type: "update", onUpdate, onDelete: onDelete(posi) }}
           initialPosi={posi}
+          locale2Messages={locale2Messages}
         />
       ) : (
         <CircularProgress />

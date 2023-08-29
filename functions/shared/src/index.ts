@@ -58,7 +58,6 @@ const makerPresentationExtension = z.object({
   howToSupport: howToSupport.optional(),
   about: z.string().optional(),
   validationProcess: z.string().optional(),
-  locale: locale.optional(),
 });
 
 export type MakerPresentationExtension = z.infer<

@@ -15,6 +15,7 @@ export declare const media: z.ZodObject<{
 }>;
 export type Media = z.infer<typeof media>;
 export declare const makerType: z.ZodEnum<["individual", "organization"]>;
+export type MakerType = z.infer<typeof makerType>;
 export declare const organizationType: z.ZodEnum<["nonprofit", "religious", "unincorporated", "profit", "incubator"]>;
 export type OrganizationType = z.infer<typeof organizationType>;
 declare const howToSupport: z.ZodObject<{
@@ -36,25 +37,24 @@ export declare const ratings: z.ZodObject<{
     count?: number;
 }>;
 export type Ratings = z.infer<typeof ratings>;
+export declare const locale: z.ZodEnum<["en", "es"]>;
+export type Locale = z.infer<typeof locale>;
 declare const dbBase: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
+    locale: z.ZodOptional<z.ZodEnum<["en", "es"]>>;
     createdAt: z.ZodOptional<z.ZodDate>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
 }, {
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
 }>;
 export type DbBase = z.infer<typeof dbBase>;
-export declare const maker: z.ZodObject<{
-    id: z.ZodOptional<z.ZodString>;
-    ownerId: z.ZodUnion<[z.ZodString, z.ZodEnum<["invited"]>]>;
-    type: z.ZodEnum<["individual", "organization"]>;
-    pic: z.ZodOptional<z.ZodString>;
-    name: z.ZodString;
-    organizationType: z.ZodOptional<z.ZodEnum<["nonprofit", "religious", "unincorporated", "profit", "incubator"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+declare const makerPresentationExtension: z.ZodObject<{
+    presentationVideo: z.ZodOptional<z.ZodString>;
     howToSupport: z.ZodOptional<z.ZodObject<{
         contact: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -63,6 +63,60 @@ export declare const maker: z.ZodObject<{
         contact?: string;
     }>>;
     about: z.ZodOptional<z.ZodString>;
+    validationProcess: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    presentationVideo?: string;
+    howToSupport?: {
+        contact?: string;
+    };
+    about?: string;
+    validationProcess?: string;
+}, {
+    presentationVideo?: string;
+    howToSupport?: {
+        contact?: string;
+    };
+    about?: string;
+    validationProcess?: string;
+}>;
+export type MakerPresentationExtension = z.infer<typeof makerPresentationExtension>;
+export declare function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(itemSchema: ItemType): z.ZodObject<{
+    en: ItemType;
+    es: ItemType;
+}, "strip", z.ZodTypeAny, z.objectUtil.addQuestionMarks<z.baseObjectOutputType<{
+    en: ItemType;
+    es: ItemType;
+}>, (undefined extends ItemType["_output"] ? never : "en") | (undefined extends ItemType["_output"] ? never : "es")> extends infer T ? { [k_1 in keyof T]: z.objectUtil.addQuestionMarks<z.baseObjectOutputType<{
+    en: ItemType;
+    es: ItemType;
+}>, (undefined extends ItemType["_output"] ? never : "en") | (undefined extends ItemType["_output"] ? never : "es")>[k_1]; } : never, z.baseObjectInputType<{
+    en: ItemType;
+    es: ItemType;
+}> extends infer T_1 ? { [k_2 in keyof T_1]: z.baseObjectInputType<{
+    en: ItemType;
+    es: ItemType;
+}>[k_2]; } : never>;
+export declare const maker: z.ZodObject<{
+    type: z.ZodEnum<["individual", "organization"]>;
+    id: z.ZodOptional<z.ZodString>;
+    name: z.ZodString;
+    email: z.ZodOptional<z.ZodString>;
+    incubator: z.ZodOptional<z.ZodString>;
+    locale: z.ZodOptional<z.ZodEnum<["en", "es"]>>;
+    createdAt: z.ZodOptional<z.ZodDate>;
+    presentationVideo: z.ZodOptional<z.ZodString>;
+    howToSupport: z.ZodOptional<z.ZodObject<{
+        contact: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        contact?: string;
+    }, {
+        contact?: string;
+    }>>;
+    about: z.ZodOptional<z.ZodString>;
+    validationProcess: z.ZodOptional<z.ZodString>;
+    ownerId: z.ZodUnion<[z.ZodString, z.ZodEnum<["invited"]>]>;
+    organizationType: z.ZodOptional<z.ZodEnum<["nonprofit", "religious", "unincorporated", "profit", "incubator"]>>;
+    pic: z.ZodOptional<z.ZodString>;
     ratings: z.ZodOptional<z.ZodObject<{
         sum: z.ZodNumber;
         count: z.ZodNumber;
@@ -73,50 +127,141 @@ export declare const maker: z.ZodObject<{
         sum?: number;
         count?: number;
     }>>;
-    email: z.ZodOptional<z.ZodString>;
-    incubator: z.ZodOptional<z.ZodString>;
+    en: z.ZodOptional<z.ZodObject<{
+        presentationVideo: z.ZodOptional<z.ZodString>;
+        howToSupport: z.ZodOptional<z.ZodObject<{
+            contact: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            contact?: string;
+        }, {
+            contact?: string;
+        }>>;
+        about: z.ZodOptional<z.ZodString>;
+        validationProcess: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        presentationVideo?: string;
+        howToSupport?: {
+            contact?: string;
+        };
+        about?: string;
+        validationProcess?: string;
+    }, {
+        presentationVideo?: string;
+        howToSupport?: {
+            contact?: string;
+        };
+        about?: string;
+        validationProcess?: string;
+    }>>;
+    es: z.ZodOptional<z.ZodObject<{
+        presentationVideo: z.ZodOptional<z.ZodString>;
+        howToSupport: z.ZodOptional<z.ZodObject<{
+            contact: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            contact?: string;
+        }, {
+            contact?: string;
+        }>>;
+        about: z.ZodOptional<z.ZodString>;
+        validationProcess: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        presentationVideo?: string;
+        howToSupport?: {
+            contact?: string;
+        };
+        about?: string;
+        validationProcess?: string;
+    }, {
+        presentationVideo?: string;
+        howToSupport?: {
+            contact?: string;
+        };
+        about?: string;
+        validationProcess?: string;
+    }>>;
 }, "strip", z.ZodTypeAny, {
-    id?: string;
-    ownerId?: string;
     type?: "individual" | "organization";
-    pic?: string;
+    id?: string;
     name?: string;
-    organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
+    email?: string;
+    incubator?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
+    presentationVideo?: string;
     howToSupport?: {
         contact?: string;
     };
     about?: string;
+    validationProcess?: string;
+    ownerId?: string;
+    organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
+    pic?: string;
     ratings?: {
         sum?: number;
         count?: number;
     };
-    email?: string;
-    incubator?: string;
+    en?: {
+        presentationVideo?: string;
+        howToSupport?: {
+            contact?: string;
+        };
+        about?: string;
+        validationProcess?: string;
+    };
+    es?: {
+        presentationVideo?: string;
+        howToSupport?: {
+            contact?: string;
+        };
+        about?: string;
+        validationProcess?: string;
+    };
 }, {
-    id?: string;
-    ownerId?: string;
     type?: "individual" | "organization";
-    pic?: string;
+    id?: string;
     name?: string;
-    organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
+    email?: string;
+    incubator?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
+    presentationVideo?: string;
     howToSupport?: {
         contact?: string;
     };
     about?: string;
+    validationProcess?: string;
+    ownerId?: string;
+    organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
+    pic?: string;
     ratings?: {
         sum?: number;
         count?: number;
     };
-    email?: string;
-    incubator?: string;
+    en?: {
+        presentationVideo?: string;
+        howToSupport?: {
+            contact?: string;
+        };
+        about?: string;
+        validationProcess?: string;
+    };
+    es?: {
+        presentationVideo?: string;
+        howToSupport?: {
+            contact?: string;
+        };
+        about?: string;
+        validationProcess?: string;
+    };
 }>;
 export type Maker = z.infer<typeof maker>;
+declare const currency: z.ZodEnum<["cop", "usd", "eur", "gbp"]>;
+export type Currency = z.infer<typeof currency>;
 export declare const member: z.ZodObject<{
-    makerId: z.ZodString;
     id: z.ZodOptional<z.ZodString>;
+    locale: z.ZodOptional<z.ZodEnum<["en", "es"]>>;
     createdAt: z.ZodOptional<z.ZodDate>;
+    makerId: z.ZodString;
     customer: z.ZodOptional<z.ZodObject<{
         firstName: z.ZodString;
         lastName: z.ZodString;
@@ -135,6 +280,7 @@ export declare const member: z.ZodObject<{
             country?: string;
             countryCode?: string;
         }>;
+        currency: z.ZodEnum<["cop", "usd", "eur", "gbp"]>;
     }, "strip", z.ZodTypeAny, {
         firstName?: string;
         lastName?: string;
@@ -145,6 +291,7 @@ export declare const member: z.ZodObject<{
             country?: string;
             countryCode?: string;
         };
+        currency?: "cop" | "usd" | "eur" | "gbp";
     }, {
         firstName?: string;
         lastName?: string;
@@ -155,6 +302,7 @@ export declare const member: z.ZodObject<{
             country?: string;
             countryCode?: string;
         };
+        currency?: "cop" | "usd" | "eur" | "gbp";
     }>>;
     stripe: z.ZodOptional<z.ZodObject<{
         customer: z.ZodString;
@@ -175,9 +323,10 @@ export declare const member: z.ZodObject<{
     pic: z.ZodOptional<z.ZodString>;
     name: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    makerId?: string;
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
+    makerId?: string;
     customer?: {
         firstName?: string;
         lastName?: string;
@@ -188,6 +337,7 @@ export declare const member: z.ZodObject<{
             country?: string;
             countryCode?: string;
         };
+        currency?: "cop" | "usd" | "eur" | "gbp";
     };
     stripe?: {
         customer?: string;
@@ -198,9 +348,10 @@ export declare const member: z.ZodObject<{
     pic?: string;
     name?: string;
 }, {
-    makerId?: string;
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
+    makerId?: string;
     customer?: {
         firstName?: string;
         lastName?: string;
@@ -211,6 +362,7 @@ export declare const member: z.ZodObject<{
             country?: string;
             countryCode?: string;
         };
+        currency?: "cop" | "usd" | "eur" | "gbp";
     };
     stripe?: {
         customer?: string;
@@ -224,41 +376,47 @@ export declare const member: z.ZodObject<{
 export type Member = z.infer<typeof member>;
 export declare const like: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
+    locale: z.ZodOptional<z.ZodEnum<["en", "es"]>>;
     createdAt: z.ZodOptional<z.ZodDate>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
 }, {
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
 }>;
 export type Like = z.infer<typeof like>;
 export declare const socialProof: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
+    locale: z.ZodOptional<z.ZodEnum<["en", "es"]>>;
+    createdAt: z.ZodOptional<z.ZodDate>;
     rating: z.ZodNumber;
     videoUrl: z.ZodOptional<z.ZodString>;
     byMaker: z.ZodString;
     forMaker: z.ZodString;
     forAction: z.ZodOptional<z.ZodString>;
-    createdAt: z.ZodOptional<z.ZodDate>;
     text: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
+    locale?: "en" | "es";
+    createdAt?: Date;
     rating?: number;
     videoUrl?: string;
     byMaker?: string;
     forMaker?: string;
     forAction?: string;
-    createdAt?: Date;
     text?: string;
 }, {
     id?: string;
+    locale?: "en" | "es";
+    createdAt?: Date;
     rating?: number;
     videoUrl?: string;
     byMaker?: string;
     forMaker?: string;
     forAction?: string;
-    createdAt?: Date;
     text?: string;
 }>;
 export type SocialProof = z.infer<typeof socialProof>;
@@ -273,10 +431,32 @@ declare const validation: z.ZodObject<{
     validated?: boolean;
 }>;
 export type Validation = z.infer<typeof validation>;
-export declare const posiFormData: z.ZodObject<{
-    id: z.ZodOptional<z.ZodString>;
+export declare const actionPresentationExtension: z.ZodObject<{
+    media: z.ZodObject<{
+        type: z.ZodEnum<["video", "img"]>;
+        url: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        type?: "img" | "video";
+        url?: string;
+    }, {
+        type?: "img" | "video";
+        url?: string;
+    }>;
     summary: z.ZodString;
-    howToIdentifyImpactedPeople: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    media?: {
+        type?: "img" | "video";
+        url?: string;
+    };
+    summary?: string;
+}, {
+    media?: {
+        type?: "img" | "video";
+        url?: string;
+    };
+    summary?: string;
+}>;
+export declare const posiFormData: z.ZodObject<{
     location: z.ZodOptional<z.ZodObject<{
         id: z.ZodOptional<z.ZodString>;
         structuredFormatting: z.ZodOptional<z.ZodObject<{
@@ -323,6 +503,7 @@ export declare const posiFormData: z.ZodObject<{
         }[];
         types?: string[];
     }>>;
+    id: z.ZodOptional<z.ZodString>;
     media: z.ZodObject<{
         type: z.ZodEnum<["video", "img"]>;
         url: z.ZodString;
@@ -333,7 +514,18 @@ export declare const posiFormData: z.ZodObject<{
         type?: "img" | "video";
         url?: string;
     }>;
-    makerId: z.ZodString;
+    summary: z.ZodString;
+    validation: z.ZodOptional<z.ZodObject<{
+        validator: z.ZodString;
+        validated: z.ZodBoolean;
+    }, "strip", z.ZodTypeAny, {
+        validator?: string;
+        validated?: boolean;
+    }, {
+        validator?: string;
+        validated?: boolean;
+    }>>;
+    locale: z.ZodOptional<z.ZodEnum<["en", "es"]>>;
     createdAt: z.ZodOptional<z.ZodDate>;
     ratings: z.ZodOptional<z.ZodObject<{
         sum: z.ZodNumber;
@@ -345,20 +537,58 @@ export declare const posiFormData: z.ZodObject<{
         sum?: number;
         count?: number;
     }>>;
-    validation: z.ZodOptional<z.ZodObject<{
-        validator: z.ZodString;
-        validated: z.ZodBoolean;
+    makerId: z.ZodString;
+    en: z.ZodOptional<z.ZodObject<{
+        media: z.ZodObject<{
+            type: z.ZodEnum<["video", "img"]>;
+            url: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            type?: "img" | "video";
+            url?: string;
+        }, {
+            type?: "img" | "video";
+            url?: string;
+        }>;
+        summary: z.ZodString;
     }, "strip", z.ZodTypeAny, {
-        validator?: string;
-        validated?: boolean;
+        media?: {
+            type?: "img" | "video";
+            url?: string;
+        };
+        summary?: string;
     }, {
-        validator?: string;
-        validated?: boolean;
+        media?: {
+            type?: "img" | "video";
+            url?: string;
+        };
+        summary?: string;
+    }>>;
+    es: z.ZodOptional<z.ZodObject<{
+        media: z.ZodObject<{
+            type: z.ZodEnum<["video", "img"]>;
+            url: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            type?: "img" | "video";
+            url?: string;
+        }, {
+            type?: "img" | "video";
+            url?: string;
+        }>;
+        summary: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        media?: {
+            type?: "img" | "video";
+            url?: string;
+        };
+        summary?: string;
+    }, {
+        media?: {
+            type?: "img" | "video";
+            url?: string;
+        };
+        summary?: string;
     }>>;
 }, "strip", z.ZodTypeAny, {
-    id?: string;
-    summary?: string;
-    howToIdentifyImpactedPeople?: string;
     location?: {
         id?: string;
         structuredFormatting?: {
@@ -371,24 +601,38 @@ export declare const posiFormData: z.ZodObject<{
         }[];
         types?: string[];
     };
+    id?: string;
     media?: {
         type?: "img" | "video";
         url?: string;
     };
-    makerId?: string;
+    summary?: string;
+    validation?: {
+        validator?: string;
+        validated?: boolean;
+    };
+    locale?: "en" | "es";
     createdAt?: Date;
     ratings?: {
         sum?: number;
         count?: number;
     };
-    validation?: {
-        validator?: string;
-        validated?: boolean;
+    makerId?: string;
+    en?: {
+        media?: {
+            type?: "img" | "video";
+            url?: string;
+        };
+        summary?: string;
+    };
+    es?: {
+        media?: {
+            type?: "img" | "video";
+            url?: string;
+        };
+        summary?: string;
     };
 }, {
-    id?: string;
-    summary?: string;
-    howToIdentifyImpactedPeople?: string;
     location?: {
         id?: string;
         structuredFormatting?: {
@@ -401,30 +645,45 @@ export declare const posiFormData: z.ZodObject<{
         }[];
         types?: string[];
     };
+    id?: string;
     media?: {
         type?: "img" | "video";
         url?: string;
     };
-    makerId?: string;
+    summary?: string;
+    validation?: {
+        validator?: string;
+        validated?: boolean;
+    };
+    locale?: "en" | "es";
     createdAt?: Date;
     ratings?: {
         sum?: number;
         count?: number;
     };
-    validation?: {
-        validator?: string;
-        validated?: boolean;
+    makerId?: string;
+    en?: {
+        media?: {
+            type?: "img" | "video";
+            url?: string;
+        };
+        summary?: string;
+    };
+    es?: {
+        media?: {
+            type?: "img" | "video";
+            url?: string;
+        };
+        summary?: string;
     };
 }>;
 export type PosiFormData = z.infer<typeof posiFormData>;
 export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
+    locale: z.ZodOptional<z.ZodEnum<["en", "es"]>>;
     createdAt: z.ZodOptional<z.ZodDate>;
     type: z.ZodLiteral<"action">;
     data: z.ZodEffects<z.ZodObject<{
-        id: z.ZodOptional<z.ZodString>;
-        summary: z.ZodString;
-        howToIdentifyImpactedPeople: z.ZodOptional<z.ZodString>;
         location: z.ZodOptional<z.ZodObject<{
             id: z.ZodOptional<z.ZodString>;
             structuredFormatting: z.ZodOptional<z.ZodObject<{
@@ -471,6 +730,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             }[];
             types?: string[];
         }>>;
+        id: z.ZodOptional<z.ZodString>;
         media: z.ZodObject<{
             type: z.ZodEnum<["video", "img"]>;
             url: z.ZodString;
@@ -481,7 +741,18 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             type?: "img" | "video";
             url?: string;
         }>;
-        makerId: z.ZodString;
+        summary: z.ZodString;
+        validation: z.ZodOptional<z.ZodObject<{
+            validator: z.ZodString;
+            validated: z.ZodBoolean;
+        }, "strip", z.ZodTypeAny, {
+            validator?: string;
+            validated?: boolean;
+        }, {
+            validator?: string;
+            validated?: boolean;
+        }>>;
+        locale: z.ZodOptional<z.ZodEnum<["en", "es"]>>;
         createdAt: z.ZodOptional<z.ZodDate>;
         ratings: z.ZodOptional<z.ZodObject<{
             sum: z.ZodNumber;
@@ -493,20 +764,58 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             sum?: number;
             count?: number;
         }>>;
-        validation: z.ZodOptional<z.ZodObject<{
-            validator: z.ZodString;
-            validated: z.ZodBoolean;
+        makerId: z.ZodString;
+        en: z.ZodOptional<z.ZodObject<{
+            media: z.ZodObject<{
+                type: z.ZodEnum<["video", "img"]>;
+                url: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                type?: "img" | "video";
+                url?: string;
+            }, {
+                type?: "img" | "video";
+                url?: string;
+            }>;
+            summary: z.ZodString;
         }, "strip", z.ZodTypeAny, {
-            validator?: string;
-            validated?: boolean;
+            media?: {
+                type?: "img" | "video";
+                url?: string;
+            };
+            summary?: string;
         }, {
-            validator?: string;
-            validated?: boolean;
+            media?: {
+                type?: "img" | "video";
+                url?: string;
+            };
+            summary?: string;
+        }>>;
+        es: z.ZodOptional<z.ZodObject<{
+            media: z.ZodObject<{
+                type: z.ZodEnum<["video", "img"]>;
+                url: z.ZodString;
+            }, "strip", z.ZodTypeAny, {
+                type?: "img" | "video";
+                url?: string;
+            }, {
+                type?: "img" | "video";
+                url?: string;
+            }>;
+            summary: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            media?: {
+                type?: "img" | "video";
+                url?: string;
+            };
+            summary?: string;
+        }, {
+            media?: {
+                type?: "img" | "video";
+                url?: string;
+            };
+            summary?: string;
         }>>;
     }, "strip", z.ZodTypeAny, {
-        id?: string;
-        summary?: string;
-        howToIdentifyImpactedPeople?: string;
         location?: {
             id?: string;
             structuredFormatting?: {
@@ -519,24 +828,38 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             }[];
             types?: string[];
         };
+        id?: string;
         media?: {
             type?: "img" | "video";
             url?: string;
         };
-        makerId?: string;
+        summary?: string;
+        validation?: {
+            validator?: string;
+            validated?: boolean;
+        };
+        locale?: "en" | "es";
         createdAt?: Date;
         ratings?: {
             sum?: number;
             count?: number;
         };
-        validation?: {
-            validator?: string;
-            validated?: boolean;
+        makerId?: string;
+        en?: {
+            media?: {
+                type?: "img" | "video";
+                url?: string;
+            };
+            summary?: string;
+        };
+        es?: {
+            media?: {
+                type?: "img" | "video";
+                url?: string;
+            };
+            summary?: string;
         };
     }, {
-        id?: string;
-        summary?: string;
-        howToIdentifyImpactedPeople?: string;
         location?: {
             id?: string;
             structuredFormatting?: {
@@ -549,24 +872,38 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             }[];
             types?: string[];
         };
+        id?: string;
         media?: {
             type?: "img" | "video";
             url?: string;
         };
-        makerId?: string;
+        summary?: string;
+        validation?: {
+            validator?: string;
+            validated?: boolean;
+        };
+        locale?: "en" | "es";
         createdAt?: Date;
         ratings?: {
             sum?: number;
             count?: number;
         };
-        validation?: {
-            validator?: string;
-            validated?: boolean;
+        makerId?: string;
+        en?: {
+            media?: {
+                type?: "img" | "video";
+                url?: string;
+            };
+            summary?: string;
+        };
+        es?: {
+            media?: {
+                type?: "img" | "video";
+                url?: string;
+            };
+            summary?: string;
         };
     }>, {
-        id?: string;
-        summary?: string;
-        howToIdentifyImpactedPeople?: string;
         location?: {
             id?: string;
             structuredFormatting?: {
@@ -579,29 +916,44 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             }[];
             types?: string[];
         };
+        id?: string;
         media?: {
             type?: "img" | "video";
             url?: string;
         };
-        makerId?: string;
+        summary?: string;
+        validation?: {
+            validator?: string;
+            validated?: boolean;
+        };
+        locale?: "en" | "es";
         createdAt?: Date;
         ratings?: {
             sum?: number;
             count?: number;
         };
-        validation?: {
-            validator?: string;
-            validated?: boolean;
+        makerId?: string;
+        en?: {
+            media?: {
+                type?: "img" | "video";
+                url?: string;
+            };
+            summary?: string;
+        };
+        es?: {
+            media?: {
+                type?: "img" | "video";
+                url?: string;
+            };
+            summary?: string;
         };
     }, unknown>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
     type?: "action";
     data?: {
-        id?: string;
-        summary?: string;
-        howToIdentifyImpactedPeople?: string;
         location?: {
             id?: string;
             structuredFormatting?: {
@@ -614,83 +966,109 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             }[];
             types?: string[];
         };
+        id?: string;
         media?: {
             type?: "img" | "video";
             url?: string;
         };
-        makerId?: string;
+        summary?: string;
+        validation?: {
+            validator?: string;
+            validated?: boolean;
+        };
+        locale?: "en" | "es";
         createdAt?: Date;
         ratings?: {
             sum?: number;
             count?: number;
         };
-        validation?: {
-            validator?: string;
-            validated?: boolean;
+        makerId?: string;
+        en?: {
+            media?: {
+                type?: "img" | "video";
+                url?: string;
+            };
+            summary?: string;
+        };
+        es?: {
+            media?: {
+                type?: "img" | "video";
+                url?: string;
+            };
+            summary?: string;
         };
     };
 }, {
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
     type?: "action";
     data?: unknown;
 }>, z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
+    locale: z.ZodOptional<z.ZodEnum<["en", "es"]>>;
     createdAt: z.ZodOptional<z.ZodDate>;
     type: z.ZodLiteral<"socialProof">;
     data: z.ZodEffects<z.ZodObject<{
         id: z.ZodOptional<z.ZodString>;
+        locale: z.ZodOptional<z.ZodEnum<["en", "es"]>>;
+        createdAt: z.ZodOptional<z.ZodDate>;
         rating: z.ZodNumber;
         videoUrl: z.ZodOptional<z.ZodString>;
         byMaker: z.ZodString;
         forMaker: z.ZodString;
         forAction: z.ZodOptional<z.ZodString>;
-        createdAt: z.ZodOptional<z.ZodDate>;
         text: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         id?: string;
+        locale?: "en" | "es";
+        createdAt?: Date;
         rating?: number;
         videoUrl?: string;
         byMaker?: string;
         forMaker?: string;
         forAction?: string;
-        createdAt?: Date;
         text?: string;
     }, {
         id?: string;
+        locale?: "en" | "es";
+        createdAt?: Date;
         rating?: number;
         videoUrl?: string;
         byMaker?: string;
         forMaker?: string;
         forAction?: string;
-        createdAt?: Date;
         text?: string;
     }>, {
         id?: string;
+        locale?: "en" | "es";
+        createdAt?: Date;
         rating?: number;
         videoUrl?: string;
         byMaker?: string;
         forMaker?: string;
         forAction?: string;
-        createdAt?: Date;
         text?: string;
     }, unknown>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
     type?: "socialProof";
     data?: {
         id?: string;
+        locale?: "en" | "es";
+        createdAt?: Date;
         rating?: number;
         videoUrl?: string;
         byMaker?: string;
         forMaker?: string;
         forAction?: string;
-        createdAt?: Date;
         text?: string;
     };
 }, {
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
     type?: "socialProof";
     data?: unknown;
@@ -700,6 +1078,7 @@ export declare const sponsorshipLevel: z.ZodEnum<["admirer", "fan", "lover", "cu
 export type SponsorshipLevel = z.infer<typeof sponsorshipLevel>;
 export declare const sponsorship: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
+    locale: z.ZodOptional<z.ZodEnum<["en", "es"]>>;
     createdAt: z.ZodOptional<z.ZodDate>;
     stripeSubscriptionItem: z.ZodUnion<[z.ZodString, z.ZodEnum<["incomplete"]>]>;
     stripePrice: z.ZodString;
@@ -712,8 +1091,10 @@ export declare const sponsorship: z.ZodObject<{
     maker: z.ZodString;
     member: z.ZodString;
     memberPublishable: z.ZodOptional<z.ZodBoolean>;
+    currency: z.ZodEnum<["cop", "usd", "eur", "gbp"]>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
     stripeSubscriptionItem?: string;
     stripePrice?: string;
@@ -726,8 +1107,10 @@ export declare const sponsorship: z.ZodObject<{
     maker?: string;
     member?: string;
     memberPublishable?: boolean;
+    currency?: "cop" | "usd" | "eur" | "gbp";
 }, {
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
     stripeSubscriptionItem?: string;
     stripePrice?: string;
@@ -740,18 +1123,22 @@ export declare const sponsorship: z.ZodObject<{
     maker?: string;
     member?: string;
     memberPublishable?: boolean;
+    currency?: "cop" | "usd" | "eur" | "gbp";
 }>;
 export type Sponsorship = z.infer<typeof sponsorship>;
 export declare const incubatee: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
+    locale: z.ZodOptional<z.ZodEnum<["en", "es"]>>;
     createdAt: z.ZodOptional<z.ZodDate>;
     acceptedInvite: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
     acceptedInvite?: boolean;
 }, {
     id?: string;
+    locale?: "en" | "es";
     createdAt?: Date;
     acceptedInvite?: boolean;
 }>;

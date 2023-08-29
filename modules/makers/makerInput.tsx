@@ -119,7 +119,7 @@ const DetailedInput: FC<DetailedInputProps<Maker>> = ({
   const inputTranslations = useTranslations("input");
 
   const detailedInput = useMemo(() => {
-    return val[locale];
+    return val ? val[locale] : undefined;
   }, [locale, val]);
 
   const setPartialDetailedInput: Dispatch<
@@ -132,6 +132,7 @@ const DetailedInput: FC<DetailedInputProps<Maker>> = ({
             prevState: MakerPresentationExtension
           ) => MakerPresentationExtension)
     ): void => {
+      if (!setVal) return;
       // localized
       setVal((maker) => {
         const prevValue = maker[locale] || {};
@@ -177,7 +178,7 @@ const DetailedInput: FC<DetailedInputProps<Maker>> = ({
   //TODO(techiejd): Fix videos story. All the videos should have refs (not just links) and the metadata should include maker id.
 
   const targetedQuestion =
-    val.organizationType == organizationType.Enum.incubator ? (
+    val?.organizationType == organizationType.Enum.incubator ? (
       <Section
         label={detailedInputTranslations(
           "incubator.whatIsYourValidationProcess"
@@ -208,7 +209,7 @@ const DetailedInput: FC<DetailedInputProps<Maker>> = ({
       <Section
         label={detailedInputTranslations(
           "nonFinancialHelp.whatOtherHelpDoYouNeed",
-          { makerType: val.type }
+          { makerType: val?.type }
         )}
       >
         <TextField
@@ -236,7 +237,7 @@ const DetailedInput: FC<DetailedInputProps<Maker>> = ({
     <Stack spacing={2} sx={sectionStyles}>
       <Section
         label={detailedInputTranslations("story.title", {
-          makerType: val.type,
+          makerType: val?.type,
         })}
       >
         <Stack spacing={2}>

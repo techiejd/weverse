@@ -11,7 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.incubatee = exports.sponsorship = exports.sponsorshipLevel = exports.content = exports.posiFormData = exports.socialProof = exports.like = exports.member = exports.maker = exports.ratings = exports.organizationType = exports.makerType = exports.media = exports.mediaType = exports.formUrl = exports.timeStamp = void 0;
+exports.incubatee = exports.sponsorship = exports.sponsorshipLevel = exports.content = exports.posiFormData = exports.actionPresentationExtension = exports.socialProof = exports.like = exports.member = exports.maker = exports.createNestedLocalizedSchema = exports.locale = exports.ratings = exports.organizationType = exports.makerType = exports.media = exports.mediaType = exports.formUrl = exports.timeStamp = void 0;
 const zod_1 = require("zod");
 exports.timeStamp = zod_1.z.any().transform((val, ctx) => {
     if (val instanceof Date) {
@@ -45,25 +45,40 @@ const howToSupport = zod_1.z.object({
     contact: zod_1.z.string().max(500).optional(),
 });
 exports.ratings = zod_1.z.object({ sum: zod_1.z.number(), count: zod_1.z.number() });
-// TODO(techiejd): go through and extend all the db ones.
+exports.locale = zod_1.z.enum(["en", "es"]);
 const dbBase = zod_1.z.object({
     id: zod_1.z.string().optional(),
+    locale: exports.locale.optional(),
     createdAt: zod_1.z.date().optional(), // from db iff exists
 });
-exports.maker = zod_1.z.object({
-    id: zod_1.z.string().optional(),
-    ownerId: zod_1.z.string().or(zod_1.z.enum(["invited"])),
-    type: exports.makerType,
-    pic: exports.formUrl.optional(),
-    name: zod_1.z.string().min(1),
-    organizationType: exports.organizationType.optional(),
-    createdAt: zod_1.z.date().optional(),
+const makerPresentationExtension = zod_1.z.object({
+    presentationVideo: exports.formUrl.optional(),
     howToSupport: howToSupport.optional(),
     about: zod_1.z.string().optional(),
-    ratings: exports.ratings.optional(),
+    validationProcess: zod_1.z.string().optional(),
+});
+function createNestedLocalizedSchema(itemSchema) {
+    // Look into a way to make these keys programmaticly
+    return zod_1.z.object({
+        en: itemSchema,
+        es: itemSchema,
+    });
+}
+exports.createNestedLocalizedSchema = createNestedLocalizedSchema;
+exports.maker = dbBase
+    .extend({
+    ownerId: zod_1.z.string().or(zod_1.z.enum(["invited"])),
+    type: exports.makerType,
+    organizationType: exports.organizationType.optional(),
+    name: zod_1.z.string().min(1),
+    pic: exports.formUrl.optional(),
     email: zod_1.z.string().optional(),
     incubator: zod_1.z.string().optional(),
-});
+    ratings: exports.ratings.optional(),
+})
+    .merge(makerPresentationExtension)
+    .merge(createNestedLocalizedSchema(makerPresentationExtension.optional()));
+const currency = zod_1.z.enum(["cop", "usd", "eur", "gbp"]);
 const customer = zod_1.z.object({
     firstName: zod_1.z.string().min(1),
     lastName: zod_1.z.string().min(1),
@@ -74,6 +89,7 @@ const customer = zod_1.z.object({
         country: zod_1.z.string().min(1),
         countryCode: zod_1.z.string().min(1),
     }),
+    currency: currency,
 });
 const stripe = zod_1.z.object({
     customer: zod_1.z.string().min(1),
@@ -81,28 +97,21 @@ const stripe = zod_1.z.object({
     billingCycleAnchor: exports.timeStamp.optional(),
     status: zod_1.z.enum(["active", "incomplete", "canceled"]),
 });
-exports.member = zod_1.z.object({
+exports.member = dbBase.extend({
     makerId: zod_1.z.string(),
-    id: zod_1.z.string().optional(),
-    createdAt: zod_1.z.date().optional(),
     customer: customer.optional(),
     stripe: stripe.optional(),
     pic: exports.formUrl.optional(),
     name: zod_1.z.string().min(1).optional(),
 });
 // This is an edge.
-exports.like = zod_1.z.object({
-    id: zod_1.z.string().optional(),
-    createdAt: zod_1.z.date().optional(),
-});
-exports.socialProof = zod_1.z.object({
-    id: zod_1.z.string().optional(),
+exports.like = dbBase;
+exports.socialProof = dbBase.extend({
     rating: zod_1.z.number(),
     videoUrl: exports.formUrl.optional(),
     byMaker: zod_1.z.string(),
     forMaker: zod_1.z.string(),
     forAction: zod_1.z.string().optional(),
-    createdAt: zod_1.z.date().optional(),
     text: zod_1.z.string().optional(),
 });
 // related to
@@ -155,17 +164,20 @@ const validation = zod_1.z.object({
 });
 // TODO(techiejd): Reshape db. It should go posi
 // {action: Action, impacts: Impact[], makerId}
-exports.posiFormData = zod_1.z.object({
-    id: zod_1.z.string().optional(),
-    summary: zod_1.z.string().min(1),
-    howToIdentifyImpactedPeople: zod_1.z.string().min(1).optional(),
-    location: location.optional(),
+exports.actionPresentationExtension = zod_1.z.object({
     media: exports.media,
+    summary: zod_1.z.string().min(1),
+});
+exports.posiFormData = dbBase
+    .extend({
     makerId: zod_1.z.string(),
-    createdAt: zod_1.z.date().optional(),
+    location: location.optional(),
     ratings: exports.ratings.optional(),
     validation: validation.optional(),
-});
+    // retired - howToIdentifyImpactedPeople: z.string().min(1).optional(),
+})
+    .merge(exports.actionPresentationExtension)
+    .merge(createNestedLocalizedSchema(exports.actionPresentationExtension.optional()));
 const parseDBInfo = (zAny) => zod_1.z.preprocess((val) => {
     const _a = zod_1.z.object({}).passthrough().parse(val), { createdAt } = _a, others = __rest(_a, ["createdAt"]);
     return Object.assign({ createdAt: createdAt ? createdAt.toDate() : undefined }, others);
@@ -195,6 +207,7 @@ exports.sponsorship = dbBase.extend({
     maker: zod_1.z.string(),
     member: zod_1.z.string(),
     memberPublishable: zod_1.z.boolean().optional(),
+    currency: currency,
 });
 exports.incubatee = dbBase.extend({
     acceptedInvite: zod_1.z.boolean().optional(),
