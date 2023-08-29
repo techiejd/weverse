@@ -27,16 +27,15 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
   const localeIn = useLocale();
   const onSubmit = useCallback(
     async (usersPosi: PosiFormData) => {
-      console.log({ usersPosi, localeIn });
       const docRef = await addDoc(
         collection(appState.firestore, "impacts").withConverter(
           posiFormDataConverter
         ),
-        { ...usersPosi, locale: locale.parse(localeIn) }
+        usersPosi
       );
       router.push(`/posi/${docRef.id}/impact/solicit`);
     },
-    [appState.firestore, localeIn, posiFormDataConverter, router]
+    [appState.firestore, posiFormDataConverter, router]
   );
   const t = useTranslations("actions.upload");
 
@@ -56,6 +55,7 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
         <PosiForm
           onInteraction={{ type: "create", onSubmit }}
           locale2Messages={locale2Messages}
+          initialPosi={{ locale: locale.parse(localeIn) }}
         />
       ) : (
         <LogInPrompt title={t("logInPrompt")} />
