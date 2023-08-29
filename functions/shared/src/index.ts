@@ -65,7 +65,7 @@ export type MakerPresentationExtension = z.infer<
   typeof makerPresentationExtension
 >;
 
-function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(
+export function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(
   itemSchema: ItemType
 ) {
   // Look into a way to make these keys programmaticly
@@ -189,7 +189,7 @@ export type Validation = z.infer<typeof validation>;
 
 // TODO(techiejd): Reshape db. It should go posi
 // {action: Action, impacts: Impact[], makerId}
-const actionPresentationExtension = z.object({
+export const actionPresentationExtension = z.object({
   media: media,
   summary: z.string().min(1),
 });

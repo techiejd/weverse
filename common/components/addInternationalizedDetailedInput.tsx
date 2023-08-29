@@ -17,8 +17,8 @@ type ValType = { [l in Locale]?: any } & { locale?: Locale };
 type SetValType<T extends ValType> = Dispatch<SetStateAction<T>>;
 
 export type DetailedInputProps<T extends ValType> = {
-  val: T;
-  setVal: Dispatch<SetStateAction<T>>;
+  val?: T;
+  setVal?: Dispatch<SetStateAction<T>>;
   locale: Locale;
 };
 
