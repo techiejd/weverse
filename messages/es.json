@@ -219,6 +219,10 @@
         },
         "location": {
           "title": "¿Dónde realizaste esta acción?"
+        },
+        "validator": {
+          "title": "Trabajando con tu incubadora",
+          "explanation": "Aviso: OneWe buscará la validación de tu incubadora."
         }
       }
     },

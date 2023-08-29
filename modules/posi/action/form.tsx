@@ -111,7 +111,7 @@ const PosiForm = ({
                   detailedInput={DetailedInput}
                 />
                 {myMaker && myMaker.incubator && (
-                  <Section label="Trabajando con tu incubadora">
+                  <Section label={t("sections.validator.title")}>
                     <ValidatorInput incubator={myMaker.incubator} />
                   </Section>
                 )}

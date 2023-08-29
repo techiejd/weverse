@@ -219,6 +219,10 @@
         },
         "location": {
           "title": "Where was this action done?"
+        },
+        "validator": {
+          "title": "Working with your incubator",
+          "explanation": "Notice: OneWe will look for your incubator's validation."
         }
       }
     },
