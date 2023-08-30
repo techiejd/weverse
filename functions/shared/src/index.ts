@@ -43,7 +43,7 @@ export type HowToSupport = z.infer<typeof howToSupport>;
 export const ratings = z.object({ sum: z.number(), count: z.number() });
 export type Ratings = z.infer<typeof ratings>;
 
-export const locale = z.enum(["en", "es"]);
+export const locale = z.enum(["en", "es", "fr"]);
 export type Locale = z.infer<typeof locale>;
 
 const dbBase = z.object({
@@ -71,6 +71,7 @@ export function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(
   return z.object({
     en: itemSchema,
     es: itemSchema,
+    fr: itemSchema,
   });
 }
 
