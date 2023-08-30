@@ -6,7 +6,7 @@ import {
   Box,
   Dialog,
 } from "@mui/material";
-import { PosiFormData } from "../../../../functions/shared/src";
+import { Locale, PosiFormData } from "../../../../functions/shared/src";
 import Media from "../../media";
 import OverlayInfo from "./overlayInfo";
 import RatingsStack from "../../../../common/components/ratings";
@@ -14,6 +14,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import LogInPrompt from "../../../../common/components/logInPrompt";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 import ValidationInfo from "./validationInfo";
+import { useLocale } from "next-intl";
 
 const LogInPromptDialog = ({
   open,
@@ -46,7 +47,9 @@ const MemberLogInTrigger = ({
 };
 
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
-  const presentationInfo = posiData[posiData.locale!]!;
+  const localeIn = useLocale();
+  const presentationInfo =
+    posiData[localeIn as Locale] || posiData[posiData.locale!]!;
   const media =
     presentationInfo.media.type == "video"
       ? {
