@@ -29,9 +29,9 @@ import ConfirmRegistrationDialog from "./confirmRegistrationDialog";
 import { AuthAction, AuthDialogState, encodePhoneNumber } from "./context";
 import { useAppState } from "../../../common/context/appState";
 import {
-  incubateeConverter,
-  makerConverter,
-  memberConverter,
+  useIncubateeConverter,
+  useMakerConverter,
+  useMemberConverter,
 } from "../../../common/utils/firebase";
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
@@ -74,7 +74,6 @@ const CheckingUserStatusExplanation = ({
   authAction: AuthAction;
 }) => {
   const t = useTranslations("auth");
-  console.log("authAction", authAction);
   return (
     <Box>
       <Typography>
@@ -105,6 +104,9 @@ const AuthDialogContent = ({
   const inputTranslations = useTranslations("input");
   const appState = useAppState();
   const { loading: userLoading } = appState.authState;
+  const memberConverter = useMemberConverter();
+  const makerConverter = useMakerConverter();
+  const incubateeConverter = useIncubateeConverter();
   const [updateProfile, _, updateProfileError] = useUpdateProfile(
     appState.auth
   );
@@ -177,7 +179,13 @@ const AuthDialogContent = ({
         }
       });
     }
-  }, [invitedAsMaker, router, appState.firestore, authTranslations]);
+  }, [
+    invitedAsMaker,
+    router,
+    appState.firestore,
+    authTranslations,
+    makerConverter,
+  ]);
 
   const handleOtp = async (otp: string) => {
     if (authDialogState.recaptchaConfirmationResult == undefined)

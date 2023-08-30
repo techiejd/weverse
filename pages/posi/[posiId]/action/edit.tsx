@@ -5,28 +5,35 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { useAppState } from "../../../../common/context/appState";
 import PosiForm from "../../../../modules/posi/action/form";
-import { posiFormDataConverter } from "../../../../common/utils/firebase";
+import { usePosiFormDataConverter } from "../../../../common/utils/firebase";
 import { PosiFormData, posiFormData } from "../../../../functions/shared/src";
 import { useCurrentPosiId } from "../../../../modules/posi/context";
-import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
+import {
+  Locale2Messages,
+  WithTranslationsStaticProps,
+  spreadTranslationsStaticProps,
+} from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
 import { asOneWePage } from "../../../../common/components/onewePage";
 
 export const getStaticPaths = CachePaths;
-export const getStaticProps = WithTranslationsStaticProps();
+export const getStaticProps = WithTranslationsStaticProps(
+  spreadTranslationsStaticProps
+);
 
-const Edit = asOneWePage(() => {
+const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
   const editTranslations = useTranslations("actions.edit");
   const appState = useAppState();
   const router = useRouter();
   const posiId = useCurrentPosiId();
+  const posiFormDataConverter = usePosiFormDataConverter();
   const posiDocRef = doc(
     appState.firestore,
     "impacts",
     String(posiId)
   ).withConverter(posiFormDataConverter);
-  const [posi, posiLoading, posiError] = useDocumentData(posiDocRef);
+  const [posi] = useDocumentData(posiDocRef);
 
   const onUpdate = async (usersPosi: PosiFormData) => {
     const cleanedPosi = pickBy(usersPosi, identity);
@@ -60,6 +67,7 @@ const Edit = asOneWePage(() => {
         <PosiForm
           onInteraction={{ type: "update", onUpdate, onDelete: onDelete(posi) }}
           initialPosi={posi}
+          locale2Messages={locale2Messages}
         />
       ) : (
         <CircularProgress />

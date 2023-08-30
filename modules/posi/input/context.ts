@@ -1,12 +1,21 @@
 import { createContext, useContext, Dispatch, SetStateAction } from "react";
 import { z } from "zod";
-import { media, posiFormData } from "../../../functions/shared/src";
+import {
+  actionPresentationExtension,
+  createNestedLocalizedSchema,
+  media,
+  posiFormData,
+} from "../../../functions/shared/src";
 
 const workingCopyPosiFormData = posiFormData
-  .extend({
-    media: z.union([media, z.enum(["loading"])]),
-  })
-  .partial();
+  .merge(
+    createNestedLocalizedSchema(
+      actionPresentationExtension
+        .extend({ media: z.union([media, z.enum(["loading"])]) })
+        .optional()
+    )
+  )
+  .deepPartial();
 export type WorkingCopyPosiFormData = z.infer<typeof workingCopyPosiFormData>;
 
 export const PosiFormContext = createContext<WorkingCopyPosiFormData>({});

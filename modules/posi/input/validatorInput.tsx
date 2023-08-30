@@ -5,6 +5,7 @@ import ValidatorBadge, {
 } from "../../../common/components/validatorBadge";
 import { useMaker } from "../../../common/context/weverseUtils";
 import { useFormData } from "./context";
+import { useTranslations } from "next-intl";
 
 const ValidatorInput = ({ incubator }: { incubator: string }) => {
   const [formData, setFormData] = useFormData();
@@ -19,15 +20,14 @@ const ValidatorInput = ({ incubator }: { incubator: string }) => {
     }
   }, [incubator, setFormData]);
   const [validator] = useMaker(incubator);
+  const t = useTranslations("actions.upload.sections.validator");
   return (
     <CardActionArea
       onClick={() => setValidationProcessDialogOpen(true)}
       disabled={!validator}
     >
       <Box sx={{ p: 2 }}>
-        <Typography>
-          Aviso: OneWe buscará la validación de tu incubadora.
-        </Typography>
+        <Typography>{t("explanation")}</Typography>
         <ValidationProcessDialog
           open={validationProcessDialogOpen}
           setOpen={setValidationProcessDialogOpen}

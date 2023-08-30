@@ -1,51 +1,84 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app";
 import {
   FirestoreDataConverter,
   WithFieldValue,
   DocumentData,
   serverTimestamp,
   QueryDocumentSnapshot,
-  Timestamp,
-  FieldValue
 } from "firebase/firestore";
-import { maker, socialProof, member, posiFormData, like, DbBase, content, sponsorship, incubatee } from '../../functions/shared/src';
-import { z } from 'zod';
+import {
+  maker,
+  socialProof,
+  member,
+  posiFormData,
+  like,
+  DbBase,
+  content,
+  sponsorship,
+  incubatee,
+} from "../../functions/shared/src";
+import { z } from "zod";
+import { useRouter } from "next/router";
+import { useMemo } from "react";
 
 export const creds = {
   apiKey: String(process.env.NEXT_PUBLIC_REACT_APP_API_KEY),
   authDomain: String(process.env.NEXT_PUBLIC_REACT_APP_AUTH_DOMAIN),
   projectId: String(process.env.NEXT_PUBLIC_REACT_APP_PROJECT_ID),
   storageBucket: String(process.env.NEXT_PUBLIC_REACT_APP_STORAGE_BUCKET),
-  messagingSenderId: String(process.env.NEXT_PUBLIC_REACT_APP_MESSAGING_SENDER_ID),
+  messagingSenderId: String(
+    process.env.NEXT_PUBLIC_REACT_APP_MESSAGING_SENDER_ID
+  ),
   appId: String(process.env.NEXT_PUBLIC_REACT_APP_ID),
   measurementId: String(process.env.NEXT_PUBLIC_REACT_APP_MEASUREMENT_ID),
 };
 
 export const app = initializeApp(creds);
 
-const makeDataConverter =
-<T extends z.ZodType<DbBase>>(zAny: T) :
- FirestoreDataConverter<z.infer<typeof zAny>> => ({
-    toFirestore: (data: WithFieldValue<z.infer<typeof zAny>>): DocumentData => {
-      const {id, createdAt, ...others} = data;
-      return {...others, createdAt: createdAt ? createdAt : serverTimestamp()};
-    },
-    fromFirestore: (snapshot: QueryDocumentSnapshot): z.infer<typeof zAny> => {
-      const data = snapshot.data();
-      // anything with serverTimestamp does not exist atm if pending writes.
-      return zAny.parse({
-        ...data,
-        id: snapshot.id,
-        createdAt: data.createdAt ? data.createdAt.toDate() : undefined,
-      });
-    },
-  });
+const createUseLocalizedDataConverterFor = <T extends z.ZodType<DbBase>>(
+  zAny: T
+): (() => FirestoreDataConverter<z.infer<typeof zAny>>) => {
+  const useLocalizedDataConverter = () => {
+    const { locale: localeIn } = useRouter();
+    return useMemo(
+      () => ({
+        toFirestore: (
+          data: WithFieldValue<z.infer<typeof zAny>>
+        ): DocumentData => {
+          const { locale, createdAt, ...others } = data;
+          const localizedData = {
+            ...others,
+            createdAt: createdAt ? createdAt : serverTimestamp(),
+            locale: locale ? locale : localeIn ?? "undefined", // Add the locale field to the data being sent
+          };
+          return localizedData;
+        },
+        fromFirestore: (
+          snapshot: QueryDocumentSnapshot
+        ): z.infer<typeof zAny> => {
+          const data = snapshot.data();
+          return zAny.parse({
+            ...data,
+            id: snapshot.id,
+            createdAt: data.createdAt ? data.createdAt.toDate() : undefined,
+          });
+        },
+      }),
+      [localeIn]
+    );
+  };
+  return useLocalizedDataConverter;
+};
 
-export const makerConverter = makeDataConverter(maker);
-export const socialProofConverter = makeDataConverter(socialProof);
-export const memberConverter = makeDataConverter(member);
-export const posiFormDataConverter = makeDataConverter(posiFormData);
-export const likeConverter = makeDataConverter(like);
-export const contentConverter = makeDataConverter(content);
-export const sponsorshipConverter = makeDataConverter(sponsorship);
-export const incubateeConverter = makeDataConverter(incubatee);
+export const useMakerConverter = createUseLocalizedDataConverterFor(maker);
+export const useSocialProofConverter =
+  createUseLocalizedDataConverterFor(socialProof);
+export const useMemberConverter = createUseLocalizedDataConverterFor(member);
+export const usePosiFormDataConverter =
+  createUseLocalizedDataConverterFor(posiFormData);
+export const useLikeConverter = createUseLocalizedDataConverterFor(like);
+export const useContentConverter = createUseLocalizedDataConverterFor(content);
+export const useSponsorshipConverter =
+  createUseLocalizedDataConverterFor(sponsorship);
+export const useIncubateeConverter =
+  createUseLocalizedDataConverterFor(incubatee);

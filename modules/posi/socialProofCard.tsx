@@ -9,9 +9,10 @@ import {
   CardActionArea,
   Typography,
 } from "@mui/material";
-import { SocialProof } from "../../functions/shared/src";
+import { Locale, SocialProof } from "../../functions/shared/src";
 import { useAction, useMaker } from "../../common/context/weverseUtils";
 import Media from "./media";
+import { useRouter } from "next/router";
 
 const SocialProofCard = ({
   socialProof,
@@ -45,16 +46,20 @@ const SocialProofCard = ({
     );
   };
   const SocialProofCardContent = () => {
-    const [action, actionLoading, actionError] = useAction(
-      showAction ? socialProof.forAction : undefined
-    );
-    const [forMaker, forMakerLoading, forMakerError] = useMaker(
-      showMaker ? socialProof.forMaker : undefined
-    );
+    const [action] = useAction(showAction ? socialProof.forAction : undefined);
+    const [forMaker] = useMaker(showMaker ? socialProof.forMaker : undefined);
+    const { locale: userLocale } = useRouter();
+    const presentationInfo =
+      (action &&
+        ((userLocale && action[userLocale as Locale]) ||
+          action[action?.locale!]!)) ||
+      undefined;
     return (
       <CardContent>
         {socialProof.text && <Typography>{socialProof.text}</Typography>}
-        {action && <Typography>Por la acción: {action.summary}</Typography>}
+        {action && (
+          <Typography>Por la acción: {presentationInfo?.summary}</Typography>
+        )}
         {forMaker && (
           <Typography>Para el o la Maker: {forMaker.name}</Typography>
         )}

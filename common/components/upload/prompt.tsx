@@ -7,6 +7,7 @@ import LogInPrompt from "../logInPrompt";
 import { useEffect, useState } from "react";
 import { useAppState } from "../../context/appState";
 import { useTranslations } from "next-intl";
+import { sectionStyles } from "../theme";
 
 const UploadSocialProofPrompt = ({
   forMaker,
@@ -60,15 +61,13 @@ const UploadSocialProofPrompt = ({
         {user && (
           <Stack
             spacing={2}
-            sx={{
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "#f5f8ff",
-              borderRadius: 2,
-              border: 1,
-              borderColor: "#d9e1ec",
-              p: 2,
-            }}
+            sx={[
+              sectionStyles,
+              {
+                justifyContent: "center",
+                alignItems: "center",
+              },
+            ]}
           >
             <Typography>{promptTranslations("share")}</Typography>
             <Button

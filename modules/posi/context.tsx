@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { collection, query, where } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useAction } from "../../common/context/weverseUtils";
-import { socialProofConverter } from "../../common/utils/firebase";
+import { useSocialProofConverter } from "../../common/utils/firebase";
 import { useAppState } from "../../common/context/appState";
 
 export const useCurrentPosiId = () => {
@@ -20,6 +20,7 @@ export const useCurrentPosi = () => {
 export const useCurrentSocialProofs = () => {
   const appState = useAppState();
   const posiId = useCurrentPosiId();
+  const socialProofConverter = useSocialProofConverter();
   return useCollectionData(
     posiId
       ? query(

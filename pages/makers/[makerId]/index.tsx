@@ -68,7 +68,7 @@ import {
   useCopyToClipboard,
 } from "../../../modules/makers/inviteAsMaker";
 import UnderConstruction from "../../../modules/posi/underConstruction";
-import { posiFormDataConverter } from "../../../common/utils/firebase";
+import { usePosiFormDataConverter } from "../../../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../../../common/utils/translations";
 import { CachePaths } from "../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
@@ -162,6 +162,7 @@ const IncubatorSection = () => {
 
   const ValidateActionPortal = ({ action }: { action: PosiFormData }) => {
     const [validating, setValidating] = useState(false);
+    const posiFormDataConverter = usePosiFormDataConverter();
     return (
       <Card>
         <CardHeader title={incubatorTranslations("isThisActionValid")} />
@@ -194,6 +195,8 @@ const IncubatorSection = () => {
     );
   };
 
+  const presentationInfo = maker ? maker[maker.locale!] : undefined;
+
   return (
     <Fragment>
       <Typography variant="h2" sx={{ fontSize: "bold" }}>
@@ -203,7 +206,7 @@ const IncubatorSection = () => {
         {incubatorTranslations("validationProcess.title")}
       </Typography>
       <Typography sx={{ whiteSpace: "pre-wrap" }}>
-        {maker?.validationProcess ||
+        {presentationInfo?.validationProcess ||
           incubatorTranslations("validationProcess.none")}
       </Typography>
       {isMyMaker && (
@@ -263,11 +266,13 @@ const IncubatorSection = () => {
 
 const AboutSection = ({ maker }: { maker?: Maker }) => {
   const aboutTranslations = useTranslations("makers.about");
-  const noAboutInfo = !maker?.presentationVideo && !maker?.about;
+  const presentationInfo = maker ? maker[maker.locale!] : undefined;
+  const noAboutInfo =
+    !presentationInfo?.presentationVideo && !presentationInfo?.about;
   return (
     <Fragment>
       <Typography variant="h2">{aboutTranslations("title")}</Typography>
-      {maker?.presentationVideo && (
+      {presentationInfo?.presentationVideo && (
         <Box
           sx={{
             height: "50vh",
@@ -282,13 +287,13 @@ const AboutSection = ({ maker }: { maker?: Maker }) => {
               controlsList:
                 "play volume fullscreen nodownload noplaybackrate notimeline",
               disablePictureInPicture: true,
-              src: maker.presentationVideo,
+              src: presentationInfo.presentationVideo,
             }}
           />
         </Box>
       )}
       <Typography>
-        {noAboutInfo ? aboutTranslations("none") : maker.about}
+        {noAboutInfo ? aboutTranslations("none") : presentationInfo.about}
       </Typography>
     </Fragment>
   );
@@ -530,6 +535,7 @@ const BottomBar = () => {
       <Typography fontSize={12}>{bottomBarTranslations("invite")}</Typography>
     </CenterBottomFab>
   );
+  const presentationInfo = maker ? maker[maker.locale!] : undefined;
   return maker == undefined ? (
     <CenterBottomCircularProgress />
   ) : myMaker && myMaker.id == maker.id ? (
@@ -541,7 +547,9 @@ const BottomBar = () => {
       <SolicitDialog
         open={solicitDialogOpen}
         setOpen={setSolicitDialogOpen}
-        howToSupport={maker.howToSupport ? maker.howToSupport : {}}
+        howToSupport={
+          presentationInfo?.howToSupport ? presentationInfo?.howToSupport : {}
+        }
         solicitOpinionPath={`/makers/${maker.id}/impact/upload`}
         pathUnderSupport={`/makers/${maker.id}`}
         editMakerPath={`/makers/${maker.id}/edit`}

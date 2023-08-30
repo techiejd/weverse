@@ -24,7 +24,7 @@ import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import Image from "next/image";
 import LinkBehavior from "../utils/linkBehavior";
 import { useMyMaker } from "../context/weverseUtils";
-import { useMessages, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
 export const MenuComponent = (props: BoxProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

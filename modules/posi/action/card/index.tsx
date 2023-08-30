@@ -6,7 +6,7 @@ import {
   Box,
   Dialog,
 } from "@mui/material";
-import { PosiFormData } from "../../../../functions/shared/src";
+import { Locale, PosiFormData } from "../../../../functions/shared/src";
 import Media from "../../media";
 import OverlayInfo from "./overlayInfo";
 import RatingsStack from "../../../../common/components/ratings";
@@ -14,6 +14,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import LogInPrompt from "../../../../common/components/logInPrompt";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 import ValidationInfo from "./validationInfo";
+import { useLocale } from "next-intl";
 
 const LogInPromptDialog = ({
   open,
@@ -46,19 +47,22 @@ const MemberLogInTrigger = ({
 };
 
 const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
+  const localeIn = useLocale();
+  const presentationInfo =
+    posiData[localeIn as Locale] || posiData[posiData.locale!]!;
   const media =
-    posiData.media.type == "video"
+    presentationInfo.media.type == "video"
       ? {
           video: {
             threshold: 0.9,
             muted: true,
             disablePictureInPicture: true,
-            src: posiData.media.url,
+            src: presentationInfo.media.url,
             controls: false,
             objectFit: "cover" as "cover",
           },
         }
-      : { image: { src: posiData.media.url } };
+      : { image: { src: presentationInfo.media.url } };
   const [logInPromptDialogOpen, setLogInPromptDialogOpen] = useState(false);
   return (
     <Card
@@ -108,7 +112,7 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
               fontSize: 18,
             }}
           >
-            {posiData.summary}
+            {presentationInfo.summary}
           </Typography>
           <RatingsStack ratings={posiData.ratings} />
           {posiData.validation && <ValidationInfo {...posiData.validation} />}

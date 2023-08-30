@@ -4,28 +4,27 @@ import Hearing from "@mui/icons-material/Hearing";
 import { doc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useAppState } from "../../../../common/context/appState";
-import {
-  makerConverter,
-  posiFormDataConverter,
-} from "../../../../common/utils/firebase";
-import { useCurrentPosiId } from "../../../../modules/posi/context";
+import { useMakerConverter } from "../../../../common/utils/firebase";
+import { useCurrentPosi } from "../../../../modules/posi/context";
 import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
 import { asOneWePage } from "../../../../common/components/onewePage";
+import { useRouter } from "next/router";
+import { Locale } from "../../../../functions/shared/src";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 const Solicit = asOneWePage(() => {
-  const posiId = useCurrentPosiId();
   const appState = useAppState();
+  const makerConverter = useMakerConverter();
 
-  const posiDocRef = doc(
-    appState.firestore,
-    "impacts",
-    String(posiId)
-  ).withConverter(posiFormDataConverter);
-  const [posi, posiLoading, posiError] = useDocumentData(posiDocRef);
+  const [posi] = useCurrentPosi();
+  const { locale: userLocale } = useRouter();
+  const presentationInfo =
+    (posi &&
+      ((userLocale && posi[userLocale as Locale]) || posi[posi?.locale!]!)) ||
+    undefined;
   const t = useTranslations("actions.impact.solicit");
   const PromptMaker = ({ makerId }: { makerId: string }) => {
     const makerDocRef = doc(
@@ -50,8 +49,8 @@ const Solicit = asOneWePage(() => {
       <PromptMaker makerId={posi.makerId!} />
       <ShareActionArea
         shareProps={{
-          title: t("solicitText", { for: posi.summary }),
-          path: `/posi/${posiId}/impact/upload`,
+          title: t("solicitText", { for: presentationInfo?.summary }),
+          path: `/posi/${presentationInfo}/impact/upload`,
         }}
       >
         <Hearing sx={{ fontSize: 160 }} />

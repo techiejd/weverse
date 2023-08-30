@@ -43,29 +43,49 @@ export type HowToSupport = z.infer<typeof howToSupport>;
 export const ratings = z.object({ sum: z.number(), count: z.number() });
 export type Ratings = z.infer<typeof ratings>;
 
-// TODO(techiejd): go through and extend all the db ones.
+export const locale = z.enum(["en", "es"]);
+export type Locale = z.infer<typeof locale>;
+
 const dbBase = z.object({
   id: z.string().optional(),
+  locale: locale.optional(),
   createdAt: z.date().optional(), // from db iff exists
 });
 export type DbBase = z.infer<typeof dbBase>;
 
-export const maker = z.object({
-  id: z.string().optional(),
-  ownerId: z.string().or(z.enum(["invited"])),
-  type: makerType,
-  pic: formUrl.optional(),
+const makerPresentationExtension = z.object({
   presentationVideo: formUrl.optional(),
-  name: z.string().min(1),
-  organizationType: organizationType.optional(),
-  createdAt: z.date().optional(),
   howToSupport: howToSupport.optional(),
   about: z.string().optional(),
-  ratings: ratings.optional(),
-  email: z.string().optional(),
-  incubator: z.string().optional(),
   validationProcess: z.string().optional(),
 });
+
+export type MakerPresentationExtension = z.infer<
+  typeof makerPresentationExtension
+>;
+
+export function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(
+  itemSchema: ItemType
+) {
+  // Look into a way to make these keys programmaticly
+  return z.object({
+    en: itemSchema,
+    es: itemSchema,
+  });
+}
+
+export const maker = dbBase
+  .extend({
+    ownerId: z.string().or(z.enum(["invited"])),
+    type: makerType,
+    organizationType: organizationType.optional(),
+    name: z.string().min(1),
+    pic: formUrl.optional(),
+    email: z.string().optional(),
+    incubator: z.string().optional(),
+    ratings: ratings.optional(),
+  })
+  .merge(createNestedLocalizedSchema(makerPresentationExtension.optional()));
 export type Maker = z.infer<typeof maker>;
 
 const currency = z.enum(["cop", "usd", "eur", "gbp"]);
@@ -91,10 +111,8 @@ const stripe = z.object({
   status: z.enum(["active", "incomplete", "canceled"]),
 });
 
-export const member = z.object({
+export const member = dbBase.extend({
   makerId: z.string(),
-  id: z.string().optional(),
-  createdAt: z.date().optional(),
   customer: customer.optional(),
   stripe: stripe.optional(),
   pic: formUrl.optional(),
@@ -103,20 +121,15 @@ export const member = z.object({
 export type Member = z.infer<typeof member>;
 
 // This is an edge.
-export const like = z.object({
-  id: z.string().optional(),
-  createdAt: z.date().optional(),
-});
+export const like = dbBase;
 export type Like = z.infer<typeof like>;
 
-export const socialProof = z.object({
-  id: z.string().optional(),
+export const socialProof = dbBase.extend({
   rating: z.number(),
   videoUrl: formUrl.optional(),
   byMaker: z.string(),
   forMaker: z.string(),
   forAction: z.string().optional(),
-  createdAt: z.date().optional(),
   text: z.string().optional(),
 });
 
@@ -175,17 +188,20 @@ export type Validation = z.infer<typeof validation>;
 
 // TODO(techiejd): Reshape db. It should go posi
 // {action: Action, impacts: Impact[], makerId}
-export const posiFormData = z.object({
-  id: z.string().optional(), // If it exists, then it exists in the db.
-  summary: z.string().min(1),
-  // retired - howToIdentifyImpactedPeople: z.string().min(1).optional(),
-  location: location.optional(),
+export const actionPresentationExtension = z.object({
   media: media,
-  makerId: z.string(), // TODO(techiejd): How many chars is the id?
-  createdAt: z.date().optional(),
-  ratings: ratings.optional(),
-  validation: validation.optional(),
+  summary: z.string().min(1),
 });
+
+export const posiFormData = dbBase
+  .extend({
+    makerId: z.string(),
+    location: location.optional(),
+    ratings: ratings.optional(),
+    validation: validation.optional(),
+    // retired - howToIdentifyImpactedPeople: z.string().min(1).optional(),
+  })
+  .merge(createNestedLocalizedSchema(actionPresentationExtension.optional()));
 
 export type PosiFormData = z.infer<typeof posiFormData>;
 

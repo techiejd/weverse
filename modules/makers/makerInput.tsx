@@ -12,8 +12,12 @@ import {
 import {
   ChangeEvent,
   Dispatch,
+  FC,
+  Fragment,
   SetStateAction,
+  useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import Section from "../../common/components/section";
@@ -22,9 +26,22 @@ import {
   Maker,
   OrganizationType,
   Media,
+  locale,
+  Locale,
+  MakerPresentationExtension,
 } from "../../functions/shared/src";
 import { FileInput } from "../posi/input";
-import { useTranslations } from "next-intl";
+import { NextIntlClientProvider, useTranslations } from "next-intl";
+import {
+  Locale2Messages,
+  localeDisplayNames,
+} from "../../common/utils/translations";
+import { sectionStyles } from "../../common/components/theme";
+import Close from "@mui/icons-material/Close";
+import Delete from "@mui/icons-material/Delete";
+import AddInternationalizedDetailedInput, {
+  DetailedInputProps,
+} from "../../common/components/addInternationalizedDetailedInput";
 
 const OrganizationTypeInput = ({
   val,
@@ -36,7 +53,7 @@ const OrganizationTypeInput = ({
   const organizationTypeTranslations = useTranslations(
     "makers.edit.chooseMakerType.organizationType"
   );
-  const makerTypesTranslations = useTranslations("makers.types.long");
+  const makerTypesTranslations = useTranslations("makers.types");
   const inputTranslations = useTranslations("input");
   const organizationTypeChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -68,7 +85,7 @@ const OrganizationTypeInput = ({
         }}
       />
       <FormControl>
-        <FormLabel>{inputTranslations("title")}</FormLabel>
+        <FormLabel>{makerTypesTranslations("title")}</FormLabel>
         <RadioGroup
           name="chooseOrganizationType"
           onChange={organizationTypeChange}
@@ -81,7 +98,7 @@ const OrganizationTypeInput = ({
                 key={oType}
                 value={oType}
                 control={<Radio required />}
-                label={makerTypesTranslations(oType)}
+                label={makerTypesTranslations("long." + oType)}
               />
             );
           })}
@@ -91,82 +108,83 @@ const OrganizationTypeInput = ({
   );
 };
 
-const DetailedInput = ({
+const DetailedInput: FC<DetailedInputProps<Maker>> = ({
   val,
   setVal,
-}: {
-  val: Maker;
-  setVal: Dispatch<SetStateAction<Maker>>;
-}) => {
+  locale,
+}: DetailedInputProps<Maker>) => {
   const detailedInputTranslations = useTranslations(
     "makers.edit.detailedInput"
   );
   const inputTranslations = useTranslations("input");
-  const [pic, setPic] = useState<Media | undefined | "loading">(
-    val.pic ? { type: "img", url: val.pic } : undefined
+
+  const detailedInput = useMemo(() => {
+    return val ? val[locale] : undefined;
+  }, [locale, val]);
+
+  const setPartialDetailedInput: Dispatch<
+    SetStateAction<MakerPresentationExtension>
+  > = useCallback(
+    (
+      extOrCallback:
+        | MakerPresentationExtension
+        | ((
+            prevState: MakerPresentationExtension
+          ) => MakerPresentationExtension)
+    ): void => {
+      if (!setVal) return;
+      // localized
+      setVal((maker) => {
+        const prevValue = maker[locale] || {};
+        const value =
+          typeof extOrCallback == "function"
+            ? extOrCallback(prevValue)
+            : extOrCallback;
+        return {
+          ...maker,
+          [locale]: {
+            ...prevValue,
+            ...value,
+          },
+        };
+      });
+    },
+    [locale, setVal]
   );
-  useEffect(() => {
-    if (pic && pic != "loading") {
-      setVal((maker) => ({ ...maker, pic: pic.url }));
-    }
-  }, [pic, setVal]);
 
   const [presentationVideo, setPresentationVideo] = useState<
     Media | undefined | "loading"
   >(
-    val.presentationVideo
-      ? { type: "video", url: val.presentationVideo }
+    detailedInput?.presentationVideo
+      ? { type: "video", url: detailedInput.presentationVideo }
       : undefined
   );
   useEffect(() => {
     if (presentationVideo && presentationVideo != "loading") {
-      setVal((maker) => ({
-        ...maker,
-        presentationVideo: presentationVideo.url,
-      }));
+      setPartialDetailedInput({ presentationVideo: presentationVideo.url });
     }
-  }, [presentationVideo, setVal]);
+  }, [presentationVideo, setPartialDetailedInput]);
 
   const setAboutInput = (about: string) => {
-    setVal((maker) => ({ ...maker, about: about }));
+    setPartialDetailedInput({ about });
   };
 
   const setContactSupport = (contactSupport: string) => {
-    setVal((maker) => ({
-      ...maker,
-      howToSupport: { ...maker.howToSupport, contact: contactSupport },
+    setPartialDetailedInput((ext) => ({
+      howToSupport: { ...ext.howToSupport, contact: contactSupport },
     }));
   };
-  const setEmail = (email: string) => {
-    setVal((maker) => ({
-      ...maker,
-      email: email,
-    }));
-  };
-
-  const setValidationProcess = (validationProcess: string) => {
-    setVal((maker) => ({ ...maker, validationProcess }));
-  };
-
-  const askForInfoMsg = detailedInputTranslations("askForInfoMsg", {
-    makerType: val.type,
-  });
-
-  const askForImage = detailedInputTranslations("askForImage", {
-    makerType: val.type,
-  });
 
   //TODO(techiejd): Fix videos story. All the videos should have refs (not just links) and the metadata should include maker id.
 
   const targetedQuestion =
-    val.organizationType == organizationType.Enum.incubator ? (
+    val?.organizationType == organizationType.Enum.incubator ? (
       <Section
         label={detailedInputTranslations(
           "incubator.whatIsYourValidationProcess"
         )}
       >
         <TextField
-          fullWidth
           label={`${detailedInputTranslations(
             "incubator.leaveDetails"
           )} (${inputTranslations("numChars", { numChars: 500 })}).`}
@@ -177,9 +195,13 @@ const DetailedInput = ({
           helperText={detailedInputTranslations(
             "incubator.devilIsInTheDetailsReminder"
           )}
-          value={val.validationProcess ? val.validationProcess : ""}
+          value={
+            detailedInput?.validationProcess
+              ? detailedInput.validationProcess
+              : ""
+          }
           onChange={(e) => {
-            setValidationProcess(e.target.value);
+            setPartialDetailedInput({ validationProcess: e.target.value });
           }}
         />
       </Section>
@@ -187,11 +209,10 @@ const DetailedInput = ({
       <Section
         label={detailedInputTranslations(
           "nonFinancialHelp.whatOtherHelpDoYouNeed",
-          { makerType: val.type }
+          { makerType: val?.type }
         )}
       >
         <TextField
-          fullWidth
           label={`${detailedInputTranslations(
             "nonFinancialHelp.leaveContactDetails"
           )} (${inputTranslations("numChars", { numChars: 500 })}).`}
@@ -200,7 +221,11 @@ const DetailedInput = ({
           minRows={2}
           inputProps={{ maxLength: 500 }}
           helperText={detailedInputTranslations("nonFinancialHelp.helperText")}
-          value={val.howToSupport?.contact ? val.howToSupport.contact : ""}
+          value={
+            detailedInput?.howToSupport?.contact
+              ? detailedInput.howToSupport.contact
+              : ""
+          }
           onChange={(e) => {
             setContactSupport(e.target.value);
           }}
@@ -209,38 +234,10 @@ const DetailedInput = ({
     );
 
   return (
-    <Stack margin={2} spacing={2}>
-      <Typography variant="h3">{askForInfoMsg}</Typography>
-      {val.type == "organization" && (
-        <OrganizationTypeInput val={val} setVal={setVal} />
-      )}
-      <Section label={detailedInputTranslations("email")}>
-        <TextField
-          label={inputTranslations("email")}
-          type="email"
-          fullWidth
-          value={val.email ? val.email : ""}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </Section>
-
-      <Section
-        label={detailedInputTranslations("profileImage", {
-          makerType: val.type,
-        })}
-      >
-        <Typography>{askForImage}</Typography>
-        <FileInput
-          initialMedia={pic != "loading" ? pic : undefined}
-          setMedia={setPic}
-          maxFileSize={10485760 /** 10MB */}
-          accept={"img"}
-          metadata={{ makerId: "", userID: "" }}
-        />
-      </Section>
+    <Stack spacing={2} sx={sectionStyles}>
       <Section
         label={detailedInputTranslations("story.title", {
-          makerType: val.type,
+          makerType: val?.type,
         })}
       >
         <Stack spacing={2}>
@@ -275,7 +272,7 @@ const DetailedInput = ({
               minRows={3}
               inputProps={{ maxLength: 1000 }}
               helperText={detailedInputTranslations("story.blurb.helperText")}
-              value={val.about ? val.about : ""}
+              value={detailedInput?.about ? detailedInput.about : ""}
               onChange={(e) => setAboutInput(e.target.value)}
             />
           </Box>
@@ -290,10 +287,12 @@ const MakerInput = ({
   userName,
   val,
   setVal,
+  locale2Messages,
 }: {
   userName: string;
   val: Maker;
   setVal: Dispatch<SetStateAction<Maker>>;
+  locale2Messages: Locale2Messages;
 }) => {
   const makerChange = (e: ChangeEvent<HTMLInputElement>, value: string) => {
     const type = value as "individual" | "organization";
@@ -310,28 +309,90 @@ const MakerInput = ({
     "makers.edit.chooseMakerType"
   );
 
+  const setEmail = (email: string) => {
+    setVal((maker) => ({
+      ...maker,
+      email: email,
+    }));
+  };
+
+  const detailedInputTranslations = useTranslations(
+    "makers.edit.detailedInput"
+  );
+
+  const askForInfoMsg = detailedInputTranslations("askForInfoMsg", {
+    makerType: val.type,
+  });
+
+  const [pic, setPic] = useState<Media | undefined | "loading">(
+    val.pic ? { type: "img", url: val.pic } : undefined
+  );
+  useEffect(() => {
+    if (pic && pic != "loading") {
+      setVal((maker) => ({ ...maker, pic: pic.url }));
+    }
+  }, [pic, setVal]);
+  const askForImage = detailedInputTranslations("askForImage", {
+    makerType: val.type,
+  });
   return (
     <Stack alignItems={"center"}>
-      <FormControl>
-        <RadioGroup
-          name="chooseMakerType"
-          row
-          onChange={makerChange}
-          value={val.type}
+      <Stack sx={sectionStyles}>
+        <Typography variant="h2">Entity information</Typography>
+        <FormControl>
+          <RadioGroup
+            name="chooseMakerType"
+            row
+            onChange={makerChange}
+            value={val.type}
+          >
+            <FormControlLabel
+              value="individual"
+              control={<Radio required />}
+              label={chooseMakerTypeTranslations("individual")}
+            />
+            <FormControlLabel
+              value="organization"
+              control={<Radio required />}
+              label={chooseMakerTypeTranslations("organization")}
+            />
+          </RadioGroup>
+        </FormControl>
+        <Typography variant="h3">{askForInfoMsg}</Typography>
+        {val.type == "organization" && (
+          <OrganizationTypeInput val={val} setVal={setVal} />
+        )}
+        <Section label={"Whatever put yor email here"}>
+          <TextField
+            label={"email dawg"}
+            type="email"
+            fullWidth
+            value={val.email ? val.email : ""}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </Section>
+        <Section
+          label={detailedInputTranslations("profileImage", {
+            makerType: val.type,
+          })}
         >
-          <FormControlLabel
-            value="individual"
-            control={<Radio required />}
-            label={chooseMakerTypeTranslations("individual")}
+          <Typography>{askForImage}</Typography>
+          <FileInput
+            initialMedia={pic != "loading" ? pic : undefined}
+            setMedia={setPic}
+            maxFileSize={10485760 /** 10MB */}
+            accept={"img"}
+            metadata={{ makerId: "", userID: "" }}
           />
-          <FormControlLabel
-            value="organization"
-            control={<Radio required />}
-            label={chooseMakerTypeTranslations("organization")}
-          />
-        </RadioGroup>
-      </FormControl>
-      <DetailedInput val={val} setVal={setVal} />
+        </Section>
+      </Stack>
+      <DetailedInput val={val} setVal={setVal} locale={val.locale!} />
+      <AddInternationalizedDetailedInput
+        val={val}
+        setVal={setVal}
+        locale2Messages={locale2Messages}
+        detailedInput={DetailedInput}
+      />
     </Stack>
   );
 };

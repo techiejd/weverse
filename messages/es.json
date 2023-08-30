@@ -58,6 +58,7 @@
     "ok": "Listo"
   },
   "common": {
+    "loading": "Cargando",
     "motto": "Apoyando acciones que cambian el mundo",
     "logInPrompt": "Regístrate si no lo has hecho. Inicia sesión si ya estás registrado.",
     "pageTitle": {
@@ -218,6 +219,10 @@
         },
         "location": {
           "title": "¿Dónde realizaste esta acción?"
+        },
+        "validator": {
+          "title": "Trabajando con tu incubadora",
+          "explanation": "Aviso: OneWe buscará la validación de tu incubadora."
         }
       }
     },
@@ -402,6 +407,13 @@
         "unincorporated": "Voluntarios",
         "profit": "Negocio",
         "incubator": "Incubadora"
+      }
+    },
+    "myMakerPortal": {
+      "join": "¡Sumáte!",
+      "myMakerSpeedDial": {
+        "view": "Ver",
+        "mine": "Mio"
       }
     }
   },

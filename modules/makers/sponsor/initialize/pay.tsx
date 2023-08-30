@@ -19,8 +19,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { useAppState } from "../../../../common/context/appState";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 import {
-  sponsorshipConverter,
-  memberConverter,
+  useSponsorshipConverter,
+  useMemberConverter,
 } from "../../../../common/utils/firebase";
 import { Step } from "./utils";
 import Details from "../common/details";
@@ -41,7 +41,8 @@ const Pay = ({
   const appState = useAppState();
 
   const StripePortal = () => {
-    const appState = useAppState();
+    const memberConverter = useMemberConverter();
+    const sponsorshipConverter = useSponsorshipConverter();
     const stripe = useStripe();
     const elements = useElements();
     const [errorMessage, setErrorMessage] = useState("");

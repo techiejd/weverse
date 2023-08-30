@@ -1,7 +1,9 @@
 import Pending from "@mui/icons-material/Pending";
 import { Fab, Typography } from "@mui/material";
+import { useTranslations } from "next-intl";
 
 const LoadingFab = () => {
+  const t = useTranslations("common");
   return (
     <Fab
       variant="extended"
@@ -13,7 +15,7 @@ const LoadingFab = () => {
       color="primary"
     >
       <Pending sx={{ mr: 1 }} />
-      <Typography>Loading</Typography>
+      <Typography>{t("loading")}</Typography>
     </Fab>
   );
 };

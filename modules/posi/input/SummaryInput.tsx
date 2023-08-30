@@ -11,21 +11,28 @@ import {
 import { useFormData } from "./context";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useTranslations } from "next-intl";
+import { Locale } from "../../../functions/shared/src";
+import { useCallback } from "react";
 
-const SummaryInput = () => {
+const SummaryInput = ({ locale }: { locale: Locale }) => {
   const [formData, setFormData] = useFormData();
-  const setSummaryInput = (summary: string) => {
-    if (setFormData) {
-      setFormData((fD) => {
-        return { ...fD, summary: summary };
-      });
-    }
-  };
+  const setSummaryInput = useCallback(
+    (summary: string) => {
+      if (setFormData) {
+        setFormData((fD) => {
+          const localizedInfo = fD[locale] || {};
+          return { ...fD, [locale]: { ...localizedInfo, summary: summary } };
+        });
+      }
+    },
+    [locale, setFormData]
+  );
   const inputTranslations = useTranslations("input");
   const summaryTranslations = useTranslations(
     "actions.upload.sections.summary"
   );
   const maxLength = 180;
+  const presentationInfo = formData[locale];
   return (
     <Box>
       <Typography>
@@ -56,7 +63,7 @@ const SummaryInput = () => {
         fullWidth
         label={summaryTranslations("prompt")}
         inputProps={{ maxLength }}
-        value={formData.summary ? formData.summary : ""}
+        value={presentationInfo?.summary ? presentationInfo.summary : ""}
         onChange={(e) => {
           setSummaryInput(e.target.value);
         }}

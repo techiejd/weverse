@@ -1,5 +1,5 @@
 import { Box, Stack, Divider, Button, CircularProgress } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, FC, Fragment, useRef } from "react";
 import Section from "../../../common/components/section";
 import { CitySearchInput } from "../input";
 import SummaryInput from "../input/SummaryInput";
@@ -9,10 +9,20 @@ import {
   PosiFormDispatchContext,
 } from "../input/context";
 import ImpactMediaInput from "../input/impactMediaInput";
-import { PosiFormData, posiFormData } from "../../../functions/shared/src";
+import {
+  Locale,
+  PosiFormData,
+  locale,
+  posiFormData,
+} from "../../../functions/shared/src";
 import { useMyMaker } from "../../../common/context/weverseUtils";
 import ValidatorInput from "../input/validatorInput";
 import { useTranslations } from "next-intl";
+import { sectionStyles } from "../../../common/components/theme";
+import AddInternationalizedDetailedInput, {
+  DetailedInputProps,
+} from "../../../common/components/addInternationalizedDetailedInput";
+import { Locale2Messages } from "../../../common/utils/translations";
 
 type onInteractionProp =
   | { type: "create"; onSubmit: (posiFormData: PosiFormData) => Promise<void> }
@@ -22,26 +32,44 @@ type onInteractionProp =
       onDelete: () => Promise<void>;
     };
 
+const DetailedInput: FC<DetailedInputProps<WorkingCopyPosiFormData>> = (
+  props: DetailedInputProps<WorkingCopyPosiFormData>
+) => {
+  const t = useTranslations("actions.upload");
+  return (
+    <Stack sx={sectionStyles}>
+      <Section label={t("sections.media.title")}>
+        <ImpactMediaInput {...props} />
+      </Section>
+      <Section label={t("sections.summary.title")}>
+        <SummaryInput {...props} />
+      </Section>
+    </Stack>
+  );
+};
+
 const PosiForm = ({
   onInteraction,
   initialPosi = {},
+  locale2Messages,
 }: {
   onInteraction: onInteractionProp;
   initialPosi?: WorkingCopyPosiFormData;
+  locale2Messages: Locale2Messages;
 }) => {
   const [formData, setFormData] =
     useState<WorkingCopyPosiFormData>(initialPosi);
   const [uploading, setUploading] = useState(false);
 
-  const [myMaker, myMakerLoading, myMakerErrors] = useMyMaker();
+  const [myMaker] = useMyMaker();
   useEffect(() => {
     if (myMaker && setFormData) {
       setFormData((fD) => ({ ...fD, makerId: myMaker.id }));
     }
   }, [myMaker, setFormData]);
-  const t = useTranslations("actions.upload");
   const callToActionTranslations = useTranslations("common.callToAction");
 
+  const t = useTranslations("actions.upload");
   return (
     <Box>
       <form
@@ -56,48 +84,62 @@ const PosiForm = ({
           }
         }}
       >
-        <PosiFormContext.Provider value={formData}>
-          <PosiFormDispatchContext.Provider value={setFormData}>
-            <Stack
-              spacing={2}
-              margin={2}
-              divider={<Divider flexItem />}
-              alignItems={"center"}
-              justifyContent={"space-between"}
-            >
-              <Section label={t("sections.media.title")}>
-                <ImpactMediaInput />
-              </Section>
-              <Section label={t("sections.summary.title")}>
-                <SummaryInput />
-              </Section>
-              <Section label={t("sections.location.title")}>
-                <CitySearchInput />
-              </Section>
-              {myMaker && myMaker.incubator && (
-                <Section label="Trabajando con tu incubadora">
-                  <ValidatorInput incubator={myMaker.incubator} />
-                </Section>
-              )}
-              {uploading || formData.media == "loading" ? (
-                <CircularProgress />
-              ) : onInteraction.type == "create" ? (
-                <Button variant="contained" sx={{ mt: 3 }} type="submit">
-                  {t("submit")}
-                </Button>
-              ) : (
-                <Stack direction={"row"} sx={{ mt: 3 }} spacing={1}>
-                  <Button variant="outlined" onClick={onInteraction.onDelete}>
-                    {callToActionTranslations("delete")}
+        <Fragment>
+          <PosiFormContext.Provider value={formData}>
+            <PosiFormDispatchContext.Provider value={setFormData}>
+              <Stack
+                spacing={2}
+                margin={2}
+                divider={<Divider flexItem />}
+                alignItems={"center"}
+                justifyContent={"space-between"}
+              >
+                <Box sx={sectionStyles}>
+                  <Section label={t("sections.location.title")}>
+                    <CitySearchInput />
+                  </Section>
+                </Box>
+                <DetailedInput
+                  setVal={setFormData}
+                  val={formData}
+                  locale={formData.locale!}
+                />
+                <AddInternationalizedDetailedInput
+                  val={formData}
+                  setVal={setFormData}
+                  locale2Messages={locale2Messages}
+                  detailedInput={DetailedInput}
+                />
+                {myMaker && myMaker.incubator && (
+                  <Section label={t("sections.validator.title")}>
+                    <ValidatorInput incubator={myMaker.incubator} />
+                  </Section>
+                )}
+                {uploading ||
+                !!Object.keys(locale.Enum).find(
+                  (l) =>
+                    formData[l as Locale] &&
+                    formData[l as Locale]?.media == "loading"
+                ) ? (
+                  <CircularProgress />
+                ) : onInteraction.type == "create" ? (
+                  <Button variant="contained" sx={{ mt: 3 }} type="submit">
+                    {t("submit")}
                   </Button>
-                  <Button variant="contained" type="submit">
-                    {callToActionTranslations("update")}
-                  </Button>
-                </Stack>
-              )}
-            </Stack>
-          </PosiFormDispatchContext.Provider>
-        </PosiFormContext.Provider>
+                ) : (
+                  <Stack direction={"row"} sx={{ mt: 3 }} spacing={1}>
+                    <Button variant="outlined" onClick={onInteraction.onDelete}>
+                      {callToActionTranslations("delete")}
+                    </Button>
+                    <Button variant="contained" type="submit">
+                      {callToActionTranslations("update")}
+                    </Button>
+                  </Stack>
+                )}
+              </Stack>
+            </PosiFormDispatchContext.Provider>
+          </PosiFormContext.Provider>
+        </Fragment>
       </form>
     </Box>
   );

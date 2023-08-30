@@ -58,6 +58,7 @@
     "ok": "Ok"
   },
   "common": {
+    "loading": "Loading",
     "motto": "Supporting actions that change the world",
     "logInPrompt": "Register if you haven't already. Log in if you have.",
     "pageTitle": {
@@ -218,6 +219,10 @@
         },
         "location": {
           "title": "Where was this action done?"
+        },
+        "validator": {
+          "title": "Working with your incubator",
+          "explanation": "Notice: OneWe will look for your incubator's validation."
         }
       }
     },
@@ -365,7 +370,7 @@
         "email": "OneWe will communicate maker related information with you by email",
         "profileImage": "{makerType, select, individual {Select your profile picture} other {Select your organization's profile picture}}",
         "story": {
-          "title": "{makerType, select, individual {Tell us about yourself and your initiatives} other {Tell us about the organization and its intiatives.}}",
+          "title": "{makerType, select, individual {Tell us about yourself and your initiatives} other {Tell us about the organization and its intiatives}}",
           "video": {
             "title": "Presentation video:",
             "prompt": "Tell us about yourself and why you should be sponsored."
@@ -402,6 +407,13 @@
         "unincorporated": "Volunteers",
         "profit": "Business",
         "incubator": "Incubator"
+      }
+    },
+    "myMakerPortal": {
+      "join": "Join!",
+      "myMakerSpeedDial": {
+        "view": "View",
+        "mine": "Mine"
       }
     }
   },

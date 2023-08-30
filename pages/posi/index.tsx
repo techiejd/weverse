@@ -18,7 +18,7 @@ import {
 import { useAppState } from "../../common/context/appState";
 import PlusOne from "@mui/icons-material/PlusOne";
 import { PosiFormData } from "../../functions/shared/src";
-import { posiFormDataConverter } from "../../common/utils/firebase";
+import { usePosiFormDataConverter } from "../../common/utils/firebase";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useCallback, useEffect, useState } from "react";
 import ImpactCard from "../../modules/posi/action/card";
@@ -34,6 +34,7 @@ const IndexPage = () => {
   >(undefined);
   const [actions, setActions] = useState<PosiFormData[]>([]);
   const [hasMore, setHasMore] = useState(true);
+  const posiFormDataConverter = usePosiFormDataConverter();
   const batchSize = 3;
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const IndexPage = () => {
     return () => {
       ignore = true;
     };
-  }, [appState.firestore]);
+  }, [appState.firestore, posiFormDataConverter]);
 
   const next = useCallback(() => {
     if (!latestDoc) {
@@ -80,7 +81,7 @@ const IndexPage = () => {
       setHasMore(latestActions.length == batchSize);
       setActions((actions) => [...actions, ...latestActions]);
     });
-  }, [appState.firestore, setHasMore, setActions, latestDoc, setLatestDoc]);
+  }, [latestDoc, appState.firestore, posiFormDataConverter]);
 
   return (
     <InfiniteScroll

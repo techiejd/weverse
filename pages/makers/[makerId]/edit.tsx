@@ -6,32 +6,43 @@ import { useAppState } from "../../../common/context/appState";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { User } from "firebase/auth";
 import { pickBy, identity } from "lodash";
-import { makerConverter } from "../../../common/utils/firebase";
+import { useMakerConverter } from "../../../common/utils/firebase";
 import { Maker, maker as makerSchema } from "../../../functions/shared/src";
 import MakerInput from "../../../modules/makers/makerInput";
-import { WithTranslationsStaticProps } from "../../../common/utils/translations";
+import {
+  Locale2Messages,
+  WithTranslationsStaticProps,
+  spreadTranslationsStaticProps,
+} from "../../../common/utils/translations";
 import { CachePaths } from "../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
 import { asOneWePage } from "../../../common/components/onewePage";
 
 export const getStaticPaths = CachePaths;
-export const getStaticProps = WithTranslationsStaticProps();
-const Edit = asOneWePage(() => {
+export const getStaticProps = WithTranslationsStaticProps(
+  spreadTranslationsStaticProps
+);
+const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
   const editMakerTranslations = useTranslations("makers.edit");
   const appState = useAppState();
   const router = useRouter();
   const { makerId } = router.query;
 
-  const MakerForm = ({ makerId }: { makerId: string }) => {
+  const MakerForm = ({
+    makerId,
+    locale2Messages,
+  }: {
+    makerId: string;
+    locale2Messages: Locale2Messages;
+  }) => {
     const { user } = useAppState().authState;
+    const makerConverter = useMakerConverter();
     const makerDocRef = doc(
       appState.firestore,
       "makers",
       makerId
     ).withConverter(makerConverter);
-    const [maker, makerLoading, makerError] = useDocumentData(
-      makerDocRef.withConverter(makerConverter)
-    );
+    const [maker] = useDocumentData(makerDocRef.withConverter(makerConverter));
 
     const MakerFormContent = ({
       user,
@@ -58,6 +69,7 @@ const Edit = asOneWePage(() => {
             userName={user.displayName ? user.displayName : ""}
             val={maker}
             setVal={setMaker}
+            locale2Messages={locale2Messages}
           />
           <Stack
             sx={{
@@ -91,7 +103,14 @@ const Edit = asOneWePage(() => {
       <Typography variant="h2">
         {editMakerTranslations("makerDefinition")}
       </Typography>
-      {makerId ? <MakerForm makerId={String(makerId)} /> : <CircularProgress />}
+      {makerId ? (
+        <MakerForm
+          makerId={String(makerId)}
+          locale2Messages={locale2Messages}
+        />
+      ) : (
+        <CircularProgress />
+      )}
     </Stack>
   );
 });

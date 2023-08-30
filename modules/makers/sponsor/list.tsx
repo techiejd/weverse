@@ -22,6 +22,7 @@ import { Sponsorship } from "../../../functions/shared/src";
 import { feePercentage, toDisplayCurrency, currencyInfo } from "./common/utils";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
+import { sectionStyles } from "../../../common/components/theme";
 
 function useLocalizedDateFormat() {
   const router = useRouter();
@@ -173,16 +174,13 @@ const Sponsorships = ({
               </ListSubheader>
             )
           }
-          sx={{
-            border: 1,
-            p: 2,
-            m: 2,
-            backgroundColor: "#f5f8ff",
-            borderRadius: 2,
-            borderColor: "#d9e1ec",
-            width: "100%",
-            maxWidth: 500,
-          }}
+          sx={[
+            sectionStyles,
+            {
+              width: "100%",
+              maxWidth: 500,
+            },
+          ]}
         >
           {activeSponsorships.map((sponsorship) => (
             <SponsorshipDisplay
