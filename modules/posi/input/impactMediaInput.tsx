@@ -8,8 +8,6 @@ import { useTranslations } from "next-intl";
 const ImpactMediaInput = ({ locale }: { locale: Locale }) => {
   const [formData, setFormData] = useFormData();
   const presentationInfo = formData[locale];
-  console.log(formData);
-  console.log({ locale, setFormData });
 
   const updateMedia: Dispatch<SetStateAction<Media | undefined | "loading">> =
     useCallback(
@@ -21,10 +19,6 @@ const ImpactMediaInput = ({ locale }: { locale: Locale }) => {
               typeof newMediaOrFunc == "function"
                 ? newMediaOrFunc(localizedInfo.media)
                 : newMediaOrFunc;
-            console.log("fD", {
-              ...fD,
-              [locale]: { ...localizedInfo, media },
-            });
             return {
               ...fD,
               [locale]: { ...localizedInfo, media },

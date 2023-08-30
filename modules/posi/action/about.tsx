@@ -28,7 +28,6 @@ const AboutContent = ({
 }: PosiFormData) => {
   const { locale: userLocale } = useRouter();
   const t = useTranslations("actions.about");
-  console.log({ locale2PresentationInfo, userLocale, locale });
   const presentationInfo =
     (userLocale && locale2PresentationInfo[userLocale as Locale]) ||
     locale2PresentationInfo[locale!];
