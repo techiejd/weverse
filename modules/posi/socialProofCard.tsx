@@ -13,6 +13,7 @@ import { Locale, SocialProof } from "../../functions/shared/src";
 import { useAction, useMaker } from "../../common/context/weverseUtils";
 import Media from "./media";
 import { useRouter } from "next/router";
+import { useTranslations } from "next-intl";
 
 const SocialProofCard = ({
   socialProof,
@@ -24,9 +25,7 @@ const SocialProofCard = ({
   showAction?: boolean;
 }) => {
   const SocialProofCardHeader = () => {
-    const [byMaker, byMakerLoading, byMakerError] = useMaker(
-      socialProof.byMaker
-    );
+    const [byMaker] = useMaker(socialProof.byMaker);
     return (
       <CardActionArea href={`/makers/${socialProof.byMaker}`}>
         <CardHeader
@@ -54,14 +53,23 @@ const SocialProofCard = ({
         ((userLocale && action[userLocale as Locale]) ||
           action[action?.locale!]!)) ||
       undefined;
+    const cardTranslations = useTranslations("testimonials.card");
     return (
       <CardContent>
         {socialProof.text && <Typography>{socialProof.text}</Typography>}
         {action && (
-          <Typography>Por la acción: {presentationInfo?.summary}</Typography>
+          <Typography>
+            {cardTranslations("forAction", {
+              action: presentationInfo?.summary,
+            })}
+          </Typography>
         )}
         {forMaker && (
-          <Typography>Para el o la Maker: {forMaker.name}</Typography>
+          <Typography>
+            {cardTranslations("forMaker", {
+              maker: forMaker.name,
+            })}
+          </Typography>
         )}
       </CardContent>
     );

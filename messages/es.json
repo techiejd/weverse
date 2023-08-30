@@ -252,6 +252,10 @@
     }
   },
   "testimonials": {
+    "card": {
+      "forAction": "Por la acción: {action}",
+      "forMaker": "Para el o la Maker: {maker}"
+    },
     "prompt": {
       "title": "<makerNameTag>{makerName}</makerNameTag> <prompt>quiere saber ¿cómo {forAction, select, true {hizo esta acción} other {hicieron sus acciones}} un cambio en tu vida?</prompt>",
       "share": "Comparte tu testimonio sobre esta acción",

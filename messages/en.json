@@ -252,6 +252,10 @@
     }
   },
   "testimonials": {
+    "card": {
+      "forAction": "For action: {action}",
+      "forMaker": "For maker: {maker}"
+    },
     "prompt": {
       "title": "<makerNameTag>{makerName}</makerNameTag> <prompt>wants to know how their action{forAction, select, true { has} other {s have}} had an impact on your life?</prompt>",
       "share": "Share your testimonial on this action",
