@@ -45,7 +45,7 @@ const howToSupport = zod_1.z.object({
     contact: zod_1.z.string().max(500).optional(),
 });
 exports.ratings = zod_1.z.object({ sum: zod_1.z.number(), count: zod_1.z.number() });
-exports.locale = zod_1.z.enum(["en", "es"]);
+exports.locale = zod_1.z.enum(["en", "es", "fr"]);
 const dbBase = zod_1.z.object({
     id: zod_1.z.string().optional(),
     locale: exports.locale.optional(),
@@ -62,6 +62,7 @@ function createNestedLocalizedSchema(itemSchema) {
     return zod_1.z.object({
         en: itemSchema,
         es: itemSchema,
+        fr: itemSchema,
     });
 }
 exports.createNestedLocalizedSchema = createNestedLocalizedSchema;
@@ -76,7 +77,6 @@ exports.maker = dbBase
     incubator: zod_1.z.string().optional(),
     ratings: exports.ratings.optional(),
 })
-    .merge(makerPresentationExtension)
     .merge(createNestedLocalizedSchema(makerPresentationExtension.optional()));
 const currency = zod_1.z.enum(["cop", "usd", "eur", "gbp"]);
 const customer = zod_1.z.object({
@@ -176,7 +176,6 @@ exports.posiFormData = dbBase
     validation: validation.optional(),
     // retired - howToIdentifyImpactedPeople: z.string().min(1).optional(),
 })
-    .merge(exports.actionPresentationExtension)
     .merge(createNestedLocalizedSchema(exports.actionPresentationExtension.optional()));
 const parseDBInfo = (zAny) => zod_1.z.preprocess((val) => {
     const _a = zod_1.z.object({}).passthrough().parse(val), { createdAt } = _a, others = __rest(_a, ["createdAt"]);

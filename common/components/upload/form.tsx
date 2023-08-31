@@ -14,7 +14,7 @@ import { useState, useEffect } from "react";
 import { Maker, Media, socialProof } from "../../../functions/shared/src";
 import { useMyMaker } from "../../context/weverseUtils";
 import { useSocialProofConverter } from "../../utils/firebase";
-import { PosiFormData } from "../../../functions/shared/lib";
+import { PosiFormData } from "../../../functions/shared/src";
 import { useAppState } from "../../context/appState";
 import { useTranslations } from "next-intl";
 
