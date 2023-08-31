@@ -56,7 +56,7 @@ import ShareActionArea from "../../../common/components/shareActionArea";
 import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
 import CenterBottomCircularProgress from "../../../common/components/centerBottomCircularProgress";
 import CenterBottomFab from "../../../common/components/centerBottomFab";
-import { calculateVipState } from "../../../common/utils/vip";
+import { useVipState } from "../../../common/utils/vip";
 import { useRouter } from "next/router";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
 import Sponsorships from "../../../modules/makers/sponsor/list";
@@ -69,7 +69,10 @@ import {
 } from "../../../modules/makers/inviteAsMaker";
 import UnderConstruction from "../../../modules/posi/underConstruction";
 import { usePosiFormDataConverter } from "../../../common/utils/firebase";
-import { WithTranslationsStaticProps } from "../../../common/utils/translations";
+import {
+  WithTranslationsStaticProps,
+  useLocalizedPresentationInfo,
+} from "../../../common/utils/translations";
 import { CachePaths } from "../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
 import { asOneWePage } from "../../../common/components/onewePage";
@@ -195,7 +198,7 @@ const IncubatorSection = () => {
     );
   };
 
-  const presentationInfo = maker ? maker[maker.locale!] : undefined;
+  const presentationInfo = useLocalizedPresentationInfo(maker);
 
   return (
     <Fragment>
@@ -266,7 +269,7 @@ const IncubatorSection = () => {
 
 const AboutSection = ({ maker }: { maker?: Maker }) => {
   const aboutTranslations = useTranslations("makers.about");
-  const presentationInfo = maker ? maker[maker.locale!] : undefined;
+  const presentationInfo = useLocalizedPresentationInfo(maker);
   const noAboutInfo =
     !presentationInfo?.presentationVideo && !presentationInfo?.about;
   return (
@@ -401,7 +404,7 @@ const VipDialog = ({
   const vipDialogTranslations = useTranslations("makers.vip.dialog");
   const [actions] = useCurrentActions();
   const [socialProofs] = useCurrentImpacts();
-  const vipState = calculateVipState(myMaker, socialProofs, actions);
+  const vipState = useVipState(myMaker, socialProofs, actions);
   return (
     <Dialog open={open}>
       <DialogTitle>{vipDialogTranslations("title")}</DialogTitle>
@@ -515,7 +518,7 @@ const BottomBar = () => {
   const [incubateeVIPDialogOpen, setIncubateeVIPDialogOpen] = useState(false);
   const [socialProofs] = useCurrentImpacts();
   const [actions] = useCurrentActions();
-  const vipState = calculateVipState(myMaker, socialProofs, actions);
+  const vipState = useVipState(myMaker, socialProofs, actions);
   const vipButtonBehavior = maker?.incubator
     ? { onClick: () => setIncubateeVIPDialogOpen(true) }
     : vipState.entryGiven
@@ -535,7 +538,7 @@ const BottomBar = () => {
       <Typography fontSize={12}>{bottomBarTranslations("invite")}</Typography>
     </CenterBottomFab>
   );
-  const presentationInfo = maker ? maker[maker.locale!] : undefined;
+  const presentationInfo = useLocalizedPresentationInfo(maker);
   return maker == undefined ? (
     <CenterBottomCircularProgress />
   ) : myMaker && myMaker.id == maker.id ? (

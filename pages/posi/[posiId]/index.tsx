@@ -26,11 +26,13 @@ import CenterBottomCircularProgress from "../../../common/components/centerBotto
 import { Locale, Maker, PosiFormData } from "../../../functions/shared/src";
 import CenterBottomFab from "../../../common/components/centerBottomFab";
 import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
-import { WithTranslationsStaticProps } from "../../../common/utils/translations";
+import {
+  WithTranslationsStaticProps,
+  useLocalizedPresentationInfo,
+} from "../../../common/utils/translations";
 import { CachePaths } from "../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
 import { asOneWePage } from "../../../common/components/onewePage";
-import { useRouter } from "next/router";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -46,9 +48,8 @@ const AdminBottomBar = ({
   const solicitOpinionPath = `/posi/${action.id}/impact/upload`;
   const callToActionTranslations = useTranslations("common.callToAction");
   const solicitTranslations = useTranslations("actions.solicit");
-  const { locale: userLocale } = useRouter();
-  const presentationInfo =
-    (userLocale && action[userLocale as Locale]) || action[action.locale!]!;
+  const presentationInfo = useLocalizedPresentationInfo(action);
+  const makerPresentationInfo = useLocalizedPresentationInfo(myMaker);
   return (
     <AppBar
       position="fixed"
@@ -58,7 +59,7 @@ const AdminBottomBar = ({
       <SolicitDialog
         open={solicitDialogOpen}
         setOpen={setSolicitDialogOpen}
-        howToSupport={(myMaker && myMaker[myMaker.locale!]?.howToSupport) || {}}
+        howToSupport={makerPresentationInfo?.howToSupport || {}}
         solicitOpinionPath={`/posi/${action.id}/impact/upload`}
         pathUnderSupport={`/posi/${action.id}`}
         editMakerPath={`/makers/${myMaker.id}/edit`}
@@ -86,7 +87,7 @@ const AdminBottomBar = ({
           shareProps={{
             path: solicitOpinionPath,
             title: solicitTranslations("requests.opinion", {
-              summary: presentationInfo.summary,
+              summary: presentationInfo?.summary,
             }),
           }}
         >

@@ -12,25 +12,23 @@ import {
 } from "@mui/material";
 import Media from "./../media";
 import MakerCard from "../../makers/MakerCard";
-import { Locale, PosiFormData } from "../../../functions/shared/src";
+import { PosiFormData } from "../../../functions/shared/src";
 import RatingsStack from "../../../common/components/ratings";
 import ValidationInfo from "./card/validationInfo";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/router";
+import { useLocalizedPresentationInfo } from "../../../common/utils/translations";
 
 const AboutContent = ({
   location,
   makerId,
   ratings,
   validation,
-  locale,
   ...locale2PresentationInfo
 }: PosiFormData) => {
-  const { locale: userLocale } = useRouter();
   const t = useTranslations("actions.about");
-  const presentationInfo =
-    (userLocale && locale2PresentationInfo[userLocale as Locale]) ||
-    locale2PresentationInfo[locale!];
+  const presentationInfo = useLocalizedPresentationInfo(
+    locale2PresentationInfo
+  );
   return (
     (presentationInfo && (
       <Box>

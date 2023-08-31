@@ -6,12 +6,13 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useAppState } from "../../../../common/context/appState";
 import { useMakerConverter } from "../../../../common/utils/firebase";
 import { useCurrentPosi } from "../../../../modules/posi/context";
-import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
+import {
+  WithTranslationsStaticProps,
+  useLocalizedPresentationInfo,
+} from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
 import { asOneWePage } from "../../../../common/components/onewePage";
-import { useRouter } from "next/router";
-import { Locale } from "../../../../functions/shared/src";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -20,11 +21,7 @@ const Solicit = asOneWePage(() => {
   const makerConverter = useMakerConverter();
 
   const [posi] = useCurrentPosi();
-  const { locale: userLocale } = useRouter();
-  const presentationInfo =
-    (posi &&
-      ((userLocale && posi[userLocale as Locale]) || posi[posi?.locale!]!)) ||
-    undefined;
+  const presentationInfo = useLocalizedPresentationInfo(posi);
   const t = useTranslations("actions.impact.solicit");
   const PromptMaker = ({ makerId }: { makerId: string }) => {
     const makerDocRef = doc(

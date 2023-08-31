@@ -9,11 +9,11 @@ import {
   CardActionArea,
   Typography,
 } from "@mui/material";
-import { Locale, SocialProof } from "../../functions/shared/src";
+import { SocialProof } from "../../functions/shared/src";
 import { useAction, useMaker } from "../../common/context/weverseUtils";
 import Media from "./media";
-import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
+import { useLocalizedPresentationInfo } from "../../common/utils/translations";
 
 const SocialProofCard = ({
   socialProof,
@@ -47,12 +47,7 @@ const SocialProofCard = ({
   const SocialProofCardContent = () => {
     const [action] = useAction(showAction ? socialProof.forAction : undefined);
     const [forMaker] = useMaker(showMaker ? socialProof.forMaker : undefined);
-    const { locale: userLocale } = useRouter();
-    const presentationInfo =
-      (action &&
-        ((userLocale && action[userLocale as Locale]) ||
-          action[action?.locale!]!)) ||
-      undefined;
+    const presentationInfo = useLocalizedPresentationInfo(action);
     const cardTranslations = useTranslations("testimonials.card");
     return (
       <CardContent>

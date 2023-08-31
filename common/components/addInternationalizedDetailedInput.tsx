@@ -8,7 +8,14 @@ import {
   Button,
 } from "@mui/material";
 import { NextIntlClientProvider } from "next-intl";
-import { Dispatch, SetStateAction, useState, Fragment, FC } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useState,
+  Fragment,
+  FC,
+  useEffect,
+} from "react";
 import { Locale, locale } from "../../functions/shared/src";
 import { Locale2Messages, localeDisplayNames } from "../utils/translations";
 import { sectionStyles } from "./theme";
@@ -46,6 +53,9 @@ const AddInternationalizedDetailedInput = <T extends ValType>({
   const [selectedLocale, setSelectedLocale] = useState<Locale | undefined>(
     choosableLocales[0]
   );
+  useEffect(() => {
+    setSelectedLocale(choosableLocales[0]);
+  }, [choosableLocales]);
 
   // In this section, we will make a box that holds in it
   // 1. A title that says "Detailed info in other languages"

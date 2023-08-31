@@ -35,6 +35,7 @@ import { useMyMember, useMySponsorships } from "../context/weverseUtils";
 import UnderConstruction from "../../modules/posi/underConstruction";
 import LogInPrompt from "./logInPrompt";
 import { useTranslations } from "next-intl";
+import { useLocalizedPresentationInfo } from "../utils/translations";
 
 const supportDialogs = z.enum(["connect", "sponsor", "generic"]);
 export type SupportDialogs = z.infer<typeof supportDialogs>;
@@ -273,7 +274,7 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
     );
   };
 
-  const makerPresentationInfo = beneficiary.maker[beneficiary.maker.locale!];
+  const makerPresentationInfo = useLocalizedPresentationInfo(beneficiary.maker);
 
   return (
     <AppBar

@@ -1,12 +1,13 @@
 import { Maker, PosiFormData, SocialProof } from "../../functions/shared/src";
+import { useLocalizedPresentationInfo } from "./translations";
 
-export const calculateVipState = (
+export const useVipState = (
   myMaker: Maker | undefined,
   socialProofs: SocialProof[] | undefined,
   actions: PosiFormData[] | undefined
 ) => {
   const oneActionDone = actions ? actions.length > 0 : false;
-  const presentationInfo = myMaker ? myMaker[myMaker?.locale!] : undefined;
+  const presentationInfo = useLocalizedPresentationInfo(myMaker);
   const unfinishedFields = (() => {
     if (!myMaker) {
       return undefined;

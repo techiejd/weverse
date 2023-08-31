@@ -6,7 +6,7 @@ import {
   useSocialProofs,
 } from "../../common/context/weverseUtils";
 import LogInPrompt from "../../common/components/logInPrompt";
-import { calculateVipState } from "../../common/utils/vip";
+import { useVipState } from "../../common/utils/vip";
 import { useEffect } from "react";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
 import { useTranslations } from "next-intl";
@@ -19,7 +19,7 @@ const Vip = asOneWePage(() => {
   const [myMaker] = useMyMaker();
   const [socialProofs] = useSocialProofs(myMaker?.id, "maker");
   const [actions] = useActions(myMaker?.id);
-  const vipState = calculateVipState(myMaker, socialProofs, actions);
+  const vipState = useVipState(myMaker, socialProofs, actions);
   const vipTranslations = useTranslations("makers.vip");
 
   useEffect(() => {

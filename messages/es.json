@@ -193,6 +193,10 @@
         "title": "{sponsorName}, ¡Gracias por patrocinar a {beneficiaryName}!",
         "togetherYouChangeTheWorld": "Juntos cambiamos el mundo."
       }
+    },
+    "validatorBadge": {
+      "missingValidationProcess": "La incubadora no ha subido su proceso de validación",
+      "learnMore": "Ver página de la incubadora para aprender más."
     }
   },
   "actions": {

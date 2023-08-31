@@ -1,5 +1,6 @@
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { Locale, locale } from "../../functions/shared/src";
+import { useLocale } from "next-intl";
 type StaticProps = {
   [x: string | number | symbol]: unknown;
 };
@@ -43,14 +44,16 @@ export function WithTranslationsStaticProps(
 export const spreadTranslationsStaticProps = async (
   context: GetStaticPropsContext
 ) => {
-  const [en, es] = await Promise.all([
+  const [en, es, fr] = await Promise.all([
     import("../../messages/en.json"),
     import("../../messages/es.json"),
+    import("../../messages/fr.json"),
   ]);
   return {
     props: {
       en: en.default,
       es: es.default,
+      fr: fr.default,
     },
   };
 };
@@ -58,4 +61,18 @@ export const spreadTranslationsStaticProps = async (
 export const localeDisplayNames = {
   [locale.Values.en]: "English",
   [locale.Values.es]: "Español",
+  [locale.Values.fr]: "Français",
+};
+
+export const useLocalizedPresentationInfo = <T extends object>(
+  localizableObj: ({ locale?: Locale } & { [key in Locale]?: T }) | undefined
+) => {
+  const userLocale = useLocale();
+  if (!localizableObj) return undefined;
+  return (
+    (localizableObj &&
+      ((userLocale && localizableObj[userLocale as Locale]) ||
+        localizableObj[localizableObj?.locale!]!)) ||
+    undefined
+  );
 };

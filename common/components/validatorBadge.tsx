@@ -8,6 +8,8 @@ import {
   Typography,
 } from "@mui/material";
 import { Maker } from "../../functions/shared/src";
+import { useLocalizedPresentationInfo } from "../utils/translations";
+import { useTranslations } from "next-intl";
 
 const ValidationProcessDialog = ({
   validator,
@@ -18,16 +20,16 @@ const ValidationProcessDialog = ({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) => {
-  const presentationInfo = validator
-    ? validator[validator?.locale!]
-    : undefined;
+  const validatorPresentationInfo = useLocalizedPresentationInfo(validator);
+  const t = useTranslations("common.validatorBadge");
+  const inputTranslations = useTranslations("input");
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <CardContent>
         <Typography variant="h6">Proceso de validación</Typography>
         <Typography sx={{ whiteSpace: "pre-wrap" }}>
-          {presentationInfo?.validationProcess ||
-            "La incubadora no ha subido su proceso de validación"}
+          {validatorPresentationInfo?.validationProcess ||
+            t("missingValidationProcess")}
         </Typography>
         <CardActions>
           <Button
@@ -35,7 +37,7 @@ const ValidationProcessDialog = ({
             color="primary"
             href={`/makers/${validator?.id}`}
           >
-            Ver página de la incubadora.
+            {t("learnMore")}
           </Button>
           <Button
             variant="contained"
@@ -45,7 +47,7 @@ const ValidationProcessDialog = ({
               e.stopPropagation();
             }}
           >
-            Entendido
+            {inputTranslations("ok")}
           </Button>
         </CardActions>
       </CardContent>
@@ -55,11 +57,12 @@ const ValidationProcessDialog = ({
 export { ValidationProcessDialog };
 
 const ValidatorBadge = ({ validator }: { validator?: Maker }) => {
+  const t = useTranslations("common");
   return (
     <Stack direction="row" alignItems="center" spacing={0.5}>
       <Avatar src={validator?.pic} sx={{ width: 18, height: 18 }} />
       <Typography fontSize={15} fontWeight={600} color="#615F5F">
-        {validator?.name || "Espere un momento"}
+        {validator?.name || t("loading")}
       </Typography>
     </Stack>
   );
