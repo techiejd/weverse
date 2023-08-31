@@ -46,8 +46,8 @@ const IndexPage = () => {
         posiFormDataConverter
       ),
       limit(batchSize),
-      orderBy(userLocale), // Gets all documents with the field
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
+      orderBy(userLocale) // Gets all documents with the field
     );
     getDocs(firstQuery).then((snap) => {
       if (!skipFetch) {
@@ -63,7 +63,6 @@ const IndexPage = () => {
       skipFetch = true;
     };
   }, [appState.firestore, posiFormDataConverter, userLocale]);
-  console.log(userLocale);
   const next = useCallback(() => {
     if (!latestDoc) {
       return;
@@ -72,8 +71,8 @@ const IndexPage = () => {
       collection(appState.firestore, "impacts").withConverter(
         posiFormDataConverter
       ),
-      orderBy(userLocale), // Gets all documents with the field
       orderBy("createdAt", "desc"),
+      orderBy(userLocale), // Gets all documents with the field
       startAfter(latestDoc),
       limit(batchSize)
     );
