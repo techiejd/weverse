@@ -1,13 +1,7 @@
 {
   "index": {
-    "callToActionExplanations": {
-      "actions": {
-        "list": "Estas son las acciones que están cambiando el mundo",
-        "add": "¿Quieres compartir tu acción? ¡Hazlo aquí!"
-      },
-      "seeMakers": "Ellos son nuestros héroes sin capa",
-      "yourMaker": "Tú"
-    }
+    "publish": "Publicar",
+    "myPage": "Mi página"
   },
   "auth": {
     "register": "Registrarme",

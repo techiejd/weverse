@@ -1,13 +1,7 @@
 {
   "index": {
-    "callToActionExplanations": {
-      "actions": {
-        "list": "See all the actions that are changing the world",
-        "add": "Want to share your action? Do it here!"
-      },
-      "seeMakers": "See our heroes without a cape",
-      "yourMaker": "You"
-    }
+    "publish": "Publish",
+    "myPage": "My page"
   },
   "auth": {
     "register": "Register",
