@@ -1,20 +1,14 @@
 {
   "index": {
-    "callToActionExplanations": {
-      "actions": {
-        "list": "Découvrez toutes les actions qui sont en train de changer le monde",
-        "add": "Tu veux partager ton action ? Fais-le ici !"
-      },
-      "seeMakers": "Voir nos héros sans cape",
-      "yourMaker": "You"
-    }
+    "publish": "Publier",
+    "myPage": "Mon profil"
   },
   "auth": {
-    "register": "Register",
-    "validationProcess": "We will verify your phone number and you will receive a verification code to this number to finish the {action, select, 0 {login} other {registration}} process.",
-    "namePlaceholder": "What's your name?",
-    "nameHelperText": "What do you like to be called? This is how you will be known in the community.",
-    "pleaseWaitWhileWeCheckUserStatus": "One second while we verify that you are {authAction, select, 0 {already} other {not}} registered.",
+    "register": "S'inscrire",
+    "validationProcess": "Nous allons vérifier votre numéro de téléphone. Vous recevrez un code de vérification à ce numéro pour terminer l' {action, select, 0 {Connectez-vous} other {Inscription}}.",
+    "namePlaceholder": "Quel est votre nom ?",
+    "nameHelperText": "Comment voulez-vous être appelé ? C'est ainsi que vous serez connu dans la communauté.",
+    "pleaseWaitWhileWeCheckUserStatus": "Patientez quelques instants pendant que nous vérifions que vous êtes {authAction, select, 0 {déjà} other {pas}} enregistré.",
     "userRegisteredError": "Hi, you are {authAction, select, 0 {not} other {already}} registered.",
     "confirmRegistrationDialog": {
       "review": "Please review your information",
@@ -25,70 +19,70 @@
       "usedInvitationLink": "This link has already been used. Ask your incubator for another invite link."
     },
     "handleOtp": {
-      "restartPrompt": "Please try again.",
-      "invitedAsMakerNotPossible": "It is not possible to register with an invite link.",
-      "invalidOtp": "Verification code is not valid."
+      "restartPrompt": "Veuillez essayer à nouveau.",
+      "invitedAsMakerNotPossible": "Il n'est pas possible de s'inscrire avec un lien d'invitation.",
+      "invalidOtp": "Le code de vérification n'est pas valide."
     },
     "otpDialog": {
-      "prompt": "Please enter the verification code you received via SMS.",
-      "checkSpam": "If you don't receive it, check your spam folder."
+      "prompt": "Veuillez saisir le code de vérification que vous avez reçu par SMS.",
+      "checkSpam": "Si vous ne le recevez pas, vérifiez dans votre dossier spam."
     },
     "recaptchaDialog": {
-      "title": "Please prove you are not a robot",
-      "inCaseCantGoOnContactCommunity": "In case you can't go on, please contact <email>community@onewe.co</email>."
+      "title": "Merci de prouver que vous n'êtes pas un robot",
+      "inCaseCantGoOnContactCommunity": "Dans le cas où vous ne pouvez pas continuer, veuillez contacter <email>community@onewe.co</email>."
     }
   },
   "input": {
     "defaultCountry": {
-      "long": "United States",
+      "long": "États-Unis",
       "short": "US"
     },
-    "cancel": "Cancel",
-    "close": "Close",
-    "phoneNumber": "Phone number",
-    "firstName": "First name",
-    "lastName": "Last name",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "phoneNumber": "Numéro de téléphone",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
     "email": "Email",
-    "postalCode": "Postal code",
-    "country": "Country",
-    "location": "Search location ...",
-    "numChars": "{numChars} characters",
-    "next": "Next",
-    "back": "Back",
+    "postalCode": "Code postal",
+    "country": "Pays",
+    "location": "Chercher l’emplacement ...",
+    "numChars": "{numChars} caractères",
+    "next": "Continuer",
+    "back": "Retour",
     "ok": "Ok"
   },
   "common": {
-    "loading": "Loading",
-    "motto": "Supporting actions that change the world",
-    "logInPrompt": "Register if you haven't already. Log in if you have.",
+    "loading": "Chargement en cours",
+    "motto": "Découvrez & contribuez aux initiatives qui sont en train de changer le monde",
+    "logInPrompt": "Enregistrez-vous si vous ne l'avez pas encore fait. Connectez-vous si vous l'avez déjà fait.",
     "pageTitle": {
-      "byOneWe": "by OneWe"
+      "byOneWe": "par OneWe"
     },
     "callToAction": {
-      "edit": "Edit",
+      "edit": "Modifier",
       "actions": {
         "list": "Actions",
-        "add": "Add your action"
+        "add": "Ajoutez votre action"
       },
-      "home": "Home",
-      "listMakers": "Makers",
-      "login": "Log In",
+      "home": "Accueil",
+      "listMakers": "Les créateurs d'impact",
+      "login": "Se connecter",
       "yourMaker": {
-        "register": "Register as a maker!",
-        "page": "My maker page"
+        "register": "S'inscrire en tant que créateur d'impact !",
+        "page": "Ma page de créateur d'impact"
       },
-      "yourMemberPage": "My Member Page",
-      "share": "Share",
-      "support": "Support",
-      "sponsor": "Sponsor",
+      "yourMemberPage": "Ma page de membre",
+      "share": "Partager",
+      "support": "Soutenir",
+      "sponsor": "Parrainer",
       "testify": "Give testimonial",
       "connect": "Connect",
-      "update": "Update",
-      "delete": "Delete"
+      "update": "Mettre à jour",
+      "delete": "Supprimer"
     },
     "meta_comment": "TODO(techiejd): Move all things that are Actions under a Maker and move their common components under maker.",
     "solicitHelpDialog": {
-      "title": "Ask for support",
+      "title": "Demander de l'aide",
       "reminderThatTheyCanSolicitMoreByEditingMakerPath": "Remember, you can ask for other types of (non-financial) help <link>by requesting it in your maker page</link>.",
       "solicit": {
         "all": {
@@ -159,7 +153,7 @@
           },
           "publicizeSupporter": {
             "prompt": "Shall we tell the OneWe Community?",
-            "makerKnows": "The Maker always knows who sponsors them",
+            "makerKnows": "Le créateur d'impact sait toujours qui les sponsorise",
             "publicizeSupporterExplanation": "If you choose to publicize your sponsorship, your name and profile picture will be visible to the greater OneWe community.",
             "publish": "I want the OneWe community to know I sponsor this Maker."
           }
