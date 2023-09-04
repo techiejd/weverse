@@ -2,10 +2,10 @@
   "index": {
     "callToActionExplanations": {
       "actions": {
-        "list": "See all the actions that are changing the world",
-        "add": "Want to share your action? Do it here!"
+        "list": "Découvrez toutes les actions qui sont en train de changer le monde",
+        "add": "Tu veux partager ton action ? Fais-le ici !"
       },
-      "seeMakers": "See our heroes without a cape",
+      "seeMakers": "Voir nos héros sans cape",
       "yourMaker": "You"
     }
   },
@@ -58,6 +58,7 @@
     "ok": "Ok"
   },
   "common": {
+    "loading": "Loading",
     "motto": "Supporting actions that change the world",
     "logInPrompt": "Register if you haven't already. Log in if you have.",
     "pageTitle": {
@@ -192,6 +193,10 @@
         "title": "{sponsorName}, thanks for sponsoring {beneficiaryName}!",
         "togetherYouChangeTheWorld": "Together, you change the world."
       }
+    },
+    "validatorBadge": {
+      "missingValidationProcess": "The incubator has yet to upload their validation process.",
+      "learnMore": "See incubator page to learn more."
     }
   },
   "actions": {
@@ -218,6 +223,10 @@
         },
         "location": {
           "title": "Where was this action done?"
+        },
+        "validator": {
+          "title": "Working with your incubator",
+          "explanation": "Notice: OneWe will look for your incubator's validation."
         }
       }
     },
@@ -247,6 +256,10 @@
     }
   },
   "testimonials": {
+    "card": {
+      "forAction": "For action: {action}",
+      "forMaker": "For maker: {maker}"
+    },
     "prompt": {
       "title": "<makerNameTag>{makerName}</makerNameTag> <prompt>wants to know how their action{forAction, select, true { has} other {s have}} had an impact on your life?</prompt>",
       "share": "Share your testimonial on this action",
@@ -365,7 +378,7 @@
         "email": "OneWe will communicate maker related information with you by email",
         "profileImage": "{makerType, select, individual {Select your profile picture} other {Select your organization's profile picture}}",
         "story": {
-          "title": "{makerType, select, individual {Tell us about yourself and your initiatives} other {Tell us about the organization and its intiatives.}}",
+          "title": "{makerType, select, individual {Tell us about yourself and your initiatives} other {Tell us about the organization and its intiatives}}",
           "video": {
             "title": "Presentation video:",
             "prompt": "Tell us about yourself and why you should be sponsored."
@@ -402,6 +415,13 @@
         "unincorporated": "Volunteers",
         "profit": "Business",
         "incubator": "Incubator"
+      }
+    },
+    "myMakerPortal": {
+      "join": "Join!",
+      "myMakerSpeedDial": {
+        "view": "View",
+        "mine": "Mine"
       }
     }
   },
