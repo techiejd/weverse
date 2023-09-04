@@ -282,6 +282,16 @@ export declare const maker: z.ZodObject<{
 export type Maker = z.infer<typeof maker>;
 declare const currency: z.ZodEnum<["cop", "usd", "eur", "gbp"]>;
 export type Currency = z.infer<typeof currency>;
+export declare const phoneNumber: z.ZodObject<{
+    countryCallingCode: z.ZodString;
+    nationalNumber: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    countryCallingCode?: string;
+    nationalNumber?: string;
+}, {
+    countryCallingCode?: string;
+    nationalNumber?: string;
+}>;
 export declare const member: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr"]>>;
@@ -346,7 +356,17 @@ export declare const member: z.ZodObject<{
         status?: "active" | "canceled" | "incomplete";
     }>>;
     pic: z.ZodOptional<z.ZodString>;
-    name: z.ZodOptional<z.ZodString>;
+    name: z.ZodString;
+    phoneNumber: z.ZodObject<{
+        countryCallingCode: z.ZodString;
+        nationalNumber: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        countryCallingCode?: string;
+        nationalNumber?: string;
+    }, {
+        countryCallingCode?: string;
+        nationalNumber?: string;
+    }>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
     locale?: "en" | "es" | "fr";
@@ -372,6 +392,10 @@ export declare const member: z.ZodObject<{
     };
     pic?: string;
     name?: string;
+    phoneNumber?: {
+        countryCallingCode?: string;
+        nationalNumber?: string;
+    };
 }, {
     id?: string;
     locale?: "en" | "es" | "fr";
@@ -397,6 +421,10 @@ export declare const member: z.ZodObject<{
     };
     pic?: string;
     name?: string;
+    phoneNumber?: {
+        countryCallingCode?: string;
+        nationalNumber?: string;
+    };
 }>;
 export type Member = z.infer<typeof member>;
 export declare const like: z.ZodObject<{

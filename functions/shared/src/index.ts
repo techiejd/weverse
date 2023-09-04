@@ -112,12 +112,18 @@ const stripe = z.object({
   status: z.enum(["active", "incomplete", "canceled"]),
 });
 
+export const phoneNumber = z.object({
+  countryCallingCode: z.string().min(1),
+  nationalNumber: z.string().min(1),
+});
+
 export const member = dbBase.extend({
   makerId: z.string(),
   customer: customer.optional(),
   stripe: stripe.optional(),
   pic: formUrl.optional(),
-  name: z.string().min(1).optional(),
+  name: z.string().min(1),
+  phoneNumber: phoneNumber,
 });
 export type Member = z.infer<typeof member>;
 

@@ -1,13 +1,12 @@
 import { z } from "zod";
 import { ConfirmationResult } from "firebase/auth";
+import { phoneNumber } from "../../../functions/shared/src";
 
-const phoneNumber = z.object({
-  countryCallingCode: z.string().nullable(),
-  nationalNumber: z.string().nullable(),
-});
-export type PhoneNumber = z.infer<typeof phoneNumber>;
+const authPhoneNumber = phoneNumber.partial();
+
+export type PhoneNumber = z.infer<typeof authPhoneNumber>;
 export const encodePhoneNumber = (pN: PhoneNumber) =>
-  `+${pN.countryCallingCode} ${pN.nationalNumber}`;
+  `+${pN.countryCallingCode}${pN.nationalNumber}`;
 
 export enum AuthAction {
   logIn = 0,
