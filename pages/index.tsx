@@ -67,7 +67,7 @@ const BottomBar = () => {
 
   return (
     <div
-      className="rounded-[43px] bg-gray-300 shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)] overflow-hidden flex flex-row p-[0.63rem] items-center justify-center gap-[0.63rem] border-[4px] border-solid border-dimgray [&.animate]:lg:animate-[1s_ease_0s_1_normal_forwards_fade-in-top] lg:opacity-[0]"
+      className="rounded-[50px] bg-whitesmoke-200 overflow-hidden flex flex-row py-0 px-4 items-center justify-center gap-[12px] [&.animate]:animate-[1s_ease_0s_1_normal_forwards_fade-in] opacity-[0] border-[4px] border-solid border-lightgray [&.animate]:lg:animate-[1s_ease_0s_1_normal_forwards_fade-in-top] lg:opacity-[0]"
       data-animate-on-scroll
     >
       <Link
@@ -76,34 +76,29 @@ const BottomBar = () => {
             ? `/members/${myMember.id}`
             : "/members/logIn?registerRequested=true"
         }
-        className="cursor-pointer [border:none] p-[0.63rem] bg-gray-100 overflow-hidden flex flex-col items-start justify-start"
         style={{ textDecoration: "none" }}
+        className="cursor-pointer [border:none] py-2 px-2.5 bg-[transparent] overflow-hidden flex flex-col items-start justify-start"
       >
-        <div className="w-[3.63rem] h-[2.72rem] flex flex-col items-center justify-start gap-[0.25rem]">
-          <div className="relative w-[1.88rem] h-[1.88rem]">
+        <div className="w-[58px] h-[43.52px] flex flex-col items-center justify-start gap-[4px]">
+          <div className="relative w-[30px] h-[30px]">
             <Image fill alt="" src="/profile-icon1.svg" />
           </div>
-          <b className="relative text-[0.75rem] font-bottom-nav-bar-label-text text-bottom-nav-bar-icons-inactive text-center">
+          <b className="relative text-xs font-bottom-nav-bar-label-text text-bottom-nav-bar-icons-inactive text-center">
             {t("myPage")}
           </b>
         </div>
       </Link>
       <Link
         href="/posi/upload"
-        className="cursor-pointer [border:none] p-[0.63rem] bg-gray-200 overflow-hidden flex flex-row items-start justify-start"
         style={{ textDecoration: "none" }}
+        className="cursor-pointer [border:none] py-2 px-2.5 bg-[transparent] overflow-hidden flex flex-row items-start justify-start"
       >
-        <div className="w-[3.06rem] h-[2.75rem] flex flex-col items-center justify-start gap-[0.31rem]">
-          <div className="relative w-[1.88rem] h-[1.88rem]">
-            <Image
-              fill
-              alt=""
-              src="/group.svg"
-              style={{ objectFit: "contain" }}
-            />
+        <div className="w-[49px] h-11 flex flex-col items-center justify-start gap-[5px]">
+          <div className="relative w-[30px] h-[30px]">
+            <Image fill alt="" src="/group.svg" />
           </div>
-          <b className="relative text-[0.75rem] font-bottom-nav-bar-label-text text-bottom-nav-bar-icons-inactive text-left">
-            {t("publish")}
+          <b className="relative text-xs font-bottom-nav-bar-label-text text-bottom-nav-bar-icons-inactive text-left">
+            Publicar
           </b>
         </div>
       </Link>
