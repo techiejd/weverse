@@ -22,7 +22,6 @@ import { useAppState } from "../context/appState";
 import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import Image from "next/image";
 import LinkBehavior from "../utils/linkBehavior";
-import { useMyMaker } from "../context/weverseUtils";
 import { useTranslations } from "next-intl";
 import Logout from "@mui/icons-material/Logout";
 import { useSignOut } from "react-firebase-hooks/auth";
@@ -118,15 +117,14 @@ export const MenuComponent = (props: BoxProps) => {
 
 const UserPortal = () => {
   const { user, loading: userLoading } = useAppState().authState;
-  const [myMaker, myMakerLoading, myMakerError] = useMyMaker();
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   return (
     <Box>
       <AuthDialog open={authDialogOpen} setOpen={setAuthDialogOpen} />
-      {myMakerLoading || userLoading ? (
+      {userLoading ? (
         <CircularProgress />
-      ) : myMaker && user ? (
-        <Button size="small" variant="outlined" href={`/makers/${myMaker.id}`}>
+      ) : user ? (
+        <Button size="small" variant="outlined" href={`/members/${user.uid}`}>
           {user.displayName}
         </Button>
       ) : (
