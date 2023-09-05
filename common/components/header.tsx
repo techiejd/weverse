@@ -15,7 +15,6 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import Home from "@mui/icons-material/Home";
 import Login from "@mui/icons-material/Login";
 import PlusOne from "@mui/icons-material/PlusOne";
@@ -25,6 +24,8 @@ import Image from "next/image";
 import LinkBehavior from "../utils/linkBehavior";
 import { useMyMaker } from "../context/weverseUtils";
 import { useTranslations } from "next-intl";
+import Logout from "@mui/icons-material/Logout";
+import { useSignOut } from "react-firebase-hooks/auth";
 
 export const MenuComponent = (props: BoxProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -32,21 +33,21 @@ export const MenuComponent = (props: BoxProps) => {
   const menuOpen = Boolean(anchorEl);
   const closeMenu = () => setAnchorEl(null);
   const t = useTranslations("common.callToAction");
+  const appState = useAppState();
+  const [signOut] = useSignOut(appState.auth);
   const UserPortal = () => {
     const { user } = useAppState().authState;
     return user ? (
       <MenuItem
-        href={`/members/${user.uid}`}
-        onClick={closeMenu}
-        component={
-          //TODO(techiejd): Look into why the href isn't rendered as an 'a'
-          LinkBehavior as any
-        }
+        onClick={() => {
+          signOut();
+          closeMenu();
+        }}
       >
         <ListItemIcon>
-          <AccountCircle />
+          <Logout />
         </ListItemIcon>
-        <ListItemText>{t("yourMemberPage")}</ListItemText>
+        <ListItemText>Log out</ListItemText>
       </MenuItem>
     ) : (
       <MenuItem
@@ -96,6 +97,18 @@ export const MenuComponent = (props: BoxProps) => {
             <PlusOne />
           </ListItemIcon>
           <ListItemText>{t("actions.add")}</ListItemText>
+        </MenuItem>
+        <MenuItem
+          href="/makers"
+          onClick={closeMenu}
+          component={LinkBehavior as any}
+        >
+          <ListItemIcon>
+            <Typography>
+              <b>💪</b>
+            </Typography>
+          </ListItemIcon>
+          <ListItemText>Makers</ListItemText>
         </MenuItem>
         <UserPortal />
       </Menu>
