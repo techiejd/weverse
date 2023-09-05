@@ -18,7 +18,7 @@ import {
 import PlusOne from "@mui/icons-material/PlusOne";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useCallback, useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { asOneWePage } from "../common/components/onewePage";
 import { useAppState } from "../common/context/appState";
 import { usePosiFormDataConverter } from "../common/utils/firebase";
@@ -107,6 +107,7 @@ const BottomBar = () => {
 };
 
 const IndexPage = () => {
+  //TODO(techiejd): WET code, refactor
   const commonTranslations = useTranslations("common");
   const appState = useAppState();
   const [latestDoc, setLatestDoc] = useState<
@@ -116,6 +117,7 @@ const IndexPage = () => {
   const [hasMore, setHasMore] = useState(true);
   const posiFormDataConverter = usePosiFormDataConverter();
   const batchSize = 3;
+  const userLocale = useLocale();
 
   useEffect(() => {
     let ignore = false;
@@ -124,7 +126,8 @@ const IndexPage = () => {
         posiFormDataConverter
       ),
       limit(batchSize),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
+      orderBy(userLocale) // Gets all documents with the field
     );
     getDocs(firstQuery).then((snap) => {
       if (!ignore) {
@@ -139,7 +142,7 @@ const IndexPage = () => {
     return () => {
       ignore = true;
     };
-  }, [appState.firestore, posiFormDataConverter]);
+  }, [appState.firestore, posiFormDataConverter, userLocale]);
 
   const next = useCallback(() => {
     if (!latestDoc) {
@@ -150,6 +153,7 @@ const IndexPage = () => {
         posiFormDataConverter
       ),
       orderBy("createdAt", "desc"),
+      orderBy(userLocale), // Gets all documents with the field
       startAfter(latestDoc),
       limit(batchSize)
     );
@@ -161,7 +165,7 @@ const IndexPage = () => {
       setHasMore(latestActions.length == batchSize);
       setActions((actions) => [...actions, ...latestActions]);
     });
-  }, [latestDoc, appState.firestore, posiFormDataConverter]);
+  }, [latestDoc, appState.firestore, posiFormDataConverter, userLocale]);
 
   return (
     <InfiniteScroll
