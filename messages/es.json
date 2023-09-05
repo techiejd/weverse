@@ -351,6 +351,7 @@
       "chooseMakerType": {
         "individual": "Trabajo solo",
         "organization": "Pertenezco a una organización",
+        "entityInformation": "Información de la entidad",
         "organizationType": {
           "namePrompt": "¿Cómo se llama la organización?",
           "title": "Tipo de organización"

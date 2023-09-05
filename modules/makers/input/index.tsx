@@ -76,10 +76,14 @@ const MakerInput = ({
   const askForImage = detailedInputTranslations("askForImage", {
     makerType: val.type,
   });
+
+  const inputTranslations = useTranslations("input");
   return (
     <Stack alignItems={"center"}>
       <Stack sx={sectionStyles}>
-        <Typography variant="h2">Entity information</Typography>
+        <Typography variant="h2">
+          {chooseMakerTypeTranslations("entityInformation")}
+        </Typography>
         <FormControl>
           <RadioGroup
             name="chooseMakerType"
@@ -103,9 +107,9 @@ const MakerInput = ({
         {val.type == "organization" && (
           <OrganizationTypeInput val={val} setVal={setVal} />
         )}
-        <Section label={"Whatever put yor email here"}>
+        <Section label={detailedInputTranslations("email")}>
           <TextField
-            label={"email dawg"}
+            label={inputTranslations("email")}
             type="email"
             fullWidth
             value={val.email ? val.email : ""}
