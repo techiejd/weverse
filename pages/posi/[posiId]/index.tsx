@@ -23,7 +23,7 @@ import {
 import SupportBottomBar from "../../../common/components/supportBottomBar";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
 import CenterBottomCircularProgress from "../../../common/components/centerBottomCircularProgress";
-import { Locale, Maker, PosiFormData } from "../../../functions/shared/src";
+import { Maker, PosiFormData } from "../../../functions/shared/src";
 import CenterBottomFab from "../../../common/components/centerBottomFab";
 import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
 import {
@@ -62,7 +62,7 @@ const AdminBottomBar = ({
         howToSupport={makerPresentationInfo?.howToSupport || {}}
         solicitOpinionPath={`/posi/${action.id}/impact/upload`}
         pathUnderSupport={`/posi/${action.id}`}
-        editMakerPath={`/makers/${myMaker.id}/edit`}
+        editMakerPath={`/initiatives/${myMaker.id}/edit`}
       />
       <Toolbar>
         <IconButtonWithLabel href={`/posi/${action.id}/action/edit`}>

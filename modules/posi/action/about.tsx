@@ -11,7 +11,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import Media from "./../media";
-import MakerCard from "../../makers/MakerCard";
+import MakerCard from "../../initiatives/MakerCard";
 import { PosiFormData } from "../../../functions/shared/src";
 import RatingsStack from "../../../common/components/ratings";
 import ValidationInfo from "./card/validationInfo";

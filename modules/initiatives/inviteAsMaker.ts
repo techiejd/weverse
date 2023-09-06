@@ -32,13 +32,13 @@ export function useCopyToClipboard(): [CopiedValue, CopyFn] {
 }
 
 export const buildShareLinks = (invitedAsMaker: string, inviter: string) => {
-  const path = buildUrl(`/makers/${invitedAsMaker}`, {
+  const path = buildUrl(`/initiatives/${invitedAsMaker}`, {
     queryParams: {
       invitedAsMaker,
       registerRequested: true,
-      inviter
+      inviter,
     },
   });
   const href = buildUrl(path, { returnAbsoluteUrl: true });
-  return {path, href};
-}
+  return { path, href };
+};

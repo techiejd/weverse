@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import {
   useActions,
@@ -29,7 +29,7 @@ const Vip = asOneWePage(() => {
       vipState.entryGiven != undefined &&
       !vipState.entryGiven
     ) {
-      router.push(`/makers/${myMaker.id}?vipDialogOpen=true`);
+      router.push(`/initiatives/${myMaker.id}?vipDialogOpen=true`);
     }
   }, [myMaker, vipState.entryGiven, router]);
   return myMaker ? (

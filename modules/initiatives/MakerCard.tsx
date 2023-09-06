@@ -10,14 +10,12 @@ import {
   CardContent,
   CardActionArea,
 } from "@mui/material";
-import { useAppState } from "../../common/context/appState";
 import { useMaker } from "../../common/context/weverseUtils";
 import RatingsStack from "../../common/components/ratings";
 
 const MakerCard = ({ makerId }: { makerId: string }) => {
-  const appState = useAppState();
   const MakerCardContent = () => {
-    const [value, loading, error] = useMaker(makerId);
+    const [value, loading] = useMaker(makerId);
 
     return loading || value == undefined ? (
       <CircularProgress />
@@ -34,7 +32,7 @@ const MakerCard = ({ makerId }: { makerId: string }) => {
 
   return (
     <Card sx={{ width: "100%" }}>
-      <CardActionArea href={`/makers/${makerId}`}>
+      <CardActionArea href={`/initiatives/${makerId}`}>
         <CardHeader
           avatar={
             <Icon>

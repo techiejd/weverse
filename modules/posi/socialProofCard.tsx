@@ -27,7 +27,7 @@ const SocialProofCard = ({
   const SocialProofCardHeader = () => {
     const [byMaker] = useMaker(socialProof.byMaker);
     return (
-      <CardActionArea href={`/makers/${socialProof.byMaker}`}>
+      <CardActionArea href={`/initiatives/${socialProof.byMaker}`}>
         <CardHeader
           title={
             <Stack

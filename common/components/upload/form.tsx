@@ -77,7 +77,7 @@ const UploadSocialProofForm = ({
 
           forAction
             ? router.push(`/posi/${forAction.id}/impact/upload/thanks`)
-            : router.push(`/makers/${forMaker.id}/impact/upload/thanks`);
+            : router.push(`/initiatives/${forMaker.id}/impact/upload/thanks`);
         } else {
           setError("Internal error.");
         }

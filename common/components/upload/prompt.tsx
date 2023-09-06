@@ -45,7 +45,7 @@ const UploadSocialProofPrompt = ({
           makerNameTag: (makerName) => (
             <Typography variant="h2">
               <Link
-                href={`/makers/${forMaker.id}`}
+                href={`/initiatives/${forMaker.id}`}
                 sx={{ color: "black" }}
               >{`${makerName}`}</Link>
             </Typography>
@@ -76,7 +76,7 @@ const UploadSocialProofPrompt = ({
               href={
                 forAction
                   ? `/posi/${forAction.id}/impact/upload/form`
-                  : `/makers/${forMaker.id}/impact/upload/form`
+                  : `/initiatives/${forMaker.id}/impact/upload/form`
               }
             >
               {promptTranslations("callToAction")}

@@ -30,7 +30,7 @@ import {
 } from "../../functions/shared/src";
 import IconButtonWithLabel from "./iconButtonWithLabel";
 import CenterBottomFab from "./centerBottomFab";
-import Sponsor from "../../modules/makers/sponsor";
+import Sponsor from "../../modules/initiatives/sponsor";
 import { useMyMember, useMySponsorships } from "../context/weverseUtils";
 import UnderConstruction from "../../modules/posi/underConstruction";
 import LogInPrompt from "./logInPrompt";
@@ -238,7 +238,7 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
 
   const addSocialProofPath = beneficiary.action
     ? `/posi/${beneficiary.action.id}/impact/upload`
-    : `/makers/${beneficiary.maker.id}/impact/upload`;
+    : `/initiatives/${beneficiary.maker.id}/impact/upload`;
 
   const shareProps = {
     title: supportDialogTranslations("share", {
@@ -246,7 +246,7 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
     }),
     path: beneficiary.action
       ? `/posi/${beneficiary.action.id}`
-      : `/makers/${beneficiary.maker.id}`,
+      : `/initiatives/${beneficiary.maker.id}`,
   };
 
   const [sponsorships] = useMySponsorships();

@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Grid, Stack, Typography } from "@mui/material";
-import { Currency, SponsorshipLevel } from "../../../../functions/shared/src";
+import { Currency } from "../../../../functions/shared/src";
 import { Fragment } from "react";
-import { currencyInfo, toDisplayCurrency } from "./utils";
+import { toDisplayCurrency } from "./utils";
 import { useTranslations } from "next-intl";
 
 const LineItems = ({

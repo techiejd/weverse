@@ -1,19 +1,15 @@
-import { CircularProgress } from "@mui/material";
-import { useCurrentMaker } from "../../../../../modules/makers/context";
-import UploadSocialProofPrompt from "../../../../../common/components/upload/prompt";
+import { useCurrentMaker } from "../../../../../modules/initiatives/context";
 import { WithTranslationsStaticProps } from "../../../../../common/utils/translations";
 import { CachePaths } from "../../../../../common/utils/staticPaths";
+import ThanksForTestimonial from "../../../../../common/components/thanksForTestimonial";
 import { asOneWePage } from "../../../../../common/components/onewePage";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
-const Upload = asOneWePage(() => {
+
+const Thanks = asOneWePage(() => {
   const [maker] = useCurrentMaker();
-  return maker ? (
-    <UploadSocialProofPrompt forMaker={maker} />
-  ) : (
-    <CircularProgress />
-  );
+  return ThanksForTestimonial({ forMakerId: maker?.id });
 });
 
-export default Upload;
+export default Thanks;

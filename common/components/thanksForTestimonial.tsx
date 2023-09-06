@@ -21,7 +21,7 @@ const ThanksForTestimonial = ({
         </Button>
       )}
       {(forMakerId && (
-        <Button href={`/makers/${forMakerId}`} variant="contained">
+        <Button href={`/initiatives/${forMakerId}`} variant="contained">
           {thanksTranslations("seeOtherActionsAndImpactsByMaker")}
         </Button>
       )) || <CircularProgress />}

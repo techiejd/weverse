@@ -38,7 +38,7 @@ import {
   useCurrentActions,
   useCurrentImpacts,
   useCurrentMaker,
-} from "../../../modules/makers/context";
+} from "../../../modules/initiatives/context";
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import moment from "moment";
 import ImpactCard from "../../../modules/posi/action/card";
@@ -59,14 +59,14 @@ import CenterBottomFab from "../../../common/components/centerBottomFab";
 import { useVipState } from "../../../common/utils/vip";
 import { useRouter } from "next/router";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
-import Sponsorships from "../../../modules/makers/sponsor/list";
-import MakerCard from "../../../modules/makers/MakerCard";
+import Sponsorships from "../../../modules/initiatives/sponsor/list";
+import MakerCard from "../../../modules/initiatives/MakerCard";
 import { useAppState } from "../../../common/context/appState";
 import { doc, updateDoc, writeBatch } from "firebase/firestore";
 import {
   buildShareLinks,
   useCopyToClipboard,
-} from "../../../modules/makers/inviteAsMaker";
+} from "../../../modules/initiatives/inviteAsMaker";
 import UnderConstruction from "../../../modules/posi/underConstruction";
 import { usePosiFormDataConverter } from "../../../common/utils/firebase";
 import {
@@ -443,7 +443,7 @@ const VipDialog = ({
             />
           </ListItemButton>
           <ListItemButton
-            href={`/makers/${myMaker.id}/edit`}
+            href={`/initiatives/${myMaker.id}/edit`}
             disabled={vipState.allFieldsFinished}
           >
             <ListItemIcon>
@@ -522,7 +522,7 @@ const BottomBar = () => {
   const vipButtonBehavior = maker?.incubator
     ? { onClick: () => setIncubateeVIPDialogOpen(true) }
     : vipState.entryGiven
-    ? { href: "/makers/vip" }
+    ? { href: "/initiatives/vip" }
     : { onClick: () => setVipDialogOpen(true) };
 
   const VipCenterBottomFab = () => (
@@ -533,7 +533,7 @@ const BottomBar = () => {
   );
 
   const IncubatorInviteMakerCenterBottomFab = ({ maker }: { maker: Maker }) => (
-    <CenterBottomFab color="secondary" href={`/makers/${maker.id}/invite`}>
+    <CenterBottomFab color="secondary" href={`/initiatives/${maker.id}/invite`}>
       <PersonAdd />
       <Typography fontSize={12}>{bottomBarTranslations("invite")}</Typography>
     </CenterBottomFab>
@@ -553,9 +553,9 @@ const BottomBar = () => {
         howToSupport={
           presentationInfo?.howToSupport ? presentationInfo?.howToSupport : {}
         }
-        solicitOpinionPath={`/makers/${maker.id}/impact/upload`}
-        pathUnderSupport={`/makers/${maker.id}`}
-        editMakerPath={`/makers/${maker.id}/edit`}
+        solicitOpinionPath={`/initiatives/${maker.id}/impact/upload`}
+        pathUnderSupport={`/initiatives/${maker.id}`}
+        editMakerPath={`/initiatives/${maker.id}/edit`}
       />
       <VipDialog
         open={vipDialogOpen}
@@ -568,7 +568,7 @@ const BottomBar = () => {
         setOpen={setIncubateeVIPDialogOpen}
       />
       <Toolbar>
-        <IconButtonWithLabel href={`/makers/${maker.id}/edit`}>
+        <IconButtonWithLabel href={`/initiatives/${maker.id}/edit`}>
           <Edit />
           <Typography>{callToActionTranslations("edit")}</Typography>
         </IconButtonWithLabel>

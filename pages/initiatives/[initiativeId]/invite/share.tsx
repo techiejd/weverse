@@ -11,11 +11,11 @@ import Check from "@mui/icons-material/Check";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import Share from "@mui/icons-material/Share";
 import { useRouter } from "next/router";
-import { useCurrentMaker } from "../../../../modules/makers/context";
+import { useCurrentMaker } from "../../../../modules/initiatives/context";
 import {
   buildShareLinks,
   useCopyToClipboard,
-} from "../../../../modules/makers/inviteAsMaker";
+} from "../../../../modules/initiatives/inviteAsMaker";
 import { Fragment } from "react";
 import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
@@ -117,7 +117,7 @@ const SharePage = asOneWePage(() => {
           />
         ))}
 
-      <Button variant="outlined" href={`/makers/${maker?.id}`}>
+      <Button variant="outlined" href={`/initiatives/${maker?.id}`}>
         Volver a mi perfil
       </Button>
     </Stack>

@@ -20,7 +20,7 @@ import {
   useSponsorshipConverter,
   useIncubateeConverter,
 } from "../utils/firebase";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   organizationType,
   makerType,
@@ -107,15 +107,15 @@ export const useMyMemberOnce = () => {
 export const useCurrentSponsorships = () => {
   const router = useRouter();
   const appState = useAppState();
-  const { makerId, userId: memberId } = router.query;
-  const id = (makerId ? makerId : memberId) as string;
+  const { initiativeId, userId: memberId } = router.query;
+  const id = (initiativeId ? initiativeId : memberId) as string;
   const sponsorshipConverter = useSponsorshipConverter();
 
   const sponsorshipCollection =
-    makerId || memberId
+    initiativeId || memberId
       ? collection(
           appState.firestore,
-          makerId ? "makers" : "members",
+          initiativeId ? "makers" : "members",
           id,
           "sponsorships"
         ).withConverter(sponsorshipConverter)
@@ -266,14 +266,14 @@ export const useMakerTypeLabel = (maker?: Maker) => {
 export const useCurrentIncubatees = () => {
   const router = useRouter();
   const appState = useAppState();
-  const { makerId } = router.query;
+  const { initiativeId } = router.query;
   const incubateeConverter = useIncubateeConverter();
   return useCollectionData(
-    makerId
+    initiativeId
       ? collection(
           appState.firestore,
           "makers",
-          makerId as string,
+          initiativeId as string,
           "incubatees"
         ).withConverter(incubateeConverter)
       : undefined
@@ -283,15 +283,15 @@ export const useCurrentIncubatees = () => {
 export const useCurrentNeedsValidation = () => {
   const router = useRouter();
   const appState = useAppState();
-  const { makerId } = router.query;
+  const { initiativeId } = router.query;
   const posiFormDataConverter = usePosiFormDataConverter();
   return useCollectionData(
-    makerId && makerId != ""
+    initiativeId && initiativeId != ""
       ? query(
           collection(appState.firestore, "impacts").withConverter(
             posiFormDataConverter
           ),
-          where("validation.validator", "==", makerId),
+          where("validation.validator", "==", initiativeId),
           where("validation.validated", "==", false)
         )
       : undefined

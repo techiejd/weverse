@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import MakerCard from "../../modules/makers/MakerCard";
+import MakerCard from "../../modules/initiatives/MakerCard";
 import PageTitle from "../../common/components/pageTitle";
 import Edit from "@mui/icons-material/Edit";
 import PlusOne from "@mui/icons-material/PlusOne";
@@ -20,7 +20,7 @@ import Share from "@mui/icons-material/Share";
 import Visibility from "@mui/icons-material/Visibility";
 import AuthDialog from "../../modules/auth/AuthDialog";
 import LoadingFab from "../../common/components/loadingFab";
-import SharingSpeedDialAction from "../../modules/makers/sharingSpeedDialAction";
+import SharingSpeedDialAction from "../../modules/initiatives/sharingSpeedDialAction";
 import { Maker } from "../../functions/shared/src";
 import { useMakerConverter } from "../../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
@@ -36,12 +36,18 @@ const MyMakerSpeedDial = ({ maker }: { maker: Maker }) => {
     <SpeedDialAction
       key="Ver"
       icon={
-        <Link href={`/makers/${maker.id}`} style={{ textDecoration: "none" }}>
+        <Link
+          href={`/initiatives/${maker.id}`}
+          style={{ textDecoration: "none" }}
+        >
           <Visibility />
         </Link>
       }
       tooltipTitle={
-        <Link href={`/makers/${maker.id}`} style={{ textDecoration: "none" }}>
+        <Link
+          href={`/initiatives/${maker.id}`}
+          style={{ textDecoration: "none" }}
+        >
           {t("view")}
         </Link>
       }
@@ -51,7 +57,7 @@ const MyMakerSpeedDial = ({ maker }: { maker: Maker }) => {
       key={"Editar"}
       icon={
         <Link
-          href={`/makers/${maker.id}/edit`}
+          href={`/initiatives/${maker.id}/edit`}
           style={{ textDecoration: "none" }}
         >
           <Edit />
@@ -59,7 +65,7 @@ const MyMakerSpeedDial = ({ maker }: { maker: Maker }) => {
       }
       tooltipTitle={
         <Link
-          href={`/makers/${maker.id}/edit`}
+          href={`/initiatives/${maker.id}/edit`}
           style={{ textDecoration: "none" }}
         >
           {callToActionTranslations("edit")}
@@ -73,7 +79,7 @@ const MyMakerSpeedDial = ({ maker }: { maker: Maker }) => {
       tooltipTitle={callToActionTranslations("share")}
       tooltipOpen
       title={`Echa un vistazo a la página Maker de ${maker.name}`}
-      path={`/makers/${maker.id}`}
+      path={`/initiatives/${maker.id}`}
     />,
   ];
   return (

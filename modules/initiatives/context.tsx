@@ -10,8 +10,8 @@ import { useAppState } from "../../common/context/appState";
 
 export const useCurrentMaker = () => {
   const router = useRouter();
-  const { makerId } = router.query;
-  return useMaker(router.isReady ? String(makerId) : undefined);
+  const { initiativeId } = router.query;
+  return useMaker(router.isReady ? String(initiativeId) : undefined);
 };
 
 export const useCurrentActions = () => {

@@ -35,7 +35,7 @@ const ValidationProcessDialog = ({
           <Button
             variant="text"
             color="primary"
-            href={`/makers/${validator?.id}`}
+            href={`/initiatives/${validator?.id}`}
           >
             {t("learnMore")}
           </Button>

@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Fragment, useState } from "react";
-import { useCurrentMaker } from "../../../../modules/makers/context";
+import { useCurrentMaker } from "../../../../modules/initiatives/context";
 import { LoadingButton } from "@mui/lab";
 import { doc, writeBatch } from "firebase/firestore";
 import { useAppState } from "../../../../common/context/appState";
@@ -172,7 +172,7 @@ const Invite = asOneWePage(() => {
         loading={loading}
         href={
           maker
-            ? buildUrl(`/makers/${maker.id!}/invite/share`, {
+            ? buildUrl(`/initiatives/${maker.id!}/invite/share`, {
                 queryParams: {
                   makerNames,
                   inviter: maker.id!,

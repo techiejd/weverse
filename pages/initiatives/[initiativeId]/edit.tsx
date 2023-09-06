@@ -8,7 +8,7 @@ import { User } from "firebase/auth";
 import { pickBy, identity } from "lodash";
 import { useMakerConverter } from "../../../common/utils/firebase";
 import { Maker, maker as makerSchema } from "../../../functions/shared/src";
-import MakerInput from "../../../modules/makers/input";
+import MakerInput from "../../../modules/initiatives/input";
 import {
   Locale2Messages,
   WithTranslationsStaticProps,
@@ -26,7 +26,7 @@ const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
   const editMakerTranslations = useTranslations("makers.edit");
   const appState = useAppState();
   const router = useRouter();
-  const { makerId } = router.query;
+  const { initiativeId } = router.query;
 
   const MakerForm = ({
     makerId,
@@ -62,7 +62,7 @@ const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
             const cleanedMaker = pickBy(maker, identity);
             const parsedMaker = makerSchema.parse(cleanedMaker);
             await setDoc(makerDocRef, parsedMaker);
-            router.push(`/makers/${makerIn.id}`);
+            router.push(`/initiatives/${makerIn.id}`);
           }}
         >
           <MakerInput
@@ -103,9 +103,9 @@ const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
       <Typography variant="h2">
         {editMakerTranslations("makerDefinition")}
       </Typography>
-      {makerId ? (
+      {initiativeId ? (
         <MakerForm
-          makerId={String(makerId)}
+          makerId={String(initiativeId)}
           locale2Messages={locale2Messages}
         />
       ) : (
