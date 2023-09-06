@@ -389,7 +389,11 @@
     "invite": {
       "title": "Invita a un maker (o más) a tu red de OneWe.",
       "whatIsMakersName": "¿Cómo se llama {makerType, select, individual {el individuo} other {la organización}}?",
-      "makeLink": "Generar vinculo"
+      "makeLink": "Generar vinculo",
+      "copy": {
+        "incompatibleBrowser": "Copiar al portapapeles no es compatible con tu navegador. Haz clic en 'Compartir'.",
+        "copyFailed": "Copiar al portapapeles falló. Haz clic en 'Compartir'."
+      }
     },
     "types": {
       "title": "Tipo de Maker",

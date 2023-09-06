@@ -1,4 +1,5 @@
 import buildUrl from "@googlicius/build-url";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 // From https://usehooks-ts.com/react-hook/use-copy-to-clipboard
@@ -7,12 +8,11 @@ export type CopyFn = (text: string) => Promise<boolean>; // Return success
 
 export function useCopyToClipboard(): [CopiedValue, CopyFn] {
   const [copiedText, setCopiedText] = useState<CopiedValue>(null);
+  const copyTranslations = useTranslations("makers.invite.copy");
 
   const copy: CopyFn = async (text) => {
     if (!navigator?.clipboard) {
-      alert(
-        'Copiar al portapapeles no es compatible con tu navegador. Haz clic en "Compartir".'
-      );
+      alert(copyTranslations("incompatibleBrowser"));
       return false;
     }
 
@@ -22,7 +22,7 @@ export function useCopyToClipboard(): [CopiedValue, CopyFn] {
       setCopiedText(text);
       return true;
     } catch (error) {
-      alert('Copiar al portapapeles falló. Haz clic en "Compartir".');
+      alert(copyTranslations("copyFailed"));
       setCopiedText(null);
       return false;
     }

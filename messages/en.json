@@ -389,7 +389,11 @@
     "invite": {
       "title": "Invite a maker (o more) to your OneWe network.",
       "whatIsMakersName": "What's the name of the {makerType, select, individual {person} other {organization}}?",
-      "makeLink": "Make link"
+      "makeLink": "Make link",
+      "copy": {
+        "incompatibleBrowser": "Your browser doesn't support copying to clipboard. Please, click on 'Share'.",
+        "copyFailed": "Copy failed. Please, click on 'Share'."
+      }
     },
     "types": {
       "title": "Maker type",
