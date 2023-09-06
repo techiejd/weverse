@@ -24,7 +24,7 @@ import { FileInput } from "../../posi/input";
 import DetailedInput from "./detailedInput";
 import OrganizationTypeInput from "./organizationTypeInput";
 
-const MakerInput = ({
+const InitiativeInput = ({
   userName,
   val,
   setVal,
@@ -142,4 +142,4 @@ const MakerInput = ({
   );
 };
 
-export default MakerInput;
+export default InitiativeInput;

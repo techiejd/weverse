@@ -13,22 +13,8 @@ import {
 import { useMaker } from "../../common/context/weverseUtils";
 import RatingsStack from "../../common/components/ratings";
 
-const MakerCard = ({ makerId }: { makerId: string }) => {
-  const MakerCardContent = () => {
-    const [value, loading] = useMaker(makerId);
-
-    return loading || value == undefined ? (
-      <CircularProgress />
-    ) : (
-      <Stack>
-        <Stack direction={"row"} alignItems={"center"} spacing={2}>
-          <Avatar src={value.pic} />
-          <Typography>{value.name}</Typography>
-        </Stack>
-        <RatingsStack ratings={value.ratings} />
-      </Stack>
-    );
-  };
+const InitiativeCard = ({ makerId }: { makerId: string }) => {
+  const [value, loading] = useMaker(makerId);
 
   return (
     <Card sx={{ width: "100%" }}>
@@ -42,11 +28,21 @@ const MakerCard = ({ makerId }: { makerId: string }) => {
           title={"Maker"}
         />
         <CardContent>
-          <MakerCardContent />
+          {loading || value == undefined ? (
+            <CircularProgress />
+          ) : (
+            <Stack>
+              <Stack direction={"row"} alignItems={"center"} spacing={2}>
+                <Avatar src={value.pic} />
+                <Typography>{value.name}</Typography>
+              </Stack>
+              <RatingsStack ratings={value.ratings} />
+            </Stack>
+          )}
         </CardContent>
       </CardActionArea>
     </Card>
   );
 };
 
-export default MakerCard;
+export default InitiativeCard;

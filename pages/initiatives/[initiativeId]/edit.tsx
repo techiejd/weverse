@@ -8,7 +8,7 @@ import { User } from "firebase/auth";
 import { pickBy, identity } from "lodash";
 import { useMakerConverter } from "../../../common/utils/firebase";
 import { Maker, maker as makerSchema } from "../../../functions/shared/src";
-import MakerInput from "../../../modules/initiatives/input";
+import InitiativeInput from "../../../modules/initiatives/input";
 import {
   Locale2Messages,
   WithTranslationsStaticProps,
@@ -65,7 +65,7 @@ const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
             router.push(`/initiatives/${makerIn.id}`);
           }}
         >
-          <MakerInput
+          <InitiativeInput
             userName={user.displayName ? user.displayName : ""}
             val={maker}
             setVal={setMaker}

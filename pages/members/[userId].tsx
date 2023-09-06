@@ -4,7 +4,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { collection, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Button, Stack, Typography } from "@mui/material";
-import MakerCard from "../../modules/initiatives/MakerCard";
+import InitiativeCard from "../../modules/initiatives/InitiativeCard";
 import { useSignOut } from "react-firebase-hooks/auth";
 import Sponsorships from "../../modules/initiatives/sponsor/list";
 import { Sponsorship } from "../../functions/shared/src";
@@ -105,7 +105,7 @@ const UserPage = asOneWePage(() => {
         <Typography>{yourMemberTranslations("makers.none")}</Typography>
       )}
       {makerIds.map((makerId) => (
-        <MakerCard makerId={makerId} key={makerId} />
+        <InitiativeCard makerId={makerId} key={makerId} />
       ))}
     </Stack>
   );

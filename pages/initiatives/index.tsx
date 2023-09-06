@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import MakerCard from "../../modules/initiatives/MakerCard";
+import InitiativeCard from "../../modules/initiatives/InitiativeCard";
 import PageTitle from "../../common/components/pageTitle";
 import Edit from "@mui/icons-material/Edit";
 import PlusOne from "@mui/icons-material/PlusOne";
@@ -168,7 +168,7 @@ const Makers = asOneWePage(() => {
         )}
         {makersLoading && <CircularProgress />}
         {makers.map((maker) => (
-          <MakerCard makerId={maker} key={maker} />
+          <InitiativeCard makerId={maker} key={maker} />
         ))}
       </Stack>
       <MyMakerPortal />

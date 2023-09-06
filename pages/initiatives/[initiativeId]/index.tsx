@@ -60,7 +60,7 @@ import { useVipState } from "../../../common/utils/vip";
 import { useRouter } from "next/router";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
 import Sponsorships from "../../../modules/initiatives/sponsor/list";
-import MakerCard from "../../../modules/initiatives/MakerCard";
+import InitiativeCard from "../../../modules/initiatives/InitiativeCard";
 import { useAppState } from "../../../common/context/appState";
 import { doc, updateDoc, writeBatch } from "firebase/firestore";
 import {
@@ -143,7 +143,7 @@ const IncubatorSection = () => {
         >
           <Close />
         </IconButton>
-        <MakerCard makerId={incubatee.id!} key={incubatee.id!} />
+        <InitiativeCard makerId={incubatee.id!} key={incubatee.id!} />
         <Stack spacing={2}>
           <IconButton onClick={() => copy(href)}>
             {value && value.includes(href) ? <Check /> : <ContentCopy />}
@@ -238,7 +238,7 @@ const IncubatorSection = () => {
       <Stack spacing={2}>
         {acceptedIncubatees && acceptedIncubatees.length > 0 ? (
           acceptedIncubatees.map((incubatee) => (
-            <MakerCard makerId={incubatee.id!} key={incubatee.id!} />
+            <InitiativeCard makerId={incubatee.id!} key={incubatee.id!} />
           ))
         ) : (
           <Typography>{incubatorTranslations("incubatees.none")}</Typography>

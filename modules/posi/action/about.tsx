@@ -11,7 +11,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import Media from "./../media";
-import MakerCard from "../../initiatives/MakerCard";
+import InitiativeCard from "../../initiatives/InitiativeCard";
 import { PosiFormData } from "../../../functions/shared/src";
 import RatingsStack from "../../../common/components/ratings";
 import ValidationInfo from "./card/validationInfo";
@@ -88,7 +88,7 @@ const AboutContent = ({
               </CardContent>
             </Box>
           )}
-          <MakerCard makerId={makerId} />
+          <InitiativeCard makerId={makerId} />
         </Stack>
       </Box>
     )) || <CircularProgress />
