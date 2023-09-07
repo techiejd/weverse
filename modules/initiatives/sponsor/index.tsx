@@ -110,7 +110,7 @@ export default function Sponsor({
           }}
         >
           <Typography component="h1" variant="h4" align="center">
-            {sponsorTranslations("title", { makerName: beneficiary.name })}
+            {sponsorTranslations("title", { initiativeName: beneficiary.name })}
           </Typography>
           {isRepeatSponsor ? (
             <RepeatSponsor

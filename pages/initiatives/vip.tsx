@@ -20,7 +20,7 @@ const Vip = asOneWePage(() => {
   const [socialProofs] = useSocialProofs(myMaker?.id, "maker");
   const [actions] = useActions(myMaker?.id);
   const vipState = useVipState(myMaker, socialProofs, actions);
-  const vipTranslations = useTranslations("makers.vip");
+  const vipTranslations = useTranslations("initiatives.vip");
 
   useEffect(() => {
     if (

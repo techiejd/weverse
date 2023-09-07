@@ -85,7 +85,7 @@ const SolicitDialog = ({
         </Stack>
         <Typography>
           {dialogTranslations.rich(
-            "reminderThatTheyCanSolicitMoreByEditingMakerPath",
+            "reminderThatTheyCanSolicitMoreByEditingInitiativePath",
             {
               link: (chunks) => <Link href={editMakerPath}>{chunks}</Link>,
             }

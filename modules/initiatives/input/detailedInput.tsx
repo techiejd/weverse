@@ -26,7 +26,7 @@ const DetailedInput: FC<DetailedInputProps<Maker>> = ({
   locale,
 }: DetailedInputProps<Maker>) => {
   const detailedInputTranslations = useTranslations(
-    "makers.edit.detailedInput"
+    "initiatives.edit.detailedInput"
   );
   const inputTranslations = useTranslations("input");
 
@@ -121,7 +121,7 @@ const DetailedInput: FC<DetailedInputProps<Maker>> = ({
       <Section
         label={detailedInputTranslations(
           "nonFinancialHelp.whatOtherHelpDoYouNeed",
-          { makerType: val?.type }
+          { initiativeType: val?.type }
         )}
       >
         <TextField
@@ -149,7 +149,7 @@ const DetailedInput: FC<DetailedInputProps<Maker>> = ({
     <Stack spacing={2} sx={sectionStyles}>
       <Section
         label={detailedInputTranslations("story.title", {
-          makerType: val?.type,
+          initiativeType: val?.type,
         })}
       >
         <Stack spacing={2}>

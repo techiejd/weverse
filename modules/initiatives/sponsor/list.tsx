@@ -135,7 +135,7 @@ const Sponsorships = ({
   handleCancelSponsorship?: (sponsorship: Sponsorship) => Promise<any>;
   showAmount?: boolean;
 }) => {
-  const sponsorshipsTranslations = useTranslations("makers.sponsorships");
+  const sponsorshipsTranslations = useTranslations("initiatives.sponsorships");
   const localizedDateFormat = useLocalizedDateFormat();
   const [sponsorships, sponsorshipsLoading, sponsorshipsError] =
     useCurrentSponsorships();

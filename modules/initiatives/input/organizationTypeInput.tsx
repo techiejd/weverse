@@ -23,9 +23,9 @@ const OrganizationTypeInput = ({
   setVal: Dispatch<SetStateAction<Maker>>;
 }) => {
   const organizationTypeTranslations = useTranslations(
-    "makers.edit.chooseMakerType.organizationType"
+    "initiatives.edit.chooseInitiativeType.organizationType"
   );
-  const makerTypesTranslations = useTranslations("makers.types");
+  const makerTypesTranslations = useTranslations("initiatives.types");
   const inputTranslations = useTranslations("input");
   const organizationTypeChange = (
     e: ChangeEvent<HTMLInputElement>,

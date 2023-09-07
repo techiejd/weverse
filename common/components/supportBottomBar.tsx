@@ -219,7 +219,7 @@ const GenericSupportDialog = ({
 };
 
 const beneficiaryType = z.object({
-  maker: maker,
+  maker,
   action: posiFormData.optional(),
 });
 type Beneficiary = z.infer<typeof beneficiaryType>;

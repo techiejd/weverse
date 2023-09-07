@@ -23,7 +23,7 @@ export const getStaticProps = WithTranslationsStaticProps(
   spreadTranslationsStaticProps
 );
 const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
-  const editMakerTranslations = useTranslations("makers.edit");
+  const editMakerTranslations = useTranslations("initiatives.edit");
   const appState = useAppState();
   const router = useRouter();
   const { initiativeId } = router.query;
@@ -101,7 +101,7 @@ const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
     <Stack sx={{ justifyContent: "center", alignItems: "center" }} spacing={2}>
       <Typography variant="h1">{editMakerTranslations("title")}</Typography>
       <Typography variant="h2">
-        {editMakerTranslations("makerDefinition")}
+        {editMakerTranslations("initiativeDefinition")}
       </Typography>
       {initiativeId ? (
         <MakerForm

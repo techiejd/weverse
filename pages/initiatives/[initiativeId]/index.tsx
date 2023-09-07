@@ -83,7 +83,7 @@ export const getStaticProps = WithTranslationsStaticProps();
 //TODO(techiejd): Clean up this file
 
 const IncubatorSection = () => {
-  const incubatorTranslations = useTranslations("makers.incubator");
+  const incubatorTranslations = useTranslations("initiatives.incubator");
   const appState = useAppState();
   const [incubatees] = useCurrentIncubatees();
   const acceptedIncubatees = incubatees?.filter(
@@ -96,9 +96,6 @@ const IncubatorSection = () => {
   const [myMaker] = useMyMaker();
   const [maker] = useCurrentMaker();
   const isMyMaker = myMaker && maker && myMaker.id == maker.id;
-  const joinPrompt = incubatorTranslations("joinPrompt", {
-    makerName: maker?.name,
-  });
   const [loading, setLoading] = useState(false);
   const [value, copy] = useCopyToClipboard();
 
@@ -150,7 +147,9 @@ const IncubatorSection = () => {
           </IconButton>
           <ShareActionArea
             shareProps={{
-              title: joinPrompt,
+              title: incubatorTranslations("joinPrompt", {
+                initiativeName: maker?.name,
+              }),
               path: path,
             }}
           >
@@ -268,7 +267,7 @@ const IncubatorSection = () => {
 };
 
 const AboutSection = ({ maker }: { maker?: Maker }) => {
-  const aboutTranslations = useTranslations("makers.about");
+  const aboutTranslations = useTranslations("initiatives.about");
   const presentationInfo = useLocalizedPresentationInfo(maker);
   const noAboutInfo =
     !presentationInfo?.presentationVideo && !presentationInfo?.about;
@@ -401,7 +400,7 @@ const VipDialog = ({
   setSolicitDialogOpen: Dispatch<SetStateAction<boolean>>;
   myMaker: Maker;
 }) => {
-  const vipDialogTranslations = useTranslations("makers.vip.dialog");
+  const vipDialogTranslations = useTranslations("initiatives.vip.dialog");
   const [actions] = useCurrentActions();
   const [socialProofs] = useCurrentImpacts();
   const vipState = useVipState(myMaker, socialProofs, actions);
@@ -454,14 +453,14 @@ const VipDialog = ({
               )}
             </ListItemIcon>
             <ListItemText
-              primary={vipDialogTranslations("finishMakerProfile.primary")}
+              primary={vipDialogTranslations("finishInitiativeProfile.primary")}
               secondary={
                 vipState.allFieldsFinished
                   ? vipDialogTranslations(
-                      "finishMakerProfile.secondary.finished"
+                      "finishInitiativeProfile.secondary.finished"
                     )
                   : vipDialogTranslations(
-                      "finishMakerProfile.secondary.missingTheseFields",
+                      "finishInitiativeProfile.secondary.missingTheseFields",
                       { fields: vipState.unfinishedFields!.join(", ") }
                     )
               }
@@ -505,7 +504,7 @@ const IncubateeVIPDialog = ({
 };
 
 const BottomBar = () => {
-  const bottomBarTranslations = useTranslations("makers.bottomBar");
+  const bottomBarTranslations = useTranslations("initiatives.bottomBar");
   const callToActionTranslations = useTranslations("common.callToAction");
   const [maker] = useCurrentMaker();
   const [myMaker] = useMyMaker();

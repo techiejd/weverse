@@ -65,12 +65,8 @@
         "add": "Agrega tu Acción"
       },
       "home": "Inicio",
-      "listMakers": "Makers",
+      "listInitiatives": "Iniciativas",
       "login": "Iniciar Sesión",
-      "yourMaker": {
-        "register": "¡Regístrate como maker!",
-        "page": "Mi Página Maker"
-      },
       "yourMemberPage": "Mi Página de Miembro",
       "share": "Compartir",
       "support": "Apoyar",
@@ -80,10 +76,9 @@
       "update": "Actualizar",
       "delete": "Borrar"
     },
-    "meta_comment": "TODO(techiejd): see meta_comment in en.json.",
     "solicitHelpDialog": {
       "title": "Solicita Apoyo",
-      "reminderThatTheyCanSolicitMoreByEditingMakerPath": "Recuerda que puedes solicitar apoyo de otro tipo (no financiero) <link>agregándolo en tu perfil de Maker</link>.",
+      "reminderThatTheyCanSolicitMoreByEditingInitiativePath": "Recuerda que puedes solicitar apoyo de otro tipo (no financiero) <link>agregándolo en el perfil de la iniciativa</link>.",
       "solicit": {
         "all": {
           "title": "Solicitar todos",
@@ -105,16 +100,16 @@
     },
     "supportDialog": {
       "title": "¡Gracias por tu apoyo!",
-      "share": "{beneficiaryType, select, action {Mira esta acción social tan chévere. ¡Apoyemosla!} other {Mira este Maker tan chévere. ¡Apoyemoslo!}}"
+      "share": "{beneficiaryType, select, action {Mira esta acción social tan chévere. ¡Apoyemosla!} other {Mira esta iniciativa tan chévere. ¡Apoyemoslo!}}"
     },
     "contactSupportDialog": {
-      "missingInfoTitle": "El o la Maker aún no ha terminado su perfil.",
-      "title": "El o la Maker dice que busca el siguiente tipo de ayuda y con estos canales de contacto:",
-      "missingInfoText": "¡Gracias por querer apoyar! Le hemos mandado un mensaje al o la Maker de tu interes y esperamos que tu solicitud le anime a terminar pronto."
+      "missingInfoTitle": "La iniciativa aún no ha terminado su perfil.",
+      "title": "La iniciativa dice que busca el siguiente tipo de ayuda y con estos canales de contacto:",
+      "missingInfoText": "¡Gracias por querer apoyar! Le hemos mandado un mensaje a la iniciativa de tu interes y esperamos que tu solicitud le anime a terminar pronto."
     },
     "sponsorDialog": {
       "title": "¡Gracias por tu patrocinio!",
-      "oneWeIsWorkingOnMakingAGoodExp": "OneWe está trabajando con el/la Maker para crear la mejor experiencia de patrocinio.",
+      "oneWeIsWorkingOnMakingAGoodExp": "OneWe está trabajando con la iniciativa para crear la mejor experiencia de patrocinio.",
       "logInPrompt": "Debes ser miembro registrado para poder patrocinar."
     },
     "underConstruction": {
@@ -149,13 +144,13 @@
           "fee": {
             "prompt": "¿Quieres cubrir la tarifa de la pasarela de pagos?",
             "feeExplanation": "{feePercentage}% + {feeAmount} por transacción.",
-            "preferMakerPays": "Prefiero que el Maker pague la tarifa."
+            "preferInitiativePays": "Prefiero que la iniciativa pague la tarifa."
           },
           "publicizeSupporter": {
             "prompt": "¿Le contamos a la comunidad OneWe?",
-            "makerKnows": "El Maker siempre sabrá quien le patrocina.",
+            "initiativeKnows": "La iniciativa siempre sabrá quien le patrocina.",
             "publicizeSupporterExplanation": "Si eliges que tu apoyo sea público, tu nombre aparece para el resto de la comunidad OneWe.",
-            "publish": "Quiero que la comunidad OneWe sepa que yo apoyo a este o esta Maker."
+            "publish": "Quiero que la comunidad OneWe sepa que yo apoyo a esta iniciativa."
           }
         },
         "customer": {
@@ -252,10 +247,10 @@
   "testimonials": {
     "card": {
       "forAction": "Por la acción: {action}",
-      "forMaker": "Para el o la Maker: {maker}"
+      "forInitiative": "Para la iniciativa: {maker}"
     },
     "prompt": {
-      "title": "<makerNameTag>{makerName}</makerNameTag> <prompt>quiere saber ¿cómo {forAction, select, true {hizo esta acción} other {hicieron sus acciones}} un cambio en tu vida?</prompt>",
+      "title": "<initiativeNameTag>{makerName}</initiativeNameTag> <prompt>quiere saber ¿cómo {forAction, select, true {hizo esta acción} other {hicieron sus acciones}} un cambio en tu vida?</prompt>",
       "share": "Comparte tu testimonio sobre esta acción",
       "callToAction": "Listo para hacer el testimonio",
       "logInPrompt": "Para hacer un testimonio, registrate como miembro.",
@@ -268,7 +263,7 @@
       "inTextFormat": "En forma escrita",
       "andOptional": "{numChars} y opcional.",
       "writtenTestimonial": "Testimonio escrito",
-      "whatImpactPrompt": "cuentenos con detalle ¿qué impacto {forAction, select, true {tuvo esta acción} other {este Maker}} en tu vida?",
+      "whatImpactPrompt": "cuentenos con detalle ¿qué impacto {forAction, select, true {tuvo esta acción} other {esta iniciativa}} en tu vida?",
       "submit": "Publicar testimonio"
     },
     "thanks": {
@@ -277,11 +272,15 @@
       "theInformationIsValuable": "La información que nos has dado es muy valiosa para la comunidad OneWe.",
       "whatWouldYouLikeToDoNow": "¿Qué te gustaría hacer ahora?",
       "seeWhatOthersSaidAboutThisAction": "Ver lo que han dicho los demas de esta acción",
-      "seeOtherActionsAndImpactsByMaker": "Ver otras acciones e impactos del Maker",
+      "seeOtherActionsAndImpactsByThisInitiative": "Ver otras acciones e impactos de la iniciativa",
       "goToHomePage": "Ir a la página principal"
     }
   },
-  "makers": {
+  "initiatives": {
+    "title": "Iniciativas",
+    "card": {
+      "title": "Iniciativa"
+    },
     "sponsorships": {
       "list": "Patrocinios:",
       "loading": "Patrocinios: Cargando...",
@@ -290,7 +289,7 @@
     },
     "about": {
       "title": "Acerca de:",
-      "none": "El/la Maker no ha agregado información de la sección 'acerca de'."
+      "none": "La iniciativa no ha agregado información de la sección 'acerca de'."
     },
     "incubator": {
       "title": "Incubadora:",
@@ -317,7 +316,7 @@
     "bottomBar": {
       "vip": "VIP",
       "invite": "Invitar",
-      "sharePrompt": "Por favor, eche un vistazo a mi página de Maker.",
+      "sharePrompt": "Por favor, eche un vistazo a mi página de la iniciativa.",
       "solicitSupportShort": "Apoyo",
       "addActionShort": "Acción"
     },
@@ -336,8 +335,8 @@
           "primary": "Escuchar a 3 personas impactadas solicitandoles el testimonio y/o opinión.",
           "secondary": "Involucramos a la comunidad en la discusión. {numSocialProofsDone}/3 Testimonios recibido."
         },
-        "finishMakerProfile": {
-          "primary": "Configurar tu perfil de Maker.",
+        "finishInitiativeProfile": {
+          "primary": "Configurar tu perfil de la iniciativa.",
           "secondary": {
             "finished": "Ya has terminado.",
             "missingTheseFields": "Hacen falta los siguientes campos: {fields}"
@@ -346,9 +345,9 @@
       }
     },
     "edit": {
-      "title": "Editar tu página Maker",
-      "makerDefinition": "Maker = creador de impacto social a través de sus acciones.",
-      "chooseMakerType": {
+      "title": "Editar la página de la iniciativa",
+      "initiativeDefinition": "Iniciativa = acto o estrategia destinado a resolver una dificultad o mejorar una situación.",
+      "chooseInitiativeType": {
         "individual": "Trabajo solo",
         "organization": "Pertenezco a una organización",
         "entityInformation": "Información de la entidad",
@@ -358,10 +357,10 @@
         }
       },
       "detailedInput": {
-        "askForInfoMsg": "{makerType, select, individual {Por favor, danos más información sobre ti.} other {Por favor, danos más información sobre tu organización.}}",
-        "askForImage": "{makerType, select, individual {Selecciona una imagen con la que quieras ser identificado por la comunidad OneWe.} other {Sube una foto de tu logo.}}",
+        "askForInfoMsg": "{iniciativeType, select, individual {Por favor, danos más información sobre ti.} other {Por favor, danos más información sobre tu organización.}}",
+        "askForImage": "{iniciativeType, select, individual {Selecciona una imagen con la que quieras ser identificado por la comunidad OneWe.} other {Sube una foto de tu logo.}}",
         "incubator": {
-          "whatIsYourValidationProcess": "Como valida tu incubadora las acciones de los makers para darle un sello de aprobacion?",
+          "whatIsYourValidationProcess": "Como valida tu incubadora las acciones de las iniciativas para darle un sello de aprobacion?",
           "leaveDetails": "Deja aquí los detalles de cómo se validan las acciones.",
           "devilIsInTheDetailsReminder": "Recuerda, la integridad depende de que se siga estrictamente este proceso."
         },
@@ -370,7 +369,7 @@
           "leaveContactDetails": "Deja aquí los datos de contacto para recibir ayudas de cualquier otro tipo y sea explicito a lo que está pidiendo",
           "helperText": "Si tu iniciativa está listo para recibir voluntarios, hablar con medios de comunicación o con especialistas como abogados, desarrolladores, etc, por favor, indica tu solicitud y los enlaces o los detalles para ponerse en contacto contigo. Por ejemplo: número telefónico, correo electrónico, redes sociales, página web, etc."
         },
-        "email": "OneWe se comunicará contigo por correo electrónico acerca de la información relacionada con Maker",
+        "email": "OneWe se comunicará contigo por correo electrónico acerca de la información relacionada con la iniciativa",
         "profileImage": "{makerType, select, individual {Elige tu foto de perfil} other {Elige la foto de perfil de la organización}}",
         "story": {
           "title": "{makerType, select, individual {Cuéntanos acerca de tí y tus iniciativas} other {Cuéntanos acerca de la organización y sus iniciativas}}",
@@ -388,7 +387,7 @@
     },
     "invite": {
       "title": "Invita a un maker (o más) a tu red de OneWe.",
-      "whatIsMakersName": "¿Cómo se llama {makerType, select, individual {el individuo} other {la organización}}?",
+      "whatIsInitiativesName": "¿Cómo se llama {makerType, select, individual {el individuo} other {la organización}}?",
       "makeLink": "Generar vinculo",
       "copy": {
         "incompatibleBrowser": "Copiar al portapapeles no es compatible con tu navegador. Haz clic en 'Compartir'.",
@@ -396,7 +395,7 @@
       }
     },
     "types": {
-      "title": "Tipo de Maker",
+      "title": "Tipo de la iniciativa",
       "long": {
         "individual": "Individuo",
         "organization": "Organización",
@@ -416,9 +415,9 @@
         "incubator": "Incubadora"
       }
     },
-    "myMakerPortal": {
+    "myInitiativePortal": {
       "join": "¡Sumáte!",
-      "myMakerSpeedDial": {
+      "myInitiativeSpeedDial": {
         "view": "Ver",
         "mine": "Mio"
       }
@@ -427,10 +426,10 @@
   "members": {
     "yours": {
       "title": "Tu página de miembro",
-      "makers": {
-        "title": "Tus Makers",
-        "none": "No hay makers.",
-        "loading": "Cargando Makers..."
+      "initiatives": {
+        "title": "Tus iniciativas",
+        "none": "No hay iniciativas.",
+        "loading": "Cargando iniciativas..."
       },
       "signOut": "Desconectar",
       "failedToCancelSponsorship": "No se pudo cancelar el patrocinio: {error}"

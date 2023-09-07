@@ -37,7 +37,7 @@ const Invite = asOneWePage(() => {
   const appState = useAppState();
   const [maker] = useCurrentMaker();
   const [loading, setLoading] = useState(false);
-  const [invitedInitiatives, setInvitedAsMakers] = useState([v4()]);
+  const [invitedInitiatives, setInvitedInitiatives] = useState([v4()]);
   const makerConverter = useMakerConverter();
   const incubateeConverter = useIncubateeConverter();
 
@@ -46,11 +46,11 @@ const Invite = asOneWePage(() => {
   >(["nonprofit" as OrganizationType]);
   const [makerNames, setMakerNames] = useState([""]);
 
-  const inviteTranslations = useTranslations("makers.invite");
+  const inviteTranslations = useTranslations("initiatives.invite");
 
   const InviteMakerInput = ({ index }: { index: number }) => {
-    const inviteTranslations = useTranslations("makers.invite");
-    const makerTypesTranslations = useTranslations("makers.types");
+    const inviteTranslations = useTranslations("initiatives.invite");
+    const makerTypesTranslations = useTranslations("initiatives.types");
     const makeTypeOption = (t: MakerType | OrganizationType) => {
       const translateType = (t: MakerType | OrganizationType) =>
         makerTypesTranslations("long." + t);
@@ -95,8 +95,8 @@ const Invite = asOneWePage(() => {
         </FormControl>
         <TextField
           required
-          label={inviteTranslations("whatIsMakersName", {
-            makerType: makerTypes[index],
+          label={inviteTranslations("whatIsInitiativesName", {
+            initiativeType: makerTypes[index],
           })}
           margin="normal"
           inputProps={{ maxLength: 75 }}
@@ -138,7 +138,7 @@ const Invite = asOneWePage(() => {
             setInviteMakerInputs((inviteMakerInputs) =>
               inviteMakerInputs.slice(0, -1)
             );
-            setInvitedAsMakers((invitedInitiatives) =>
+            setInvitedInitiatives((invitedInitiatives) =>
               invitedInitiatives.slice(0, -1)
             );
           }}
@@ -149,7 +149,7 @@ const Invite = asOneWePage(() => {
           onClick={() => {
             //TODO(techiejd): Look into consolidating this in order to avoid race conditions.
             setMakerNames((makerNames) => [...makerNames, ""]);
-            setInvitedAsMakers((invitedInitiatives) => [
+            setInvitedInitiatives((invitedInitiatives) => [
               ...invitedInitiatives,
               v4(),
             ]);

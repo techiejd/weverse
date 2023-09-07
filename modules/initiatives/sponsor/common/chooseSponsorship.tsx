@@ -292,7 +292,7 @@ const ChooseSponsorship = ({
                   onChange={(e) => setMakerPaysFee(e.target.checked)}
                 />
               }
-              label={chooseTranslations("fee.preferMakerPays")}
+              label={chooseTranslations("fee.preferInitiativePays")}
             />
           </ListItem>
         </Stack>
@@ -302,7 +302,7 @@ const ChooseSponsorship = ({
               primary={chooseTranslations("publicizeSupporter.prompt")}
               secondary={
                 <>
-                  {chooseTranslations("publicizeSupporter.makerKnows")}
+                  {chooseTranslations("publicizeSupporter.initiativeKnows")}
                   <br />{" "}
                   {chooseTranslations(
                     "publicizeSupporter.publicizeSupporterExplanation"

@@ -32,7 +32,7 @@ const Solicit = asOneWePage(() => {
     const [maker, makerLoading, makerError] = useDocumentData(makerDocRef);
     return maker ? (
       <Typography variant="h1">
-        {t("title", { makerName: maker.name })}
+        {t("title", { initiativeName: maker.name })}
       </Typography>
     ) : (
       <CircularProgress />

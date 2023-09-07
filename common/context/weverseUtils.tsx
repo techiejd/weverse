@@ -239,7 +239,7 @@ export const useActions = (maker: string | undefined) => {
 };
 
 export const useMakerTypeLabel = (maker?: Maker) => {
-  const makerTypesTranslations = useTranslations("makers.types.short");
+  const makerTypesTranslations = useTranslations("initiatives.types.short");
   if (!maker) {
     return "";
   }

@@ -42,12 +42,12 @@ const UploadSocialProofPrompt = ({
         )}
         {promptTranslations.rich("title", {
           makerName: forMaker.name,
-          makerNameTag: (makerName) => (
+          initiativeNameTag: (initiativeName) => (
             <Typography variant="h2">
               <Link
                 href={`/initiatives/${forMaker.id}`}
                 sx={{ color: "black" }}
-              >{`${makerName}`}</Link>
+              >{`${initiativeName}`}</Link>
             </Typography>
           ),
           prompt: (p) => (

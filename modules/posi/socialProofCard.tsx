@@ -61,8 +61,8 @@ const SocialProofCard = ({
         )}
         {forMaker && (
           <Typography>
-            {cardTranslations("forMaker", {
-              maker: forMaker.name,
+            {cardTranslations("forInitiative", {
+              initiative: forMaker.name,
             })}
           </Typography>
         )}

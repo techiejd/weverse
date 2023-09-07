@@ -29,9 +29,11 @@ import { useTranslations } from "next-intl";
 import { useMyMaker } from "../../common/context/weverseUtils";
 
 export const getStaticProps = WithTranslationsStaticProps();
-const MyMakerSpeedDial = ({ maker }: { maker: Maker }) => {
+const MyInitiativeSpeedDial = ({ maker }: { maker: Maker }) => {
   const callToActionTranslations = useTranslations("common.callToAction");
-  const t = useTranslations("makers.myMakerPortal.myMakerSpeedDial");
+  const t = useTranslations(
+    "initiatives.myInitiativePortal.myInitiativeSpeedDial"
+  );
   const actions = [
     <SpeedDialAction
       key="Ver"
@@ -102,10 +104,10 @@ const MyMakerSpeedDial = ({ maker }: { maker: Maker }) => {
   );
 };
 
-const MyMakerPortal = () => {
+const MyInitiativePortal = () => {
   const [myMaker, myMakerLoading] = useMyMaker();
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
-  const t = useTranslations("makers.myMakerPortal");
+  const t = useTranslations("initiatives.myInitiativePortal");
 
   const registerFab = (
     <Fab
@@ -131,7 +133,7 @@ const MyMakerPortal = () => {
       {myMakerLoading ? (
         <LoadingFab />
       ) : myMaker ? (
-        <MyMakerSpeedDial maker={myMaker} />
+        <MyInitiativeSpeedDial maker={myMaker} />
       ) : (
         registerFab
       )}
@@ -139,12 +141,13 @@ const MyMakerPortal = () => {
   );
 };
 
-const Makers = asOneWePage(() => {
+const Initiatives = asOneWePage(() => {
   const appState = useAppState();
   const makerConverter = useMakerConverter();
   const [makersSnapshot, makersLoading, makersError] = useCollection(
     collection(appState.firestore, "makers").withConverter(makerConverter)
   );
+  const initiativesTranslations = useTranslations("initiatives");
 
   const [makers, setMakers] = useState<string[]>([]);
 
@@ -162,7 +165,7 @@ const Makers = asOneWePage(() => {
         sx={{ alignItems: "center", justifyContent: "center", p: 1 }}
         spacing={1}
       >
-        <PageTitle title={<b>💪 Makers</b>} />
+        <PageTitle title={<b>💪 {initiativesTranslations("title")}</b>} />
         {makersError && (
           <Typography color={"red"}>{JSON.stringify(makersError)}</Typography>
         )}
@@ -171,9 +174,9 @@ const Makers = asOneWePage(() => {
           <InitiativeCard makerId={maker} key={maker} />
         ))}
       </Stack>
-      <MyMakerPortal />
+      <MyInitiativePortal />
     </Box>
   );
 });
 
-export default Makers;
+export default Initiatives;

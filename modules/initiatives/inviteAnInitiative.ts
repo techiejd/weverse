@@ -8,7 +8,7 @@ export type CopyFn = (text: string) => Promise<boolean>; // Return success
 
 export function useCopyToClipboard(): [CopiedValue, CopyFn] {
   const [copiedText, setCopiedText] = useState<CopiedValue>(null);
-  const copyTranslations = useTranslations("makers.invite.copy");
+  const copyTranslations = useTranslations("initiatives.invite.copy");
 
   const copy: CopyFn = async (text) => {
     if (!navigator?.clipboard) {

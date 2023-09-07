@@ -93,16 +93,16 @@ const UserPage = asOneWePage(() => {
         }
       />
       <Typography variant="h2">
-        {yourMemberTranslations("makers.title")}
+        {yourMemberTranslations("initiatives.title")}
       </Typography>
       {makersError && (
         <Typography color={"red"}>{JSON.stringify(makersError)}</Typography>
       )}
       {loading && (
-        <Typography>{yourMemberTranslations("makers.loading")}</Typography>
+        <Typography>{yourMemberTranslations("initiatives.loading")}</Typography>
       )}
       {!loading && !makersError && makerIds.length == 0 && (
-        <Typography>{yourMemberTranslations("makers.none")}</Typography>
+        <Typography>{yourMemberTranslations("initiatives.none")}</Typography>
       )}
       {makerIds.map((makerId) => (
         <InitiativeCard makerId={makerId} key={makerId} />

@@ -47,7 +47,7 @@ const InitiativeInput = ({
     }));
   };
   const chooseMakerTypeTranslations = useTranslations(
-    "makers.edit.chooseMakerType"
+    "initiatives.edit.chooseInitiativeType"
   );
 
   const setEmail = (email: string) => {
@@ -58,12 +58,8 @@ const InitiativeInput = ({
   };
 
   const detailedInputTranslations = useTranslations(
-    "makers.edit.detailedInput"
+    "initiatives.edit.detailedInput"
   );
-
-  const askForInfoMsg = detailedInputTranslations("askForInfoMsg", {
-    makerType: val.type,
-  });
 
   const [pic, setPic] = useState<Media | undefined | "loading">(
     val.pic ? { type: "img", url: val.pic } : undefined
@@ -73,9 +69,6 @@ const InitiativeInput = ({
       setVal((maker) => ({ ...maker, pic: pic.url }));
     }
   }, [pic, setVal]);
-  const askForImage = detailedInputTranslations("askForImage", {
-    makerType: val.type,
-  });
 
   const inputTranslations = useTranslations("input");
   return (
@@ -86,7 +79,7 @@ const InitiativeInput = ({
         </Typography>
         <FormControl>
           <RadioGroup
-            name="chooseMakerType"
+            name="chooseInitiativeType"
             row
             onChange={makerChange}
             value={val.type}
@@ -103,7 +96,11 @@ const InitiativeInput = ({
             />
           </RadioGroup>
         </FormControl>
-        <Typography variant="h3">{askForInfoMsg}</Typography>
+        <Typography variant="h3">
+          {detailedInputTranslations("askForInfoMsg", {
+            initiativeType: val.type,
+          })}
+        </Typography>
         {val.type == "organization" && (
           <OrganizationTypeInput val={val} setVal={setVal} />
         )}
@@ -118,10 +115,14 @@ const InitiativeInput = ({
         </Section>
         <Section
           label={detailedInputTranslations("profileImage", {
-            makerType: val.type,
+            initiativeType: val.type,
           })}
         >
-          <Typography>{askForImage}</Typography>
+          <Typography>
+            {detailedInputTranslations("askForImage", {
+              initiativeType: val.type,
+            })}
+          </Typography>
           <FileInput
             initialMedia={pic != "loading" ? pic : undefined}
             setMedia={setPic}

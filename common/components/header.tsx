@@ -107,7 +107,7 @@ export const MenuComponent = (props: BoxProps) => {
               <b>💪</b>
             </Typography>
           </ListItemIcon>
-          <ListItemText>Makers</ListItemText>
+          <ListItemText>{t("listInitiatives")}</ListItemText>
         </MenuItem>
         <UserPortal />
       </Menu>

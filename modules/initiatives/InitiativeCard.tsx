@@ -12,9 +12,11 @@ import {
 } from "@mui/material";
 import { useMaker } from "../../common/context/weverseUtils";
 import RatingsStack from "../../common/components/ratings";
+import { useTranslations } from "next-intl";
 
 const InitiativeCard = ({ makerId }: { makerId: string }) => {
   const [value, loading] = useMaker(makerId);
+  const initiativeCardTranslations = useTranslations("initiatives.card");
 
   return (
     <Card sx={{ width: "100%" }}>
@@ -25,7 +27,7 @@ const InitiativeCard = ({ makerId }: { makerId: string }) => {
               <SentimentVerySatisfied />
             </Icon>
           }
-          title={"Maker"}
+          title={initiativeCardTranslations("title")}
         />
         <CardContent>
           {loading || value == undefined ? (
