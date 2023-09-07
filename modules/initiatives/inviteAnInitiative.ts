@@ -31,10 +31,10 @@ export function useCopyToClipboard(): [CopiedValue, CopyFn] {
   return [copiedText, copy];
 }
 
-export const buildShareLinks = (invitedAsMaker: string, inviter: string) => {
-  const path = buildUrl(`/initiatives/${invitedAsMaker}`, {
+export const buildShareLinks = (invitedInitiative: string, inviter: string) => {
+  const path = buildUrl(`/initiatives/${invitedInitiative}`, {
     queryParams: {
-      invitedAsMaker,
+      invitedInitiative,
       registerRequested: true,
       inviter,
     },

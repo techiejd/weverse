@@ -37,7 +37,7 @@ const Invite = asOneWePage(() => {
   const appState = useAppState();
   const [maker] = useCurrentMaker();
   const [loading, setLoading] = useState(false);
-  const [invitedAsMakers, setInvitedAsMakers] = useState([v4()]);
+  const [invitedInitiatives, setInvitedAsMakers] = useState([v4()]);
   const makerConverter = useMakerConverter();
   const incubateeConverter = useIncubateeConverter();
 
@@ -138,8 +138,8 @@ const Invite = asOneWePage(() => {
             setInviteMakerInputs((inviteMakerInputs) =>
               inviteMakerInputs.slice(0, -1)
             );
-            setInvitedAsMakers((invitedAsMakers) =>
-              invitedAsMakers.slice(0, -1)
+            setInvitedAsMakers((invitedInitiatives) =>
+              invitedInitiatives.slice(0, -1)
             );
           }}
         >
@@ -149,7 +149,10 @@ const Invite = asOneWePage(() => {
           onClick={() => {
             //TODO(techiejd): Look into consolidating this in order to avoid race conditions.
             setMakerNames((makerNames) => [...makerNames, ""]);
-            setInvitedAsMakers((invitedAsMakers) => [...invitedAsMakers, v4()]);
+            setInvitedAsMakers((invitedInitiatives) => [
+              ...invitedInitiatives,
+              v4(),
+            ]);
             setMakerTypes((makerTypes) => [...makerTypes, "nonprofit"]);
             setInviteMakerInputs((inviteMakerInputs) => [
               ...inviteMakerInputs,
@@ -176,7 +179,7 @@ const Invite = asOneWePage(() => {
                 queryParams: {
                   makerNames,
                   inviter: maker.id!,
-                  invitedAsMakers,
+                  invitedInitiatives,
                   registerRequested: true,
                 },
               })
@@ -186,11 +189,11 @@ const Invite = asOneWePage(() => {
           setLoading(true);
           if (!maker) return false;
           const batch = writeBatch(appState.firestore);
-          invitedAsMakers.forEach((invitedAsMaker, idx) => {
+          invitedInitiatives.forEach((invitedInitiative, idx) => {
             const incubateeMakerDocRef = doc(
               appState.firestore,
               "makers",
-              invitedAsMaker
+              invitedInitiative
             ).withConverter(makerConverter);
             batch.set(incubateeMakerDocRef, {
               ownerId: "invited",
@@ -208,7 +211,7 @@ const Invite = asOneWePage(() => {
               "makers",
               maker.id!,
               "incubatees",
-              invitedAsMaker
+              invitedInitiative
             ).withConverter(incubateeConverter);
             batch.set(incubateeDocRef, {
               acceptedInvite: false,

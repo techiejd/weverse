@@ -66,7 +66,7 @@ import { doc, updateDoc, writeBatch } from "firebase/firestore";
 import {
   buildShareLinks,
   useCopyToClipboard,
-} from "../../../modules/initiatives/inviteAsMaker";
+} from "../../../modules/initiatives/inviteAnInitiative";
 import UnderConstruction from "../../../modules/posi/underConstruction";
 import { usePosiFormDataConverter } from "../../../common/utils/firebase";
 import {

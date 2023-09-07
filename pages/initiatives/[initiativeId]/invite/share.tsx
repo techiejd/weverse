@@ -15,7 +15,7 @@ import { useCurrentMaker } from "../../../../modules/initiatives/context";
 import {
   buildShareLinks,
   useCopyToClipboard,
-} from "../../../../modules/initiatives/inviteAsMaker";
+} from "../../../../modules/initiatives/inviteAnInitiative";
 import { Fragment } from "react";
 import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
@@ -26,19 +26,19 @@ export const getStaticProps = WithTranslationsStaticProps();
 const SharePage = asOneWePage(() => {
   const router = useRouter();
   const {
-    invitedAsMakers: invitedAsMakersIn,
+    invitedInitiatives: invitedInitiativesIn,
     makerNames: makerNamesIn,
     inviter,
   } = router.query;
-  const invitedAsMakers = invitedAsMakersIn
-    ? (invitedAsMakersIn as string).split(",")
+  const invitedInitiatives = invitedInitiativesIn
+    ? (invitedInitiativesIn as string).split(",")
     : null;
   const makerNames = makerNamesIn ? (makerNamesIn as string).split(",") : null;
   const [maker] = useCurrentMaker();
-  const shareLinks = invitedAsMakers
-    ? (invitedAsMakers as string[]).map((invitedAsMaker) =>
+  const shareLinks = invitedInitiatives
+    ? (invitedInitiatives as string[]).map((invitedInitiative) =>
         buildShareLinks(
-          (invitedAsMaker as string) ?? "",
+          (invitedInitiative as string) ?? "",
           (inviter as string) ?? ""
         )
       )
@@ -98,7 +98,7 @@ const SharePage = asOneWePage(() => {
       spacing={3}
     >
       <Typography variant="h2" textAlign="center">
-        {invitedAsMakers == null || invitedAsMakers.length == 1
+        {invitedInitiatives == null || invitedInitiatives.length == 1
           ? "Tu vinculo está listo"
           : "Tus vinculos están listos"}
       </Typography>

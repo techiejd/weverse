@@ -135,52 +135,52 @@ const AuthDialogContent = ({
 
   //TODO(techiejd): Look into reducing the logic for authentication.
   const router = useRouter();
-  const { invitedAsMaker, inviter } = router.query;
+  const { invitedInitiative, inviter } = router.query;
   const makersCollection = collection(
     appState.firestore,
     "makers"
   ).withConverter(makerConverter);
-  const invitedMakerDocRef = invitedAsMaker
-    ? doc(makersCollection, invitedAsMaker as string)
+  const invitedMakerDocRef = invitedInitiative
+    ? doc(makersCollection, invitedInitiative as string)
     : null;
   const incubateeDocRef =
-    inviter && invitedAsMaker
+    inviter && invitedInitiative
       ? doc(
           appState.firestore,
           "makers",
           inviter as string,
           "incubatees",
-          invitedAsMaker as string
+          invitedInitiative as string
         ).withConverter(incubateeConverter)
       : null;
 
-  // First we need to maker sure that the invitedAsMaker query param is valid.
-  // The invitedAsMaker is a maker whose ownerId is "invited".
+  // First we need to maker sure that the invitedInitiative query param is valid.
+  // The invitedInitiative is a maker whose ownerId is "invited".
   useEffect(() => {
-    if (invitedAsMaker) {
+    if (invitedInitiative) {
       const makerDoc = doc(
         appState.firestore,
         "makers",
-        invitedAsMaker as string
+        invitedInitiative as string
       ).withConverter(makerConverter);
       getDoc(makerDoc).then((makerDocSnap) => {
         if (!makerDocSnap.exists()) {
           alert(
             authTranslations(
-              "invitedAsMaker.invalidInvitationLinkAskForAnother"
+              "invitedInitiative.invalidInvitationLinkAskForAnother"
             )
           );
           router.push("/");
         }
         const makerData = makerDocSnap.data();
         if (makerData!.ownerId != "invited") {
-          alert("invitedAsMaker.usedInvitationLink");
+          alert("invitedInitiative.usedInvitationLink");
           router.push("/");
         }
       });
     }
   }, [
-    invitedAsMaker,
+    invitedInitiative,
     router,
     appState.firestore,
     authTranslations,
@@ -251,8 +251,8 @@ const AuthDialogContent = ({
           };
           await createUserAndMaker();
         } else {
-          if (invitedAsMaker) {
-            return authTranslations("handleOtp.invitedAsMakerNotPossible");
+          if (invitedInitiative) {
+            return authTranslations("handleOtp.invitedInitiativeNotPossible");
           }
         }
 

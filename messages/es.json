@@ -14,13 +14,13 @@
       "review": "Por favor revisa tu información",
       "name": "Nombre:"
     },
-    "invitedAsMaker": {
+    "invitedInitiative": {
       "invalidInvitationLinkAskForAnother": "Este vinculo no es valido. Hay que pedir otro de la incubadora.",
       "usedInvitationLink": "Este vinculo ya fue usado. Hay que pedir otro de la incubadora."
     },
     "handleOtp": {
       "restartPrompt": "Intenta de nuevo.",
-      "invitedAsMakerNotPossible": "No es posible registrarse con enlace de invitado.",
+      "invitedInitiativeNotPossible": "No es posible registrarse con enlace de invitado.",
       "invalidOtp": "El código de verificación no es válido."
     },
     "otpDialog": {
