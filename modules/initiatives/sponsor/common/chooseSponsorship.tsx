@@ -70,7 +70,7 @@ const ChooseSponsorship = ({
     );
 
   const [tipPercentage, setTipPercentage] = useState(15);
-  const [makerPaysFee, setMakerPaysFee] = useState(false);
+  const [initiativePaysFee, setInitiativePaysFee] = useState(false);
   const [memberPublishable, setMemberPublishable] = useState(true);
 
   const sponsorshipAmount =
@@ -81,7 +81,7 @@ const ChooseSponsorship = ({
     const feeAmount =
       feePercentage * sponsorshipAmount +
       currencyInfo[currency].feeCharge.amount;
-    return makerPaysFee
+    return initiativePaysFee
       ? 0
       : currency == "cop"
       ? Math.ceil(feeAmount)
@@ -288,8 +288,8 @@ const ChooseSponsorship = ({
                 <Checkbox
                   color="secondary"
                   name="denyFee"
-                  checked={makerPaysFee}
-                  onChange={(e) => setMakerPaysFee(e.target.checked)}
+                  checked={initiativePaysFee}
+                  onChange={(e) => setInitiativePaysFee(e.target.checked)}
                 />
               }
               label={chooseTranslations("fee.preferInitiativePays")}

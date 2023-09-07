@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useState, Fragment } from "react";
 import {
-  useMaker,
+  useInitiative,
   useMember,
   useCurrentSponsorships,
   useCurrentMember,
@@ -44,14 +44,16 @@ const SponsorshipDisplay = ({
 }) => {
   const localizedDateFormat = useLocalizedDateFormat();
   const sponsorTranslations = useTranslations("common.sponsor");
-  const [maker] = useMaker(type == "for" ? sponsorship.maker : undefined);
+  const [initiative] = useInitiative(
+    type == "for" ? sponsorship.maker : undefined
+  );
   const [member] = useMember(type == "from" ? sponsorship.member : undefined);
   const [loading, setLoading] = useState(false);
   const displayInfo =
     type == "for"
       ? {
-          name: maker?.name,
-          pic: maker?.pic,
+          name: initiative?.name,
+          pic: initiative?.pic,
         }
       : {
           name: member?.name,
@@ -66,11 +68,11 @@ const SponsorshipDisplay = ({
           const tipPercent = sponsorship.tipAmount / 100;
           const amountReceivedFromMemberIfFeePaidByMember =
             (sponsorship.total - feeCharge) / (1 + tipPercent + feePercentage);
-          const amountReceivedFromMemberIfFeePaidByMaker =
+          const amountReceivedFromMemberIfFeePaidByInitiative =
             (sponsorship.total - feeCharge - feeCharge * tipPercent) /
             (1 + tipPercent + feePercentage + tipPercent * feePercentage);
           return sponsorship.denyFee
-            ? amountReceivedFromMemberIfFeePaidByMaker
+            ? amountReceivedFromMemberIfFeePaidByInitiative
             : amountReceivedFromMemberIfFeePaidByMember;
         })();
   const amount = showAmount

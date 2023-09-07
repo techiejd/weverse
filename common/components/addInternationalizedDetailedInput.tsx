@@ -108,8 +108,8 @@ const AddInternationalizedDetailedInput = <T extends ValType>({
         // 1. A title that says "Add another language". Languages are represented by locale codes.
         // 2. A dropdown that lets you choose a language
         // 3. A button that says "Add"
-        // 4. A component that lets you edit the detailed maker input for that language
-        // 5. A close button on the top right of the detailed maker input component
+        // 4. A component that lets you edit the detailed initiative input for that language
+        // 5. A close button on the top right of the detailed initiative input component
         choosableLocales.length > 0 && (
           <Fragment>
             <Typography variant="h3">Add another language</Typography>

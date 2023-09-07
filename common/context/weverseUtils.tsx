@@ -14,7 +14,7 @@ import {
 } from "firebase/firestore";
 import {
   useMemberConverter,
-  useMakerConverter,
+  useInitiativeConverter,
   usePosiFormDataConverter,
   useSocialProofConverter,
   useSponsorshipConverter,
@@ -23,19 +23,19 @@ import {
 import { useEffect, useState } from "react";
 import {
   organizationType,
-  makerType,
-  Maker,
+  Maker as Initiative,
   OrganizationType,
-  MakerType,
+  MakerType as InitiativeType,
+  makerType as initiativeType,
 } from "../../functions/shared/src";
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
 
-export const useMyMaker = () => {
+export const useMyInitiative = () => {
   const appState = useAppState();
   const { user } = appState.authState;
   const memberConverter = useMemberConverter();
-  const makerConverter = useMakerConverter();
+  const initiativeConverter = useInitiativeConverter();
   const [member] = useDocumentData(
     user
       ? doc(appState.firestore, "members", user.uid).withConverter(
@@ -46,7 +46,7 @@ export const useMyMaker = () => {
   return useDocumentData(
     member && member.makerId
       ? doc(appState.firestore, "makers", member.makerId).withConverter(
-          makerConverter
+          initiativeConverter
         )
       : undefined
   );
@@ -179,12 +179,14 @@ export const useLikesCount = (actionId: string | undefined) => {
   return c;
 };
 
-export const useMaker = (makerId: string | undefined) => {
+export const useInitiative = (initiativeId: string | undefined) => {
   const appState = useAppState();
-  const makerConverter = useMakerConverter();
+  const initiativeConverter = useInitiativeConverter();
   return useDocumentData(
-    makerId
-      ? doc(appState.firestore, "makers", makerId).withConverter(makerConverter)
+    initiativeId
+      ? doc(appState.firestore, "makers", initiativeId).withConverter(
+          initiativeConverter
+        )
       : undefined
   );
 };
@@ -203,7 +205,7 @@ export const useAction = (posiId: string | undefined) => {
 
 export const useSocialProofs = (
   beneficiary: string | undefined,
-  beneficiaryType: "action" | "maker"
+  beneficiaryType: "action" | "initiative"
 ) => {
   const appState = useAppState();
   const socialProofConverter = useSocialProofConverter();
@@ -214,7 +216,7 @@ export const useSocialProofs = (
             socialProofConverter
           ),
           where(
-            beneficiaryType == "action" ? "forAction" : "forMaker",
+            beneficiaryType == "action" ? "forAction" : "forInitiative",
             "==",
             beneficiary
           )
@@ -223,44 +225,49 @@ export const useSocialProofs = (
   );
 };
 
-export const useActions = (maker: string | undefined) => {
+export const useActions = (initiative: string | undefined) => {
   const appState = useAppState();
   const posiFormDataConverter = usePosiFormDataConverter();
   return useCollectionData(
-    maker
+    initiative
       ? query(
           collection(appState.firestore, "impacts").withConverter(
             posiFormDataConverter
           ),
-          where("makerId", "==", maker)
+          where("initiativeId", "==", initiative)
         )
       : undefined
   );
 };
 
-export const useMakerTypeLabel = (maker?: Maker) => {
-  const makerTypesTranslations = useTranslations("initiatives.types.short");
-  if (!maker) {
+export const useInitiativeTypeLabel = (initiative?: Initiative) => {
+  const initiativeTypesTranslations = useTranslations(
+    "initiatives.types.short"
+  );
+  if (!initiative) {
     return "";
   }
   const organizationLabels = Object.keys(organizationType.Enum).reduce(
     (acc, key) => {
-      acc[key as OrganizationType] = makerTypesTranslations(key);
+      acc[key as OrganizationType] = initiativeTypesTranslations(key);
       return acc;
     },
     {} as Record<OrganizationType, string>
   );
 
-  const makerTypeLabels = Object.keys(makerType.Enum).reduce((acc, key) => {
-    acc[key as MakerType] = makerTypesTranslations(key);
-    return acc;
-  }, {} as Record<MakerType, string>);
+  const initiativeTypeLabels = Object.keys(initiativeType.Enum).reduce(
+    (acc, key) => {
+      acc[key as InitiativeType] = initiativeTypesTranslations(key);
+      return acc;
+    },
+    {} as Record<InitiativeType, string>
+  );
 
-  return maker.type == "individual"
-    ? makerTypeLabels[maker.type]
-    : maker.organizationType
-    ? organizationLabels[maker.organizationType]
-    : makerTypeLabels[maker.type];
+  return initiative.type == "individual"
+    ? initiativeTypeLabels[initiative.type]
+    : initiative.organizationType
+    ? organizationLabels[initiative.organizationType]
+    : initiativeTypeLabels[initiative.type];
 };
 
 export const useCurrentIncubatees = () => {

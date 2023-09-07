@@ -25,7 +25,7 @@ import { z } from "zod";
 import {
   HowToSupport,
   Maker,
-  maker,
+  maker as initiative,
   posiFormData,
 } from "../../functions/shared/src";
 import IconButtonWithLabel from "./iconButtonWithLabel";
@@ -219,12 +219,12 @@ const GenericSupportDialog = ({
 };
 
 const beneficiaryType = z.object({
-  maker,
+  initiative,
   action: posiFormData.optional(),
 });
 type Beneficiary = z.infer<typeof beneficiaryType>;
 const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
-  // TODO(techiejd): Missing button for connect to maker (generic support dialog has it).
+  // TODO(techiejd): Missing button for connect to initiative (generic support dialog has it).
   const openSupportDialog = useOpenSupportDialog();
   const genericDialogOpen = openSupportDialog == "generic";
   const [connectDialogOpen, setConnectDialogOpen] = useState(
@@ -238,21 +238,21 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
 
   const addSocialProofPath = beneficiary.action
     ? `/posi/${beneficiary.action.id}/impact/upload`
-    : `/initiatives/${beneficiary.maker.id}/impact/upload`;
+    : `/initiatives/${beneficiary.initiative.id}/impact/upload`;
 
   const shareProps = {
     title: supportDialogTranslations("share", {
-      beneficiaryType: beneficiary.action ? "action" : "maker",
+      beneficiaryType: beneficiary.action ? "action" : "initiative",
     }),
     path: beneficiary.action
       ? `/posi/${beneficiary.action.id}`
-      : `/initiatives/${beneficiary.maker.id}`,
+      : `/initiatives/${beneficiary.initiative.id}`,
   };
 
   const [sponsorships] = useMySponsorships();
   const sponsoring = sponsorships
     ? sponsorships.some(
-        (s) => s.maker == beneficiary.maker.id && !!s.paymentsStarted
+        (s) => s.maker == beneficiary.initiative.id && !!s.paymentsStarted
       )
     : false;
   const [inAddSponsorshipExperience, setInAddSponsorshipExperience] =
@@ -274,7 +274,9 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
     );
   };
 
-  const makerPresentationInfo = useLocalizedPresentationInfo(beneficiary.maker);
+  const initiativePresentationInfo = useLocalizedPresentationInfo(
+    beneficiary.initiative
+  );
 
   return (
     <AppBar
@@ -288,20 +290,20 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
         sponsoring={sponsoring}
         inAddSponsorshipExperience={inAddSponsorshipExperience}
         setInAddSponsorshipExperience={setInAddSponsorshipExperience}
-        beneficiary={beneficiary.maker}
+        beneficiary={beneficiary.initiative}
       />
       <ContactSupportDialog
         open={connectDialogOpen}
         setOpen={setConnectDialogOpen}
-        inputText={makerPresentationInfo?.howToSupport?.contact}
+        inputText={initiativePresentationInfo?.howToSupport?.contact}
       />
       <GenericSupportDialog
         open={genericDialogOpen}
         setSponsorDialogOpen={setSponsorDialogOpen}
         setConnectDialogOpen={setConnectDialogOpen}
         howToSupport={
-          makerPresentationInfo?.howToSupport
-            ? makerPresentationInfo.howToSupport
+          initiativePresentationInfo?.howToSupport
+            ? initiativePresentationInfo.howToSupport
             : {}
         }
         shareProps={shareProps}
@@ -319,7 +321,7 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
           aria-label="add"
           sx={{ width: 70, height: 70 }}
           onClick={() => {
-            //TODO(techiejd): Honestly posi should be under makers/makerId/posi.
+            //TODO(techiejd): Honestly posi should be under initiatives/initiativeId/posi.
             setSponsorDialogOpen(true);
             if (!sponsoring) setInAddSponsorshipExperience(true);
           }}

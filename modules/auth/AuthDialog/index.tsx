@@ -30,7 +30,7 @@ import { AuthAction, AuthDialogState, encodePhoneNumber } from "./context";
 import { useAppState } from "../../../common/context/appState";
 import {
   useIncubateeConverter,
-  useMakerConverter,
+  useInitiativeConverter,
   useMemberConverter,
 } from "../../../common/utils/firebase";
 import { useRouter } from "next/router";
@@ -105,7 +105,7 @@ const AuthDialogContent = ({
   const appState = useAppState();
   const { loading: userLoading } = appState.authState;
   const memberConverter = useMemberConverter();
-  const makerConverter = useMakerConverter();
+  const initiativeConverter = useInitiativeConverter();
   const incubateeConverter = useIncubateeConverter();
   const [updateProfile, _, updateProfileError] = useUpdateProfile(
     appState.auth
@@ -136,12 +136,12 @@ const AuthDialogContent = ({
   //TODO(techiejd): Look into reducing the logic for authentication.
   const router = useRouter();
   const { invitedInitiative, inviter } = router.query;
-  const makersCollection = collection(
+  const initiativesCollection = collection(
     appState.firestore,
     "makers"
-  ).withConverter(makerConverter);
-  const invitedMakerDocRef = invitedInitiative
-    ? doc(makersCollection, invitedInitiative as string)
+  ).withConverter(initiativeConverter);
+  const invitedInitiativeDocRef = invitedInitiative
+    ? doc(initiativesCollection, invitedInitiative as string)
     : null;
   const incubateeDocRef =
     inviter && invitedInitiative
@@ -154,17 +154,17 @@ const AuthDialogContent = ({
         ).withConverter(incubateeConverter)
       : null;
 
-  // First we need to maker sure that the invitedInitiative query param is valid.
-  // The invitedInitiative is a maker whose ownerId is "invited".
+  // First we need to initiative sure that the invitedInitiative query param is valid.
+  // The invitedInitiative is a initiative whose ownerId is "invited".
   useEffect(() => {
     if (invitedInitiative) {
-      const makerDoc = doc(
+      const initiativeDoc = doc(
         appState.firestore,
         "makers",
         invitedInitiative as string
-      ).withConverter(makerConverter);
-      getDoc(makerDoc).then((makerDocSnap) => {
-        if (!makerDocSnap.exists()) {
+      ).withConverter(initiativeConverter);
+      getDoc(initiativeDoc).then((initiativeDocSnap) => {
+        if (!initiativeDocSnap.exists()) {
           alert(
             authTranslations(
               "invitedInitiative.invalidInvitationLinkAskForAnother"
@@ -172,8 +172,8 @@ const AuthDialogContent = ({
           );
           router.push("/");
         }
-        const makerData = makerDocSnap.data();
-        if (makerData!.ownerId != "invited") {
+        const initiativeData = initiativeDocSnap.data();
+        if (initiativeData!.ownerId != "invited") {
           alert("invitedInitiative.usedInvitationLink");
           router.push("/");
         }
@@ -184,7 +184,7 @@ const AuthDialogContent = ({
     router,
     appState.firestore,
     authTranslations,
-    makerConverter,
+    initiativeConverter,
   ]);
 
   const handleOtp = async (otp: string) => {
@@ -195,24 +195,24 @@ const AuthDialogContent = ({
       .then(async (userCred) => {
         let error = "";
         if (authDialogState.authAction == AuthAction.register) {
-          const createUserAndMaker = async () => {
+          const createUserAndInitiative = async () => {
             const updateSuccessful = updateProfile({
               displayName: authDialogState.name,
             });
-            const makerDocRef = await (async () => {
-              if (invitedMakerDocRef && incubateeDocRef) {
+            const initiativeDocRef = await (async () => {
+              if (invitedInitiativeDocRef && incubateeDocRef) {
                 const batch = writeBatch(appState.firestore);
-                batch.update(invitedMakerDocRef, {
+                batch.update(invitedInitiativeDocRef, {
                   ownerId: userCred.user.uid,
                 });
                 batch.update(incubateeDocRef, {
                   acceptedInvite: true,
                 });
                 await batch.commit();
-                return invitedMakerDocRef;
+                return invitedInitiativeDocRef;
               }
-              // So we assume all users are also makers. They can edit this later.
-              return addDoc(makersCollection, {
+              // So we assume all users are also initiatives. They can edit this later.
+              return addDoc(initiativesCollection, {
                 ownerId: userCred.user.uid,
                 name: authDialogState.name,
                 type: "individual",
@@ -226,7 +226,7 @@ const AuthDialogContent = ({
                 "members",
                 userCred.user.uid
               ).withConverter(memberConverter),
-              { makerId: makerDocRef.id }
+              { makerId: initiativeDocRef.id }
             );
 
             const registeredPhoneNumberPromise = setDoc(
@@ -249,7 +249,7 @@ const AuthDialogContent = ({
                 ? updateProfileError?.message
                 : "";
           };
-          await createUserAndMaker();
+          await createUserAndInitiative();
         } else {
           if (invitedInitiative) {
             return authTranslations("handleOtp.invitedInitiativeNotPossible");

@@ -10,23 +10,23 @@ import { useTranslations } from "next-intl";
 import { sectionStyles } from "../theme";
 
 const UploadSocialProofPrompt = ({
-  forMaker,
+  forInitiative,
   forAction,
 }: {
-  forMaker: Maker;
+  forInitiative: Maker;
   forAction?: PosiFormData;
 }) => {
   const { user } = useAppState().authState;
-  const [makerActions, makerActionsLoading, makerActionsError] = useActions(
-    forAction ? undefined : forMaker.id
+  const [initiativeActions] = useActions(
+    forAction ? undefined : forInitiative.id
   );
   const [actions, setActions] = useState<PosiFormData[]>(
     forAction ? [forAction] : []
   );
 
   useEffect(() => {
-    if (makerActions) setActions(makerActions);
-  }, [makerActions, setActions]);
+    if (initiativeActions) setActions(initiativeActions);
+  }, [initiativeActions, setActions]);
 
   const promptTranslations = useTranslations("testimonials.prompt");
 
@@ -37,15 +37,15 @@ const UploadSocialProofPrompt = ({
         sx={{ justifyContent: "center", alignItems: "center" }}
         p={2}
       >
-        {forMaker.pic && (
-          <Avatar src={forMaker.pic} sx={{ width: 112, height: 112 }} />
+        {forInitiative.pic && (
+          <Avatar src={forInitiative.pic} sx={{ width: 112, height: 112 }} />
         )}
         {promptTranslations.rich("title", {
-          makerName: forMaker.name,
+          initiativeName: forInitiative.name,
           initiativeNameTag: (initiativeName) => (
             <Typography variant="h2">
               <Link
-                href={`/initiatives/${forMaker.id}`}
+                href={`/initiatives/${forInitiative.id}`}
                 sx={{ color: "black" }}
               >{`${initiativeName}`}</Link>
             </Typography>
@@ -76,7 +76,7 @@ const UploadSocialProofPrompt = ({
               href={
                 forAction
                   ? `/posi/${forAction.id}/impact/upload/form`
-                  : `/initiatives/${forMaker.id}/impact/upload/form`
+                  : `/initiatives/${forInitiative.id}/impact/upload/form`
               }
             >
               {promptTranslations("callToAction")}

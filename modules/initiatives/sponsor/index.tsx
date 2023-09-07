@@ -15,13 +15,13 @@ export default function Sponsor({
   beneficiary,
 }: {
   exitButtonBehavior: { href: string } | { onClick: () => void };
-  //TODO(techiejd): This isn't necessary if we move posi under makers/maker
+  //TODO(techiejd): This isn't necessary if we move posi under initiatives/initiative
   beneficiary: Maker;
 }) {
   const sponsorTranslations = useTranslations("common.sponsor");
   const router = useRouter();
   const { isReady, query } = useRouter();
-  const { sponsorStep, makerId, ...queryOthers } = query;
+  const { sponsorStep, initiativeId, ...queryOthers } = query;
   const currPath = router.asPath.split("?")[0];
   const [activeStep, setActiveStep] = React.useState(0);
   const [myMember, myMemberLoading, myMemberErrors] = useMyMemberOnce();

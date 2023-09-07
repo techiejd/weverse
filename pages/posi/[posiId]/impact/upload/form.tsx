@@ -1,5 +1,5 @@
 import { CircularProgress } from "@mui/material";
-import { useMaker } from "../../../../../common/context/weverseUtils";
+import { useInitiative } from "../../../../../common/context/weverseUtils";
 import { useCurrentPosi } from "../../../../../modules/posi/context";
 import UploadSocialProofForm from "../../../../../common/components/upload/form";
 import { WithTranslationsStaticProps } from "../../../../../common/utils/translations";
@@ -10,9 +10,9 @@ export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 const UploadForm = asOneWePage(() => {
   const [action] = useCurrentPosi();
-  const [maker] = useMaker(action?.makerId);
-  return action && maker ? (
-    <UploadSocialProofForm forMaker={maker} forAction={action} />
+  const [initiative] = useInitiative(action?.makerId);
+  return action && initiative ? (
+    <UploadSocialProofForm forInitiative={initiative} forAction={action} />
   ) : (
     <CircularProgress />
   );

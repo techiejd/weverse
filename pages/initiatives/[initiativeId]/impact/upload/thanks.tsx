@@ -1,4 +1,4 @@
-import { useCurrentMaker } from "../../../../../modules/initiatives/context";
+import { useCurrentInitiative } from "../../../../../modules/initiatives/context";
 import { WithTranslationsStaticProps } from "../../../../../common/utils/translations";
 import { CachePaths } from "../../../../../common/utils/staticPaths";
 import ThanksForTestimonial from "../../../../../common/components/thanksForTestimonial";
@@ -8,8 +8,8 @@ export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 
 const Thanks = asOneWePage(() => {
-  const [maker] = useCurrentMaker();
-  return ThanksForTestimonial({ forMakerId: maker?.id });
+  const [initiative] = useCurrentInitiative();
+  return ThanksForTestimonial({ forInitiativeId: initiative?.id });
 });
 
 export default Thanks;

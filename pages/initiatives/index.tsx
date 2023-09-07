@@ -22,14 +22,14 @@ import AuthDialog from "../../modules/auth/AuthDialog";
 import LoadingFab from "../../common/components/loadingFab";
 import SharingSpeedDialAction from "../../modules/initiatives/sharingSpeedDialAction";
 import { Maker } from "../../functions/shared/src";
-import { useMakerConverter } from "../../common/utils/firebase";
+import { useInitiativeConverter } from "../../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
 import { asOneWePage } from "../../common/components/onewePage";
 import { useTranslations } from "next-intl";
-import { useMyMaker } from "../../common/context/weverseUtils";
+import { useMyInitiative } from "../../common/context/weverseUtils";
 
 export const getStaticProps = WithTranslationsStaticProps();
-const MyInitiativeSpeedDial = ({ maker }: { maker: Maker }) => {
+const MyInitiativeSpeedDial = ({ initiative }: { initiative: Maker }) => {
   const callToActionTranslations = useTranslations("common.callToAction");
   const t = useTranslations(
     "initiatives.myInitiativePortal.myInitiativeSpeedDial"
@@ -39,7 +39,7 @@ const MyInitiativeSpeedDial = ({ maker }: { maker: Maker }) => {
       key="Ver"
       icon={
         <Link
-          href={`/initiatives/${maker.id}`}
+          href={`/initiatives/${initiative.id}`}
           style={{ textDecoration: "none" }}
         >
           <Visibility />
@@ -47,7 +47,7 @@ const MyInitiativeSpeedDial = ({ maker }: { maker: Maker }) => {
       }
       tooltipTitle={
         <Link
-          href={`/initiatives/${maker.id}`}
+          href={`/initiatives/${initiative.id}`}
           style={{ textDecoration: "none" }}
         >
           {t("view")}
@@ -59,7 +59,7 @@ const MyInitiativeSpeedDial = ({ maker }: { maker: Maker }) => {
       key={"Editar"}
       icon={
         <Link
-          href={`/initiatives/${maker.id}/edit`}
+          href={`/initiatives/${initiative.id}/edit`}
           style={{ textDecoration: "none" }}
         >
           <Edit />
@@ -67,7 +67,7 @@ const MyInitiativeSpeedDial = ({ maker }: { maker: Maker }) => {
       }
       tooltipTitle={
         <Link
-          href={`/initiatives/${maker.id}/edit`}
+          href={`/initiatives/${initiative.id}/edit`}
           style={{ textDecoration: "none" }}
         >
           {callToActionTranslations("edit")}
@@ -80,8 +80,8 @@ const MyInitiativeSpeedDial = ({ maker }: { maker: Maker }) => {
       icon={<Share />}
       tooltipTitle={callToActionTranslations("share")}
       tooltipOpen
-      title={`Echa un vistazo a la página Maker de ${maker.name}`}
-      path={`/initiatives/${maker.id}`}
+      title={`Echa un vistazo a la página Maker de ${initiative.name}`}
+      path={`/initiatives/${initiative.id}`}
     />,
   ];
   return (
@@ -105,7 +105,7 @@ const MyInitiativeSpeedDial = ({ maker }: { maker: Maker }) => {
 };
 
 const MyInitiativePortal = () => {
-  const [myMaker, myMakerLoading] = useMyMaker();
+  const [myInitiative, myInitiativeLoading] = useMyInitiative();
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const t = useTranslations("initiatives.myInitiativePortal");
 
@@ -130,10 +130,10 @@ const MyInitiativePortal = () => {
   return (
     <Box>
       <AuthDialog open={authDialogOpen} setOpen={setAuthDialogOpen} />
-      {myMakerLoading ? (
+      {myInitiativeLoading ? (
         <LoadingFab />
-      ) : myMaker ? (
-        <MyInitiativeSpeedDial maker={myMaker} />
+      ) : myInitiative ? (
+        <MyInitiativeSpeedDial initiative={myInitiative} />
       ) : (
         registerFab
       )}
@@ -143,22 +143,25 @@ const MyInitiativePortal = () => {
 
 const Initiatives = asOneWePage(() => {
   const appState = useAppState();
-  const makerConverter = useMakerConverter();
-  const [makersSnapshot, makersLoading, makersError] = useCollection(
-    collection(appState.firestore, "makers").withConverter(makerConverter)
-  );
+  const initiativeConverter = useInitiativeConverter();
+  const [initiativesSnapshot, initiativesLoading, initiativesError] =
+    useCollection(
+      collection(appState.firestore, "makers").withConverter(
+        initiativeConverter
+      )
+    );
   const initiativesTranslations = useTranslations("initiatives");
 
-  const [makers, setMakers] = useState<string[]>([]);
+  const [initiatives, setInitiatives] = useState<string[]>([]);
 
   useEffect(() => {
-    makersSnapshot?.docChanges().forEach((docChange) => {
+    initiativesSnapshot?.docChanges().forEach((docChange) => {
       // TODO(techiejd): Look into the other scenarios.
       if (docChange.type == "added") {
-        setMakers((makers) => [...makers, docChange.doc.id]);
+        setInitiatives((initiatives) => [...initiatives, docChange.doc.id]);
       }
     });
-  }, [makersSnapshot]);
+  }, [initiativesSnapshot]);
   return (
     <Box>
       <Stack
@@ -166,12 +169,14 @@ const Initiatives = asOneWePage(() => {
         spacing={1}
       >
         <PageTitle title={<b>💪 {initiativesTranslations("title")}</b>} />
-        {makersError && (
-          <Typography color={"red"}>{JSON.stringify(makersError)}</Typography>
+        {initiativesError && (
+          <Typography color={"red"}>
+            {JSON.stringify(initiativesError)}
+          </Typography>
         )}
-        {makersLoading && <CircularProgress />}
-        {makers.map((maker) => (
-          <InitiativeCard makerId={maker} key={maker} />
+        {initiativesLoading && <CircularProgress />}
+        {initiatives.map((initiative) => (
+          <InitiativeCard initiativeId={initiative} key={initiative} />
         ))}
       </Stack>
       <MyInitiativePortal />

@@ -19,7 +19,7 @@ import AddInternationalizedDetailedInput from "../../../common/components/addInt
 import Section from "../../../common/components/section";
 import { sectionStyles } from "../../../common/components/theme";
 import { Locale2Messages } from "../../../common/utils/translations";
-import { Maker, Media } from "../../../functions/shared/src";
+import { Maker as Initiative, Media } from "../../../functions/shared/src";
 import { FileInput } from "../../posi/input";
 import DetailedInput from "./detailedInput";
 import OrganizationTypeInput from "./organizationTypeInput";
@@ -31,28 +31,31 @@ const InitiativeInput = ({
   locale2Messages,
 }: {
   userName: string;
-  val: Maker;
-  setVal: Dispatch<SetStateAction<Maker>>;
+  val: Initiative;
+  setVal: Dispatch<SetStateAction<Initiative>>;
   locale2Messages: Locale2Messages;
 }) => {
-  const makerChange = (e: ChangeEvent<HTMLInputElement>, value: string) => {
+  const initiativeChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    value: string
+  ) => {
     const type = value as "individual" | "organization";
 
-    setVal((maker) => ({
-      ...maker,
+    setVal((initiative) => ({
+      ...initiative,
       type: type,
       organizationType:
         type == "organization" ? val.organizationType : undefined,
       name: type == "organization" ? val.name : userName,
     }));
   };
-  const chooseMakerTypeTranslations = useTranslations(
+  const chooseInitiativeTypeTranslations = useTranslations(
     "initiatives.edit.chooseInitiativeType"
   );
 
   const setEmail = (email: string) => {
-    setVal((maker) => ({
-      ...maker,
+    setVal((initiative) => ({
+      ...initiative,
       email: email,
     }));
   };
@@ -66,7 +69,7 @@ const InitiativeInput = ({
   );
   useEffect(() => {
     if (pic && pic != "loading") {
-      setVal((maker) => ({ ...maker, pic: pic.url }));
+      setVal((initiative) => ({ ...initiative, pic: pic.url }));
     }
   }, [pic, setVal]);
 
@@ -75,24 +78,24 @@ const InitiativeInput = ({
     <Stack alignItems={"center"}>
       <Stack sx={sectionStyles}>
         <Typography variant="h2">
-          {chooseMakerTypeTranslations("entityInformation")}
+          {chooseInitiativeTypeTranslations("entityInformation")}
         </Typography>
         <FormControl>
           <RadioGroup
             name="chooseInitiativeType"
             row
-            onChange={makerChange}
+            onChange={initiativeChange}
             value={val.type}
           >
             <FormControlLabel
               value="individual"
               control={<Radio required />}
-              label={chooseMakerTypeTranslations("individual")}
+              label={chooseInitiativeTypeTranslations("individual")}
             />
             <FormControlLabel
               value="organization"
               control={<Radio required />}
-              label={chooseMakerTypeTranslations("organization")}
+              label={chooseInitiativeTypeTranslations("organization")}
             />
           </RadioGroup>
         </FormControl>
@@ -128,7 +131,7 @@ const InitiativeInput = ({
             setMedia={setPic}
             maxFileSize={10485760 /** 10MB */}
             accept={"img"}
-            metadata={{ makerId: "", userID: "" }}
+            metadata={{ initiativeId: "", userID: "" }}
           />
         </Section>
       </Stack>

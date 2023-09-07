@@ -12,9 +12,9 @@ import { writeBatch, doc } from "firebase/firestore";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { useAppState } from "../../../../common/context/appState";
 import {
-  useMakerTypeLabel,
+  useInitiativeTypeLabel,
   useLikesCount,
-  useMaker,
+  useInitiative,
   useMyLikes,
   useMyMember,
 } from "../../../../common/context/weverseUtils";
@@ -138,8 +138,8 @@ const OverlayInfo = ({
   action: PosiFormData;
   setLogInPromptOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [maker] = useMaker(action.makerId);
-  const makerTypeLabel = useMakerTypeLabel(maker);
+  const [initiative] = useInitiative(action.makerId);
+  const initiativeTypeLabel = useInitiativeTypeLabel(initiative);
 
   return (
     <Stack
@@ -164,17 +164,17 @@ const OverlayInfo = ({
       >
         <Avatar
           key="makerAvatorOnActionCard"
-          src={maker?.pic}
+          src={initiative?.pic}
           sx={{ width: 25, height: 25, mr: 1 }}
         />
-        {maker ? (
+        {initiative ? (
           [
             <Typography
               key="makerTitleOnActionCard"
               fontWeight={"bold"}
               color={"white"}
             >
-              {maker.name}
+              {initiative.name}
             </Typography>,
             <Typography
               key="makerTypeOnActionCard"
@@ -188,7 +188,7 @@ const OverlayInfo = ({
                 p: 1,
               }}
             >
-              {makerTypeLabel}
+              {initiativeTypeLabel}
             </Typography>,
           ]
         ) : (

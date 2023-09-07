@@ -15,7 +15,7 @@ import {
   locale,
   posiFormData,
 } from "../../../functions/shared/src";
-import { useMyMaker } from "../../../common/context/weverseUtils";
+import { useMyInitiative } from "../../../common/context/weverseUtils";
 import ValidatorInput from "../input/validatorInput";
 import { useTranslations } from "next-intl";
 import { sectionStyles } from "../../../common/components/theme";
@@ -61,12 +61,12 @@ const PosiForm = ({
     useState<WorkingCopyPosiFormData>(initialPosi);
   const [uploading, setUploading] = useState(false);
 
-  const [myMaker] = useMyMaker();
+  const [myInitiative] = useMyInitiative();
   useEffect(() => {
-    if (myMaker && setFormData) {
-      setFormData((fD) => ({ ...fD, makerId: myMaker.id }));
+    if (myInitiative && setFormData) {
+      setFormData((fD) => ({ ...fD, initiativeId: myInitiative.id }));
     }
-  }, [myMaker, setFormData]);
+  }, [myInitiative, setFormData]);
   const callToActionTranslations = useTranslations("common.callToAction");
 
   const t = useTranslations("actions.upload");
@@ -110,9 +110,9 @@ const PosiForm = ({
                   locale2Messages={locale2Messages}
                   detailedInput={DetailedInput}
                 />
-                {myMaker && myMaker.incubator && (
+                {myInitiative && myInitiative.incubator && (
                   <Section label={t("sections.validator.title")}>
-                    <ValidatorInput incubator={myMaker.incubator} />
+                    <ValidatorInput incubator={myInitiative.incubator} />
                   </Section>
                 )}
                 {uploading ||

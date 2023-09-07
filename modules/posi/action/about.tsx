@@ -20,7 +20,7 @@ import { useLocalizedPresentationInfo } from "../../../common/utils/translations
 
 const AboutContent = ({
   location,
-  makerId,
+  makerId: initiativeId,
   ratings,
   validation,
   ...locale2PresentationInfo
@@ -88,7 +88,7 @@ const AboutContent = ({
               </CardContent>
             </Box>
           )}
-          <InitiativeCard makerId={makerId} />
+          <InitiativeCard initiativeId={initiativeId} />
         </Stack>
       </Box>
     )) || <CircularProgress />

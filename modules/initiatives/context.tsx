@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useMaker } from "../../common/context/weverseUtils";
+import { useInitiative } from "../../common/context/weverseUtils";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { query, collection, where } from "firebase/firestore";
 import {
@@ -8,21 +8,21 @@ import {
 } from "../../common/utils/firebase";
 import { useAppState } from "../../common/context/appState";
 
-export const useCurrentMaker = () => {
+export const useCurrentInitiative = () => {
   const router = useRouter();
   const { initiativeId } = router.query;
-  return useMaker(router.isReady ? String(initiativeId) : undefined);
+  return useInitiative(router.isReady ? String(initiativeId) : undefined);
 };
 
 export const useCurrentActions = () => {
   const appState = useAppState();
   const posiFormDataConverter = usePosiFormDataConverter();
-  const [maker] = useCurrentMaker();
+  const [initiative] = useCurrentInitiative();
   return useCollectionData(
-    maker
+    initiative
       ? query(
           collection(appState.firestore, "impacts"),
-          where("makerId", "==", maker.id)
+          where("makerId", "==", initiative.id)
         ).withConverter(posiFormDataConverter)
       : undefined
   );
@@ -30,13 +30,13 @@ export const useCurrentActions = () => {
 
 export const useCurrentImpacts = () => {
   const appState = useAppState();
-  const [maker] = useCurrentMaker();
+  const [initiative] = useCurrentInitiative();
   const socialProofConverter = useSocialProofConverter();
   return useCollectionData(
-    maker
+    initiative
       ? query(
           collection(appState.firestore, "socialProofs"),
-          where("forMaker", "==", maker.id)
+          where("forInitiative", "==", initiative.id)
         ).withConverter(socialProofConverter)
       : undefined
   );

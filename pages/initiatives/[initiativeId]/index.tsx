@@ -37,16 +37,16 @@ import SupportBottomBar from "../../../common/components/supportBottomBar";
 import {
   useCurrentActions,
   useCurrentImpacts,
-  useCurrentMaker,
+  useCurrentInitiative,
 } from "../../../modules/initiatives/context";
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import moment from "moment";
 import ImpactCard from "../../../modules/posi/action/card";
 import {
-  useMakerTypeLabel,
+  useInitiativeTypeLabel,
   useCurrentIncubatees,
   useCurrentNeedsValidation,
-  useMyMaker,
+  useMyInitiative,
 } from "../../../common/context/weverseUtils";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
 import { Incubatee, Maker, PosiFormData } from "../../../functions/shared/src";
@@ -93,15 +93,16 @@ const IncubatorSection = () => {
     (incubatee) => !incubatee.acceptedInvite
   );
   const [needsValidation] = useCurrentNeedsValidation();
-  const [myMaker] = useMyMaker();
-  const [maker] = useCurrentMaker();
-  const isMyMaker = myMaker && maker && myMaker.id == maker.id;
+  const [myInitiative] = useMyInitiative();
+  const [initiative] = useCurrentInitiative();
+  const isMyInitiative =
+    myInitiative && initiative && myInitiative.id == initiative.id;
   const [loading, setLoading] = useState(false);
   const [value, copy] = useCopyToClipboard();
 
   const InvitedIncubateePortal = ({ incubatee }: { incubatee: Incubatee }) => {
-    const { path, href } = maker
-      ? buildShareLinks(incubatee.id!, maker!.id!)
+    const { path, href } = initiative
+      ? buildShareLinks(incubatee.id!, initiative!.id!)
       : { path: "", href: "" };
     return loading ? (
       <CircularProgress />
@@ -115,32 +116,32 @@ const IncubatorSection = () => {
       >
         <IconButton
           onClick={() => {
-            // Here we delete the maker that had been invited by the incubator
+            // Here we delete the initiative that had been invited by the incubator
             // And we delete the incubatee relationship with the incubator
-            if (!maker || !incubatee) return;
+            if (!initiative || !incubatee) return;
             setLoading(true);
             const incubateeRef = doc(
               appState.firestore,
               "makers",
-              maker.id!,
+              initiative.id!,
               "incubatees",
               incubatee.id!
             );
-            const incubateeMakerRef = doc(
+            const incubateeInitiativeRef = doc(
               appState.firestore,
               "makers",
               incubatee.id!
             );
             const batch = writeBatch(appState.firestore);
             batch.delete(incubateeRef);
-            batch.delete(incubateeMakerRef);
+            batch.delete(incubateeInitiativeRef);
             batch.commit();
             setLoading(false);
           }}
         >
           <Close />
         </IconButton>
-        <InitiativeCard makerId={incubatee.id!} key={incubatee.id!} />
+        <InitiativeCard initiativeId={incubatee.id!} key={incubatee.id!} />
         <Stack spacing={2}>
           <IconButton onClick={() => copy(href)}>
             {value && value.includes(href) ? <Check /> : <ContentCopy />}
@@ -148,7 +149,7 @@ const IncubatorSection = () => {
           <ShareActionArea
             shareProps={{
               title: incubatorTranslations("joinPrompt", {
-                initiativeName: maker?.name,
+                initiativeName: initiative?.name,
               }),
               path: path,
             }}
@@ -197,7 +198,7 @@ const IncubatorSection = () => {
     );
   };
 
-  const presentationInfo = useLocalizedPresentationInfo(maker);
+  const presentationInfo = useLocalizedPresentationInfo(initiative);
 
   return (
     <Fragment>
@@ -211,7 +212,7 @@ const IncubatorSection = () => {
         {presentationInfo?.validationProcess ||
           incubatorTranslations("validationProcess.none")}
       </Typography>
-      {isMyMaker && (
+      {isMyInitiative && (
         <Fragment>
           <Typography variant="h3">
             {incubatorTranslations("pendingValidation.title")}
@@ -237,13 +238,13 @@ const IncubatorSection = () => {
       <Stack spacing={2}>
         {acceptedIncubatees && acceptedIncubatees.length > 0 ? (
           acceptedIncubatees.map((incubatee) => (
-            <InitiativeCard makerId={incubatee.id!} key={incubatee.id!} />
+            <InitiativeCard initiativeId={incubatee.id!} key={incubatee.id!} />
           ))
         ) : (
           <Typography>{incubatorTranslations("incubatees.none")}</Typography>
         )}
       </Stack>
-      {isMyMaker && (
+      {isMyInitiative && (
         <Fragment>
           <Typography variant="h3">
             {incubatorTranslations("invited.title")}
@@ -266,9 +267,9 @@ const IncubatorSection = () => {
   );
 };
 
-const AboutSection = ({ maker }: { maker?: Maker }) => {
+const AboutSection = ({ initiative }: { initiative?: Maker }) => {
   const aboutTranslations = useTranslations("initiatives.about");
-  const presentationInfo = useLocalizedPresentationInfo(maker);
+  const presentationInfo = useLocalizedPresentationInfo(initiative);
   const noAboutInfo =
     !presentationInfo?.presentationVideo && !presentationInfo?.about;
   return (
@@ -301,24 +302,26 @@ const AboutSection = ({ maker }: { maker?: Maker }) => {
   );
 };
 
-const MakerProfile = () => {
-  const [maker] = useCurrentMaker();
-  const [myMaker] = useMyMaker();
-  const makerTypeLabel = useMakerTypeLabel(maker);
-  return maker ? (
+const InitiativeProfile = () => {
+  const [initiative] = useCurrentInitiative();
+  const [myInitiative] = useMyInitiative();
+  const initiativeTypeLabel = useInitiativeTypeLabel(initiative);
+  return initiative ? (
     <Stack
       spacing={2}
       sx={{ justifyContent: "center", alignItems: "center", pb: 2 }}
     >
-      <Typography variant="h1">{maker.name}</Typography>
-      <RatingsStack ratings={maker.ratings} />
-      <Avatar src={maker.pic} sx={{ width: 225, height: 225 }} />
-      <Typography>{makerTypeLabel}</Typography>
-      <AboutSection maker={maker} />
+      <Typography variant="h1">{initiative.name}</Typography>
+      <RatingsStack ratings={initiative.ratings} />
+      <Avatar src={initiative.pic} sx={{ width: 225, height: 225 }} />
+      <Typography>{initiativeTypeLabel}</Typography>
+      <AboutSection initiative={initiative} />
       <Stack sx={{ width: "100%" }}>
-        {maker.type == "organization" &&
-          maker.organizationType == "incubator" && <IncubatorSection />}
-        <Sponsorships showAmount={myMaker && myMaker?.id == maker?.id} />
+        {initiative.type == "organization" &&
+          initiative.organizationType == "incubator" && <IncubatorSection />}
+        <Sponsorships
+          showAmount={myInitiative && myInitiative?.id == initiative?.id}
+        />
       </Stack>
     </Stack>
   ) : (
@@ -326,7 +329,7 @@ const MakerProfile = () => {
   );
 };
 
-const MakerContent = () => {
+const InitiativeContent = () => {
   const [actions] = useCurrentActions();
   const [socialProofs] = useCurrentImpacts();
   const [actionsContent, setActionsContent] = useState<Content[]>([]);
@@ -381,7 +384,7 @@ const MakerContent = () => {
           {c.type == "action" ? (
             <ImpactCard posiData={c.data} />
           ) : (
-            <SocialProofCard socialProof={c.data} showMaker={false} />
+            <SocialProofCard socialProof={c.data} showInitiative={false} />
           )}
         </Grid>
       ))}
@@ -393,17 +396,17 @@ const VipDialog = ({
   open,
   setOpen,
   setSolicitDialogOpen,
-  myMaker,
+  myInitiative,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   setSolicitDialogOpen: Dispatch<SetStateAction<boolean>>;
-  myMaker: Maker;
+  myInitiative: Maker;
 }) => {
   const vipDialogTranslations = useTranslations("initiatives.vip.dialog");
   const [actions] = useCurrentActions();
   const [socialProofs] = useCurrentImpacts();
-  const vipState = useVipState(myMaker, socialProofs, actions);
+  const vipState = useVipState(myInitiative, socialProofs, actions);
   return (
     <Dialog open={open}>
       <DialogTitle>{vipDialogTranslations("title")}</DialogTitle>
@@ -442,7 +445,7 @@ const VipDialog = ({
             />
           </ListItemButton>
           <ListItemButton
-            href={`/initiatives/${myMaker.id}/edit`}
+            href={`/initiatives/${myInitiative.id}/edit`}
             disabled={vipState.allFieldsFinished}
           >
             <ListItemIcon>
@@ -506,8 +509,8 @@ const IncubateeVIPDialog = ({
 const BottomBar = () => {
   const bottomBarTranslations = useTranslations("initiatives.bottomBar");
   const callToActionTranslations = useTranslations("common.callToAction");
-  const [maker] = useCurrentMaker();
-  const [myMaker] = useMyMaker();
+  const [initiative] = useCurrentInitiative();
+  const [myInitiative] = useMyInitiative();
   const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
   const router = useRouter();
   const { vipDialogOpen: queryVipDialogOpen } = router.query;
@@ -517,8 +520,8 @@ const BottomBar = () => {
   const [incubateeVIPDialogOpen, setIncubateeVIPDialogOpen] = useState(false);
   const [socialProofs] = useCurrentImpacts();
   const [actions] = useCurrentActions();
-  const vipState = useVipState(myMaker, socialProofs, actions);
-  const vipButtonBehavior = maker?.incubator
+  const vipState = useVipState(myInitiative, socialProofs, actions);
+  const vipButtonBehavior = initiative?.incubator
     ? { onClick: () => setIncubateeVIPDialogOpen(true) }
     : vipState.entryGiven
     ? { href: "/initiatives/vip" }
@@ -531,16 +534,23 @@ const BottomBar = () => {
     </CenterBottomFab>
   );
 
-  const IncubatorInviteMakerCenterBottomFab = ({ maker }: { maker: Maker }) => (
-    <CenterBottomFab color="secondary" href={`/initiatives/${maker.id}/invite`}>
+  const IncubatorInviteInitiativeCenterBottomFab = ({
+    initiative,
+  }: {
+    initiative: Maker;
+  }) => (
+    <CenterBottomFab
+      color="secondary"
+      href={`/initiatives/${initiative.id}/invite`}
+    >
       <PersonAdd />
       <Typography fontSize={12}>{bottomBarTranslations("invite")}</Typography>
     </CenterBottomFab>
   );
-  const presentationInfo = useLocalizedPresentationInfo(maker);
-  return maker == undefined ? (
+  const presentationInfo = useLocalizedPresentationInfo(initiative);
+  return initiative == undefined ? (
     <CenterBottomCircularProgress />
-  ) : myMaker && myMaker.id == maker.id ? (
+  ) : myInitiative && myInitiative.id == initiative.id ? (
     <AppBar
       position="fixed"
       color="primary"
@@ -552,22 +562,22 @@ const BottomBar = () => {
         howToSupport={
           presentationInfo?.howToSupport ? presentationInfo?.howToSupport : {}
         }
-        solicitOpinionPath={`/initiatives/${maker.id}/impact/upload`}
-        pathUnderSupport={`/initiatives/${maker.id}`}
-        editMakerPath={`/initiatives/${maker.id}/edit`}
+        solicitOpinionPath={`/initiatives/${initiative.id}/impact/upload`}
+        pathUnderSupport={`/initiatives/${initiative.id}`}
+        editInitiativePath={`/initiatives/${initiative.id}/edit`}
       />
       <VipDialog
         open={vipDialogOpen}
         setOpen={setVipDialogOpen}
         setSolicitDialogOpen={setSolicitDialogOpen}
-        myMaker={myMaker}
+        myInitiative={myInitiative}
       />
       <IncubateeVIPDialog
         open={incubateeVIPDialogOpen}
         setOpen={setIncubateeVIPDialogOpen}
       />
       <Toolbar>
-        <IconButtonWithLabel href={`/initiatives/${maker.id}/edit`}>
+        <IconButtonWithLabel href={`/initiatives/${initiative.id}/edit`}>
           <Edit />
           <Typography>{callToActionTranslations("edit")}</Typography>
         </IconButtonWithLabel>
@@ -577,8 +587,8 @@ const BottomBar = () => {
             {bottomBarTranslations("solicitSupportShort")}
           </Typography>
         </IconButtonWithLabel>
-        {maker?.organizationType == "incubator" ? (
-          <IncubatorInviteMakerCenterBottomFab maker={maker} />
+        {initiative?.organizationType == "incubator" ? (
+          <IncubatorInviteInitiativeCenterBottomFab initiative={initiative} />
         ) : (
           <VipCenterBottomFab />
         )}
@@ -586,7 +596,7 @@ const BottomBar = () => {
         <ShareActionArea
           shareProps={{
             title: bottomBarTranslations("sharePrompt"),
-            path: `makers/${maker.id}`,
+            path: `initiatives/${initiative.id}`,
           }}
         >
           <IconButtonWithLabel>
@@ -601,7 +611,7 @@ const BottomBar = () => {
       </Toolbar>
     </AppBar>
   ) : (
-    <SupportBottomBar beneficiary={{ maker }} />
+    <SupportBottomBar beneficiary={{ initiative: initiative }} />
   );
 };
 
@@ -609,8 +619,8 @@ const MakerPage = asOneWePage(() => {
   return (
     <Box mb={12}>
       <Stack p={2} divider={<Divider />}>
-        <MakerProfile />
-        <MakerContent />
+        <InitiativeProfile />
+        <InitiativeContent />
       </Stack>
       <BottomBar />
     </Box>

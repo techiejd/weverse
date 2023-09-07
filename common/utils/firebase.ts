@@ -7,7 +7,7 @@ import {
   QueryDocumentSnapshot,
 } from "firebase/firestore";
 import {
-  maker,
+  maker as initiative,
   socialProof,
   member,
   posiFormData,
@@ -70,7 +70,8 @@ const createUseLocalizedDataConverterFor = <T extends z.ZodType<DbBase>>(
   return useLocalizedDataConverter;
 };
 
-export const useMakerConverter = createUseLocalizedDataConverterFor(maker);
+export const useInitiativeConverter =
+  createUseLocalizedDataConverterFor(initiative);
 export const useSocialProofConverter =
   createUseLocalizedDataConverterFor(socialProof);
 export const useMemberConverter = createUseLocalizedDataConverterFor(member);

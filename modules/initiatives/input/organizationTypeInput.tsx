@@ -10,7 +10,7 @@ import {
 import { useTranslations } from "next-intl";
 import { Dispatch, SetStateAction, ChangeEvent } from "react";
 import {
-  Maker,
+  Maker as Initiative,
   OrganizationType,
   organizationType,
 } from "../../../functions/shared/src";
@@ -19,21 +19,21 @@ const OrganizationTypeInput = ({
   val,
   setVal,
 }: {
-  val: Maker;
-  setVal: Dispatch<SetStateAction<Maker>>;
+  val: Initiative;
+  setVal: Dispatch<SetStateAction<Initiative>>;
 }) => {
   const organizationTypeTranslations = useTranslations(
     "initiatives.edit.chooseInitiativeType.organizationType"
   );
-  const makerTypesTranslations = useTranslations("initiatives.types");
+  const initiativeTypesTranslations = useTranslations("initiatives.types");
   const inputTranslations = useTranslations("input");
   const organizationTypeChange = (
     e: ChangeEvent<HTMLInputElement>,
     value: string
   ) => {
     const type = value as OrganizationType;
-    setVal((maker) => ({
-      ...maker,
+    setVal((initiative) => ({
+      ...initiative,
       organizationType: type,
     }));
   };
@@ -50,14 +50,14 @@ const OrganizationTypeInput = ({
         inputProps={{ maxLength: 75 }}
         value={val.name ? val.name : ""}
         onChange={(e) => {
-          setVal((maker) => ({
-            ...maker,
+          setVal((initiative) => ({
+            ...initiative,
             name: e.target.value,
           }));
         }}
       />
       <FormControl>
-        <FormLabel>{makerTypesTranslations("title")}</FormLabel>
+        <FormLabel>{initiativeTypesTranslations("title")}</FormLabel>
         <RadioGroup
           name="chooseOrganizationType"
           onChange={organizationTypeChange}
@@ -70,7 +70,7 @@ const OrganizationTypeInput = ({
                 key={oType}
                 value={oType}
                 control={<Radio required />}
-                label={makerTypesTranslations("long." + oType)}
+                label={initiativeTypesTranslations("long." + oType)}
               />
             );
           })}

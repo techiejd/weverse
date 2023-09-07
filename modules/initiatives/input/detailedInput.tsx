@@ -13,18 +13,18 @@ import { DetailedInputProps } from "../../../common/components/addInternationali
 import Section from "../../../common/components/section";
 import { sectionStyles } from "../../../common/components/theme";
 import {
-  Maker,
-  MakerPresentationExtension,
+  Maker as Initiative,
+  MakerPresentationExtension as InitiativePresentationExtension,
   organizationType,
   Media,
 } from "../../../functions/shared/src";
 import { FileInput } from "../../posi/input";
 
-const DetailedInput: FC<DetailedInputProps<Maker>> = ({
+const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
   val,
   setVal,
   locale,
-}: DetailedInputProps<Maker>) => {
+}: DetailedInputProps<Initiative>) => {
   const detailedInputTranslations = useTranslations(
     "initiatives.edit.detailedInput"
   );
@@ -35,25 +35,25 @@ const DetailedInput: FC<DetailedInputProps<Maker>> = ({
   }, [locale, val]);
 
   const setPartialDetailedInput: Dispatch<
-    SetStateAction<MakerPresentationExtension>
+    SetStateAction<InitiativePresentationExtension>
   > = useCallback(
     (
       extOrCallback:
-        | MakerPresentationExtension
+        | InitiativePresentationExtension
         | ((
-            prevState: MakerPresentationExtension
-          ) => MakerPresentationExtension)
+            prevState: InitiativePresentationExtension
+          ) => InitiativePresentationExtension)
     ): void => {
       if (!setVal) return;
       // localized
-      setVal((maker) => {
-        const prevValue = maker[locale] || {};
+      setVal((initiative) => {
+        const prevValue = initiative[locale] || {};
         const value =
           typeof extOrCallback == "function"
             ? extOrCallback(prevValue)
             : extOrCallback;
         return {
-          ...maker,
+          ...initiative,
           [locale]: {
             ...prevValue,
             ...value,
@@ -87,7 +87,7 @@ const DetailedInput: FC<DetailedInputProps<Maker>> = ({
     }));
   };
 
-  //TODO(techiejd): Fix videos story. All the videos should have refs (not just links) and the metadata should include maker id.
+  //TODO(techiejd): Fix videos story. All the videos should have refs (not just links) and the metadata should include initiative id.
 
   const targetedQuestion =
     val?.organizationType == organizationType.Enum.incubator ? (
@@ -164,7 +164,7 @@ const DetailedInput: FC<DetailedInputProps<Maker>> = ({
               setMedia={setPresentationVideo}
               maxFileSize={10485760 /** 10MB */}
               accept={"video"}
-              metadata={{ makerId: "", userID: "" }}
+              metadata={{ initiativeId: "", userID: "" }}
             />
             <Typography>
               {detailedInputTranslations("story.video.prompt")}

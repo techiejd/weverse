@@ -8,19 +8,19 @@ import {
   Typography,
 } from "@mui/material";
 import { Fragment, useState } from "react";
-import { useCurrentMaker } from "../../../../modules/initiatives/context";
+import { useCurrentInitiative } from "../../../../modules/initiatives/context";
 import { LoadingButton } from "@mui/lab";
 import { doc, writeBatch } from "firebase/firestore";
 import { useAppState } from "../../../../common/context/appState";
 import {
   useIncubateeConverter,
-  useMakerConverter,
+  useInitiativeConverter,
 } from "../../../../common/utils/firebase";
 import { v4 } from "uuid";
 import {
   organizationType,
-  makerType as makerTypeSchema,
-  MakerType,
+  makerType as initiativeTypeSchema,
+  MakerType as InitiativeType,
   OrganizationType,
 } from "../../../../functions/shared/src";
 import Add from "@mui/icons-material/Add";
@@ -35,38 +35,44 @@ export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 const Invite = asOneWePage(() => {
   const appState = useAppState();
-  const [maker] = useCurrentMaker();
+  const [initiative] = useCurrentInitiative();
   const [loading, setLoading] = useState(false);
   const [invitedInitiatives, setInvitedInitiatives] = useState([v4()]);
-  const makerConverter = useMakerConverter();
+  const initiativeConverter = useInitiativeConverter();
   const incubateeConverter = useIncubateeConverter();
 
-  const [makerTypes, setMakerTypes] = useState<
-    (MakerType | OrganizationType)[]
+  const [initiativeTypes, setInitiativeTypes] = useState<
+    (InitiativeType | OrganizationType)[]
   >(["nonprofit" as OrganizationType]);
-  const [makerNames, setMakerNames] = useState([""]);
+  const [initiativeNames, setInitiativeNames] = useState([""]);
 
   const inviteTranslations = useTranslations("initiatives.invite");
 
-  const InviteMakerInput = ({ index }: { index: number }) => {
+  const InviteInitiativeInput = ({ index }: { index: number }) => {
     const inviteTranslations = useTranslations("initiatives.invite");
-    const makerTypesTranslations = useTranslations("initiatives.types");
-    const makeTypeOption = (t: MakerType | OrganizationType) => {
-      const translateType = (t: MakerType | OrganizationType) =>
-        makerTypesTranslations("long." + t);
+    const initiativeTypesTranslations = useTranslations("initiatives.types");
+    const makeTypeOption = (t: InitiativeType | OrganizationType) => {
+      const translateType = (t: InitiativeType | OrganizationType) =>
+        initiativeTypesTranslations("long." + t);
       return <option value={t}>{translateType(t)}</option>;
     };
     //TODO(techiejd): React's not updating the states through array manipulation.
-    const [makerName, setMakerName] = useState(makerNames[index] ?? "");
-    const [makerType, setMakerType] = useState(
-      makerTypes[index] ?? organizationType.Enum.nonprofit
+    const [initiativeName, setInitiativeName] = useState(
+      initiativeNames[index] ?? ""
     );
-    const onSelectMakerType = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setMakerType(event.target.value as MakerType | OrganizationType);
-      setMakerTypes((makerTypes) =>
-        makerTypes.map((type, i) =>
+    const [initiativeType, setInitiativeType] = useState(
+      initiativeTypes[index] ?? organizationType.Enum.nonprofit
+    );
+    const onSelectInitiativeType = (
+      event: React.ChangeEvent<HTMLSelectElement>
+    ) => {
+      setInitiativeType(
+        event.target.value as InitiativeType | OrganizationType
+      );
+      setInitiativeTypes((initiativeTypes) =>
+        initiativeTypes.map((type, i) =>
           i === index
-            ? (event.target.value as MakerType | OrganizationType)
+            ? (event.target.value as InitiativeType | OrganizationType)
             : type
         )
       );
@@ -75,18 +81,18 @@ const Invite = asOneWePage(() => {
       <Fragment>
         <FormControl fullWidth sx={{ maxWidth: 600 }}>
           <InputLabel htmlFor="makerType">
-            {makerTypesTranslations("title")}
+            {initiativeTypesTranslations("title")}
           </InputLabel>
           <NativeSelect
             sx={{ width: "100%" }}
-            value={makerType}
-            onChange={onSelectMakerType}
+            value={initiativeType}
+            onChange={onSelectInitiativeType}
             inputProps={{
               name: "makerType",
               id: "makerType",
             }}
           >
-            {makeTypeOption(makerTypeSchema.Enum.individual)}
+            {makeTypeOption(initiativeTypeSchema.Enum.individual)}
             {makeTypeOption(organizationType.Enum.nonprofit)}
             {makeTypeOption(organizationType.Enum.religious)}
             {makeTypeOption(organizationType.Enum.unincorporated)}
@@ -96,17 +102,17 @@ const Invite = asOneWePage(() => {
         <TextField
           required
           label={inviteTranslations("whatIsInitiativesName", {
-            initiativeType: makerTypes[index],
+            initiativeType: initiativeTypes[index],
           })}
           margin="normal"
           inputProps={{ maxLength: 75 }}
           fullWidth
           sx={{ maxWidth: 600 }}
-          value={makerName}
+          value={initiativeName}
           onChange={(e) => {
-            setMakerName(e.target.value);
-            setMakerNames((makerNames) => {
-              return makerNames.map((name, i) => {
+            setInitiativeName(e.target.value);
+            setInitiativeNames((initiativeNames) => {
+              return initiativeNames.map((name, i) => {
                 return i === index ? e.target.value : name;
               });
             });
@@ -116,9 +122,9 @@ const Invite = asOneWePage(() => {
     );
   };
 
-  const [inviteMakerInputs, setInviteMakerInputs] = useState<JSX.Element[]>([
-    <InviteMakerInput key={0} index={0} />,
-  ]);
+  const [inviteInitiativeInputs, setInviteInitiativeInputs] = useState<
+    JSX.Element[]
+  >([<InviteInitiativeInput key={0} index={0} />]);
 
   return (
     <Stack
@@ -128,15 +134,19 @@ const Invite = asOneWePage(() => {
       <Typography variant="h2" textAlign="center">
         {inviteTranslations("title")}
       </Typography>
-      {inviteMakerInputs}
+      {inviteInitiativeInputs}
       <Stack direction="row" spacing={2}>
         <IconButton
-          disabled={inviteMakerInputs.length <= 1}
+          disabled={inviteInitiativeInputs.length <= 1}
           onClick={() => {
-            setMakerNames((makerNames) => makerNames.slice(0, -1));
-            setMakerTypes((makerTypes) => makerTypes.slice(0, -1));
-            setInviteMakerInputs((inviteMakerInputs) =>
-              inviteMakerInputs.slice(0, -1)
+            setInitiativeNames((initiativeNames) =>
+              initiativeNames.slice(0, -1)
+            );
+            setInitiativeTypes((initiativeTypes) =>
+              initiativeTypes.slice(0, -1)
+            );
+            setInviteInitiativeInputs((inviteInitiativeInputs) =>
+              inviteInitiativeInputs.slice(0, -1)
             );
             setInvitedInitiatives((invitedInitiatives) =>
               invitedInitiatives.slice(0, -1)
@@ -148,17 +158,20 @@ const Invite = asOneWePage(() => {
         <IconButton
           onClick={() => {
             //TODO(techiejd): Look into consolidating this in order to avoid race conditions.
-            setMakerNames((makerNames) => [...makerNames, ""]);
+            setInitiativeNames((initiativeNames) => [...initiativeNames, ""]);
             setInvitedInitiatives((invitedInitiatives) => [
               ...invitedInitiatives,
               v4(),
             ]);
-            setMakerTypes((makerTypes) => [...makerTypes, "nonprofit"]);
-            setInviteMakerInputs((inviteMakerInputs) => [
-              ...inviteMakerInputs,
-              <InviteMakerInput
-                key={inviteMakerInputs.length}
-                index={inviteMakerInputs.length}
+            setInitiativeTypes((initiativeTypes) => [
+              ...initiativeTypes,
+              "nonprofit",
+            ]);
+            setInviteInitiativeInputs((inviteInitiativeInputs) => [
+              ...inviteInitiativeInputs,
+              <InviteInitiativeInput
+                key={inviteInitiativeInputs.length}
+                index={inviteInitiativeInputs.length}
               />,
             ]);
           }}
@@ -170,15 +183,17 @@ const Invite = asOneWePage(() => {
         variant="contained"
         sx={{ width: "fit-content" }}
         disabled={
-          !makerNames.every((makerName) => makerName) || loading || !maker
+          !initiativeNames.every((initiativeName) => initiativeName) ||
+          loading ||
+          !initiative
         }
         loading={loading}
         href={
-          maker
-            ? buildUrl(`/initiatives/${maker.id!}/invite/share`, {
+          initiative
+            ? buildUrl(`/initiatives/${initiative.id!}/invite/share`, {
                 queryParams: {
-                  makerNames,
-                  inviter: maker.id!,
+                  initiativeNames,
+                  inviter: initiative.id!,
                   invitedInitiatives,
                   registerRequested: true,
                 },
@@ -187,29 +202,31 @@ const Invite = asOneWePage(() => {
         }
         onClick={async () => {
           setLoading(true);
-          if (!maker) return false;
+          if (!initiative) return false;
           const batch = writeBatch(appState.firestore);
           invitedInitiatives.forEach((invitedInitiative, idx) => {
-            const incubateeMakerDocRef = doc(
+            const incubateeInitiativeDocRef = doc(
               appState.firestore,
               "makers",
               invitedInitiative
-            ).withConverter(makerConverter);
-            batch.set(incubateeMakerDocRef, {
+            ).withConverter(initiativeConverter);
+            batch.set(incubateeInitiativeDocRef, {
               ownerId: "invited",
               type:
-                makerTypes[idx] == "individual" ? "individual" : "organization",
+                initiativeTypes[idx] == "individual"
+                  ? "individual"
+                  : "organization",
               organizationType:
-                makerTypes[idx] == "individual"
+                initiativeTypes[idx] == "individual"
                   ? undefined
-                  : organizationType.parse(makerTypes[idx]),
-              name: makerNames[idx],
-              incubator: maker?.id,
+                  : organizationType.parse(initiativeTypes[idx]),
+              name: initiativeNames[idx],
+              incubator: initiative?.id,
             });
             const incubateeDocRef = doc(
               appState.firestore,
               "makers",
-              maker.id!,
+              initiative.id!,
               "incubatees",
               invitedInitiative
             ).withConverter(incubateeConverter);

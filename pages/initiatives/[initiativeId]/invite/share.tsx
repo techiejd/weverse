@@ -11,7 +11,7 @@ import Check from "@mui/icons-material/Check";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import Share from "@mui/icons-material/Share";
 import { useRouter } from "next/router";
-import { useCurrentMaker } from "../../../../modules/initiatives/context";
+import { useCurrentInitiative } from "../../../../modules/initiatives/context";
 import {
   buildShareLinks,
   useCopyToClipboard,
@@ -27,14 +27,16 @@ const SharePage = asOneWePage(() => {
   const router = useRouter();
   const {
     invitedInitiatives: invitedInitiativesIn,
-    makerNames: makerNamesIn,
+    initiativeNames: initiativeNamesIn,
     inviter,
   } = router.query;
   const invitedInitiatives = invitedInitiativesIn
     ? (invitedInitiativesIn as string).split(",")
     : null;
-  const makerNames = makerNamesIn ? (makerNamesIn as string).split(",") : null;
-  const [maker] = useCurrentMaker();
+  const initiativeNames = initiativeNamesIn
+    ? (initiativeNamesIn as string).split(",")
+    : null;
+  const [initiative] = useCurrentInitiative();
   const shareLinks = invitedInitiatives
     ? (invitedInitiatives as string[]).map((invitedInitiative) =>
         buildShareLinks(
@@ -44,12 +46,12 @@ const SharePage = asOneWePage(() => {
       )
     : null;
 
-  const InviteAsMakerPortal = ({
-    makerName,
+  const InviteAsInitiativePortal = ({
+    initiativeName,
     href,
     path,
   }: {
-    makerName: string;
+    initiativeName: string;
     href: string;
     path: string;
   }) => {
@@ -57,7 +59,8 @@ const SharePage = asOneWePage(() => {
     return (
       <Fragment>
         <Typography textAlign="center">
-          Enviale este vinculo a {makerName} para que ingrese a tu red de OneWe.
+          Enviale este vinculo a {initiativeName} para que ingrese a tu red de
+          OneWe.
         </Typography>
         <TextField
           value={href}
@@ -107,17 +110,17 @@ const SharePage = asOneWePage(() => {
       </Typography>
 
       {shareLinks &&
-        makerNames &&
+        initiativeNames &&
         shareLinks.map((shareLink, idx) => (
-          <InviteAsMakerPortal
+          <InviteAsInitiativePortal
             key={shareLink.href}
             href={shareLink.href}
             path={shareLink.path}
-            makerName={(makerNames as string[])[idx]}
+            initiativeName={(initiativeNames as string[])[idx]}
           />
         ))}
 
-      <Button variant="outlined" href={`/initiatives/${maker?.id}`}>
+      <Button variant="outlined" href={`/initiatives/${initiative?.id}`}>
         Volver a mi perfil
       </Button>
     </Stack>

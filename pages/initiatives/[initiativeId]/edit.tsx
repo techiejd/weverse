@@ -6,8 +6,11 @@ import { useAppState } from "../../../common/context/appState";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { User } from "firebase/auth";
 import { pickBy, identity } from "lodash";
-import { useMakerConverter } from "../../../common/utils/firebase";
-import { Maker, maker as makerSchema } from "../../../functions/shared/src";
+import { useInitiativeConverter } from "../../../common/utils/firebase";
+import {
+  Maker as Initiative,
+  maker as initiativeSchema,
+} from "../../../functions/shared/src";
 import InitiativeInput from "../../../modules/initiatives/input";
 import {
   Locale2Messages,
@@ -23,52 +26,54 @@ export const getStaticProps = WithTranslationsStaticProps(
   spreadTranslationsStaticProps
 );
 const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
-  const editMakerTranslations = useTranslations("initiatives.edit");
+  const editInitiativeTranslations = useTranslations("initiatives.edit");
   const appState = useAppState();
   const router = useRouter();
   const { initiativeId } = router.query;
 
-  const MakerForm = ({
-    makerId,
+  const InitiativeForm = ({
+    initiativeId,
     locale2Messages,
   }: {
-    makerId: string;
+    initiativeId: string;
     locale2Messages: Locale2Messages;
   }) => {
     const { user } = useAppState().authState;
-    const makerConverter = useMakerConverter();
-    const makerDocRef = doc(
+    const initiativeConverter = useInitiativeConverter();
+    const initiativeDocRef = doc(
       appState.firestore,
       "makers",
-      makerId
-    ).withConverter(makerConverter);
-    const [maker] = useDocumentData(makerDocRef.withConverter(makerConverter));
+      initiativeId
+    ).withConverter(initiativeConverter);
+    const [initiative] = useDocumentData(
+      initiativeDocRef.withConverter(initiativeConverter)
+    );
 
-    const MakerFormContent = ({
+    const InitiativeFormContent = ({
       user,
-      makerIn,
+      initiativeIn,
     }: {
       user: User;
-      makerIn: Maker;
+      initiativeIn: Initiative;
     }) => {
       const callToActionTranslations = useTranslations("common.callToAction");
-      const [maker, setMaker] = useState<Maker>(makerIn);
+      const [initiative, setInitiative] = useState<Initiative>(initiativeIn);
       const [uploading, setUploading] = useState(false);
       return (
         <form
           onSubmit={async (e) => {
             setUploading(true);
             e.preventDefault();
-            const cleanedMaker = pickBy(maker, identity);
-            const parsedMaker = makerSchema.parse(cleanedMaker);
-            await setDoc(makerDocRef, parsedMaker);
-            router.push(`/initiatives/${makerIn.id}`);
+            const cleanedInitiative = pickBy(initiative, identity);
+            const parsedInitiative = initiativeSchema.parse(cleanedInitiative);
+            await setDoc(initiativeDocRef, parsedInitiative);
+            router.push(`/initiatives/${initiativeIn.id}`);
           }}
         >
           <InitiativeInput
             userName={user.displayName ? user.displayName : ""}
-            val={maker}
-            setVal={setMaker}
+            val={initiative}
+            setVal={setInitiative}
             locale2Messages={locale2Messages}
           />
           <Stack
@@ -79,7 +84,7 @@ const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
               pb: 2,
             }}
           >
-            {uploading || maker.pic == "loading" ? (
+            {uploading || initiative.pic == "loading" ? (
               <CircularProgress />
             ) : (
               <Button type="submit" variant="contained">
@@ -92,20 +97,22 @@ const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
     };
 
     return (
-      (user && maker && <MakerFormContent user={user} makerIn={maker} />) || (
-        <CircularProgress />
-      )
+      (user && initiative && (
+        <InitiativeFormContent user={user} initiativeIn={initiative} />
+      )) || <CircularProgress />
     );
   };
   return (
     <Stack sx={{ justifyContent: "center", alignItems: "center" }} spacing={2}>
-      <Typography variant="h1">{editMakerTranslations("title")}</Typography>
+      <Typography variant="h1">
+        {editInitiativeTranslations("title")}
+      </Typography>
       <Typography variant="h2">
-        {editMakerTranslations("initiativeDefinition")}
+        {editInitiativeTranslations("initiativeDefinition")}
       </Typography>
       {initiativeId ? (
-        <MakerForm
-          makerId={String(initiativeId)}
+        <InitiativeForm
+          initiativeId={String(initiativeId)}
           locale2Messages={locale2Messages}
         />
       ) : (

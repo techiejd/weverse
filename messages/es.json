@@ -257,7 +257,7 @@
       "for": "{forAction, select, true {Acción en cuestión:} other {Sus acciones:}}"
     },
     "form": {
-      "rate": "Califica {forAction, select, true {la acción} other {la maker}}:",
+      "rate": "Califica {forAction, select, true {la acción} other {la iniciativa}}:",
       "inVideoFormat": "En selfie video",
       "videoSuggestions": "30 segundos a 5 minutos y opcional.",
       "inTextFormat": "En forma escrita",
@@ -386,7 +386,7 @@
       }
     },
     "invite": {
-      "title": "Invita a un maker (o más) a tu red de OneWe.",
+      "title": "Invita a una iniciativa (o más) a tu red de OneWe.",
       "whatIsInitiativesName": "¿Cómo se llama {makerType, select, individual {el individuo} other {la organización}}?",
       "makeLink": "Generar vinculo",
       "copy": {

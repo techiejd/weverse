@@ -10,17 +10,17 @@ import {
   CardContent,
   CardActionArea,
 } from "@mui/material";
-import { useMaker } from "../../common/context/weverseUtils";
+import { useInitiative } from "../../common/context/weverseUtils";
 import RatingsStack from "../../common/components/ratings";
 import { useTranslations } from "next-intl";
 
-const InitiativeCard = ({ makerId }: { makerId: string }) => {
-  const [value, loading] = useMaker(makerId);
+const InitiativeCard = ({ initiativeId }: { initiativeId: string }) => {
+  const [value, loading] = useInitiative(initiativeId);
   const initiativeCardTranslations = useTranslations("initiatives.card");
 
   return (
     <Card sx={{ width: "100%" }}>
-      <CardActionArea href={`/initiatives/${makerId}`}>
+      <CardActionArea href={`/initiatives/${initiativeId}`}>
         <CardHeader
           avatar={
             <Icon>
