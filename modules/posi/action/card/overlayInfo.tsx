@@ -163,21 +163,21 @@ const OverlayInfo = ({
         spacing={1}
       >
         <Avatar
-          key="makerAvatorOnActionCard"
+          key="initiativeAvatorOnActionCard"
           src={initiative?.pic}
           sx={{ width: 25, height: 25, mr: 1 }}
         />
         {initiative ? (
           [
             <Typography
-              key="makerTitleOnActionCard"
+              key="initiativeTitleOnActionCard"
               fontWeight={"bold"}
               color={"white"}
             >
               {initiative.name}
             </Typography>,
             <Typography
-              key="makerTypeOnActionCard"
+              key="initiativeTypeOnActionCard"
               sx={{
                 backgroundColor: "#d6ffcc",
                 borderRadius: 5,
@@ -192,7 +192,7 @@ const OverlayInfo = ({
             </Typography>,
           ]
         ) : (
-          <LinearProgress key="makerLinearProgressOnActionCard" />
+          <LinearProgress key="initiativeLinearProgressOnActionCard" />
         )}
       </Stack>
       <Stack
