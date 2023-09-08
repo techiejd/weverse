@@ -14,8 +14,8 @@ export declare const media: z.ZodObject<{
     url?: string;
 }>;
 export type Media = z.infer<typeof media>;
-export declare const makerType: z.ZodEnum<["individual", "organization"]>;
-export type MakerType = z.infer<typeof makerType>;
+export declare const initiativeType: z.ZodEnum<["individual", "organization"]>;
+export type InitiativeType = z.infer<typeof initiativeType>;
 export declare const organizationType: z.ZodEnum<["nonprofit", "religious", "unincorporated", "profit", "incubator"]>;
 export type OrganizationType = z.infer<typeof organizationType>;
 declare const howToSupport: z.ZodObject<{
@@ -53,7 +53,7 @@ declare const dbBase: z.ZodObject<{
     createdAt?: Date;
 }>;
 export type DbBase = z.infer<typeof dbBase>;
-declare const makerPresentationExtension: z.ZodObject<{
+declare const initiativePresentationExtension: z.ZodObject<{
     presentationVideo: z.ZodOptional<z.ZodString>;
     howToSupport: z.ZodOptional<z.ZodObject<{
         contact: z.ZodOptional<z.ZodString>;
@@ -79,7 +79,7 @@ declare const makerPresentationExtension: z.ZodObject<{
     about?: string;
     validationProcess?: string;
 }>;
-export type MakerPresentationExtension = z.infer<typeof makerPresentationExtension>;
+export type InitiativePresentationExtension = z.infer<typeof initiativePresentationExtension>;
 export declare function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(itemSchema: ItemType): z.ZodObject<{
     en: ItemType;
     es: ItemType;
@@ -101,7 +101,7 @@ export declare function createNestedLocalizedSchema<ItemType extends z.ZodTypeAn
     es: ItemType;
     fr: ItemType;
 }>[k_2]; } : never>;
-export declare const maker: z.ZodObject<{
+export declare const initiative: z.ZodObject<{
     type: z.ZodEnum<["individual", "organization"]>;
     id: z.ZodOptional<z.ZodString>;
     name: z.ZodString;
@@ -279,7 +279,7 @@ export declare const maker: z.ZodObject<{
         validationProcess?: string;
     };
 }>;
-export type Maker = z.infer<typeof maker>;
+export type Initiative = z.infer<typeof initiative>;
 declare const currency: z.ZodEnum<["cop", "usd", "eur", "gbp"]>;
 export type Currency = z.infer<typeof currency>;
 export declare const member: z.ZodObject<{

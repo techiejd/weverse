@@ -122,7 +122,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
   } = body;
 
   const initiativeSponsorshipDoc = firestore
-    .doc(`initiatives/${initiative}/sponsorships/${member}`)
+    .doc(`makers/${initiative}/sponsorships/${member}`)
     .withConverter(Utils.sponsorshipConverter);
   const memberSponsorshipDoc = firestore
     .doc(`members/${member}/sponsorships/${initiative}`)

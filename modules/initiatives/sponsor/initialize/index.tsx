@@ -5,7 +5,7 @@ import { Step } from "./utils";
 import ChooseSponsorship from "../common/chooseSponsorship";
 import Final from "../common/final";
 import StepperHeader from "../common/stepperHeader";
-import { Maker } from "../../../../functions/shared/src";
+import { Initiative } from "../../../../functions/shared/src";
 import { useTranslations } from "next-intl";
 
 const InitializeSponsor = ({
@@ -21,7 +21,7 @@ const InitializeSponsor = ({
   exitButtonBehavior: { href: string } | { onClick: () => void };
   handleBack: () => void;
   handleNext: () => void;
-  beneficiary: Maker;
+  beneficiary: Initiative;
 }) => {
   const sponsorTranslations = useTranslations("common.sponsor");
   const steps = [

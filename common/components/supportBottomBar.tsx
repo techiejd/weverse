@@ -24,8 +24,8 @@ import { useRouter } from "next/router";
 import { z } from "zod";
 import {
   HowToSupport,
-  Maker,
-  maker as initiative,
+  Initiative,
+  initiative,
   posiFormData,
 } from "../../functions/shared/src";
 import IconButtonWithLabel from "./iconButtonWithLabel";
@@ -61,7 +61,7 @@ const SponsorDialog = ({
   sponsoring: boolean;
   inAddSponsorshipExperience: boolean;
   setInAddSponsorshipExperience: Dispatch<SetStateAction<boolean>>;
-  beneficiary: Maker;
+  beneficiary: Initiative;
 }) => {
   const sponsorDialogTranslations = useTranslations("common.sponsorDialog");
   const inputTranslations = useTranslations("input");

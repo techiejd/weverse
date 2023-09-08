@@ -20,7 +20,7 @@ import { feePercentage, currencyInfo, toDisplayCurrency } from "./utils";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 import {
   Currency,
-  Maker,
+  Initiative,
   SponsorshipLevel,
   sponsorshipLevel,
 } from "../../../../functions/shared/src";
@@ -34,7 +34,7 @@ const ChooseSponsorship = ({
 }: {
   sponsorForm: Record<string, string>;
   exitButtonBehavior: { href: string } | { onClick: () => void };
-  beneficiary: Maker;
+  beneficiary: Initiative;
   currency?: Currency;
 }) => {
   const sponsorTranslations = useTranslations("common.sponsor");

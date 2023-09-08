@@ -19,7 +19,7 @@ import AddInternationalizedDetailedInput from "../../../common/components/addInt
 import Section from "../../../common/components/section";
 import { sectionStyles } from "../../../common/components/theme";
 import { Locale2Messages } from "../../../common/utils/translations";
-import { Maker as Initiative, Media } from "../../../functions/shared/src";
+import { Initiative, Media } from "../../../functions/shared/src";
 import { FileInput } from "../../posi/input";
 import DetailedInput from "./detailedInput";
 import OrganizationTypeInput from "./organizationTypeInput";

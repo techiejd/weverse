@@ -49,7 +49,11 @@ import {
   useMyInitiative,
 } from "../../../common/context/weverseUtils";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
-import { Incubatee, Maker, PosiFormData } from "../../../functions/shared/src";
+import {
+  Incubatee,
+  Initiative,
+  PosiFormData,
+} from "../../../functions/shared/src";
 import { Content } from "../../../modules/posi/content";
 import RatingsStack from "../../../common/components/ratings";
 import ShareActionArea from "../../../common/components/shareActionArea";
@@ -267,7 +271,7 @@ const IncubatorSection = () => {
   );
 };
 
-const AboutSection = ({ initiative }: { initiative?: Maker }) => {
+const AboutSection = ({ initiative }: { initiative?: Initiative }) => {
   const aboutTranslations = useTranslations("initiatives.about");
   const presentationInfo = useLocalizedPresentationInfo(initiative);
   const noAboutInfo =
@@ -401,7 +405,7 @@ const VipDialog = ({
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   setSolicitDialogOpen: Dispatch<SetStateAction<boolean>>;
-  myInitiative: Maker;
+  myInitiative: Initiative;
 }) => {
   const vipDialogTranslations = useTranslations("initiatives.vip.dialog");
   const [actions] = useCurrentActions();
@@ -537,7 +541,7 @@ const BottomBar = () => {
   const IncubatorInviteInitiativeCenterBottomFab = ({
     initiative,
   }: {
-    initiative: Maker;
+    initiative: Initiative;
   }) => (
     <CenterBottomFab
       color="secondary"

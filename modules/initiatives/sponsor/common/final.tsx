@@ -2,7 +2,7 @@ import { LoadingButton } from "@mui/lab";
 import { Box, Typography } from "@mui/material";
 import { Fragment } from "react";
 import { useAppState } from "../../../../common/context/appState";
-import { Maker } from "../../../../functions/shared/src";
+import { Initiative } from "../../../../functions/shared/src";
 import { useTranslations } from "next-intl";
 
 const Final = ({
@@ -12,7 +12,7 @@ const Final = ({
 }: {
   exitButtonBehavior: { href: string } | { onClick: () => void };
   loading?: boolean;
-  beneficiary: Maker;
+  beneficiary: Initiative;
 }) => {
   const appState = useAppState();
   const thanksTranslations = useTranslations("common.sponsor.thanks");

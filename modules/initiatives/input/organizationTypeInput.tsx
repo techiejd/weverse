@@ -10,7 +10,7 @@ import {
 import { useTranslations } from "next-intl";
 import { Dispatch, SetStateAction, ChangeEvent } from "react";
 import {
-  Maker as Initiative,
+  Initiative,
   OrganizationType,
   organizationType,
 } from "../../../functions/shared/src";

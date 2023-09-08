@@ -21,7 +21,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import AuthDialog from "../../modules/auth/AuthDialog";
 import LoadingFab from "../../common/components/loadingFab";
 import SharingSpeedDialAction from "../../modules/initiatives/sharingSpeedDialAction";
-import { Maker } from "../../functions/shared/src";
+import { Initiative } from "../../functions/shared/src";
 import { useInitiativeConverter } from "../../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
 import { asOneWePage } from "../../common/components/onewePage";
@@ -29,7 +29,7 @@ import { useTranslations } from "next-intl";
 import { useMyInitiative } from "../../common/context/weverseUtils";
 
 export const getStaticProps = WithTranslationsStaticProps();
-const MyInitiativeSpeedDial = ({ initiative }: { initiative: Maker }) => {
+const MyInitiativeSpeedDial = ({ initiative }: { initiative: Initiative }) => {
   const callToActionTranslations = useTranslations("common.callToAction");
   const t = useTranslations(
     "initiatives.myInitiativePortal.myInitiativeSpeedDial"

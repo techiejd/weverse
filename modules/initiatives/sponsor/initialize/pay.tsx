@@ -24,7 +24,7 @@ import {
 } from "../../../../common/utils/firebase";
 import { Step } from "./utils";
 import Details from "../common/details";
-import { Maker } from "../../../../functions/shared/src";
+import { Initiative } from "../../../../functions/shared/src";
 import { useTranslations } from "next-intl";
 
 const Pay = ({
@@ -36,7 +36,7 @@ const Pay = ({
   sponsorForm: Record<string, string>;
   handleBack: () => void;
   handleNext: () => void;
-  beneficiary: Maker;
+  beneficiary: Initiative;
 }) => {
   const appState = useAppState();
 

@@ -8,8 +8,8 @@ import { User } from "firebase/auth";
 import { pickBy, identity } from "lodash";
 import { useInitiativeConverter } from "../../../common/utils/firebase";
 import {
-  Maker as Initiative,
-  maker as initiativeSchema,
+  Initiative,
+  initiative as initiativeSchema,
 } from "../../../functions/shared/src";
 import InitiativeInput from "../../../modules/initiatives/input";
 import {

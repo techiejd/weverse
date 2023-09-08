@@ -64,7 +64,7 @@ const PosiForm = ({
   const [myInitiative] = useMyInitiative();
   useEffect(() => {
     if (myInitiative && setFormData) {
-      setFormData((fD) => ({ ...fD, initiativeId: myInitiative.id }));
+      setFormData((fD) => ({ ...fD, makerId: myInitiative.id }));
     }
   }, [myInitiative, setFormData]);
   const callToActionTranslations = useTranslations("common.callToAction");

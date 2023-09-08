@@ -13,8 +13,8 @@ import { DetailedInputProps } from "../../../common/components/addInternationali
 import Section from "../../../common/components/section";
 import { sectionStyles } from "../../../common/components/theme";
 import {
-  Maker as Initiative,
-  MakerPresentationExtension as InitiativePresentationExtension,
+  Initiative,
+  InitiativePresentationExtension,
   organizationType,
   Media,
 } from "../../../functions/shared/src";

@@ -6,7 +6,7 @@ import Confirm from "./confirm";
 import StepperHeader from "../common/stepperHeader";
 import Final from "../common/final";
 import ChooseSponsorship from "../common/chooseSponsorship";
-import { Maker } from "../../../../functions/shared/src";
+import { Initiative } from "../../../../functions/shared/src";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 import { CircularProgress } from "@mui/material";
 import { useTranslations } from "next-intl";
@@ -22,7 +22,7 @@ const RepeatSponsor = ({
   sponsorForm: Record<string, string>;
   exitButtonBehavior: { href: string } | { onClick: () => void };
   handleBack: () => void;
-  beneficiary: Maker;
+  beneficiary: Initiative;
 }) => {
   const sponsorTranslations = useTranslations("common.sponsor");
   const steps = [

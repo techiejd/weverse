@@ -19,8 +19,8 @@ import {
 import { v4 } from "uuid";
 import {
   organizationType,
-  makerType as initiativeTypeSchema,
-  MakerType as InitiativeType,
+  initiativeType as initiativeTypeSchema,
+  InitiativeType,
   OrganizationType,
 } from "../../../../functions/shared/src";
 import Add from "@mui/icons-material/Add";

@@ -1,5 +1,5 @@
 import { Avatar, Button, Grid, Link, Stack, Typography } from "@mui/material";
-import { Maker, PosiFormData } from "../../../functions/shared/src";
+import { Initiative, PosiFormData } from "../../../functions/shared/src";
 import ImpactCard from "../../../modules/posi/action/card";
 
 import { useActions } from "../../context/weverseUtils";
@@ -13,7 +13,7 @@ const UploadSocialProofPrompt = ({
   forInitiative,
   forAction,
 }: {
-  forInitiative: Maker;
+  forInitiative: Initiative;
   forAction?: PosiFormData;
 }) => {
   const { user } = useAppState().authState;

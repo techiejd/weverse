@@ -7,7 +7,7 @@ import {
   QueryDocumentSnapshot,
 } from "firebase/firestore";
 import {
-  maker as initiative,
+  initiative,
   socialProof,
   member,
   posiFormData,

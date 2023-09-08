@@ -26,7 +26,7 @@ import {
 import SupportBottomBar from "../../../common/components/supportBottomBar";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
 import CenterBottomCircularProgress from "../../../common/components/centerBottomCircularProgress";
-import { Maker, PosiFormData } from "../../../functions/shared/src";
+import { Initiative, PosiFormData } from "../../../functions/shared/src";
 import CenterBottomFab from "../../../common/components/centerBottomFab";
 import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
 import {
@@ -45,7 +45,7 @@ const AdminBottomBar = ({
   myInitiative,
 }: {
   action: PosiFormData;
-  myInitiative: Maker;
+  myInitiative: Initiative;
 }) => {
   const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
   const solicitOpinionPath = `/posi/${action.id}/impact/upload`;

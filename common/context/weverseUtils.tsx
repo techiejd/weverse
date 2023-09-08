@@ -23,10 +23,10 @@ import {
 import { useEffect, useState } from "react";
 import {
   organizationType,
-  Maker as Initiative,
+  Initiative,
   OrganizationType,
-  MakerType as InitiativeType,
-  makerType as initiativeType,
+  InitiativeType,
+  initiativeType,
 } from "../../functions/shared/src";
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";

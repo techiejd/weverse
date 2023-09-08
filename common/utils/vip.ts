@@ -1,8 +1,12 @@
-import { Maker, PosiFormData, SocialProof } from "../../functions/shared/src";
+import {
+  Initiative,
+  PosiFormData,
+  SocialProof,
+} from "../../functions/shared/src";
 import { useLocalizedPresentationInfo } from "./translations";
 
 export const useVipState = (
-  myInitiative: Maker | undefined,
+  myInitiative: Initiative | undefined,
   socialProofs: SocialProof[] | undefined,
   actions: PosiFormData[] | undefined
 ) => {

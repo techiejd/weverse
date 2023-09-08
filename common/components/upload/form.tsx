@@ -11,7 +11,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { pickBy, identity } from "lodash";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { Maker, Media, socialProof } from "../../../functions/shared/src";
+import { Initiative, Media, socialProof } from "../../../functions/shared/src";
 import { useMyInitiative } from "../../context/weverseUtils";
 import { useSocialProofConverter } from "../../utils/firebase";
 import { PosiFormData } from "../../../functions/shared/src";
@@ -22,7 +22,7 @@ const UploadSocialProofForm = ({
   forInitiative,
   forAction,
 }: {
-  forInitiative: Maker;
+  forInitiative: Initiative;
   forAction?: PosiFormData;
 }) => {
   const appState = useAppState();
@@ -59,8 +59,8 @@ const UploadSocialProofForm = ({
             pickBy(
               {
                 rating: rating,
-                byInitiative: myInitiative.id,
-                forInitiative: forInitiative.id,
+                byMaker: myInitiative.id,
+                forMaker: forInitiative.id,
                 forAction: forAction?.id,
                 videoUrl: media && media != "loading" ? media.url : undefined,
                 text: text != "" ? text : undefined,

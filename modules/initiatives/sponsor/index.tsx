@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useMyMemberOnce } from "../../../common/context/weverseUtils";
 import InitializeSponsor from "./initialize";
 import RepeatSponsor from "./repeat";
-import { Maker } from "../../../functions/shared/src";
+import { Initiative } from "../../../functions/shared/src";
 import { useTranslations } from "next-intl";
 
 export default function Sponsor({
@@ -16,7 +16,7 @@ export default function Sponsor({
 }: {
   exitButtonBehavior: { href: string } | { onClick: () => void };
   //TODO(techiejd): This isn't necessary if we move posi under initiatives/initiative
-  beneficiary: Maker;
+  beneficiary: Initiative;
 }) {
   const sponsorTranslations = useTranslations("common.sponsor");
   const router = useRouter();

@@ -24,8 +24,8 @@ export const media = z.object({
 });
 export type Media = z.infer<typeof media>;
 
-export const makerType = z.enum(["individual", "organization"]);
-export type MakerType = z.infer<typeof makerType>;
+export const initiativeType = z.enum(["individual", "organization"]);
+export type InitiativeType = z.infer<typeof initiativeType>;
 export const organizationType = z.enum([
   "nonprofit",
   "religious",
@@ -53,15 +53,15 @@ const dbBase = z.object({
 });
 export type DbBase = z.infer<typeof dbBase>;
 
-const makerPresentationExtension = z.object({
+const initiativePresentationExtension = z.object({
   presentationVideo: formUrl.optional(),
   howToSupport: howToSupport.optional(),
   about: z.string().optional(),
   validationProcess: z.string().optional(),
 });
 
-export type MakerPresentationExtension = z.infer<
-  typeof makerPresentationExtension
+export type InitiativePresentationExtension = z.infer<
+  typeof initiativePresentationExtension
 >;
 
 export function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(
@@ -75,10 +75,10 @@ export function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(
   });
 }
 
-export const maker = dbBase
+export const initiative = dbBase
   .extend({
     ownerId: z.string().or(z.enum(["invited"])),
-    type: makerType,
+    type: initiativeType,
     organizationType: organizationType.optional(),
     name: z.string().min(1),
     pic: formUrl.optional(),
@@ -86,8 +86,10 @@ export const maker = dbBase
     incubator: z.string().optional(),
     ratings: ratings.optional(),
   })
-  .merge(createNestedLocalizedSchema(makerPresentationExtension.optional()));
-export type Maker = z.infer<typeof maker>;
+  .merge(
+    createNestedLocalizedSchema(initiativePresentationExtension.optional())
+  );
+export type Initiative = z.infer<typeof initiative>;
 
 const currency = z.enum(["cop", "usd", "eur", "gbp"]);
 export type Currency = z.infer<typeof currency>;
@@ -188,7 +190,7 @@ const validation = z.object({
 export type Validation = z.infer<typeof validation>;
 
 // TODO(techiejd): Reshape db. It should go posi
-// {action: Action, impacts: Impact[], makerId}
+// {action: Action, impacts: Impact[], initiativeId}
 export const actionPresentationExtension = z.object({
   media: media,
   summary: z.string().min(1),
