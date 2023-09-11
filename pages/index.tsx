@@ -67,7 +67,7 @@ const BottomBar = () => {
 
   return (
     <div
-      className="rounded-[50px] bg-whitesmoke-200 overflow-hidden flex flex-row py-0 px-4 items-center justify-center gap-[12px] [&.animate]:animate-[1s_ease_0s_1_normal_forwards_fade-in] opacity-[0] border-[4px] border-solid border-lightgray [&.animate]:lg:animate-[1s_ease_0s_1_normal_forwards_fade-in-top] lg:opacity-[0]"
+      className="rounded-[50px] bg-whitesmoke-200 overflow-hidden flex flex-row py-0 px-4 items-center justify-center gap-[12px] opacity-[0] border-[4px] border-solid border-lightgray [&.animate]:animate-[1s_ease_0s_1_normal_forwards_fade-in-top]"
       data-animate-on-scroll
     >
       <Link
