@@ -62,7 +62,7 @@ const ComponentActionCard: NextPage = () => {
       </div>
       <div className="self-stretch flex flex-row flex-wrap py-0 px-1 items-start justify-start z-[2] text-base text-gray-100 sm:flex-row sm:gap-[8px] sm:items-start sm:justify-start">
         <small
-          className="flex-1 relative leading-[24px] font-medium"
+          className="flex-1 relative leading-[24px] font-medium line-clamp-3"
           id="Action card text copy"
         >
           Ayudamos a 150 niños de un colegio de escasos recursos a utilizar
