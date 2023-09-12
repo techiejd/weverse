@@ -49,7 +49,11 @@
     "numChars": "{numChars} caracteres",
     "next": "Siguiente",
     "back": "Atras",
-    "ok": "Listo"
+    "ok": "Listo",
+    "internationalizedDetailed": {
+      "title": "Información detallada en otros idiomas",
+      "prompt": "Agregar otro idioma"
+    }
   },
   "common": {
     "loading": "Cargando",
