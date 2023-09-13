@@ -271,10 +271,20 @@ const AuthDialogContent = ({
       checkingUserRegistered: true,
     }));
 
+    console.log(authDialogState.phoneNumber);
     const registeredMembersWithPN = await getDocs(
       query(
         collection(appState.firestore, "members"),
-        where("phoneNumber", "==", authDialogState.phoneNumber)
+        where(
+          "phoneNumber.countryCallingCode",
+          "==",
+          authDialogState.phoneNumber.countryCallingCode
+        ),
+        where(
+          "phoneNumber.nationalNumber",
+          "==",
+          authDialogState.phoneNumber.nationalNumber
+        )
       )
     );
 
