@@ -1,7 +1,8 @@
 {
   "index": {
     "publish": "Publish",
-    "myPage": "My page"
+    "myPage": "My page",
+    "seeContentIn": "See content in"
   },
   "auth": {
     "register": "Register",

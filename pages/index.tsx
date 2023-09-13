@@ -123,6 +123,7 @@ const BottomBar = () => {
 const IndexPage = () => {
   //TODO(techiejd): WET code, refactor
   const commonTranslations = useTranslations("common");
+  const t = useTranslations("index");
   const appState = useAppState();
   const [latestDoc, setLatestDoc] = useState<
     QueryDocumentSnapshot<PosiFormData> | undefined
@@ -139,7 +140,6 @@ const IndexPage = () => {
   const [chosenLocales, setChosenLocales] = useState<Locale[]>(
     myMember?.settings?.locales ?? [userLocale as Locale]
   );
-  const [filterLoading, setFilterLoading] = useState(true);
 
   useEffect(() => {
     if (myMember?.settings?.locales) {
@@ -152,13 +152,18 @@ const IndexPage = () => {
       if (!myMember || !myMember?.id) {
         setChosenLocales((prev) => [...prev, l as Locale]);
       }
-      updateDoc(doc(appState.firestore, "members", myMember!.id!), {
-        settings: {
-          locales: [...(myMember!.settings?.locales ?? []), l as Locale],
-        },
-      });
+      updateDoc(
+        doc(appState.firestore, "members", myMember!.id!).withConverter(
+          memberConverter
+        ),
+        {
+          settings: {
+            locales: [...(myMember!.settings?.locales ?? []), l as Locale],
+          },
+        }
+      );
     },
-    [appState.firestore, myMember]
+    [appState.firestore, memberConverter, myMember]
   );
 
   const removeLocale = useCallback(
@@ -265,7 +270,7 @@ const IndexPage = () => {
           <CircularProgress />
         ) : (
           <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-            <FormLabel component="legend">See content in</FormLabel>
+            <FormLabel component="legend">{t("seeContentIn")}</FormLabel>
             <FormGroup row>
               {possibleLocales.map((l) => (
                 <FormControlLabel
