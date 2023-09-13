@@ -8,7 +8,7 @@ import { User } from "firebase/auth";
 import { pickBy, identity } from "lodash";
 import { useMakerConverter } from "../../../common/utils/firebase";
 import { Maker, maker as makerSchema } from "../../../functions/shared/src";
-import MakerInput from "../../../modules/makers/makerInput";
+import MakerInput from "../../../modules/makers/input";
 import {
   Locale2Messages,
   WithTranslationsStaticProps,

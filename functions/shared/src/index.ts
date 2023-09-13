@@ -111,7 +111,9 @@ const stripe = z.object({
   billingCycleAnchor: timeStamp.optional(),
   status: z.enum(["active", "incomplete", "canceled"]),
 });
-
+const contentSettings = z.object({
+  locales: locale.array(),
+});
 export const phoneNumber = z.object({
   countryCallingCode: z.string().min(1),
   nationalNumber: z.string().min(1),
@@ -123,6 +125,7 @@ export const member = dbBase.extend({
   stripe: stripe.optional(),
   pic: formUrl.optional(),
   name: z.string().min(1),
+  settings: contentSettings.optional(),
   phoneNumber: phoneNumber,
 });
 export type Member = z.infer<typeof member>;

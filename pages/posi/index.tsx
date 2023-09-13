@@ -14,6 +14,7 @@ import {
   query,
   QueryDocumentSnapshot,
   startAfter,
+  where,
 } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import PlusOne from "@mui/icons-material/PlusOne";
@@ -23,7 +24,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useCallback, useEffect, useState } from "react";
 import ImpactCard from "../../modules/posi/action/card";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { asOneWePage } from "../../common/components/onewePage";
 
 export const getStaticProps = WithTranslationsStaticProps();
@@ -36,18 +37,20 @@ const IndexPage = () => {
   const [hasMore, setHasMore] = useState(true);
   const posiFormDataConverter = usePosiFormDataConverter();
   const batchSize = 3;
+  const userLocale = useLocale();
 
   useEffect(() => {
-    let ignore = false;
+    let skipFetch = false;
     const firstQuery = query(
       collection(appState.firestore, "impacts").withConverter(
         posiFormDataConverter
       ),
       limit(batchSize),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
+      orderBy(userLocale) // Gets all documents with the field
     );
     getDocs(firstQuery).then((snap) => {
-      if (!ignore) {
+      if (!skipFetch) {
         const latestActions = snap.docs.map((doc) => doc.data());
         if (latestActions.length) {
           setLatestDoc(snap.docs[snap.docs.length - 1]);
@@ -57,10 +60,9 @@ const IndexPage = () => {
       }
     });
     return () => {
-      ignore = true;
+      skipFetch = true;
     };
-  }, [appState.firestore, posiFormDataConverter]);
-
+  }, [appState.firestore, posiFormDataConverter, userLocale]);
   const next = useCallback(() => {
     if (!latestDoc) {
       return;
@@ -70,6 +72,7 @@ const IndexPage = () => {
         posiFormDataConverter
       ),
       orderBy("createdAt", "desc"),
+      orderBy(userLocale), // Gets all documents with the field
       startAfter(latestDoc),
       limit(batchSize)
     );
@@ -81,7 +84,7 @@ const IndexPage = () => {
       setHasMore(latestActions.length == batchSize);
       setActions((actions) => [...actions, ...latestActions]);
     });
-  }, [latestDoc, appState.firestore, posiFormDataConverter]);
+  }, [latestDoc, appState.firestore, posiFormDataConverter, userLocale]);
 
   return (
     <InfiniteScroll

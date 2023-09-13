@@ -1,13 +1,8 @@
 {
   "index": {
-    "callToActionExplanations": {
-      "actions": {
-        "list": "Estas son las acciones que están cambiando el mundo",
-        "add": "¿Quieres compartir tu acción? ¡Hazlo aquí!"
-      },
-      "seeMakers": "Ellos son nuestros héroes sin capa",
-      "yourMaker": "Tú"
-    }
+    "publish": "Publicar",
+    "myPage": "Mi página",
+    "seeContentIn": "Vea contenido en"
   },
   "auth": {
     "register": "Registrarme",
@@ -55,7 +50,11 @@
     "numChars": "{numChars} caracteres",
     "next": "Siguiente",
     "back": "Atras",
-    "ok": "Listo"
+    "ok": "Listo",
+    "internationalizedDetailed": {
+      "title": "Información detallada en otros idiomas",
+      "prompt": "Agregar otro idioma"
+    }
   },
   "common": {
     "loading": "Cargando",
@@ -357,6 +356,7 @@
       "chooseMakerType": {
         "individual": "Trabajo solo",
         "organization": "Pertenezco a una organización",
+        "entityInformation": "Información de la entidad",
         "organizationType": {
           "namePrompt": "¿Cómo se llama la organización?",
           "title": "Tipo de organización"

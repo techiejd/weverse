@@ -3,6 +3,7 @@ import Head from "next/head";
 import "../modules/auth/AuthCode.css";
 import Script from "next/script";
 import AppProvider from "../common/context/appState";
+import "./global.css";
 
 function WeVerse({ Component, pageProps }: AppProps) {
   return (

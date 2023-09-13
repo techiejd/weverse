@@ -7,7 +7,7 @@ import {
   NativeSelect,
   Button,
 } from "@mui/material";
-import { NextIntlClientProvider } from "next-intl";
+import { NextIntlClientProvider, useTranslations } from "next-intl";
 import {
   Dispatch,
   SetStateAction,
@@ -56,6 +56,9 @@ const AddInternationalizedDetailedInput = <T extends ValType>({
   useEffect(() => {
     setSelectedLocale(choosableLocales[0]);
   }, [choosableLocales]);
+  const internationalizedDetailedInputTranslations = useTranslations(
+    "input.internationalizedDetailed"
+  );
 
   // In this section, we will make a box that holds in it
   // 1. A title that says "Detailed info in other languages"
@@ -69,7 +72,9 @@ const AddInternationalizedDetailedInput = <T extends ValType>({
       ]}
       spacing={2}
     >
-      <Typography variant="h3"> Detailed info in other languages</Typography>
+      <Typography variant="h3">
+        {internationalizedDetailedInputTranslations("title")}
+      </Typography>
       {
         // In this section, we will make a box that holds in it
         // 1. A list of the choosen locales with the detailed info form for each
@@ -112,7 +117,9 @@ const AddInternationalizedDetailedInput = <T extends ValType>({
         // 5. A close button on the top right of the detailed maker input component
         choosableLocales.length > 0 && (
           <Fragment>
-            <Typography variant="h3">Add another language</Typography>
+            <Typography variant="h3">
+              {internationalizedDetailedInputTranslations("prompt")}
+            </Typography>
             <NativeSelect
               value={selectedLocale}
               onChange={(e) => {
