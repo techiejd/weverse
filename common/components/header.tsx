@@ -98,7 +98,7 @@ export const MenuComponent = (props: BoxProps) => {
           <ListItemText>{t("actions.add")}</ListItemText>
         </MenuItem>
         <MenuItem
-          href="/makers"
+          href="/initiatives"
           onClick={closeMenu}
           component={LinkBehavior as any}
         >
@@ -107,7 +107,7 @@ export const MenuComponent = (props: BoxProps) => {
               <b>💪</b>
             </Typography>
           </ListItemIcon>
-          <ListItemText>Makers</ListItemText>
+          <ListItemText>{t("listInitiatives")}</ListItemText>
         </MenuItem>
         <UserPortal />
       </Menu>

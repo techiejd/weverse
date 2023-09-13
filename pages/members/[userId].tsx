@@ -4,9 +4,9 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { collection, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Button, Stack, Typography } from "@mui/material";
-import MakerCard from "../../modules/makers/MakerCard";
+import InitiativeCard from "../../modules/initiatives/InitiativeCard";
 import { useSignOut } from "react-firebase-hooks/auth";
-import Sponsorships from "../../modules/makers/sponsor/list";
+import Sponsorships from "../../modules/initiatives/sponsor/list";
 import { Sponsorship } from "../../functions/shared/src";
 import { useMyMember } from "../../common/context/weverseUtils";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
@@ -27,16 +27,19 @@ const UserPage = asOneWePage(() => {
     return String(userId);
   })();
   const q = query(
-    collection(appState.firestore, "makers"),
+    collection(appState.firestore, "initiatives"),
     where("ownerId", "==", userId)
   );
-  const [makersSnapshot, loading, makersError] = useCollection(q);
-  const [makerIds, setMakerIds] = useState<string[]>([]);
+  const [initiativesSnapshot, loading, initiativesError] = useCollection(q);
+  const [initiativeIds, setInitiativeIds] = useState<string[]>([]);
   useEffect(() => {
-    makersSnapshot?.forEach((makerDocSnapshot) =>
-      setMakerIds((makerIds) => [...makerIds, makerDocSnapshot.id])
+    initiativesSnapshot?.forEach((initiativeDocSnapshot) =>
+      setInitiativeIds((initiativeIds) => [
+        ...initiativeIds,
+        initiativeDocSnapshot.id,
+      ])
     );
-  }, [makersSnapshot, setMakerIds]);
+  }, [initiativesSnapshot, setInitiativeIds]);
 
   const { user } = appState.authState;
   const [signOut] = useSignOut(appState.auth);
@@ -77,7 +80,7 @@ const UserPage = asOneWePage(() => {
                   body: JSON.stringify({
                     stripeSubscription: myMember.stripe?.subscription,
                     stripeSubscriptionItem: sponsorship.stripeSubscriptionItem,
-                    maker: sponsorship.maker,
+                    initiative: sponsorship.initiative,
                     member: sponsorship.member,
                   }),
                 }).then((res) => {
@@ -93,19 +96,21 @@ const UserPage = asOneWePage(() => {
         }
       />
       <Typography variant="h2">
-        {yourMemberTranslations("makers.title")}
+        {yourMemberTranslations("initiatives.title")}
       </Typography>
-      {makersError && (
-        <Typography color={"red"}>{JSON.stringify(makersError)}</Typography>
+      {initiativesError && (
+        <Typography color={"red"}>
+          {JSON.stringify(initiativesError)}
+        </Typography>
       )}
       {loading && (
-        <Typography>{yourMemberTranslations("makers.loading")}</Typography>
+        <Typography>{yourMemberTranslations("initiatives.loading")}</Typography>
       )}
-      {!loading && !makersError && makerIds.length == 0 && (
-        <Typography>{yourMemberTranslations("makers.none")}</Typography>
+      {!loading && !initiativesError && initiativeIds.length == 0 && (
+        <Typography>{yourMemberTranslations("initiatives.none")}</Typography>
       )}
-      {makerIds.map((makerId) => (
-        <MakerCard makerId={makerId} key={makerId} />
+      {initiativeIds.map((initiativeId) => (
+        <InitiativeCard initiativeId={initiativeId} key={initiativeId} />
       ))}
     </Stack>
   );

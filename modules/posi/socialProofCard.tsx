@@ -10,24 +10,24 @@ import {
   Typography,
 } from "@mui/material";
 import { SocialProof } from "../../functions/shared/src";
-import { useAction, useMaker } from "../../common/context/weverseUtils";
+import { useAction, useInitiative } from "../../common/context/weverseUtils";
 import Media from "./media";
 import { useTranslations } from "next-intl";
 import { useLocalizedPresentationInfo } from "../../common/utils/translations";
 
 const SocialProofCard = ({
   socialProof,
-  showMaker = true,
+  showInitiative = true,
   showAction = true,
 }: {
   socialProof: SocialProof;
-  showMaker?: boolean;
+  showInitiative?: boolean;
   showAction?: boolean;
 }) => {
   const SocialProofCardHeader = () => {
-    const [byMaker] = useMaker(socialProof.byMaker);
+    const [byInitiative] = useInitiative(socialProof.byInitiative);
     return (
-      <CardActionArea href={`/makers/${socialProof.byMaker}`}>
+      <CardActionArea href={`/initiatives/${socialProof.byInitiative}`}>
         <CardHeader
           title={
             <Stack
@@ -35,7 +35,7 @@ const SocialProofCard = ({
               sx={{ justifyContent: "center", alignItems: "center" }}
             >
               <Box pr={2}>
-                {byMaker ? `${byMaker.name}: ` : <CircularProgress />}
+                {byInitiative ? `${byInitiative.name}: ` : <CircularProgress />}
               </Box>
               <Rating value={socialProof.rating} />
             </Stack>
@@ -46,7 +46,9 @@ const SocialProofCard = ({
   };
   const SocialProofCardContent = () => {
     const [action] = useAction(showAction ? socialProof.forAction : undefined);
-    const [forMaker] = useMaker(showMaker ? socialProof.forMaker : undefined);
+    const [forInitiative] = useInitiative(
+      showInitiative ? socialProof.forInitiative : undefined
+    );
     const presentationInfo = useLocalizedPresentationInfo(action);
     const cardTranslations = useTranslations("testimonials.card");
     return (
@@ -59,10 +61,10 @@ const SocialProofCard = ({
             })}
           </Typography>
         )}
-        {forMaker && (
+        {forInitiative && (
           <Typography>
-            {cardTranslations("forMaker", {
-              maker: forMaker.name,
+            {cardTranslations("forInitiative", {
+              initiative: forInitiative.name,
             })}
           </Typography>
         )}

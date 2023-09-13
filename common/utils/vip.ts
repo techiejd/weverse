@@ -1,20 +1,24 @@
-import { Maker, PosiFormData, SocialProof } from "../../functions/shared/src";
+import {
+  Initiative,
+  PosiFormData,
+  SocialProof,
+} from "../../functions/shared/src";
 import { useLocalizedPresentationInfo } from "./translations";
 
 export const useVipState = (
-  myMaker: Maker | undefined,
+  myInitiative: Initiative | undefined,
   socialProofs: SocialProof[] | undefined,
   actions: PosiFormData[] | undefined
 ) => {
   const oneActionDone = actions ? actions.length > 0 : false;
-  const presentationInfo = useLocalizedPresentationInfo(myMaker);
+  const presentationInfo = useLocalizedPresentationInfo(myInitiative);
   const unfinishedFields = (() => {
-    if (!myMaker) {
+    if (!myInitiative) {
       return undefined;
     }
     const fieldsWeWantToAnswers = {
-      name: myMaker.name,
-      pic: myMaker.pic,
+      name: myInitiative.name,
+      pic: myInitiative.pic,
       contact: presentationInfo?.howToSupport?.contact,
       about: presentationInfo?.about,
     };
@@ -32,7 +36,7 @@ export const useVipState = (
   const enoughSocialProof = socialProofs && socialProofs.length >= 3;
   return {
     entryGiven:
-      myMaker && socialProofs && actions
+      myInitiative && socialProofs && actions
         ? oneActionDone && allFieldsFinished && enoughSocialProof
         : undefined,
     oneActionDone,

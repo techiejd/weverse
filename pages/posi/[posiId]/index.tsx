@@ -14,7 +14,10 @@ import Share from "@mui/icons-material/Share";
 import { useState } from "react";
 import ShareActionArea from "../../../common/components/shareActionArea";
 import SolicitDialog from "../../../common/components/solicitHelpDialog";
-import { useMaker, useMyMaker } from "../../../common/context/weverseUtils";
+import {
+  useInitiative,
+  useMyInitiative,
+} from "../../../common/context/weverseUtils";
 import AboutContent from "../../../modules/posi/action/about";
 import {
   useCurrentPosi,
@@ -23,7 +26,7 @@ import {
 import SupportBottomBar from "../../../common/components/supportBottomBar";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
 import CenterBottomCircularProgress from "../../../common/components/centerBottomCircularProgress";
-import { Locale, Maker, PosiFormData } from "../../../functions/shared/src";
+import { Initiative, PosiFormData } from "../../../functions/shared/src";
 import CenterBottomFab from "../../../common/components/centerBottomFab";
 import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
 import {
@@ -39,17 +42,17 @@ export const getStaticProps = WithTranslationsStaticProps();
 
 const AdminBottomBar = ({
   action,
-  myMaker,
+  myInitiative,
 }: {
   action: PosiFormData;
-  myMaker: Maker;
+  myInitiative: Initiative;
 }) => {
   const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
   const solicitOpinionPath = `/posi/${action.id}/impact/upload`;
   const callToActionTranslations = useTranslations("common.callToAction");
   const solicitTranslations = useTranslations("actions.solicit");
   const presentationInfo = useLocalizedPresentationInfo(action);
-  const makerPresentationInfo = useLocalizedPresentationInfo(myMaker);
+  const initiativePresentationInfo = useLocalizedPresentationInfo(myInitiative);
   return (
     <AppBar
       position="fixed"
@@ -59,10 +62,10 @@ const AdminBottomBar = ({
       <SolicitDialog
         open={solicitDialogOpen}
         setOpen={setSolicitDialogOpen}
-        howToSupport={makerPresentationInfo?.howToSupport || {}}
+        howToSupport={initiativePresentationInfo?.howToSupport || {}}
         solicitOpinionPath={`/posi/${action.id}/impact/upload`}
         pathUnderSupport={`/posi/${action.id}`}
-        editMakerPath={`/makers/${myMaker.id}/edit`}
+        editInitiativePath={`/initiatives/${myInitiative.id}/edit`}
       />
       <Toolbar>
         <IconButtonWithLabel href={`/posi/${action.id}/action/edit`}>
@@ -119,8 +122,8 @@ const AdminBottomBar = ({
 const Index = asOneWePage(() => {
   const [posiData, loading, error] = useCurrentPosi();
   const [socialProofs] = useCurrentSocialProofs();
-  const [myMaker] = useMyMaker();
-  const [maker] = useMaker(posiData?.makerId);
+  const [myInitiative] = useMyInitiative();
+  const [initiative] = useInitiative(posiData?.initiativeId);
 
   const Loading = () => {
     return (
@@ -168,7 +171,7 @@ const Index = asOneWePage(() => {
                         key={socialProof.id}
                         socialProof={socialProof}
                         showAction={false}
-                        showMaker={false}
+                        showInitiative={false}
                       />
                     </Grid>
                   );
@@ -176,11 +179,13 @@ const Index = asOneWePage(() => {
               </Grid>
             </Stack>
           )}
-          {maker ? (
-            myMaker && myMaker.id == maker.id ? (
-              <AdminBottomBar action={posiData} myMaker={myMaker} />
+          {initiative ? (
+            myInitiative && myInitiative.id == initiative.id ? (
+              <AdminBottomBar action={posiData} myInitiative={myInitiative} />
             ) : (
-              <SupportBottomBar beneficiary={{ maker, action: posiData }} />
+              <SupportBottomBar
+                beneficiary={{ initiative: initiative, action: posiData }}
+              />
             )
           ) : (
             <CenterBottomCircularProgress />

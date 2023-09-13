@@ -24,8 +24,8 @@ export const media = z.object({
 });
 export type Media = z.infer<typeof media>;
 
-export const makerType = z.enum(["individual", "organization"]);
-export type MakerType = z.infer<typeof makerType>;
+export const initiativeType = z.enum(["individual", "organization"]);
+export type InitiativeType = z.infer<typeof initiativeType>;
 export const organizationType = z.enum([
   "nonprofit",
   "religious",
@@ -53,15 +53,15 @@ const dbBase = z.object({
 });
 export type DbBase = z.infer<typeof dbBase>;
 
-const makerPresentationExtension = z.object({
+const initiativePresentationExtension = z.object({
   presentationVideo: formUrl.optional(),
   howToSupport: howToSupport.optional(),
   about: z.string().optional(),
   validationProcess: z.string().optional(),
 });
 
-export type MakerPresentationExtension = z.infer<
-  typeof makerPresentationExtension
+export type InitiativePresentationExtension = z.infer<
+  typeof initiativePresentationExtension
 >;
 
 export function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(
@@ -75,10 +75,11 @@ export function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(
   });
 }
 
-export const maker = dbBase
+// deprecated: maker
+export const initiative = dbBase
   .extend({
     ownerId: z.string().or(z.enum(["invited"])),
-    type: makerType,
+    type: initiativeType,
     organizationType: organizationType.optional(),
     name: z.string().min(1),
     pic: formUrl.optional(),
@@ -86,8 +87,10 @@ export const maker = dbBase
     incubator: z.string().optional(),
     ratings: ratings.optional(),
   })
-  .merge(createNestedLocalizedSchema(makerPresentationExtension.optional()));
-export type Maker = z.infer<typeof maker>;
+  .merge(
+    createNestedLocalizedSchema(initiativePresentationExtension.optional())
+  );
+export type Initiative = z.infer<typeof initiative>;
 
 const currency = z.enum(["cop", "usd", "eur", "gbp"]);
 export type Currency = z.infer<typeof currency>;
@@ -111,13 +114,23 @@ const stripe = z.object({
   billingCycleAnchor: timeStamp.optional(),
   status: z.enum(["active", "incomplete", "canceled"]),
 });
+const contentSettings = z.object({
+  locales: locale.array(),
+});
+export const phoneNumber = z.object({
+  countryCallingCode: z.string().min(1),
+  nationalNumber: z.string().min(1),
+});
 
 export const member = dbBase.extend({
-  makerId: z.string(),
+  // deprecated: makerId: z.string().optional(),
+  initiativeId: z.string(),
   customer: customer.optional(),
   stripe: stripe.optional(),
   pic: formUrl.optional(),
-  name: z.string().min(1).optional(),
+  name: z.string().min(1),
+  settings: contentSettings.optional(),
+  phoneNumber: phoneNumber,
 });
 export type Member = z.infer<typeof member>;
 
@@ -128,8 +141,10 @@ export type Like = z.infer<typeof like>;
 export const socialProof = dbBase.extend({
   rating: z.number(),
   videoUrl: formUrl.optional(),
-  byMaker: z.string(),
-  forMaker: z.string(),
+  // deprecated: byMaker: z.string().optional(),
+  byInitiative: z.string(),
+  // deprecated: forMaker: z.string().optional(),
+  forInitiative: z.string(),
   forAction: z.string().optional(),
   text: z.string().optional(),
 });
@@ -188,7 +203,7 @@ const validation = z.object({
 export type Validation = z.infer<typeof validation>;
 
 // TODO(techiejd): Reshape db. It should go posi
-// {action: Action, impacts: Impact[], makerId}
+// {action: Action, impacts: Impact[], initiativeId}
 export const actionPresentationExtension = z.object({
   media: media,
   summary: z.string().min(1),
@@ -196,7 +211,8 @@ export const actionPresentationExtension = z.object({
 
 export const posiFormData = dbBase
   .extend({
-    makerId: z.string(),
+    // deprecated: makerId: z.string().optional(),
+    initiativeId: z.string(),
     location: location.optional(),
     ratings: ratings.optional(),
     validation: validation.optional(),
@@ -242,7 +258,8 @@ export const sponsorship = dbBase.extend({
   customAmount: z.number().optional(),
   tipAmount: z.number(),
   denyFee: z.boolean().optional(),
-  maker: z.string(),
+  // deprecated: maker: z.string()
+  initiative: z.string(),
   member: z.string(),
   memberPublishable: z.boolean().optional(),
   currency: currency,

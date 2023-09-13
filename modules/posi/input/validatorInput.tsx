@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import ValidatorBadge, {
   ValidationProcessDialog,
 } from "../../../common/components/validatorBadge";
-import { useMaker } from "../../../common/context/weverseUtils";
+import { useInitiative } from "../../../common/context/weverseUtils";
 import { useFormData } from "./context";
 import { useTranslations } from "next-intl";
 
@@ -19,7 +19,7 @@ const ValidatorInput = ({ incubator }: { incubator: string }) => {
       }));
     }
   }, [incubator, setFormData]);
-  const [validator] = useMaker(incubator);
+  const [validator] = useInitiative(incubator);
   const t = useTranslations("actions.upload.sections.validator");
   return (
     <CardActionArea

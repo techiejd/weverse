@@ -11,22 +11,23 @@ import { addDoc, collection } from "firebase/firestore";
 import { pickBy, identity } from "lodash";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { Maker, Media, socialProof } from "../../../functions/shared/src";
-import { useMyMaker } from "../../context/weverseUtils";
+import { Initiative, Media, socialProof } from "../../../functions/shared/src";
+import { useMyInitiative } from "../../context/weverseUtils";
 import { useSocialProofConverter } from "../../utils/firebase";
 import { PosiFormData } from "../../../functions/shared/src";
 import { useAppState } from "../../context/appState";
 import { useTranslations } from "next-intl";
 
 const UploadSocialProofForm = ({
-  forMaker,
+  forInitiative,
   forAction,
 }: {
-  forMaker: Maker;
+  forInitiative: Initiative;
   forAction?: PosiFormData;
 }) => {
   const appState = useAppState();
-  const [myMaker, myMakerLoading, myMakerError] = useMyMaker();
+  const [myInitiative, myInitiativeLoading, myInitiativeError] =
+    useMyInitiative();
   const [error, setError] = useState("");
   const [rating, setRating] = useState<number | null>(null);
   const [media, setMedia] = useState<Media | undefined | "loading">(undefined);
@@ -52,14 +53,14 @@ const UploadSocialProofForm = ({
           return;
         }
 
-        if (myMaker) {
+        if (myInitiative) {
           setUploading(true);
           const socialProofEncoded = socialProof.parse(
             pickBy(
               {
                 rating: rating,
-                byMaker: myMaker.id,
-                forMaker: forMaker.id,
+                byInitiative: myInitiative.id,
+                forInitiative: forInitiative.id,
                 forAction: forAction?.id,
                 videoUrl: media && media != "loading" ? media.url : undefined,
                 text: text != "" ? text : undefined,
@@ -77,7 +78,9 @@ const UploadSocialProofForm = ({
 
           forAction
             ? router.push(`/posi/${forAction.id}/impact/upload/thanks`)
-            : router.push(`/makers/${forMaker.id}/impact/upload/thanks`);
+            : router.push(
+                `/initiatives/${forInitiative.id}/impact/upload/thanks`
+              );
         } else {
           setError("Internal error.");
         }
@@ -132,7 +135,7 @@ const UploadSocialProofForm = ({
           onChange={(e) => setText(e.target.value)}
           sx={{ maxWidth: 700, width: "100%" }}
         />
-        {myMaker &&
+        {myInitiative &&
           (media == "loading" || uploading ? (
             <CircularProgress />
           ) : (

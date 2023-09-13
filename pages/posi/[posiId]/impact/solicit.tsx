@@ -4,7 +4,7 @@ import Hearing from "@mui/icons-material/Hearing";
 import { doc } from "firebase/firestore";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useAppState } from "../../../../common/context/appState";
-import { useMakerConverter } from "../../../../common/utils/firebase";
+import { useInitiativeConverter } from "../../../../common/utils/firebase";
 import { useCurrentPosi } from "../../../../modules/posi/context";
 import {
   WithTranslationsStaticProps,
@@ -18,21 +18,22 @@ export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 const Solicit = asOneWePage(() => {
   const appState = useAppState();
-  const makerConverter = useMakerConverter();
+  const initiativeConverter = useInitiativeConverter();
 
   const [posi] = useCurrentPosi();
   const presentationInfo = useLocalizedPresentationInfo(posi);
   const t = useTranslations("actions.impact.solicit");
-  const PromptMaker = ({ makerId }: { makerId: string }) => {
-    const makerDocRef = doc(
+  const PromptInitiative = ({ initiativeId }: { initiativeId: string }) => {
+    const initiativeDocRef = doc(
       appState.firestore,
-      "makers",
-      makerId
-    ).withConverter(makerConverter);
-    const [maker, makerLoading, makerError] = useDocumentData(makerDocRef);
-    return maker ? (
+      "initiatives",
+      initiativeId
+    ).withConverter(initiativeConverter);
+    const [initiative, initiativeLoading, initiativeError] =
+      useDocumentData(initiativeDocRef);
+    return initiative ? (
       <Typography variant="h1">
-        {t("title", { makerName: maker.name })}
+        {t("title", { initiativeName: initiative.name })}
       </Typography>
     ) : (
       <CircularProgress />
@@ -43,7 +44,7 @@ const Solicit = asOneWePage(() => {
       spacing={2}
       sx={{ justifyContent: "center", alignItems: "center", p: 2 }}
     >
-      <PromptMaker makerId={posi.makerId!} />
+      <PromptInitiative initiativeId={posi.initiativeId!} />
       <ShareActionArea
         shareProps={{
           title: t("solicitText", { for: presentationInfo?.summary }),

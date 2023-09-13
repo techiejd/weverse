@@ -23,14 +23,14 @@ const SolicitDialog = ({
   howToSupport,
   pathUnderSupport,
   solicitOpinionPath,
-  editMakerPath,
+  editInitiativePath,
 }: {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   howToSupport: HowToSupport;
   pathUnderSupport: string;
   solicitOpinionPath: string;
-  editMakerPath: string;
+  editInitiativePath: string;
 }) => {
   const queryKeyExt = `?openSupport=`;
   const dialogTranslations = useTranslations("common.solicitHelpDialog");
@@ -85,9 +85,9 @@ const SolicitDialog = ({
         </Stack>
         <Typography>
           {dialogTranslations.rich(
-            "reminderThatTheyCanSolicitMoreByEditingMakerPath",
+            "reminderThatTheyCanSolicitMoreByEditingInitiativePath",
             {
-              link: (chunks) => <Link href={editMakerPath}>{chunks}</Link>,
+              link: (chunks) => <Link href={editInitiativePath}>{chunks}</Link>,
             }
           )}
         </Typography>

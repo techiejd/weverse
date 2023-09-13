@@ -1,7 +1,8 @@
 {
   "index": {
     "publish": "Publish",
-    "myPage": "My page"
+    "myPage": "My page",
+    "seeContentIn": "See content in"
   },
   "auth": {
     "register": "Register",
@@ -14,13 +15,13 @@
       "review": "Please review your information",
       "name": "Name:"
     },
-    "invitedAsMaker": {
+    "invitedInitiative": {
       "invalidInvitationLinkAskForAnother": "This link is not valid. Ask your incubator for another invite link.",
       "usedInvitationLink": "This link has already been used. Ask your incubator for another invite link."
     },
     "handleOtp": {
       "restartPrompt": "Please try again.",
-      "invitedAsMakerNotPossible": "It is not possible to register with an invite link.",
+      "invitedInitiativeNotPossible": "It is not possible to register with an invite link.",
       "invalidOtp": "Verification code is not valid."
     },
     "otpDialog": {
@@ -49,7 +50,11 @@
     "numChars": "{numChars} characters",
     "next": "Next",
     "back": "Back",
-    "ok": "Ok"
+    "ok": "Ok",
+    "internationalizedDetailed": {
+      "title": "Detailed info in other languages",
+      "prompt": "Add another language"
+    }
   },
   "common": {
     "loading": "Loading",
@@ -65,12 +70,8 @@
         "add": "Add your action"
       },
       "home": "Home",
-      "listMakers": "Makers",
+      "listInitiatives": "Initiatives",
       "login": "Log In",
-      "yourMaker": {
-        "register": "Register as a maker!",
-        "page": "My maker page"
-      },
       "yourMemberPage": "My Member Page",
       "share": "Share",
       "support": "Support",
@@ -80,10 +81,10 @@
       "update": "Update",
       "delete": "Delete"
     },
-    "meta_comment": "TODO(techiejd): Move all things that are Actions under a Maker and move their common components under maker.",
+    "meta_comment": "TODO(techiejd): Move all things that are Actions under an initiative and move their common components under initiative.",
     "solicitHelpDialog": {
       "title": "Ask for support",
-      "reminderThatTheyCanSolicitMoreByEditingMakerPath": "Remember, you can ask for other types of (non-financial) help <link>by requesting it in your maker page</link>.",
+      "reminderThatTheyCanSolicitMoreByEditingInitiativePath": "Remember, you can ask for other types of (non-financial) help <link>by requesting it in your initiative's page</link>.",
       "solicit": {
         "all": {
           "title": "Ask for all",
@@ -105,16 +106,16 @@
     },
     "supportDialog": {
       "title": "Thank you for the support!",
-      "share": "{beneficiaryType, select, action {Take a look at this cool social action. Let's support it!} other {Take a look at this awesome Maker. Let's support them!}}"
+      "share": "{beneficiaryType, select, action {Take a look at this cool social action. Let's support it!} other {Take a look at this awesome Initiative. Let's support it!}}"
     },
     "contactSupportDialog": {
-      "missingInfoTitle": "The maker has yet to finish their profile.",
-      "title": "The maker says you can contact them through these ways:",
-      "missingInfoText": "¡Thanks for wanting to support! We have alerted the maker about your interest and we hope your ask convinces them to finish quickly."
+      "missingInfoTitle": "The initiative has yet to finish their profile.",
+      "title": "The initiative says you can contact them through these ways:",
+      "missingInfoText": "¡Thanks for wanting to support! We have alerted the initiative about your interest and we hope your ask convinces them to finish quickly."
     },
     "sponsorDialog": {
       "title": "Thank you for your sponsorship!",
-      "oneWeIsWorkingOnMakingAGoodExp": "We are working with the Maker on making a good experience for you.",
+      "oneWeIsWorkingOnMakingAGoodExp": "We are working with the initiative on making a good experience for you.",
       "logInPrompt": "You must be a registered member to sponsor."
     },
     "underConstruction": {
@@ -122,7 +123,7 @@
     },
     "sponsor": {
       "sponsorship": "Sponsorship",
-      "title": "Sponsor {makerName}",
+      "title": "Sponsor {initiativeName}",
       "total": "Total",
       "monthly": "Monthly",
       "levels": {
@@ -149,13 +150,13 @@
           "fee": {
             "prompt": "Want to cover the payment processing fee?",
             "feeExplanation": "{feePercentage}% + {feeAmount} per transacción.",
-            "preferMakerPays": "I prefer the maker pays the fee"
+            "preferInitiativePays": "I prefer the initiative pays the fee"
           },
           "publicizeSupporter": {
             "prompt": "Shall we tell the OneWe Community?",
-            "makerKnows": "The Maker always knows who sponsors them",
+            "initiativeKnows": "The initiative always knows who sponsors them",
             "publicizeSupporterExplanation": "If you choose to publicize your sponsorship, your name and profile picture will be visible to the greater OneWe community.",
-            "publish": "I want the OneWe community to know I sponsor this Maker."
+            "publish": "I want the OneWe community to know I sponsor this Initiative."
           }
         },
         "customer": {
@@ -226,7 +227,7 @@
     },
     "impact": {
       "solicit": {
-        "title": "{makerName}, Get testimonials and get more engagement!",
+        "title": "{initiativeName}, Get testimonials and get more engagement!",
         "solicitText": "Please give me your opinion on my action: {for}",
         "clickOnEarToSolicit": "Click on the ear to send them a survey asking for a testimonials."
       }
@@ -252,23 +253,23 @@
   "testimonials": {
     "card": {
       "forAction": "For action: {action}",
-      "forMaker": "For maker: {maker}"
+      "forInitiative": "For initiative: {initiative}"
     },
     "prompt": {
-      "title": "<makerNameTag>{makerName}</makerNameTag> <prompt>wants to know how their action{forAction, select, true { has} other {s have}} had an impact on your life?</prompt>",
+      "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>wants to know how their action{forAction, select, true { has} other {s have}} had an impact on your life?</prompt>",
       "share": "Share your testimonial on this action",
       "callToAction": "Ready to do the testimonial",
       "logInPrompt": "To do a testimonial, you must first register as a member.",
       "for": "{forAction, select, true {The action in question:} other {Their actions:}}"
     },
     "form": {
-      "rate": "Rate the {forAction, select, true {action} other {maker}}:",
+      "rate": "Rate the {forAction, select, true {action} other {initiative}}:",
       "inVideoFormat": "In a selfie video",
       "videoSuggestions": "30 seconds to 5 minutes and optional.",
       "inTextFormat": "In your own words",
       "andOptional": "{numChars} and optional.",
       "writtenTestimonial": "Written testiomonial",
-      "whatImpactPrompt": "with details, what impact did this {forAction, select, true {action} other {Maker}} have in your life?",
+      "whatImpactPrompt": "with details, what impact did this {forAction, select, true {action} other {Initiative}} have in your life?",
       "submit": "Publish testimonial"
     },
     "thanks": {
@@ -277,11 +278,15 @@
       "theInformationIsValuable": "The information you provided is valuable to the OneWe community.",
       "whatWouldYouLikeToDoNow": "What would you like to do now?",
       "seeWhatOthersSaidAboutThisAction": "See what others said about this action",
-      "seeOtherActionsAndImpactsByMaker": "See other actions and impacts by this Maker",
+      "seeOtherActionsAndImpactsByThisInitiative": "See other actions and impacts by this Initiative",
       "goToHomePage": "Go to the home page"
     }
   },
-  "makers": {
+  "initiatives": {
+    "title": "Initiatives",
+    "card": {
+      "title": "Initiative"
+    },
     "sponsorships": {
       "list": "Sponsorships:",
       "loading": "Sponsorships: Cargando...",
@@ -290,11 +295,11 @@
     },
     "about": {
       "title": "About:",
-      "none": "The maker has not filled out their 'about section'."
+      "none": "The initiative has not filled out their 'about section'."
     },
     "incubator": {
       "title": "Incubator:",
-      "joinPrompt": "{makerName} is inviting you to be a part of their network as an incubator.",
+      "joinPrompt": "{initiativeName} is inviting you to be a part of their network as an incubator.",
       "isThisActionValid": "Is this action valid?",
       "actionIsValid": "Yes, it's valid.",
       "validationProcess": {
@@ -317,7 +322,7 @@
     "bottomBar": {
       "vip": "VIP",
       "invite": "Invite",
-      "sharePrompt": "Please take a look at my Maker page!",
+      "sharePrompt": "Please take a look at my Initiative page!",
       "solicitSupportShort": "Get support",
       "addActionShort": "Action"
     },
@@ -336,8 +341,8 @@
           "primary": "Listen to 3 impacted people by getting their testimonial or opinion.",
           "secondary": "We get the community involved in the discussion. {numSocialProofsDone}/3 testimonials received."
         },
-        "finishMakerProfile": {
-          "primary": "Finish filling out your Maker profile.",
+        "finishInitiativeProfile": {
+          "primary": "Finish filling out your Initiative profile.",
           "secondary": {
             "finished": "You're done.",
             "missingTheseFields": "Following fields empty: {fields}"
@@ -346,9 +351,9 @@
       }
     },
     "edit": {
-      "title": "Edit your maker page",
-      "makerDefinition": "Maker = social impact creator through their social actions.",
-      "chooseMakerType": {
+      "title": "Edit your initiative's page",
+      "initiativeDefinition": "Initiative = an act or strategy intended to resolve a difficulty or improve a situation.",
+      "chooseInitiativeType": {
         "individual": "I work alone",
         "organization": "I'm part of an organization",
         "entityInformation": "Entity information",
@@ -358,22 +363,22 @@
         }
       },
       "detailedInput": {
-        "askForInfoMsg": "{makerType, select, individual {Please, tell us about yourself.} other {Please, tell us about your organization.}}",
-        "askForImage": "{makerType, select, individual {Select an image with which you'll be identified by the OneWe community.} other {Upload your logo.}}",
+        "askForInfoMsg": "{initiativeType, select, individual {Please, tell us about yourself.} other {Please, tell us about your organization.}}",
+        "askForImage": "{initiativeType, select, individual {Select an image with which you'll be identified by the OneWe community.} other {Upload your logo.}}",
         "incubator": {
           "whatIsYourValidationProcess": "How does the incubator validate actions in order to give out seals of approval?",
           "leaveDetails": "Leave details about your validation process here.",
           "devilIsInTheDetailsReminder": "The devil is in the details. The more details you give and follow, the more trust you'll build with the community."
         },
         "nonFinancialHelp": {
-          "whatOtherHelpDoYouNeed": "What type of non-financial help do{makerType, select, individual { you} other {es the organization}} need?",
+          "whatOtherHelpDoYouNeed": "What type of non-financial help do{initiativeType, select, individual { you} other {es the organization}} need?",
           "leaveContactDetails": "Leave contact details here and be explicit in what help you need.",
           "helperText": "If you're ready to receive volunteers, speak to the news or specialists like lawyers, developers, etc, please be explicit in your ask and leave links or other details for them to contact you. For example: phone number, email, social network, page links, etc."
         },
-        "email": "OneWe will communicate maker related information with you by email",
-        "profileImage": "{makerType, select, individual {Select your profile picture} other {Select your organization's profile picture}}",
+        "email": "OneWe will communicate initiative related information with you by email",
+        "profileImage": "{initiativeType, select, individual {Select your profile picture} other {Select your organization's profile picture}}",
         "story": {
-          "title": "{makerType, select, individual {Tell us about yourself and your initiatives} other {Tell us about the organization and its intiatives}}",
+          "title": "{initiativeType, select, individual {Tell us about yourself and your initiatives} other {Tell us about the organization and its intiatives}}",
           "video": {
             "title": "Presentation video:",
             "prompt": "Tell us about yourself and why you should be sponsored."
@@ -387,12 +392,16 @@
       }
     },
     "invite": {
-      "title": "Invite a maker (o more) to your OneWe network.",
-      "whatIsMakersName": "What's the name of the {makerType, select, individual {person} other {organization}}?",
-      "makeLink": "Make link"
+      "title": "Invite an initiative (or more) to your OneWe network.",
+      "whatIsInitiativesName": "What's the name of the {initiativeType, select, individual {person} other {organization}}?",
+      "makeLink": "Make link",
+      "copy": {
+        "incompatibleBrowser": "Your browser doesn't support copying to clipboard. Please, click on 'Share'.",
+        "copyFailed": "Copy failed. Please, click on 'Share'."
+      }
     },
     "types": {
-      "title": "Maker type",
+      "title": "Initiative type",
       "long": {
         "individual": "Individual",
         "organization": "Organization",
@@ -412,9 +421,9 @@
         "incubator": "Incubator"
       }
     },
-    "myMakerPortal": {
+    "myInitiativePortal": {
       "join": "Join!",
-      "myMakerSpeedDial": {
+      "myInitiativeSpeedDial": {
         "view": "View",
         "mine": "Mine"
       }
@@ -423,10 +432,10 @@
   "members": {
     "yours": {
       "title": "Your member page",
-      "makers": {
-        "title": "Your Makers",
-        "none": "There are no Maker.",
-        "loading": "Loading Makers..."
+      "initiatives": {
+        "title": "Your Initiatives",
+        "none": "There are no Initiatives.",
+        "loading": "Loading Initiatives..."
       },
       "signOut": "Sign Out",
       "failedToCancelSponsorship": "Failed to cancel sponsorship: {error}"

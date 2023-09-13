@@ -11,7 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.incubatee = exports.sponsorship = exports.sponsorshipLevel = exports.content = exports.posiFormData = exports.actionPresentationExtension = exports.socialProof = exports.like = exports.member = exports.maker = exports.createNestedLocalizedSchema = exports.locale = exports.ratings = exports.organizationType = exports.makerType = exports.media = exports.mediaType = exports.formUrl = exports.timeStamp = void 0;
+exports.incubatee = exports.sponsorship = exports.sponsorshipLevel = exports.content = exports.posiFormData = exports.actionPresentationExtension = exports.socialProof = exports.like = exports.member = exports.phoneNumber = exports.initiative = exports.createNestedLocalizedSchema = exports.locale = exports.ratings = exports.organizationType = exports.initiativeType = exports.media = exports.mediaType = exports.formUrl = exports.timeStamp = void 0;
 const zod_1 = require("zod");
 exports.timeStamp = zod_1.z.any().transform((val, ctx) => {
     if (val instanceof Date) {
@@ -33,7 +33,7 @@ exports.media = zod_1.z.object({
     type: exports.mediaType,
     url: exports.formUrl,
 });
-exports.makerType = zod_1.z.enum(["individual", "organization"]);
+exports.initiativeType = zod_1.z.enum(["individual", "organization"]);
 exports.organizationType = zod_1.z.enum([
     "nonprofit",
     "religious",
@@ -51,7 +51,7 @@ const dbBase = zod_1.z.object({
     locale: exports.locale.optional(),
     createdAt: zod_1.z.date().optional(), // from db iff exists
 });
-const makerPresentationExtension = zod_1.z.object({
+const initiativePresentationExtension = zod_1.z.object({
     presentationVideo: exports.formUrl.optional(),
     howToSupport: howToSupport.optional(),
     about: zod_1.z.string().optional(),
@@ -66,10 +66,11 @@ function createNestedLocalizedSchema(itemSchema) {
     });
 }
 exports.createNestedLocalizedSchema = createNestedLocalizedSchema;
-exports.maker = dbBase
+// deprecated: maker
+exports.initiative = dbBase
     .extend({
     ownerId: zod_1.z.string().or(zod_1.z.enum(["invited"])),
-    type: exports.makerType,
+    type: exports.initiativeType,
     organizationType: exports.organizationType.optional(),
     name: zod_1.z.string().min(1),
     pic: exports.formUrl.optional(),
@@ -77,7 +78,7 @@ exports.maker = dbBase
     incubator: zod_1.z.string().optional(),
     ratings: exports.ratings.optional(),
 })
-    .merge(createNestedLocalizedSchema(makerPresentationExtension.optional()));
+    .merge(createNestedLocalizedSchema(initiativePresentationExtension.optional()));
 const currency = zod_1.z.enum(["cop", "usd", "eur", "gbp"]);
 const customer = zod_1.z.object({
     firstName: zod_1.z.string().min(1),
@@ -97,20 +98,32 @@ const stripe = zod_1.z.object({
     billingCycleAnchor: exports.timeStamp.optional(),
     status: zod_1.z.enum(["active", "incomplete", "canceled"]),
 });
+const contentSettings = zod_1.z.object({
+    locales: exports.locale.array(),
+});
+exports.phoneNumber = zod_1.z.object({
+    countryCallingCode: zod_1.z.string().min(1),
+    nationalNumber: zod_1.z.string().min(1),
+});
 exports.member = dbBase.extend({
-    makerId: zod_1.z.string(),
+    // deprecated: makerId: z.string().optional(),
+    initiativeId: zod_1.z.string(),
     customer: customer.optional(),
     stripe: stripe.optional(),
     pic: exports.formUrl.optional(),
-    name: zod_1.z.string().min(1).optional(),
+    name: zod_1.z.string().min(1),
+    settings: contentSettings.optional(),
+    phoneNumber: exports.phoneNumber,
 });
 // This is an edge.
 exports.like = dbBase;
 exports.socialProof = dbBase.extend({
     rating: zod_1.z.number(),
     videoUrl: exports.formUrl.optional(),
-    byMaker: zod_1.z.string(),
-    forMaker: zod_1.z.string(),
+    // deprecated: byMaker: z.string().optional(),
+    byInitiative: zod_1.z.string(),
+    // deprecated: forMaker: z.string().optional(),
+    forInitiative: zod_1.z.string(),
     forAction: zod_1.z.string().optional(),
     text: zod_1.z.string().optional(),
 });
@@ -163,14 +176,15 @@ const validation = zod_1.z.object({
     validated: zod_1.z.boolean(),
 });
 // TODO(techiejd): Reshape db. It should go posi
-// {action: Action, impacts: Impact[], makerId}
+// {action: Action, impacts: Impact[], initiativeId}
 exports.actionPresentationExtension = zod_1.z.object({
     media: exports.media,
     summary: zod_1.z.string().min(1),
 });
 exports.posiFormData = dbBase
     .extend({
-    makerId: zod_1.z.string(),
+    // deprecated: makerId: z.string().optional(),
+    initiativeId: zod_1.z.string(),
     location: location.optional(),
     ratings: exports.ratings.optional(),
     validation: validation.optional(),
@@ -203,7 +217,8 @@ exports.sponsorship = dbBase.extend({
     customAmount: zod_1.z.number().optional(),
     tipAmount: zod_1.z.number(),
     denyFee: zod_1.z.boolean().optional(),
-    maker: zod_1.z.string(),
+    // deprecated: maker: z.string()
+    initiative: zod_1.z.string(),
     member: zod_1.z.string(),
     memberPublishable: zod_1.z.boolean().optional(),
     currency: currency,

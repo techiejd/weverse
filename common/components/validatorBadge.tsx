@@ -7,7 +7,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Maker } from "../../functions/shared/src";
+import { Initiative } from "../../functions/shared/src";
 import { useLocalizedPresentationInfo } from "../utils/translations";
 import { useTranslations } from "next-intl";
 
@@ -16,7 +16,7 @@ const ValidationProcessDialog = ({
   open,
   setOpen,
 }: {
-  validator?: Maker;
+  validator?: Initiative;
   open: boolean;
   setOpen: (open: boolean) => void;
 }) => {
@@ -35,7 +35,7 @@ const ValidationProcessDialog = ({
           <Button
             variant="text"
             color="primary"
-            href={`/makers/${validator?.id}`}
+            href={`/initiatives/${validator?.id}`}
           >
             {t("learnMore")}
           </Button>
@@ -56,7 +56,7 @@ const ValidationProcessDialog = ({
 };
 export { ValidationProcessDialog };
 
-const ValidatorBadge = ({ validator }: { validator?: Maker }) => {
+const ValidatorBadge = ({ validator }: { validator?: Initiative }) => {
   const t = useTranslations("common");
   return (
     <Stack direction="row" alignItems="center" spacing={0.5}>

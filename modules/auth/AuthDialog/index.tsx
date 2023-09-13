@@ -20,6 +20,9 @@ import {
   doc,
   getDoc,
   writeBatch,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
 import Login from "@mui/icons-material/Login";
 import OtpDialog from "./otpDialog";
@@ -30,12 +33,11 @@ import { AuthAction, AuthDialogState, encodePhoneNumber } from "./context";
 import { useAppState } from "../../../common/context/appState";
 import {
   useIncubateeConverter,
-  useMakerConverter,
+  useInitiativeConverter,
   useMemberConverter,
 } from "../../../common/utils/firebase";
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
-import { auth } from "firebase-admin";
 
 const usePrompts = () => {
   const t = useTranslations("auth");
@@ -105,14 +107,14 @@ const AuthDialogContent = ({
   const appState = useAppState();
   const { loading: userLoading } = appState.authState;
   const memberConverter = useMemberConverter();
-  const makerConverter = useMakerConverter();
+  const initiativeConverter = useInitiativeConverter();
   const incubateeConverter = useIncubateeConverter();
   const [updateProfile, _, updateProfileError] = useUpdateProfile(
     appState.auth
   );
   const [authDialogState, setAuthDialogState] = useState<AuthDialogState>({
     name: "",
-    phoneNumber: { countryCallingCode: null, nationalNumber: null },
+    phoneNumber: {},
     phoneNumberInputError: false,
     authAction: initialAuthAction,
     otpDialogOpen: false,
@@ -135,56 +137,56 @@ const AuthDialogContent = ({
 
   //TODO(techiejd): Look into reducing the logic for authentication.
   const router = useRouter();
-  const { invitedAsMaker, inviter } = router.query;
-  const makersCollection = collection(
+  const { invitedInitiative, inviter } = router.query;
+  const initiativesCollection = collection(
     appState.firestore,
-    "makers"
-  ).withConverter(makerConverter);
-  const invitedMakerDocRef = invitedAsMaker
-    ? doc(makersCollection, invitedAsMaker as string)
+    "initiatives"
+  ).withConverter(initiativeConverter);
+  const invitedInitiativeDocRef = invitedInitiative
+    ? doc(initiativesCollection, invitedInitiative as string)
     : null;
   const incubateeDocRef =
-    inviter && invitedAsMaker
+    inviter && invitedInitiative
       ? doc(
           appState.firestore,
-          "makers",
+          "initiatives",
           inviter as string,
           "incubatees",
-          invitedAsMaker as string
+          invitedInitiative as string
         ).withConverter(incubateeConverter)
       : null;
 
-  // First we need to maker sure that the invitedAsMaker query param is valid.
-  // The invitedAsMaker is a maker whose ownerId is "invited".
+  // First we need to initiative sure that the invitedInitiative query param is valid.
+  // The invitedInitiative is a initiative whose ownerId is "invited".
   useEffect(() => {
-    if (invitedAsMaker) {
-      const makerDoc = doc(
+    if (invitedInitiative) {
+      const initiativeDoc = doc(
         appState.firestore,
-        "makers",
-        invitedAsMaker as string
-      ).withConverter(makerConverter);
-      getDoc(makerDoc).then((makerDocSnap) => {
-        if (!makerDocSnap.exists()) {
+        "initiatives",
+        invitedInitiative as string
+      ).withConverter(initiativeConverter);
+      getDoc(initiativeDoc).then((initiativeDocSnap) => {
+        if (!initiativeDocSnap.exists()) {
           alert(
             authTranslations(
-              "invitedAsMaker.invalidInvitationLinkAskForAnother"
+              "invitedInitiative.invalidInvitationLinkAskForAnother"
             )
           );
           router.push("/");
         }
-        const makerData = makerDocSnap.data();
-        if (makerData!.ownerId != "invited") {
-          alert("invitedAsMaker.usedInvitationLink");
+        const initiativeData = initiativeDocSnap.data();
+        if (initiativeData!.ownerId != "invited") {
+          alert("invitedInitiative.usedInvitationLink");
           router.push("/");
         }
       });
     }
   }, [
-    invitedAsMaker,
+    invitedInitiative,
     router,
     appState.firestore,
     authTranslations,
-    makerConverter,
+    initiativeConverter,
   ]);
 
   const handleOtp = async (otp: string) => {
@@ -195,24 +197,24 @@ const AuthDialogContent = ({
       .then(async (userCred) => {
         let error = "";
         if (authDialogState.authAction == AuthAction.register) {
-          const createUserAndMaker = async () => {
+          const createUserAndInitiative = async () => {
             const updateSuccessful = updateProfile({
               displayName: authDialogState.name,
             });
-            const makerDocRef = await (async () => {
-              if (invitedMakerDocRef && incubateeDocRef) {
+            const initiativeDocRef = await (async () => {
+              if (invitedInitiativeDocRef && incubateeDocRef) {
                 const batch = writeBatch(appState.firestore);
-                batch.update(invitedMakerDocRef, {
+                batch.update(invitedInitiativeDocRef, {
                   ownerId: userCred.user.uid,
                 });
                 batch.update(incubateeDocRef, {
                   acceptedInvite: true,
                 });
                 await batch.commit();
-                return invitedMakerDocRef;
+                return invitedInitiativeDocRef;
               }
-              // So we assume all users are also makers. They can edit this later.
-              return addDoc(makersCollection, {
+              // So we assume all users are also initiatives. They can edit this later.
+              return addDoc(initiativesCollection, {
                 ownerId: userCred.user.uid,
                 name: authDialogState.name,
                 type: "individual",
@@ -226,22 +228,20 @@ const AuthDialogContent = ({
                 "members",
                 userCred.user.uid
               ).withConverter(memberConverter),
-              { makerId: makerDocRef.id }
-            );
-
-            const registeredPhoneNumberPromise = setDoc(
-              doc(
-                appState.firestore,
-                "registeredPhoneNumbers",
-                encodePhoneNumber(authDialogState.phoneNumber)
-              ),
-              { ownerId: userCred.user.uid }
+              {
+                initiativeId: initiativeDocRef.id,
+                name: authDialogState.name,
+                phoneNumber: {
+                  countryCallingCode:
+                    authDialogState.phoneNumber.countryCallingCode!,
+                  nationalNumber: authDialogState.phoneNumber.nationalNumber!,
+                },
+              }
             );
 
             const [finishedUpdateSuccessful] = await Promise.all([
               updateSuccessful,
               memberDocPromise,
-              registeredPhoneNumberPromise,
             ]);
 
             if (!finishedUpdateSuccessful)
@@ -249,10 +249,10 @@ const AuthDialogContent = ({
                 ? updateProfileError?.message
                 : "";
           };
-          await createUserAndMaker();
+          await createUserAndInitiative();
         } else {
-          if (invitedAsMaker) {
-            return authTranslations("handleOtp.invitedAsMakerNotPossible");
+          if (invitedInitiative) {
+            return authTranslations("handleOtp.invitedInitiativeNotPossible");
           }
         }
 
@@ -271,19 +271,29 @@ const AuthDialogContent = ({
       checkingUserRegistered: true,
     }));
 
-    const registeredPNRef = doc(
-      appState.firestore,
-      "registeredPhoneNumbers",
-      encodePhoneNumber(authDialogState.phoneNumber)
+    console.log(authDialogState.phoneNumber);
+    const registeredMembersWithPN = await getDocs(
+      query(
+        collection(appState.firestore, "members"),
+        where(
+          "phoneNumber.countryCallingCode",
+          "==",
+          authDialogState.phoneNumber.countryCallingCode
+        ),
+        where(
+          "phoneNumber.nationalNumber",
+          "==",
+          authDialogState.phoneNumber.nationalNumber
+        )
+      )
     );
-    const registeredPNDoc = await getDoc(registeredPNRef);
 
     setAuthDialogState((aDS) => ({
       ...aDS,
       checkingUserRegistered: false,
     }));
 
-    return registeredPNDoc.exists();
+    return !registeredMembersWithPN.empty;
   };
 
   const onSubmit = async () => {

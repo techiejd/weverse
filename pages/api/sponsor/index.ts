@@ -100,7 +100,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const {
     member,
-    maker,
+    initiative,
     total,
     sponsorshipLevel,
     customAmount,
@@ -121,17 +121,17 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
     customer: customerIn,
   } = body;
 
-  const makerSponsorshipDoc = firestore
-    .doc(`makers/${maker}/sponsorships/${member}`)
+  const initiativeSponsorshipDoc = firestore
+    .doc(`initiatives/${initiative}/sponsorships/${member}`)
     .withConverter(Utils.sponsorshipConverter);
   const memberSponsorshipDoc = firestore
-    .doc(`members/${member}/sponsorships/${maker}`)
+    .doc(`members/${member}/sponsorships/${initiative}`)
     .withConverter(Utils.sponsorshipConverter);
   const mirroredSponsorshipUpdate = (
     data: z.infer<typeof partialSponsorship>
   ) => {
     const batch = firestore.batch();
-    batch.update(makerSponsorshipDoc, data);
+    batch.update(initiativeSponsorshipDoc, data);
     batch.update(memberSponsorshipDoc, data);
     return batch.commit();
   };
@@ -149,7 +149,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const sponsorshipPrice = await stripe.prices.create({
       metadata: {
-        maker,
+        initiative,
         member,
         tipAmount,
         denyFee,
@@ -171,11 +171,11 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
       denyFee: !!denyFee,
       //TODO(techiejd): Flesh out publishing name support.
       memberPublishable: !!memberPublishable,
-      maker,
+      initiative: initiative,
       member,
       currency,
     };
-    batch.set(makerSponsorshipDoc, sponsorshipData);
+    batch.set(initiativeSponsorshipDoc, sponsorshipData);
     batch.set(memberSponsorshipDoc, sponsorshipData);
 
     await Promise.all([archiveLastSponsorshipPricePromise, batch.commit()]);
@@ -226,7 +226,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
           return stripe.subscriptions.create({
             metadata: {
               member,
-              maker,
+              initiative,
               tipAmount,
               denyFee,
             },
@@ -234,7 +234,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
             items: [
               {
                 price: sponsorshipPriceIn,
-                metadata: { maker, member, tipAmount, denyFee },
+                metadata: { initiative, member, tipAmount, denyFee },
               },
             ], // you can't update a default_incomplete subscription's price, so we choose to assume the price is stale and, thusly, to create a new subscription.
             payment_behavior: "default_incomplete", // since it's default incomplete, we can just ditch it.
@@ -296,7 +296,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
       case "confirm":
         const subscriptionItem = await stripe.subscriptionItems.create({
           metadata: {
-            maker,
+            initiative,
             member,
           },
           subscription: subscriptionIn,

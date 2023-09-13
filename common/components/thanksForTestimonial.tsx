@@ -2,10 +2,10 @@ import { Button, CircularProgress, Stack, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
 
 const ThanksForTestimonial = ({
-  forMakerId,
+  forInitiativeId,
   forActionId,
 }: {
-  forMakerId?: string;
+  forInitiativeId?: string;
   forActionId?: string;
 }) => {
   const thanksTranslations = useTranslations("testimonials.thanks");
@@ -20,9 +20,9 @@ const ThanksForTestimonial = ({
           {thanksTranslations("seeWhatOthersSaidAboutThisAction")}
         </Button>
       )}
-      {(forMakerId && (
-        <Button href={`/makers/${forMakerId}`} variant="contained">
-          {thanksTranslations("seeOtherActionsAndImpactsByMaker")}
+      {(forInitiativeId && (
+        <Button href={`/initiatives/${forInitiativeId}`} variant="contained">
+          {thanksTranslations("seeOtherActionsAndImpactsByThisInitiative")}
         </Button>
       )) || <CircularProgress />}
       <Button href="/" variant="contained">

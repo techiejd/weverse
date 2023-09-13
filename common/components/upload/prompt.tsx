@@ -1,5 +1,5 @@
 import { Avatar, Button, Grid, Link, Stack, Typography } from "@mui/material";
-import { Maker, PosiFormData } from "../../../functions/shared/src";
+import { Initiative, PosiFormData } from "../../../functions/shared/src";
 import ImpactCard from "../../../modules/posi/action/card";
 
 import { useActions } from "../../context/weverseUtils";
@@ -10,23 +10,23 @@ import { useTranslations } from "next-intl";
 import { sectionStyles } from "../theme";
 
 const UploadSocialProofPrompt = ({
-  forMaker,
+  forInitiative,
   forAction,
 }: {
-  forMaker: Maker;
+  forInitiative: Initiative;
   forAction?: PosiFormData;
 }) => {
   const { user } = useAppState().authState;
-  const [makerActions, makerActionsLoading, makerActionsError] = useActions(
-    forAction ? undefined : forMaker.id
+  const [initiativeActions] = useActions(
+    forAction ? undefined : forInitiative.id
   );
   const [actions, setActions] = useState<PosiFormData[]>(
     forAction ? [forAction] : []
   );
 
   useEffect(() => {
-    if (makerActions) setActions(makerActions);
-  }, [makerActions, setActions]);
+    if (initiativeActions) setActions(initiativeActions);
+  }, [initiativeActions, setActions]);
 
   const promptTranslations = useTranslations("testimonials.prompt");
 
@@ -37,17 +37,17 @@ const UploadSocialProofPrompt = ({
         sx={{ justifyContent: "center", alignItems: "center" }}
         p={2}
       >
-        {forMaker.pic && (
-          <Avatar src={forMaker.pic} sx={{ width: 112, height: 112 }} />
+        {forInitiative.pic && (
+          <Avatar src={forInitiative.pic} sx={{ width: 112, height: 112 }} />
         )}
         {promptTranslations.rich("title", {
-          makerName: forMaker.name,
-          makerNameTag: (makerName) => (
+          initiativeName: forInitiative.name,
+          initiativeNameTag: (initiativeName) => (
             <Typography variant="h2">
               <Link
-                href={`/makers/${forMaker.id}`}
+                href={`/initiatives/${forInitiative.id}`}
                 sx={{ color: "black" }}
-              >{`${makerName}`}</Link>
+              >{`${initiativeName}`}</Link>
             </Typography>
           ),
           prompt: (p) => (
@@ -76,7 +76,7 @@ const UploadSocialProofPrompt = ({
               href={
                 forAction
                   ? `/posi/${forAction.id}/impact/upload/form`
-                  : `/makers/${forMaker.id}/impact/upload/form`
+                  : `/initiatives/${forInitiative.id}/impact/upload/form`
               }
             >
               {promptTranslations("callToAction")}
