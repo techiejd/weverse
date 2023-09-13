@@ -357,6 +357,13 @@ export declare const member: z.ZodObject<{
     }>>;
     pic: z.ZodOptional<z.ZodString>;
     name: z.ZodString;
+    settings: z.ZodOptional<z.ZodObject<{
+        locales: z.ZodArray<z.ZodEnum<["en", "es", "fr"]>, "many">;
+    }, "strip", z.ZodTypeAny, {
+        locales?: ("en" | "es" | "fr")[];
+    }, {
+        locales?: ("en" | "es" | "fr")[];
+    }>>;
     phoneNumber: z.ZodObject<{
         countryCallingCode: z.ZodString;
         nationalNumber: z.ZodString;
@@ -392,6 +399,9 @@ export declare const member: z.ZodObject<{
     };
     pic?: string;
     name?: string;
+    settings?: {
+        locales?: ("en" | "es" | "fr")[];
+    };
     phoneNumber?: {
         countryCallingCode?: string;
         nationalNumber?: string;
@@ -421,6 +431,9 @@ export declare const member: z.ZodObject<{
     };
     pic?: string;
     name?: string;
+    settings?: {
+        locales?: ("en" | "es" | "fr")[];
+    };
     phoneNumber?: {
         countryCallingCode?: string;
         nationalNumber?: string;

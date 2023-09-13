@@ -22,8 +22,10 @@ const PhoneInput = ({
       setAuthDialogState((aDS) => ({
         ...aDS,
         phoneNumber: {
-          countryCallingCode: info.countryCallingCode,
-          nationalNumber: info.nationalNumber,
+          countryCallingCode: info.countryCallingCode
+            ? info.countryCallingCode
+            : undefined,
+          nationalNumber: info.nationalNumber ? info.nationalNumber : undefined,
         },
       }));
       setPhoneNumberIn(value);

@@ -97,6 +97,9 @@ const stripe = zod_1.z.object({
     billingCycleAnchor: exports.timeStamp.optional(),
     status: zod_1.z.enum(["active", "incomplete", "canceled"]),
 });
+const contentSettings = zod_1.z.object({
+    locales: exports.locale.array(),
+});
 exports.phoneNumber = zod_1.z.object({
     countryCallingCode: zod_1.z.string().min(1),
     nationalNumber: zod_1.z.string().min(1),
@@ -107,6 +110,7 @@ exports.member = dbBase.extend({
     stripe: stripe.optional(),
     pic: exports.formUrl.optional(),
     name: zod_1.z.string().min(1),
+    settings: contentSettings.optional(),
     phoneNumber: exports.phoneNumber,
 });
 // This is an edge.
