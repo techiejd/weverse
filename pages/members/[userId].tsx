@@ -27,7 +27,7 @@ const UserPage = asOneWePage(() => {
     return String(userId);
   })();
   const q = query(
-    collection(appState.firestore, "makers"),
+    collection(appState.firestore, "initiatives"),
     where("ownerId", "==", userId)
   );
   const [initiativesSnapshot, loading, initiativesError] = useCollection(q);
@@ -80,7 +80,7 @@ const UserPage = asOneWePage(() => {
                   body: JSON.stringify({
                     stripeSubscription: myMember.stripe?.subscription,
                     stripeSubscriptionItem: sponsorship.stripeSubscriptionItem,
-                    initiative: sponsorship.maker,
+                    initiative: sponsorship.initiative,
                     member: sponsorship.member,
                   }),
                 }).then((res) => {

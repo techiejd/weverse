@@ -43,7 +43,7 @@ const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
   };
 
   const onDelete = (p: PosiFormData) => {
-    const initiativeRoute = `/initiatives/${p.makerId}`;
+    const initiativeRoute = `/initiatives/${p.initiativeId}`;
 
     router.prefetch(initiativeRoute);
 

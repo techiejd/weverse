@@ -286,7 +286,7 @@ export declare const member: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr"]>>;
     createdAt: z.ZodOptional<z.ZodDate>;
-    makerId: z.ZodString;
+    initiativeId: z.ZodString;
     customer: z.ZodOptional<z.ZodObject<{
         firstName: z.ZodString;
         lastName: z.ZodString;
@@ -347,11 +347,18 @@ export declare const member: z.ZodObject<{
     }>>;
     pic: z.ZodOptional<z.ZodString>;
     name: z.ZodOptional<z.ZodString>;
+    settings: z.ZodOptional<z.ZodObject<{
+        locales: z.ZodArray<z.ZodEnum<["en", "es", "fr"]>, "many">;
+    }, "strip", z.ZodTypeAny, {
+        locales?: ("en" | "es" | "fr")[];
+    }, {
+        locales?: ("en" | "es" | "fr")[];
+    }>>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
     locale?: "en" | "es" | "fr";
     createdAt?: Date;
-    makerId?: string;
+    initiativeId?: string;
     customer?: {
         firstName?: string;
         lastName?: string;
@@ -372,11 +379,14 @@ export declare const member: z.ZodObject<{
     };
     pic?: string;
     name?: string;
+    settings?: {
+        locales?: ("en" | "es" | "fr")[];
+    };
 }, {
     id?: string;
     locale?: "en" | "es" | "fr";
     createdAt?: Date;
-    makerId?: string;
+    initiativeId?: string;
     customer?: {
         firstName?: string;
         lastName?: string;
@@ -397,6 +407,9 @@ export declare const member: z.ZodObject<{
     };
     pic?: string;
     name?: string;
+    settings?: {
+        locales?: ("en" | "es" | "fr")[];
+    };
 }>;
 export type Member = z.infer<typeof member>;
 export declare const like: z.ZodObject<{
@@ -419,8 +432,8 @@ export declare const socialProof: z.ZodObject<{
     createdAt: z.ZodOptional<z.ZodDate>;
     rating: z.ZodNumber;
     videoUrl: z.ZodOptional<z.ZodString>;
-    byMaker: z.ZodString;
-    forMaker: z.ZodString;
+    byInitiative: z.ZodString;
+    forInitiative: z.ZodString;
     forAction: z.ZodOptional<z.ZodString>;
     text: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
@@ -429,8 +442,8 @@ export declare const socialProof: z.ZodObject<{
     createdAt?: Date;
     rating?: number;
     videoUrl?: string;
-    byMaker?: string;
-    forMaker?: string;
+    byInitiative?: string;
+    forInitiative?: string;
     forAction?: string;
     text?: string;
 }, {
@@ -439,8 +452,8 @@ export declare const socialProof: z.ZodObject<{
     createdAt?: Date;
     rating?: number;
     videoUrl?: string;
-    byMaker?: string;
-    forMaker?: string;
+    byInitiative?: string;
+    forInitiative?: string;
     forAction?: string;
     text?: string;
 }>;
@@ -551,7 +564,7 @@ export declare const posiFormData: z.ZodObject<{
         sum?: number;
         count?: number;
     }>>;
-    makerId: z.ZodString;
+    initiativeId: z.ZodString;
     en: z.ZodOptional<z.ZodObject<{
         media: z.ZodObject<{
             type: z.ZodEnum<["video", "img"]>;
@@ -651,7 +664,7 @@ export declare const posiFormData: z.ZodObject<{
         sum?: number;
         count?: number;
     };
-    makerId?: string;
+    initiativeId?: string;
     en?: {
         media?: {
             type?: "img" | "video";
@@ -697,7 +710,7 @@ export declare const posiFormData: z.ZodObject<{
         sum?: number;
         count?: number;
     };
-    makerId?: string;
+    initiativeId?: string;
     en?: {
         media?: {
             type?: "img" | "video";
@@ -796,7 +809,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             sum?: number;
             count?: number;
         }>>;
-        makerId: z.ZodString;
+        initiativeId: z.ZodString;
         en: z.ZodOptional<z.ZodObject<{
             media: z.ZodObject<{
                 type: z.ZodEnum<["video", "img"]>;
@@ -896,7 +909,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             sum?: number;
             count?: number;
         };
-        makerId?: string;
+        initiativeId?: string;
         en?: {
             media?: {
                 type?: "img" | "video";
@@ -942,7 +955,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             sum?: number;
             count?: number;
         };
-        makerId?: string;
+        initiativeId?: string;
         en?: {
             media?: {
                 type?: "img" | "video";
@@ -988,7 +1001,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             sum?: number;
             count?: number;
         };
-        makerId?: string;
+        initiativeId?: string;
         en?: {
             media?: {
                 type?: "img" | "video";
@@ -1040,7 +1053,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             sum?: number;
             count?: number;
         };
-        makerId?: string;
+        initiativeId?: string;
         en?: {
             media?: {
                 type?: "img" | "video";
@@ -1080,8 +1093,8 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt: z.ZodOptional<z.ZodDate>;
         rating: z.ZodNumber;
         videoUrl: z.ZodOptional<z.ZodString>;
-        byMaker: z.ZodString;
-        forMaker: z.ZodString;
+        byInitiative: z.ZodString;
+        forInitiative: z.ZodString;
         forAction: z.ZodOptional<z.ZodString>;
         text: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
@@ -1090,8 +1103,8 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt?: Date;
         rating?: number;
         videoUrl?: string;
-        byMaker?: string;
-        forMaker?: string;
+        byInitiative?: string;
+        forInitiative?: string;
         forAction?: string;
         text?: string;
     }, {
@@ -1100,8 +1113,8 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt?: Date;
         rating?: number;
         videoUrl?: string;
-        byMaker?: string;
-        forMaker?: string;
+        byInitiative?: string;
+        forInitiative?: string;
         forAction?: string;
         text?: string;
     }>, {
@@ -1110,8 +1123,8 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt?: Date;
         rating?: number;
         videoUrl?: string;
-        byMaker?: string;
-        forMaker?: string;
+        byInitiative?: string;
+        forInitiative?: string;
         forAction?: string;
         text?: string;
     }, unknown>;
@@ -1126,8 +1139,8 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt?: Date;
         rating?: number;
         videoUrl?: string;
-        byMaker?: string;
-        forMaker?: string;
+        byInitiative?: string;
+        forInitiative?: string;
         forAction?: string;
         text?: string;
     };
@@ -1153,7 +1166,7 @@ export declare const sponsorship: z.ZodObject<{
     customAmount: z.ZodOptional<z.ZodNumber>;
     tipAmount: z.ZodNumber;
     denyFee: z.ZodOptional<z.ZodBoolean>;
-    maker: z.ZodString;
+    initiative: z.ZodString;
     member: z.ZodString;
     memberPublishable: z.ZodOptional<z.ZodBoolean>;
     currency: z.ZodEnum<["cop", "usd", "eur", "gbp"]>;
@@ -1169,7 +1182,7 @@ export declare const sponsorship: z.ZodObject<{
     customAmount?: number;
     tipAmount?: number;
     denyFee?: boolean;
-    maker?: string;
+    initiative?: string;
     member?: string;
     memberPublishable?: boolean;
     currency?: "cop" | "usd" | "eur" | "gbp";
@@ -1185,7 +1198,7 @@ export declare const sponsorship: z.ZodObject<{
     customAmount?: number;
     tipAmount?: number;
     denyFee?: boolean;
-    maker?: string;
+    initiative?: string;
     member?: string;
     memberPublishable?: boolean;
     currency?: "cop" | "usd" | "eur" | "gbp";

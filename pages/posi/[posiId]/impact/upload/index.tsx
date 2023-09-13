@@ -10,7 +10,7 @@ export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 const Upload = asOneWePage(() => {
   const [action] = useCurrentPosi();
-  const [initiative] = useInitiative(action?.makerId);
+  const [initiative] = useInitiative(action?.initiativeId);
   return action && initiative ? (
     <UploadSocialProofPrompt forInitiative={initiative} forAction={action} />
   ) : (

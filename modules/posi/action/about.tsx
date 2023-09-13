@@ -20,7 +20,7 @@ import { useLocalizedPresentationInfo } from "../../../common/utils/translations
 
 const AboutContent = ({
   location,
-  makerId: initiativeId,
+  initiativeId: initiativeId,
   ratings,
   validation,
   ...locale2PresentationInfo

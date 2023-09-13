@@ -50,7 +50,7 @@ export const testimonialAdded = functions.firestore
     }
     promises.push(
       store
-        .doc(`makers/${sProof.forMaker}`)
+        .doc(`initiatives/${sProof.forInitiative}`)
         .withConverter(initiativeConverter)
         .get()
         .then((initiativeDocSnap) => {
@@ -121,8 +121,8 @@ export const actionDeleted = functions.firestore
         .where("forAction", "==", snapshot.id)
         .get(),
       snapshot.ref.collection("likes").get(),
-      action.makerId
-        ? store.doc(`makers/${action.makerId}`).get()
+      action.initiativeId
+        ? store.doc(`initiatives/${action.initiativeId}`).get()
         : Promise.resolve(undefined),
     ];
 

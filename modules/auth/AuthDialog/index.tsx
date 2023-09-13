@@ -138,7 +138,7 @@ const AuthDialogContent = ({
   const { invitedInitiative, inviter } = router.query;
   const initiativesCollection = collection(
     appState.firestore,
-    "makers"
+    "initiatives"
   ).withConverter(initiativeConverter);
   const invitedInitiativeDocRef = invitedInitiative
     ? doc(initiativesCollection, invitedInitiative as string)
@@ -147,7 +147,7 @@ const AuthDialogContent = ({
     inviter && invitedInitiative
       ? doc(
           appState.firestore,
-          "makers",
+          "initiatives",
           inviter as string,
           "incubatees",
           invitedInitiative as string
@@ -160,7 +160,7 @@ const AuthDialogContent = ({
     if (invitedInitiative) {
       const initiativeDoc = doc(
         appState.firestore,
-        "makers",
+        "initiatives",
         invitedInitiative as string
       ).withConverter(initiativeConverter);
       getDoc(initiativeDoc).then((initiativeDocSnap) => {
@@ -226,7 +226,7 @@ const AuthDialogContent = ({
                 "members",
                 userCred.user.uid
               ).withConverter(memberConverter),
-              { makerId: initiativeDocRef.id }
+              { initiativeId: initiativeDocRef.id }
             );
 
             const registeredPhoneNumberPromise = setDoc(

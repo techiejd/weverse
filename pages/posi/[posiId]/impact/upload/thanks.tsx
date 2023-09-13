@@ -11,7 +11,7 @@ export const getStaticProps = WithTranslationsStaticProps();
 const Thanks = asOneWePage(() => {
   const [action] = useCurrentPosi();
   return ThanksForTestimonial({
-    forInitiativeId: action?.makerId,
+    forInitiativeId: action?.initiativeId,
     forActionId: action?.id,
   });
 });

@@ -42,7 +42,7 @@ const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
     const initiativeConverter = useInitiativeConverter();
     const initiativeDocRef = doc(
       appState.firestore,
-      "makers",
+      "initiatives",
       initiativeId
     ).withConverter(initiativeConverter);
     const [initiative] = useDocumentData(

@@ -45,7 +45,7 @@ const SponsorshipDisplay = ({
   const localizedDateFormat = useLocalizedDateFormat();
   const sponsorTranslations = useTranslations("common.sponsor");
   const [initiative] = useInitiative(
-    type == "for" ? sponsorship.maker : undefined
+    type == "for" ? sponsorship.initiative : undefined
   );
   const [member] = useMember(type == "from" ? sponsorship.member : undefined);
   const [loading, setLoading] = useState(false);

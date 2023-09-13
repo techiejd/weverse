@@ -22,7 +22,7 @@ export const useCurrentActions = () => {
     initiative
       ? query(
           collection(appState.firestore, "impacts"),
-          where("makerId", "==", initiative.id)
+          where("initiativeId", "==", initiative.id)
         ).withConverter(posiFormDataConverter)
       : undefined
   );

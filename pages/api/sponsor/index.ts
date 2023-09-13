@@ -122,7 +122,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
   } = body;
 
   const initiativeSponsorshipDoc = firestore
-    .doc(`makers/${initiative}/sponsorships/${member}`)
+    .doc(`initiatives/${initiative}/sponsorships/${member}`)
     .withConverter(Utils.sponsorshipConverter);
   const memberSponsorshipDoc = firestore
     .doc(`members/${member}/sponsorships/${initiative}`)
@@ -171,7 +171,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
       denyFee: !!denyFee,
       //TODO(techiejd): Flesh out publishing name support.
       memberPublishable: !!memberPublishable,
-      maker: initiative,
+      initiative: initiative,
       member,
       currency,
     };

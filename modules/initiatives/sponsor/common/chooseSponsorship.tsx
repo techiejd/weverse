@@ -165,7 +165,7 @@ const ChooseSponsorship = ({
 
       <input hidden value={"chooseSponsorship"} name="stepString" readOnly />
       <input hidden value={total} name="total" readOnly />
-      <input hidden value={beneficiary.id} name="maker" readOnly />
+      <input hidden value={beneficiary.id} name="initiative" readOnly />
       <input hidden value={myMember?.id ?? ""} name="member" readOnly />
 
       <Stack spacing={2} divider={<Divider />}>

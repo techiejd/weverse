@@ -123,7 +123,7 @@ const Index = asOneWePage(() => {
   const [posiData, loading, error] = useCurrentPosi();
   const [socialProofs] = useCurrentSocialProofs();
   const [myInitiative] = useMyInitiative();
-  const [initiative] = useInitiative(posiData?.makerId);
+  const [initiative] = useInitiative(posiData?.initiativeId);
 
   const Loading = () => {
     return (

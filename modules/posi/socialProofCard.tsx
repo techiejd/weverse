@@ -25,9 +25,9 @@ const SocialProofCard = ({
   showAction?: boolean;
 }) => {
   const SocialProofCardHeader = () => {
-    const [byInitiative] = useInitiative(socialProof.byMaker);
+    const [byInitiative] = useInitiative(socialProof.byInitiative);
     return (
-      <CardActionArea href={`/initiatives/${socialProof.byMaker}`}>
+      <CardActionArea href={`/initiatives/${socialProof.byInitiative}`}>
         <CardHeader
           title={
             <Stack
@@ -47,7 +47,7 @@ const SocialProofCard = ({
   const SocialProofCardContent = () => {
     const [action] = useAction(showAction ? socialProof.forAction : undefined);
     const [forInitiative] = useInitiative(
-      showInitiative ? socialProof.forMaker : undefined
+      showInitiative ? socialProof.forInitiative : undefined
     );
     const presentationInfo = useLocalizedPresentationInfo(action);
     const cardTranslations = useTranslations("testimonials.card");

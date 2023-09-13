@@ -138,7 +138,7 @@ const OverlayInfo = ({
   action: PosiFormData;
   setLogInPromptOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [initiative] = useInitiative(action.makerId);
+  const [initiative] = useInitiative(action.initiativeId);
   const initiativeTypeLabel = useInitiativeTypeLabel(initiative);
 
   return (

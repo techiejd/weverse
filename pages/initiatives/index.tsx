@@ -80,13 +80,13 @@ const MyInitiativeSpeedDial = ({ initiative }: { initiative: Initiative }) => {
       icon={<Share />}
       tooltipTitle={callToActionTranslations("share")}
       tooltipOpen
-      title={`Echa un vistazo a la página Maker de ${initiative.name}`}
+      title={`Echa un vistazo a la página Initiative de ${initiative.name}`}
       path={`/initiatives/${initiative.id}`}
     />,
   ];
   return (
     <SpeedDial
-      ariaLabel="My Maker Speed Dial"
+      ariaLabel="My Initiative Speed Dial"
       sx={{
         position: "fixed",
         bottom: 64,
@@ -146,7 +146,7 @@ const Initiatives = asOneWePage(() => {
   const initiativeConverter = useInitiativeConverter();
   const [initiativesSnapshot, initiativesLoading, initiativesError] =
     useCollection(
-      collection(appState.firestore, "makers").withConverter(
+      collection(appState.firestore, "initiatives").withConverter(
         initiativeConverter
       )
     );

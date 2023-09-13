@@ -120,7 +120,7 @@ const Pay = ({
         batch.update(
           doc(
             appState.firestore,
-            "makers",
+            "initiatives",
             beneficiary.id!,
             "sponsorships",
             myMember.id!

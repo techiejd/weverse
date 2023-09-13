@@ -97,20 +97,27 @@ const stripe = zod_1.z.object({
     billingCycleAnchor: exports.timeStamp.optional(),
     status: zod_1.z.enum(["active", "incomplete", "canceled"]),
 });
+const contentSettings = zod_1.z.object({
+    locales: exports.locale.array(),
+});
 exports.member = dbBase.extend({
-    makerId: zod_1.z.string(),
+    // deprecated: makerId: z.string().optional(),
+    initiativeId: zod_1.z.string(),
     customer: customer.optional(),
     stripe: stripe.optional(),
     pic: exports.formUrl.optional(),
     name: zod_1.z.string().min(1).optional(),
+    settings: contentSettings.optional(),
 });
 // This is an edge.
 exports.like = dbBase;
 exports.socialProof = dbBase.extend({
     rating: zod_1.z.number(),
     videoUrl: exports.formUrl.optional(),
-    byMaker: zod_1.z.string(),
-    forMaker: zod_1.z.string(),
+    // deprecated: byMaker: z.string().optional(),
+    byInitiative: zod_1.z.string(),
+    // deprecated: forMaker: z.string().optional(),
+    forInitiative: zod_1.z.string(),
     forAction: zod_1.z.string().optional(),
     text: zod_1.z.string().optional(),
 });
@@ -170,7 +177,8 @@ exports.actionPresentationExtension = zod_1.z.object({
 });
 exports.posiFormData = dbBase
     .extend({
-    makerId: zod_1.z.string(),
+    // deprecated: makerId: z.string().optional(),
+    initiativeId: zod_1.z.string(),
     location: location.optional(),
     ratings: exports.ratings.optional(),
     validation: validation.optional(),
@@ -203,7 +211,8 @@ exports.sponsorship = dbBase.extend({
     customAmount: zod_1.z.number().optional(),
     tipAmount: zod_1.z.number(),
     denyFee: zod_1.z.boolean().optional(),
-    maker: zod_1.z.string(),
+    // deprecated: maker: z.string()
+    initiative: zod_1.z.string(),
     member: zod_1.z.string(),
     memberPublishable: zod_1.z.boolean().optional(),
     currency: currency,

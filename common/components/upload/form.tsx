@@ -59,8 +59,8 @@ const UploadSocialProofForm = ({
             pickBy(
               {
                 rating: rating,
-                byMaker: myInitiative.id,
-                forMaker: forInitiative.id,
+                byInitiative: myInitiative.id,
+                forInitiative: forInitiative.id,
                 forAction: forAction?.id,
                 videoUrl: media && media != "loading" ? media.url : undefined,
                 text: text != "" ? text : undefined,

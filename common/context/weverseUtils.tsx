@@ -44,10 +44,12 @@ export const useMyInitiative = () => {
       : undefined
   );
   return useDocumentData(
-    member && member.makerId
-      ? doc(appState.firestore, "makers", member.makerId).withConverter(
-          initiativeConverter
-        )
+    member && member.initiativeId
+      ? doc(
+          appState.firestore,
+          "initiatives",
+          member.initiativeId
+        ).withConverter(initiativeConverter)
       : undefined
   );
 };
@@ -108,6 +110,7 @@ export const useCurrentSponsorships = () => {
   const router = useRouter();
   const appState = useAppState();
   const { initiativeId, userId: memberId } = router.query;
+  console.log("initiativeId", initiativeId, "memberId", memberId);
   const id = (initiativeId ? initiativeId : memberId) as string;
   const sponsorshipConverter = useSponsorshipConverter();
 
@@ -115,7 +118,7 @@ export const useCurrentSponsorships = () => {
     initiativeId || memberId
       ? collection(
           appState.firestore,
-          initiativeId ? "makers" : "members",
+          initiativeId ? "initiatives" : "members",
           id,
           "sponsorships"
         ).withConverter(sponsorshipConverter)
@@ -184,7 +187,7 @@ export const useInitiative = (initiativeId: string | undefined) => {
   const initiativeConverter = useInitiativeConverter();
   return useDocumentData(
     initiativeId
-      ? doc(appState.firestore, "makers", initiativeId).withConverter(
+      ? doc(appState.firestore, "initiatives", initiativeId).withConverter(
           initiativeConverter
         )
       : undefined
@@ -279,7 +282,7 @@ export const useCurrentIncubatees = () => {
     initiativeId
       ? collection(
           appState.firestore,
-          "makers",
+          "initiatives",
           initiativeId as string,
           "incubatees"
         ).withConverter(incubateeConverter)

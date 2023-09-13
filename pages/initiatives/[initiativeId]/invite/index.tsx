@@ -80,7 +80,7 @@ const Invite = asOneWePage(() => {
     return (
       <Fragment>
         <FormControl fullWidth sx={{ maxWidth: 600 }}>
-          <InputLabel htmlFor="makerType">
+          <InputLabel htmlFor="initiativeType">
             {initiativeTypesTranslations("title")}
           </InputLabel>
           <NativeSelect
@@ -88,8 +88,8 @@ const Invite = asOneWePage(() => {
             value={initiativeType}
             onChange={onSelectInitiativeType}
             inputProps={{
-              name: "makerType",
-              id: "makerType",
+              name: "initiativeType",
+              id: "initiativeType",
             }}
           >
             {makeTypeOption(initiativeTypeSchema.Enum.individual)}
@@ -207,7 +207,7 @@ const Invite = asOneWePage(() => {
           invitedInitiatives.forEach((invitedInitiative, idx) => {
             const incubateeInitiativeDocRef = doc(
               appState.firestore,
-              "makers",
+              "initiatives",
               invitedInitiative
             ).withConverter(initiativeConverter);
             batch.set(incubateeInitiativeDocRef, {
@@ -225,7 +225,7 @@ const Invite = asOneWePage(() => {
             });
             const incubateeDocRef = doc(
               appState.firestore,
-              "makers",
+              "initiatives",
               initiative.id!,
               "incubatees",
               invitedInitiative

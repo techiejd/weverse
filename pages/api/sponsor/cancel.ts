@@ -76,7 +76,7 @@ const Cancel = async (req: NextApiRequest, res: NextApiResponse) => {
     body;
 
   const initiativeSponsorshipDoc = firestore
-    .doc(`makers/${initiative}/sponsorships/${member}`)
+    .doc(`initiatives/${initiative}/sponsorships/${member}`)
     .withConverter(Utils.sponsorshipConverter);
   const memberSponsorshipDoc = firestore
     .doc(`members/${member}/sponsorships/${initiative}`)

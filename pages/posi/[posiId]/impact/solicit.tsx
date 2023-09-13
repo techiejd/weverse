@@ -26,7 +26,7 @@ const Solicit = asOneWePage(() => {
   const PromptInitiative = ({ initiativeId }: { initiativeId: string }) => {
     const initiativeDocRef = doc(
       appState.firestore,
-      "makers",
+      "initiatives",
       initiativeId
     ).withConverter(initiativeConverter);
     const [initiative, initiativeLoading, initiativeError] =
@@ -44,7 +44,7 @@ const Solicit = asOneWePage(() => {
       spacing={2}
       sx={{ justifyContent: "center", alignItems: "center", p: 2 }}
     >
-      <PromptInitiative initiativeId={posi.makerId!} />
+      <PromptInitiative initiativeId={posi.initiativeId!} />
       <ShareActionArea
         shareProps={{
           title: t("solicitText", { for: presentationInfo?.summary }),

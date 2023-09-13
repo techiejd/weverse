@@ -252,7 +252,7 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
   const [sponsorships] = useMySponsorships();
   const sponsoring = sponsorships
     ? sponsorships.some(
-        (s) => s.maker == beneficiary.initiative.id && !!s.paymentsStarted
+        (s) => s.initiative == beneficiary.initiative.id && !!s.paymentsStarted
       )
     : false;
   const [inAddSponsorshipExperience, setInAddSponsorshipExperience] =

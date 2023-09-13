@@ -75,6 +75,7 @@ export function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(
   });
 }
 
+// deprecated: maker
 export const initiative = dbBase
   .extend({
     ownerId: z.string().or(z.enum(["invited"])),
@@ -119,7 +120,8 @@ const contentSettings = z.object({
 });
 
 export const member = dbBase.extend({
-  makerId: z.string(),
+  // deprecated: makerId: z.string().optional(),
+  initiativeId: z.string(),
   customer: customer.optional(),
   stripe: stripe.optional(),
   pic: formUrl.optional(),
@@ -135,8 +137,10 @@ export type Like = z.infer<typeof like>;
 export const socialProof = dbBase.extend({
   rating: z.number(),
   videoUrl: formUrl.optional(),
-  byMaker: z.string(),
-  forMaker: z.string(),
+  // deprecated: byMaker: z.string().optional(),
+  byInitiative: z.string(),
+  // deprecated: forMaker: z.string().optional(),
+  forInitiative: z.string(),
   forAction: z.string().optional(),
   text: z.string().optional(),
 });
@@ -203,7 +207,8 @@ export const actionPresentationExtension = z.object({
 
 export const posiFormData = dbBase
   .extend({
-    makerId: z.string(),
+    // deprecated: makerId: z.string().optional(),
+    initiativeId: z.string(),
     location: location.optional(),
     ratings: ratings.optional(),
     validation: validation.optional(),
@@ -249,7 +254,8 @@ export const sponsorship = dbBase.extend({
   customAmount: z.number().optional(),
   tipAmount: z.number(),
   denyFee: z.boolean().optional(),
-  maker: z.string(),
+  // deprecated: maker: z.string()
+  initiative: z.string(),
   member: z.string(),
   memberPublishable: z.boolean().optional(),
   currency: currency,

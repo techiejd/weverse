@@ -126,14 +126,14 @@ const IncubatorSection = () => {
             setLoading(true);
             const incubateeRef = doc(
               appState.firestore,
-              "makers",
+              "initiatives",
               initiative.id!,
               "incubatees",
               incubatee.id!
             );
             const incubateeInitiativeRef = doc(
               appState.firestore,
-              "makers",
+              "initiatives",
               incubatee.id!
             );
             const batch = writeBatch(appState.firestore);
@@ -619,7 +619,7 @@ const BottomBar = () => {
   );
 };
 
-const MakerPage = asOneWePage(() => {
+const InitiativePage = asOneWePage(() => {
   return (
     <Box mb={12}>
       <Stack p={2} divider={<Divider />}>
@@ -631,4 +631,4 @@ const MakerPage = asOneWePage(() => {
   );
 });
 
-export default MakerPage;
+export default InitiativePage;
