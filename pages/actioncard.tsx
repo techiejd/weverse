@@ -2,10 +2,10 @@ import { NextPage } from "next";
 
 const ComponentActionCard: NextPage = () => {
   return (
-    <div className="action-card">
+    <div className="action-card h-[600px] overflow-hidden flex flex-col py-2 px-4 box-border items-start justify-start max-h-[1000px] text-left text-xs text-white font-card-body-text">
       <div className="w-full h-full rounded-2xl bg-white flex flex-col pt-2 px-2 pb-6 box-border items-center justify-start gap-[12px] min-w-[280px] max-w-[433px] max-h-[600px] text-left text-xs text-white font-card-body-text sm:h-full">
         <div className="self-stretch flex-1 flex flex-col items-center justify-start min-h-[200px] max-h-[336px] z-[4]">
-          <div className="self-stretch flex-1 rounded-xl flex flex-col items-start justify-start bg-[url('/action-image7@3x.png')] bg-cover bg-no-repeat bg-[top] max-h-[336px]">
+          <div className="self-stretch flex-1 rounded-xl flex flex-col items-start justify-start bg-[url('/action-image7@3x.png')] bg-cover bg-no-repeat bg-[bottom] max-h-[336px]">
             <div className="flex flex-row py-2 px-1 items-start justify-start z-[0]">
               <button className="cursor-pointer [border:none] py-2 px-0 bg-gray-400/30 rounded-41xl flex flex-row flex-wrap box-border items-start justify-start min-w-[90px] max-w-[393px]">
                 <div className="flex flex-row py-0 px-2.5 items-center justify-start gap-[6px]">
@@ -22,7 +22,7 @@ const ComponentActionCard: NextPage = () => {
                         className="relative text-xs font-bold font-card-body-text text-blue-0 text-left inline-block min-w-[10px] max-w-[260px]"
                         id="Maker name"
                       >
-                        Impat maker name
+                        MasterPeace Colombia / PeaceHub Medellín
                       </b>
                     </div>
                     <div className="rounded-2xs bg-lightgoldenrodyellow flex flex-col py-0.5 px-1.5 items-start justify-center">
