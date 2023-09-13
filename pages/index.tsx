@@ -1,6 +1,12 @@
 import {
   Box,
+  Checkbox,
+  CircularProgress,
   Fab,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
   Grid,
   LinearProgress,
   Stack,
@@ -8,12 +14,14 @@ import {
 } from "@mui/material";
 import {
   collection,
+  doc,
   getDocs,
   limit,
   orderBy,
   query,
   QueryDocumentSnapshot,
   startAfter,
+  updateDoc,
 } from "firebase/firestore";
 import PlusOne from "@mui/icons-material/PlusOne";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -21,9 +29,15 @@ import { useCallback, useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { asOneWePage } from "../common/components/onewePage";
 import { useAppState } from "../common/context/appState";
-import { usePosiFormDataConverter } from "../common/utils/firebase";
-import { WithTranslationsStaticProps } from "../common/utils/translations";
-import { PosiFormData } from "../functions/shared/src";
+import {
+  useMemberConverter,
+  usePosiFormDataConverter,
+} from "../common/utils/firebase";
+import {
+  WithTranslationsStaticProps,
+  localeDisplayNames,
+} from "../common/utils/translations";
+import { Locale, PosiFormData, locale } from "../functions/shared/src";
 import ImpactCard from "../modules/posi/action/card";
 import Link from "next/link";
 import Image from "next/image";
@@ -67,7 +81,7 @@ const BottomBar = () => {
 
   return (
     <div
-      className="rounded-[50px] bg-whitesmoke-200 overflow-hidden flex flex-row py-0 px-4 items-center justify-center gap-[12px] [&.animate]:animate-[1s_ease_0s_1_normal_forwards_fade-in] opacity-[0] border-[4px] border-solid border-lightgray [&.animate]:lg:animate-[1s_ease_0s_1_normal_forwards_fade-in-top] lg:opacity-[0]"
+      className="rounded-[50px] bg-whitesmoke-200 overflow-hidden flex flex-row py-0 px-4 items-center justify-center gap-[12px] opacity-[0] border-[4px] border-solid border-lightgray [&.animate]:animate-[1s_ease_0s_1_normal_forwards_fade-in-top]"
       data-animate-on-scroll
     >
       <Link
@@ -109,15 +123,62 @@ const BottomBar = () => {
 const IndexPage = () => {
   //TODO(techiejd): WET code, refactor
   const commonTranslations = useTranslations("common");
+  const t = useTranslations("index");
   const appState = useAppState();
   const [latestDoc, setLatestDoc] = useState<
     QueryDocumentSnapshot<PosiFormData> | undefined
   >(undefined);
-  const [actions, setActions] = useState<PosiFormData[]>([]);
+  const [myMember, myMemberLoading] = useMyMember();
+  const memberConverter = useMemberConverter();
+  const [cachedActions, setCachedActions] = useState<PosiFormData[]>([]);
+  const [displayedActions, setDisplayedActions] = useState<PosiFormData[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const posiFormDataConverter = usePosiFormDataConverter();
   const batchSize = 3;
   const userLocale = useLocale();
+  const possibleLocales = Object.keys(locale.Enum);
+  const [chosenLocales, setChosenLocales] = useState<Locale[]>(
+    myMember?.settings?.locales ?? [userLocale as Locale]
+  );
+
+  useEffect(() => {
+    if (myMember?.settings?.locales) {
+      setChosenLocales(myMember?.settings?.locales ?? [userLocale as Locale]);
+    }
+  }, [myMember?.settings?.locales, userLocale]);
+
+  const addLocale = useCallback(
+    (l: Locale) => {
+      if (!myMember || !myMember?.id) {
+        setChosenLocales((prev) => [...prev, l as Locale]);
+      }
+      updateDoc(
+        doc(appState.firestore, "members", myMember!.id!).withConverter(
+          memberConverter
+        ),
+        {
+          settings: {
+            locales: [...(myMember!.settings?.locales ?? []), l as Locale],
+          },
+        }
+      );
+    },
+    [appState.firestore, memberConverter, myMember]
+  );
+
+  const removeLocale = useCallback(
+    (l: Locale) => {
+      if (!myMember || !myMember?.id) {
+        setChosenLocales((prev) => prev.filter((cl) => cl != l));
+      }
+      updateDoc(doc(appState.firestore, "members", myMember!.id!), {
+        settings: {
+          locales: myMember!.settings?.locales?.filter((cl) => cl != l),
+        },
+      });
+    },
+    [appState.firestore, myMember]
+  );
 
   useEffect(() => {
     let ignore = false;
@@ -126,8 +187,7 @@ const IndexPage = () => {
         posiFormDataConverter
       ),
       limit(batchSize),
-      orderBy("createdAt", "desc"),
-      orderBy(userLocale) // Gets all documents with the field
+      orderBy("createdAt", "desc")
     );
     getDocs(firstQuery).then((snap) => {
       if (!ignore) {
@@ -136,13 +196,21 @@ const IndexPage = () => {
           setLatestDoc(snap.docs[snap.docs.length - 1]);
         }
         setHasMore(latestActions.length == batchSize);
-        setActions((actions) => [...actions, ...latestActions]);
+        setCachedActions((actions) => [...actions, ...latestActions]);
       }
     });
     return () => {
       ignore = true;
     };
-  }, [appState.firestore, posiFormDataConverter, userLocale]);
+  }, [appState.firestore, posiFormDataConverter]);
+
+  useEffect(() => {
+    setDisplayedActions([
+      ...cachedActions.filter((action) =>
+        Object.keys(action).some((l) => chosenLocales.includes(l as any))
+      ),
+    ]);
+  }, [cachedActions, chosenLocales]);
 
   const next = useCallback(() => {
     if (!latestDoc) {
@@ -153,7 +221,6 @@ const IndexPage = () => {
         posiFormDataConverter
       ),
       orderBy("createdAt", "desc"),
-      orderBy(userLocale), // Gets all documents with the field
       startAfter(latestDoc),
       limit(batchSize)
     );
@@ -163,16 +230,16 @@ const IndexPage = () => {
         setLatestDoc(snap.docs[snap.docs.length - 1]);
       }
       setHasMore(latestActions.length == batchSize);
-      setActions((actions) => [...actions, ...latestActions]);
+      setCachedActions((actions) => [...actions, ...latestActions]);
     });
-  }, [latestDoc, appState.firestore, posiFormDataConverter, userLocale]);
+  }, [latestDoc, appState.firestore, posiFormDataConverter]);
 
   return (
     <InfiniteScroll
       next={next}
       hasMore={hasMore}
       loader={<LinearProgress />}
-      dataLength={actions.length}
+      dataLength={displayedActions.length}
       style={{ display: "flex", flexDirection: "column" }}
     >
       <Stack
@@ -199,9 +266,36 @@ const IndexPage = () => {
             {commonTranslations("callToAction.actions.add")}
           </Typography>
         </Fab>
+        {myMemberLoading ? (
+          <CircularProgress />
+        ) : (
+          <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
+            <FormLabel component="legend">{t("seeContentIn")}</FormLabel>
+            <FormGroup row>
+              {possibleLocales.map((l) => (
+                <FormControlLabel
+                  key={l}
+                  control={
+                    <Checkbox
+                      checked={chosenLocales.includes(l as Locale)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          addLocale(l as Locale);
+                        } else {
+                          removeLocale(l as Locale);
+                        }
+                      }}
+                    />
+                  }
+                  label={localeDisplayNames[l as Locale]}
+                />
+              ))}
+            </FormGroup>
+          </FormControl>
+        )}
       </Stack>
       <Grid container spacing={1} pl={1} pr={1}>
-        {actions.map((action) => (
+        {displayedActions.map((action) => (
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={action.id}>
             <ImpactCard posiData={action} />
           </Grid>

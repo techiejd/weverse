@@ -114,12 +114,17 @@ const stripe = z.object({
   status: z.enum(["active", "incomplete", "canceled"]),
 });
 
+const contentSettings = z.object({
+  locales: locale.array(),
+});
+
 export const member = dbBase.extend({
   makerId: z.string(),
   customer: customer.optional(),
   stripe: stripe.optional(),
   pic: formUrl.optional(),
   name: z.string().min(1).optional(),
+  settings: contentSettings.optional(),
 });
 export type Member = z.infer<typeof member>;
 

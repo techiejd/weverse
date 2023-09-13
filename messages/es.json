@@ -1,7 +1,8 @@
 {
   "index": {
     "publish": "Publicar",
-    "myPage": "Mi página"
+    "myPage": "Mi página",
+    "seeContentIn": "Vea contenido en"
   },
   "auth": {
     "register": "Registrarme",
@@ -49,7 +50,11 @@
     "numChars": "{numChars} caracteres",
     "next": "Siguiente",
     "back": "Atras",
-    "ok": "Listo"
+    "ok": "Listo",
+    "internationalizedDetailed": {
+      "title": "Información detallada en otros idiomas",
+      "prompt": "Agregar otro idioma"
+    }
   },
   "common": {
     "loading": "Cargando",
