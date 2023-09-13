@@ -11,7 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.incubatee = exports.sponsorship = exports.sponsorshipLevel = exports.content = exports.posiFormData = exports.actionPresentationExtension = exports.socialProof = exports.like = exports.member = exports.initiative = exports.createNestedLocalizedSchema = exports.locale = exports.ratings = exports.organizationType = exports.initiativeType = exports.media = exports.mediaType = exports.formUrl = exports.timeStamp = void 0;
+exports.incubatee = exports.sponsorship = exports.sponsorshipLevel = exports.content = exports.posiFormData = exports.actionPresentationExtension = exports.socialProof = exports.like = exports.member = exports.phoneNumber = exports.initiative = exports.createNestedLocalizedSchema = exports.locale = exports.ratings = exports.organizationType = exports.initiativeType = exports.media = exports.mediaType = exports.formUrl = exports.timeStamp = void 0;
 const zod_1 = require("zod");
 exports.timeStamp = zod_1.z.any().transform((val, ctx) => {
     if (val instanceof Date) {
@@ -66,6 +66,7 @@ function createNestedLocalizedSchema(itemSchema) {
     });
 }
 exports.createNestedLocalizedSchema = createNestedLocalizedSchema;
+// deprecated: maker
 exports.initiative = dbBase
     .extend({
     ownerId: zod_1.z.string().or(zod_1.z.enum(["invited"])),
@@ -100,14 +101,19 @@ const stripe = zod_1.z.object({
 const contentSettings = zod_1.z.object({
     locales: exports.locale.array(),
 });
+exports.phoneNumber = zod_1.z.object({
+    countryCallingCode: zod_1.z.string().min(1),
+    nationalNumber: zod_1.z.string().min(1),
+});
 exports.member = dbBase.extend({
     // deprecated: makerId: z.string().optional(),
     initiativeId: zod_1.z.string(),
     customer: customer.optional(),
     stripe: stripe.optional(),
     pic: exports.formUrl.optional(),
-    name: zod_1.z.string().min(1).optional(),
+    name: zod_1.z.string().min(1),
     settings: contentSettings.optional(),
+    phoneNumber: exports.phoneNumber,
 });
 // This is an edge.
 exports.like = dbBase;

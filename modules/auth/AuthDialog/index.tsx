@@ -20,6 +20,9 @@ import {
   doc,
   getDoc,
   writeBatch,
+  query,
+  where,
+  getDocs,
 } from "firebase/firestore";
 import Login from "@mui/icons-material/Login";
 import OtpDialog from "./otpDialog";
@@ -35,7 +38,6 @@ import {
 } from "../../../common/utils/firebase";
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
-import { auth } from "firebase-admin";
 
 const usePrompts = () => {
   const t = useTranslations("auth");
@@ -112,7 +114,7 @@ const AuthDialogContent = ({
   );
   const [authDialogState, setAuthDialogState] = useState<AuthDialogState>({
     name: "",
-    phoneNumber: { countryCallingCode: null, nationalNumber: null },
+    phoneNumber: {},
     phoneNumberInputError: false,
     authAction: initialAuthAction,
     otpDialogOpen: false,
@@ -226,22 +228,20 @@ const AuthDialogContent = ({
                 "members",
                 userCred.user.uid
               ).withConverter(memberConverter),
-              { initiativeId: initiativeDocRef.id }
-            );
-
-            const registeredPhoneNumberPromise = setDoc(
-              doc(
-                appState.firestore,
-                "registeredPhoneNumbers",
-                encodePhoneNumber(authDialogState.phoneNumber)
-              ),
-              { ownerId: userCred.user.uid }
+              {
+                initiativeId: initiativeDocRef.id,
+                name: authDialogState.name,
+                phoneNumber: {
+                  countryCallingCode:
+                    authDialogState.phoneNumber.countryCallingCode!,
+                  nationalNumber: authDialogState.phoneNumber.nationalNumber!,
+                },
+              }
             );
 
             const [finishedUpdateSuccessful] = await Promise.all([
               updateSuccessful,
               memberDocPromise,
-              registeredPhoneNumberPromise,
             ]);
 
             if (!finishedUpdateSuccessful)
@@ -271,19 +271,29 @@ const AuthDialogContent = ({
       checkingUserRegistered: true,
     }));
 
-    const registeredPNRef = doc(
-      appState.firestore,
-      "registeredPhoneNumbers",
-      encodePhoneNumber(authDialogState.phoneNumber)
+    console.log(authDialogState.phoneNumber);
+    const registeredMembersWithPN = await getDocs(
+      query(
+        collection(appState.firestore, "members"),
+        where(
+          "phoneNumber.countryCallingCode",
+          "==",
+          authDialogState.phoneNumber.countryCallingCode
+        ),
+        where(
+          "phoneNumber.nationalNumber",
+          "==",
+          authDialogState.phoneNumber.nationalNumber
+        )
+      )
     );
-    const registeredPNDoc = await getDoc(registeredPNRef);
 
     setAuthDialogState((aDS) => ({
       ...aDS,
       checkingUserRegistered: false,
     }));
 
-    return registeredPNDoc.exists();
+    return !registeredMembersWithPN.empty;
   };
 
   const onSubmit = async () => {

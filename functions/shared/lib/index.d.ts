@@ -282,6 +282,16 @@ export declare const initiative: z.ZodObject<{
 export type Initiative = z.infer<typeof initiative>;
 declare const currency: z.ZodEnum<["cop", "usd", "eur", "gbp"]>;
 export type Currency = z.infer<typeof currency>;
+export declare const phoneNumber: z.ZodObject<{
+    countryCallingCode: z.ZodString;
+    nationalNumber: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    countryCallingCode?: string;
+    nationalNumber?: string;
+}, {
+    countryCallingCode?: string;
+    nationalNumber?: string;
+}>;
 export declare const member: z.ZodObject<{
     id: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr"]>>;
@@ -346,7 +356,7 @@ export declare const member: z.ZodObject<{
         status?: "active" | "canceled" | "incomplete";
     }>>;
     pic: z.ZodOptional<z.ZodString>;
-    name: z.ZodOptional<z.ZodString>;
+    name: z.ZodString;
     settings: z.ZodOptional<z.ZodObject<{
         locales: z.ZodArray<z.ZodEnum<["en", "es", "fr"]>, "many">;
     }, "strip", z.ZodTypeAny, {
@@ -354,6 +364,16 @@ export declare const member: z.ZodObject<{
     }, {
         locales?: ("en" | "es" | "fr")[];
     }>>;
+    phoneNumber: z.ZodObject<{
+        countryCallingCode: z.ZodString;
+        nationalNumber: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        countryCallingCode?: string;
+        nationalNumber?: string;
+    }, {
+        countryCallingCode?: string;
+        nationalNumber?: string;
+    }>;
 }, "strip", z.ZodTypeAny, {
     id?: string;
     locale?: "en" | "es" | "fr";
@@ -382,6 +402,10 @@ export declare const member: z.ZodObject<{
     settings?: {
         locales?: ("en" | "es" | "fr")[];
     };
+    phoneNumber?: {
+        countryCallingCode?: string;
+        nationalNumber?: string;
+    };
 }, {
     id?: string;
     locale?: "en" | "es" | "fr";
@@ -409,6 +433,10 @@ export declare const member: z.ZodObject<{
     name?: string;
     settings?: {
         locales?: ("en" | "es" | "fr")[];
+    };
+    phoneNumber?: {
+        countryCallingCode?: string;
+        nationalNumber?: string;
     };
 }>;
 export type Member = z.infer<typeof member>;
