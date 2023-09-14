@@ -51,6 +51,7 @@
     "next": "Next",
     "back": "Back",
     "ok": "Ok",
+    "yes": "Yes",
     "internationalizedDetailed": {
       "title": "Detailed info in other languages",
       "prompt": "Add another language"
@@ -301,7 +302,19 @@
       "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>is inviting you to be a part of their incubator network.</prompt>",
       "whyEnter": "By entering the incubator, you will enjoy the exposure and mentorship that comes with it.",
       "callToAction": "Enter the incubator",
-      "acceptedIncubateeInitiatives": "The initiatives who have taken the plunge:"
+      "acceptedIncubateeInitiatives": "The initiatives who have taken the plunge:",
+      "alreadyIncubated": "Your initiative is already part of this incubator.",
+      "logInPrompt": "To enter the incubator, you must first register as a member or log in.",
+      "dialog": {
+        "tryWithDifferentInitiative": "Try with a different initiative",
+        "selfIncubationErrorTitle": "You can not incubate yourself.",
+        "successTitle": "Welcome!",
+        "successMessage": "You have successfully entered as an incubatee.",
+        "viewMyInitiative": "Go to my initiative",
+        "changeIncubatorPromptTitle": "Are you sure you want to change your incubator?",
+        "currentlyIncubatedBy": "You are currently incubated by <incubatorNameTag>{incubatorName}</incubatorNameTag>.",
+        "notAnIncubatorErrorTitle": "This initiative is not an incubator."
+      }
     },
     "incubator": {
       "title": "Incubator:",

@@ -51,6 +51,7 @@
     "next": "Siguiente",
     "back": "Atras",
     "ok": "Listo",
+    "yes": "Sí",
     "internationalizedDetailed": {
       "title": "Información detallada en otros idiomas",
       "prompt": "Agregar otro idioma"
@@ -300,7 +301,19 @@
       "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>te invita a ser parte de su red de incubadora.</prompt>",
       "whyEnter": "Al ingresar a la incubadora, disfrutaras de la exposición y la mentoría que la acompaña.",
       "callToAction": "Entrar a la incubadora",
-      "acceptedIncubateeInitiatives": "Las iniciativas que han dado el paso:"
+      "acceptedIncubateeInitiatives": "Las iniciativas que han dado el paso:",
+      "alreadyIncubated": "Tu inciciativa ya es parte de la incubadora.",
+      "logInPrompt": "Para entrar a la incubadora debes primero registrarte como miembro o iniciar sesión.",
+      "dialog": {
+        "tryWithDifferentInitiative": "Intentalo otra vez con una iniciativa diferente.",
+        "selfIncubationErrorTitle": "No puedes entrar a tu propia incubadora.",
+        "successTitle": "¡Bienvenido a la incubadora!",
+        "successMessage": "Has entrado a la incubadora con éxito.",
+        "viewMyInitiative": "Ver mi iniciativa",
+        "changeIncubatorPromptTitle": "¿Quieres cambiar de incubadora?",
+        "currentlyIncubatedBy": "Tu iniciativa en este momento afiliada con <incubatorNameTag>{incubatorName}</incubatorNameTag>.",
+        "notAnIncubatorErrorTitle": "Esta inciativa no es una incubadora."
+      }
     },
     "incubator": {
       "title": "Incubadora:",

@@ -24,7 +24,7 @@ import { CachePaths } from "../../../common/utils/staticPaths";
 import { asOneWePage } from "../../../common/components/onewePage";
 import { WithTranslationsStaticProps } from "../../../common/utils/translations";
 import InitiativeCard from "../../../modules/initiatives/InitiativeCard";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, use, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useAppState } from "../../../common/context/appState";
 import { deleteDoc, doc, setDoc, updateDoc } from "firebase/firestore";
@@ -158,18 +158,21 @@ const IncubateeEntrance = asOneWePage(() => {
 
   const MyDialogContent = () => {
     const [myIncubator] = useInitiative(myInitiative?.incubator);
+    const t = useTranslations("initiatives.incubateeEntrance.dialog");
+    const commonTranslations = useTranslations("common");
+    const inputTranslations = useTranslations("input");
     const homeButton = (
       <Button variant="outlined" href={`/`}>
-        Go home
+        {commonTranslations("callToAction.home")}
       </Button>
     );
     const okButton = (
       <Button variant="contained" onClick={() => setDialogOpen(false)}>
-        Ok
+        {inputTranslations("ok")}
       </Button>
     );
     const tryWithDifferentInitiative = (
-      <Typography>Please try with a different initiative.</Typography>
+      <Typography>{t("tryWithDifferentInitiative")}</Typography>
     );
     switch (dialogMode) {
       case "processing":
@@ -178,7 +181,7 @@ const IncubateeEntrance = asOneWePage(() => {
         return (
           <Fragment>
             <DialogTitle variant="h2">
-              You can not incubate yourself.
+              {t("selfIncubationErrorTitle")}
             </DialogTitle>
             <DialogContent>{tryWithDifferentInitiative}</DialogContent>
             <DialogActions>{okButton}</DialogActions>
@@ -187,11 +190,9 @@ const IncubateeEntrance = asOneWePage(() => {
       case "success":
         return (
           <Fragment>
-            <DialogTitle variant="h2">Congratulations!</DialogTitle>
+            <DialogTitle variant="h2">{t("successTitle")}</DialogTitle>
             <DialogContent>
-              <Typography>
-                You have successfully entered as an incubatee.
-              </Typography>
+              <Typography>{t("successMessage")}</Typography>
             </DialogContent>
             <DialogActions>
               {homeButton}
@@ -199,7 +200,7 @@ const IncubateeEntrance = asOneWePage(() => {
                 variant="contained"
                 href={`/initiatives/${myInitiative?.id}`}
               >
-                Go to my initiative
+                {t("viewMyInitiative")}
               </Button>
             </DialogActions>
           </Fragment>
@@ -208,22 +209,23 @@ const IncubateeEntrance = asOneWePage(() => {
         return (
           <Fragment>
             <DialogTitle variant="h2">
-              Are you sure you want to change your incubator?
+              {t("changeIncubatorPromptTitle")}
             </DialogTitle>
             <DialogContent>
               <Typography>
-                You are currently incubated by{" "}
-                {
-                  <Link href={`/initiatives/${myIncubator?.id}`}>
-                    {myIncubator?.name}
-                  </Link>
-                }
-                .
+                {t.rich("currentlyIncubatedBy", {
+                  incubatorName: myIncubator?.name,
+                  incubatorNameTag: (incubatorName) => (
+                    <Link
+                      href={`/initiatives/${myIncubator?.id}`}
+                    >{`${incubatorName}`}</Link>
+                  ),
+                })}
               </Typography>
             </DialogContent>
             <DialogActions>
               <Button variant="outlined" onClick={() => setDialogOpen(false)}>
-                Cancel
+                {inputTranslations("cancel")}
               </Button>
               <Button
                 variant="contained"
@@ -232,7 +234,7 @@ const IncubateeEntrance = asOneWePage(() => {
                   setDialogMode("processing");
                 }}
               >
-                Yes
+                {inputTranslations("yes")}
               </Button>
             </DialogActions>
           </Fragment>
@@ -241,7 +243,7 @@ const IncubateeEntrance = asOneWePage(() => {
         return (
           <Fragment>
             <DialogTitle variant="h2">
-              This initiative is not an incubator.
+              {t("notAnIncubatorErrorTitle")}
             </DialogTitle>
             <DialogContent>{tryWithDifferentInitiative}</DialogContent>
             <DialogActions>
