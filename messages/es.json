@@ -296,6 +296,12 @@
       "title": "Acerca de:",
       "none": "La iniciativa no ha agregado información de la sección 'acerca de'."
     },
+    "incubateeEntrance": {
+      "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>te invita a ser parte de su red de incubadora.</prompt>",
+      "whyEnter": "Al ingresar a la incubadora, disfrutaras de la exposición y la mentoría que la acompaña.",
+      "callToAction": "Entrar a la incubadora",
+      "acceptedIncubateeInitiatives": "Las iniciativas que han dado el paso:"
+    },
     "incubator": {
       "title": "Incubadora:",
       "joinPrompt": "{InitiativeName} te invita a unirte a su red de incubadora.",

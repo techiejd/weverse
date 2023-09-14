@@ -297,6 +297,12 @@
       "title": "About:",
       "none": "The initiative has not filled out their 'about section'."
     },
+    "incubateeEntrance": {
+      "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>is inviting you to be a part of their incubator network.</prompt>",
+      "whyEnter": "By entering the incubator, you will enjoy the exposure and mentorship that comes with it.",
+      "callToAction": "Enter the incubator",
+      "acceptedIncubateeInitiatives": "The initiatives who have taken the plunge:"
+    },
     "incubator": {
       "title": "Incubator:",
       "joinPrompt": "{initiativeName} is inviting you to be a part of their network as an incubator.",
