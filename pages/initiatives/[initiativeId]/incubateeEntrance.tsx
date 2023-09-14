@@ -24,8 +24,7 @@ import { CachePaths } from "../../../common/utils/staticPaths";
 import { asOneWePage } from "../../../common/components/onewePage";
 import { WithTranslationsStaticProps } from "../../../common/utils/translations";
 import InitiativeCard from "../../../modules/initiatives/InitiativeCard";
-import { Fragment, use, useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { useAppState } from "../../../common/context/appState";
 import { deleteDoc, doc, setDoc, updateDoc } from "firebase/firestore";
 import {
@@ -53,7 +52,6 @@ const IncubateeEntrance = asOneWePage(() => {
   const t = useTranslations("initiatives.incubateeEntrance");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState<DialogMode>("processing");
-  const router = useRouter();
   const appState = useAppState();
   const incubateeConverter = useIncubateeConverter();
   const initiativeConverter = useInitiativeConverter();
@@ -144,13 +142,12 @@ const IncubateeEntrance = asOneWePage(() => {
   }, [appState.firestore, connectIncubateeToIncubator, myInitiative]);
 
   useEffect(() => {
-    console.log(incubator?.organizationType);
     // If the current initiative is not an incubator, we open the dialog in notAnIncubatorError.
     if (incubator && incubator.organizationType !== "incubator") {
       setDialogMode("notAnIncubatorError");
       setDialogOpen(true);
     }
-  }, [incubator, router]);
+  }, [incubator]);
 
   const alreadyIncubated = acceptedIncubatees?.some(
     (incubatee) => incubatee?.id === myInitiative?.id
