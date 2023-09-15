@@ -82,6 +82,7 @@
       "update": "Actualizar",
       "delete": "Borrar"
     },
+    "meta_comment": "TODO(techiejd): see meta_comment in en.json.",
     "solicitHelpDialog": {
       "title": "Solicita Apoyo",
       "reminderThatTheyCanSolicitMoreByEditingInitiativePath": "Recuerda que puedes solicitar apoyo de otro tipo (no financiero) <link>agregándolo en el perfil de la iniciativa</link>.",
