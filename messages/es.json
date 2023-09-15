@@ -51,6 +51,7 @@
     "next": "Siguiente",
     "back": "Atras",
     "ok": "Listo",
+    "yes": "Sí",
     "internationalizedDetailed": {
       "title": "Información detallada en otros idiomas",
       "prompt": "Agregar otro idioma"
@@ -81,6 +82,7 @@
       "update": "Actualizar",
       "delete": "Borrar"
     },
+    "meta_comment": "TODO(techiejd): see meta_comment in en.json.",
     "solicitHelpDialog": {
       "title": "Solicita Apoyo",
       "reminderThatTheyCanSolicitMoreByEditingInitiativePath": "Recuerda que puedes solicitar apoyo de otro tipo (no financiero) <link>agregándolo en el perfil de la iniciativa</link>.",
@@ -296,6 +298,25 @@
       "title": "Acerca de:",
       "none": "La iniciativa no ha agregado información de la sección 'acerca de'."
     },
+    "incubateeEntrance": {
+      "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>te invita a ser parte de su red de incubadora.</prompt>",
+      "specialTitleForGWNLmXTQ3qXtpYSE6awp": "<prompt>Hola cooleader 😎, <initiativeNameTag>{initiativeName}</initiativeNameTag> te invita a celebrar el dia de la paz internacional IDP.</prompt>",
+      "whyEnter": "Al ingresar a la incubadora, disfrutaras de la exposición y la mentoría que la acompaña.",
+      "callToAction": "Entrar a la incubadora",
+      "acceptedIncubateeInitiatives": "Las iniciativas que han dado el paso:",
+      "alreadyIncubated": "Tu inciciativa ya es parte de la incubadora.",
+      "logInPrompt": "Para entrar a la incubadora debes primero registrarte como miembro o iniciar sesión.",
+      "dialog": {
+        "tryWithDifferentInitiative": "Intentalo otra vez con una iniciativa diferente.",
+        "selfIncubationErrorTitle": "No puedes entrar a tu propia incubadora.",
+        "successTitle": "¡Bienvenido a la incubadora!",
+        "successMessage": "Has entrado a la incubadora con éxito.",
+        "viewMyInitiative": "Ver mi iniciativa",
+        "changeIncubatorPromptTitle": "¿Quieres cambiar de incubadora?",
+        "currentlyIncubatedBy": "Tu iniciativa en este momento afiliada con <incubatorNameTag>{incubatorName}</incubatorNameTag>.",
+        "notAnIncubatorErrorTitle": "Esta inciativa no es una incubadora."
+      }
+    },
     "incubator": {
       "title": "Incubadora:",
       "joinPrompt": "{InitiativeName} te invita a unirte a su red de incubadora.",
@@ -362,22 +383,22 @@
         }
       },
       "detailedInput": {
-        "askForInfoMsg": "{iniciativeType, select, individual {Por favor, danos más información sobre ti.} other {Por favor, danos más información sobre tu organización.}}",
-        "askForImage": "{iniciativeType, select, individual {Selecciona una imagen con la que quieras ser identificado por la comunidad OneWe.} other {Sube una foto de tu logo.}}",
+        "askForInfoMsg": "{initiativeType, select, individual {Por favor, danos más información sobre ti.} other {Por favor, danos más información sobre tu organización.}}",
+        "askForImage": "{initiativeType, select, individual {Selecciona una imagen con la que quieras ser identificado por la comunidad OneWe.} other {Sube una foto de tu logo.}}",
         "incubator": {
           "whatIsYourValidationProcess": "Como valida tu incubadora las acciones de las iniciativas para darle un sello de aprobacion?",
           "leaveDetails": "Deja aquí los detalles de cómo se validan las acciones.",
           "devilIsInTheDetailsReminder": "Recuerda, la integridad depende de que se siga estrictamente este proceso."
         },
         "nonFinancialHelp": {
-          "whatOtherHelpDoYouNeed": "¿Qué tipo de apoyo necesita{InitiativeType, select, individual {s} other {}}?",
+          "whatOtherHelpDoYouNeed": "¿Qué tipo de apoyo necesita{initiativeType, select, individual {s} other {}}?",
           "leaveContactDetails": "Deja aquí los datos de contacto para recibir ayudas de cualquier otro tipo y sea explicito a lo que está pidiendo",
           "helperText": "Si tu iniciativa está listo para recibir voluntarios, hablar con medios de comunicación o con especialistas como abogados, desarrolladores, etc, por favor, indica tu solicitud y los enlaces o los detalles para ponerse en contacto contigo. Por ejemplo: número telefónico, correo electrónico, redes sociales, página web, etc."
         },
         "email": "OneWe se comunicará contigo por correo electrónico acerca de la información relacionada con la iniciativa",
-        "profileImage": "{InitiativeType, select, individual {Elige tu foto de perfil} other {Elige la foto de perfil de la organización}}",
+        "profileImage": "{initiativeType, select, individual {Elige tu foto de perfil} other {Elige la foto de perfil de la organización}}",
         "story": {
-          "title": "{InitiativeType, select, individual {Cuéntanos acerca de tí y tus iniciativas} other {Cuéntanos acerca de la organización y sus iniciativas}}",
+          "title": "{initiativeType, select, individual {Cuéntanos acerca de tí y tus iniciativas} other {Cuéntanos acerca de la organización y sus iniciativas}}",
           "video": {
             "title": "Vídeo de presentación:",
             "prompt": "Cuéntanos acerca de ti y por qué deberías ser patrocinado."
@@ -392,7 +413,7 @@
     },
     "invite": {
       "title": "Invita a una iniciativa (o más) a tu red de OneWe.",
-      "whatIsInitiativesName": "¿Cómo se llama {InitiativeType, select, individual {el individuo} other {la organización}}?",
+      "whatIsInitiativesName": "¿Cómo se llama {initiativeType, select, individual {el individuo} other {la organización}}?",
       "makeLink": "Generar vinculo",
       "copy": {
         "incompatibleBrowser": "Copiar al portapapeles no es compatible con tu navegador. Haz clic en 'Compartir'.",
