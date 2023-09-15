@@ -271,22 +271,40 @@ const IncubateeEntrance = asOneWePage(() => {
           {incubator?.pic && (
             <Avatar src={incubator.pic} sx={{ width: 112, height: 112 }} />
           )}
-          {t.rich("title", {
-            initiativeName: incubator?.name,
-            initiativeNameTag: (initiativeName) => (
-              <Typography variant="h2">
-                <Link
-                  href={`/initiatives/${incubator?.id}`}
-                  sx={{ color: "black" }}
-                >{`${initiativeName}`}</Link>
-              </Typography>
-            ),
-            prompt: (p) => (
-              <Typography variant="h2" textAlign="center">
-                {p}
-              </Typography>
-            ),
-          })}
+          {incubator?.id != "GWNLmXTQ3qXtpYSE6awp" &&
+            t.rich("title", {
+              initiativeName: incubator?.name,
+              initiativeNameTag: (initiativeName) => (
+                <Typography variant="h2">
+                  <Link
+                    href={`/initiatives/${incubator?.id}`}
+                    sx={{ color: "black" }}
+                  >{`${initiativeName}`}</Link>
+                </Typography>
+              ),
+              prompt: (p) => (
+                <Typography variant="h2" textAlign="center">
+                  {p}
+                </Typography>
+              ),
+            })}
+          {incubator?.id == "GWNLmXTQ3qXtpYSE6awp" &&
+            t.rich("specialTitleForGWNLmXTQ3qXtpYSE6awp", {
+              initiativeName: incubator?.name,
+              initiativeNameTag: (initiativeName) => (
+                <Typography variant="h2">
+                  <Link
+                    href={`/initiatives/${incubator?.id}`}
+                    sx={{ color: "black" }}
+                  >{`${initiativeName}`}</Link>
+                </Typography>
+              ),
+              prompt: (p) => (
+                <Typography variant="h2" textAlign="center">
+                  {p}
+                </Typography>
+              ),
+            })}
 
           {myInitiative && !alreadyIncubated && (
             <Stack
