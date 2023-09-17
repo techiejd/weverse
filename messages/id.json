@@ -236,7 +236,7 @@
     },
     "impact": {
       "solicit": {
-        "title": "{initiativeName}, get testimonials and get more engagement!",
+        "title": "{initiativeName}, Get testimonials and get more engagement!",
         "solicitText": "Please give me your opinion on my action: {for}",
         "clickOnEarToSolicit": "Click on the ear to send them a survey asking for a testimonials."
       }
@@ -298,7 +298,7 @@
     },
     "sponsorships": {
       "list": "Sponsorships:",
-      "loading": "Sponsorships: Loading...",
+      "loading": "Sponsorships: Cargando...",
       "none": "There are no sponsorships.",
       "billingCycleStarted": "Billing cycle date started: {formattedDate}"
     },
@@ -462,7 +462,7 @@
       "title": "Your member page",
       "initiatives": {
         "title": "Your Initiatives",
-        "none": "There are no initiatives.",
+        "none": "There are no Initiatives.",
         "loading": "Loading Initiatives..."
       },
       "signOut": "Sign Out",
