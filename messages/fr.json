@@ -125,7 +125,7 @@
     },
     "sponsor": {
       "sponsorship": "Parrainage",
-      "title": "Sponsoriser {initiativeName}",
+      "title": "Parrainer {initiativeName}",
       "total": "Total",
       "monthly": "Mensuel",
       "levels": {
