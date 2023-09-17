@@ -7,13 +7,15 @@ import ValidatorBadge, {
   ValidationProcessDialog,
 } from "../../../../common/components/validatorBadge";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 const ValidationInfo = ({ validated, validator: validatorId }: Validation) => {
   const [validator] = useInitiative(validatorId);
   const ValidatedIcon = validated ? Verified : Flaky;
+  const t = useTranslations("actions.card.validation");
   const validationStatus = validated
-    ? "Validado por:"
-    : "En proceso de validación con:";
+    ? t("validatedBy")
+    : t("inValidationProcess");
   const [validationProcessDialogOpen, setValidationProcessDialogOpen] =
     useState(false);
   return (

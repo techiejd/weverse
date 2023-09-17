@@ -110,7 +110,6 @@ export const useCurrentSponsorships = () => {
   const router = useRouter();
   const appState = useAppState();
   const { initiativeId, userId: memberId } = router.query;
-  console.log("initiativeId", initiativeId, "memberId", memberId);
   const id = (initiativeId ? initiativeId : memberId) as string;
   const sponsorshipConverter = useSponsorshipConverter();
 

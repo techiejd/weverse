@@ -51,6 +51,7 @@
     "next": "Next",
     "back": "Back",
     "ok": "Ok",
+    "yes": "Yes",
     "internationalizedDetailed": {
       "title": "Detailed info in other languages",
       "prompt": "Add another language"
@@ -72,6 +73,7 @@
       "home": "Home",
       "listInitiatives": "Initiatives",
       "login": "Log In",
+      "logout": "Log Out",
       "yourMemberPage": "My Member Page",
       "share": "Share",
       "support": "Support",
@@ -190,11 +192,18 @@
       }
     },
     "validatorBadge": {
+      "validationProcess": "Validation process",
       "missingValidationProcess": "The incubator has yet to upload their validation process.",
       "learnMore": "See incubator page to learn more."
     }
   },
   "actions": {
+    "card": {
+      "validation": {
+        "validatedBy": "Validated by:",
+        "inValidationProcess": "In validation process with:"
+      }
+    },
     "testimonials": "Testimonials",
     "emptyTestimonials": "There are no testimonials, yet. Add one!",
     "upload": {
@@ -296,6 +305,25 @@
     "about": {
       "title": "About:",
       "none": "The initiative has not filled out their 'about section'."
+    },
+    "incubateeEntrance": {
+      "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>is inviting you to be a part of their incubator network.</prompt>",
+      "specialTitleForGWNLmXTQ3qXtpYSE6awp": "<prompt>Hey cooleader 😎, <initiativeNameTag>{initiativeName}</initiativeNameTag> is inviting you to celebrate the International Day of Peace IDP.</prompt>",
+      "whyEnter": "By entering the incubator, you will enjoy the exposure and mentorship that comes with it.",
+      "callToAction": "Enter the incubator",
+      "acceptedIncubateeInitiatives": "The initiatives who have taken the plunge:",
+      "alreadyIncubated": "Your initiative is already part of this incubator.",
+      "logInPrompt": "To enter the incubator, you must first register as a member or log in.",
+      "dialog": {
+        "tryWithDifferentInitiative": "Try with a different initiative",
+        "selfIncubationErrorTitle": "You can not incubate yourself.",
+        "successTitle": "Welcome!",
+        "successMessage": "You have successfully entered as an incubatee.",
+        "viewMyInitiative": "Go to my initiative",
+        "changeIncubatorPromptTitle": "Are you sure you want to change your incubator?",
+        "currentlyIncubatedBy": "You are currently incubated by <incubatorNameTag>{incubatorName}</incubatorNameTag>.",
+        "notAnIncubatorErrorTitle": "This initiative is not an incubator."
+      }
     },
     "incubator": {
       "title": "Incubator:",

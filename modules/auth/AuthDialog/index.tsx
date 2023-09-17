@@ -271,7 +271,6 @@ const AuthDialogContent = ({
       checkingUserRegistered: true,
     }));
 
-    console.log(authDialogState.phoneNumber);
     const registeredMembersWithPN = await getDocs(
       query(
         collection(appState.firestore, "members"),

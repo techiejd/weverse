@@ -26,7 +26,7 @@ const ValidationProcessDialog = ({
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <CardContent>
-        <Typography variant="h6">Proceso de validación</Typography>
+        <Typography variant="h6">{t("validationProcess")}</Typography>
         <Typography sx={{ whiteSpace: "pre-wrap" }}>
           {validatorPresentationInfo?.validationProcess ||
             t("missingValidationProcess")}
