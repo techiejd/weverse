@@ -43,7 +43,7 @@ export type HowToSupport = z.infer<typeof howToSupport>;
 export const ratings = z.object({ sum: z.number(), count: z.number() });
 export type Ratings = z.infer<typeof ratings>;
 
-export const locale = z.enum(["en", "es", "fr"]);
+export const locale = z.enum(["en", "es", "fr", "de", "pl", "pt"]);
 export type Locale = z.infer<typeof locale>;
 
 const dbBase = z.object({

@@ -35,8 +35,8 @@
   },
   "input": {
     "defaultCountry": {
-      "long": "Estados Unidos",
-      "short": "EUA"
+      "long": "Brazil",
+      "short": "BR"
     },
     "cancel": "cancelar",
     "close": "FECHAR",

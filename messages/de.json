@@ -35,8 +35,8 @@
   },
   "input": {
     "defaultCountry": {
-      "long": "Vereinigte Staaten",
-      "short": "MN"
+      "long": "Germany",
+      "short": "DE"
     },
     "cancel": "Abbrechen",
     "close": "Schließen",
@@ -136,7 +136,7 @@
       },
       "steps": {
         "choose": {
-          "defaultCurrency": "usr",
+          "defaultCurrency": "eur",
           "short": "Auswählen",
           "title": "Wähle dein Sponsoring-Level",
           "level": "Level {level}",
