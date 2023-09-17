@@ -72,6 +72,9 @@ export function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(
     en: itemSchema,
     es: itemSchema,
     fr: itemSchema,
+    de: itemSchema,
+    pl: itemSchema,
+    pt: itemSchema,
   });
 }
 
