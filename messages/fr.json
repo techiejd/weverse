@@ -35,8 +35,8 @@
   },
   "input": {
     "defaultCountry": {
-      "long": "États-Unis",
-      "short": "US"
+      "long": "France",
+      "short": "FR"
     },
     "cancel": "Annuler",
     "close": "Fermer",
@@ -86,7 +86,7 @@
     "meta_comment": "TODO(techiejd): Move all things that are Actions under a Initiative and move their common components under initiative.",
     "solicitHelpDialog": {
       "title": "Demander de l'aide",
-      "reminderThatTheyCanSolicitMoreByEditingInitiativePath": "Remember, you can ask for other types of (non-financial) help <link>by requesting it in your initiative page</link>.",
+      "reminderThatTheyCanSolicitMoreByEditingInitiativePath": "N'oubliez pas que vous pouvez demander d'autres types d'aide (non financière) <link>en en faisant la demande sur la page de votre initiative</link>.",
       "solicit": {
         "all": {
           "title": "Demander tout",
@@ -108,16 +108,16 @@
     },
     "supportDialog": {
       "title": "Merci pour votre soutien!",
-      "share": "{beneficiaryType, select, action {Take a look at this cool social action. Let's support it!} other {Take a look at this awesome initiative. Let's support them!}}"
+      "share": "{beneficiaryType, select, action {Jetez un coup d'œil à cette action sociale sympa. Nous allons la soutenir!} other {Jetez un coup d'œil à cette initiative géniale. Nous allons la soutenir!}}"
     },
     "contactSupportDialog": {
-      "missingInfoTitle": "The maker has yet to finish their profile.",
-      "title": "The maker says you can contact them through these ways:",
-      "missingInfoText": "¡Thanks for wanting to support! We have alerted the maker about your interest and we hope your ask convinces them to finish quickly."
+      "missingInfoTitle": "L'initiative n'a pas encore terminé son profil.",
+      "title": "L'initiative dit que vous pouvez les contacter de cette manière:",
+      "missingInfoText": "¡Merci de vouloir soutenir! Nous avons alerté l'initiative de votre intérêt et nous espérons que votre demande les convaincra pour finir rapidement."
     },
     "sponsorDialog": {
       "title": "Merci pour votre parrainage!",
-      "oneWeIsWorkingOnMakingAGoodExp": "We are working with the Initiative on making a good experience for you.",
+      "oneWeIsWorkingOnMakingAGoodExp": "Nous travaillons avec l'initiative de faire une bonne expérience pour vous.",
       "logInPrompt": "Vous devez être un membre enregistré pour parrainer."
     },
     "underConstruction": {
@@ -125,7 +125,7 @@
     },
     "sponsor": {
       "sponsorship": "Parrainage",
-      "title": "Sponsor {makerName}",
+      "title": "Sponsoriser {initiativeName}",
       "total": "Total",
       "monthly": "Mensuel",
       "levels": {
@@ -136,7 +136,7 @@
       },
       "steps": {
         "choose": {
-          "defaultCurrency": "USD",
+          "defaultCurrency": "eur",
           "short": "Choisir",
           "title": "Choisissez votre niveau de sponsoring",
           "level": "Niveau {level}",
@@ -158,7 +158,7 @@
             "prompt": "Devons-nous dire à la Communauté OneWe ?",
             "initiativeKnows": "Le créateur d'impact sait toujours qui les sponsorise",
             "publicizeSupporterExplanation": "Si vous choisissez de faire connaître votre sponsoring, votre nom et votre photo de profil seront visibles pour la grande communauté OneWe.",
-            "publish": "I want the OneWe community to know I sponsor this initiative."
+            "publish": "Je veux que la communauté OneWe sache que je parraine cette Initiative."
           }
         },
         "customer": {
@@ -187,7 +187,7 @@
         }
       },
       "thanks": {
-        "title": "{sponsorName}, thanks for sponsoring {beneficiaryName}!",
+        "title": "{sponsorName}, merci pour le parrainage {beneficiaryName}!",
         "togetherYouChangeTheWorld": "Ensemble, vous changez le monde."
       }
     },
@@ -236,7 +236,7 @@
     },
     "impact": {
       "solicit": {
-        "title": "{makerName}, Get testimonials and get more engagement!",
+        "title": "{initiativeName}, obtenez des témoignages et obtenez plus d’engagement!",
         "solicitText": "Veuillez me donner votre avis sur mon action : {for}",
         "clickOnEarToSolicit": "Cliquez sur l'oreille pour leur envoyer une enquête demandant un témoignage."
       }
@@ -265,14 +265,14 @@
       "forInitiative": "Pour initiative: {initiative}"
     },
     "prompt": {
-      "title": "<makerNameTag>{makerName}</makerNameTag> <prompt>wants to know how their action{forAction, select, true { has} other {s have}} had an impact on your life?</prompt>",
+      "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>veut savoir comment leur action{forAction, select, true { a} other {s ont}} a eu un impact sur votre vie ?</prompt>",
       "share": "Partagez votre témoignage sur cette action",
       "callToAction": "Prêt à faire le témoignage",
       "logInPrompt": "Pour faire un témoignage, vous devez d'abord vous inscrire en tant que membre.",
       "for": "{forAction, select, true {L'action en question} other {Leurs actions :}}"
     },
     "form": {
-      "rate": "Rate the {forAction, select, true {action} other {maker}}:",
+      "rate": "Noter le {forAction, select, true {action} other {initiative}}:",
       "inVideoFormat": "Dans une vidéo selfie",
       "videoSuggestions": "30 secondes à 5 minutes et facultatif.",
       "inTextFormat": "Dans vos propres mots",
@@ -287,7 +287,7 @@
       "theInformationIsValuable": "Les informations que vous avez fournies sont précieuses pour la communauté OneWe.",
       "whatWouldYouLikeToDoNow": "Que voulez-vous faire maintenant?",
       "seeWhatOthersSaidAboutThisAction": "Voir ce que les autres ont dit à propos de cette action",
-      "seeOtherActionsAndImpactsByThisInitiative": "See other actions and impacts by this initiative",
+      "seeOtherActionsAndImpactsByThisInitiative": "Voir d'autres actions et impacts de cette initiative",
       "goToHomePage": "Aller à la page d'accueil"
     }
   },
@@ -298,7 +298,7 @@
     },
     "sponsorships": {
       "list": "Commanditaires :",
-      "loading": "Sponsorships: Cargando...",
+      "loading": "Parrainages : Chargement...",
       "none": "Il n'y a pas de sponsoring.",
       "billingCycleStarted": "Date de début du cycle de facturation : {formattedDate}"
     },
@@ -350,7 +350,7 @@
     "bottomBar": {
       "vip": "Vip",
       "invite": "Inviter",
-      "sharePrompt": "Please take a look at my initiative page!",
+      "sharePrompt": "Jetez un coup d'oeil à ma page d'initiative!",
       "solicitSupportShort": "Obtenir de l'aide",
       "addActionShort": "Action"
     },
@@ -370,7 +370,7 @@
           "secondary": "Nous impliquons la communauté dans la discussion. Les témoignages {numSocialProofsDone}/3 reçus."
         },
         "finishInitiativeProfile": {
-          "primary": "Finish filling out your initiative profile.",
+          "primary": "Terminez de remplir votre profil d'initiative.",
           "secondary": {
             "finished": "Vous avez terminé.",
             "missingTheseFields": "Champs suivants vides : {fields}"
@@ -379,7 +379,7 @@
       }
     },
     "edit": {
-      "title": "Edit your initiative page",
+      "title": "Modifier la page de votre initiative",
       "initiativeDefinition": "Initiative = un acte ou une stratégie visant à résoudre une difficulté ou à améliorer une situation.",
       "chooseInitiativeType": {
         "individual": "Je travaille seul",
@@ -412,7 +412,7 @@
             "prompt": "Parlez-nous de vous-même et pourquoi vous devriez être parrainé."
           },
           "blurb": {
-            "title": "Presentation blurb:",
+            "title": "Vidéo de présentation :",
             "prompt": "Donnez-nous une histoire",
             "helperText": "Ici vous pouvez être aussi détaillé que vous le souhaitez."
           }
@@ -461,9 +461,9 @@
     "yours": {
       "title": "Votre page de membre",
       "initiatives": {
-        "title": "Your initiatives",
-        "none": "There are no initiatives.",
-        "loading": "Loading initiatives..."
+        "title": "Vos initiatives",
+        "none": "Il n'y a aucune initiative.",
+        "loading": "Chargement des initiatives..."
       },
       "signOut": "Déconnexion",
       "failedToCancelSponsorship": "Impossible d'annuler le parrainage : {error}"
