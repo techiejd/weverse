@@ -48,7 +48,7 @@ const Solicit = asOneWePage(() => {
       <ShareActionArea
         shareProps={{
           title: t("solicitText", { for: presentationInfo?.summary }),
-          path: `/posi/${presentationInfo}/impact/upload`,
+          path: `/posi/${posi.id}/impact/upload`,
         }}
       >
         <Hearing sx={{ fontSize: 160 }} />
