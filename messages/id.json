@@ -1,0 +1,472 @@
+{
+  "index": {
+    "publish": "Publish",
+    "myPage": "My page",
+    "seeContentIn": "See content in"
+  },
+  "auth": {
+    "register": "Register",
+    "validationProcess": "We will verify your phone number and you will receive a verification code to this number to finish the {action, select, 0 {login} other {registration}} process.",
+    "namePlaceholder": "What's your name?",
+    "nameHelperText": "What do you like to be called? This is how you will be known in the community.",
+    "pleaseWaitWhileWeCheckUserStatus": "One second while we verify that you are {authAction, select, 0 {already} other {not}} registered.",
+    "userRegisteredError": "Hi, you are {authAction, select, 0 {not} other {already}} registered.",
+    "confirmRegistrationDialog": {
+      "review": "Please review your information",
+      "name": "Name:"
+    },
+    "invitedInitiative": {
+      "invalidInvitationLinkAskForAnother": "This link is not valid. Ask your incubator for another invite link.",
+      "usedInvitationLink": "This link has already been used. Ask your incubator for another invite link."
+    },
+    "handleOtp": {
+      "restartPrompt": "Please try again.",
+      "invitedInitiativeNotPossible": "It is not possible to register with an invite link.",
+      "invalidOtp": "Verification code is not valid."
+    },
+    "otpDialog": {
+      "prompt": "Please enter the verification code you received via SMS.",
+      "checkSpam": "If you don't receive it, check your spam folder."
+    },
+    "recaptchaDialog": {
+      "title": "Please prove you are not a robot",
+      "inCaseCantGoOnContactCommunity": "In case you can't go on, please contact <email>community@onewe.co</email>."
+    }
+  },
+  "input": {
+    "defaultCountry": {
+      "long": "United States",
+      "short": "US"
+    },
+    "cancel": "Cancel",
+    "close": "Close",
+    "phoneNumber": "Phone number",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "postalCode": "Postal code",
+    "country": "Country",
+    "location": "Search location ...",
+    "numChars": "{numChars} characters",
+    "next": "Next",
+    "back": "Back",
+    "ok": "Ok",
+    "yes": "Yes",
+    "internationalizedDetailed": {
+      "title": "Detailed info in other languages",
+      "prompt": "Add another language"
+    }
+  },
+  "common": {
+    "loading": "Loading",
+    "motto": "Be part of the solution",
+    "logInPrompt": "Register if you haven't already. Log in if you have.",
+    "pageTitle": {
+      "byOneWe": "by OneWe"
+    },
+    "callToAction": {
+      "edit": "Edit",
+      "actions": {
+        "list": "Actions",
+        "add": "Add your action"
+      },
+      "home": "Home",
+      "listInitiatives": "Initiatives",
+      "login": "Log In",
+      "logout": "Log Out",
+      "yourMemberPage": "My Member Page",
+      "share": "Share",
+      "support": "Support",
+      "sponsor": "Sponsor",
+      "testify": "Give testimonial",
+      "connect": "Connect",
+      "update": "Update",
+      "delete": "Delete"
+    },
+    "meta_comment": "TODO(techiejd): Move all things that are Actions under an initiative and move their common components under initiative.",
+    "solicitHelpDialog": {
+      "title": "Ask for support",
+      "reminderThatTheyCanSolicitMoreByEditingInitiativePath": "Remember, you can ask for other types of (non-financial) help <link>by requesting it in your initiative's page</link>.",
+      "solicit": {
+        "all": {
+          "title": "Ask for all",
+          "prompt": "I would love to collaborate on my social impact."
+        },
+        "testimonial": {
+          "title": "Ask for a testimonial",
+          "prompt": "Please give me a testimonial on my social impact."
+        },
+        "sponsorship": {
+          "title": "Ask for sponsorship",
+          "prompt": "I am looking for sponsorships of my social impact."
+        },
+        "connect": {
+          "title": "Ask to connect",
+          "prompt": "Let's connect over my social impact"
+        }
+      }
+    },
+    "supportDialog": {
+      "title": "Thank you for the support!",
+      "share": "{beneficiaryType, select, action {Take a look at this cool social action. Let's support it!} other {Take a look at this awesome Initiative. Let's support it!}}"
+    },
+    "contactSupportDialog": {
+      "missingInfoTitle": "The initiative has yet to finish their profile.",
+      "title": "The initiative says you can contact them through these ways:",
+      "missingInfoText": "¡Thanks for wanting to support! We have alerted the initiative about your interest and we hope your ask convinces them to finish quickly."
+    },
+    "sponsorDialog": {
+      "title": "Thank you for your sponsorship!",
+      "oneWeIsWorkingOnMakingAGoodExp": "We are working with the initiative on making a good experience for you.",
+      "logInPrompt": "You must be a registered member to sponsor."
+    },
+    "underConstruction": {
+      "title": "Come back soon!"
+    },
+    "sponsor": {
+      "sponsorship": "Sponsorship",
+      "title": "Sponsor {initiativeName}",
+      "total": "Total",
+      "monthly": "Monthly",
+      "levels": {
+        "admirer": "Admirer",
+        "fan": "Fan",
+        "lover": "Lover",
+        "custom": "Custom"
+      },
+      "steps": {
+        "choose": {
+          "defaultCurrency": "usd",
+          "short": "Choose",
+          "title": "Choose your sponsorship level",
+          "level": "Level {level}",
+          "currency": {
+            "prompt": "Choose your currency",
+            "chooseWiselyWarning": "Choose wisely. You can only choose your currency in this first sponsor, since we save this information."
+          },
+          "tip": {
+            "prompt": "Want to leave a tip for OneWe?",
+            "showUsYourLove": "Show us!, how much you love us.",
+            "forTheService": "For the service we provide you through the platform."
+          },
+          "fee": {
+            "prompt": "Want to cover the payment processing fee?",
+            "feeExplanation": "{feePercentage}% + {feeAmount} per transacción.",
+            "preferInitiativePays": "I prefer the initiative pays the fee"
+          },
+          "publicizeSupporter": {
+            "prompt": "Shall we tell the OneWe Community?",
+            "initiativeKnows": "The initiative always knows who sponsors them",
+            "publicizeSupporterExplanation": "If you choose to publicize your sponsorship, your name and profile picture will be visible to the greater OneWe community.",
+            "publish": "I want the OneWe community to know I sponsor this Initiative."
+          }
+        },
+        "customer": {
+          "short": "Customer info",
+          "title": "Customer Information"
+        },
+        "payment": {
+          "short": "Payment",
+          "card": {
+            "number": "Card number",
+            "expiry": "Expiry"
+          }
+        },
+        "confirm": {
+          "short": "Confirm"
+        }
+      },
+      "details": {
+        "sponsorshipSummary": {
+          "title": "Sponsorship summary",
+          "level": "Sponsorship level"
+        },
+        "payment": {
+          "title": "Payment details",
+          "holder": "Card holder name"
+        }
+      },
+      "thanks": {
+        "title": "{sponsorName}, thanks for sponsoring {beneficiaryName}!",
+        "togetherYouChangeTheWorld": "Together, you change the world."
+      }
+    },
+    "validatorBadge": {
+      "validationProcess": "Validation process",
+      "missingValidationProcess": "The incubator has yet to upload their validation process.",
+      "learnMore": "See incubator page to learn more."
+    }
+  },
+  "actions": {
+    "card": {
+      "validation": {
+        "validatedBy": "Validated by:",
+        "inValidationProcess": "In validation process with:"
+      }
+    },
+    "testimonials": "Testimonials",
+    "emptyTestimonials": "There are no testimonials, yet. Add one!",
+    "upload": {
+      "submit": "Publish",
+      "title": "Publish your action! 🪧",
+      "logInPrompt": "In order to publish an action, you must first register as a member.",
+      "sections": {
+        "media": {
+          "title": "Show us a bit of what you've done",
+          "prompt": "Upload a photo or video of your action."
+        },
+        "summary": {
+          "title": "Summarize your action",
+          "examples": {
+            "title": "Good summary examples",
+            "1": "We taught 150 children from a low-income school to use AI to better their lives.",
+            "2": "I filled 1 bag with garbage from the river near my house.",
+            "3": "We built an irrigation system for a community of 200 people in the Amazon."
+          },
+          "prompt": "This summary will become your action's title."
+        },
+        "location": {
+          "title": "Where was this action done?"
+        },
+        "validator": {
+          "title": "Working with your incubator",
+          "explanation": "Notice: OneWe will look for your incubator's validation."
+        }
+      }
+    },
+    "impact": {
+      "solicit": {
+        "title": "{initiativeName}, get testimonials and get more engagement!",
+        "solicitText": "Please give me your opinion on my action: {for}",
+        "clickOnEarToSolicit": "Click on the ear to send them a survey asking for a testimonials."
+      }
+    },
+    "about": {
+      "explanation": "About this action",
+      "coverVideo": "Cover video",
+      "location": "Location"
+    },
+    "empty": "There are no actions, yet. Add one!",
+    "solicit": {
+      "support": "Support",
+      "testimonial": "Listen",
+      "requests": {
+        "opinion": "Please give me your opinion on my social impact for my action: {summary}",
+        "look": "Take a look at my social action."
+      }
+    },
+    "edit": {
+      "title": "Edit your action"
+    }
+  },
+  "testimonials": {
+    "card": {
+      "forAction": "For action: {action}",
+      "forInitiative": "For initiative: {initiative}"
+    },
+    "prompt": {
+      "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>wants to know how their action{forAction, select, true { has} other {s have}} had an impact on your life?</prompt>",
+      "share": "Share your testimonial on this action",
+      "callToAction": "Ready to do the testimonial",
+      "logInPrompt": "To do a testimonial, you must first register as a member.",
+      "for": "{forAction, select, true {The action in question:} other {Their actions:}}"
+    },
+    "form": {
+      "rate": "Rate the {forAction, select, true {action} other {initiative}}:",
+      "inVideoFormat": "In a selfie video",
+      "videoSuggestions": "30 seconds to 5 minutes and optional.",
+      "inTextFormat": "In your own words",
+      "andOptional": "{numChars} and optional.",
+      "writtenTestimonial": "Written testiomonial",
+      "whatImpactPrompt": "with details, what impact did this {forAction, select, true {action} other {Initiative}} have in your life?",
+      "submit": "Publish testimonial"
+    },
+    "thanks": {
+      "title": "Thanks for your testimonial",
+      "thisIsHowWeChangeTheWorld": "This is how we change the world!",
+      "theInformationIsValuable": "The information you provided is valuable to the OneWe community.",
+      "whatWouldYouLikeToDoNow": "What would you like to do now?",
+      "seeWhatOthersSaidAboutThisAction": "See what others said about this action",
+      "seeOtherActionsAndImpactsByThisInitiative": "See other actions and impacts by this Initiative",
+      "goToHomePage": "Go to the home page"
+    }
+  },
+  "initiatives": {
+    "title": "Initiatives",
+    "card": {
+      "title": "Initiative"
+    },
+    "sponsorships": {
+      "list": "Sponsorships:",
+      "loading": "Sponsorships: Loading...",
+      "none": "There are no sponsorships.",
+      "billingCycleStarted": "Billing cycle date started: {formattedDate}"
+    },
+    "about": {
+      "title": "About:",
+      "none": "The initiative has not filled out their 'about section'."
+    },
+    "incubateeEntrance": {
+      "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>is inviting you to be a part of their incubator network.</prompt>",
+      "specialTitleForGWNLmXTQ3qXtpYSE6awp": "<prompt>Hey cooleader 😎, <initiativeNameTag>{initiativeName}</initiativeNameTag> is inviting you to celebrate the International Day of Peace IDP.</prompt>",
+      "whyEnter": "By entering the incubator, you will enjoy the exposure and mentorship that comes with it.",
+      "callToAction": "Enter the incubator",
+      "acceptedIncubateeInitiatives": "The initiatives who have taken the plunge:",
+      "alreadyIncubated": "Your initiative is already part of this incubator.",
+      "logInPrompt": "To enter the incubator, you must first register as a member or log in.",
+      "dialog": {
+        "tryWithDifferentInitiative": "Try with a different initiative",
+        "selfIncubationErrorTitle": "You can not incubate yourself.",
+        "successTitle": "Welcome!",
+        "successMessage": "You have successfully entered as an incubatee.",
+        "viewMyInitiative": "Go to my initiative",
+        "changeIncubatorPromptTitle": "Are you sure you want to change your incubator?",
+        "currentlyIncubatedBy": "You are currently incubated by <incubatorNameTag>{incubatorName}</incubatorNameTag>.",
+        "notAnIncubatorErrorTitle": "This initiative is not an incubator."
+      }
+    },
+    "incubator": {
+      "title": "Incubator:",
+      "joinPrompt": "{initiativeName} is inviting you to be a part of their network as an incubator.",
+      "isThisActionValid": "Is this action valid?",
+      "actionIsValid": "Yes, it's valid.",
+      "validationProcess": {
+        "title": "Validation process:",
+        "none": "The incubator has not uploaded their validation process."
+      },
+      "pendingValidation": {
+        "title": "Pending validation:",
+        "none": "There is nothing pending validation."
+      },
+      "incubatees": {
+        "title": "Incubatees:",
+        "none": "There are no incubatees."
+      },
+      "invited": {
+        "title": "Invited:",
+        "none": "No one has been invited."
+      }
+    },
+    "bottomBar": {
+      "vip": "VIP",
+      "invite": "Invite",
+      "sharePrompt": "Please take a look at my Initiative page!",
+      "solicitSupportShort": "Get support",
+      "addActionShort": "Action"
+    },
+    "vip": {
+      "logInPrompt": "To enter the VIP lounge, you must log in as a member.",
+      "welcome": "Welcome to the VIP lounge!",
+      "underConstruction": "Right now we are working on making this experience better",
+      "dialog": {
+        "title": "To enter the VIP lounge:",
+        "startProcessPrompt": "Click on each task to start the process:",
+        "oneActionDone": {
+          "primary": "Add an action.",
+          "secondary": "We show our changes in the world by adding actions."
+        },
+        "getThreeTestimonials": {
+          "primary": "Listen to 3 impacted people by getting their testimonial or opinion.",
+          "secondary": "We get the community involved in the discussion. {numSocialProofsDone}/3 testimonials received."
+        },
+        "finishInitiativeProfile": {
+          "primary": "Finish filling out your Initiative profile.",
+          "secondary": {
+            "finished": "You're done.",
+            "missingTheseFields": "Following fields empty: {fields}"
+          }
+        }
+      }
+    },
+    "edit": {
+      "title": "Edit your initiative's page",
+      "initiativeDefinition": "Initiative = an act or strategy intended to resolve a difficulty or improve a situation.",
+      "chooseInitiativeType": {
+        "individual": "I work alone",
+        "organization": "I'm part of an organization",
+        "entityInformation": "Entity information",
+        "organizationType": {
+          "namePrompt": "What's the organization's name?",
+          "title": "Organization type"
+        }
+      },
+      "detailedInput": {
+        "askForInfoMsg": "{initiativeType, select, individual {Please, tell us about yourself.} other {Please, tell us about your organization.}}",
+        "askForImage": "{initiativeType, select, individual {Select an image with which you'll be identified by the OneWe community.} other {Upload your logo.}}",
+        "incubator": {
+          "whatIsYourValidationProcess": "How does the incubator validate actions in order to give out seals of approval?",
+          "leaveDetails": "Leave details about your validation process here.",
+          "devilIsInTheDetailsReminder": "The devil is in the details. The more details you give and follow, the more trust you'll build with the community."
+        },
+        "nonFinancialHelp": {
+          "whatOtherHelpDoYouNeed": "What type of non-financial help do{initiativeType, select, individual { you} other {es the organization}} need?",
+          "leaveContactDetails": "Leave contact details here and be explicit in what help you need.",
+          "helperText": "If you're ready to receive volunteers, speak to the news or specialists like lawyers, developers, etc, please be explicit in your ask and leave links or other details for them to contact you. For example: phone number, email, social network, page links, etc."
+        },
+        "email": "OneWe will communicate initiative related information with you by email",
+        "profileImage": "{initiativeType, select, individual {Select your profile picture} other {Select your organization's profile picture}}",
+        "story": {
+          "title": "{initiativeType, select, individual {Tell us about yourself and your initiatives} other {Tell us about the organization and its intiatives}}",
+          "video": {
+            "title": "Presentation video:",
+            "prompt": "Tell us about yourself and why you should be sponsored."
+          },
+          "blurb": {
+            "title": "Presentation blurb:",
+            "prompt": "Give us a story",
+            "helperText": "Here you can be as detailed as you wish."
+          }
+        }
+      }
+    },
+    "invite": {
+      "title": "Invite an initiative (or more) to your OneWe network.",
+      "whatIsInitiativesName": "What's the name of the {initiativeType, select, individual {person} other {organization}}?",
+      "makeLink": "Make link",
+      "copy": {
+        "incompatibleBrowser": "Your browser doesn't support copying to clipboard. Please, click on 'Share'.",
+        "copyFailed": "Copy failed. Please, click on 'Share'."
+      }
+    },
+    "types": {
+      "title": "Initiative type",
+      "long": {
+        "individual": "Individual",
+        "organization": "Organization",
+        "nonprofit": "Charity or NGO",
+        "religious": "Religious organization",
+        "unincorporated": "Volunteer organization",
+        "profit": "Commercial enterprise",
+        "incubator": "Incubator"
+      },
+      "short": {
+        "individual": "Individual",
+        "organization": "Organization",
+        "nonprofit": "NGO",
+        "religious": "Religion",
+        "unincorporated": "Volunteers",
+        "profit": "Business",
+        "incubator": "Incubator"
+      }
+    },
+    "myInitiativePortal": {
+      "join": "Join!",
+      "myInitiativeSpeedDial": {
+        "view": "View",
+        "mine": "Mine"
+      }
+    }
+  },
+  "members": {
+    "yours": {
+      "title": "Your member page",
+      "initiatives": {
+        "title": "Your Initiatives",
+        "none": "There are no initiatives.",
+        "loading": "Loading Initiatives..."
+      },
+      "signOut": "Sign Out",
+      "failedToCancelSponsorship": "Failed to cancel sponsorship: {error}"
+    }
+  }
+}
