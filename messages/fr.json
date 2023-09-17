@@ -82,7 +82,7 @@
       "update": "Mettre à jour",
       "delete": "Supprimer"
     },
-    "meta_comment": "TODO(techiejd): Move all things that are Actions under a Maker and move their common components under maker.",
+    "meta_comment": "TODO(techiejd): Move all things that are Actions under a Initiative and move their common components under initiative.",
     "solicitHelpDialog": {
       "title": "Demander de l'aide",
       "reminderThatTheyCanSolicitMoreByEditingInitiativePath": "Remember, you can ask for other types of (non-financial) help <link>by requesting it in your initiative page</link>.",
@@ -110,13 +110,13 @@
       "share": "{beneficiaryType, select, action {Take a look at this cool social action. Let's support it!} other {Take a look at this awesome initiative. Let's support them!}}"
     },
     "contactSupportDialog": {
-      "missingInfoTitle": "The maker has yet to finish their profile.",
-      "title": "The maker says you can contact them through these ways:",
-      "missingInfoText": "¡Thanks for wanting to support! We have alerted the maker about your interest and we hope your ask convinces them to finish quickly."
+      "missingInfoTitle": "The initiative has yet to finish their profile.",
+      "title": "The initiative says you can contact them through these ways:",
+      "missingInfoText": "¡Thanks for wanting to support! We have alerted the initiative about your interest and we hope your ask convinces them to finish quickly."
     },
     "sponsorDialog": {
       "title": "Merci pour votre parrainage!",
-      "oneWeIsWorkingOnMakingAGoodExp": "We are working with the Maker on making a good experience for you.",
+      "oneWeIsWorkingOnMakingAGoodExp": "We are working with the Initiative on making a good experience for you.",
       "logInPrompt": "Vous devez être un membre enregistré pour parrainer."
     },
     "underConstruction": {
@@ -124,7 +124,7 @@
     },
     "sponsor": {
       "sponsorship": "Parrainage",
-      "title": "Sponsor {makerName}",
+      "title": "Sponsor {initiativeName}",
       "total": "Total",
       "monthly": "Mensuel",
       "levels": {
@@ -235,7 +235,7 @@
     },
     "impact": {
       "solicit": {
-        "title": "{makerName}, Get testimonials and get more engagement!",
+        "title": "{initiativeName}, Get testimonials and get more engagement!",
         "solicitText": "Veuillez me donner votre avis sur mon action : {for}",
         "clickOnEarToSolicit": "Cliquez sur l'oreille pour leur envoyer une enquête demandant un témoignage."
       }
@@ -264,14 +264,14 @@
       "forInitiative": "Pour initiative: {initiative}"
     },
     "prompt": {
-      "title": "<makerNameTag>{makerName}</makerNameTag> <prompt>wants to know how their action{forAction, select, true { has} other {s have}} had an impact on your life?</prompt>",
+      "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>wants to know how their action{forAction, select, true { has} other {s have}} had an impact on your life?</prompt>",
       "share": "Partagez votre témoignage sur cette action",
       "callToAction": "Prêt à faire le témoignage",
       "logInPrompt": "Pour faire un témoignage, vous devez d'abord vous inscrire en tant que membre.",
       "for": "{forAction, select, true {L'action en question} other {Leurs actions :}}"
     },
     "form": {
-      "rate": "Rate the {forAction, select, true {action} other {maker}}:",
+      "rate": "Rate the {forAction, select, true {action} other {initiative}}:",
       "inVideoFormat": "Dans une vidéo selfie",
       "videoSuggestions": "30 secondes à 5 minutes et facultatif.",
       "inTextFormat": "Dans vos propres mots",
