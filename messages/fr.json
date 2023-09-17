@@ -73,6 +73,7 @@
       "home": "Accueil",
       "listInitiatives": "Initiatives",
       "login": "Se déconnecter",
+      "logout": "Déconnexion",
       "yourMemberPage": "Ma page de membre",
       "share": "Partager",
       "support": "Soutenir",
@@ -110,9 +111,9 @@
       "share": "{beneficiaryType, select, action {Take a look at this cool social action. Let's support it!} other {Take a look at this awesome initiative. Let's support them!}}"
     },
     "contactSupportDialog": {
-      "missingInfoTitle": "The initiative has yet to finish their profile.",
-      "title": "The initiative says you can contact them through these ways:",
-      "missingInfoText": "¡Thanks for wanting to support! We have alerted the initiative about your interest and we hope your ask convinces them to finish quickly."
+      "missingInfoTitle": "The maker has yet to finish their profile.",
+      "title": "The maker says you can contact them through these ways:",
+      "missingInfoText": "¡Thanks for wanting to support! We have alerted the maker about your interest and we hope your ask convinces them to finish quickly."
     },
     "sponsorDialog": {
       "title": "Merci pour votre parrainage!",
@@ -124,7 +125,7 @@
     },
     "sponsor": {
       "sponsorship": "Parrainage",
-      "title": "Sponsor {initiativeName}",
+      "title": "Sponsor {makerName}",
       "total": "Total",
       "monthly": "Mensuel",
       "levels": {
@@ -235,7 +236,7 @@
     },
     "impact": {
       "solicit": {
-        "title": "{initiativeName}, Get testimonials and get more engagement!",
+        "title": "{makerName}, Get testimonials and get more engagement!",
         "solicitText": "Veuillez me donner votre avis sur mon action : {for}",
         "clickOnEarToSolicit": "Cliquez sur l'oreille pour leur envoyer une enquête demandant un témoignage."
       }
@@ -264,14 +265,14 @@
       "forInitiative": "Pour initiative: {initiative}"
     },
     "prompt": {
-      "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>wants to know how their action{forAction, select, true { has} other {s have}} had an impact on your life?</prompt>",
+      "title": "<makerNameTag>{makerName}</makerNameTag> <prompt>wants to know how their action{forAction, select, true { has} other {s have}} had an impact on your life?</prompt>",
       "share": "Partagez votre témoignage sur cette action",
       "callToAction": "Prêt à faire le témoignage",
       "logInPrompt": "Pour faire un témoignage, vous devez d'abord vous inscrire en tant que membre.",
       "for": "{forAction, select, true {L'action en question} other {Leurs actions :}}"
     },
     "form": {
-      "rate": "Rate the {forAction, select, true {action} other {initiative}}:",
+      "rate": "Rate the {forAction, select, true {action} other {maker}}:",
       "inVideoFormat": "Dans une vidéo selfie",
       "videoSuggestions": "30 secondes à 5 minutes et facultatif.",
       "inTextFormat": "Dans vos propres mots",
