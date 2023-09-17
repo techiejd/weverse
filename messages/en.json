@@ -192,11 +192,18 @@
       }
     },
     "validatorBadge": {
+      "validationProcess": "Validation process",
       "missingValidationProcess": "The incubator has yet to upload their validation process.",
       "learnMore": "See incubator page to learn more."
     }
   },
   "actions": {
+    "card": {
+      "validation": {
+        "validatedBy": "Validated by:",
+        "inValidationProcess": "In validation process with:"
+      }
+    },
     "testimonials": "Testimonials",
     "emptyTestimonials": "There are no testimonials, yet. Add one!",
     "upload": {

@@ -191,11 +191,18 @@
       }
     },
     "validatorBadge": {
+      "validationProcess": "Processus de validation",
       "missingValidationProcess": "L'incubateur n'a pas encore téléchargé son processus de validation.",
       "learnMore": "Consultez la page des incubateurs pour en savoir plus."
     }
   },
   "actions": {
+    "card": {
+      "validation": {
+        "validatedBy": "Validé par:",
+        "inValidationProcess": "En cours de validation avec:"
+      }
+    },
     "testimonials": "Témoignages",
     "emptyTestimonials": "Il n'y a pas encore de témoignages. Ajoutez-en un!",
     "upload": {
