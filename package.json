@@ -49,6 +49,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@types/lodash": "^4.14.194",
     "@types/node": "18.8.2",
     "@types/react": "^18.0.21",

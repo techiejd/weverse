@@ -209,6 +209,7 @@
     "upload": {
       "submit": "Publish",
       "title": "Publish your action! 🪧",
+      "whatIsAnAction": "What is an action?",
       "logInPrompt": "In order to publish an action, you must first register as a member.",
       "sections": {
         "media": {
