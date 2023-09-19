@@ -9,7 +9,6 @@ const config: Config = {
     preflight: false,
   },
   plugins: [
-    require("@tailwindcss/line-clamp"),
     require("tailwindcss-themer")({
       themes: [
         {
