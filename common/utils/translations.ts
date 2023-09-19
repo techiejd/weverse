@@ -62,6 +62,9 @@ export const localeDisplayNames = {
   [locale.Values.en]: "English",
   [locale.Values.es]: "Español",
   [locale.Values.fr]: "Français",
+  [locale.Values.de]: "Deutsch",
+  [locale.Values.pl]: "Polski",
+  [locale.Values.pt]: "Português",
 };
 
 export const useLocalizedPresentationInfo = <T extends object>(

@@ -59,7 +59,7 @@
   },
   "common": {
     "loading": "Cargando",
-    "motto": "Apoyando acciones que cambian el mundo",
+    "motto": "Sea parte de la solución",
     "logInPrompt": "Regístrate si no lo has hecho. Inicia sesión si ya estás registrado.",
     "pageTitle": {
       "byOneWe": "hecho por OneWe"
@@ -210,6 +210,7 @@
       "submit": "Publicar",
       "title": "¡Publica tu acción! 🪧",
       "logInPrompt": "Para publicar tu acción, registrarte como miembro.",
+      "whatIsAnAction": "¿Qué es una acción?",
       "sections": {
         "media": {
           "title": "Muéstranos un poco de lo que has hecho",
@@ -265,7 +266,7 @@
       "forInitiative": "Para la iniciativa: {Initiative}"
     },
     "prompt": {
-      "title": "<initiativeNameTag>{InitiativeName}</initiativeNameTag> <prompt>quiere saber ¿cómo {forAction, select, true {hizo esta acción} other {hicieron sus acciones}} un cambio en tu vida?</prompt>",
+      "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>quiere saber ¿cómo {forAction, select, true {hizo esta acción} other {hicieron sus acciones}} un cambio en tu vida?</prompt>",
       "share": "Comparte tu testimonio sobre esta acción",
       "callToAction": "Listo para hacer el testimonio",
       "logInPrompt": "Para hacer un testimonio, registrate como miembro.",

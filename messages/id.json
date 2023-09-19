@@ -35,8 +35,8 @@
   },
   "input": {
     "defaultCountry": {
-      "long": "United States",
-      "short": "US"
+      "long": "Indonesia",
+      "short": "ID"
     },
     "cancel": "Cancel",
     "close": "Close",
@@ -209,7 +209,6 @@
     "upload": {
       "submit": "Publish",
       "title": "Publish your action! 🪧",
-      "whatIsAnAction": "What is an action?",
       "logInPrompt": "In order to publish an action, you must first register as a member.",
       "sections": {
         "media": {
@@ -237,7 +236,7 @@
     },
     "impact": {
       "solicit": {
-        "title": "{initiativeName}, Get testimonials and get more engagement!",
+        "title": "{initiativeName}, get testimonials and get more engagement!",
         "solicitText": "Please give me your opinion on my action: {for}",
         "clickOnEarToSolicit": "Click on the ear to send them a survey asking for a testimonials."
       }
@@ -299,7 +298,7 @@
     },
     "sponsorships": {
       "list": "Sponsorships:",
-      "loading": "Sponsorships: Cargando...",
+      "loading": "Sponsorships: Loading...",
       "none": "There are no sponsorships.",
       "billingCycleStarted": "Billing cycle date started: {formattedDate}"
     },
@@ -463,7 +462,7 @@
       "title": "Your member page",
       "initiatives": {
         "title": "Your Initiatives",
-        "none": "There are no Initiatives.",
+        "none": "There are no initiatives.",
         "loading": "Loading Initiatives..."
       },
       "signOut": "Sign Out",

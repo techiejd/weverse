@@ -9,6 +9,7 @@ const config: Config = {
     preflight: false,
   },
   plugins: [
+    require("@tailwindcss/aspect-ratio"),
     require("tailwindcss-themer")({
       themes: [
         {
