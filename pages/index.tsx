@@ -294,7 +294,7 @@ const IndexPage = () => {
           </FormControl>
         )}
       </Stack>
-      <Grid container spacing={1} pl={1} pr={1}>
+      <Grid container>
         {displayedActions.map((action) => (
           <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={action.id}>
             <ImpactCard posiData={action} />
