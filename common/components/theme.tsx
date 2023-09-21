@@ -60,6 +60,13 @@ const baseConfiguration = {
         required: false,
       },
     },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          whiteSpace: "pre-wrap",
+        },
+      },
+    },
   },
   typography: {
     fontFamily: interFont.style.fontFamily,
