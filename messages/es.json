@@ -59,12 +59,13 @@
   },
   "common": {
     "loading": "Cargando",
-    "motto": "Sea parte de la solución",
+    "motto": "{tense, select, imperative {Sea parte de la solución} other {Sos parte de la solución}}",
     "logInPrompt": "Regístrate si no lo has hecho. Inicia sesión si ya estás registrado.",
     "pageTitle": {
       "byOneWe": "hecho por OneWe"
     },
     "callToAction": {
+      "countMeIn": "Me sumo",
       "edit": "Editar",
       "actions": {
         "list": "Acciones",

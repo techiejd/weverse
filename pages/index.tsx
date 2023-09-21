@@ -253,7 +253,9 @@ const IndexPage = () => {
         spacing={3}
       >
         <Typography fontSize={25} variant="h2" textAlign="center" pb={1}>
-          {commonTranslations("motto")}
+          {commonTranslations("motto", {
+            tense: myMember ? "present" : "imperative",
+          })}
         </Typography>
         <Fab
           variant="extended"
@@ -263,7 +265,7 @@ const IndexPage = () => {
         >
           <PlusOne sx={{ mr: 1 }} />
           <Typography>
-            {commonTranslations("callToAction.actions.add")}
+            {commonTranslations("callToAction.countMeIn")}
           </Typography>
         </Fab>
         {myMemberLoading ? (
