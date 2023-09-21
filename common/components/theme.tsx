@@ -63,7 +63,7 @@ const baseConfiguration = {
     MuiTypography: {
       styleOverrides: {
         root: {
-          whiteSpace: "pre-wrap",
+          whiteSpace: "pre-wrap" as any,
         },
       },
     },
