@@ -1,7 +1,12 @@
 import {
   Box,
+  Button,
   Checkbox,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Fab,
   FormControl,
   FormControlLabel,
@@ -41,7 +46,20 @@ import { Locale, PosiFormData, locale } from "../functions/shared/src";
 import ImpactCard from "../modules/posi/action/card";
 import Link from "next/link";
 import Image from "next/image";
-import { useMyMember } from "../common/context/weverseUtils";
+import {
+  useInitiative,
+  useMyMember,
+  useMySponsorships,
+} from "../common/context/weverseUtils";
+import ShareActionArea from "../common/components/shareActionArea";
+import AuthDialog from "../modules/auth/AuthDialog";
+import { AuthAction } from "../modules/auth/AuthDialog/context";
+import Sponsor from "../modules/initiatives/sponsor";
+import { useRouter } from "next/router";
+import Share from "@mui/icons-material/Share";
+import Login from "@mui/icons-material/Login";
+import Campaign from "@mui/icons-material/Campaign";
+import HeartHandshakeIcon from "../common/svg/HeartHandshake";
 
 export const getStaticProps = WithTranslationsStaticProps();
 
@@ -120,6 +138,119 @@ const BottomBar = () => {
   );
 };
 
+const CountMeInDialog = ({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) => {
+  const inputTranslations = useTranslations("input");
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const [myMember, setMyMember] = useMyMember();
+  const [oneWeInitiative] = useInitiative("275EEG2k7FUKYCITnk0Z");
+  const [sponsorOneWeOpen, setSponsorOneWeOpen] = useState(false);
+  const [sponsorships] = useMySponsorships();
+  const sponsoring =
+    oneWeInitiative && sponsorships
+      ? sponsorships.some(
+          (s) => s.initiative == oneWeInitiative.id && !!s.paymentsStarted
+        )
+      : false;
+  const closeSponsorOneWe = useCallback(() => {
+    setSponsorOneWeOpen(false);
+  }, [setSponsorOneWeOpen]);
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <AuthDialog
+        open={authDialogOpen}
+        setOpen={setAuthDialogOpen}
+        initialAuthAction={AuthAction.register}
+      />
+      <Dialog open={sponsorOneWeOpen} fullScreen>
+        {oneWeInitiative && (
+          <Sponsor
+            exitButtonBehavior={{
+              onClick: closeSponsorOneWe,
+            }}
+            beneficiary={oneWeInitiative}
+          />
+        )}
+      </Dialog>
+      <DialogTitle>{"Great to have you onboard!"}</DialogTitle>
+      <DialogContent>
+        <Typography>{"Contribute to the OneWe movement."}</Typography>
+        <br />
+        <Stack spacing={1}>
+          <div className="aspect-w-16 aspect-h-9">
+            <iframe
+              src="https://www.youtube.com/embed/DkWCwOT9r24?si=MTCz03QyD02od0zx"
+              title="What is an action? YT Video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            ></iframe>
+          </div>
+          {!sponsoring && (
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setSponsorOneWeOpen(true);
+              }}
+              startIcon={<HeartHandshakeIcon />}
+            >
+              Sponsor OneWe
+            </Button>
+          )}
+          <Button
+            variant="outlined"
+            href="/posi/upload"
+            startIcon={<PlusOne />}
+          >
+            Upload an action
+          </Button>
+          {!myMember && (
+            <Button
+              variant="outlined"
+              startIcon={<Login />}
+              onClick={() => setAuthDialogOpen(true)}
+            >
+              Register as a member (or login)
+            </Button>
+          )}
+          <Button
+            variant="outlined"
+            href="/initiatives/275EEG2k7FUKYCITnk0Z/impact/upload"
+            startIcon={<Campaign />}
+          >
+            Give OneWe a testimonial
+          </Button>
+          <ShareActionArea
+            shareProps={{
+              path: "/",
+              title: "Join the OneWe movement",
+            }}
+          >
+            <Button variant="outlined" startIcon={<Share />}>
+              Share
+            </Button>
+          </ShareActionArea>
+        </Stack>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            onClose();
+          }}
+        >
+          {inputTranslations("close")}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 const IndexPage = () => {
   //TODO(techiejd): WET code, refactor
   const commonTranslations = useTranslations("common");
@@ -140,6 +271,15 @@ const IndexPage = () => {
   const [chosenLocales, setChosenLocales] = useState<Locale[]>(
     myMember?.settings?.locales ?? [userLocale as Locale]
   );
+  const router = useRouter();
+  const [countMeInDialogOpen, setCountMeInDialogOpen] = useState(false);
+  console.log({ countMeInDialogOpen });
+  useEffect(() => {
+    if (router.isReady) {
+      const { requestCountMeInDialogOpen } = router.query;
+      setCountMeInDialogOpen(Boolean(requestCountMeInDialogOpen));
+    }
+  }, [router.isReady, router.query]);
 
   useEffect(() => {
     if (myMember?.settings?.locales) {
@@ -259,19 +399,31 @@ const IndexPage = () => {
         </Typography>
         <Fab
           variant="extended"
-          href="/posi/upload"
           color="primary"
           sx={{ width: "fit-content" }}
+          onClick={() => {
+            setCountMeInDialogOpen(true);
+          }}
         >
           <PlusOne sx={{ mr: 1 }} />
           <Typography>
             {commonTranslations("callToAction.countMeIn")}
           </Typography>
+          <CountMeInDialog
+            open={countMeInDialogOpen}
+            onClose={() => {
+              setCountMeInDialogOpen(false);
+            }}
+          />
         </Fab>
         {myMemberLoading ? (
           <CircularProgress />
         ) : (
-          <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
+          <FormControl
+            sx={{ m: 3, pl: 2 }}
+            component="fieldset"
+            variant="standard"
+          >
             <FormLabel component="legend">{t("seeContentIn")}</FormLabel>
             <FormGroup row>
               {possibleLocales.map((l) => (

@@ -60,21 +60,16 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
         <Box textAlign={"center"} width="fit-content">
           <Typography variant="h1">{t("title")}</Typography>
         </Box>
-        <Accordion sx={{ width: "100%", maxWidth: 560 }}>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            <Typography>{t("whatIsAnAction")}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <div className="aspect-w-16 aspect-h-9">
-              <iframe
-                src="https://www.youtube.com/embed/DkWCwOT9r24?si=MTCz03QyD02od0zx"
-                title="What is an action? YT Video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              ></iframe>
-            </div>
-          </AccordionDetails>
-        </Accordion>
+        <Box width={"100%"} maxWidth={"600px"}>
+          <div className="aspect-w-16 aspect-h-9">
+            <iframe
+              src="https://www.youtube.com/embed/DkWCwOT9r24?si=MTCz03QyD02od0zx"
+              title="What is an action? YT Video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </Box>
       </Stack>
       {user ? (
         <PosiForm
