@@ -299,7 +299,7 @@
       "title": "Initiative"
     },
     "sponsorships": {
-      "list": "Sponsorships:",
+      "list": "Joined:",
       "loading": "Sponsorships: Cargando...",
       "none": "There are no sponsorships.",
       "billingCycleStarted": "Billing cycle date started: {formattedDate}"

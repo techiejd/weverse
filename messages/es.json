@@ -299,7 +299,7 @@
       "title": "Iniciativa"
     },
     "sponsorships": {
-      "list": "Patrocinios:",
+      "list": "Unidos:",
       "loading": "Patrocinios: Cargando...",
       "none": "No hay patrocinios.",
       "billingCycleStarted": "Ciclo de facturación iniciado: {formattedDate}"

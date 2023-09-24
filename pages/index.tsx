@@ -147,7 +147,7 @@ const CountMeInDialog = ({
 }) => {
   const inputTranslations = useTranslations("input");
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
-  const [myMember, setMyMember] = useMyMember();
+  const [myMember] = useMyMember();
   const [oneWeInitiative] = useInitiative("275EEG2k7FUKYCITnk0Z");
   const [sponsorOneWeOpen, setSponsorOneWeOpen] = useState(false);
   const [sponsorships] = useMySponsorships();
@@ -184,10 +184,9 @@ const CountMeInDialog = ({
         <Stack spacing={1}>
           <div className="aspect-w-16 aspect-h-9">
             <iframe
-              src="https://www.youtube.com/embed/DkWCwOT9r24?si=MTCz03QyD02od0zx"
-              title="What is an action? YT Video"
+              src="https://www.youtube.com/embed/8dIKfizbirA?si=9bzRmB_x61ye9ngO"
+              title="How to join vid"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
             ></iframe>
           </div>
           {!sponsoring && (
