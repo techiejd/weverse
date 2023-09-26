@@ -383,7 +383,6 @@
       "chooseInitiativeType": {
         "individual": "Je travaille seul",
         "organization": "Je fais partie d'une organisation",
-        "entityInformation": "Informations sur l'entité",
         "organizationType": {
           "namePrompt": "Quel est le nom de l'organisation ?",
           "title": "Type d'organisation"

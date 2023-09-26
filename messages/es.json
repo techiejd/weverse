@@ -386,7 +386,7 @@
       "chooseInitiativeType": {
         "individual": "Trabajo solo",
         "organization": "Pertenezco a una organización",
-        "entityInformation": "Información de la entidad",
+        "essentialInformation": "Información esencial de la iniciativa",
         "organizationType": {
           "namePrompt": "¿Cómo se llama la organización?",
           "title": "Tipo de organización"
