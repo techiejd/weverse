@@ -89,6 +89,7 @@ export const initiative = dbBase
     email: z.string().optional(),
     incubator: z.string().optional(),
     ratings: ratings.optional(),
+    visibility: z.enum(["public", "spotlighted"]).optional(),
   })
   .merge(
     createNestedLocalizedSchema(initiativePresentationExtension.optional())

@@ -6,6 +6,7 @@ import {
   FormControlLabel,
   Radio,
   TextField,
+  FormHelperText,
 } from "@mui/material";
 import { useTranslations } from "next-intl";
 import {
@@ -35,7 +36,7 @@ const InitiativeInput = ({
   setVal: Dispatch<SetStateAction<Initiative>>;
   locale2Messages: Locale2Messages;
 }) => {
-  const initiativeChange = (
+  const initiativeTypeChange = (
     e: ChangeEvent<HTMLInputElement>,
     value: string
   ) => {
@@ -76,7 +77,7 @@ const InitiativeInput = ({
   const inputTranslations = useTranslations("input");
   return (
     <Stack alignItems={"center"}>
-      <Stack sx={sectionStyles}>
+      <Stack sx={sectionStyles} spacing={2}>
         <Typography variant="h2">
           {chooseInitiativeTypeTranslations("essentialInformation")}
         </Typography>
@@ -84,7 +85,7 @@ const InitiativeInput = ({
           <RadioGroup
             name="chooseInitiativeType"
             row
-            onChange={initiativeChange}
+            onChange={initiativeTypeChange}
             value={val.type}
           >
             <FormControlLabel
@@ -133,6 +134,38 @@ const InitiativeInput = ({
             accept={"img"}
             metadata={{ initiativeId: "", userID: "" }}
           />
+        </Section>
+        <Section label={"Initiative's visibility"}>
+          <FormControl>
+            <RadioGroup name="chooseInitiativeVisibility">
+              <FormControlLabel
+                value="spotlighted"
+                control={<Radio required />}
+                label={
+                  <Typography>
+                    Spotlighted
+                    <FormHelperText>
+                      This is your best work and it ends up on {`everyone's`}{" "}
+                      feed.
+                    </FormHelperText>
+                  </Typography>
+                }
+              />
+              <FormControlLabel
+                value="public"
+                control={<Radio required />}
+                label={
+                  <Typography>
+                    Public
+                    <FormHelperText>
+                      Perfect for fun and for sharing with family, friends, and
+                      colleagues.
+                    </FormHelperText>
+                  </Typography>
+                }
+              />
+            </RadioGroup>
+          </FormControl>
         </Section>
       </Stack>
       <DetailedInput val={val} setVal={setVal} locale={val.locale!} />

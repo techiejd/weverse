@@ -218,6 +218,7 @@ const AuthDialogContent = ({
                 ownerId: userCred.user.uid,
                 name: authDialogState.name,
                 type: "individual",
+                visibility: "public",
               });
             })();
 

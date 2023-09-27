@@ -27,6 +27,7 @@ import {
   QueryDocumentSnapshot,
   startAfter,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import PlusOne from "@mui/icons-material/PlusOne";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -272,7 +273,6 @@ const IndexPage = () => {
   );
   const router = useRouter();
   const [countMeInDialogOpen, setCountMeInDialogOpen] = useState(false);
-  console.log({ countMeInDialogOpen });
   useEffect(() => {
     if (router.isReady) {
       const { requestCountMeInDialogOpen } = router.query;
@@ -325,6 +325,7 @@ const IndexPage = () => {
       collection(appState.firestore, "impacts").withConverter(
         posiFormDataConverter
       ),
+      where("visibility", "==", "spotlighted"),
       limit(batchSize),
       orderBy("createdAt", "desc")
     );
@@ -361,6 +362,7 @@ const IndexPage = () => {
       ),
       orderBy("createdAt", "desc"),
       startAfter(latestDoc),
+      where("visibility", "==", "spotlighted"),
       limit(batchSize)
     );
     getDocs(nextQuery).then((snap) => {
