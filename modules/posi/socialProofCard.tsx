@@ -84,7 +84,7 @@ const SocialProofCard = ({
           <Media
             video={{
               threshold: 0.9,
-              muted: false,
+              muted: true,
               controls: true,
               controlsList:
                 "play volume fullscreen nodownload noplaybackrate notimeline",
