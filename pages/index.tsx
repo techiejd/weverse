@@ -18,7 +18,7 @@ import {
   Typography,
 } from "@mui/material";
 import {
-  collection,
+  collectionGroup,
   doc,
   getDocs,
   limit,
@@ -48,6 +48,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   useInitiative,
+  useMyInitiatives,
   useMyMember,
   useMySponsorships,
 } from "../common/context/weverseUtils";
@@ -65,6 +66,12 @@ export const getStaticProps = WithTranslationsStaticProps();
 
 const BottomBar = () => {
   const [myMember] = useMyMember();
+  const [myInitatives] = useMyInitiatives();
+  const firstInitiative = myInitatives?.[0];
+  const uploadActionPath =
+    myMember && firstInitiative
+      ? `${firstInitiative.path}/actions/upload`
+      : "/members/undefined/initiatives/undefined/actions/upload";
   useEffect(() => {
     const scrollAnimElements = document.querySelectorAll(
       "[data-animate-on-scroll]"
@@ -105,7 +112,7 @@ const BottomBar = () => {
       <Link
         href={
           myMember
-            ? `/members/${myMember.id}`
+            ? `${myMember.path}`
             : "/members/logIn?registerRequested=true"
         }
         style={{ textDecoration: "none" }}
@@ -121,7 +128,7 @@ const BottomBar = () => {
         </div>
       </Link>
       <Link
-        href="/posi/upload"
+        href={uploadActionPath}
         style={{ textDecoration: "none" }}
         className="cursor-pointer [border:none] py-2 px-2.5 bg-[transparent] overflow-hidden flex flex-row items-start justify-start"
       >
@@ -148,13 +155,15 @@ const CountMeInDialog = ({
   const inputTranslations = useTranslations("input");
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [myMember] = useMyMember();
-  const [oneWeInitiative] = useInitiative("275EEG2k7FUKYCITnk0Z");
+  const [oneWeInitiative] = useInitiative(
+    "/members/Xhge4AaVYBRGqAObaIMYBLSlaf42/initiatives/275EEG2k7FUKYCITnk0Z"
+  );
   const [sponsorOneWeOpen, setSponsorOneWeOpen] = useState(false);
-  const [sponsorships] = useMySponsorships();
+  const [mySponsorships] = useMySponsorships();
   const sponsoring =
-    oneWeInitiative && sponsorships
-      ? sponsorships.some(
-          (s) => s.initiative == oneWeInitiative.id && !!s.paymentsStarted
+    oneWeInitiative && mySponsorships
+      ? mySponsorships.some(
+          (s) => s.initiative == oneWeInitiative.path && !!s.paymentsStarted
         )
       : false;
   const closeSponsorOneWe = useCallback(() => {
@@ -218,7 +227,7 @@ const CountMeInDialog = ({
           )}
           <Button
             variant="outlined"
-            href="/initiatives/275EEG2k7FUKYCITnk0Z/impact/upload"
+            href="/members/Xhge4AaVYBRGqAObaIMYBLSlaf42/initiatives/275EEG2k7FUKYCITnk0Z/impact/upload"
             startIcon={<Campaign />}
           >
             Give OneWe a testimonial
@@ -272,7 +281,6 @@ const IndexPage = () => {
   );
   const router = useRouter();
   const [countMeInDialogOpen, setCountMeInDialogOpen] = useState(false);
-  console.log({ countMeInDialogOpen });
   useEffect(() => {
     if (router.isReady) {
       const { requestCountMeInDialogOpen } = router.query;
@@ -288,16 +296,15 @@ const IndexPage = () => {
 
   const addLocale = useCallback(
     (l: Locale) => {
-      if (!myMember || !myMember?.id) {
+      if (!myMember || !myMember?.path) {
         setChosenLocales((prev) => [...prev, l as Locale]);
+        return;
       }
       updateDoc(
-        doc(appState.firestore, "members", myMember!.id!).withConverter(
-          memberConverter
-        ),
+        doc(appState.firestore, myMember.path).withConverter(memberConverter),
         {
           settings: {
-            locales: [...(myMember!.settings?.locales ?? []), l as Locale],
+            locales: [...(myMember.settings?.locales ?? []), l as Locale],
           },
         }
       );
@@ -307,10 +314,11 @@ const IndexPage = () => {
 
   const removeLocale = useCallback(
     (l: Locale) => {
-      if (!myMember || !myMember?.id) {
+      if (!myMember || !myMember?.path) {
         setChosenLocales((prev) => prev.filter((cl) => cl != l));
+        return;
       }
-      updateDoc(doc(appState.firestore, "members", myMember!.id!), {
+      updateDoc(doc(appState.firestore, myMember.path), {
         settings: {
           locales: myMember!.settings?.locales?.filter((cl) => cl != l),
         },
@@ -322,7 +330,7 @@ const IndexPage = () => {
   useEffect(() => {
     let ignore = false;
     const firstQuery = query(
-      collection(appState.firestore, "impacts").withConverter(
+      collectionGroup(appState.firestore, "actions").withConverter(
         posiFormDataConverter
       ),
       limit(batchSize),
@@ -356,7 +364,7 @@ const IndexPage = () => {
       return;
     }
     const nextQuery = query(
-      collection(appState.firestore, "impacts").withConverter(
+      collectionGroup(appState.firestore, "actions").withConverter(
         posiFormDataConverter
       ),
       orderBy("createdAt", "desc"),
@@ -449,7 +457,7 @@ const IndexPage = () => {
       </Stack>
       <Grid container spacing={1} pl={1} pr={1}>
         {displayedActions.map((action) => (
-          <Grid item xs={12} md={6} lg={4} key={action.id}>
+          <Grid item xs={12} md={6} lg={4} key={action.path}>
             <ImpactCard posiData={action} />
           </Grid>
         ))}

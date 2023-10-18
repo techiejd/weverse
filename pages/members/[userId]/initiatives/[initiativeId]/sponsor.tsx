@@ -1,9 +1,9 @@
 import { CircularProgress } from "@mui/material";
-import { useCurrentInitiative } from "../../../modules/initiatives/context";
-import Sponsor from "../../../modules/initiatives/sponsor";
-import { WithTranslationsStaticProps } from "../../../common/utils/translations";
-import { CachePaths } from "../../../common/utils/staticPaths";
-import { asOneWePage } from "../../../common/components/onewePage";
+import { asOneWePage } from "../../../../../common/components/onewePage";
+import { CachePaths } from "../../../../../common/utils/staticPaths";
+import { WithTranslationsStaticProps } from "../../../../../common/utils/translations";
+import { useCurrentInitiative } from "../../../../../modules/initiatives/context";
+import Sponsor from "../../../../../modules/initiatives/sponsor";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();

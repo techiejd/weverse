@@ -6,20 +6,20 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import ShareActionArea from "../../../../common/components/shareActionArea";
 import Check from "@mui/icons-material/Check";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import Share from "@mui/icons-material/Share";
 import { useRouter } from "next/router";
-import { useCurrentInitiative } from "../../../../modules/initiatives/context";
+import { Fragment } from "react";
+import { asOneWePage } from "../../../../../../common/components/onewePage";
+import ShareActionArea from "../../../../../../common/components/shareActionArea";
+import { CachePaths } from "../../../../../../common/utils/staticPaths";
+import { WithTranslationsStaticProps } from "../../../../../../common/utils/translations";
+import { useCurrentInitiative } from "../../../../../../modules/initiatives/context";
 import {
   buildShareLinks,
   useCopyToClipboard,
-} from "../../../../modules/initiatives/inviteAnInitiative";
-import { Fragment } from "react";
-import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
-import { CachePaths } from "../../../../common/utils/staticPaths";
-import { asOneWePage } from "../../../../common/components/onewePage";
+} from "../../../../../../modules/initiatives/inviteAnInitiative";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -120,7 +120,7 @@ const SharePage = asOneWePage(() => {
           />
         ))}
 
-      <Button variant="outlined" href={`/initiatives/${initiative?.id}`}>
+      <Button variant="outlined" href={`${initiative?.path}`}>
         Volver a mi perfil
       </Button>
     </Stack>

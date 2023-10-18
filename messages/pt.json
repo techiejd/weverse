@@ -307,7 +307,6 @@
     },
     "incubateeEntrance": {
       "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>está convidando você a fazer parte de sua rede de incubadores.</prompt>",
-      "specialTitleForGWNLmXTQ3qXtpYSE6awp": "<prompt>Olá cozinheiro líder 😎, <initiativeNameTag>{initiativeName}</initiativeNameTag> está convidando você para celebrar o Dia Internacional do ID.</prompt>",
       "whyEnter": "Ao entrar na incubadora, você vai desfrutar da exposição e mentoria que vem com ela.",
       "callToAction": "Digite o incubador",
       "acceptedIncubateeInitiatives": "As iniciativas que tomaram o calabouço:",

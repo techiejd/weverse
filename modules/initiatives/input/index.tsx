@@ -131,7 +131,7 @@ const InitiativeInput = ({
             setMedia={setPic}
             maxFileSize={10485760 /** 10MB */}
             accept={"img"}
-            metadata={{ initiativeId: "", userID: "" }}
+            metadata={{ initiativePath: val.path || "" }}
           />
         </Section>
       </Stack>

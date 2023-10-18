@@ -14,12 +14,15 @@ import { useAppState } from "../../../../common/context/appState";
 import {
   useInitiativeTypeLabel,
   useLikesCount,
-  useInitiative,
   useMyLikes,
   useMyMember,
 } from "../../../../common/context/weverseUtils";
-import { useLikeConverter } from "../../../../common/utils/firebase";
+import {
+  useFromConverter,
+  useLikeConverter,
+} from "../../../../common/utils/firebase";
 import { PosiFormData } from "../../../../functions/shared/src";
+import { useInitiative } from "../../context";
 
 const transaparentPillBox = {
   minHeight: "33px",
@@ -39,7 +42,7 @@ const LikesDisplay = ({
 }) => {
   const appState = useAppState();
   const [myMember, myMemberLoading, myMemberError] = useMyMember();
-  const likes = useLikesCount(action.id);
+  const likes = useLikesCount(action.path);
   const [localChange, setLocalChange] = useState<
     "increment" | "decrement" | undefined
   >();
@@ -48,40 +51,39 @@ const LikesDisplay = ({
     likes +
     (localChange == undefined ? 0 : localChange == "increment" ? 1 : -1);
   const myLikes = useMyLikes();
-  const liked = myLikes.includes(String(action.id));
+  const liked = myLikes.includes(String(action.path));
   const likeConverter = useLikeConverter();
+  const fromConverter = useFromConverter();
   const updateLikes = async (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (updating || action.id == undefined || myMember?.id == undefined) {
-      if (myMember?.id == undefined) {
+    if (updating || action.path == undefined || myMember?.path == undefined) {
+      if (myMember?.path == undefined) {
         setLogInPromptOpen(true);
       }
       return;
     }
     const batch = writeBatch(appState.firestore);
-    const actionLikeDoc = doc(
-      appState.firestore,
-      "impacts",
-      action.id,
-      "likes",
-      myMember.id
-    ).withConverter(likeConverter);
+    const likePath =
+      action.path + "/likes/" + myMember.path.replaceAll("/", "_");
+    const actionLikeDoc = doc(appState.firestore, likePath).withConverter(
+      likeConverter
+    );
     const memberLikeDoc = doc(
       appState.firestore,
-      "members",
-      myMember.id,
-      "likes",
-      action.id
-    ).withConverter(likeConverter);
+      myMember.path,
+      "from",
+      likePath.replaceAll("/", "_")
+    ).withConverter(fromConverter);
     const commit = async () => {
       setUpdating(true);
       await batch.commit();
       setUpdating(false);
     };
     const increment = async () => {
-      batch.set(actionLikeDoc, {});
-      batch.set(memberLikeDoc, {});
+      const actionLike = { path: likePath };
+      batch.set(actionLikeDoc, actionLike);
+      batch.set(memberLikeDoc, { type: "like", data: actionLike });
       await commit();
     };
     const decrement = async () => {
@@ -138,7 +140,7 @@ const OverlayInfo = ({
   action: PosiFormData;
   setLogInPromptOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [initiative] = useInitiative(action.initiativeId);
+  const [initiative] = useInitiative(action);
   const initiativeTypeLabel = useInitiativeTypeLabel(initiative);
 
   return (

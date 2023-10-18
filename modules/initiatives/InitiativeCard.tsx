@@ -14,13 +14,14 @@ import { useInitiative } from "../../common/context/weverseUtils";
 import RatingsStack from "../../common/components/ratings";
 import { useTranslations } from "next-intl";
 
-const InitiativeCard = ({ initiativeId }: { initiativeId: string }) => {
-  const [value, loading] = useInitiative(initiativeId);
+const InitiativeCard = ({ initiativePath }: { initiativePath: string }) => {
+  console.log({ initiativePath });
+  const [value, loading] = useInitiative(initiativePath);
   const initiativeCardTranslations = useTranslations("initiatives.card");
-
+  console.log({ initiativePath });
   return (
     <Card sx={{ width: "100%" }}>
-      <CardActionArea href={`/initiatives/${initiativeId}`}>
+      <CardActionArea href={"/" + initiativePath}>
         <CardHeader
           avatar={
             <Icon>

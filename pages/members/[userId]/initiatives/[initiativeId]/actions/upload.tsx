@@ -1,28 +1,22 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
-import { useAppState } from "../../common/context/appState";
-import { useRouter } from "next/router";
-import PosiForm from "../../modules/posi/action/form";
-import LogInPrompt from "../../common/components/logInPrompt";
-import { usePosiFormDataConverter } from "../../common/utils/firebase";
-import { PosiFormData, locale } from "../../functions/shared/src";
-import {
-  Locale2Messages,
-  WithTranslationsStaticProps,
-  spreadTranslationsStaticProps,
-} from "../../common/utils/translations";
-import { asOneWePage } from "../../common/components/onewePage";
 import { useCallback } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import ExpandMore from "@mui/icons-material/ExpandMore";
+import { useRouter } from "next/router";
+import LogInPrompt from "../../../../../../common/components/logInPrompt";
+import { asOneWePage } from "../../../../../../common/components/onewePage";
+import { useAppState } from "../../../../../../common/context/appState";
+import { usePosiFormDataConverter } from "../../../../../../common/utils/firebase";
+import {
+  WithTranslationsStaticProps,
+  spreadTranslationsStaticProps,
+  Locale2Messages,
+} from "../../../../../../common/utils/translations";
+import { PosiFormData, locale } from "../../../../../../functions/shared/src";
+import PosiForm from "../../../../../../modules/posi/action/form";
+import { CachePaths } from "../../../../../../common/utils/staticPaths";
 
+export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps(
   spreadTranslationsStaticProps
 );
@@ -36,7 +30,7 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
   const onSubmit = useCallback(
     async (usersPosi: PosiFormData) => {
       const docRef = await addDoc(
-        collection(appState.firestore, "impacts").withConverter(
+        collection(appState.firestore, "actions").withConverter(
           posiFormDataConverter
         ),
         usersPosi

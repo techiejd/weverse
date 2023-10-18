@@ -21,6 +21,7 @@ import { useMyMember } from "../../../../common/context/weverseUtils";
 import {
   useSponsorshipConverter,
   useMemberConverter,
+  useFromConverter,
 } from "../../../../common/utils/firebase";
 import { Step } from "./utils";
 import Details from "../common/details";
@@ -43,6 +44,7 @@ const Pay = ({
   const StripePortal = () => {
     const memberConverter = useMemberConverter();
     const sponsorshipConverter = useSponsorshipConverter();
+    const fromConverter = useFromConverter();
     const stripe = useStripe();
     const elements = useElements();
     const [errorMessage, setErrorMessage] = useState("");
@@ -114,32 +116,30 @@ const Pay = ({
         }
 
         const batch = writeBatch(appState.firestore);
+        const sponsorshipPath =
+          beneficiary.path! + "/sponsorships/" + myMember.path!;
         const updateSponsorshipData = {
           paymentsStarted: new Date(paymentIntent!.created * 1000),
         };
         batch.update(
-          doc(
-            appState.firestore,
-            "initiatives",
-            beneficiary.id!,
-            "sponsorships",
-            myMember.id!
-          ).withConverter(sponsorshipConverter),
+          doc(appState.firestore, sponsorshipPath).withConverter(
+            sponsorshipConverter
+          ),
           updateSponsorshipData
         );
         batch.update(
           doc(
             appState.firestore,
             "members",
-            myMember.id!,
-            "sponsorships",
-            beneficiary.id!
-          ).withConverter(sponsorshipConverter),
-          updateSponsorshipData
+            myMember.path!,
+            "from",
+            sponsorshipPath.replaceAll("/", "_")
+          ).withConverter(fromConverter),
+          { type: "sponsorship", data: updateSponsorshipData }
         );
 
         batch.update(
-          doc(appState.firestore, "members", myMember.id!).withConverter(
+          doc(appState.firestore, "members", myMember.path!).withConverter(
             memberConverter
           ),
           { "stripe.status": "active" }

@@ -1,10 +1,4 @@
 import { useTranslations } from "next-intl";
-import { useCurrentInitiative } from "../../../modules/initiatives/context";
-import {
-  useCurrentIncubatees,
-  useInitiative,
-  useMyInitiative,
-} from "../../../common/context/weverseUtils";
 import {
   Stack,
   Avatar,
@@ -18,19 +12,25 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import LogInPrompt from "../../../common/components/logInPrompt";
-import { sectionStyles } from "../../../common/components/theme";
-import { CachePaths } from "../../../common/utils/staticPaths";
-import { asOneWePage } from "../../../common/components/onewePage";
-import { WithTranslationsStaticProps } from "../../../common/utils/translations";
-import InitiativeCard from "../../../modules/initiatives/InitiativeCard";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import { useAppState } from "../../../common/context/appState";
 import { deleteDoc, doc, setDoc, updateDoc } from "firebase/firestore";
+import LogInPrompt from "../../../../../common/components/logInPrompt";
+import { asOneWePage } from "../../../../../common/components/onewePage";
+import { sectionStyles } from "../../../../../common/components/theme";
+import { useAppState } from "../../../../../common/context/appState";
 import {
   useIncubateeConverter,
   useInitiativeConverter,
-} from "../../../common/utils/firebase";
+} from "../../../../../common/utils/firebase";
+import { CachePaths } from "../../../../../common/utils/staticPaths";
+import { WithTranslationsStaticProps } from "../../../../../common/utils/translations";
+import InitiativeCard from "../../../../../modules/initiatives/InitiativeCard";
+import {
+  useMyInitiatives,
+  useCurrentIncubatees,
+  useInitiative,
+} from "../../../../../common/context/weverseUtils";
+import { useCurrentInitiative } from "../../../../../modules/initiatives/context";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -44,10 +44,10 @@ type DialogMode =
 
 const IncubateeEntrance = asOneWePage(() => {
   const [incubator] = useCurrentInitiative();
-  const [myInitiative] = useMyInitiative();
+  const [myInitiatives] = useMyInitiatives();
   const [theirIncubatees] = useCurrentIncubatees();
   const [acceptedIncubatees, setAcceptedIncubatees] = useState(
-    theirIncubatees?.filter((incubatee) => incubatee?.acceptedInvite)
+    theirIncubatees?.filter((incubatee) => incubatee?.initiativePath)
   );
   const t = useTranslations("initiatives.incubateeEntrance");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -57,25 +57,24 @@ const IncubateeEntrance = asOneWePage(() => {
   const initiativeConverter = useInitiativeConverter();
 
   const connectIncubateeToIncubator = useCallback(async () => {
-    if (myInitiative?.id && incubator?.id) {
+    if (myInitiatives && myInitiatives[0].path && incubator?.path) {
       const addInitiativeToIncubator = setDoc(
         doc(
           appState.firestore,
-          "initiatives",
-          incubator.id,
+          incubator.path,
           "incubatees",
-          myInitiative.id
+          myInitiatives[0].path.replaceAll("/", "_")
         ).withConverter(incubateeConverter),
         {
           acceptedInvite: true,
         }
       );
       const addIncubatorToInitiative = updateDoc(
-        doc(appState.firestore, "initiatives", myInitiative.id).withConverter(
+        doc(appState.firestore, myInitiatives[0].path).withConverter(
           initiativeConverter
         ),
         {
-          incubator: incubator.id,
+          incubator: incubator.path,
         }
       );
       return Promise.all([addInitiativeToIncubator, addIncubatorToInitiative]);
@@ -83,9 +82,9 @@ const IncubateeEntrance = asOneWePage(() => {
   }, [
     appState.firestore,
     incubateeConverter,
-    incubator?.id,
+    incubator?.path,
     initiativeConverter,
-    myInitiative?.id,
+    myInitiatives,
   ]);
 
   useEffect(() => {
@@ -97,12 +96,12 @@ const IncubateeEntrance = asOneWePage(() => {
   useEffect(() => {
     if (
       acceptedIncubatees?.some(
-        (incubatee) => incubatee?.id === myInitiative?.id
+        (incubatee) => incubatee?.path === myInitiatives?.[0]?.path
       )
     ) {
       setDialogMode("success");
     }
-  }, [acceptedIncubatees, myInitiative]);
+  }, [acceptedIncubatees, myInitiatives]);
 
   const handleEnter = useCallback(() => {
     // We can assume the member is signed in and have an initiative at this point.
@@ -111,11 +110,14 @@ const IncubateeEntrance = asOneWePage(() => {
     // If the member's initiative is already an incubatee of the current initiative, we skip straight to the congratulations message.
     // If the member's initiative is the current incubator, we bring error letting user know they can not self incuabte.
     let dialogMode: DialogMode = "processing";
-    if (myInitiative?.id === incubator?.id) {
+    if (myInitiatives?.[0]?.path === incubator?.path) {
       dialogMode = "selfIncubationError";
       setDialogMode("selfIncubationError");
     }
-    if (myInitiative?.incubator && myInitiative?.incubator !== incubator?.id) {
+    if (
+      myInitiatives?.[0]?.incubator &&
+      myInitiatives?.[0]?.incubator !== incubator?.path
+    ) {
       dialogMode = "changeIncubatorPrompt";
       setDialogMode("changeIncubatorPrompt");
     }
@@ -124,22 +126,22 @@ const IncubateeEntrance = asOneWePage(() => {
       connectIncubateeToIncubator();
     }
     setDialogOpen(true);
-  }, [myInitiative, incubator, connectIncubateeToIncubator]);
+  }, [myInitiatives, incubator, connectIncubateeToIncubator]);
 
   const transferIncubateeFromPreviousIncubator = useCallback(async () => {
     // Simple, we just remove the incubatee from the previous incubator and
     // add it to the current incubator.
+    if (!myInitiatives?.[0]?.incubator || !myInitiatives[0].path) return;
     deleteDoc(
       doc(
         appState.firestore,
-        "initiatives",
-        myInitiative?.incubator!,
+        myInitiatives[0].incubator,
         "incubatees",
-        myInitiative?.id!
+        myInitiatives[0].path
       )
     );
     connectIncubateeToIncubator();
-  }, [appState.firestore, connectIncubateeToIncubator, myInitiative]);
+  }, [appState.firestore, connectIncubateeToIncubator, myInitiatives]);
 
   useEffect(() => {
     // If the current initiative is not an incubator, we open the dialog in notAnIncubatorError.
@@ -150,11 +152,11 @@ const IncubateeEntrance = asOneWePage(() => {
   }, [incubator]);
 
   const alreadyIncubated = acceptedIncubatees?.some(
-    (incubatee) => incubatee?.id === myInitiative?.id
+    (incubatee) => incubatee?.path === myInitiatives?.[0]?.path
   );
 
   const MyDialogContent = () => {
-    const [myIncubator] = useInitiative(myInitiative?.incubator);
+    const [myIncubator] = useInitiative(myInitiatives?.[0]?.incubator);
     const t = useTranslations("initiatives.incubateeEntrance.dialog");
     const commonTranslations = useTranslations("common");
     const inputTranslations = useTranslations("input");
@@ -193,10 +195,7 @@ const IncubateeEntrance = asOneWePage(() => {
             </DialogContent>
             <DialogActions>
               {homeButton}
-              <Button
-                variant="contained"
-                href={`/initiatives/${myInitiative?.id}`}
-              >
+              <Button variant="contained" href={`${myInitiatives?.[0]?.path}`}>
                 {t("viewMyInitiative")}
               </Button>
             </DialogActions>
@@ -214,7 +213,7 @@ const IncubateeEntrance = asOneWePage(() => {
                   incubatorName: myIncubator?.name,
                   incubatorNameTag: (incubatorName) => (
                     <Link
-                      href={`/initiatives/${myIncubator?.id}`}
+                      href={`${myInitiatives?.[0]?.path}`}
                     >{`${incubatorName}`}</Link>
                   ),
                 })}
@@ -271,42 +270,24 @@ const IncubateeEntrance = asOneWePage(() => {
           {incubator?.pic && (
             <Avatar src={incubator.pic} sx={{ width: 112, height: 112 }} />
           )}
-          {incubator?.id != "GWNLmXTQ3qXtpYSE6awp" &&
-            t.rich("title", {
-              initiativeName: incubator?.name,
-              initiativeNameTag: (initiativeName) => (
-                <Typography variant="h2">
-                  <Link
-                    href={`/initiatives/${incubator?.id}`}
-                    sx={{ color: "black" }}
-                  >{`${initiativeName}`}</Link>
-                </Typography>
-              ),
-              prompt: (p) => (
-                <Typography variant="h2" textAlign="center">
-                  {p}
-                </Typography>
-              ),
-            })}
-          {incubator?.id == "GWNLmXTQ3qXtpYSE6awp" &&
-            t.rich("specialTitleForGWNLmXTQ3qXtpYSE6awp", {
-              initiativeName: incubator?.name,
-              initiativeNameTag: (initiativeName) => (
-                <Typography variant="h2">
-                  <Link
-                    href={`/initiatives/${incubator?.id}`}
-                    sx={{ color: "black" }}
-                  >{`${initiativeName}`}</Link>
-                </Typography>
-              ),
-              prompt: (p) => (
-                <Typography variant="h2" textAlign="center">
-                  {p}
-                </Typography>
-              ),
-            })}
+          {t.rich("title", {
+            initiativeName: incubator?.name,
+            initiativeNameTag: (initiativeName) => (
+              <Typography variant="h2">
+                <Link
+                  href={`${incubator?.path}`}
+                  sx={{ color: "black" }}
+                >{`${initiativeName}`}</Link>
+              </Typography>
+            ),
+            prompt: (p) => (
+              <Typography variant="h2" textAlign="center">
+                {p}
+              </Typography>
+            ),
+          })}
 
-          {myInitiative && !alreadyIncubated && (
+          {myInitiatives && !alreadyIncubated && (
             <Stack
               spacing={2}
               sx={[
@@ -327,7 +308,7 @@ const IncubateeEntrance = asOneWePage(() => {
               </Button>
             </Stack>
           )}
-          {!myInitiative && <LogInPrompt title={t("logInPrompt")} />}
+          {!myInitiatives && <LogInPrompt title={t("logInPrompt")} />}
           {alreadyIncubated && (
             <Typography
               sx={[
@@ -358,7 +339,7 @@ const IncubateeEntrance = asOneWePage(() => {
             {acceptedIncubatees &&
               acceptedIncubatees.map((incubatee, idx) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={idx}>
-                  <InitiativeCard initiativeId={incubatee?.id!} />
+                  <InitiativeCard initiativePath={incubatee?.path!} />
                 </Grid>
               ))}
           </Grid>

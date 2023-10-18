@@ -3,10 +3,10 @@ import {
   useCollection,
   useCollectionData,
   useDocumentData,
-  useDocumentDataOnce,
 } from "react-firebase-hooks/firestore";
 import {
   collection,
+  collectionGroup,
   doc,
   getCountFromServer,
   query,
@@ -31,37 +31,29 @@ import {
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
 
-export const useMyInitiative = () => {
+export const useInitiatives = (memberPath: string | undefined) => {
   const appState = useAppState();
-  const { user } = appState.authState;
-  const memberConverter = useMemberConverter();
   const initiativeConverter = useInitiativeConverter();
-  const [member] = useDocumentData(
-    user
-      ? doc(appState.firestore, "members", user.uid).withConverter(
-          memberConverter
+  return useCollectionData(
+    memberPath
+      ? collection(appState.firestore, memberPath, "initiatives").withConverter(
+          initiativeConverter
         )
-      : undefined
-  );
-  return useDocumentData(
-    member && member.initiativeId
-      ? doc(
-          appState.firestore,
-          "initiatives",
-          member.initiativeId
-        ).withConverter(initiativeConverter)
       : undefined
   );
 };
 
-export const useMember = (memberId: string | undefined) => {
+export const useMyInitiatives = () => {
+  const [myMember] = useMyMember();
+  return useInitiatives(myMember?.path);
+};
+
+export const useMember = (memberPath: string | undefined) => {
   const appState = useAppState();
   const memberConverter = useMemberConverter();
   return useDocumentData(
-    memberId
-      ? doc(appState.firestore, "members", memberId).withConverter(
-          memberConverter
-        )
+    memberPath
+      ? doc(appState.firestore, memberPath).withConverter(memberConverter)
       : undefined
   );
 };
@@ -93,36 +85,39 @@ export const useCurrentMember = () => {
   );
 };
 
-export const useMyMemberOnce = () => {
-  const appState = useAppState();
-  const { user } = appState.authState;
-  const memberConverter = useMemberConverter();
-  return useDocumentDataOnce(
-    user
-      ? doc(appState.firestore, "members", user.uid).withConverter(
-          memberConverter
-        )
-      : undefined
+export const useIsMine = () => {
+  const [currentMember] = useCurrentMember();
+  const [myMember] = useMyMember();
+  return !!(
+    currentMember &&
+    myMember &&
+    currentMember.path &&
+    currentMember.path != "" &&
+    currentMember.path == myMember.path
   );
+};
+
+export const useCurrentInitiatives = () => {
+  const [currentMember] = useCurrentMember();
+  return useInitiatives(currentMember?.path);
 };
 
 export const useCurrentSponsorships = () => {
   const router = useRouter();
   const appState = useAppState();
   const { initiativeId, userId: memberId } = router.query;
-  const id = (initiativeId ? initiativeId : memberId) as string;
+  const sponsorshipCollectionPath = memberId
+    ? `members/${memberId}` +
+      (initiativeId ? `/initiatives/${initiativeId}` : ``) +
+      `/sponsorships`
+    : undefined;
   const sponsorshipConverter = useSponsorshipConverter();
 
-  const sponsorshipCollection =
-    initiativeId || memberId
-      ? collection(
-          appState.firestore,
-          initiativeId ? "initiatives" : "members",
-          id,
-          "sponsorships"
-        ).withConverter(sponsorshipConverter)
-      : undefined;
-
+  const sponsorshipCollection = sponsorshipCollectionPath
+    ? collection(appState.firestore, sponsorshipCollectionPath).withConverter(
+        sponsorshipConverter
+      )
+    : undefined;
   return useCollectionData(sponsorshipCollection);
 };
 
@@ -131,11 +126,10 @@ export const useMySponsorships = () => {
   const [myMember] = useMyMember();
   const sponsorshipConverter = useSponsorshipConverter();
   return useCollectionData(
-    myMember && myMember.id && myMember.id != ""
+    myMember && myMember.path
       ? collection(
           appState.firestore,
-          "members",
-          myMember.id,
+          myMember.path,
           "sponsorships"
         ).withConverter(sponsorshipConverter)
       : undefined
@@ -145,12 +139,11 @@ export const useMySponsorships = () => {
 export const useMyLikes = () => {
   const appState = useAppState();
   const { user } = useAppState().authState;
-  const [likesCollection, likesCollectionLoading, likesCollectionError] =
-    useCollection(
-      user
-        ? collection(appState.firestore, "members", user.uid, "likes")
-        : undefined
-    );
+  const [likesCollection] = useCollection(
+    user
+      ? collection(appState.firestore, "members", user.uid, "likes")
+      : undefined
+  );
   const [likes, setLikes] = useState<string[]>([]);
   useEffect(() => {
     if (likesCollection) {
@@ -161,46 +154,45 @@ export const useMyLikes = () => {
   return likes;
 };
 
-export const useLikesCount = (actionId: string | undefined) => {
+export const useLikesCount = (actionPath: string | undefined) => {
   const appState = useAppState();
   const [c, setC] = useState(0);
   useEffect(() => {
     (async () => {
-      if (actionId) {
+      if (actionPath) {
         setC(
           (
             await getCountFromServer(
-              collection(appState.firestore, "impacts", actionId, "likes")
+              collection(appState.firestore, actionPath, "likes")
             )
           ).data().count
         );
       }
     })();
-  }, [appState.firestore, actionId, setC]);
+  }, [appState.firestore, actionPath, setC]);
 
   return c;
 };
 
-export const useInitiative = (initiativeId: string | undefined) => {
+export const useInitiative = (initiativePath: string | undefined) => {
+  console.log({ initiativePath });
   const appState = useAppState();
   const initiativeConverter = useInitiativeConverter();
   return useDocumentData(
-    initiativeId
-      ? doc(appState.firestore, "initiatives", initiativeId).withConverter(
+    initiativePath
+      ? doc(appState.firestore, initiativePath).withConverter(
           initiativeConverter
         )
       : undefined
   );
 };
 
-export const useAction = (posiId: string | undefined) => {
+export const useAction = (posiPath: string | undefined) => {
   const appState = useAppState();
   const posiFormDataConverter = usePosiFormDataConverter();
   return useDocumentData(
-    posiId
-      ? doc(appState.firestore, "impacts", posiId).withConverter(
-          posiFormDataConverter
-        )
+    posiPath
+      ? doc(appState.firestore, posiPath).withConverter(posiFormDataConverter)
       : undefined
   );
 };
@@ -227,16 +219,16 @@ export const useSocialProofs = (
   );
 };
 
-export const useActions = (initiative: string | undefined) => {
+export const useActions = (initiativePath: string | undefined) => {
   const appState = useAppState();
   const posiFormDataConverter = usePosiFormDataConverter();
   return useCollectionData(
-    initiative
+    initiativePath
       ? query(
-          collection(appState.firestore, "impacts").withConverter(
+          collectionGroup(appState.firestore, "actions").withConverter(
             posiFormDataConverter
           ),
-          where("initiativeId", "==", initiative)
+          where("initiativePath", "==", initiativePath)
         )
       : undefined
   );
@@ -275,12 +267,14 @@ export const useInitiativeTypeLabel = (initiative?: Initiative) => {
 export const useCurrentIncubatees = () => {
   const router = useRouter();
   const appState = useAppState();
-  const { initiativeId } = router.query;
+  const { initiativeId, userId: memberId } = router.query;
   const incubateeConverter = useIncubateeConverter();
   return useCollectionData(
     initiativeId
       ? collection(
           appState.firestore,
+          "members",
+          memberId as string,
           "initiatives",
           initiativeId as string,
           "incubatees"
@@ -292,15 +286,16 @@ export const useCurrentIncubatees = () => {
 export const useCurrentNeedsValidation = () => {
   const router = useRouter();
   const appState = useAppState();
-  const { initiativeId } = router.query;
+  const { initiativeId, userId: memberId } = router.query;
   const posiFormDataConverter = usePosiFormDataConverter();
+  const path = "members/" + memberId + "/initiatives/" + initiativeId;
   return useCollectionData(
     initiativeId && initiativeId != ""
       ? query(
-          collection(appState.firestore, "impacts").withConverter(
+          collection(appState.firestore, "actions").withConverter(
             posiFormDataConverter
           ),
-          where("validation.validator", "==", initiativeId),
+          where("validation.validator", "==", path),
           where("validation.validated", "==", false)
         )
       : undefined

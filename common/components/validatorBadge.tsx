@@ -32,11 +32,7 @@ const ValidationProcessDialog = ({
             t("missingValidationProcess")}
         </Typography>
         <CardActions>
-          <Button
-            variant="text"
-            color="primary"
-            href={`/initiatives/${validator?.id}`}
-          >
+          <Button variant="text" color="primary" href={`${validator?.path}`}>
             {t("learnMore")}
           </Button>
           <Button

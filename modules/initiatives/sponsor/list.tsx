@@ -188,7 +188,7 @@ const Sponsorships = ({
             <SponsorshipDisplay
               type={myMember ? "for" : "from"}
               sponsorship={sponsorship}
-              key={sponsorship.id}
+              key={sponsorship.path}
               handleCancelSponsorship={handleCancelSponsorship}
               showAmount={showAmount}
             />

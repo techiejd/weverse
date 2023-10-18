@@ -121,8 +121,8 @@ export const actionDeleted = functions.firestore
         .where("forAction", "==", snapshot.id)
         .get(),
       snapshot.ref.collection("likes").get(),
-      action.initiativeId
-        ? store.doc(`initiatives/${action.initiativeId}`).get()
+      action.initiativePath
+        ? store.doc(`${action.initiativePath}`).get()
         : Promise.resolve(undefined),
     ];
 
@@ -140,10 +140,16 @@ export const actionDeleted = functions.firestore
     });
     likesCollection.forEach((likeSnapshot) => {
       const fromMember = likeSnapshot.id;
-      const memberLike = store.doc(`members/${fromMember}/likes/${action.id}`);
+      const memberLike = store.doc(
+        `members/${fromMember}/from/${likeSnapshot.ref.path.replace(
+          /\//g,
+          "_"
+        )}`
+      );
       batch.delete(memberLike);
       batch.delete(likeSnapshot.ref);
     });
+
     if (initiativeDoc && actionRatings.count) {
       const m = initiativeDoc.data();
       batch.update(initiativeDoc.ref, {

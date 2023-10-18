@@ -157,7 +157,7 @@ const AuthDialogContent = ({
       : null;
 
   // First we need to initiative sure that the invitedInitiative query param is valid.
-  // The invitedInitiative is a initiative whose ownerId is "invited".
+  // The invitedInitiative is a initiative whose member and initiative is "invited".
   useEffect(() => {
     if (invitedInitiative) {
       const initiativeDoc = doc(
@@ -229,7 +229,7 @@ const AuthDialogContent = ({
                 userCred.user.uid
               ).withConverter(memberConverter),
               {
-                initiativeId: initiativeDocRef.id,
+                initiativePath: initiativeDocRef.id,
                 name: authDialogState.name,
                 phoneNumber: {
                   countryCallingCode:

@@ -7,38 +7,42 @@ import {
   Typography,
 } from "@mui/material";
 import { FileInput } from "../../../modules/posi/input";
-import { addDoc, collection } from "firebase/firestore";
+import { doc, writeBatch } from "firebase/firestore";
 import { pickBy, identity } from "lodash";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { Initiative, Media, socialProof } from "../../../functions/shared/src";
-import { useMyInitiative } from "../../context/weverseUtils";
-import { useSocialProofConverter } from "../../utils/firebase";
-import { PosiFormData } from "../../../functions/shared/src";
+import { Media, socialProof } from "../../../functions/shared/src";
+import { useMyMember } from "../../context/weverseUtils";
+import {
+  useFromConverter,
+  useSocialProofConverter,
+} from "../../utils/firebase";
 import { useAppState } from "../../context/appState";
 import { useTranslations } from "next-intl";
+import { v4 } from "uuid";
+import { useCurrentInitiative } from "../../../modules/initiatives/context";
+import { useCurrentPosi } from "../../../modules/posi/context";
 
-const UploadSocialProofForm = ({
-  forInitiative,
-  forAction,
-}: {
-  forInitiative: Initiative;
-  forAction?: PosiFormData;
-}) => {
+const UploadSocialProofForm = () => {
   const appState = useAppState();
-  const [myInitiative, myInitiativeLoading, myInitiativeError] =
-    useMyInitiative();
+  const router = useRouter();
+  const { pathname } = router;
+  const forInitiative = useCurrentInitiative();
+  const forAction = useCurrentPosi();
+  const isAction = !!forAction;
+
+  const [myMember] = useMyMember();
   const [error, setError] = useState("");
   const [rating, setRating] = useState<number | null>(null);
   const [media, setMedia] = useState<Media | undefined | "loading">(undefined);
   const [text, setText] = useState("");
   const [uploading, setUploading] = useState(false);
   const needsRatingMsg = "Calificación necesaria.";
-  const router = useRouter();
   const formTranslations = useTranslations("testimonials.form");
   const inputTranslations = useTranslations("input");
   const maxLength = 500;
   const socialProofConverter = useSocialProofConverter();
+  const fromConverter = useFromConverter();
   useEffect(() => {
     if (error == needsRatingMsg && rating != null) {
       setError("");
@@ -53,15 +57,18 @@ const UploadSocialProofForm = ({
           return;
         }
 
-        if (myInitiative) {
+        if (myMember) {
+          const testimonialPath =
+            (forAction || forInitiative) + "/testimonials/" + v4();
           setUploading(true);
           const socialProofEncoded = socialProof.parse(
             pickBy(
               {
+                path: testimonialPath,
                 rating: rating,
-                byInitiative: myInitiative.id,
-                forInitiative: forInitiative.id,
-                forAction: forAction?.id,
+                fromMember: myMember.path,
+                forInitiative: forInitiative,
+                forAction: forAction,
                 videoUrl: media && media != "loading" ? media.url : undefined,
                 text: text != "" ? text : undefined,
               },
@@ -69,18 +76,25 @@ const UploadSocialProofForm = ({
             )
           );
 
-          await addDoc(
-            collection(appState.firestore, `socialProofs`).withConverter(
+          const batch = writeBatch(appState.firestore);
+          batch.set(
+            doc(appState.firestore, testimonialPath).withConverter(
               socialProofConverter
             ),
             socialProofEncoded
           );
+          batch.set(
+            doc(
+              appState.firestore,
+              myMember.path!,
+              "from",
+              testimonialPath.replaceAll("/", "_")
+            ).withConverter(fromConverter),
+            { type: "testimonial", data: socialProofEncoded }
+          );
+          await batch.commit();
 
-          forAction
-            ? router.push(`/posi/${forAction.id}/impact/upload/thanks`)
-            : router.push(
-                `/initiatives/${forInitiative.id}/impact/upload/thanks`
-              );
+          router.push(`${pathname}/thanks`);
         } else {
           setError("Internal error.");
         }
@@ -92,7 +106,7 @@ const UploadSocialProofForm = ({
         p={2}
       >
         <Typography variant="h2">
-          {formTranslations("rate", { forAction: !!forAction })}
+          {formTranslations("rate", { forAction: isAction })}
         </Typography>
         <Rating
           value={rating}
@@ -105,7 +119,7 @@ const UploadSocialProofForm = ({
         <Typography>
           {`${formTranslations("inVideoFormat")}, ${formTranslations(
             "whatImpactPrompt",
-            { forAction: !!forAction }
+            { forAction: isAction }
           )}`}
           <br />({formTranslations("videoSuggestions")})
         </Typography>
@@ -118,7 +132,7 @@ const UploadSocialProofForm = ({
         <Typography>
           {`${formTranslations("inTextFormat")}, ${formTranslations(
             "whatImpactPrompt",
-            { forAction: !!forAction }
+            { forAction: isAction }
           )}`}
           <br />(
           {formTranslations("andOptional", {
@@ -135,7 +149,7 @@ const UploadSocialProofForm = ({
           onChange={(e) => setText(e.target.value)}
           sx={{ maxWidth: 700, width: "100%" }}
         />
-        {myInitiative &&
+        {myMember &&
           (media == "loading" || uploading ? (
             <CircularProgress />
           ) : (

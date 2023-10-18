@@ -15,7 +15,6 @@ import {
   locale,
   posiFormData,
 } from "../../../functions/shared/src";
-import { useMyInitiative } from "../../../common/context/weverseUtils";
 import ValidatorInput from "../input/validatorInput";
 import { useTranslations } from "next-intl";
 import { sectionStyles } from "../../../common/components/theme";
@@ -23,6 +22,7 @@ import AddInternationalizedDetailedInput, {
   DetailedInputProps,
 } from "../../../common/components/addInternationalizedDetailedInput";
 import { Locale2Messages } from "../../../common/utils/translations";
+import { useCurrentInitiative } from "../../initiatives/context";
 
 type onInteractionProp =
   | { type: "create"; onSubmit: (posiFormData: PosiFormData) => Promise<void> }
@@ -61,10 +61,10 @@ const PosiForm = ({
     useState<WorkingCopyPosiFormData>(initialPosi);
   const [uploading, setUploading] = useState(false);
 
-  const [myInitiative] = useMyInitiative();
+  const [myInitiative] = useCurrentInitiative();
   useEffect(() => {
     if (myInitiative && setFormData) {
-      setFormData((fD) => ({ ...fD, initiativeId: myInitiative.id }));
+      setFormData((fD) => ({ ...fD, initiativePath: myInitiative.path }));
     }
   }, [myInitiative, setFormData]);
   const callToActionTranslations = useTranslations("common.callToAction");

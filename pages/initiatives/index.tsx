@@ -1,5 +1,8 @@
-import { useCollection } from "react-firebase-hooks/firestore";
-import { collection } from "firebase/firestore";
+import {
+  useCollection,
+  useCollectionData,
+} from "react-firebase-hooks/firestore";
+import { collection, collectionGroup } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import {
   Box,
@@ -26,7 +29,7 @@ import { useInitiativeConverter } from "../../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../../common/utils/translations";
 import { asOneWePage } from "../../common/components/onewePage";
 import { useTranslations } from "next-intl";
-import { useMyInitiative } from "../../common/context/weverseUtils";
+import { useMyInitiatives } from "../../common/context/weverseUtils";
 
 export const getStaticProps = WithTranslationsStaticProps();
 const MyInitiativeSpeedDial = ({ initiative }: { initiative: Initiative }) => {
@@ -38,18 +41,12 @@ const MyInitiativeSpeedDial = ({ initiative }: { initiative: Initiative }) => {
     <SpeedDialAction
       key="Ver"
       icon={
-        <Link
-          href={`/initiatives/${initiative.id}`}
-          style={{ textDecoration: "none" }}
-        >
+        <Link href={`${initiative.path}`} style={{ textDecoration: "none" }}>
           <Visibility />
         </Link>
       }
       tooltipTitle={
-        <Link
-          href={`/initiatives/${initiative.id}`}
-          style={{ textDecoration: "none" }}
-        >
+        <Link href={`${initiative.path}`} style={{ textDecoration: "none" }}>
           {t("view")}
         </Link>
       }
@@ -59,7 +56,7 @@ const MyInitiativeSpeedDial = ({ initiative }: { initiative: Initiative }) => {
       key={"Editar"}
       icon={
         <Link
-          href={`/initiatives/${initiative.id}/edit`}
+          href={`${initiative.path}/edit`}
           style={{ textDecoration: "none" }}
         >
           <Edit />
@@ -67,7 +64,7 @@ const MyInitiativeSpeedDial = ({ initiative }: { initiative: Initiative }) => {
       }
       tooltipTitle={
         <Link
-          href={`/initiatives/${initiative.id}/edit`}
+          href={`${initiative.path}/edit`}
           style={{ textDecoration: "none" }}
         >
           {callToActionTranslations("edit")}
@@ -81,7 +78,7 @@ const MyInitiativeSpeedDial = ({ initiative }: { initiative: Initiative }) => {
       tooltipTitle={callToActionTranslations("share")}
       tooltipOpen
       title={`Echa un vistazo a la página Initiative de ${initiative.name}`}
-      path={`/initiatives/${initiative.id}`}
+      path={`${initiative.path}`}
     />,
   ];
   return (
@@ -105,7 +102,7 @@ const MyInitiativeSpeedDial = ({ initiative }: { initiative: Initiative }) => {
 };
 
 const MyInitiativePortal = () => {
-  const [myInitiative, myInitiativeLoading] = useMyInitiative();
+  const [myInitiatives, myInitiativesLoading] = useMyInitiatives();
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const t = useTranslations("initiatives.myInitiativePortal");
 
@@ -130,10 +127,10 @@ const MyInitiativePortal = () => {
   return (
     <Box>
       <AuthDialog open={authDialogOpen} setOpen={setAuthDialogOpen} />
-      {myInitiativeLoading ? (
+      {myInitiativesLoading ? (
         <LoadingFab />
-      ) : myInitiative ? (
-        <MyInitiativeSpeedDial initiative={myInitiative} />
+      ) : myInitiatives ? (
+        <MyInitiativeSpeedDial initiative={myInitiatives[0]} />
       ) : (
         registerFab
       )}
@@ -144,24 +141,13 @@ const MyInitiativePortal = () => {
 const Initiatives = asOneWePage(() => {
   const appState = useAppState();
   const initiativeConverter = useInitiativeConverter();
-  const [initiativesSnapshot, initiativesLoading, initiativesError] =
-    useCollection(
-      collection(appState.firestore, "initiatives").withConverter(
-        initiativeConverter
-      )
-    );
+  const [initiatives, initiativesLoading, initiativesError] = useCollectionData(
+    collectionGroup(appState.firestore, "initiatives").withConverter(
+      initiativeConverter
+    )
+  );
   const initiativesTranslations = useTranslations("initiatives");
 
-  const [initiatives, setInitiatives] = useState<string[]>([]);
-
-  useEffect(() => {
-    initiativesSnapshot?.docChanges().forEach((docChange) => {
-      // TODO(techiejd): Look into the other scenarios.
-      if (docChange.type == "added") {
-        setInitiatives((initiatives) => [...initiatives, docChange.doc.id]);
-      }
-    });
-  }, [initiativesSnapshot]);
   return (
     <Box>
       <Stack
@@ -175,8 +161,8 @@ const Initiatives = asOneWePage(() => {
           </Typography>
         )}
         {initiativesLoading && <CircularProgress />}
-        {initiatives.map((initiative) => (
-          <InitiativeCard initiativeId={initiative} key={initiative} />
+        {initiatives?.map((i) => (
+          <InitiativeCard initiativePath={i.path!} key={i.path!} />
         ))}
       </Stack>
       <MyInitiativePortal />

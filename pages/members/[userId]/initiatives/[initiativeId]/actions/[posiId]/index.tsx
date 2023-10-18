@@ -12,30 +12,31 @@ import Handshake from "@mui/icons-material/Handshake";
 import Hearing from "@mui/icons-material/Hearing";
 import Share from "@mui/icons-material/Share";
 import { useState } from "react";
-import ShareActionArea from "../../../common/components/shareActionArea";
-import SolicitDialog from "../../../common/components/solicitHelpDialog";
-import {
-  useInitiative,
-  useMyInitiative,
-} from "../../../common/context/weverseUtils";
-import AboutContent from "../../../modules/posi/action/about";
-import {
-  useCurrentPosi,
-  useCurrentSocialProofs,
-} from "../../../modules/posi/context";
-import SupportBottomBar from "../../../common/components/supportBottomBar";
-import SocialProofCard from "../../../modules/posi/socialProofCard";
-import CenterBottomCircularProgress from "../../../common/components/centerBottomCircularProgress";
-import { Initiative, PosiFormData } from "../../../functions/shared/src";
-import CenterBottomFab from "../../../common/components/centerBottomFab";
-import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
+import { useTranslations } from "next-intl";
+import CenterBottomCircularProgress from "../../../../../../../common/components/centerBottomCircularProgress";
+import CenterBottomFab from "../../../../../../../common/components/centerBottomFab";
+import IconButtonWithLabel from "../../../../../../../common/components/iconButtonWithLabel";
+import { asOneWePage } from "../../../../../../../common/components/onewePage";
+import ShareActionArea from "../../../../../../../common/components/shareActionArea";
+import SolicitDialog from "../../../../../../../common/components/solicitHelpDialog";
+import SupportBottomBar from "../../../../../../../common/components/supportBottomBar";
+import { useIsMine } from "../../../../../../../common/context/weverseUtils";
+import { CachePaths } from "../../../../../../../common/utils/staticPaths";
 import {
   WithTranslationsStaticProps,
   useLocalizedPresentationInfo,
-} from "../../../common/utils/translations";
-import { CachePaths } from "../../../common/utils/staticPaths";
-import { useTranslations } from "next-intl";
-import { asOneWePage } from "../../../common/components/onewePage";
+} from "../../../../../../../common/utils/translations";
+import {
+  PosiFormData,
+  Initiative,
+} from "../../../../../../../functions/shared/src";
+import AboutContent from "../../../../../../../modules/posi/action/about";
+import {
+  useCurrentPosi,
+  useCurrentSocialProofs,
+  useInitiative,
+} from "../../../../../../../modules/posi/context";
+import SocialProofCard from "../../../../../../../modules/posi/socialProofCard";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -48,7 +49,7 @@ const AdminBottomBar = ({
   myInitiative: Initiative;
 }) => {
   const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
-  const solicitOpinionPath = `/posi/${action.id}/impact/upload`;
+  const solicitOpinionPath = `${action.path}/impact/upload`;
   const callToActionTranslations = useTranslations("common.callToAction");
   const solicitTranslations = useTranslations("actions.solicit");
   const presentationInfo = useLocalizedPresentationInfo(action);
@@ -63,12 +64,12 @@ const AdminBottomBar = ({
         open={solicitDialogOpen}
         setOpen={setSolicitDialogOpen}
         howToSupport={initiativePresentationInfo?.howToSupport || {}}
-        solicitOpinionPath={`/posi/${action.id}/impact/upload`}
-        pathUnderSupport={`/posi/${action.id}`}
-        editInitiativePath={`/initiatives/${myInitiative.id}/edit`}
+        solicitOpinionPath={`${action.path}/impact/upload`}
+        pathUnderSupport={`${action.path}`}
+        editInitiativePath={`${myInitiative.path}/edit`}
       />
       <Toolbar>
-        <IconButtonWithLabel href={`/posi/${action.id}/action/edit`}>
+        <IconButtonWithLabel href={`${action.path}/action/edit`}>
           <Edit />
           <Typography>{callToActionTranslations("edit")}</Typography>
         </IconButtonWithLabel>
@@ -103,7 +104,7 @@ const AdminBottomBar = ({
         </ShareActionArea>
         <ShareActionArea
           shareProps={{
-            path: `/posi/${action.id}`,
+            path: `${action.path}`,
             title: solicitTranslations("requests.look"),
           }}
         >
@@ -122,8 +123,8 @@ const AdminBottomBar = ({
 const Index = asOneWePage(() => {
   const [posiData, loading, error] = useCurrentPosi();
   const [socialProofs] = useCurrentSocialProofs();
-  const [myInitiative] = useMyInitiative();
-  const [initiative] = useInitiative(posiData?.initiativeId);
+  const isMine = useIsMine();
+  const [initiative] = useInitiative(posiData);
 
   const Loading = () => {
     return (
@@ -164,11 +165,10 @@ const Index = asOneWePage(() => {
                       md={4}
                       lg={3}
                       xl={2}
-                      key={socialProof.id}
+                      key={socialProof.path}
                       p={2}
                     >
                       <SocialProofCard
-                        key={socialProof.id}
                         socialProof={socialProof}
                         showAction={false}
                         showInitiative={false}
@@ -180,8 +180,8 @@ const Index = asOneWePage(() => {
             </Stack>
           )}
           {initiative ? (
-            myInitiative && myInitiative.id == initiative.id ? (
-              <AdminBottomBar action={posiData} myInitiative={myInitiative} />
+            isMine ? (
+              <AdminBottomBar action={posiData} myInitiative={initiative} />
             ) : (
               <SupportBottomBar
                 beneficiary={{ initiative: initiative, action: posiData }}
