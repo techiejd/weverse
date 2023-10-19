@@ -1,4 +1,5 @@
 import {
+  AppBar,
   Box,
   Button,
   Checkbox,
@@ -13,9 +14,13 @@ import {
   FormGroup,
   FormLabel,
   Grid,
+  IconButton,
   LinearProgress,
   Stack,
+  Toolbar,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   collection,
@@ -56,6 +61,7 @@ import AuthDialog from "../modules/auth/AuthDialog";
 import { AuthAction } from "../modules/auth/AuthDialog/context";
 import Sponsor from "../modules/initiatives/sponsor";
 import { useRouter } from "next/router";
+import Close from "@mui/icons-material/Close";
 import Share from "@mui/icons-material/Share";
 import Login from "@mui/icons-material/Login";
 import Campaign from "@mui/icons-material/Campaign";
@@ -145,7 +151,6 @@ const CountMeInDialog = ({
   open: boolean;
   onClose: () => void;
 }) => {
-  const inputTranslations = useTranslations("input");
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [myMember] = useMyMember();
   const [oneWeInitiative] = useInitiative("275EEG2k7FUKYCITnk0Z");
@@ -160,8 +165,19 @@ const CountMeInDialog = ({
   const closeSponsorOneWe = useCallback(() => {
     setSponsorOneWeOpen(false);
   }, [setSponsorOneWeOpen]);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const t = useTranslations("index.countMeInDialog");
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog
+      open={open}
+      onClose={(e: any) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose();
+      }}
+      fullScreen={fullScreen}
+    >
       <AuthDialog
         open={authDialogOpen}
         setOpen={setAuthDialogOpen}
@@ -177,9 +193,25 @@ const CountMeInDialog = ({
           />
         )}
       </Dialog>
-      <DialogTitle>{"Great to have you onboard!"}</DialogTitle>
+      <AppBar sx={{ position: "relative" }}>
+        <Toolbar>
+          <Typography sx={{ flex: 1 }}>{t("title")}</Typography>
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="close"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onClose();
+            }}
+          >
+            <Close />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
       <DialogContent>
-        <Typography>{"Contribute to the OneWe movement."}</Typography>
+        <Typography>{t("contribute")}</Typography>
         <br />
         <Stack spacing={1}>
           <div className="aspect-w-16 aspect-h-9">
@@ -197,7 +229,7 @@ const CountMeInDialog = ({
               }}
               startIcon={<HeartHandshakeIcon />}
             >
-              Sponsor OneWe
+              {t("sponsorOneWe")}
             </Button>
           )}
           <Button
@@ -205,7 +237,7 @@ const CountMeInDialog = ({
             href="/posi/upload"
             startIcon={<PlusOne />}
           >
-            Upload an action
+            {t("uploadAnAction")}
           </Button>
           {!myMember && (
             <Button
@@ -213,7 +245,7 @@ const CountMeInDialog = ({
               startIcon={<Login />}
               onClick={() => setAuthDialogOpen(true)}
             >
-              Register as a member (or login)
+              {t("registerOrLoginPrompt")}
             </Button>
           )}
           <Button
@@ -221,7 +253,7 @@ const CountMeInDialog = ({
             href="/initiatives/275EEG2k7FUKYCITnk0Z/impact/upload"
             startIcon={<Campaign />}
           >
-            Give OneWe a testimonial
+            {t("giveOneWeTestimonial")}
           </Button>
           <ShareActionArea
             shareProps={{
@@ -230,7 +262,7 @@ const CountMeInDialog = ({
             }}
           >
             <Button variant="outlined" startIcon={<Share />}>
-              Share
+              {t("shareOneWe")}
             </Button>
           </ShareActionArea>
         </Stack>
@@ -243,7 +275,7 @@ const CountMeInDialog = ({
             onClose();
           }}
         >
-          {inputTranslations("close")}
+          {t("seeOneWe")}
         </Button>
       </DialogActions>
     </Dialog>

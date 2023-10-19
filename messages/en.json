@@ -2,7 +2,17 @@
   "index": {
     "publish": "Publish",
     "myPage": "My page",
-    "seeContentIn": "See content in"
+    "seeContentIn": "See content in",
+    "countMeInDialog": {
+      "title": "Glad to have you on board!",
+      "contribute": "Contribute to the OneWe movement.",
+      "sponsorOneWe": "Sponsor OneWe",
+      "uploadAnAction": "Upload an action",
+      "registerOrLoginPrompt": "Register as a member (or login)",
+      "giveOneWeTestimonial": "Give OneWe a testimonial",
+      "shareOneWe": "Share OneWe",
+      "seeOneWe": "See our platform in action"
+    }
   },
   "auth": {
     "register": "Register",
