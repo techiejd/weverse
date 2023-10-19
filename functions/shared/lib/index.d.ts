@@ -1639,17 +1639,17 @@ export declare const incubatee: z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
     createdAt: z.ZodOptional<z.ZodDate>;
-    acceptedInvite: z.ZodOptional<z.ZodString>;
+    initiativePath: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
     createdAt?: Date;
-    acceptedInvite?: string;
+    initiativePath?: string;
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
     createdAt?: Date;
-    acceptedInvite?: string;
+    initiativePath?: string;
 }>;
 export type Incubatee = z.infer<typeof incubatee>;
 export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{

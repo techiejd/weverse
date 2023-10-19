@@ -226,7 +226,7 @@ exports.sponsorship = dbBase.extend({
     currency: currency,
 });
 exports.incubatee = dbBase.extend({
-    acceptedInvite: zod_1.z.string().optional(), // Path to the initiative that accepted.
+    initiativePath: zod_1.z.string().optional(), // Path to the initiative that accepted.
 });
 // This is are all edges from the member to the initiative or action.
 exports.from = zod_1.z.discriminatedUnion("type", [
