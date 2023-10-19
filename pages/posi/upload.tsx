@@ -16,16 +16,13 @@ import { PosiFormData, locale } from "../../functions/shared/src";
 import {
   Locale2Messages,
   WithTranslationsStaticProps,
-  spreadTranslationsStaticProps,
 } from "../../common/utils/translations";
 import { asOneWePage } from "../../common/components/onewePage";
 import { useCallback } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
-export const getStaticProps = WithTranslationsStaticProps(
-  spreadTranslationsStaticProps
-);
+export const getStaticProps = WithTranslationsStaticProps();
 
 const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
   const appState = useAppState();

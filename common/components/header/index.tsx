@@ -18,15 +18,15 @@ import { useState } from "react";
 import Home from "@mui/icons-material/Home";
 import Login from "@mui/icons-material/Login";
 import PlusOne from "@mui/icons-material/PlusOne";
-import { useAppState } from "../context/appState";
-import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import Image from "next/image";
-import LinkBehavior from "../utils/linkBehavior";
 import { useTranslations } from "next-intl";
 import Logout from "@mui/icons-material/Logout";
 import { useSignOut } from "react-firebase-hooks/auth";
-import LanguagePortal from "./header/languagePortal";
-import { Locale2Messages } from "../utils/translations";
+import AuthDialog, { AuthDialogButton } from "../../../modules/auth/AuthDialog";
+import { useAppState } from "../../context/appState";
+import LinkBehavior from "../../utils/linkBehavior";
+import LanguagePortal from "./languagePortal";
+import { Locale2Messages } from "../../utils/translations";
 
 export const MenuComponent = (props: BoxProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

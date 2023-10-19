@@ -11,16 +11,13 @@ import { useCurrentPosiId } from "../../../../modules/posi/context";
 import {
   Locale2Messages,
   WithTranslationsStaticProps,
-  spreadTranslationsStaticProps,
 } from "../../../../common/utils/translations";
 import { CachePaths } from "../../../../common/utils/staticPaths";
 import { useTranslations } from "next-intl";
 import { asOneWePage } from "../../../../common/components/onewePage";
 
 export const getStaticPaths = CachePaths;
-export const getStaticProps = WithTranslationsStaticProps(
-  spreadTranslationsStaticProps
-);
+export const getStaticProps = WithTranslationsStaticProps();
 
 const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
   const editTranslations = useTranslations("actions.edit");

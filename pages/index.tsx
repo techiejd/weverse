@@ -7,7 +7,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   Fab,
   FormControl,
   FormControlLabel,
@@ -304,7 +303,6 @@ const IndexPage = () => {
   );
   const router = useRouter();
   const [countMeInDialogOpen, setCountMeInDialogOpen] = useState(false);
-  console.log({ countMeInDialogOpen });
   useEffect(() => {
     if (router.isReady) {
       const { requestCountMeInDialogOpen } = router.query;

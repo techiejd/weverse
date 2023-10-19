@@ -21,13 +21,12 @@ import {
 import { Sponsorship } from "../../../functions/shared/src";
 import { feePercentage, toDisplayCurrency, currencyInfo } from "./common/utils";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/router";
 import { sectionStyles } from "../../../common/components/theme";
+import { useAppState } from "../../../common/context/appState";
 
 function useLocalizedDateFormat() {
-  const router = useRouter();
-  const { locale: localeIn, defaultLocale } = router;
-  const locale = localeIn || defaultLocale;
+  const appState = useAppState();
+  const locale = appState.languages.primary;
   return new Intl.DateTimeFormat(locale).format;
 }
 
