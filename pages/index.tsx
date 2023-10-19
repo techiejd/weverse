@@ -322,6 +322,7 @@ const IndexPage = () => {
     (l: Locale) => {
       if (!myMember || !myMember?.id) {
         setChosenLocales((prev) => [...prev, l as Locale]);
+        return;
       }
       updateDoc(
         doc(appState.firestore, "members", myMember!.id!).withConverter(
