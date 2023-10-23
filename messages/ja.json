@@ -2,7 +2,17 @@
   "index": {
     "publish": "公開",
     "myPage": "マイページ",
-    "seeContentIn": "内容を見る"
+    "seeContentIn": "内容を見る",
+    "countMeInDialog": {
+      "title": "あなたを乗せてくれてうれしい!",
+      "contribute": "OneWe運動に貢献します。",
+      "sponsorOneWe": "Sponsor OneWe",
+      "uploadAnAction": "アクションをアップロード",
+      "registerOrLoginPrompt": "メンバーとして登録（またはログイン）",
+      "giveOneWeTestimonial": "1つを与える私たちは証言です",
+      "shareOneWe": "OneWeを共有",
+      "seeOneWe": "私たちのプラットフォームを見る"
+    }
   },
   "auth": {
     "register": "登録",
@@ -59,12 +69,13 @@
   },
   "common": {
     "loading": "読み込み中",
-    "motto": "解決策の一部になる",
+    "motto": "{tense, select, imperative {解の一部になりましょう} other {解の一部になります}}",
     "logInPrompt": "まだ登録していない場合は登録してください。ログインしている場合はログインしてください。",
     "pageTitle": {
       "byOneWe": "by OneWe"
     },
     "callToAction": {
+      "countMeIn": "私を数えてください",
       "edit": "編集",
       "actions": {
         "list": "アクション",
@@ -209,6 +220,7 @@
     "upload": {
       "submit": "公開",
       "title": "アクションを公開! 🪧",
+      "whatIsAnAction": "アクションとは何ですか?",
       "logInPrompt": "アクションを発行するには、まずメンバーとして登録する必要があります。",
       "sections": {
         "media": {
@@ -297,8 +309,8 @@
       "title": "イニシアチブformat@@0"
     },
     "sponsorships": {
-      "list": "スポンサー:",
-      "loading": "スポンサーシップ: 読み込み中...",
+      "list": "参加:",
+      "loading": "スポンサーシップ: カーガンド...",
       "none": "スポンサーはありません。",
       "billingCycleStarted": "請求サイクル開始日: {formattedDate}"
     },
@@ -384,7 +396,7 @@
       "chooseInitiativeType": {
         "individual": "私は単独で作業します",
         "organization": "私は組織の一員です",
-        "entityInformation": "エンティティ情報",
+        "essentialInformation": "本質的なイニシアチブ情報",
         "organizationType": {
           "namePrompt": "組織の名前は？",
           "title": "組織の種類"
@@ -462,7 +474,7 @@
       "title": "メンバーページ",
       "initiatives": {
         "title": "あなたの取り組み",
-        "none": "イニシアチブはありません。",
+        "none": "Initiatives はありません。",
         "loading": "イニシアチブを読み込んでいます..."
       },
       "signOut": "サインアウト",
