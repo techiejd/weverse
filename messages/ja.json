@@ -1,4 +1,13 @@
 {
+  "header": {
+    "languagePortal": {
+      "chooseYourLanguage": "Choose your language",
+      "primaryLanguage": "Primary language",
+      "polyglot?": "Polyglot?",
+      "explanationPrimaryLanguage": "The main language that is used throughout the entire application.",
+      "explanationContentLanguages": "You'll see actions and testimonials in any language you choose."
+    }
+  },
   "index": {
     "publish": "公開",
     "myPage": "マイページ",
@@ -49,6 +58,7 @@
       "short": "米国"
     },
     "cancel": "キャンセル",
+    "save": "Save",
     "close": "閉じる",
     "phoneNumber": "電話番号",
     "firstName": "名",
