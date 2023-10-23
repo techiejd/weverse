@@ -2,7 +2,17 @@
   "index": {
     "publish": "Publish",
     "myPage": "My page",
-    "seeContentIn": "See content in"
+    "seeContentIn": "See content in",
+    "countMeInDialog": {
+      "title": "Glad to have you on board!",
+      "contribute": "Contribute to the OneWe movement.",
+      "sponsorOneWe": "Sponsor OneWe",
+      "uploadAnAction": "Upload an action",
+      "registerOrLoginPrompt": "Register as a member (or login)",
+      "giveOneWeTestimonial": "Give OneWe a testimonial",
+      "shareOneWe": "Share OneWe",
+      "seeOneWe": "See our platform in action"
+    }
   },
   "auth": {
     "register": "Register",
@@ -59,12 +69,13 @@
   },
   "common": {
     "loading": "Loading",
-    "motto": "Be part of the solution",
+    "motto": "{tense, select, imperative {Be part of the solution} other {You're part of the solution}}",
     "logInPrompt": "Register if you haven't already. Log in if you have.",
     "pageTitle": {
       "byOneWe": "by OneWe"
     },
     "callToAction": {
+      "countMeIn": "Count me in",
       "edit": "Edit",
       "actions": {
         "list": "Actions",
@@ -209,6 +220,7 @@
     "upload": {
       "submit": "Publish",
       "title": "Publish your action! 🪧",
+      "whatIsAnAction": "What is an action?",
       "logInPrompt": "In order to publish an action, you must first register as a member.",
       "sections": {
         "media": {
@@ -236,7 +248,7 @@
     },
     "impact": {
       "solicit": {
-        "title": "{initiativeName}, Get testimonials and get more engagement!",
+        "title": "{initiativeName}, get testimonials and get more engagement!",
         "solicitText": "Please give me your opinion on my action: {for}",
         "clickOnEarToSolicit": "Click on the ear to send them a survey asking for a testimonials."
       }
@@ -298,7 +310,7 @@
     },
     "sponsorships": {
       "list": "Sponsorships:",
-      "loading": "Sponsorships: Cargando...",
+      "loading": "Sponsorships: Loading...",
       "none": "There are no sponsorships.",
       "billingCycleStarted": "Billing cycle date started: {formattedDate}"
     },
@@ -384,7 +396,7 @@
       "chooseInitiativeType": {
         "individual": "I work alone",
         "organization": "I'm part of an organization",
-        "entityInformation": "Entity information",
+        "essentialInformation": "Essential initiative information",
         "organizationType": {
           "namePrompt": "What's the organization's name?",
           "title": "Organization type"
@@ -462,7 +474,7 @@
       "title": "Your member page",
       "initiatives": {
         "title": "Your Initiatives",
-        "none": "There are no Initiatives.",
+        "none": "There are no initiatives.",
         "loading": "Loading Initiatives..."
       },
       "signOut": "Sign Out",
