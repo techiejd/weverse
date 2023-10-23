@@ -2,7 +2,17 @@
   "index": {
     "publish": "Opublikuj",
     "myPage": "Moja strona",
-    "seeContentIn": "Zobacz zawartość w"
+    "seeContentIn": "Zobacz zawartość w",
+    "countMeInDialog": {
+      "title": "Miło cię na pokładzie!",
+      "contribute": "Przyczyń się do ruchu Oneus.",
+      "sponsorOneWe": "Sponsor OneWe",
+      "uploadAnAction": "Prześlij akcję",
+      "registerOrLoginPrompt": "Zarejestruj się jako członek (lub zaloguj)",
+      "giveOneWeTestimonial": "Daj OneWe zeznanie",
+      "shareOneWe": "Udostępnij OneWe",
+      "seeOneWe": "Zobacz naszą platformę w akcji"
+    }
   },
   "auth": {
     "register": "Rejestracja",
@@ -59,11 +69,13 @@
   },
   "common": {
     "loading": "Ładowanie",
+    "motto": "{tense, select, imperative {Bądź częścią rozwiązania} other {Jesteś częścią rozwiązania}}",
     "logInPrompt": "Zarejestruj się, jeśli jeszcze tego nie zrobiłeś. Zaloguj się, jeśli posiadasz.",
     "pageTitle": {
       "byOneWe": "autorstwa OneWe"
     },
     "callToAction": {
+      "countMeIn": "Policz mnie w",
       "edit": "Edytuj",
       "actions": {
         "list": "Akcje",
@@ -208,6 +220,7 @@
     "upload": {
       "submit": "Opublikuj",
       "title": "Opublikuj swoją akcję! 🪧",
+      "whatIsAnAction": "Czym jest działanie?",
       "logInPrompt": "Aby opublikować akcję, musisz najpierw zarejestrować się jako członek.",
       "sections": {
         "media": {
@@ -383,6 +396,7 @@
       "chooseInitiativeType": {
         "individual": "Pracuję samodzielnie",
         "organization": "Jestem częścią organizacji",
+        "essentialInformation": "Podstawowe informacje z inicjatywy",
         "organizationType": {
           "namePrompt": "Jaka jest nazwa organizacji?",
           "title": "Typ organizacji"
