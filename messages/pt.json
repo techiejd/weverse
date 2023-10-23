@@ -2,7 +2,17 @@
   "index": {
     "publish": "Publicar",
     "myPage": "Minha página",
-    "seeContentIn": "Ver conteúdo em"
+    "seeContentIn": "Ver conteúdo em",
+    "countMeInDialog": {
+      "title": "Que bom ter você a bordo!",
+      "contribute": "Contribua com o movimento OneWe",
+      "sponsorOneWe": "Sponsor OneWe",
+      "uploadAnAction": "Enviar uma ação",
+      "registerOrLoginPrompt": "Registrar como membro (ou login)",
+      "giveOneWeTestimonial": "Dar um testemunho ao OneWe",
+      "shareOneWe": "Compartilhar OneWe",
+      "seeOneWe": "Veja nossa plataforma em ação"
+    }
   },
   "auth": {
     "register": "Cadastrar",
@@ -59,11 +69,13 @@
   },
   "common": {
     "loading": "Carregando...",
+    "motto": "{tense, select, imperative {Faça parte da solução} other {Você é parte da solução}}",
     "logInPrompt": "Registre-se se ainda não o fez. Entre se tiver.",
     "pageTitle": {
       "byOneWe": "por OneWe"
     },
     "callToAction": {
+      "countMeIn": "Conte comigo",
       "edit": "Alterar",
       "actions": {
         "list": "Ações.",
@@ -208,6 +220,7 @@
     "upload": {
       "submit": "Publicar",
       "title": "Publique sua ação! 🪧",
+      "whatIsAnAction": "O que é uma acção?",
       "logInPrompt": "Para publicar uma ação, você deve primeiro registrar como um membro.",
       "sections": {
         "media": {
@@ -383,6 +396,7 @@
       "chooseInitiativeType": {
         "individual": "Eu trabalho sozinho",
         "organization": "Eu faço parte de uma organização",
+        "essentialInformation": "Informações essenciais da iniciativa",
         "organizationType": {
           "namePrompt": "Qual é o nome da organização?",
           "title": "Tipo de organização"
