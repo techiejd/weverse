@@ -2,7 +2,17 @@
   "index": {
     "publish": "Publicar",
     "myPage": "Mi página",
-    "seeContentIn": "Vea contenido en"
+    "seeContentIn": "Vea contenido en",
+    "countMeInDialog": {
+      "title": "¡Encantado de tenerte a bordo!",
+      "contribute": "Contribuir al movimiento OneWe .",
+      "sponsorOneWe": "Sponsor OneWe",
+      "uploadAnAction": "Subir una acción",
+      "registerOrLoginPrompt": "Registrarse como miembro (o iniciar sesión)",
+      "giveOneWeTestimonial": "Dale un testimonio a OneWe",
+      "shareOneWe": "Compartir OneWe",
+      "seeOneWe": "Ver nuestra plataforma en acción"
+    }
   },
   "auth": {
     "register": "Registrarme",
@@ -59,12 +69,13 @@
   },
   "common": {
     "loading": "Cargando",
-    "motto": "Sea parte de la solución",
+    "motto": "{tense, select, imperative {Sea parte de la solución} other {Sos parte de la solución}}",
     "logInPrompt": "Regístrate si no lo has hecho. Inicia sesión si ya estás registrado.",
     "pageTitle": {
       "byOneWe": "hecho por OneWe"
     },
     "callToAction": {
+      "countMeIn": "Me sumo",
       "edit": "Editar",
       "actions": {
         "list": "Acciones",
@@ -209,6 +220,7 @@
     "upload": {
       "submit": "Publicar",
       "title": "¡Publica tu acción! 🪧",
+      "whatIsAnAction": "¿Qué es una acción?",
       "logInPrompt": "Para publicar tu acción, registrarte como miembro.",
       "sections": {
         "media": {
@@ -297,7 +309,7 @@
       "title": "Iniciativa"
     },
     "sponsorships": {
-      "list": "Patrocinios:",
+      "list": "Unidos:",
       "loading": "Patrocinios: Cargando...",
       "none": "No hay patrocinios.",
       "billingCycleStarted": "Ciclo de facturación iniciado: {formattedDate}"
@@ -384,7 +396,7 @@
       "chooseInitiativeType": {
         "individual": "Trabajo solo",
         "organization": "Pertenezco a una organización",
-        "entityInformation": "Información de la entidad",
+        "essentialInformation": "Información esencial de la iniciativa",
         "organizationType": {
           "namePrompt": "¿Cómo se llama la organización?",
           "title": "Tipo de organización"
