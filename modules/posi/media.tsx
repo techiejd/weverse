@@ -103,6 +103,7 @@ const CandidateVideo = ({
       disablePictureInPicture={disablePictureInPicture}
       loop
       playsInline={playsInline}
+      autoPlay
     >
       <source src={props.src} type="video/mp4" />
     </video>

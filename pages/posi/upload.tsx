@@ -1,4 +1,11 @@
-import { Box, Stack, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import { useRouter } from "next/router";
@@ -14,6 +21,7 @@ import {
 import { asOneWePage } from "../../common/components/onewePage";
 import { useCallback } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 
 export const getStaticProps = WithTranslationsStaticProps(
   spreadTranslationsStaticProps
@@ -41,16 +49,28 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
 
   return (
     <Stack>
-      <Box
-        width="100%"
-        alignItems="center"
-        justifyContent="center"
-        display="flex"
+      <Stack
+        sx={{
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 2,
+        }}
       >
         <Box textAlign={"center"} width="fit-content">
           <Typography variant="h1">{t("title")}</Typography>
         </Box>
-      </Box>
+        <Box width={"100%"} maxWidth={"600px"}>
+          <div className="aspect-w-16 aspect-h-9">
+            <iframe
+              src="https://www.youtube.com/embed/DkWCwOT9r24?si=MTCz03QyD02od0zx"
+              title="What is an action? YT Video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </Box>
+      </Stack>
       {user ? (
         <PosiForm
           onInteraction={{ type: "create", onSubmit }}

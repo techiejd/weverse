@@ -78,7 +78,7 @@ const InitiativeInput = ({
     <Stack alignItems={"center"}>
       <Stack sx={sectionStyles}>
         <Typography variant="h2">
-          {chooseInitiativeTypeTranslations("entityInformation")}
+          {chooseInitiativeTypeTranslations("essentialInformation")}
         </Typography>
         <FormControl>
           <RadioGroup

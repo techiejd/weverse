@@ -33,12 +33,6 @@ type CurrencyInfo = Record<
 >;
 
 export const currencyInfo: CurrencyInfo = (() => {
-  const displayNames = {
-    [sponsorshipLevel.Enum.admirer]: "Admirador",
-    [sponsorshipLevel.Enum.fan]: "Aficionado",
-    [sponsorshipLevel.Enum.lover]: "Amante",
-    [sponsorshipLevel.Enum.custom]: "Personalizado",
-  };
   const applySponsorshipLevelInfo = (
     currency: "cop" | "usd" | "eur" | "gbp",
     sponsorshipLevelInfo: Record<SponsorshipLevel, number>

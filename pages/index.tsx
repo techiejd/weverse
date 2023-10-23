@@ -1,16 +1,26 @@
 import {
+  AppBar,
   Box,
+  Button,
   Checkbox,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Fab,
   FormControl,
   FormControlLabel,
   FormGroup,
   FormLabel,
   Grid,
+  IconButton,
   LinearProgress,
   Stack,
+  Toolbar,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   collection,
@@ -41,7 +51,21 @@ import { Locale, PosiFormData, locale } from "../functions/shared/src";
 import ImpactCard from "../modules/posi/action/card";
 import Link from "next/link";
 import Image from "next/image";
-import { useMyMember } from "../common/context/weverseUtils";
+import {
+  useInitiative,
+  useMyMember,
+  useMySponsorships,
+} from "../common/context/weverseUtils";
+import ShareActionArea from "../common/components/shareActionArea";
+import AuthDialog from "../modules/auth/AuthDialog";
+import { AuthAction } from "../modules/auth/AuthDialog/context";
+import Sponsor from "../modules/initiatives/sponsor";
+import { useRouter } from "next/router";
+import Close from "@mui/icons-material/Close";
+import Share from "@mui/icons-material/Share";
+import Login from "@mui/icons-material/Login";
+import Campaign from "@mui/icons-material/Campaign";
+import HeartHandshakeIcon from "../common/svg/HeartHandshake";
 
 export const getStaticProps = WithTranslationsStaticProps();
 
@@ -81,7 +105,7 @@ const BottomBar = () => {
 
   return (
     <div
-      className="rounded-[50px] bg-whitesmoke-200 overflow-hidden flex flex-row py-0 px-4 items-center justify-center gap-[12px] opacity-[0] border-[4px] border-solid border-lightgray [&.animate]:animate-[1s_ease_0s_1_normal_forwards_fade-in-top]"
+      className="bottom-navigation-bar rounded-[50px] bg-whitesmoke-200 overflow-hidden flex flex-row py-0 px-4 items-center justify-center gap-[12px] opacity-[0] border-[4px] border-solid border-lightgray [&.animate]:animate-[1s_ease_0s_1_normal_forwards_fade-in-top]"
       data-animate-on-scroll
     >
       <Link
@@ -120,6 +144,144 @@ const BottomBar = () => {
   );
 };
 
+const CountMeInDialog = ({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) => {
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const [myMember] = useMyMember();
+  const [oneWeInitiative] = useInitiative("275EEG2k7FUKYCITnk0Z");
+  const [sponsorOneWeOpen, setSponsorOneWeOpen] = useState(false);
+  const [sponsorships] = useMySponsorships();
+  const sponsoring =
+    oneWeInitiative && sponsorships
+      ? sponsorships.some(
+          (s) => s.initiative == oneWeInitiative.id && !!s.paymentsStarted
+        )
+      : false;
+  const closeSponsorOneWe = useCallback(() => {
+    setSponsorOneWeOpen(false);
+  }, [setSponsorOneWeOpen]);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const t = useTranslations("index.countMeInDialog");
+  return (
+    <Dialog
+      open={open}
+      onClose={(e: any) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose();
+      }}
+      fullScreen={fullScreen}
+    >
+      <AuthDialog
+        open={authDialogOpen}
+        setOpen={setAuthDialogOpen}
+        initialAuthAction={AuthAction.register}
+      />
+      <Dialog open={sponsorOneWeOpen} fullScreen>
+        {oneWeInitiative && (
+          <Sponsor
+            exitButtonBehavior={{
+              onClick: closeSponsorOneWe,
+            }}
+            beneficiary={oneWeInitiative}
+          />
+        )}
+      </Dialog>
+      <AppBar sx={{ position: "relative" }}>
+        <Toolbar>
+          <Typography sx={{ flex: 1 }}>{t("title")}</Typography>
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="close"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onClose();
+            }}
+          >
+            <Close />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <DialogContent>
+        <Typography>{t("contribute")}</Typography>
+        <br />
+        <Stack spacing={1}>
+          <div className="aspect-w-16 aspect-h-9">
+            <iframe
+              src="https://www.youtube.com/embed/8dIKfizbirA?si=9bzRmB_x61ye9ngO"
+              title="How to join vid"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            ></iframe>
+          </div>
+          {!sponsoring && (
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setSponsorOneWeOpen(true);
+              }}
+              startIcon={<HeartHandshakeIcon />}
+            >
+              {t("sponsorOneWe")}
+            </Button>
+          )}
+          <Button
+            variant="outlined"
+            href="/posi/upload"
+            startIcon={<PlusOne />}
+          >
+            {t("uploadAnAction")}
+          </Button>
+          {!myMember && (
+            <Button
+              variant="outlined"
+              startIcon={<Login />}
+              onClick={() => setAuthDialogOpen(true)}
+            >
+              {t("registerOrLoginPrompt")}
+            </Button>
+          )}
+          <Button
+            variant="outlined"
+            href="/initiatives/275EEG2k7FUKYCITnk0Z/impact/upload"
+            startIcon={<Campaign />}
+          >
+            {t("giveOneWeTestimonial")}
+          </Button>
+          <ShareActionArea
+            shareProps={{
+              path: "/",
+              title: "Join the OneWe movement",
+            }}
+          >
+            <Button variant="outlined" startIcon={<Share />}>
+              {t("shareOneWe")}
+            </Button>
+          </ShareActionArea>
+        </Stack>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            onClose();
+          }}
+        >
+          {t("seeOneWe")}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 const IndexPage = () => {
   //TODO(techiejd): WET code, refactor
   const commonTranslations = useTranslations("common");
@@ -140,6 +302,15 @@ const IndexPage = () => {
   const [chosenLocales, setChosenLocales] = useState<Locale[]>(
     myMember?.settings?.locales ?? [userLocale as Locale]
   );
+  const router = useRouter();
+  const [countMeInDialogOpen, setCountMeInDialogOpen] = useState(false);
+  console.log({ countMeInDialogOpen });
+  useEffect(() => {
+    if (router.isReady) {
+      const { requestCountMeInDialogOpen } = router.query;
+      setCountMeInDialogOpen(Boolean(requestCountMeInDialogOpen));
+    }
+  }, [router.isReady, router.query]);
 
   useEffect(() => {
     if (myMember?.settings?.locales) {
@@ -151,6 +322,7 @@ const IndexPage = () => {
     (l: Locale) => {
       if (!myMember || !myMember?.id) {
         setChosenLocales((prev) => [...prev, l as Locale]);
+        return;
       }
       updateDoc(
         doc(appState.firestore, "members", myMember!.id!).withConverter(
@@ -253,23 +425,37 @@ const IndexPage = () => {
         spacing={3}
       >
         <Typography fontSize={25} variant="h2" textAlign="center" pb={1}>
-          {commonTranslations("motto")}
+          {commonTranslations("motto", {
+            tense: myMember ? "present" : "imperative",
+          })}
         </Typography>
         <Fab
           variant="extended"
-          href="/posi/upload"
           color="primary"
           sx={{ width: "fit-content" }}
+          onClick={() => {
+            setCountMeInDialogOpen(true);
+          }}
         >
           <PlusOne sx={{ mr: 1 }} />
           <Typography>
-            {commonTranslations("callToAction.actions.add")}
+            {commonTranslations("callToAction.countMeIn")}
           </Typography>
+          <CountMeInDialog
+            open={countMeInDialogOpen}
+            onClose={() => {
+              setCountMeInDialogOpen(false);
+            }}
+          />
         </Fab>
         {myMemberLoading ? (
           <CircularProgress />
         ) : (
-          <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
+          <FormControl
+            sx={{ m: 3, pl: 2 }}
+            component="fieldset"
+            variant="standard"
+          >
             <FormLabel component="legend">{t("seeContentIn")}</FormLabel>
             <FormGroup row>
               {possibleLocales.map((l) => (
@@ -296,7 +482,7 @@ const IndexPage = () => {
       </Stack>
       <Grid container spacing={1} pl={1} pr={1}>
         {displayedActions.map((action) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={action.id}>
+          <Grid item xs={12} md={6} lg={4} key={action.id}>
             <ImpactCard posiData={action} />
           </Grid>
         ))}
