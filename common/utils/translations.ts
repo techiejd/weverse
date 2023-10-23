@@ -75,10 +75,15 @@ export const useLocalizedPresentationInfo = <T extends object>(
   const appState = useAppState();
   const userLocale = appState.languages.primary;
   if (!localizableObj) return undefined;
+  const objInUserPrimaryLanguage = userLocale && localizableObj[userLocale];
+  const objInUserAnyLanguage = (() => {
+    // So here we are trying to find the first language that the user has which is also a key in localizableObj.
+    const possibleLanguages = appState.languages.content;
+    const firstLanguage = possibleLanguages.find((l) => l in localizableObj);
+    return firstLanguage ? localizableObj[firstLanguage] : undefined;
+  })();
+  const objInItsOwnLanguage = localizableObj[localizableObj?.locale!]!;
   return (
-    (localizableObj &&
-      ((userLocale && localizableObj[userLocale]) ||
-        localizableObj[localizableObj?.locale!]!)) ||
-    undefined
+    objInUserPrimaryLanguage || objInUserAnyLanguage || objInItsOwnLanguage
   );
 };

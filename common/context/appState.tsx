@@ -116,7 +116,10 @@ const AppProvider: React.FC<{
   useEffect(() => {
     setCachedLanguages((cachedLanguages) => ({
       primary: member?.locale || cachedLanguages.primary,
-      content: member?.settings?.locales || cachedLanguages.content,
+      content:
+        member?.settings?.locales || member?.locale
+          ? [member?.locale!]
+          : cachedLanguages.content,
     }));
   }, [member?.locale, member?.settings?.locales]);
 

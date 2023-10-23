@@ -74,12 +74,10 @@ const AsRadio = ({
   selectedLocale,
   setSelectedLocale,
   l,
-  selectedLocales,
   setSelectedLocales,
 }: {
   selectedLocale: Locale;
   setSelectedLocale: Dispatch<SetStateAction<Locale>>;
-  selectedLocales: Locale[];
   setSelectedLocales: Dispatch<SetStateAction<Locale[]>>;
   l: Locale;
 }) => (
@@ -189,7 +187,6 @@ const AppLanguageModalContent = ({
                   l={l as Locale}
                   selectedLocale={selectedLocale}
                   setSelectedLocale={setSelectedLocale}
-                  selectedLocales={requestedContentLocales}
                   setSelectedLocales={setRequestedContentLocales}
                 />
               ) : (
