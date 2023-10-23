@@ -6,12 +6,11 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { NextIntlClientProvider, useLocale, useTranslations } from "next-intl";
+import { NextIntlClientProvider, useTranslations } from "next-intl";
 import { useState, Fragment, useEffect, Dispatch, SetStateAction } from "react";
 import { locale, Locale } from "../../../functions/shared/src";
 import { Locale2Messages, localeDisplayNames } from "../../utils/translations";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { useAppState } from "../../context/appState";
 
 const ChoosingPrimary = ({

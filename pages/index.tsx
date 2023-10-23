@@ -2,16 +2,10 @@ import {
   AppBar,
   Box,
   Button,
-  Checkbox,
-  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   Fab,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
   Grid,
   IconButton,
   LinearProgress,
@@ -35,18 +29,15 @@ import {
 import PlusOne from "@mui/icons-material/PlusOne";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useCallback, useEffect, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { asOneWePage } from "../common/components/onewePage";
 import { useAppState } from "../common/context/appState";
 import {
   useMemberConverter,
   usePosiFormDataConverter,
 } from "../common/utils/firebase";
-import {
-  WithTranslationsStaticProps,
-  localeDisplayNames,
-} from "../common/utils/translations";
-import { Locale, PosiFormData, locale } from "../functions/shared/src";
+import { WithTranslationsStaticProps } from "../common/utils/translations";
+import { PosiFormData } from "../functions/shared/src";
 import ImpactCard from "../modules/posi/action/card";
 import Link from "next/link";
 import Image from "next/image";
@@ -296,11 +287,7 @@ const IndexPage = () => {
   const [hasMore, setHasMore] = useState(true);
   const posiFormDataConverter = usePosiFormDataConverter();
   const batchSize = 3;
-  const userLocale = useLocale();
-  const possibleLocales = Object.keys(locale.Enum);
-  const [chosenLocales, setChosenLocales] = useState<Locale[]>(
-    myMember?.settings?.locales ?? [userLocale as Locale]
-  );
+  const chosenLocales = appState.languages.content;
   const router = useRouter();
   const [countMeInDialogOpen, setCountMeInDialogOpen] = useState(false);
   useEffect(() => {
@@ -309,46 +296,6 @@ const IndexPage = () => {
       setCountMeInDialogOpen(Boolean(requestCountMeInDialogOpen));
     }
   }, [router.isReady, router.query]);
-
-  useEffect(() => {
-    if (myMember?.settings?.locales) {
-      setChosenLocales(myMember?.settings?.locales ?? [userLocale as Locale]);
-    }
-  }, [myMember?.settings?.locales, userLocale]);
-
-  const addLocale = useCallback(
-    (l: Locale) => {
-      if (!myMember || !myMember?.id) {
-        setChosenLocales((prev) => [...prev, l as Locale]);
-        return;
-      }
-      updateDoc(
-        doc(appState.firestore, "members", myMember!.id!).withConverter(
-          memberConverter
-        ),
-        {
-          settings: {
-            locales: [...(myMember!.settings?.locales ?? []), l as Locale],
-          },
-        }
-      );
-    },
-    [appState.firestore, memberConverter, myMember]
-  );
-
-  const removeLocale = useCallback(
-    (l: Locale) => {
-      if (!myMember || !myMember?.id) {
-        setChosenLocales((prev) => prev.filter((cl) => cl != l));
-      }
-      updateDoc(doc(appState.firestore, "members", myMember!.id!), {
-        settings: {
-          locales: myMember!.settings?.locales?.filter((cl) => cl != l),
-        },
-      });
-    },
-    [appState.firestore, myMember]
-  );
 
   useEffect(() => {
     let ignore = false;
@@ -446,37 +393,6 @@ const IndexPage = () => {
             }}
           />
         </Fab>
-        {myMemberLoading ? (
-          <CircularProgress />
-        ) : (
-          <FormControl
-            sx={{ m: 3, pl: 2 }}
-            component="fieldset"
-            variant="standard"
-          >
-            <FormLabel component="legend">{t("seeContentIn")}</FormLabel>
-            <FormGroup row>
-              {possibleLocales.map((l) => (
-                <FormControlLabel
-                  key={l}
-                  control={
-                    <Checkbox
-                      checked={chosenLocales.includes(l as Locale)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          addLocale(l as Locale);
-                        } else {
-                          removeLocale(l as Locale);
-                        }
-                      }}
-                    />
-                  }
-                  label={localeDisplayNames[l as Locale]}
-                />
-              ))}
-            </FormGroup>
-          </FormControl>
-        )}
       </Stack>
       <Grid container spacing={1} pl={1} pr={1}>
         {displayedActions.map((action) => (

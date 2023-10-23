@@ -19,8 +19,7 @@ import {
 } from "../../common/utils/translations";
 import { asOneWePage } from "../../common/components/onewePage";
 import { useCallback } from "react";
-import { useLocale, useTranslations } from "next-intl";
-import ExpandMore from "@mui/icons-material/ExpandMore";
+import { useTranslations } from "next-intl";
 
 export const getStaticProps = WithTranslationsStaticProps();
 
@@ -29,7 +28,7 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
   const router = useRouter();
   const { user } = useAppState().authState;
   const posiFormDataConverter = usePosiFormDataConverter();
-  const localeIn = useLocale();
+  const localeIn = appState.languages.primary;
   const onSubmit = useCallback(
     async (usersPosi: PosiFormData) => {
       const docRef = await addDoc(

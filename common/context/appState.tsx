@@ -27,10 +27,10 @@ import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { lightConfiguration } from "../components/theme";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
-import { AbstractIntlMessages, useLocale } from "next-intl";
+import { AbstractIntlMessages } from "next-intl";
 import { NextIntlClientProvider } from "next-intl";
 import { Locale } from "../../functions/shared/src";
-import { useCurrentMember, useMember } from "./weverseUtils";
+import { useCurrentMember } from "./weverseUtils";
 
 const isDevEnvironment = process && process.env.NODE_ENV === "development";
 

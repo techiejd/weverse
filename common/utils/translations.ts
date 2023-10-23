@@ -1,6 +1,5 @@
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { Locale, locale } from "../../functions/shared/src";
-import { useLocale } from "next-intl";
 import { useAppState } from "../context/appState";
 type StaticProps = {
   [x: string | number | symbol]: unknown;
