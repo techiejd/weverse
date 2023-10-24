@@ -1,11 +1,11 @@
 {
   "header": {
     "languagePortal": {
-      "chooseYourLanguage": "Choose your language",
-      "primaryLanguage": "Primary language",
-      "polyglot?": "Polyglot?",
-      "explanationPrimaryLanguage": "The main language that is used throughout the entire application.",
-      "explanationContentLanguages": "You'll see actions and testimonials in any language you choose."
+      "chooseYourLanguage": "Choisissez votre langue",
+      "primaryLanguage": "Langue principale",
+      "polyglot?": "Polyglotte ?",
+      "explanationPrimaryLanguage": "Le langage principal qui est utilisé dans toute l'application.",
+      "explanationContentLanguages": "Vous verrez des actions et des témoignages dans n'importe quelle langue que vous choisissez."
     }
   },
   "index": {
@@ -58,7 +58,7 @@
       "short": "FR"
     },
     "cancel": "Annuler",
-    "save": "Save",
+    "save": "Enregistrer",
     "close": "Fermer",
     "phoneNumber": "Numéro de téléphone",
     "firstName": "Prénom",
