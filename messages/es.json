@@ -1,4 +1,13 @@
 {
+  "header": {
+    "languagePortal": {
+      "chooseYourLanguage": "Elige tu idioma",
+      "primaryLanguage": "Idioma principal",
+      "polyglot?": "¿Polígono?",
+      "explanationPrimaryLanguage": "El idioma principal que se utiliza a través de toda la aplicación.",
+      "explanationContentLanguages": "Verás acciones y testimonios en cualquier idioma que elijas."
+    }
+  },
   "index": {
     "publish": "Publicar",
     "myPage": "Mi página",
@@ -49,6 +58,7 @@
       "short": "CO"
     },
     "cancel": "Cancelar",
+    "save": "Guardar",
     "close": "Cerrar",
     "phoneNumber": "Número telefónico",
     "firstName": "Nombres",
@@ -222,7 +232,6 @@
       "title": "¡Publica tu acción! 🪧",
       "whatIsAnAction": "¿Qué es una acción?",
       "logInPrompt": "Para publicar tu acción, registrarte como miembro.",
-      "whatIsAnAction": "¿Qué es una acción?",
       "sections": {
         "media": {
           "title": "Muéstranos un poco de lo que has hecho",

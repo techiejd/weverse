@@ -1,4 +1,13 @@
 {
+  "header": {
+    "languagePortal": {
+      "chooseYourLanguage": "Choisissez votre langue",
+      "primaryLanguage": "Langue principale",
+      "polyglot?": "Polyglotte ?",
+      "explanationPrimaryLanguage": "Le langage principal qui est utilisé dans toute l'application.",
+      "explanationContentLanguages": "Vous verrez des actions et des témoignages dans n'importe quelle langue que vous choisissez."
+    }
+  },
   "index": {
     "publish": "Publier",
     "myPage": "Mon profil",
@@ -49,6 +58,7 @@
       "short": "FR"
     },
     "cancel": "Annuler",
+    "save": "Enregistrer",
     "close": "Fermer",
     "phoneNumber": "Numéro de téléphone",
     "firstName": "Prénom",
