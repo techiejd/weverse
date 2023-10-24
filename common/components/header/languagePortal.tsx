@@ -3,11 +3,13 @@ import {
   CircularProgress,
   Dialog,
   IconButton,
+  InputLabel,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { NextIntlClientProvider, useTranslations } from "next-intl";
-import { useState, Fragment, useEffect, Dispatch, SetStateAction } from "react";
+import { useState, Fragment, Dispatch, SetStateAction } from "react";
 import { locale, Locale } from "../../../functions/shared/src";
 import { Locale2Messages, localeDisplayNames } from "../../utils/translations";
 import Image from "next/image";
@@ -268,6 +270,7 @@ const LanguagePortal = ({
 }: {
   locale2Messages: Locale2Messages;
 }) => {
+  const appState = useAppState();
   const [languageModalOpen, setLanguageModalOpen] = useState(false);
   const onClose = () => setLanguageModalOpen(false);
   const theme = useTheme();
@@ -281,14 +284,25 @@ const LanguagePortal = ({
       >
         <AppLanguageModal onClose={onClose} locale2Messages={locale2Messages} />
       </Dialog>
-      <IconButton
-        sx={{ mx: 1 }}
-        onClick={() => {
-          setLanguageModalOpen(true);
+      <InputLabel
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          mx: 1,
         }}
       >
-        <Language color="primary" />
-      </IconButton>
+        <IconButton
+          onClick={() => {
+            setLanguageModalOpen(true);
+          }}
+        >
+          <Language color="primary" />
+        </IconButton>
+        <Typography color="primary">
+          {appState.languages.primary.toUpperCase()}
+        </Typography>
+      </InputLabel>
     </Fragment>
   );
 };
