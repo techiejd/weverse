@@ -181,7 +181,7 @@ const AppLanguageModalContent = ({
       ) : (
         possibleLocales.map((l) => (
           <div className="flex flex-row items-center justify-start" key={l}>
-            <div className="flex flex-row items-center justify-start gap-[8px]">
+            <label className="flex flex-row items-center justify-start gap-[8px]">
               {choosing === "primary" ? (
                 <AsRadio
                   l={l as Locale}
@@ -200,7 +200,7 @@ const AppLanguageModalContent = ({
               <div className="relative leading-[20px] font-medium">
                 {localeDisplayNames[l as Locale]}
               </div>
-            </div>
+            </label>
           </div>
         ))
       )}
