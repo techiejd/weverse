@@ -1,4 +1,4 @@
-import { app } from "../utils/firebase";
+import { app, useMemberConverter } from "../utils/firebase";
 import {
   getStorage,
   connectStorageEmulator,
@@ -10,6 +10,11 @@ import {
   Firestore,
   doc,
   updateDoc,
+  DocumentData,
+  FirestoreDataConverter,
+  QueryDocumentSnapshot,
+  WithFieldValue,
+  serverTimestamp,
 } from "firebase/firestore";
 import { getAuth, connectAuthEmulator, User, Auth } from "firebase/auth";
 
@@ -29,8 +34,9 @@ import { lightConfiguration } from "../components/theme";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
 import { AbstractIntlMessages } from "next-intl";
 import { NextIntlClientProvider } from "next-intl";
-import { Locale } from "../../functions/shared/src";
-import { useCurrentMember } from "./weverseUtils";
+import { DbBase, Locale } from "../../functions/shared/src";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { z } from "zod";
 
 const isDevEnvironment = process && process.env.NODE_ENV === "development";
 
@@ -105,29 +111,32 @@ const AppProvider: React.FC<{
   messages?: AbstractIntlMessages;
 }> = ({ children, messages }) => {
   const [user, loading, error] = useAuthState(weverse.auth);
-  const [member] = useCurrentMember();
+  const [member] = useDocumentData(
+    user ? doc(weverse.firestore, "members", user.uid as string) : undefined
+  );
   const router = useRouter();
   const locale = (router.locale || "en") as Locale;
   const [cachedLanguages, setCachedLanguages] = useState<Languages>({
-    primary: locale,
-    content: [locale],
+    primary: member?.locale || locale,
+    content:
+      member?.settings?.locales ||
+      (member?.locale ? [member?.locale!] : [locale]),
   });
 
   useEffect(() => {
     setCachedLanguages((cachedLanguages) => ({
       primary: member?.locale || cachedLanguages.primary,
       content:
-        member?.settings?.locales || member?.locale
-          ? [member?.locale!]
-          : cachedLanguages.content,
+        member?.settings?.locales ||
+        (member?.locale ? [member?.locale!] : cachedLanguages.content),
     }));
   }, [member?.locale, member?.settings?.locales]);
 
   const useSetLanguages = useCallback(() => {
     return (languages: Languages) => {
       setCachedLanguages(languages);
-      if (member) {
-        const memberRef = doc(weverse.firestore, "members", member.id!);
+      if (member && user?.uid) {
+        const memberRef = doc(weverse.firestore, "members", user.uid);
         return updateDoc(memberRef, {
           locale: languages.primary,
           settings: {

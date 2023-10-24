@@ -270,9 +270,6 @@ const LanguagePortal = ({
 }) => {
   const [languageModalOpen, setLanguageModalOpen] = useState(false);
   const onClose = () => setLanguageModalOpen(false);
-  useEffect(() => {
-    console.log(languageModalOpen);
-  }, [languageModalOpen]);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   return (
@@ -287,7 +284,6 @@ const LanguagePortal = ({
       <IconButton
         sx={{ mx: 1 }}
         onClick={() => {
-          console.log("clicked");
           setLanguageModalOpen(true);
         }}
       >
