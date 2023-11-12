@@ -18,11 +18,13 @@ import {
 import {
   collection,
   doc,
+  Firestore,
   getDocs,
   limit,
   orderBy,
   query,
   QueryDocumentSnapshot,
+  QuerySnapshot,
   startAfter,
   updateDoc,
 } from "firebase/firestore";
@@ -37,7 +39,7 @@ import {
   usePosiFormDataConverter,
 } from "../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../common/utils/translations";
-import { PosiFormData } from "../functions/shared/src";
+import { Locale, PosiFormData } from "../functions/shared/src";
 import ImpactCard from "../modules/posi/action/card";
 import Link from "next/link";
 import Image from "next/image";
@@ -272,6 +274,10 @@ const CountMeInDialog = ({
   );
 };
 
+function isContentAction(action: PosiFormData, chosenLocales: Locale[]) {
+  return Object.keys(action).some((l) => chosenLocales.includes(l as any));
+}
+
 const IndexPage = () => {
   //TODO(techiejd): WET code, refactor
   const commonTranslations = useTranslations("common");
@@ -280,11 +286,9 @@ const IndexPage = () => {
   const [latestDoc, setLatestDoc] = useState<
     QueryDocumentSnapshot<PosiFormData> | undefined
   >(undefined);
-  const [myMember, myMemberLoading] = useMyMember();
-  const memberConverter = useMemberConverter();
+  const [myMember] = useMyMember();
   const [cachedActions, setCachedActions] = useState<PosiFormData[]>([]);
   const [displayedActions, setDisplayedActions] = useState<PosiFormData[]>([]);
-  const [hasMore, setHasMore] = useState(true);
   const posiFormDataConverter = usePosiFormDataConverter();
   const batchSize = 3;
   const chosenLocales = appState.languages.content;
@@ -297,64 +301,74 @@ const IndexPage = () => {
     }
   }, [router.isReady, router.query]);
 
-  useEffect(() => {
-    let ignore = false;
-    const firstQuery = query(
-      collection(appState.firestore, "impacts").withConverter(
-        posiFormDataConverter
-      ),
-      limit(batchSize),
-      orderBy("createdAt", "desc")
-    );
-    getDocs(firstQuery).then((snap) => {
-      if (!ignore) {
-        const latestActions = snap.docs.map((doc) => doc.data());
-        if (latestActions.length) {
-          setLatestDoc(snap.docs[snap.docs.length - 1]);
-        }
-        setHasMore(latestActions.length == batchSize);
-        setCachedActions((actions) => [...actions, ...latestActions]);
-      }
-    });
-    return () => {
-      ignore = true;
-    };
-  }, [appState.firestore, posiFormDataConverter]);
+  const fetchActions = useCallback(
+    async ({ startDoc }: { startDoc: any | undefined }) => {
+      let currLatestDoc = startDoc;
+      console.log({ currLatestDoc });
+      let latestActions: PosiFormData[] = [];
+      let latestContentActions: PosiFormData[] = [];
+      let enoughLatestContentActions = false;
+      let hasMore = true;
+      do {
+        const snap: QuerySnapshot<PosiFormData> = await getDocs(
+          query(
+            collection(appState.firestore, "impacts").withConverter(
+              posiFormDataConverter
+            ),
+            limit(batchSize),
+            orderBy("createdAt", "desc"),
+            ...(currLatestDoc ? [startAfter(currLatestDoc)] : [])
+          )
+        );
+        currLatestDoc = snap.docs.slice(-1)[0];
+        latestActions = [
+          ...latestActions,
+          ...snap.docs.map((doc) => doc.data()),
+        ];
+        console.log({ latestActions });
+        latestContentActions = latestActions.filter((action) =>
+          isContentAction(action, chosenLocales)
+        );
+        enoughLatestContentActions = latestContentActions.length >= batchSize;
+        console.log({ enoughLatestContentActions, hasMore });
+        hasMore = snap.docs.length == batchSize;
+      } while (!enoughLatestContentActions && hasMore);
+
+      setLatestDoc(hasMore ? currLatestDoc : undefined);
+      return latestActions;
+    },
+    [appState.firestore, chosenLocales, posiFormDataConverter]
+  );
 
   useEffect(() => {
+    (async () => {
+      setCachedActions(await fetchActions({ startDoc: undefined }));
+    })();
+  }, [fetchActions]);
+
+  useEffect(() => {
+    console.log({ cachedActions });
     setDisplayedActions([
       ...cachedActions.filter((action) =>
-        Object.keys(action).some((l) => chosenLocales.includes(l as any))
+        isContentAction(action, chosenLocales)
       ),
     ]);
   }, [cachedActions, chosenLocales]);
 
   const next = useCallback(() => {
-    if (!latestDoc) {
-      return;
-    }
-    const nextQuery = query(
-      collection(appState.firestore, "impacts").withConverter(
-        posiFormDataConverter
-      ),
-      orderBy("createdAt", "desc"),
-      startAfter(latestDoc),
-      limit(batchSize)
-    );
-    getDocs(nextQuery).then((snap) => {
-      const latestActions = snap.docs.map((doc) => doc.data());
-      if (latestActions.length) {
-        setLatestDoc(snap.docs[snap.docs.length - 1]);
-      }
-      setHasMore(latestActions.length == batchSize);
-      setCachedActions((actions) => [...actions, ...latestActions]);
-    });
-  }, [latestDoc, appState.firestore, posiFormDataConverter]);
+    (async () => {
+      const latestActions = await fetchActions({ startDoc: latestDoc });
+      setCachedActions((actions) => {
+        console.log({ actions, latestActions });
+        return [...actions, ...latestActions];
+      });
+    })();
+  }, [fetchActions, latestDoc]);
 
   return (
     <InfiniteScroll
       next={next}
-      hasMore={hasMore}
+      hasMore={latestDoc != undefined}
       loader={<LinearProgress />}
       dataLength={displayedActions.length}
       style={{ display: "flex", flexDirection: "column" }}
