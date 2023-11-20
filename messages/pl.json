@@ -172,7 +172,6 @@
           },
           "fee": {
             "prompt": "Chcesz pokryć opłatę za przelew?",
-            "feeExplanation": "{feePercentage}% + {feeAmount} per transacción.",
             "preferInitiativePays": "Wolałbym, aby inicjatywa uiściła opłatę."
           },
           "publicizeSupporter": {

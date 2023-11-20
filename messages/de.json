@@ -172,7 +172,6 @@
           },
           "fee": {
             "prompt": "Möchten Sie die Zahlungsabwicklungsgebühr decken?",
-            "feeExplanation": "{feePercentage}% + {feeAmount} per transacción.",
             "preferInitiativePays": "Ich bevorzuge die Initiative zahlt die Gebühr"
           },
           "publicizeSupporter": {

@@ -172,7 +172,7 @@
           },
           "fee": {
             "prompt": "¿Quieres cubrir la tarifa de la pasarela de pagos?",
-            "feeExplanation": "{feePercentage}% + {feeAmount} por transacción.",
+            "feeExplanation": "{denyFee, select, true {Estas transacciones serán gratuitas para usted} other {{feePercentage}% + {feeAmount} por transacción}}.",
             "preferInitiativePays": "Prefiero que la iniciativa pague la tarifa."
           },
           "publicizeSupporter": {

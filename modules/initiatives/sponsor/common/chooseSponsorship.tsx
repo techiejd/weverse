@@ -276,6 +276,7 @@ const ChooseSponsorship = ({
               secondary={
                 /*TODO(techiejd): look into formatting with next-intl*/
                 chooseTranslations("fee.feeExplanation", {
+                  denyFee: initiativePaysFee,
                   feePercentage: `${(feePercentage * 100).toFixed(1)}`,
                   feeAmount: feeDisplayAmount,
                 })

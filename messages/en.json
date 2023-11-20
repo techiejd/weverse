@@ -172,7 +172,7 @@
           },
           "fee": {
             "prompt": "Want to cover the payment processing fee?",
-            "feeExplanation": "{feePercentage}% + {feeAmount} per transacción.",
+            "feeExplanation": "{denyFee, select, true {These transactions are now free for you} other {{feePercentage}% + {feeAmount} per transaction}}.",
             "preferInitiativePays": "I prefer the initiative pays the fee"
           },
           "publicizeSupporter": {

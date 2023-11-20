@@ -172,7 +172,6 @@
           },
           "fee": {
             "prompt": "Vous voulez couvrir les frais de traitement des paiements?",
-            "feeExplanation": "{feePercentage}% + {feeAmount} per transacción.",
             "preferInitiativePays": "Je préfère que l'initiative paie les frais"
           },
           "publicizeSupporter": {

@@ -172,7 +172,6 @@
           },
           "fee": {
             "prompt": "支払い処理手数料をカバーしたいですか？",
-            "feeExplanation": "{feePercentage}% + {feeAmount} per transacción.",
             "preferInitiativePays": "私はイニシアチブが手数料を支払う"
           },
           "publicizeSupporter": {

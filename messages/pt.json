@@ -172,7 +172,6 @@
           },
           "fee": {
             "prompt": "Deseja cobrir a taxa de processamento do pagamento?",
-            "feeExplanation": "{feePercentage}% + {feeAmount} per transacción.",
             "preferInitiativePays": "Eu prefiro que a iniciativa pague a taxa"
           },
           "publicizeSupporter": {
