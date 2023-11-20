@@ -146,7 +146,7 @@
     },
     "sponsor": {
       "sponsorship": "Patrocinio",
-      "title": "Patrocina a {InitiativeName}",
+      "title": "Patrocina a {initiativeName}",
       "total": "Total",
       "monthly": "Al mes",
       "levels": {
@@ -258,7 +258,7 @@
     },
     "impact": {
       "solicit": {
-        "title": "{InitiativeName}, ¡Obten los comentarios y obten más participación!",
+        "title": "{initiativeName}, ¡Obten los comentarios y obten más participación!",
         "solicitText": "Por favor dame tu opinion sobre mi acción social: {for}",
         "clickOnEarToSolicit": "Haz clic en la oreja para enviarles una encuesta sobre esta acción."
       }
@@ -349,7 +349,7 @@
     },
     "incubator": {
       "title": "Incubadora:",
-      "joinPrompt": "{InitiativeName} te invita a unirte a su red de incubadora.",
+      "joinPrompt": "{initiativeName} te invita a unirte a su red de incubadora.",
       "isThisActionValid": "¿Esta acción es válida?",
       "actionIsValid": "Sí, es valida",
       "validationProcess": {
