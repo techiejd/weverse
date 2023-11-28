@@ -150,8 +150,8 @@ export const Header = ({
             src="/logo.png"
             priority
             alt="OneWe logo"
-            width={"125"}
-            height={"20"}
+            width={"100"}
+            height={"25"}
           />
         </Link>
 
