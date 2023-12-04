@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import { Header } from "./header";
 import { ComponentType, FC, Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/router";
