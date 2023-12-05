@@ -41,12 +41,12 @@ const MyInitiativeSpeedDial = ({ initiative }: { initiative: Initiative }) => {
     <SpeedDialAction
       key="Ver"
       icon={
-        <Link href={`${initiative.path}`} style={{ textDecoration: "none" }}>
+        <Link href={`/${initiative.path}`} style={{ textDecoration: "none" }}>
           <Visibility />
         </Link>
       }
       tooltipTitle={
-        <Link href={`${initiative.path}`} style={{ textDecoration: "none" }}>
+        <Link href={`/${initiative.path}`} style={{ textDecoration: "none" }}>
           {t("view")}
         </Link>
       }
@@ -56,7 +56,7 @@ const MyInitiativeSpeedDial = ({ initiative }: { initiative: Initiative }) => {
       key={"Editar"}
       icon={
         <Link
-          href={`${initiative.path}/edit`}
+          href={`/${initiative.path}/edit`}
           style={{ textDecoration: "none" }}
         >
           <Edit />
@@ -64,7 +64,7 @@ const MyInitiativeSpeedDial = ({ initiative }: { initiative: Initiative }) => {
       }
       tooltipTitle={
         <Link
-          href={`${initiative.path}/edit`}
+          href={`/${initiative.path}/edit`}
           style={{ textDecoration: "none" }}
         >
           {callToActionTranslations("edit")}

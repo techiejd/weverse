@@ -27,7 +27,7 @@ const SocialProofCard = ({
   const SocialProofCardHeader = () => {
     const [fromMember] = useInitiative(socialProof.fromMember);
     return (
-      <CardActionArea href={`${socialProof.fromMember}`}>
+      <CardActionArea href={`/${socialProof.fromMember}`}>
         <CardHeader
           title={
             <Stack

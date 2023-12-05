@@ -53,9 +53,6 @@ const InitiativeInput = ({
         type == "organization" ? val.organizationType : undefined,
     }));
   };
-  const chooseInitiativeTypeTranslations = useTranslations(
-    "initiatives.edit.chooseInitiativeType"
-  );
 
   const setEmail = (email: string) => {
     setVal((initiative) => ({
@@ -89,10 +86,10 @@ const InitiativeInput = ({
   };
 
   const inputTranslations = useTranslations("input");
-  const organizationTypeTranslations = useTranslations(
-    "initiatives.edit.chooseInitiativeType.organizationType"
-  );
   const initiativeTypesTranslations = useTranslations("initiatives.types");
+  const chooseInitiativeTypeTranslations = useTranslations(
+    "initiatives.edit.chooseInitiativeType"
+  );
 
   return (
     <Stack alignItems={"center"}>
@@ -127,9 +124,9 @@ const InitiativeInput = ({
         <TextField
           required
           fullWidth
-          label={`${organizationTypeTranslations(
-            "namePrompt"
-          )} (${inputTranslations("numChars", { numChars: 75 })})`}
+          label={`${chooseInitiativeTypeTranslations("namePrompt", {
+            initiativeType: val.type,
+          })}* (${inputTranslations("numChars", { numChars: 75 })})`}
           margin="normal"
           inputProps={{ maxLength: 75 }}
           value={val.name ? val.name : ""}

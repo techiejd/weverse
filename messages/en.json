@@ -408,13 +408,10 @@
         "individual": "I work alone",
         "organization": "I'm part of an organization",
         "essentialInformation": "Essential initiative information",
-        "organizationType": {
-          "namePrompt": "What's the organization's name?",
-          "title": "Organization type"
-        }
+        "namePrompt": "What's the {initiativeType, select, individual {initiative} other {organization}}'s name?"
       },
       "detailedInput": {
-        "askForInfoMsg": "{initiativeType, select, individual {Please, tell us about yourself.} other {Please, tell us about your organization.}}",
+        "askForInfoMsg": "Please, tell us about your {initiativeType, select, individual {initiative} other {organization}}.",
         "askForImage": "{initiativeType, select, individual {Select an image with which you'll be identified by the OneWe community.} other {Upload your logo.}}",
         "incubator": {
           "whatIsYourValidationProcess": "How does the incubator validate actions in order to give out seals of approval?",

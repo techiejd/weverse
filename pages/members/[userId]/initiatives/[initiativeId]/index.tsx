@@ -400,6 +400,7 @@ const VipDialog = ({
   const [actions] = useCurrentActions();
   const [socialProofs] = useCurrentTestimonials();
   const vipState = useVipState(myInitiative, socialProofs, actions);
+  console.log(myInitiative);
   return (
     <Dialog open={open}>
       <DialogTitle>{vipDialogTranslations("title")}</DialogTitle>
@@ -438,7 +439,7 @@ const VipDialog = ({
             />
           </ListItemButton>
           <ListItemButton
-            href={`${myInitiative.path}/edit`}
+            href={`/${myInitiative.path}/edit`}
             disabled={vipState.allFieldsFinished}
           >
             <ListItemIcon>
@@ -533,7 +534,7 @@ const BottomBar = () => {
   }: {
     initiative: Initiative;
   }) => (
-    <CenterBottomFab color="secondary" href={`${initiative.path}/invite`}>
+    <CenterBottomFab color="secondary" href={`/${initiative.path}/invite`}>
       <PersonAdd />
       <Typography fontSize={12}>{bottomBarTranslations("invite")}</Typography>
     </CenterBottomFab>
@@ -555,7 +556,7 @@ const BottomBar = () => {
         }
         solicitOpinionPath={`${initiative.path}/impact/upload`}
         pathUnderSupport={`${initiative.path}`}
-        editInitiativePath={`${initiative.path}/edit`}
+        editInitiativePath={`/${initiative.path}/edit`}
       />
       <VipDialog
         open={vipDialogOpen}
@@ -568,7 +569,7 @@ const BottomBar = () => {
         setOpen={setIncubateeVIPDialogOpen}
       />
       <Toolbar>
-        <IconButtonWithLabel href={`${initiative.path}/edit`}>
+        <IconButtonWithLabel href={`/${initiative.path}/edit`}>
           <Edit />
           <Typography>{callToActionTranslations("edit")}</Typography>
         </IconButtonWithLabel>

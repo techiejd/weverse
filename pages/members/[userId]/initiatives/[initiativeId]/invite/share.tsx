@@ -117,7 +117,7 @@ const SharePage = asOneWePage(() => {
           />
         ))}
 
-      <Button variant="outlined" href={`${initiative?.path}`}>
+      <Button variant="outlined" href={`/${initiative?.path}`}>
         Volver a mi perfil
       </Button>
     </Stack>

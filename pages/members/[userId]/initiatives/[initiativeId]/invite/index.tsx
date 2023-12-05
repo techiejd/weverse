@@ -190,7 +190,7 @@ const Invite = asOneWePage(() => {
         loading={loading}
         href={
           initiative
-            ? buildUrl(`${initiative.path!}/invite/share`, {
+            ? buildUrl(`/${initiative.path!}/invite/share`, {
                 queryParams: {
                   initiativeNames,
                   inviter: initiative.path,

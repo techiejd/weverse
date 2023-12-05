@@ -14,12 +14,12 @@ const ThanksForTestimonial = () => {
       <Typography>{thanksTranslations("thisIsHowWeChangeTheWorld")}</Typography>
       <Typography>{thanksTranslations("whatWouldYouLikeToDoNow")}</Typography>
       {forAction && (
-        <Button href={`${forAction.path}`} variant="contained">
+        <Button href={`/${forAction.path}`} variant="contained">
           {thanksTranslations("seeWhatOthersSaidAboutThisAction")}
         </Button>
       )}
       {(forInitiative && (
-        <Button href={`${forInitiative.path}`} variant="contained">
+        <Button href={`/${forInitiative.path}`} variant="contained">
           {thanksTranslations("seeOtherActionsAndImpactsByThisInitiative")}
         </Button>
       )) || <CircularProgress />}

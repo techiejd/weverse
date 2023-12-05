@@ -69,7 +69,7 @@ const AdminBottomBar = ({
         editInitiativePath={`${myInitiative.path}/edit`}
       />
       <Toolbar>
-        <IconButtonWithLabel href={`${action.path}/action/edit`}>
+        <IconButtonWithLabel href={`/${action.path}/action/edit`}>
           <Edit />
           <Typography>{callToActionTranslations("edit")}</Typography>
         </IconButtonWithLabel>

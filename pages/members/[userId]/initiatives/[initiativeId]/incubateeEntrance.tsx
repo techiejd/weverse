@@ -195,7 +195,7 @@ const IncubateeEntrance = asOneWePage(() => {
             </DialogContent>
             <DialogActions>
               {homeButton}
-              <Button variant="contained" href={`${myInitiatives?.[0]?.path}`}>
+              <Button variant="contained" href={`/${myInitiatives?.[0]?.path}`}>
                 {t("viewMyInitiative")}
               </Button>
             </DialogActions>
@@ -213,7 +213,7 @@ const IncubateeEntrance = asOneWePage(() => {
                   incubatorName: myIncubator?.name,
                   incubatorNameTag: (incubatorName) => (
                     <Link
-                      href={`${myInitiatives?.[0]?.path}`}
+                      href={`/${myInitiatives?.[0]?.path}`}
                     >{`${incubatorName}`}</Link>
                   ),
                 })}
@@ -275,7 +275,7 @@ const IncubateeEntrance = asOneWePage(() => {
             initiativeNameTag: (initiativeName) => (
               <Typography variant="h2">
                 <Link
-                  href={`${incubator?.path}`}
+                  href={`/${incubator?.path}`}
                   sx={{ color: "black" }}
                 >{`${initiativeName}`}</Link>
               </Typography>

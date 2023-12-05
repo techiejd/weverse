@@ -68,7 +68,7 @@ const BottomBar = () => {
   const firstInitiative = myInitatives?.[0];
   const uploadActionPath =
     myMember && firstInitiative
-      ? `${firstInitiative.path}/actions/upload`
+      ? `/${firstInitiative.path}/actions/upload`
       : "/members/undefined/initiatives/undefined/actions/upload";
   useEffect(() => {
     const scrollAnimElements = document.querySelectorAll(
@@ -111,7 +111,7 @@ const BottomBar = () => {
       <Link
         href={
           myMember
-            ? `${myMember.path}`
+            ? `/${myMember.path}`
             : "/members/logIn?registerRequested=true"
         }
         style={{ textDecoration: "none" }}
