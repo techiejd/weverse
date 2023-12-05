@@ -13,26 +13,31 @@ import {
 } from "../../../../../../common/utils/translations";
 import { PosiFormData, locale } from "../../../../../../functions/shared/src";
 import PosiForm from "../../../../../../modules/posi/action/form";
+import { CachePaths } from "../../../../../../common/utils/staticPaths";
+import { useCurrentInitiative } from "../../../../../../modules/initiatives/context";
 
+export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 
 const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
   const appState = useAppState();
   const router = useRouter();
-  const { user } = useAppState().authState;
+  const [initiative] = useCurrentInitiative();
   const posiFormDataConverter = usePosiFormDataConverter();
   const localeIn = appState.languages.primary;
   const onSubmit = useCallback(
     async (usersPosi: PosiFormData) => {
+      if (!initiative) return;
       const docRef = await addDoc(
-        collection(appState.firestore, "actions").withConverter(
-          posiFormDataConverter
-        ),
+        collection(
+          appState.firestore,
+          `${initiative.path!}/actions`
+        ).withConverter(posiFormDataConverter),
         usersPosi
       );
-      router.push(`/posi/${docRef.id}/impact/solicit`);
+      router.push(`/${docRef.path}/impact/solicit`);
     },
-    [appState.firestore, posiFormDataConverter, router]
+    [appState.firestore, initiative, posiFormDataConverter, router]
   );
   const t = useTranslations("actions.upload");
 
@@ -60,7 +65,7 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
           </div>
         </Box>
       </Stack>
-      {user ? (
+      {initiative ? (
         <PosiForm
           onInteraction={{ type: "create", onSubmit }}
           locale2Messages={locale2Messages}

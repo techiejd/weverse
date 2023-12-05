@@ -28,9 +28,9 @@ export const useCurrentActions = () => {
   const [initiative] = useCurrentInitiative();
   return useCollectionData(
     initiative
-      ? query(
-          collection(appState.firestore, "actions"),
-          where("initiativePath", "==", initiative.path)
+      ? collection(
+          appState.firestore,
+          `${initiative.path}/actions`
         ).withConverter(posiFormDataConverter)
       : undefined
   );
@@ -42,9 +42,9 @@ export const useCurrentTestimonials = () => {
   const socialProofConverter = useSocialProofConverter();
   return useCollectionData(
     initiative
-      ? query(
-          collection(appState.firestore, "socialProofs"),
-          where("forInitiative", "==", initiative.path)
+      ? collection(
+          appState.firestore,
+          `${initiative.path}/testimonials`
         ).withConverter(socialProofConverter)
       : undefined
   );

@@ -10,7 +10,11 @@ import {
   Typography,
 } from "@mui/material";
 import { SocialProof } from "../../functions/shared/src";
-import { useAction, useInitiative } from "../../common/context/weverseUtils";
+import {
+  useAction,
+  useInitiative,
+  useMember,
+} from "../../common/context/weverseUtils";
 import Media from "./media";
 import { useTranslations } from "next-intl";
 import { useLocalizedPresentationInfo } from "../../common/utils/translations";
@@ -25,7 +29,7 @@ const SocialProofCard = ({
   showAction?: boolean;
 }) => {
   const SocialProofCardHeader = () => {
-    const [fromMember] = useInitiative(socialProof.fromMember);
+    const [fromMember] = useMember(socialProof.fromMember);
     return (
       <CardActionArea href={`/${socialProof.fromMember}`}>
         <CardHeader

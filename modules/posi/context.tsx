@@ -33,7 +33,7 @@ export const useCurrentSocialProofs = () => {
     posiPath
       ? collection(
           appState.firestore,
-          posiPath + "/socialProofs"
+          posiPath + "/testimonials"
         ).withConverter(socialProofConverter)
       : undefined
   );

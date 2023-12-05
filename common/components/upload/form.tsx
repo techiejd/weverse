@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { FileInput } from "../../../modules/posi/input";
-import { doc, writeBatch } from "firebase/firestore";
+import { collection, doc, writeBatch } from "firebase/firestore";
 import { pickBy, identity } from "lodash";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -19,16 +19,22 @@ import {
 } from "../../utils/firebase";
 import { useAppState } from "../../context/appState";
 import { useTranslations } from "next-intl";
-import { v4 } from "uuid";
 import { useCurrentInitiative } from "../../../modules/initiatives/context";
 import { useCurrentPosi } from "../../../modules/posi/context";
+
+const buildThankYouPath = (path: string) => {
+  const parts = path.split("/");
+  parts.pop();
+  return `${parts.join("/")}/thanks`;
+};
 
 const UploadSocialProofForm = () => {
   const appState = useAppState();
   const router = useRouter();
-  const { pathname } = router;
-  const forInitiative = useCurrentInitiative();
-  const forAction = useCurrentPosi();
+  const { asPath } = router;
+  console.log(router);
+  const [forInitiative] = useCurrentInitiative();
+  const [forAction] = useCurrentPosi();
   const isAction = !!forAction;
 
   const [myMember] = useMyMember();
@@ -58,17 +64,17 @@ const UploadSocialProofForm = () => {
         }
 
         if (myMember) {
-          const testimonialPath =
-            (forAction || forInitiative) + "/testimonials/" + v4();
           setUploading(true);
+          if (!forInitiative) {
+            return;
+          }
           const socialProofEncoded = socialProof.parse(
             pickBy(
               {
-                path: testimonialPath,
                 rating: rating,
                 fromMember: myMember.path,
-                forInitiative: forInitiative,
-                forAction: forAction,
+                forInitiative: forInitiative.path,
+                forAction: forAction?.path,
                 videoUrl: media && media != "loading" ? media.url : undefined,
                 text: text != "" ? text : undefined,
               },
@@ -77,24 +83,24 @@ const UploadSocialProofForm = () => {
           );
 
           const batch = writeBatch(appState.firestore);
+          const collectionPath = `${
+            isAction ? forAction.path! : forInitiative.path!
+          }/testimonials`;
           batch.set(
-            doc(appState.firestore, testimonialPath).withConverter(
+            doc(collection(appState.firestore, collectionPath)).withConverter(
               socialProofConverter
             ),
             socialProofEncoded
           );
           batch.set(
             doc(
-              appState.firestore,
-              myMember.path!,
-              "from",
-              testimonialPath.replaceAll("/", "_")
+              collection(appState.firestore, myMember.path!, "from")
             ).withConverter(fromConverter),
             { type: "testimonial", data: socialProofEncoded }
           );
           await batch.commit();
 
-          router.push(`${pathname}/thanks`);
+          router.push(buildThankYouPath(asPath));
         } else {
           setError("Internal error.");
         }
