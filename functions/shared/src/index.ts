@@ -271,6 +271,13 @@ export type Sponsorship = z.infer<typeof sponsorship>;
 
 export const incubatee = dbBase.extend({
   initiativePath: z.string().optional(), // Path to the initiative that accepted.
+  initializeWith: z
+    .object({
+      name: z.string().min(1),
+      type: initiativeType,
+      organizationType: organizationType.optional(),
+    })
+    .optional(),
 });
 
 export type Incubatee = z.infer<typeof incubatee>;

@@ -1,0 +1,493 @@
+{
+  "header": {
+    "languagePortal": {
+      "chooseYourLanguage": "言語を選択してください",
+      "primaryLanguage": "主な言語",
+      "polyglot?": "Polyglot",
+      "explanationPrimaryLanguage": "アプリケーション全体で使用されるメイン言語。",
+      "explanationContentLanguages": "どの言語でも行動や証言が表示されます。"
+    }
+  },
+  "index": {
+    "publish": "公開",
+    "myPage": "マイページ",
+    "seeContentIn": "内容を見る",
+    "countMeInDialog": {
+      "title": "あなたを乗せてくれてうれしい!",
+      "contribute": "OneWe運動に貢献します。",
+      "sponsorOneWe": "Sponsor OneWe",
+      "uploadAnAction": "アクションをアップロード",
+      "registerOrLoginPrompt": "メンバーとして登録（またはログイン）",
+      "giveOneWeTestimonial": "1つを与える私たちは証言です",
+      "shareOneWe": "OneWeを共有",
+      "seeOneWe": "私たちのプラットフォームを見る"
+    }
+  },
+  "auth": {
+    "register": "登録",
+    "validationProcess": "私たちはあなたの電話番号を確認し、あなたは {action, select, 0 {ログイン} other {登録}} プロセスを完了するために、この番号に確認コードを受け取ります。",
+    "namePlaceholder": "あなたのお名前は？",
+    "nameHelperText": "あなたは何と呼ばれるのが好きですか? これがあなたがコミュニティで知られる方法です。",
+    "pleaseWaitWhileWeCheckUserStatus": "あなたが {authAction, select, 0 {であることを確認します。すでに} other {}} は登録されていません。",
+    "userRegisteredError": "こんにちは、あなたは {authAction, select, 0 {not} other {already}} が登録されました。",
+    "confirmRegistrationDialog": {
+      "review": "あなたの情報を確認してください",
+      "name": "名前:"
+    },
+    "invitedInitiative": {
+      "invalidInvitationLinkAskForAnother": "このリンクは無効です。別の招待リンクをインキュベーターに問い合わせてください。",
+      "usedInvitationLink": "このリンクは既に使用されています。別の招待リンクについては、インキュベーターにお問い合わせください。"
+    },
+    "handleOtp": {
+      "restartPrompt": "もう一度やり直してください。",
+      "invitedInitiativeNotPossible": "招待リンクに登録することはできません。",
+      "invalidOtp": "認証コードが無効です。"
+    },
+    "otpDialog": {
+      "prompt": "SMS経由で受信した認証コードを入力してください。",
+      "checkSpam": "受信できない場合は、迷惑メールフォルダを確認してください。"
+    },
+    "recaptchaDialog": {
+      "title": "あなたがロボットではないことを証明してください",
+      "inCaseCantGoOnContactCommunity": "続けることができない場合は、 <email>community@onewe.co</email> までご連絡ください。"
+    }
+  },
+  "input": {
+    "defaultCountry": {
+      "long": "アメリカ",
+      "short": "米国"
+    },
+    "cancel": "キャンセル",
+    "save": "保存",
+    "close": "閉じる",
+    "phoneNumber": "電話番号",
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "Eメールアドレス",
+    "postalCode": "郵便番号",
+    "country": "国",
+    "location": "場所を検索...",
+    "numChars": "{numChars} 文字",
+    "next": "次へ",
+    "back": "戻る",
+    "ok": "OK",
+    "yes": "はい",
+    "internationalizedDetailed": {
+      "title": "他の言語の詳細情報",
+      "prompt": "別の言語を追加"
+    }
+  },
+  "common": {
+    "loading": "読み込み中",
+    "motto": "{tense, select, imperative {解の一部になりましょう} other {解の一部になります}}",
+    "logInPrompt": "まだ登録していない場合は登録してください。ログインしている場合はログインしてください。",
+    "pageTitle": {
+      "byOneWe": "by OneWe"
+    },
+    "callToAction": {
+      "countMeIn": "私を数えてください",
+      "edit": "編集",
+      "actions": {
+        "list": "アクション",
+        "add": "アクションを追加"
+      },
+      "home": "ホーム",
+      "listInitiatives": "取り組み",
+      "login": "ログイン",
+      "logout": "ログアウト",
+      "yourMemberPage": "マイメンバーページ",
+      "share": "共有",
+      "support": "サポート",
+      "sponsor": "スポンサー情報",
+      "testify": "証言を与える",
+      "connect": "接続する",
+      "update": "更新",
+      "delete": "削除"
+    },
+    "meta_comment": "TODO(techiejd): Actionsであるすべてのものをイニシアチブの下に移動し、その共通コンポーネントをイニシアチブの下に移動させます。",
+    "solicitHelpDialog": {
+      "title": "サポートを依頼する",
+      "reminderThatTheyCanSolicitMoreByEditingInitiativePath": "覚えておいてください, あなたのイニシアチブのページ <link>でそれを要求することによって、他のタイプの(非金融) ヘルプ</link> を求めることができます.",
+      "solicit": {
+        "all": {
+          "title": "すべてを要求",
+          "prompt": "社会的影響について協力したいと思います。"
+        },
+        "testimonial": {
+          "title": "証言を求める",
+          "prompt": "私の社会的影響を証言してください。"
+        },
+        "sponsorship": {
+          "title": "スポンサーを依頼する",
+          "prompt": "私は社会的影響のスポンサーを探しています。"
+        },
+        "connect": {
+          "title": "接続を依頼する",
+          "prompt": "自分のソーシャルインパクトにつなげましょう"
+        }
+      }
+    },
+    "supportDialog": {
+      "title": "サポートしていただきありがとうございます!",
+      "share": "{beneficiaryType, select, action {このクールなソーシャルアクションを見てみましょう! サポートしましょう!} other {この素晴らしいイニシアチブを見てみましょう! サポートしましょう!}}"
+    },
+    "contactSupportDialog": {
+      "missingInfoTitle": "イニシアチブはまだ彼らのプロフィールを終了していません。",
+      "title": "イニシアチブは、次の方法で連絡することができます:",
+      "missingInfoText": "サポートしていただきありがとうございます！私たちはあなたの関心についてのイニシアチブを警告しました。私たちはあなたの質問が迅速に終了するように説得することを願っています。"
+    },
+    "sponsorDialog": {
+      "title": "あなたのスポンサーシップに感謝します!",
+      "oneWeIsWorkingOnMakingAGoodExp": "私たちはあなたのために良い経験をするためのイニシアチブと協力しています。",
+      "logInPrompt": "スポンサー登録会員である必要があります。"
+    },
+    "underConstruction": {
+      "title": "すぐに戻ってきなさい！"
+    },
+    "sponsor": {
+      "sponsorship": "スポンサーシップ",
+      "title": "スポンサー {initiativeName}",
+      "total": "合計",
+      "monthly": "月ごと",
+      "levels": {
+        "admirer": "アドミラー",
+        "fan": "ファン",
+        "lover": "Lover",
+        "custom": "カスタム"
+      },
+      "steps": {
+        "choose": {
+          "defaultCurrency": "SD",
+          "short": "選択",
+          "title": "スポンサーレベルを選択してください",
+          "level": "レベル {level}",
+          "currency": {
+            "prompt": "通貨を選択してください",
+            "chooseWiselyWarning": "賢明に選択してください。この情報を保存するため、最初のスポンサーでのみ通貨を選択できます。"
+          },
+          "tip": {
+            "prompt": "OneWeのためにヒントを残したいですか?",
+            "showUsYourLove": "私たちを見せてください!, あなたは私たちを愛してどのくらい.",
+            "forTheService": "サービスの場合は、プラットフォームを介して提供します。"
+          },
+          "fee": {
+            "prompt": "支払い処理手数料をカバーしたいですか？",
+            "preferInitiativePays": "私はイニシアチブが手数料を支払う"
+          },
+          "publicizeSupporter": {
+            "prompt": "OneWeコミュニティに伝えましょうか？",
+            "initiativeKnows": "イニシアチブは、誰がそれらをスポンサーするかを常に知っています",
+            "publicizeSupporterExplanation": "スポンサーシップを公表することを選択した場合、あなたの名前とプロフィール写真は、より大きなOneWe コミュニティに表示されます。",
+            "publish": "私がこのイニシアチブをスポンサーしていることをOneWe コミュニティに知ってもらいたい。"
+          }
+        },
+        "customer": {
+          "short": "顧客情報",
+          "title": "顧客情報"
+        },
+        "payment": {
+          "short": "支払い",
+          "card": {
+            "number": "カード番号",
+            "expiry": "Expiry"
+          }
+        },
+        "confirm": {
+          "short": "確認する"
+        }
+      },
+      "details": {
+        "sponsorshipSummary": {
+          "title": "スポンサーシップの概要",
+          "level": "スポンサーレベル"
+        },
+        "payment": {
+          "title": "支払いの詳細",
+          "holder": "カード名義人名"
+        }
+      },
+      "thanks": {
+        "title": "{sponsorName}、 {beneficiaryName} をスポンサーしていただきありがとうございます！",
+        "togetherYouChangeTheWorld": "共に世界を変えるのです"
+      }
+    },
+    "validatorBadge": {
+      "validationProcess": "バリデーションプロセス",
+      "missingValidationProcess": "インキュベーターはまだ検証プロセスをアップロードしていません。",
+      "learnMore": "詳細はインキュベーターのページをご覧ください。"
+    }
+  },
+  "actions": {
+    "card": {
+      "validation": {
+        "validatedBy": "認証者：",
+        "inValidationProcess": "検証プロセス:"
+      }
+    },
+    "testimonials": "Testimonials",
+    "emptyTestimonials": "まだ証言はありません。追加してください！",
+    "upload": {
+      "submit": "公開",
+      "title": "アクションを公開! 🪧",
+      "whatIsAnAction": "アクションとは何ですか?",
+      "logInPrompt": "アクションを発行するには、まずメンバーとして登録する必要があります。",
+      "sections": {
+        "media": {
+          "title": "あなたがやったことを少し教えてください",
+          "prompt": "アクションの写真またはビデオをアップロードします。"
+        },
+        "summary": {
+          "title": "アクションをまとめます",
+          "examples": {
+            "title": "良い要約例",
+            "1": "私たちは低所得の学校から150人の子どもたちにAIを使って生活を向上させるように教えました。",
+            "2": "私は家の近くの川からゴミで1袋を埋めました。",
+            "3": "アマゾンに200人のコミュニティのための灌漑システムを構築しました"
+          },
+          "prompt": "この概要はあなたのアクションのタイトルになります。"
+        },
+        "location": {
+          "title": "この行動はどこでなされたか?"
+        },
+        "validator": {
+          "title": "インキュベーターの操作",
+          "explanation": "注意: One私たちはあなたのインキュベーターの検証を探します。"
+        }
+      }
+    },
+    "impact": {
+      "solicit": {
+        "title": "{initiativeName}, 証言を得て、より多くのエンゲージメントを得ましょう!",
+        "solicitText": "私の行動についてのご意見をお聞かせください： {for}",
+        "clickOnEarToSolicit": "彼らに証言を求める調査を送るために耳をクリックしてください。"
+      }
+    },
+    "about": {
+      "explanation": "このアクションについて",
+      "coverVideo": "カバービデオ",
+      "location": "場所"
+    },
+    "empty": "アクションはまだありません。追加してください！",
+    "solicit": {
+      "support": "サポート",
+      "testimonial": "Listen",
+      "requests": {
+        "opinion": "自分の行動に対するソーシャルインパクトについてのあなたの意見を教えてください： {summary}",
+        "look": "私の社会的な行動を見てみましょう。"
+      }
+    },
+    "edit": {
+      "title": "アクションを編集"
+    }
+  },
+  "testimonials": {
+    "card": {
+      "forAction": "アクション: {action}",
+      "forInitiative": "イニシアチブ: {initiative}"
+    },
+    "prompt": {
+      "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag><prompt>は、彼らの行動があなたの人生にどのような影響を与えたかを知りたいと考えています。{forAction, select, true {} other {}}</prompt>",
+      "share": "この操作の証言をシェアする",
+      "callToAction": "推薦状を作成する準備ができました",
+      "logInPrompt": "証言を行うには、まずメンバーとして登録する必要があります。",
+      "for": "{forAction, select, true {質問:} other {アクション:}}"
+    },
+    "form": {
+      "rate": "{forAction, select, true {アクションを評価} other {イニシアチブ}}:",
+      "inVideoFormat": "セルフィー動画で",
+      "videoSuggestions": "30秒から5分と任意。",
+      "inTextFormat": "自分の言葉で",
+      "andOptional": "{numChars} とオプション。",
+      "writtenTestimonial": "記述されたtestioonial",
+      "whatImpactPrompt": "詳細は {forAction, select, true {アクション} other {イニシアチブ}} あなたの人生にはどんな影響がありますか?",
+      "submit": "証言を公開"
+    },
+    "thanks": {
+      "title": "あなたの証言に感謝します",
+      "thisIsHowWeChangeTheWorld": "これが私達が世界を変える方法です!",
+      "theInformationIsValuable": "あなたが提供した情報はOneWe コミュニティにとって価値があります。",
+      "whatWouldYouLikeToDoNow": "あなたは今何をしたいですか？",
+      "seeWhatOthersSaidAboutThisAction": "このアクションについて他の人が何を言ったかを見る",
+      "seeOtherActionsAndImpactsByThisInitiative": "このイニシアチブによる他の行動と影響を見る",
+      "goToHomePage": "ホームページに移動"
+    }
+  },
+  "initiatives": {
+    "title": "取り組み",
+    "card": {
+      "title": "イニシアチブformat@@0"
+    },
+    "sponsorships": {
+      "list": "参加:",
+      "loading": "スポンサーシップ: カーガンド...",
+      "none": "スポンサーはありません。",
+      "billingCycleStarted": "請求サイクル開始日: {formattedDate}"
+    },
+    "about": {
+      "title": "について:",
+      "none": "イニシアチブは、彼らの「セクションについて」を記入していません。"
+    },
+    "incubateeEntrance": {
+      "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>がインキュベーターネットワークの一部になるよう招待しています。</prompt>",
+      "specialTitleForGWNLmXTQ3qXtpYSE6awp": "<prompt>Hey cooleader 😎, <initiativeNameTag>{initiativeName}</initiativeNameTag> が国際平和デーを祝うためにあなたを招待しています。</prompt>",
+      "whyEnter": "インキュベーターに入ると、それに付属する露出と指導を楽しむことができます。",
+      "callToAction": "インキュベーターを入力してください",
+      "acceptedIncubateeInitiatives": "急落したイニシアチブ:",
+      "alreadyIncubated": "あなたのイニシアチブはすでにこのインキュベーターの一部です。",
+      "logInPrompt": "インキュベーターに入るには、まずメンバーとして登録するか、ログインする必要があります。",
+      "dialog": {
+        "tryWithDifferentInitiative": "別のイニシアチブで試す",
+        "selfIncubationErrorTitle": "あなた自身を孵化させることはできません。",
+        "successTitle": "ようこそ！",
+        "successMessage": "正常にインキュベイトとして入力しました。",
+        "viewMyInitiative": "私のイニシアチブに移動",
+        "changeIncubatorPromptTitle": "インキュベーターを変更してもよろしいですか？",
+        "currentlyIncubatedBy": "現在、 <incubatorNameTag>{incubatorName}</incubatorNameTag> によってインキュベーションされています。",
+        "notAnIncubatorErrorTitle": "このイニシアチブはインキュベーターではありません。"
+      }
+    },
+    "incubator": {
+      "title": "インキュベーター:",
+      "joinPrompt": "{initiativeName} は、インキュベーターとしてあなたをネットワークの一部にするよう招待しています。",
+      "isThisActionValid": "このアクションは有効ですか?",
+      "actionIsValid": "はい、有効です。",
+      "validationProcess": {
+        "title": "バリデーションプロセス:",
+        "none": "インキュベーターは検証プロセスをアップロードしていません。"
+      },
+      "pendingValidation": {
+        "title": "保留中の検証:",
+        "none": "保留中の検証はありません。"
+      },
+      "incubatees": {
+        "title": "Incubatees:",
+        "none": "インキュベイトはありません。"
+      },
+      "invited": {
+        "title": "招待済み:",
+        "none": "招待された人はいません。"
+      }
+    },
+    "bottomBar": {
+      "vip": "VIP",
+      "invite": "招待",
+      "sharePrompt": "私のイニシアチブのページをご覧ください!",
+      "solicitSupportShort": "サポートを受ける",
+      "addActionShort": "アクション"
+    },
+    "vip": {
+      "logInPrompt": "VIPラウンジに入るには、メンバーとしてログインしてください。",
+      "welcome": "VIPラウンジへようこそ！",
+      "underConstruction": "現在、この体験をより良くするために取り組んでいます。",
+      "dialog": {
+        "title": "VIPラウンジに入るには:",
+        "startProcessPrompt": "各タスクをクリックしてプロセスを開始します:",
+        "oneActionDone": {
+          "primary": "アクションを追加",
+          "secondary": "我々は行動を追加することによって、世界の変化を示しています。"
+        },
+        "getThreeTestimonials": {
+          "primary": "彼らの証言や意見を得ることによって影響を受けた3人に耳を傾けてください。",
+          "secondary": "{numSocialProofsDone}/3 の証言を受け取ったコミュニティがディスカッションに参加します。"
+        },
+        "finishInitiativeProfile": {
+          "primary": "Initiativeプロフィールの入力を完了します。",
+          "secondary": {
+            "finished": "終わりました。",
+            "missingTheseFields": "次のフィールドが空です: {fields}"
+          }
+        }
+      }
+    },
+    "edit": {
+      "title": "イニシアチブのページを編集",
+      "initiativeDefinition": "イニシアチブ=困難を解決したり、状況を改善することを目的とした行動または戦略。",
+      "chooseInitiativeType": {
+        "individual": "私は単独で作業します",
+        "organization": "私は組織の一員です",
+        "essentialInformation": "本質的なイニシアチブ情報",
+        "organizationType": {
+          "namePrompt": "組織の名前は？",
+          "title": "組織の種類"
+        }
+      },
+      "detailedInput": {
+        "askForInfoMsg": "{initiativeType, select, individual {あなたについて教えてください。} other {あなたの組織について教えてください。}}",
+        "askForImage": "{initiativeType, select, individual {OneWe コミュニティで識別される画像を選択してください。} other {ロゴをアップロードしてください。}}",
+        "incubator": {
+          "whatIsYourValidationProcess": "インキュベーターは、承認のシールを与えるための行動をどのように検証しますか?",
+          "leaveDetails": "確認プロセスの詳細はこちらに記載してください。",
+          "devilIsInTheDetailsReminder": "悪魔は細部にあります。詳細を伝えたり追いかけたりすればするほど、コミュニティと共に築く信頼が高まります。"
+        },
+        "nonFinancialHelp": {
+          "whatOtherHelpDoYouNeed": "どのような種類の非財務的なヘルプが{initiativeType, select, individual { あなた} other {が組織}} が必要ですか?",
+          "leaveContactDetails": "ここに連絡先の詳細を残し、必要なヘルプを明示してください。",
+          "helperText": "ボランティアを受け取る準備ができている場合は、ニュースや弁護士、開発者などの専門家に相談してください。 など、明示的にお願いし、リンクまたは他の詳細を残してください彼らはあなたに連絡する。 例えば、電話番号、電子メール、ソーシャルネットワーク、ページリンクなどです。"
+        },
+        "email": "OneWe will community communicate related information with you by email",
+        "profileImage": "{initiativeType, select, individual {プロフィール写真を選択してください} other {あなたの組織のプロフィール写真}}",
+        "story": {
+          "title": "{initiativeType, select, individual {あなた自身とあなたの取り組みについて教えてください} other {組織とその内容について教えてください}}",
+          "video": {
+            "title": "プレゼンテーションビデオ:",
+            "prompt": "あなた自身について、なぜスポンサーになるべきなのかを教えてください。"
+          },
+          "blurb": {
+            "title": "Presentation blurb:",
+            "prompt": "ストーリーを教えてください",
+            "helperText": "ここでは、あなたが望むように詳細にすることができます。"
+          }
+        }
+      }
+    },
+    "invite": {
+      "title": "OneWe ネットワークにイニシアチブ(またはそれ以上)を招待します。",
+      "whatIsInitiativesName": "{initiativeType, select, individual {人} other {組織}}",
+      "makeLink": "リンクを作成",
+      "copy": {
+        "incompatibleBrowser": "お使いのブラウザーはクリップボードへのコピーをサポートしていません。「共有」をクリックしてください。",
+        "copyFailed": "コピーに失敗しました。「共有」をクリックしてください。"
+      }
+    },
+    "types": {
+      "title": "イニシアティブの種類",
+      "long": {
+        "individual": "個人",
+        "organization": "組織",
+        "nonprofit": "慈善団体またはNGOなど",
+        "religious": "宗教組織",
+        "unincorporated": "ボランティア組織",
+        "profit": "商用事業",
+        "incubator": "Incubator"
+      },
+      "short": {
+        "individual": "個人",
+        "organization": "組織",
+        "nonprofit": "NGO",
+        "religious": "宗教",
+        "unincorporated": "ボランティア",
+        "profit": "ビジネス",
+        "incubator": "Incubator"
+      }
+    },
+    "myInitiativePortal": {
+      "join": "参加！",
+      "myInitiativeSpeedDial": {
+        "view": "表示",
+        "mine": "Mina"
+      }
+    }
+  },
+  "members": {
+    "yours": {
+      "title": "メンバーページ",
+      "initiatives": {
+        "title": "あなたの取り組み",
+        "none": "Initiatives はありません。",
+        "loading": "イニシアチブを読み込んでいます..."
+      },
+      "signOut": "サインアウト",
+      "failedToCancelSponsorship": "スポンサーシップをキャンセルできませんでした: {error}"
+    }
+  }
+}

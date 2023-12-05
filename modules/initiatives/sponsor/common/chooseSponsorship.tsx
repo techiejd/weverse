@@ -24,7 +24,7 @@ import {
   SponsorshipLevel,
   sponsorshipLevel,
 } from "../../../../functions/shared/src";
-import { useTranslations } from "next-intl";
+import { useMessages, useTranslations } from "next-intl";
 
 const ChooseSponsorship = ({
   sponsorForm,
@@ -37,13 +37,14 @@ const ChooseSponsorship = ({
   beneficiary: Initiative;
   currency?: Currency;
 }) => {
+  const messages = useMessages();
   const sponsorTranslations = useTranslations("common.sponsor");
   const chooseTranslations = useTranslations("common.sponsor.steps.choose");
   const inputTranslations = useTranslations("input");
   const [currency, setCurrency] = useState<Currency>(
     currencyIn ||
       (sponsorForm.currency as Currency) ||
-      (chooseTranslations("defaultCurrency") as Currency)
+      (messages ? (chooseTranslations("defaultCurrency") as Currency) : "usd")
   );
   const sponsorshipLevelInfo = currencyInfo[currency].sponsorshipLevelInfo;
   const [customAmount, setCustomAmount] = useState(
@@ -275,6 +276,7 @@ const ChooseSponsorship = ({
               secondary={
                 /*TODO(techiejd): look into formatting with next-intl*/
                 chooseTranslations("fee.feeExplanation", {
+                  denyFee: initiativePaysFee,
                   feePercentage: `${(feePercentage * 100).toFixed(1)}`,
                   feeAmount: feeDisplayAmount,
                 })

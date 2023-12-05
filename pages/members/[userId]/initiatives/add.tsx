@@ -1,40 +1,45 @@
 import { useState } from "react";
 import { Button, CircularProgress, Stack, Typography } from "@mui/material";
-import { doc, updateDoc } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { User } from "firebase/auth";
 import { pickBy, identity } from "lodash";
 import { useTranslations } from "next-intl";
-import { useCurrentInitiative } from "../../../../../modules/initiatives/context";
-import { asOneWePage } from "../../../../../common/components/onewePage";
-import { useAppState } from "../../../../../common/context/appState";
-import { useInitiativeConverter } from "../../../../../common/utils/firebase";
-import { CachePaths } from "../../../../../common/utils/staticPaths";
+import { asOneWePage } from "../../../../common/components/onewePage";
+import { useAppState } from "../../../../common/context/appState";
+import { useInitiativeConverter } from "../../../../common/utils/firebase";
+import { CachePaths } from "../../../../common/utils/staticPaths";
 import {
   WithTranslationsStaticProps,
   Locale2Messages,
-} from "../../../../../common/utils/translations";
-import { Initiative, initiative } from "../../../../../functions/shared/src";
-import InitiativeInput from "../../../../../modules/initiatives/input";
+} from "../../../../common/utils/translations";
+import { Initiative, initiative } from "../../../../functions/shared/src";
+import InitiativeInput from "../../../../modules/initiatives/input";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 const InitiativeFormContent = ({
   user,
-  initiativeIn,
   locale2Messages,
 }: {
   user: User;
-  initiativeIn: Initiative;
   locale2Messages: Locale2Messages;
 }) => {
   const appState = useAppState();
   const callToActionTranslations = useTranslations("common.callToAction");
-  const [workingInitiative, setWorkingInitiative] =
-    useState<Initiative>(initiativeIn);
+  const [workingInitiative, setWorkingInitiative] = useState<Initiative>({
+    name: user.displayName!,
+    type: "individual",
+  });
   const [uploading, setUploading] = useState(false);
   const router = useRouter();
   const initiativeConverter = useInitiativeConverter();
+  const initiativesCollection = collection(
+    appState.firestore,
+    "members",
+    user.uid,
+    "initiatives"
+  );
 
   return (
     <form
@@ -43,13 +48,11 @@ const InitiativeFormContent = ({
         e.preventDefault();
         const cleanedInitiative = pickBy(workingInitiative, identity);
         const parsedInitiative = initiative.parse(cleanedInitiative);
-        await updateDoc(
-          doc(appState.firestore, initiativeIn.path!).withConverter(
-            initiativeConverter
-          ),
-          parsedInitiative
+        const initiativeDoc = doc(initiativesCollection).withConverter(
+          initiativeConverter
         );
-        router.push(`${initiativeIn.path}`);
+        await setDoc(initiativeDoc, parsedInitiative);
+        router.push(`/${initiativeDoc.path}`);
       }}
     >
       <InitiativeInput
@@ -70,7 +73,7 @@ const InitiativeFormContent = ({
           <CircularProgress />
         ) : (
           <Button type="submit" variant="contained">
-            {callToActionTranslations("update")}
+            {callToActionTranslations("publish")}
           </Button>
         )}
       </Stack>
@@ -78,25 +81,20 @@ const InitiativeFormContent = ({
   );
 };
 const InitiativeForm = (props: { locale2Messages: Locale2Messages }) => {
-  const [currentIniative] = useCurrentInitiative();
   const { user } = useAppState().authState;
   return (
-    (user && currentIniative && (
-      <InitiativeFormContent
-        user={user}
-        initiativeIn={currentIniative}
-        {...props}
-      />
-    )) || <CircularProgress />
+    (user && <InitiativeFormContent user={user} {...props} />) || (
+      <CircularProgress />
+    )
   );
 };
 
-const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
+const Add = asOneWePage((locale2Messages: Locale2Messages) => {
   const editInitiativeTranslations = useTranslations("initiatives.edit");
   return (
     <Stack sx={{ justifyContent: "center", alignItems: "center" }} spacing={2}>
       <Typography variant="h1">
-        {editInitiativeTranslations("title")}
+        {editInitiativeTranslations("publishTitle")}
       </Typography>
       <Typography variant="h2">
         {editInitiativeTranslations("initiativeDefinition")}
@@ -106,4 +104,4 @@ const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
   );
 });
 
-export default Edit;
+export default Add;

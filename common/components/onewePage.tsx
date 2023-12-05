@@ -1,10 +1,11 @@
-import { Box } from "@mui/material";
 import { Header } from "./header";
-import { ComponentType, FC, useEffect, useState } from "react";
+import { ComponentType, FC, Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import AuthDialog from "../../modules/auth/AuthDialog";
 import { AuthAction } from "../../modules/auth/AuthDialog/context";
 import { useAppState } from "../context/appState";
+import { Locale2Messages } from "../utils/translations";
+import { NextIntlClientProvider } from "next-intl";
 
 const RegisterModal = () => {
   //TODO(techiejd): Look into how to consolidate all AuthDialogs into one.
@@ -31,12 +32,17 @@ export const asOneWePage = <P extends object>(
   Component: ComponentType<P>
 ): FC<P> => {
   const OWP = (props: P) => {
+    const appState = useAppState();
     return (
-      <Box>
-        <RegisterModal />
-        <Header />
-        <Component {...props} />
-      </Box>
+      <NextIntlClientProvider
+        messages={(props as Locale2Messages)[appState.languages.primary]}
+      >
+        <Fragment>
+          <RegisterModal />
+          <Header locale2Messages={props as Locale2Messages} />
+          <Component {...props} />
+        </Fragment>
+      </NextIntlClientProvider>
     );
   };
   return OWP;

@@ -1,4 +1,10 @@
-import { Dialog, DialogTitle, Box, DialogContentText } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  Box,
+  DialogContentText,
+  CircularProgress,
+} from "@mui/material";
 import { Dispatch, SetStateAction, useRef, useState, useEffect } from "react";
 
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
@@ -86,6 +92,7 @@ const RecaptchaDialog = ({
           p={1}
         ></Box>
       </center>
+      <CircularProgress />
       <DialogContentText>
         {t.rich("inCaseCantGoOnContactCommunity", {
           email: (chunks) => <a href="mailto:community@onewe.co">{chunks}</a>,

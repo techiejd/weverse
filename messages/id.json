@@ -1,8 +1,27 @@
 {
+  "header": {
+    "languagePortal": {
+      "chooseYourLanguage": "Choose your language",
+      "primaryLanguage": "Primary language",
+      "polyglot?": "Polyglot?",
+      "explanationPrimaryLanguage": "The main language that is used throughout the entire application.",
+      "explanationContentLanguages": "You'll see actions and testimonials in any language you choose."
+    }
+  },
   "index": {
     "publish": "Publish",
     "myPage": "My page",
-    "seeContentIn": "See content in"
+    "seeContentIn": "See content in",
+    "countMeInDialog": {
+      "title": "Glad to have you on board!",
+      "contribute": "Contribute to the OneWe movement.",
+      "sponsorOneWe": "Sponsor OneWe",
+      "uploadAnAction": "Upload an action",
+      "registerOrLoginPrompt": "Register as a member (or login)",
+      "giveOneWeTestimonial": "Give OneWe a testimonial",
+      "shareOneWe": "Share OneWe",
+      "seeOneWe": "See our platform in action"
+    }
   },
   "auth": {
     "register": "Register",
@@ -39,6 +58,7 @@
       "short": "ID"
     },
     "cancel": "Cancel",
+    "save": "Save",
     "close": "Close",
     "phoneNumber": "Phone number",
     "firstName": "First name",
@@ -59,11 +79,13 @@
   },
   "common": {
     "loading": "Loading",
+    "motto": "{tense, select, imperative {Be part of the solution} other {You're part of the solution}}",
     "logInPrompt": "Register if you haven't already. Log in if you have.",
     "pageTitle": {
       "byOneWe": "by OneWe"
     },
     "callToAction": {
+      "countMeIn": "Count me in",
       "edit": "Edit",
       "actions": {
         "list": "Actions",
@@ -150,7 +172,6 @@
           },
           "fee": {
             "prompt": "Want to cover the payment processing fee?",
-            "feeExplanation": "{feePercentage}% + {feeAmount} per transacción.",
             "preferInitiativePays": "I prefer the initiative pays the fee"
           },
           "publicizeSupporter": {
@@ -208,6 +229,7 @@
     "upload": {
       "submit": "Publish",
       "title": "Publish your action! 🪧",
+      "whatIsAnAction": "What is an action?",
       "logInPrompt": "In order to publish an action, you must first register as a member.",
       "sections": {
         "media": {
@@ -382,6 +404,7 @@
       "chooseInitiativeType": {
         "individual": "I work alone",
         "organization": "I'm part of an organization",
+        "essentialInformation": "Essential initiative information",
         "organizationType": {
           "namePrompt": "What's the organization's name?",
           "title": "Organization type"

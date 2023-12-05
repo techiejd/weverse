@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
 import { useCallback } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import LogInPrompt from "../../../../../../common/components/logInPrompt";
 import { asOneWePage } from "../../../../../../common/components/onewePage";
@@ -9,24 +9,19 @@ import { useAppState } from "../../../../../../common/context/appState";
 import { usePosiFormDataConverter } from "../../../../../../common/utils/firebase";
 import {
   WithTranslationsStaticProps,
-  spreadTranslationsStaticProps,
   Locale2Messages,
 } from "../../../../../../common/utils/translations";
 import { PosiFormData, locale } from "../../../../../../functions/shared/src";
 import PosiForm from "../../../../../../modules/posi/action/form";
-import { CachePaths } from "../../../../../../common/utils/staticPaths";
 
-export const getStaticPaths = CachePaths;
-export const getStaticProps = WithTranslationsStaticProps(
-  spreadTranslationsStaticProps
-);
+export const getStaticProps = WithTranslationsStaticProps();
 
 const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
   const appState = useAppState();
   const router = useRouter();
   const { user } = useAppState().authState;
   const posiFormDataConverter = usePosiFormDataConverter();
-  const localeIn = useLocale();
+  const localeIn = appState.languages.primary;
   const onSubmit = useCallback(
     async (usersPosi: PosiFormData) => {
       const docRef = await addDoc(

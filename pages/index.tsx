@@ -1,48 +1,45 @@
 import {
+  AppBar,
   Box,
   Button,
-  Checkbox,
-  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   Fab,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
   Grid,
+  IconButton,
   LinearProgress,
   Stack,
+  Toolbar,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   collectionGroup,
   doc,
+  Firestore,
   getDocs,
   limit,
   orderBy,
   query,
   QueryDocumentSnapshot,
+  QuerySnapshot,
   startAfter,
   updateDoc,
 } from "firebase/firestore";
 import PlusOne from "@mui/icons-material/PlusOne";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useCallback, useEffect, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { asOneWePage } from "../common/components/onewePage";
 import { useAppState } from "../common/context/appState";
 import {
   useMemberConverter,
   usePosiFormDataConverter,
 } from "../common/utils/firebase";
-import {
-  WithTranslationsStaticProps,
-  localeDisplayNames,
-} from "../common/utils/translations";
-import { Locale, PosiFormData, locale } from "../functions/shared/src";
+import { WithTranslationsStaticProps } from "../common/utils/translations";
+import { Locale, PosiFormData } from "../functions/shared/src";
 import ImpactCard from "../modules/posi/action/card";
 import Link from "next/link";
 import Image from "next/image";
@@ -57,6 +54,7 @@ import AuthDialog from "../modules/auth/AuthDialog";
 import { AuthAction } from "../modules/auth/AuthDialog/context";
 import Sponsor from "../modules/initiatives/sponsor";
 import { useRouter } from "next/router";
+import Close from "@mui/icons-material/Close";
 import Share from "@mui/icons-material/Share";
 import Login from "@mui/icons-material/Login";
 import Campaign from "@mui/icons-material/Campaign";
@@ -103,10 +101,11 @@ const BottomBar = () => {
   }, []);
 
   const t = useTranslations("index");
+  const callToActionTranslations = useTranslations("common.callToAction");
 
   return (
     <div
-      className="rounded-[50px] bg-whitesmoke-200 overflow-hidden flex flex-row py-0 px-4 items-center justify-center gap-[12px] opacity-[0] border-[4px] border-solid border-lightgray [&.animate]:animate-[1s_ease_0s_1_normal_forwards_fade-in-top]"
+      className="bottom-navigation-bar rounded-[50px] bg-whitesmoke-200 overflow-hidden flex flex-row py-0 px-4 items-center justify-center gap-[12px] opacity-[0] border-[4px] border-solid border-lightgray [&.animate]:animate-[1s_ease_0s_1_normal_forwards_fade-in-top]"
       data-animate-on-scroll
     >
       <Link
@@ -137,7 +136,7 @@ const BottomBar = () => {
             <Image fill alt="" src="/group.svg" />
           </div>
           <b className="relative text-xs font-bottom-nav-bar-label-text text-bottom-nav-bar-icons-inactive text-left">
-            Publicar
+            {callToActionTranslations("publish")}
           </b>
         </div>
       </Link>
@@ -152,7 +151,6 @@ const CountMeInDialog = ({
   open: boolean;
   onClose: () => void;
 }) => {
-  const inputTranslations = useTranslations("input");
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [myMember] = useMyMember();
   const [oneWeInitiative] = useInitiative(
@@ -169,8 +167,19 @@ const CountMeInDialog = ({
   const closeSponsorOneWe = useCallback(() => {
     setSponsorOneWeOpen(false);
   }, [setSponsorOneWeOpen]);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const t = useTranslations("index.countMeInDialog");
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog
+      open={open}
+      onClose={(e: any) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose();
+      }}
+      fullScreen={fullScreen}
+    >
       <AuthDialog
         open={authDialogOpen}
         setOpen={setAuthDialogOpen}
@@ -186,9 +195,25 @@ const CountMeInDialog = ({
           />
         )}
       </Dialog>
-      <DialogTitle>{"Great to have you onboard!"}</DialogTitle>
+      <AppBar sx={{ position: "relative" }}>
+        <Toolbar>
+          <Typography sx={{ flex: 1 }}>{t("title")}</Typography>
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="close"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onClose();
+            }}
+          >
+            <Close />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
       <DialogContent>
-        <Typography>{"Contribute to the OneWe movement."}</Typography>
+        <Typography>{t("contribute")}</Typography>
         <br />
         <Stack spacing={1}>
           <div className="aspect-w-16 aspect-h-9">
@@ -206,7 +231,7 @@ const CountMeInDialog = ({
               }}
               startIcon={<HeartHandshakeIcon />}
             >
-              Sponsor OneWe
+              {t("sponsorOneWe")}
             </Button>
           )}
           <Button
@@ -214,7 +239,7 @@ const CountMeInDialog = ({
             href="/posi/upload"
             startIcon={<PlusOne />}
           >
-            Upload an action
+            {t("uploadAnAction")}
           </Button>
           {!myMember && (
             <Button
@@ -222,7 +247,7 @@ const CountMeInDialog = ({
               startIcon={<Login />}
               onClick={() => setAuthDialogOpen(true)}
             >
-              Register as a member (or login)
+              {t("registerOrLoginPrompt")}
             </Button>
           )}
           <Button
@@ -230,7 +255,7 @@ const CountMeInDialog = ({
             href="/members/Xhge4AaVYBRGqAObaIMYBLSlaf42/initiatives/275EEG2k7FUKYCITnk0Z/impact/upload"
             startIcon={<Campaign />}
           >
-            Give OneWe a testimonial
+            {t("giveOneWeTestimonial")}
           </Button>
           <ShareActionArea
             shareProps={{
@@ -239,7 +264,7 @@ const CountMeInDialog = ({
             }}
           >
             <Button variant="outlined" startIcon={<Share />}>
-              Share
+              {t("shareOneWe")}
             </Button>
           </ShareActionArea>
         </Stack>
@@ -252,12 +277,16 @@ const CountMeInDialog = ({
             onClose();
           }}
         >
-          {inputTranslations("close")}
+          {t("seeOneWe")}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
+
+function isContentAction(action: PosiFormData, chosenLocales: Locale[]) {
+  return Object.keys(action).some((l) => chosenLocales.includes(l as any));
+}
 
 const IndexPage = () => {
   //TODO(techiejd): WET code, refactor
@@ -267,18 +296,12 @@ const IndexPage = () => {
   const [latestDoc, setLatestDoc] = useState<
     QueryDocumentSnapshot<PosiFormData> | undefined
   >(undefined);
-  const [myMember, myMemberLoading] = useMyMember();
-  const memberConverter = useMemberConverter();
+  const [myMember] = useMyMember();
   const [cachedActions, setCachedActions] = useState<PosiFormData[]>([]);
   const [displayedActions, setDisplayedActions] = useState<PosiFormData[]>([]);
-  const [hasMore, setHasMore] = useState(true);
   const posiFormDataConverter = usePosiFormDataConverter();
   const batchSize = 3;
-  const userLocale = useLocale();
-  const possibleLocales = Object.keys(locale.Enum);
-  const [chosenLocales, setChosenLocales] = useState<Locale[]>(
-    myMember?.settings?.locales ?? [userLocale as Locale]
-  );
+  const chosenLocales = appState.languages.content;
   const router = useRouter();
   const [countMeInDialogOpen, setCountMeInDialogOpen] = useState(false);
   useEffect(() => {
@@ -288,103 +311,74 @@ const IndexPage = () => {
     }
   }, [router.isReady, router.query]);
 
-  useEffect(() => {
-    if (myMember?.settings?.locales) {
-      setChosenLocales(myMember?.settings?.locales ?? [userLocale as Locale]);
-    }
-  }, [myMember?.settings?.locales, userLocale]);
+  const fetchActions = useCallback(
+    async ({ startDoc }: { startDoc: any | undefined }) => {
+      let currLatestDoc = startDoc;
+      console.log({ currLatestDoc });
+      let latestActions: PosiFormData[] = [];
+      let latestContentActions: PosiFormData[] = [];
+      let enoughLatestContentActions = false;
+      let hasMore = true;
+      do {
+        const snap: QuerySnapshot<PosiFormData> = await getDocs(
+          query(
+            collectionGroup(appState.firestore, "actions").withConverter(
+              posiFormDataConverter
+            ),
+            limit(batchSize),
+            orderBy("createdAt", "desc"),
+            ...(currLatestDoc ? [startAfter(currLatestDoc)] : [])
+          )
+        );
+        currLatestDoc = snap.docs.slice(-1)[0];
+        latestActions = [
+          ...latestActions,
+          ...snap.docs.map((doc) => doc.data()),
+        ];
+        console.log({ latestActions });
+        latestContentActions = latestActions.filter((action) =>
+          isContentAction(action, chosenLocales)
+        );
+        enoughLatestContentActions = latestContentActions.length >= batchSize;
+        console.log({ enoughLatestContentActions, hasMore });
+        hasMore = snap.docs.length == batchSize;
+      } while (!enoughLatestContentActions && hasMore);
 
-  const addLocale = useCallback(
-    (l: Locale) => {
-      if (!myMember || !myMember?.path) {
-        setChosenLocales((prev) => [...prev, l as Locale]);
-        return;
-      }
-      updateDoc(
-        doc(appState.firestore, myMember.path).withConverter(memberConverter),
-        {
-          settings: {
-            locales: [...(myMember.settings?.locales ?? []), l as Locale],
-          },
-        }
-      );
+      setLatestDoc(hasMore ? currLatestDoc : undefined);
+      return latestActions;
     },
-    [appState.firestore, memberConverter, myMember]
+    [appState.firestore, chosenLocales, posiFormDataConverter]
   );
 
-  const removeLocale = useCallback(
-    (l: Locale) => {
-      if (!myMember || !myMember?.path) {
-        setChosenLocales((prev) => prev.filter((cl) => cl != l));
-        return;
-      }
-      updateDoc(doc(appState.firestore, myMember.path), {
-        settings: {
-          locales: myMember!.settings?.locales?.filter((cl) => cl != l),
-        },
-      });
-    },
-    [appState.firestore, myMember]
-  );
+  useEffect(() => {
+    (async () => {
+      setCachedActions(await fetchActions({ startDoc: undefined }));
+    })();
+  }, [fetchActions]);
 
   useEffect(() => {
-    let ignore = false;
-    const firstQuery = query(
-      collectionGroup(appState.firestore, "actions").withConverter(
-        posiFormDataConverter
-      ),
-      limit(batchSize),
-      orderBy("createdAt", "desc")
-    );
-    getDocs(firstQuery).then((snap) => {
-      if (!ignore) {
-        const latestActions = snap.docs.map((doc) => doc.data());
-        if (latestActions.length) {
-          setLatestDoc(snap.docs[snap.docs.length - 1]);
-        }
-        setHasMore(latestActions.length == batchSize);
-        setCachedActions((actions) => [...actions, ...latestActions]);
-      }
-    });
-    return () => {
-      ignore = true;
-    };
-  }, [appState.firestore, posiFormDataConverter]);
-
-  useEffect(() => {
+    console.log({ cachedActions });
     setDisplayedActions([
       ...cachedActions.filter((action) =>
-        Object.keys(action).some((l) => chosenLocales.includes(l as any))
+        isContentAction(action, chosenLocales)
       ),
     ]);
   }, [cachedActions, chosenLocales]);
 
   const next = useCallback(() => {
-    if (!latestDoc) {
-      return;
-    }
-    const nextQuery = query(
-      collectionGroup(appState.firestore, "actions").withConverter(
-        posiFormDataConverter
-      ),
-      orderBy("createdAt", "desc"),
-      startAfter(latestDoc),
-      limit(batchSize)
-    );
-    getDocs(nextQuery).then((snap) => {
-      const latestActions = snap.docs.map((doc) => doc.data());
-      if (latestActions.length) {
-        setLatestDoc(snap.docs[snap.docs.length - 1]);
-      }
-      setHasMore(latestActions.length == batchSize);
-      setCachedActions((actions) => [...actions, ...latestActions]);
-    });
-  }, [latestDoc, appState.firestore, posiFormDataConverter]);
+    (async () => {
+      const latestActions = await fetchActions({ startDoc: latestDoc });
+      setCachedActions((actions) => {
+        console.log({ actions, latestActions });
+        return [...actions, ...latestActions];
+      });
+    })();
+  }, [fetchActions, latestDoc]);
 
   return (
     <InfiniteScroll
       next={next}
-      hasMore={hasMore}
+      hasMore={latestDoc != undefined}
       loader={<LinearProgress />}
       dataLength={displayedActions.length}
       style={{ display: "flex", flexDirection: "column" }}
@@ -423,37 +417,6 @@ const IndexPage = () => {
             }}
           />
         </Fab>
-        {myMemberLoading ? (
-          <CircularProgress />
-        ) : (
-          <FormControl
-            sx={{ m: 3, pl: 2 }}
-            component="fieldset"
-            variant="standard"
-          >
-            <FormLabel component="legend">{t("seeContentIn")}</FormLabel>
-            <FormGroup row>
-              {possibleLocales.map((l) => (
-                <FormControlLabel
-                  key={l}
-                  control={
-                    <Checkbox
-                      checked={chosenLocales.includes(l as Locale)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          addLocale(l as Locale);
-                        } else {
-                          removeLocale(l as Locale);
-                        }
-                      }}
-                    />
-                  }
-                  label={localeDisplayNames[l as Locale]}
-                />
-              ))}
-            </FormGroup>
-          </FormControl>
-        )}
       </Stack>
       <Grid container spacing={1} pl={1} pr={1}>
         {displayedActions.map((action) => (

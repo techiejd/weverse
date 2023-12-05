@@ -1,8 +1,27 @@
 {
+  "header": {
+    "languagePortal": {
+      "chooseYourLanguage": "Elige tu idioma",
+      "primaryLanguage": "Idioma principal",
+      "polyglot?": "¿Polígono?",
+      "explanationPrimaryLanguage": "El idioma principal que se utiliza a través de toda la aplicación.",
+      "explanationContentLanguages": "Verás acciones y testimonios en cualquier idioma que elijas."
+    }
+  },
   "index": {
     "publish": "Publicar",
     "myPage": "Mi página",
-    "seeContentIn": "Vea contenido en"
+    "seeContentIn": "Vea contenido en",
+    "countMeInDialog": {
+      "title": "¡Encantado de tenerte a bordo!",
+      "contribute": "Contribuir al movimiento OneWe .",
+      "sponsorOneWe": "Sponsor OneWe",
+      "uploadAnAction": "Subir una acción",
+      "registerOrLoginPrompt": "Registrarse como miembro (o iniciar sesión)",
+      "giveOneWeTestimonial": "Dale un testimonio a OneWe",
+      "shareOneWe": "Compartir OneWe",
+      "seeOneWe": "Ver nuestra plataforma en acción"
+    }
   },
   "auth": {
     "register": "Registrarme",
@@ -39,6 +58,7 @@
       "short": "CO"
     },
     "cancel": "Cancelar",
+    "save": "Guardar",
     "close": "Cerrar",
     "phoneNumber": "Número telefónico",
     "firstName": "Nombres",
@@ -82,7 +102,8 @@
       "testify": "Dar testimonio",
       "connect": "Conectar",
       "update": "Actualizar",
-      "delete": "Borrar"
+      "delete": "Borrar",
+      "publish": "Publicar"
     },
     "meta_comment": "TODO(techiejd): see meta_comment in en.json.",
     "solicitHelpDialog": {
@@ -126,7 +147,7 @@
     },
     "sponsor": {
       "sponsorship": "Patrocinio",
-      "title": "Patrocina a {InitiativeName}",
+      "title": "Patrocina a {initiativeName}",
       "total": "Total",
       "monthly": "Al mes",
       "levels": {
@@ -152,7 +173,7 @@
           },
           "fee": {
             "prompt": "¿Quieres cubrir la tarifa de la pasarela de pagos?",
-            "feeExplanation": "{feePercentage}% + {feeAmount} por transacción.",
+            "feeExplanation": "{denyFee, select, true {Estas transacciones serán gratuitas para usted} other {{feePercentage}% + {feeAmount} por transacción}}.",
             "preferInitiativePays": "Prefiero que la iniciativa pague la tarifa."
           },
           "publicizeSupporter": {
@@ -210,8 +231,8 @@
     "upload": {
       "submit": "Publicar",
       "title": "¡Publica tu acción! 🪧",
-      "logInPrompt": "Para publicar tu acción, registrarte como miembro.",
       "whatIsAnAction": "¿Qué es una acción?",
+      "logInPrompt": "Para publicar tu acción, registrarte como miembro.",
       "sections": {
         "media": {
           "title": "Muéstranos un poco de lo que has hecho",
@@ -238,7 +259,7 @@
     },
     "impact": {
       "solicit": {
-        "title": "{InitiativeName}, ¡Obten los comentarios y obten más participación!",
+        "title": "{initiativeName}, ¡Obten los comentarios y obten más participación!",
         "solicitText": "Por favor dame tu opinion sobre mi acción social: {for}",
         "clickOnEarToSolicit": "Haz clic en la oreja para enviarles una encuesta sobre esta acción."
       }
@@ -328,7 +349,7 @@
     },
     "incubator": {
       "title": "Incubadora:",
-      "joinPrompt": "{InitiativeName} te invita a unirte a su red de incubadora.",
+      "joinPrompt": "{initiativeName} te invita a unirte a su red de incubadora.",
       "isThisActionValid": "¿Esta acción es válida?",
       "actionIsValid": "Sí, es valida",
       "validationProcess": {

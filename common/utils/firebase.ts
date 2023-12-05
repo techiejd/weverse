@@ -21,6 +21,7 @@ import {
 import { z } from "zod";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
+import { useAppState } from "../context/appState";
 
 export const creds = {
   apiKey: String(process.env.NEXT_PUBLIC_REACT_APP_API_KEY),
@@ -40,7 +41,7 @@ const createUseLocalizedDataConverterFor = <T extends z.ZodType<DbBase>>(
   zAny: T
 ): (() => FirestoreDataConverter<z.infer<typeof zAny>>) => {
   const useLocalizedDataConverter = () => {
-    const { locale: localeIn } = useRouter();
+    const localeIn = useAppState().languages.primary;
     return useMemo(
       () => ({
         toFirestore: (
@@ -85,3 +86,11 @@ export const useSponsorshipConverter =
 export const useIncubateeConverter =
   createUseLocalizedDataConverterFor(incubatee);
 export const useFromConverter = createUseLocalizedDataConverterFor(from);
+
+export const splitPath = (path: string | undefined) => {
+  if (!path) return { collection: undefined, id: undefined };
+  const splits = path.split("/");
+  const id = splits.pop();
+  const collection = splits.join("/");
+  return { collection, id };
+};

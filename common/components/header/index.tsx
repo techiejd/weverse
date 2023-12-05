@@ -18,13 +18,15 @@ import { useState } from "react";
 import Home from "@mui/icons-material/Home";
 import Login from "@mui/icons-material/Login";
 import PlusOne from "@mui/icons-material/PlusOne";
-import { useAppState } from "../context/appState";
-import AuthDialog, { AuthDialogButton } from "../../modules/auth/AuthDialog";
 import Image from "next/image";
-import LinkBehavior from "../utils/linkBehavior";
 import { useTranslations } from "next-intl";
 import Logout from "@mui/icons-material/Logout";
 import { useSignOut } from "react-firebase-hooks/auth";
+import AuthDialog, { AuthDialogButton } from "../../../modules/auth/AuthDialog";
+import { useAppState } from "../../context/appState";
+import LinkBehavior from "../../utils/linkBehavior";
+import LanguagePortal from "./languagePortal";
+import { Locale2Messages } from "../../utils/translations";
 
 export const MenuComponent = (props: BoxProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -134,7 +136,11 @@ const UserPortal = () => {
   );
 };
 
-export const Header = () => {
+export const Header = ({
+  locale2Messages,
+}: {
+  locale2Messages: Locale2Messages;
+}) => {
   return (
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar>
@@ -144,12 +150,13 @@ export const Header = () => {
             src="/logo.png"
             priority
             alt="OneWe logo"
-            width={"125"}
-            height={"20"}
+            width={"100"}
+            height={"25"}
           />
         </Link>
 
         <div style={{ flexGrow: 1 }}></div>
+        <LanguagePortal locale2Messages={locale2Messages} />
         <UserPortal />
       </Toolbar>
     </AppBar>

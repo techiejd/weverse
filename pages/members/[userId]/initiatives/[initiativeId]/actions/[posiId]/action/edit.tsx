@@ -1,31 +1,26 @@
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { identity, pickBy } from "lodash";
-import { useDocumentData } from "react-firebase-hooks/firestore";
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { useTranslations } from "next-intl";
+import { useCallback } from "react";
 import { asOneWePage } from "../../../../../../../../common/components/onewePage";
 import { useAppState } from "../../../../../../../../common/context/appState";
-import { usePosiFormDataConverter } from "../../../../../../../../common/utils/firebase";
 import { CachePaths } from "../../../../../../../../common/utils/staticPaths";
 import {
   WithTranslationsStaticProps,
-  spreadTranslationsStaticProps,
   Locale2Messages,
 } from "../../../../../../../../common/utils/translations";
 import {
   PosiFormData,
   posiFormData,
 } from "../../../../../../../../functions/shared/src";
+import { useCurrentInitiative } from "../../../../../../../../modules/initiatives/context";
 import PosiForm from "../../../../../../../../modules/posi/action/form";
 import { useCurrentPosi } from "../../../../../../../../modules/posi/context";
-import { useCurrentInitiative } from "../../../../../../../../modules/initiatives/context";
-import { useCallback } from "react";
 
 export const getStaticPaths = CachePaths;
-export const getStaticProps = WithTranslationsStaticProps(
-  spreadTranslationsStaticProps
-);
+export const getStaticProps = WithTranslationsStaticProps();
 
 const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
   const editTranslations = useTranslations("actions.edit");

@@ -35,7 +35,7 @@ import Check from "@mui/icons-material/Check";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import moment from "moment";
-import { doc, updateDoc, writeBatch } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
 import CenterBottomCircularProgress from "../../../../../common/components/centerBottomCircularProgress";
@@ -106,7 +106,7 @@ const IncubatorSection = () => {
 
   const InvitedIncubateePortal = ({ incubatee }: { incubatee: Incubatee }) => {
     const { path, href } = initiative
-      ? buildShareLinks(incubatee.initiativePath!, initiative!.path!)
+      ? buildShareLinks(incubatee.path!)
       : { path: "", href: "" };
     return loading ? (
       <CircularProgress />
@@ -119,25 +119,12 @@ const IncubatorSection = () => {
         sx={{ border: "1px solid", borderColor: "grey.300" }}
       >
         <IconButton
-          onClick={() => {
-            // Here we delete the initiative that had been invited by the incubator
-            // And we delete the incubatee relationship with the incubator
+          onClick={async () => {
+            // Here we delete the incubatee relationship with the incubator
             if (!initiative || !incubatee) return;
             setLoading(true);
-            const incubateeRef = doc(
-              appState.firestore,
-              initiative.path!,
-              "incubatees",
-              incubatee.path!.replaceAll("/", "_")
-            );
-            const incubateeInitiativeRef = doc(
-              appState.firestore,
-              incubatee.initiativePath!
-            );
-            const batch = writeBatch(appState.firestore);
-            batch.delete(incubateeRef);
-            batch.delete(incubateeInitiativeRef);
-            batch.commit();
+            const incubateeRef = doc(appState.firestore, incubatee.path!);
+            await deleteDoc(incubateeRef);
             setLoading(false);
           }}
         >
@@ -145,7 +132,7 @@ const IncubatorSection = () => {
         </IconButton>
         <InitiativeCard
           initiativePath={incubatee.initiativePath!}
-          key={incubatee.initiativePath!}
+          key={incubatee.path!}
         />
         <Stack spacing={2}>
           <IconButton onClick={() => copy(href)}>
@@ -261,7 +248,7 @@ const IncubatorSection = () => {
             {notAcceptedIncubatees && notAcceptedIncubatees.length > 0 ? (
               notAcceptedIncubatees.map((incubatee) => (
                 <InvitedIncubateePortal
-                  key={incubatee.initiativePath!}
+                  key={incubatee.path!}
                   incubatee={incubatee}
                 />
               ))

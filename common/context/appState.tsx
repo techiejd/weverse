@@ -1,4 +1,4 @@
-import { app } from "../utils/firebase";
+import { app, useMemberConverter } from "../utils/firebase";
 import {
   getStorage,
   connectStorageEmulator,
@@ -8,20 +8,35 @@ import {
   getFirestore,
   connectFirestoreEmulator,
   Firestore,
+  doc,
+  updateDoc,
+  DocumentData,
+  FirestoreDataConverter,
+  QueryDocumentSnapshot,
+  WithFieldValue,
+  serverTimestamp,
 } from "firebase/firestore";
 import { getAuth, connectAuthEmulator, User, Auth } from "firebase/auth";
 
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
-import AuthDialog from "../../modules/auth/AuthDialog";
-import { AuthAction } from "../../modules/auth/AuthDialog/context";
 import { lightConfiguration } from "../components/theme";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
 import { AbstractIntlMessages } from "next-intl";
 import { NextIntlClientProvider } from "next-intl";
+import { DbBase, Locale } from "../../functions/shared/src";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { z } from "zod";
 
 const isDevEnvironment = process && process.env.NODE_ENV === "development";
 
@@ -50,6 +65,11 @@ const auth = (() => {
 
 let stripePromise: Promise<Stripe | null>;
 
+type Languages = {
+  primary: Locale;
+  content: Locale[];
+};
+
 const weverse: {
   storage: FirebaseStorage;
   firestore: Firestore;
@@ -59,6 +79,11 @@ const weverse: {
   };
   auth: Auth;
   getStripe: () => Promise<Stripe | null>;
+  languages: Languages;
+  useSetLanguages: () => (languages: {
+    primary: Locale;
+    content: Locale[];
+  }) => Promise<void>;
 } = {
   storage: storage,
   firestore: firestore,
@@ -72,6 +97,11 @@ const weverse: {
     }
     return stripePromise;
   },
+  languages: {
+    primary: "en" as Locale,
+    content: ["en"] as Locale[],
+  },
+  useSetLanguages: () => (languages: Languages) => Promise.resolve(),
 };
 
 const AppStateContext = createContext(weverse);
@@ -80,15 +110,62 @@ const AppProvider: React.FC<{
   children: React.ReactNode;
   messages?: AbstractIntlMessages;
 }> = ({ children, messages }) => {
-  const [appState, setAppState] = useState(weverse);
-  const [user, loading, error] = useAuthState(appState.auth);
-  // TODO(techiejd): Do something about errors.
+  const [user, loading, error] = useAuthState(weverse.auth);
+  const [member] = useDocumentData(
+    user ? doc(weverse.firestore, "members", user.uid as string) : undefined
+  );
+  const router = useRouter();
+  const locale = (router.locale || "en") as Locale;
+  const [cachedLanguages, setCachedLanguages] = useState<Languages>({
+    primary: member?.locale || locale,
+    content:
+      member?.settings?.locales ||
+      (member?.locale ? [member?.locale!] : [locale]),
+  });
+
   useEffect(() => {
-    setAppState((appState) => ({
-      ...appState,
-      authState: { user, loading },
+    setCachedLanguages((cachedLanguages) => ({
+      primary: member?.locale || cachedLanguages.primary,
+      content:
+        member?.settings?.locales ||
+        (member?.locale ? [member?.locale!] : cachedLanguages.content),
     }));
-  }, [setAppState, user, loading]);
+  }, [member?.locale, member?.settings?.locales]);
+
+  const useSetLanguages = useCallback(() => {
+    return (languages: Languages) => {
+      setCachedLanguages(languages);
+      if (member && user?.uid) {
+        const memberRef = doc(weverse.firestore, "members", user.uid);
+        return updateDoc(memberRef, {
+          locale: languages.primary,
+          settings: {
+            locales: languages.content,
+          },
+        });
+      }
+      return Promise.resolve();
+    };
+  }, [member]);
+
+  const appState = useMemo(() => {
+    return {
+      ...weverse,
+      authState: { user, loading },
+      languages: {
+        primary: cachedLanguages.primary as Locale,
+        content: cachedLanguages.content as Locale[],
+      },
+      useSetLanguages,
+    };
+  }, [
+    user,
+    loading,
+    cachedLanguages.primary,
+    cachedLanguages.content,
+    useSetLanguages,
+  ]);
+  // TODO(techiejd): Do something about errors.
 
   //TODO(techiejd): Look into removing registermodal and header into somewhere else so that getstaticprops can be used.
   return (
