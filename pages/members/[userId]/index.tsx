@@ -90,12 +90,20 @@ const UserPage = asOneWePage(() => {
           {yourMemberTranslations("initiatives.initiativesLoading")}
         </Typography>
       )}
-      {!initiativesLoading && !initiativesError && initiatives && (
-        <Typography>{yourMemberTranslations("initiatives.none")}</Typography>
-      )}
+      {!initiativesLoading &&
+        !initiativesError &&
+        initiatives &&
+        initiatives.length == 0 && (
+          <Typography>{yourMemberTranslations("initiatives.none")}</Typography>
+        )}
       {initiatives?.map((i) => (
         <InitiativeCard initiativePath={i.path!} key={i.path!} />
       ))}
+      {isMine && (
+        <Button variant="contained" href={`/${myMember?.path}/initiatives/add`}>
+          Publish a new initiative
+        </Button>
+      )}
     </Stack>
   );
 });
