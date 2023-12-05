@@ -237,16 +237,16 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
   const supportDialogTranslations = useTranslations("common.supportDialog");
 
   const addSocialProofPath = beneficiary.action
-    ? `${beneficiary.action.path}/impact/upload`
-    : `${beneficiary.initiative.path}/impact/upload`;
+    ? `/${beneficiary.action.path}/impact/upload`
+    : `/${beneficiary.initiative.path}/impact/upload`;
 
   const shareProps = {
     title: supportDialogTranslations("share", {
       beneficiaryType: beneficiary.action ? "action" : "initiative",
     }),
     path: beneficiary.action
-      ? `${beneficiary.action.path}`
-      : `${beneficiary.initiative.path}`,
+      ? `/${beneficiary.action.path}`
+      : `/${beneficiary.initiative.path}`,
   };
 
   const [sponsorships] = useMySponsorships();

@@ -1,6 +1,5 @@
 import * as functions from "firebase-functions";
-import { Initiative, PosiFormData } from "../shared";
-import { DocumentReference, getFirestore } from "firebase-admin/firestore";
+import { getFirestore } from "firebase-admin/firestore";
 import { initializeApp } from "firebase-admin/app";
 import {
   initiativeConverter,
@@ -15,24 +14,16 @@ const testimonialsUnderInitiativePath =
 const testimonialsUnderActionPath =
   "members/{memberId}/initiatives/{initiativeId}/actions/{actionId}/testimonials/{testimonialId}";
 
-const ParentDocRef = (r: DocumentReference | null) =>
-  r ? r.parent.parent : null;
-
 export const testimonialUnderInitiativeAdded = functions.firestore
   .document(testimonialsUnderInitiativePath)
-  .onCreate((snapshot) => {
+  .onCreate((snapshot, context) => {
+    const ids = context.params;
     const store = getFirestore();
     const testimonial = socialProofConverter.fromFirestore(snapshot);
-    const initiativeDocRef = (() => {
-      const initiative = ParentDocRef(snapshot.ref)?.withConverter(
-        initiativeConverter
-      );
-      if (!initiative) {
-        throw new Error(`No initiative found for testimonial ${snapshot.id}`);
-      }
-      return initiative;
-    })();
-    store.runTransaction(async (t) => {
+    const initiativeDocRef = store
+      .doc(`members/${ids.memberId}/initiatives/${ids.initiativeId}`)
+      .withConverter(initiativeConverter);
+    return store.runTransaction(async (t) => {
       const initiativeDoc = await t.get(initiativeDocRef);
       const initiative = initiativeDoc.data();
       if (!initiative) {
@@ -55,35 +46,30 @@ export const testimonialUnderInitiativeAdded = functions.firestore
 
 export const testimonialsUnderActionAdded = functions.firestore
   .document(testimonialsUnderActionPath)
-  .onCreate((snapshot) => {
+  .onCreate((snapshot, context) => {
+    const ids = context.params;
     const store = getFirestore();
     const testimonial = socialProofConverter.fromFirestore(snapshot);
-    const ancestorRefs = (() => {
-      const initiative = ParentDocRef(
-        ParentDocRef(snapshot.ref)
-      )?.withConverter(initiativeConverter);
+    const ancestorRefs = {
+      initiative: store
+        .doc(`members/${ids.memberId}/initiatives/${ids.initiativeId}`)
+        .withConverter(initiativeConverter),
+      action: store
+        .doc(
+          `members/${ids.memberId}/initiatives/${ids.initiativeId}/actions/${ids.actionId}`
+        )
+        .withConverter(posiFormDataConverter),
+    };
+    return store.runTransaction(async (t) => {
+      const initiativeDoc = await t.get(ancestorRefs.initiative);
+      const actionDoc = await t.get(ancestorRefs.action);
+      const initiative = initiativeDoc.data();
+      const action = actionDoc.data();
       if (!initiative) {
         throw new Error(`No initiative found for testimonial ${snapshot.id}`);
       }
-      const action = ParentDocRef(initiative)?.withConverter(
-        posiFormDataConverter
-      );
       if (!action) {
         throw new Error(`No action found for testimonial ${snapshot.id}`);
-      }
-      return [initiative, action];
-    })();
-    store.runTransaction(async (t) => {
-      const initiativeDoc = await t.get(
-        ancestorRefs[0] as DocumentReference<Initiative>
-      );
-      const actionDoc =
-        ancestorRefs.length > 1
-          ? await t.get(ancestorRefs[1] as DocumentReference<PosiFormData>)
-          : null;
-      const initiative = initiativeDoc.data();
-      if (!initiative) {
-        throw new Error(`No initiative found for testimonial ${snapshot.id}`);
       }
       t.update(initiativeDoc.ref, {
         ratings:
@@ -96,12 +82,7 @@ export const testimonialsUnderActionAdded = functions.firestore
                 count: initiative.ratings.count + 1,
               }
             : { sum: testimonial.rating, count: 1 },
-      });
-      const action = actionDoc?.data();
-      if (!action) {
-        throw new Error(`No action found for testimonial ${snapshot.id}`);
-      }
-      t.update(actionDoc!.ref, {
+      }).update(actionDoc.ref, {
         ratings:
           action.ratings &&
           action.ratings.sum &&

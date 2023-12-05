@@ -298,7 +298,6 @@
       "videoSuggestions": "30 secondes à 5 minutes et facultatif.",
       "inTextFormat": "Dans vos propres mots",
       "andOptional": "{numChars} et facultatif.",
-      "writtenTestimonial": "testiomonial écrit",
       "whatImpactPrompt": "with details, what impact did this {forAction, select, true {action} other {initiative}} have in your life?",
       "submit": "Publier le témoignage"
     },
