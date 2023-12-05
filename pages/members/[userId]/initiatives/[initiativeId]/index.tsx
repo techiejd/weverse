@@ -407,7 +407,10 @@ const VipDialog = ({
       <DialogContent>
         <Typography>{vipDialogTranslations("startProcessPrompt")}</Typography>
         <List>
-          <ListItemButton href="/posi/upload" disabled={vipState.oneActionDone}>
+          <ListItemButton
+            href={`/${myInitiative.path}/actions/upload`}
+            disabled={vipState.oneActionDone}
+          >
             <ListItemIcon>
               {vipState.oneActionDone ? <CheckBox /> : <CheckBoxOutlineBlank />}
             </ListItemIcon>
@@ -596,7 +599,7 @@ const BottomBar = () => {
             <Typography>{callToActionTranslations("share")}</Typography>
           </IconButtonWithLabel>
         </ShareActionArea>
-        <IconButtonWithLabel href={`/posi/upload`}>
+        <IconButtonWithLabel href={`/${initiative.path}/actions/upload`}>
           <Add />
           <Typography>{bottomBarTranslations("addActionShort")}</Typography>
         </IconButtonWithLabel>
