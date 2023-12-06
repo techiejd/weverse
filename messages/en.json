@@ -10,6 +10,18 @@
   },
   "index": {
     "publish": "Publish",
+    "publishDialog": {
+      "title": "Share with the world",
+      "whatToPublish": "What do you want to publish?",
+      "action": "Publish an action",
+      "initiative": "Publish an initiative",
+      "logInPrompt": "In order to publish, you must login or register",
+      "initiativeNeededDialog": {
+        "title": "You need an initiative to publish an action.",
+        "prompt": "Please, publish an initiative first.",
+        "publishInitiative": "Publish initiative"
+      }
+    },
     "myPage": "My page",
     "seeContentIn": "See content in",
     "countMeInDialog": {
@@ -474,6 +486,13 @@
       "myInitiativeSpeedDial": {
         "view": "View",
         "mine": "Mine"
+      }
+    },
+    "flow": {
+      "title": "Would you like to continue your journey",
+      "action": {
+        "prompt": "Would you like to publish an action?",
+        "yes": "Publish an action"
       }
     }
   },

@@ -17,8 +17,6 @@ import {
 } from "@mui/material";
 import {
   collectionGroup,
-  doc,
-  Firestore,
   getDocs,
   limit,
   orderBy,
@@ -26,7 +24,6 @@ import {
   QueryDocumentSnapshot,
   QuerySnapshot,
   startAfter,
-  updateDoc,
 } from "firebase/firestore";
 import PlusOne from "@mui/icons-material/PlusOne";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -34,10 +31,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { asOneWePage } from "../common/components/onewePage";
 import { useAppState } from "../common/context/appState";
-import {
-  useMemberConverter,
-  usePosiFormDataConverter,
-} from "../common/utils/firebase";
+import { usePosiFormDataConverter } from "../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../common/utils/translations";
 import { Locale, PosiFormData } from "../functions/shared/src";
 import ImpactCard from "../modules/posi/action/card";
@@ -45,7 +39,6 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   useInitiative,
-  useMyInitiatives,
   useMyMember,
   useMySponsorships,
 } from "../common/context/weverseUtils";
@@ -59,17 +52,16 @@ import Share from "@mui/icons-material/Share";
 import Login from "@mui/icons-material/Login";
 import Campaign from "@mui/icons-material/Campaign";
 import HeartHandshakeIcon from "../common/svg/HeartHandshake";
+import PublishDialog from "../common/components/publishDialog";
 
 export const getStaticProps = WithTranslationsStaticProps();
 
 const BottomBar = () => {
   const [myMember] = useMyMember();
-  const [myInitatives] = useMyInitiatives();
-  const firstInitiative = myInitatives?.[0];
-  const uploadActionPath =
-    myMember && firstInitiative
-      ? `/${firstInitiative.path}/actions/upload`
-      : "/members/undefined/initiatives/undefined/actions/upload";
+  const [publishDialogOpen, setPublishDialogOpen] = useState(false);
+  const closePublishDialog = useCallback(() => {
+    setPublishDialogOpen(false);
+  }, [setPublishDialogOpen]);
   useEffect(() => {
     const scrollAnimElements = document.querySelectorAll(
       "[data-animate-on-scroll]"
@@ -108,6 +100,7 @@ const BottomBar = () => {
       className="bottom-navigation-bar rounded-[50px] bg-whitesmoke-200 overflow-hidden flex flex-row py-0 px-4 items-center justify-center gap-[12px] opacity-[0] border-[4px] border-solid border-lightgray [&.animate]:animate-[1s_ease_0s_1_normal_forwards_fade-in-top]"
       data-animate-on-scroll
     >
+      <PublishDialog open={publishDialogOpen} close={closePublishDialog} />
       <Link
         href={
           myMember
@@ -126,9 +119,10 @@ const BottomBar = () => {
           </b>
         </div>
       </Link>
-      <Link
-        href={uploadActionPath}
-        style={{ textDecoration: "none" }}
+      <div
+        onClick={() => {
+          setPublishDialogOpen(true);
+        }}
         className="cursor-pointer [border:none] py-2 px-2.5 bg-[transparent] overflow-hidden flex flex-row items-start justify-start"
       >
         <div className="w-[49px] h-11 flex flex-col items-center justify-start gap-[5px]">
@@ -139,7 +133,7 @@ const BottomBar = () => {
             {callToActionTranslations("publish")}
           </b>
         </div>
-      </Link>
+      </div>
     </div>
   );
 };

@@ -27,12 +27,14 @@ const InitiativeFormContent = ({
 }) => {
   const appState = useAppState();
   const callToActionTranslations = useTranslations("common.callToAction");
+  const addTranslations = useTranslations("initiatives.add");
   const [workingInitiative, setWorkingInitiative] = useState<Initiative>({
     name: user.displayName!,
     type: "individual",
   });
   const [uploading, setUploading] = useState(false);
   const router = useRouter();
+  const { flow } = router.query;
   const initiativeConverter = useInitiativeConverter();
   const initiativesCollection = collection(
     appState.firestore,
@@ -52,7 +54,10 @@ const InitiativeFormContent = ({
           initiativeConverter
         );
         await setDoc(initiativeDoc, parsedInitiative);
-        router.push(`/${initiativeDoc.path}`);
+        const nextPage = flow
+          ? `/${initiativeDoc.path}?flow=true`
+          : `/${initiativeDoc.path}`;
+        router.push(nextPage);
       }}
     >
       <InitiativeInput
