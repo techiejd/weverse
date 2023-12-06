@@ -49,7 +49,7 @@ const InitiativeFormContent = ({
           ),
           parsedInitiative
         );
-        router.push(`${initiativeIn.path}`);
+        router.push(`/${initiativeIn.path}`);
       }}
     >
       <InitiativeInput
