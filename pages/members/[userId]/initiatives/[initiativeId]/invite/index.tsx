@@ -15,6 +15,7 @@ import Add from "@mui/icons-material/Add";
 import Remove from "@mui/icons-material/Remove";
 import buildUrl from "@googlicius/build-url";
 import { useTranslations } from "next-intl";
+import { identity, pickBy } from "lodash";
 import { asOneWePage } from "../../../../../../common/components/onewePage";
 import { useAppState } from "../../../../../../common/context/appState";
 import {
@@ -28,6 +29,7 @@ import {
   OrganizationType,
   organizationType,
   initiativeType as initiativeTypeSchema,
+  incubatee,
 } from "../../../../../../functions/shared/src";
 import { useCurrentInitiative } from "../../../../../../modules/initiatives/context";
 
@@ -205,30 +207,31 @@ const Invite = asOneWePage(() => {
           if (!initiative) return false;
           const batch = writeBatch(appState.firestore);
           invitedInitiatives.forEach((invitedInitiative, idx) => {
-            const incubateeInitiativeDocRef = doc(
-              appState.firestore,
-              "initiatives",
-              invitedInitiative
-            ).withConverter(initiativeConverter);
-            batch.set(incubateeInitiativeDocRef, {
-              type:
-                initiativeTypes[idx] == "individual"
-                  ? "individual"
-                  : "organization",
-              organizationType:
-                initiativeTypes[idx] == "individual"
-                  ? undefined
-                  : organizationType.parse(initiativeTypes[idx]),
-              name: initiativeNames[idx],
-              incubator: initiative?.path,
-            });
             const incubateeDocRef = doc(
               appState.firestore,
               initiative.path!,
               "incubatees",
               invitedInitiative
             ).withConverter(incubateeConverter);
-            batch.set(incubateeDocRef, {});
+            batch.set(
+              incubateeDocRef,
+              incubatee.parse({
+                initializeWith: {
+                  name: initiativeNames[idx],
+                  type:
+                    initiativeTypes[idx] == "individual"
+                      ? "individual"
+                      : "organization",
+                  ...(initiativeTypes[idx] == "individual"
+                    ? {}
+                    : {
+                        organizationType: organizationType.parse(
+                          initiativeTypes[idx]
+                        ),
+                      }),
+                },
+              })
+            );
           });
           await batch.commit();
           setLoading(false);

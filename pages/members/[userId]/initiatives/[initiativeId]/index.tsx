@@ -108,13 +108,18 @@ const IncubatorSection = () => {
     const { path, href } = initiative
       ? buildShareLinks(incubatee.path!)
       : { path: "", href: "" };
+    console.log(incubatee);
+    const longInitiativeTypesTranslations = useTranslations(
+      "initiatives.types.long"
+    );
     return loading ? (
       <CircularProgress />
     ) : (
       <Stack
-        direction={"row"}
+        direction="row"
         key={incubatee.initiativePath}
-        alignItems={"center"}
+        alignItems="center"
+        justifyContent="space-between"
         spacing={2}
         sx={{ border: "1px solid", borderColor: "grey.300" }}
       >
@@ -130,10 +135,12 @@ const IncubatorSection = () => {
         >
           <Close />
         </IconButton>
-        <InitiativeCard
-          initiativePath={incubatee.initiativePath!}
-          key={incubatee.path!}
-        />
+        <Stack spacing={2}>
+          <Typography>{incubatee.initializeWith?.name}</Typography>
+          <Typography>
+            {longInitiativeTypesTranslations(incubatee.initializeWith?.type)}
+          </Typography>
+        </Stack>
         <Stack spacing={2}>
           <IconButton onClick={() => copy(href)}>
             {value && value.includes(href) ? <Check /> : <ContentCopy />}
@@ -460,7 +467,6 @@ const VipDialog = ({
   const [actions] = useCurrentActions();
   const [socialProofs] = useCurrentTestimonials();
   const vipState = useVipState(myInitiative, socialProofs, actions);
-  console.log(myInitiative);
   return (
     <Dialog open={open}>
       <DialogTitle>{vipDialogTranslations("title")}</DialogTitle>

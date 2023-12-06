@@ -175,7 +175,6 @@ export const useLikesCount = (actionPath: string | undefined) => {
 };
 
 export const useInitiative = (initiativePath: string | undefined) => {
-  console.log({ initiativePath });
   const appState = useAppState();
   const initiativeConverter = useInitiativeConverter();
   return useDocumentData(

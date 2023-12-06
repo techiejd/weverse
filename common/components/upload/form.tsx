@@ -32,7 +32,6 @@ const UploadSocialProofForm = () => {
   const appState = useAppState();
   const router = useRouter();
   const { asPath } = router;
-  console.log(router);
   const [forInitiative] = useCurrentInitiative();
   const [forAction] = useCurrentPosi();
   const isAction = !!forAction;

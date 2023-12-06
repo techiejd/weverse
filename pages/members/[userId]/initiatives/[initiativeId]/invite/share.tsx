@@ -39,7 +39,9 @@ const SharePage = asOneWePage(() => {
   const [initiative] = useCurrentInitiative();
   const shareLinks = invitedInitiatives
     ? (invitedInitiatives as string[]).map((invitedInitiative) =>
-        buildShareLinks((invitedInitiative as string) ?? "")
+        buildShareLinks(
+          `${inviter as string}/incubatees/${invitedInitiative as string}`
+        )
       )
     : null;
 

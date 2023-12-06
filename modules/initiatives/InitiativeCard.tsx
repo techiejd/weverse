@@ -15,10 +15,8 @@ import RatingsStack from "../../common/components/ratings";
 import { useTranslations } from "next-intl";
 
 const InitiativeCard = ({ initiativePath }: { initiativePath: string }) => {
-  console.log({ initiativePath });
   const [value, loading] = useInitiative(initiativePath);
   const initiativeCardTranslations = useTranslations("initiatives.card");
-  console.log({ initiativePath });
   return (
     <Card sx={{ width: "100%" }}>
       <CardActionArea href={"/" + initiativePath}>

@@ -315,7 +315,6 @@ const IndexPage = () => {
   const fetchActions = useCallback(
     async ({ startDoc }: { startDoc: any | undefined }) => {
       let currLatestDoc = startDoc;
-      console.log({ currLatestDoc });
       let latestActions: PosiFormData[] = [];
       let latestContentActions: PosiFormData[] = [];
       let enoughLatestContentActions = false;
@@ -336,12 +335,10 @@ const IndexPage = () => {
           ...latestActions,
           ...snap.docs.map((doc) => doc.data()),
         ];
-        console.log({ latestActions });
         latestContentActions = latestActions.filter((action) =>
           isContentAction(action, chosenLocales)
         );
         enoughLatestContentActions = latestContentActions.length >= batchSize;
-        console.log({ enoughLatestContentActions, hasMore });
         hasMore = snap.docs.length == batchSize;
       } while (!enoughLatestContentActions && hasMore);
 
@@ -358,7 +355,6 @@ const IndexPage = () => {
   }, [fetchActions]);
 
   useEffect(() => {
-    console.log({ cachedActions });
     setDisplayedActions([
       ...cachedActions.filter((action) =>
         isContentAction(action, chosenLocales)
@@ -370,7 +366,6 @@ const IndexPage = () => {
     (async () => {
       const latestActions = await fetchActions({ startDoc: latestDoc });
       setCachedActions((actions) => {
-        console.log({ actions, latestActions });
         return [...actions, ...latestActions];
       });
     })();
