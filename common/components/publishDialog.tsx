@@ -10,6 +10,8 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  InputLabel,
+  NativeSelect,
 } from "@mui/material";
 import { useTranslations } from "next-intl";
 import {
@@ -71,7 +73,28 @@ const ChooseInitiativeDialog = ({
   open: boolean;
   close: () => void;
 }) => {
-  const t = useTranslations("index.initiativeNeededDialog");
+  const t = useTranslations("index.publishDialog.chooseInitiativeDialog");
+  const inputTranslations = useTranslations("input");
+  const [myInitiatives] = useMyInitiatives();
+  const [selected, setSelected] = useState("");
+  const [nextPage, setNextPage] = useState<string>("/");
+
+  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelected(e.target.value);
+  };
+
+  useEffect(() => {
+    if (selected != "") {
+      setNextPage(`/${selected}/actions/upload`);
+    }
+  }, [selected]);
+
+  useEffect(() => {
+    if (myInitiatives) {
+      setSelected(myInitiatives[0].path!);
+    }
+  }, [myInitiatives]);
+
   return (
     <Dialog
       open={open}
@@ -79,8 +102,19 @@ const ChooseInitiativeDialog = ({
         close();
       }}
     >
+      <DialogTitle>{t("title")}</DialogTitle>
       <DialogContent>
-        <Typography>{t("title")}</Typography>
+        <Typography>{t("prompt")}</Typography>
+        <FormControl fullWidth>
+          <InputLabel variant="standard">Initiative</InputLabel>
+          <NativeSelect onChange={handleChange} value={selected}>
+            {myInitiatives?.map((initiative) => (
+              <option value={initiative.path} key={initiative.path}>
+                {initiative.name}
+              </option>
+            ))}
+          </NativeSelect>
+        </FormControl>
       </DialogContent>
       <DialogActions>
         <Button
@@ -88,7 +122,10 @@ const ChooseInitiativeDialog = ({
             close();
           }}
         >
-          {t("close")}
+          {inputTranslations("cancel")}
+        </Button>
+        <Button variant="contained" disabled={!selected} href={nextPage}>
+          {inputTranslations("ok")}
         </Button>
       </DialogActions>
     </Dialog>

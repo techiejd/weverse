@@ -20,6 +20,10 @@
         "title": "You need an initiative to publish an action.",
         "prompt": "Please, publish an initiative first.",
         "publishInitiative": "Publish initiative"
+      },
+      "chooseInitiativeDialog": {
+        "title": "Under which initiative would you like to publish this action?",
+        "prompt": "Please, choose an initiative first."
       }
     },
     "myPage": "My page",
