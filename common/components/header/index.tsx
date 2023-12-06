@@ -27,6 +27,7 @@ import { useAppState } from "../../context/appState";
 import LinkBehavior from "../../utils/linkBehavior";
 import LanguagePortal from "./languagePortal";
 import { Locale2Messages } from "../../utils/translations";
+import PublishDialog from "../publishDialog";
 
 export const MenuComponent = (props: BoxProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -36,6 +37,7 @@ export const MenuComponent = (props: BoxProps) => {
   const t = useTranslations("common.callToAction");
   const appState = useAppState();
   const [signOut] = useSignOut(appState.auth);
+  const [publishDialogOpen, setPublishDialogOpen] = useState(false);
   const UserPortal = () => {
     const { user } = useAppState().authState;
     return user ? (
@@ -66,6 +68,10 @@ export const MenuComponent = (props: BoxProps) => {
   };
   return (
     <Box {...props}>
+      <PublishDialog
+        open={publishDialogOpen}
+        close={() => setPublishDialogOpen(false)}
+      />
       <AuthDialog open={authDialogOpen} setOpen={setAuthDialogOpen} />
       <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
         <MenuIcon />
@@ -77,11 +83,16 @@ export const MenuComponent = (props: BoxProps) => {
           </ListItemIcon>
           <ListItemText>{t("home")}</ListItemText>
         </MenuItem>
-        <MenuItem href="/posi/upload" component={LinkBehavior}>
+        <MenuItem
+          onClick={() => {
+            closeMenu();
+            setPublishDialogOpen(true);
+          }}
+        >
           <ListItemIcon>
             <PlusOne />
           </ListItemIcon>
-          <ListItemText>{t("actions.add")}</ListItemText>
+          <ListItemText>{t("publish")}</ListItemText>
         </MenuItem>
         <MenuItem href="/initiatives" component={LinkBehavior as any}>
           <ListItemIcon>

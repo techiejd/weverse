@@ -164,6 +164,7 @@ const CountMeInDialog = ({
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const t = useTranslations("index.countMeInDialog");
+  const [publishDialogOpen, setPublishDialogOpen] = useState(false);
   return (
     <Dialog
       open={open}
@@ -189,6 +190,10 @@ const CountMeInDialog = ({
           />
         )}
       </Dialog>
+      <PublishDialog
+        open={publishDialogOpen}
+        close={() => setPublishDialogOpen(false)}
+      />
       <AppBar sx={{ position: "relative" }}>
         <Toolbar>
           <Typography sx={{ flex: 1 }}>{t("title")}</Typography>
@@ -230,10 +235,12 @@ const CountMeInDialog = ({
           )}
           <Button
             variant="outlined"
-            href="/posi/upload"
             startIcon={<PlusOne />}
+            onClick={() => {
+              setPublishDialogOpen(true);
+            }}
           >
-            {t("uploadAnAction")}
+            {t("publishSomething")}
           </Button>
           {!myMember && (
             <Button
