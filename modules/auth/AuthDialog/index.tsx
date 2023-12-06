@@ -149,25 +149,39 @@ const AuthDialogContent = ({
           incubateeConverter
         )
       : undefined;
-  const [incubatee] = useDocumentData(incubateeDocRef);
+  const [incubatee, incubateeLoading] = useDocumentData(incubateeDocRef);
+  const [incubateeLinkAlreadyUsed, setIncubateeLinkAlreadyUsed] =
+    useState(false);
+  useEffect(() => {
+    if (incubatee?.initiativePath && !appState.auth?.currentUser?.uid) {
+      setIncubateeLinkAlreadyUsed(true);
+    }
+  }, [appState.auth?.currentUser?.uid, incubatee, setIncubateeLinkAlreadyUsed]);
 
   // First we need to initiative sure that the invitedInitiative query param is valid.
   // The invitedInitiative is a initiative whose member and initiative is "invited".
   useEffect(() => {
     if (invitedIncubatee) {
-      if (!incubatee) {
+      if (!incubatee && !incubateeLoading) {
         alert(
           authTranslations(
             "invitedInitiative.invalidInvitationLinkAskForAnother"
           )
         );
         router.push("/members/logIn");
-      } else if (incubatee.initiativePath) {
+      } else if (incubateeLinkAlreadyUsed) {
         alert("invitedInitiative.usedInvitationLink");
         router.push("/");
       }
     }
-  }, [invitedIncubatee, incubatee, router, authTranslations]);
+  }, [
+    invitedIncubatee,
+    incubatee,
+    router,
+    authTranslations,
+    incubateeLoading,
+    incubateeLinkAlreadyUsed,
+  ]);
 
   const handleOtp = async (otp: string) => {
     if (authDialogState.recaptchaConfirmationResult == undefined)
