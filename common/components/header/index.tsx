@@ -71,39 +71,19 @@ export const MenuComponent = (props: BoxProps) => {
         <MenuIcon />
       </IconButton>
       <Menu anchorEl={anchorEl} open={menuOpen} onClose={closeMenu}>
-        <MenuItem onClick={closeMenu} href="/" component={LinkBehavior as any}>
+        <MenuItem href="/" component={LinkBehavior}>
           <ListItemIcon>
             <Home />
           </ListItemIcon>
           <ListItemText>{t("home")}</ListItemText>
         </MenuItem>
-        <MenuItem
-          href="/posi"
-          onClick={closeMenu}
-          component={LinkBehavior as any}
-        >
-          <ListItemIcon>
-            <Typography>
-              <b>🤸</b>
-            </Typography>
-          </ListItemIcon>
-          <ListItemText>{t("actions.list")}</ListItemText>
-        </MenuItem>
-        <MenuItem
-          href="/posi/upload"
-          onClick={closeMenu}
-          component={LinkBehavior as any}
-        >
+        <MenuItem href="/posi/upload" component={LinkBehavior}>
           <ListItemIcon>
             <PlusOne />
           </ListItemIcon>
           <ListItemText>{t("actions.add")}</ListItemText>
         </MenuItem>
-        <MenuItem
-          href="/initiatives"
-          onClick={closeMenu}
-          component={LinkBehavior as any}
-        >
+        <MenuItem href="/initiatives" component={LinkBehavior as any}>
           <ListItemIcon>
             <Typography>
               <b>💪</b>
