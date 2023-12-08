@@ -15,10 +15,7 @@ import {
 import { useUpdateProfile } from "react-firebase-hooks/auth";
 import {
   collection,
-  addDoc,
-  setDoc,
   doc,
-  getDoc,
   writeBatch,
   query,
   where,
