@@ -346,7 +346,7 @@
       "whyEnter": "By entering the incubator, you will enjoy the exposure and mentorship that comes with it.",
       "callToAction": "Enter the incubator",
       "acceptedIncubateeInitiatives": "The initiatives who have taken the plunge:",
-      "alreadyIncubated": "Your initiative is already part of this incubator.",
+      "alreadyIncubated": "This initiative is already part of this incubator.",
       "logInPrompt": "To enter the incubator, you must first register as a member or log in.",
       "dialog": {
         "tryWithDifferentInitiative": "Try with a different initiative",
@@ -354,9 +354,16 @@
         "successTitle": "Welcome!",
         "successMessage": "You have successfully entered as an incubatee.",
         "viewMyInitiative": "Go to my initiative",
-        "changeIncubatorPromptTitle": "Are you sure you want to change your incubator?",
-        "currentlyIncubatedBy": "You are currently incubated by <incubatorNameTag>{incubatorName}</incubatorNameTag>.",
-        "notAnIncubatorErrorTitle": "This initiative is not an incubator."
+        "notAnIncubatorErrorTitle": "This initiative is not an incubator.",
+        "needAnInitiativeTitle": "You need an initiative to enter an incubator.",
+        "publishAnInitiative": "Publish an initiative to continue",
+        "chooseInitiativesTitle": "Choose the initiative(s) you would like to enter the incubator",
+        "currentlyIncubatedBy": "This initiative is currently incubated by <incubatorNameTag>{incubatorName}</incubatorNameTag>. An initiative can only be incubated by one other initiative and selecting this will remove the prior incubator.",
+        "warningPriorIncubatorWillBeRemoved": "Warning: Selecting this initiative will remove prior incubator.",
+        "cantIncubateSelf": "An initiative can not incubate itself. It can only be incubated by another initiative.",
+        "alreadyIncubating": "This initiative is already incubated by this incubator.",
+        "orPublishAnotherInitiative": "Or publish another initiative",
+        "viewIncubator": "View incubator's page"
       }
     },
     "incubator": {
