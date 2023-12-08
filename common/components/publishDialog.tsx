@@ -90,7 +90,7 @@ const ChooseInitiativeDialog = ({
   }, [selected]);
 
   useEffect(() => {
-    if (myInitiatives) {
+    if (myInitiatives && myInitiatives.length > 0) {
       setSelected(myInitiatives[0].path!);
     }
   }, [myInitiatives]);
