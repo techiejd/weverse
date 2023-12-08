@@ -15,13 +15,9 @@ import Add from "@mui/icons-material/Add";
 import Remove from "@mui/icons-material/Remove";
 import buildUrl from "@googlicius/build-url";
 import { useTranslations } from "next-intl";
-import { identity, pickBy } from "lodash";
 import { asOneWePage } from "../../../../../../common/components/onewePage";
 import { useAppState } from "../../../../../../common/context/appState";
-import {
-  useInitiativeConverter,
-  useIncubateeConverter,
-} from "../../../../../../common/utils/firebase";
+import { useIncubateeConverter } from "../../../../../../common/utils/firebase";
 import { CachePaths } from "../../../../../../common/utils/staticPaths";
 import { WithTranslationsStaticProps } from "../../../../../../common/utils/translations";
 import {
@@ -40,7 +36,6 @@ const Invite = asOneWePage(() => {
   const [initiative] = useCurrentInitiative();
   const [loading, setLoading] = useState(false);
   const [invitedInitiatives, setInvitedInitiatives] = useState([v4()]);
-  const initiativeConverter = useInitiativeConverter();
   const incubateeConverter = useIncubateeConverter();
 
   const [initiativeTypes, setInitiativeTypes] = useState<
@@ -218,6 +213,7 @@ const Invite = asOneWePage(() => {
               incubatee.parse({
                 initializeWith: {
                   name: initiativeNames[idx],
+                  incubator: initiative.path!,
                   type:
                     initiativeTypes[idx] == "individual"
                       ? "individual"

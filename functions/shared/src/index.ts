@@ -276,6 +276,7 @@ export const incubatee = dbBase.extend({
       name: z.string().min(1),
       type: initiativeType,
       organizationType: organizationType.optional(),
+      incubator: z.string().min(1),
     })
     .optional(),
 });
