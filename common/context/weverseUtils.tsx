@@ -61,14 +61,7 @@ export const useMember = (memberPath: string | undefined) => {
 export const useMyMember = () => {
   const appState = useAppState();
   const { user } = appState.authState;
-  const memberConverter = useMemberConverter();
-  return useDocumentData(
-    user
-      ? doc(appState.firestore, "members", user.uid).withConverter(
-          memberConverter
-        )
-      : undefined
-  );
+  return useMember(user ? `members/${user.uid}` : undefined);
 };
 
 export const useCurrentMember = () => {

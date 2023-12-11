@@ -77,12 +77,14 @@ export const MenuComponent = (props: BoxProps) => {
         <MenuIcon />
       </IconButton>
       <Menu anchorEl={anchorEl} open={menuOpen} onClose={closeMenu}>
-        <MenuItem href="/" component={LinkBehavior}>
-          <ListItemIcon>
-            <Home />
-          </ListItemIcon>
-          <ListItemText>{t("home")}</ListItemText>
-        </MenuItem>
+        <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <MenuItem>
+            <ListItemIcon>
+              <Home />
+            </ListItemIcon>
+            <ListItemText>{t("home")}</ListItemText>
+          </MenuItem>
+        </Link>
         <MenuItem
           onClick={() => {
             closeMenu();
@@ -94,14 +96,19 @@ export const MenuComponent = (props: BoxProps) => {
           </ListItemIcon>
           <ListItemText>{t("publish")}</ListItemText>
         </MenuItem>
-        <MenuItem href="/initiatives" component={LinkBehavior as any}>
-          <ListItemIcon>
-            <Typography>
-              <b>💪</b>
-            </Typography>
-          </ListItemIcon>
-          <ListItemText>{t("listInitiatives")}</ListItemText>
-        </MenuItem>
+        <Link
+          href="/initiatives"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <MenuItem>
+            <ListItemIcon>
+              <Typography>
+                <b>💪</b>
+              </Typography>
+            </ListItemIcon>
+            <ListItemText>{t("listInitiatives")}</ListItemText>
+          </MenuItem>
+        </Link>
         <UserPortal />
       </Menu>
     </Box>
