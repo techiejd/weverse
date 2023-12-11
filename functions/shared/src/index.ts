@@ -283,6 +283,9 @@ export const incubatee = dbBase.extend({
 
 export type Incubatee = z.infer<typeof incubatee>;
 
+const fromTypes = z.enum(["testimonial", "sponsorship", "like"]);
+export type FromType = z.infer<typeof fromTypes>;
+
 // This is are all edges from the member to the initiative or action.
 export const from = z.discriminatedUnion("type", [
   dbBase.extend({ type: z.literal("testimonial"), data: socialProof }),

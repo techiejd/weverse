@@ -12,12 +12,14 @@ import { writeBatch, doc } from "firebase/firestore";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { useAppState } from "../../../../common/context/appState";
 import {
+  pathAndType2FromCollectionId,
   useInitiativeTypeLabel,
   useLikesCount,
   useMyLikes,
   useMyMember,
 } from "../../../../common/context/weverseUtils";
 import {
+  splitPath,
   useFromConverter,
   useLikeConverter,
 } from "../../../../common/utils/firebase";
@@ -41,7 +43,7 @@ const LikesDisplay = ({
   setLogInPromptOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
   const appState = useAppState();
-  const [myMember, myMemberLoading, myMemberError] = useMyMember();
+  const [myMember] = useMyMember();
   const likes = useLikesCount(action.path);
   const [localChange, setLocalChange] = useState<
     "increment" | "decrement" | undefined
@@ -51,7 +53,7 @@ const LikesDisplay = ({
     likes +
     (localChange == undefined ? 0 : localChange == "increment" ? 1 : -1);
   const myLikes = useMyLikes();
-  const liked = myLikes.includes(String(action.path));
+  const liked = myLikes?.includes(String(action.path)) || false;
   const likeConverter = useLikeConverter();
   const fromConverter = useFromConverter();
   const updateLikes = async (e: MouseEvent) => {
@@ -64,8 +66,7 @@ const LikesDisplay = ({
       return;
     }
     const batch = writeBatch(appState.firestore);
-    const likePath =
-      action.path + "/likes/" + myMember.path.replaceAll("/", "_");
+    const likePath = action.path + "/likes/" + splitPath(myMember.path).id;
     const actionLikeDoc = doc(appState.firestore, likePath).withConverter(
       likeConverter
     );
@@ -73,7 +74,7 @@ const LikesDisplay = ({
       appState.firestore,
       myMember.path,
       "from",
-      likePath.replaceAll("/", "_")
+      pathAndType2FromCollectionId(action.path, "like")!
     ).withConverter(fromConverter);
     const commit = async () => {
       setUpdating(true);

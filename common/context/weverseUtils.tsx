@@ -19,6 +19,7 @@ import {
   useSocialProofConverter,
   useSponsorshipConverter,
   useIncubateeConverter,
+  useFromConverter,
 } from "../utils/firebase";
 import { useEffect, useState } from "react";
 import {
@@ -27,6 +28,7 @@ import {
   OrganizationType,
   InitiativeType,
   initiativeType,
+  FromType,
 } from "../../functions/shared/src";
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
@@ -129,25 +131,44 @@ export const useMySponsorships = () => {
   );
 };
 
+export const pathAndType2FromCollectionId = (
+  path: string | undefined,
+  fromType: FromType
+) => {
+  // if path is undefined, return undefined
+  // if path exists, return the path with all slashes replaced with underscores and prepended with fromType
+  if (!path) return undefined;
+  return `${fromType}_${path.replaceAll("/", "_")}`;
+};
+
+const fromCollectionId2PathAndType = (fromId: string | undefined) => {
+  // if fromId is undefined, return undefined
+  // if fromId exists, return the path and fromType
+  if (!fromId) return undefined;
+  const fromType = fromId.split("_")[0] as FromType;
+  const path = fromId.slice(fromType.length + 1).replaceAll("_", "/");
+  return { path, fromType };
+};
+
 export const useMyLikes = () => {
+  // Returns a list of the paths of the actions that the current user has liked.
+  const [myMember] = useMyMember();
   const appState = useAppState();
-  const { user } = useAppState().authState;
-  const [likesCollection] = useCollection(
-    user
-      ? collection(appState.firestore, "members", user.uid, "likes")
+  const fromConverter = useFromConverter();
+  const [fromCollection] = useCollection(
+    myMember
+      ? collection(appState.firestore, myMember.path!, "from").withConverter(
+          fromConverter
+        )
       : undefined
   );
-  const [likes, setLikes] = useState<string[]>([]);
-  useEffect(() => {
-    if (likesCollection) {
-      setLikes(likesCollection.docs.map((likeDoc) => likeDoc.id));
-    }
-  }, [likesCollection, setLikes]);
-
-  return likes;
+  return fromCollection?.docs
+    .filter((doc) => doc.data().type == "like")
+    .map((doc) => fromCollectionId2PathAndType(doc.id)?.path);
 };
 
 export const useLikesCount = (actionPath: string | undefined) => {
+  // Does not update when likes are added or removed. Only when the component is mounted.
   const appState = useAppState();
   const [c, setC] = useState(0);
   useEffect(() => {
