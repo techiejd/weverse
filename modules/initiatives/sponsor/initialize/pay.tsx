@@ -17,11 +17,15 @@ import {
 import { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useAppState } from "../../../../common/context/appState";
-import { useMyMember } from "../../../../common/context/weverseUtils";
+import {
+  pathAndType2FromCollectionId,
+  useMyMember,
+} from "../../../../common/context/weverseUtils";
 import {
   useSponsorshipConverter,
   useMemberConverter,
   useFromConverter,
+  splitPath,
 } from "../../../../common/utils/firebase";
 import { Step } from "./utils";
 import Details from "../common/details";
@@ -117,7 +121,7 @@ const Pay = ({
 
         const batch = writeBatch(appState.firestore);
         const sponsorshipPath =
-          beneficiary.path! + "/sponsorships/" + myMember.path!;
+          beneficiary.path! + "/sponsorships/" + splitPath(myMember.path).id;
         const updateSponsorshipData = {
           paymentsStarted: new Date(paymentIntent!.created * 1000),
         };
@@ -127,19 +131,19 @@ const Pay = ({
           ),
           updateSponsorshipData
         );
-        batch.update(
+        // TODO(techiejd): Refactor update vs set + merge logic into some other function
+        batch.set(
           doc(
             appState.firestore,
-            "members",
             myMember.path!,
             "from",
-            sponsorshipPath.replaceAll("/", "_")
+            pathAndType2FromCollectionId(beneficiary.path!, "sponsorship")!
           ).withConverter(fromConverter),
-          { type: "sponsorship", data: updateSponsorshipData }
+          { type: "sponsorship", data: updateSponsorshipData },
+          { merge: true }
         );
-
         batch.update(
-          doc(appState.firestore, "members", myMember.path!).withConverter(
+          doc(appState.firestore, myMember.path!).withConverter(
             memberConverter
           ),
           { "stripe.status": "active" }
