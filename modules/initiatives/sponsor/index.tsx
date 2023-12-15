@@ -25,7 +25,12 @@ export default function Sponsor({
   const currPath = router.asPath.split("?")[0];
   const [activeStep, setActiveStep] = React.useState(0);
   const [myMember] = useMyMember();
-  const isRepeatSponsor = myMember?.stripe?.status === "active";
+  const [isRepeatSponsor, setIsRepeatSponsor] = useState<boolean | undefined>();
+  React.useEffect(() => {
+    if (isRepeatSponsor === undefined && myMember) {
+      setIsRepeatSponsor(myMember?.stripe?.status === "active");
+    }
+  }, [myMember, isRepeatSponsor]);
   React.useEffect(() => {
     if (isReady) {
       setActiveStep(sponsorStep ? parseInt(sponsorStep as string) : 0);
