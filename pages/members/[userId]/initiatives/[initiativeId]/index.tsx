@@ -108,7 +108,6 @@ const IncubatorSection = () => {
     const { path, href } = initiative
       ? buildShareLinks(incubatee.path!)
       : { path: "", href: "" };
-    console.log(incubatee);
     const longInitiativeTypesTranslations = useTranslations(
       "initiatives.types.long"
     );
