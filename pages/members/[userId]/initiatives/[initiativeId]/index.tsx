@@ -72,6 +72,7 @@ import {
   useCurrentInitiative,
   useCurrentActions,
   useCurrentTestimonials,
+  useCurrentSponsorships,
 } from "../../../../../modules/initiatives/context";
 import {
   useCopyToClipboard,
@@ -379,7 +380,10 @@ const InitiativeProfile = () => {
         <Stack sx={{ width: "100%" }}>
           {initiative.type == "organization" &&
             initiative.organizationType == "incubator" && <IncubatorSection />}
-          <Sponsorships showAmount={isMyInitiative} />
+          <Sponsorships
+            showAmount={isMyInitiative}
+            useCurrentSponsorships={useCurrentSponsorships}
+          />
         </Stack>
       </Stack>
     </Fragment>

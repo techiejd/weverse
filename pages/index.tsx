@@ -37,11 +37,7 @@ import { Locale, PosiFormData } from "../functions/shared/src";
 import ImpactCard from "../modules/posi/action/card";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  useInitiative,
-  useMyMember,
-  useMySponsorships,
-} from "../common/context/weverseUtils";
+import { useInitiative, useMyMember } from "../common/context/weverseUtils";
 import ShareActionArea from "../common/components/shareActionArea";
 import AuthDialog from "../modules/auth/AuthDialog";
 import { AuthAction } from "../modules/auth/AuthDialog/context";
@@ -53,6 +49,7 @@ import Login from "@mui/icons-material/Login";
 import Campaign from "@mui/icons-material/Campaign";
 import HeartHandshakeIcon from "../common/svg/HeartHandshake";
 import PublishDialog from "../common/components/publishDialog";
+import { useMySponsorships } from "../modules/members/context";
 
 export const getStaticProps = WithTranslationsStaticProps();
 

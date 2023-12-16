@@ -52,7 +52,7 @@ const LikesDisplay = ({
   const localLikes =
     likes +
     (localChange == undefined ? 0 : localChange == "increment" ? 1 : -1);
-  const myLikes = useMyLikes();
+  const [myLikes] = useMyLikes();
   const liked = myLikes?.includes(String(action.path)) || false;
   const likeConverter = useLikeConverter();
   const fromConverter = useFromConverter();

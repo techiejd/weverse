@@ -15,7 +15,6 @@ import { useState, Fragment } from "react";
 import {
   useInitiative,
   useMember,
-  useCurrentSponsorships,
   useCurrentMember,
 } from "../../../common/context/weverseUtils";
 import { Sponsorship } from "../../../functions/shared/src";
@@ -23,6 +22,7 @@ import { feePercentage, toDisplayCurrency, currencyInfo } from "./common/utils";
 import { useTranslations } from "next-intl";
 import { sectionStyles } from "../../../common/components/theme";
 import { useAppState } from "../../../common/context/appState";
+import { FirestoreError } from "firebase/firestore";
 
 function useLocalizedDateFormat() {
   const appState = useAppState();
@@ -132,9 +132,15 @@ const SponsorshipDisplay = ({
 const Sponsorships = ({
   handleCancelSponsorship,
   showAmount,
+  useCurrentSponsorships,
 }: {
   handleCancelSponsorship?: (sponsorship: Sponsorship) => Promise<any>;
   showAmount?: boolean;
+  useCurrentSponsorships: () => readonly [
+    Sponsorship[] | undefined,
+    boolean,
+    FirestoreError | undefined
+  ];
 }) => {
   const sponsorshipsTranslations = useTranslations("initiatives.sponsorships");
   const localizedDateFormat = useLocalizedDateFormat();

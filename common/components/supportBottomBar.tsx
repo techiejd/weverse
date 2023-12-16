@@ -31,11 +31,12 @@ import {
 import IconButtonWithLabel from "./iconButtonWithLabel";
 import CenterBottomFab from "./centerBottomFab";
 import Sponsor from "../../modules/initiatives/sponsor";
-import { useMyMember, useMySponsorships } from "../context/weverseUtils";
+import { useMyMember } from "../context/weverseUtils";
 import UnderConstruction from "../../modules/posi/underConstruction";
 import LogInPrompt from "./logInPrompt";
 import { useTranslations } from "next-intl";
 import { useLocalizedPresentationInfo } from "../utils/translations";
+import { useMySponsorships } from "../../modules/members/context";
 
 const supportDialogs = z.enum(["connect", "sponsor", "generic"]);
 export type SupportDialogs = z.infer<typeof supportDialogs>;

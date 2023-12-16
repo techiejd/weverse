@@ -97,40 +97,6 @@ export const useCurrentInitiatives = () => {
   return useInitiatives(currentMember?.path);
 };
 
-export const useCurrentSponsorships = () => {
-  const router = useRouter();
-  const appState = useAppState();
-  const { initiativeId, userId: memberId } = router.query;
-  const sponsorshipCollectionPath = memberId
-    ? `members/${memberId}` +
-      (initiativeId ? `/initiatives/${initiativeId}` : ``) +
-      `/sponsorships`
-    : undefined;
-  const sponsorshipConverter = useSponsorshipConverter();
-
-  const sponsorshipCollection = sponsorshipCollectionPath
-    ? collection(appState.firestore, sponsorshipCollectionPath).withConverter(
-        sponsorshipConverter
-      )
-    : undefined;
-  return useCollectionData(sponsorshipCollection);
-};
-
-export const useMySponsorships = () => {
-  const appState = useAppState();
-  const [myMember] = useMyMember();
-  const sponsorshipConverter = useSponsorshipConverter();
-  return useCollectionData(
-    myMember && myMember.path
-      ? collection(
-          appState.firestore,
-          myMember.path,
-          "sponsorships"
-        ).withConverter(sponsorshipConverter)
-      : undefined
-  );
-};
-
 export const pathAndType2FromCollectionId = (
   path: string | undefined,
   fromType: FromType
@@ -150,21 +116,39 @@ const fromCollectionId2PathAndType = (fromId: string | undefined) => {
   return { path, fromType };
 };
 
+export const useFilteredFromCollection = (
+  path: string | undefined,
+  type: FromType
+) => {
+  const appState = useAppState();
+  const fromConverter = useFromConverter();
+  const [fromCollection, fromCollectionLoading, fromCollectionError] =
+    useCollection(
+      path
+        ? collection(appState.firestore, path, "from").withConverter(
+            fromConverter
+          )
+        : undefined
+    );
+  return [
+    fromCollection?.docs.filter((doc) => doc.data().type == type),
+    fromCollectionLoading,
+    fromCollectionError,
+  ] as const;
+};
+
 export const useMyLikes = () => {
   // Returns a list of the paths of the actions that the current user has liked.
   const [myMember] = useMyMember();
-  const appState = useAppState();
-  const fromConverter = useFromConverter();
-  const [fromCollection] = useCollection(
-    myMember
-      ? collection(appState.firestore, myMember.path!, "from").withConverter(
-          fromConverter
-        )
-      : undefined
+  const [likes, likesLoading, likesError] = useFilteredFromCollection(
+    myMember?.path,
+    "like"
   );
-  return fromCollection?.docs
-    .filter((doc) => doc.data().type == "like")
-    .map((doc) => fromCollectionId2PathAndType(doc.id)?.path);
+  return [
+    likes?.map((doc) => fromCollectionId2PathAndType(doc.id)?.path),
+    likesLoading,
+    likesError,
+  ] as const;
 };
 
 export const useLikesCount = (actionPath: string | undefined) => {

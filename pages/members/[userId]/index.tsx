@@ -13,6 +13,7 @@ import { WithTranslationsStaticProps } from "../../../common/utils/translations"
 import { Sponsorship } from "../../../functions/shared/src";
 import InitiativeCard from "../../../modules/initiatives/InitiativeCard";
 import Sponsorships from "../../../modules/initiatives/sponsor/list";
+import { useCurrentSponsorships } from "../../../modules/members/context";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -76,6 +77,7 @@ const UserPage = asOneWePage(() => {
                 });
               })
         }
+        useCurrentSponsorships={useCurrentSponsorships}
       />
       <Typography variant="h2">
         {yourMemberTranslations("initiatives.title")}

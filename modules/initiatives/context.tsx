@@ -4,10 +4,11 @@ import {
   useInitiative,
 } from "../../common/context/weverseUtils";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { query, collection, where } from "firebase/firestore";
+import { collection } from "firebase/firestore";
 import {
   usePosiFormDataConverter,
   useSocialProofConverter,
+  useSponsorshipConverter,
 } from "../../common/utils/firebase";
 import { useAppState } from "../../common/context/appState";
 
@@ -48,4 +49,19 @@ export const useCurrentTestimonials = () => {
         ).withConverter(socialProofConverter)
       : undefined
   );
+};
+
+export const useCurrentSponsorships = () => {
+  const appState = useAppState();
+  const [initiative] = useCurrentInitiative();
+  const sponsorshipConverter = useSponsorshipConverter();
+  const [sponsorships, loading, error] = useCollectionData(
+    initiative
+      ? collection(
+          appState.firestore,
+          `${initiative.path}/sponsorships`
+        ).withConverter(sponsorshipConverter)
+      : undefined
+  );
+  return [sponsorships, loading, error] as const;
 };
