@@ -140,7 +140,7 @@ const AppProvider: React.FC<{
       }
       return Promise.resolve();
     };
-  }, [member]);
+  }, [member, user?.uid]);
 
   const appState = useMemo(() => {
     return {
