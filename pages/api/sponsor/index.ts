@@ -74,7 +74,7 @@ namespace Utils {
       // anything with serverTimestamp does not exist atm if pending writes.
       return zAny.parse({
         ...data,
-        id: snapshot.id,
+        path: snapshot.ref.path,
         createdAt: data.createdAt ? data.createdAt.toDate() : undefined,
       });
     },
