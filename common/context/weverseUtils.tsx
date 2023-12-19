@@ -289,7 +289,7 @@ export const useCurrentNeedsValidation = () => {
   return useCollectionData(
     initiativeId && initiativeId != ""
       ? query(
-          collection(appState.firestore, "actions").withConverter(
+          collectionGroup(appState.firestore, "actions").withConverter(
             posiFormDataConverter
           ),
           where("validation.validator", "==", path),
