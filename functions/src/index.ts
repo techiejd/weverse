@@ -1,5 +1,5 @@
 import * as functions from "firebase-functions";
-import { getFirestore } from "firebase-admin/firestore";
+import { Firestore, getFirestore } from "firebase-admin/firestore";
 import { initializeApp } from "firebase-admin/app";
 import {
   initiativeConverter,
@@ -9,6 +9,15 @@ import {
 
 initializeApp();
 
+const shouldAbortFunction = async (store: Firestore) => {
+  const doc = await store.collection("settings").doc("functions").get();
+  const data = doc.data();
+  if (!doc.exists || !data) {
+    return true;
+  }
+  return !data.shouldRunFunctions;
+};
+
 const testimonialsUnderInitiativePath =
   "members/{memberId}/initiatives/{initiativeId}/testimonials/{testimonialId}";
 const testimonialsUnderActionPath =
@@ -16,9 +25,14 @@ const testimonialsUnderActionPath =
 
 export const testimonialUnderInitiativeAdded = functions.firestore
   .document(testimonialsUnderInitiativePath)
-  .onCreate((snapshot, context) => {
-    const ids = context.params;
+  .onCreate(async (snapshot, context) => {
     const store = getFirestore();
+    if (await shouldAbortFunction(store)) {
+      console.log("Aborting function");
+      return Promise.resolve();
+    }
+
+    const ids = context.params;
     const testimonial = socialProofConverter.fromFirestore(snapshot);
     const initiativeDocRef = store
       .doc(`members/${ids.memberId}/initiatives/${ids.initiativeId}`)
@@ -46,9 +60,14 @@ export const testimonialUnderInitiativeAdded = functions.firestore
 
 export const testimonialsUnderActionAdded = functions.firestore
   .document(testimonialsUnderActionPath)
-  .onCreate((snapshot, context) => {
-    const ids = context.params;
+  .onCreate(async (snapshot, context) => {
     const store = getFirestore();
+    if (await shouldAbortFunction(store)) {
+      console.log("Aborting function");
+      return Promise.resolve();
+    }
+
+    const ids = context.params;
     const testimonial = socialProofConverter.fromFirestore(snapshot);
     const ancestorRefs = {
       initiative: store
