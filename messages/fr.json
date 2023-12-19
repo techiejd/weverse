@@ -298,7 +298,6 @@
       "videoSuggestions": "30 secondes à 5 minutes et facultatif.",
       "inTextFormat": "Dans vos propres mots",
       "andOptional": "{numChars} et facultatif.",
-      "writtenTestimonial": "testiomonial écrit",
       "whatImpactPrompt": "with details, what impact did this {forAction, select, true {action} other {initiative}} have in your life?",
       "submit": "Publier le témoignage"
     },
@@ -329,7 +328,6 @@
     },
     "incubateeEntrance": {
       "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>vous invite à faire partie de leur réseau d'incubateur.</prompt>",
-      "specialTitleForGWNLmXTQ3qXtpYSE6awp": "<prompt>Hey cooleader :smiling_face_with_sunglasses :, <initiativeNameTag>{initiativeName}</initiativeNameTag> vous invite à célébrer la Journée internationale de la paix IDP.</prompt>",
       "whyEnter": "En entrant dans l’incubateur, vous profiterez de l’exposition et du mentorat qui l’accompagne.",
       "callToAction": "Entrer dans l'incubateur",
       "acceptedIncubateeInitiatives": "Les initiatives qui ont fait le plongeur:",

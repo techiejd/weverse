@@ -1,9 +1,7 @@
 import * as functions from "firebase-functions";
-import { initiative } from "../shared";
-import { getFirestore } from "firebase-admin/firestore";
+import { Firestore, getFirestore } from "firebase-admin/firestore";
 import { initializeApp } from "firebase-admin/app";
 import {
-  contentConverter,
   initiativeConverter,
   posiFormDataConverter,
   socialProofConverter,
@@ -11,149 +9,109 @@ import {
 
 initializeApp();
 
-const testimonialsPath = "socialProofs/{socialProofId}";
-const actionsPath = "impacts/{actionId}";
-const getContentDocRef = (
-  snapshot: functions.firestore.QueryDocumentSnapshot,
-  store: FirebaseFirestore.Firestore
-) => store.doc(`content/${snapshot.id}`).withConverter(contentConverter);
+const shouldAbortFunction = async (store: Firestore) => {
+  const doc = await store.collection("settings").doc("functions").get();
+  const data = doc.data();
+  if (!doc.exists || !data) {
+    return true;
+  }
+  return !data.shouldRunFunctions;
+};
 
-export const testimonialAdded = functions.firestore
-  .document(testimonialsPath)
-  .onCreate((snapshot) => {
+const testimonialsUnderInitiativePath =
+  "members/{memberId}/initiatives/{initiativeId}/testimonials/{testimonialId}";
+const testimonialsUnderActionPath =
+  "members/{memberId}/initiatives/{initiativeId}/actions/{actionId}/testimonials/{testimonialId}";
+
+export const testimonialUnderInitiativeAdded = functions.firestore
+  .document(testimonialsUnderInitiativePath)
+  .onCreate(async (snapshot, context) => {
     const store = getFirestore();
-    const sProof = socialProofConverter.fromFirestore(snapshot);
-    const promises = [];
-    if (sProof.forAction) {
-      promises.push(
-        store
-          .doc(`impacts/${sProof.forAction}`)
-          .withConverter(posiFormDataConverter)
-          .get()
-          .then((actionDocSnap) => {
-            const action = actionDocSnap.data();
-            action &&
-              actionDocSnap.ref.update({
-                ratings:
-                  action.ratings &&
-                  action.ratings.sum &&
-                  sProof.rating &&
-                  action.ratings.count
-                    ? {
-                        sum: action.ratings.sum + sProof.rating,
-                        count: action.ratings.count + 1,
-                      }
-                    : { sum: sProof.rating, count: 1 },
-              });
-          })
-      );
+    if (await shouldAbortFunction(store)) {
+      console.log("Aborting function");
+      return Promise.resolve();
     }
-    promises.push(
-      store
-        .doc(`initiatives/${sProof.forInitiative}`)
-        .withConverter(initiativeConverter)
-        .get()
-        .then((initiativeDocSnap) => {
-          const m = initiative.parse(initiativeDocSnap.data());
-          initiativeDocSnap.ref.update({
-            ratings:
-              m.ratings && m.ratings.sum && sProof.rating && m.ratings.count
-                ? {
-                    sum: m.ratings.sum + sProof.rating,
-                    count: m.ratings.count + 1,
-                  }
-                : { sum: sProof.rating, count: 1 },
-          });
-        })
-    );
-    if (sProof.videoUrl) {
-      promises.push(
-        getContentDocRef(snapshot, store).create({
-          type: "socialProof",
-          data: sProof,
-        })
-      );
-    }
-    return Promise.all(promises);
+
+    const ids = context.params;
+    const testimonial = socialProofConverter.fromFirestore(snapshot);
+    const initiativeDocRef = store
+      .doc(`members/${ids.memberId}/initiatives/${ids.initiativeId}`)
+      .withConverter(initiativeConverter);
+    return store.runTransaction(async (t) => {
+      const initiativeDoc = await t.get(initiativeDocRef);
+      const initiative = initiativeDoc.data();
+      if (!initiative) {
+        throw new Error(`No initiative found for testimonial ${snapshot.id}`);
+      }
+      t.update(initiativeDoc.ref, {
+        ratings:
+          initiative.ratings &&
+          initiative.ratings.sum &&
+          testimonial.rating &&
+          initiative.ratings.count
+            ? {
+                sum: initiative.ratings.sum + testimonial.rating,
+                count: initiative.ratings.count + 1,
+              }
+            : { sum: testimonial.rating, count: 1 },
+      });
+    });
   });
 
-export const testimonialDeleted = functions.firestore
-  .document(testimonialsPath)
-  .onDelete((snapshot) => getContentDocRef(snapshot, getFirestore()).delete());
-
-export const actionAdded = functions.firestore
-  .document(actionsPath)
-  .onCreate((snapshot) =>
-    getContentDocRef(snapshot, getFirestore()).create({
-      type: "action",
-      data: snapshot.data(),
-    })
-  );
-
-export const actionModified = functions.firestore
-  .document(actionsPath)
-  .onUpdate((change) =>
-    getContentDocRef(change.after, getFirestore()).set({
-      type: "action",
-      data: change.after.data(),
-    })
-  );
-
-export const actionDeleted = functions.firestore
-  .document(actionsPath)
-  .onDelete(async (snapshot) => {
+export const testimonialsUnderActionAdded = functions.firestore
+  .document(testimonialsUnderActionPath)
+  .onCreate(async (snapshot, context) => {
     const store = getFirestore();
-    const action = posiFormDataConverter.fromFirestore(snapshot);
-    const batch = store.batch();
-    batch.delete(getContentDocRef(snapshot, store));
-    const promises: [
-      Promise<FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>>,
-      Promise<FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData>>,
-      (
-        | Promise<
-            FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>
-          >
-        | Promise<undefined>
-      )
-    ] = [
-      store
-        .collection("socialProofs")
-        .where("forAction", "==", snapshot.id)
-        .get(),
-      snapshot.ref.collection("likes").get(),
-      action.initiativeId
-        ? store.doc(`initiatives/${action.initiativeId}`).get()
-        : Promise.resolve(undefined),
-    ];
-
-    const [socialProofsCollection, likesCollection, initiativeDoc] =
-      await Promise.all(promises);
-    let actionRatings = { sum: 0, count: 0 };
-    socialProofsCollection.forEach((socialProofSnapshot) => {
-      const socialProof =
-        socialProofConverter.fromFirestore(socialProofSnapshot);
-      actionRatings = {
-        sum: actionRatings.sum + (socialProof?.rating ? socialProof.rating : 0),
-        count: actionRatings.count + 1,
-      };
-      batch.delete(socialProofSnapshot.ref);
-    });
-    likesCollection.forEach((likeSnapshot) => {
-      const fromMember = likeSnapshot.id;
-      const memberLike = store.doc(`members/${fromMember}/likes/${action.id}`);
-      batch.delete(memberLike);
-      batch.delete(likeSnapshot.ref);
-    });
-    if (initiativeDoc && actionRatings.count) {
-      const m = initiativeDoc.data();
-      batch.update(initiativeDoc.ref, {
-        ...m,
-        ratings: {
-          sum: m!.ratings!.sum! - actionRatings.sum,
-          count: m!.ratings!.count! - actionRatings.count,
-        },
-      });
+    if (await shouldAbortFunction(store)) {
+      console.log("Aborting function");
+      return Promise.resolve();
     }
 
-    return batch.commit();
+    const ids = context.params;
+    const testimonial = socialProofConverter.fromFirestore(snapshot);
+    const ancestorRefs = {
+      initiative: store
+        .doc(`members/${ids.memberId}/initiatives/${ids.initiativeId}`)
+        .withConverter(initiativeConverter),
+      action: store
+        .doc(
+          `members/${ids.memberId}/initiatives/${ids.initiativeId}/actions/${ids.actionId}`
+        )
+        .withConverter(posiFormDataConverter),
+    };
+    return store.runTransaction(async (t) => {
+      const initiativeDoc = await t.get(ancestorRefs.initiative);
+      const actionDoc = await t.get(ancestorRefs.action);
+      const initiative = initiativeDoc.data();
+      const action = actionDoc.data();
+      if (!initiative) {
+        throw new Error(`No initiative found for testimonial ${snapshot.id}`);
+      }
+      if (!action) {
+        throw new Error(`No action found for testimonial ${snapshot.id}`);
+      }
+      t.update(initiativeDoc.ref, {
+        ratings:
+          initiative.ratings &&
+          initiative.ratings.sum &&
+          testimonial.rating &&
+          initiative.ratings.count
+            ? {
+                sum: initiative.ratings.sum + testimonial.rating,
+                count: initiative.ratings.count + 1,
+              }
+            : { sum: testimonial.rating, count: 1 },
+      }).update(actionDoc.ref, {
+        ratings:
+          action.ratings &&
+          action.ratings.sum &&
+          testimonial.rating &&
+          action.ratings.count
+            ? {
+                sum: action.ratings.sum + testimonial.rating,
+                count: action.ratings.count + 1,
+              }
+            : { sum: testimonial.rating, count: 1 },
+      });
+    });
   });

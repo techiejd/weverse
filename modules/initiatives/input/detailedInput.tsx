@@ -164,7 +164,7 @@ const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
               setMedia={setPresentationVideo}
               maxFileSize={15728640 /** 15MB */}
               accept={"video"}
-              metadata={{ initiativeId: "", userID: "" }}
+              metadata={{ initiativePath: val?.path || "" }}
             />
             <Typography>
               {detailedInputTranslations("story.video.prompt")}

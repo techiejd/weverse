@@ -8,28 +8,26 @@ import {
   Typography,
 } from "@mui/material";
 import { Fragment, useState } from "react";
-import { useCurrentInitiative } from "../../../../modules/initiatives/context";
 import { LoadingButton } from "@mui/lab";
 import { doc, writeBatch } from "firebase/firestore";
-import { useAppState } from "../../../../common/context/appState";
-import {
-  useIncubateeConverter,
-  useInitiativeConverter,
-} from "../../../../common/utils/firebase";
 import { v4 } from "uuid";
-import {
-  organizationType,
-  initiativeType as initiativeTypeSchema,
-  InitiativeType,
-  OrganizationType,
-} from "../../../../functions/shared/src";
 import Add from "@mui/icons-material/Add";
 import Remove from "@mui/icons-material/Remove";
 import buildUrl from "@googlicius/build-url";
-import { WithTranslationsStaticProps } from "../../../../common/utils/translations";
-import { CachePaths } from "../../../../common/utils/staticPaths";
-import { asOneWePage } from "../../../../common/components/onewePage";
 import { useTranslations } from "next-intl";
+import { asOneWePage } from "../../../../../../common/components/onewePage";
+import { useAppState } from "../../../../../../common/context/appState";
+import { useIncubateeConverter } from "../../../../../../common/utils/firebase";
+import { CachePaths } from "../../../../../../common/utils/staticPaths";
+import { WithTranslationsStaticProps } from "../../../../../../common/utils/translations";
+import {
+  InitiativeType,
+  OrganizationType,
+  organizationType,
+  initiativeType as initiativeTypeSchema,
+  incubatee,
+} from "../../../../../../functions/shared/src";
+import { useCurrentInitiative } from "../../../../../../modules/initiatives/context";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -38,7 +36,6 @@ const Invite = asOneWePage(() => {
   const [initiative] = useCurrentInitiative();
   const [loading, setLoading] = useState(false);
   const [invitedInitiatives, setInvitedInitiatives] = useState([v4()]);
-  const initiativeConverter = useInitiativeConverter();
   const incubateeConverter = useIncubateeConverter();
 
   const [initiativeTypes, setInitiativeTypes] = useState<
@@ -190,10 +187,10 @@ const Invite = asOneWePage(() => {
         loading={loading}
         href={
           initiative
-            ? buildUrl(`/initiatives/${initiative.id!}/invite/share`, {
+            ? buildUrl(`/${initiative.path!}/invite/share`, {
                 queryParams: {
                   initiativeNames,
-                  inviter: initiative.id!,
+                  inviter: initiative.path,
                   invitedInitiatives,
                   registerRequested: true,
                 },
@@ -205,34 +202,32 @@ const Invite = asOneWePage(() => {
           if (!initiative) return false;
           const batch = writeBatch(appState.firestore);
           invitedInitiatives.forEach((invitedInitiative, idx) => {
-            const incubateeInitiativeDocRef = doc(
-              appState.firestore,
-              "initiatives",
-              invitedInitiative
-            ).withConverter(initiativeConverter);
-            batch.set(incubateeInitiativeDocRef, {
-              ownerId: "invited",
-              type:
-                initiativeTypes[idx] == "individual"
-                  ? "individual"
-                  : "organization",
-              organizationType:
-                initiativeTypes[idx] == "individual"
-                  ? undefined
-                  : organizationType.parse(initiativeTypes[idx]),
-              name: initiativeNames[idx],
-              incubator: initiative?.id,
-            });
             const incubateeDocRef = doc(
               appState.firestore,
-              "initiatives",
-              initiative.id!,
+              initiative.path!,
               "incubatees",
               invitedInitiative
             ).withConverter(incubateeConverter);
-            batch.set(incubateeDocRef, {
-              acceptedInvite: false,
-            });
+            batch.set(
+              incubateeDocRef,
+              incubatee.parse({
+                initializeWith: {
+                  name: initiativeNames[idx],
+                  incubator: initiative.path!,
+                  type:
+                    initiativeTypes[idx] == "individual"
+                      ? "individual"
+                      : "organization",
+                  ...(initiativeTypes[idx] == "individual"
+                    ? {}
+                    : {
+                        organizationType: organizationType.parse(
+                          initiativeTypes[idx]
+                        ),
+                      }),
+                },
+              })
+            );
           });
           await batch.commit();
           setLoading(false);

@@ -1,32 +1,20 @@
 import { Avatar, Button, Grid, Link, Stack, Typography } from "@mui/material";
-import { Initiative, PosiFormData } from "../../../functions/shared/src";
 import ImpactCard from "../../../modules/posi/action/card";
-
-import { useActions } from "../../context/weverseUtils";
 import LogInPrompt from "../logInPrompt";
-import { useEffect, useState } from "react";
 import { useAppState } from "../../context/appState";
 import { useTranslations } from "next-intl";
 import { sectionStyles } from "../theme";
+import { useCurrentPosi } from "../../../modules/posi/context";
+import {
+  useCurrentActions,
+  useCurrentInitiative,
+} from "../../../modules/initiatives/context";
 
-const UploadSocialProofPrompt = ({
-  forInitiative,
-  forAction,
-}: {
-  forInitiative: Initiative;
-  forAction?: PosiFormData;
-}) => {
+const UploadSocialProofPrompt = () => {
+  const [forInitiative] = useCurrentInitiative();
+  const [actions] = useCurrentActions();
+  const [forAction] = useCurrentPosi();
   const { user } = useAppState().authState;
-  const [initiativeActions] = useActions(
-    forAction ? undefined : forInitiative.id
-  );
-  const [actions, setActions] = useState<PosiFormData[]>(
-    forAction ? [forAction] : []
-  );
-
-  useEffect(() => {
-    if (initiativeActions) setActions(initiativeActions);
-  }, [initiativeActions, setActions]);
 
   const promptTranslations = useTranslations("testimonials.prompt");
 
@@ -37,15 +25,15 @@ const UploadSocialProofPrompt = ({
         sx={{ justifyContent: "center", alignItems: "center" }}
         p={2}
       >
-        {forInitiative.pic && (
+        {forInitiative?.pic && (
           <Avatar src={forInitiative.pic} sx={{ width: 112, height: 112 }} />
         )}
         {promptTranslations.rich("title", {
-          initiativeName: forInitiative.name,
+          initiativeName: forInitiative?.name,
           initiativeNameTag: (initiativeName) => (
             <Typography variant="h2">
               <Link
-                href={`/initiatives/${forInitiative.id}`}
+                href={`/${forInitiative?.path}`}
                 sx={{ color: "black" }}
               >{`${initiativeName}`}</Link>
             </Typography>
@@ -75,8 +63,8 @@ const UploadSocialProofPrompt = ({
               sx={{ width: "fit-content" }}
               href={
                 forAction
-                  ? `/posi/${forAction.id}/impact/upload/form`
-                  : `/initiatives/${forInitiative.id}/impact/upload/form`
+                  ? `/${forAction.path}/impact/upload/form`
+                  : `/${forInitiative?.path}/impact/upload/form`
               }
             >
               {promptTranslations("callToAction")}
@@ -98,8 +86,8 @@ const UploadSocialProofPrompt = ({
           {promptTranslations("for", { forAction: !!forAction })}
         </Typography>
         <Grid key="actionsGridUploadSocialProofPrompt" container spacing={1}>
-          {actions.map((a, idx) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={a.id}>
+          {(forAction ? [forAction] : actions)?.map((a, idx) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={a.path}>
               <ImpactCard posiData={a} />
             </Grid>
           ))}

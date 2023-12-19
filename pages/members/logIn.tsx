@@ -13,7 +13,7 @@ const LogIn = asOneWePage(() => {
   const router = useRouter();
   useEffect(() => {
     if (myMember) {
-      router.push(`/members/${myMember.id}`);
+      router.push(`/${myMember.path}`);
     }
   }, [myMember, router]);
   return <LogInPrompt title="Yo" />;

@@ -31,11 +31,12 @@ import {
 import IconButtonWithLabel from "./iconButtonWithLabel";
 import CenterBottomFab from "./centerBottomFab";
 import Sponsor from "../../modules/initiatives/sponsor";
-import { useMyMember, useMySponsorships } from "../context/weverseUtils";
+import { useMyMember } from "../context/weverseUtils";
 import UnderConstruction from "../../modules/posi/underConstruction";
 import LogInPrompt from "./logInPrompt";
 import { useTranslations } from "next-intl";
 import { useLocalizedPresentationInfo } from "../utils/translations";
+import { useMySponsorships } from "../../modules/members/context";
 
 const supportDialogs = z.enum(["connect", "sponsor", "generic"]);
 export type SupportDialogs = z.infer<typeof supportDialogs>;
@@ -237,22 +238,23 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
   const supportDialogTranslations = useTranslations("common.supportDialog");
 
   const addSocialProofPath = beneficiary.action
-    ? `/posi/${beneficiary.action.id}/impact/upload`
-    : `/initiatives/${beneficiary.initiative.id}/impact/upload`;
+    ? `/${beneficiary.action.path}/impact/upload`
+    : `/${beneficiary.initiative.path}/impact/upload`;
 
   const shareProps = {
     title: supportDialogTranslations("share", {
       beneficiaryType: beneficiary.action ? "action" : "initiative",
     }),
     path: beneficiary.action
-      ? `/posi/${beneficiary.action.id}`
-      : `/initiatives/${beneficiary.initiative.id}`,
+      ? `/${beneficiary.action.path}`
+      : `/${beneficiary.initiative.path}`,
   };
 
   const [sponsorships] = useMySponsorships();
   const sponsoring = sponsorships
     ? sponsorships.some(
-        (s) => s.initiative == beneficiary.initiative.id && !!s.paymentsStarted
+        (s) =>
+          s.initiative == beneficiary.initiative.path && !!s.paymentsStarted
       )
     : false;
   const [inAddSponsorshipExperience, setInAddSponsorshipExperience] =
@@ -321,7 +323,7 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
           aria-label="add"
           sx={{ width: 70, height: 70 }}
           onClick={() => {
-            //TODO(techiejd): Honestly posi should be under initiatives/initiativeId/posi.
+            //TODO(techiejd): Honestly posi should be under initiatives/initiativePath/posi.
             setSponsorDialogOpen(true);
             if (!sponsoring) setInAddSponsorshipExperience(true);
           }}

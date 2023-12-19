@@ -2,7 +2,7 @@ import { Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import {
   useActions,
-  useMyInitiative,
+  useMyInitiatives,
   useSocialProofs,
 } from "../../common/context/weverseUtils";
 import LogInPrompt from "../../common/components/logInPrompt";
@@ -16,23 +16,26 @@ import { asOneWePage } from "../../common/components/onewePage";
 export const getStaticProps = WithTranslationsStaticProps();
 const Vip = asOneWePage(() => {
   const router = useRouter();
-  const [myInitiative] = useMyInitiative();
-  const [socialProofs] = useSocialProofs(myInitiative?.id, "initiative");
-  const [actions] = useActions(myInitiative?.id);
-  const vipState = useVipState(myInitiative, socialProofs, actions);
+  const [myInitiatives] = useMyInitiatives();
+  const [socialProofs] = useSocialProofs(
+    myInitiatives?.[0]?.path,
+    "initiative"
+  );
+  const [actions] = useActions(myInitiatives?.[0]?.path);
+  const vipState = useVipState(myInitiatives?.[0], socialProofs, actions);
   const vipTranslations = useTranslations("initiatives.vip");
 
   useEffect(() => {
     if (
       router.isReady &&
-      myInitiative &&
+      myInitiatives &&
       vipState.entryGiven != undefined &&
       !vipState.entryGiven
     ) {
-      router.push(`/initiatives/${myInitiative.id}?vipDialogOpen=true`);
+      router.push(`${myInitiatives?.[0].path}?vipDialogOpen=true`);
     }
-  }, [myInitiative, vipState.entryGiven, router]);
-  return myInitiative ? (
+  }, [myInitiatives, vipState.entryGiven, router]);
+  return myInitiatives ? (
     <Stack spacing={2} p={2} alignItems="center">
       <Typography variant="h1" textAlign="center">
         {vipTranslations("welcome")}

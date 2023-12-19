@@ -10,7 +10,11 @@ import {
   Typography,
 } from "@mui/material";
 import { SocialProof } from "../../functions/shared/src";
-import { useAction, useInitiative } from "../../common/context/weverseUtils";
+import {
+  useAction,
+  useInitiative,
+  useMember,
+} from "../../common/context/weverseUtils";
 import Media from "./media";
 import { useTranslations } from "next-intl";
 import { useLocalizedPresentationInfo } from "../../common/utils/translations";
@@ -25,9 +29,9 @@ const SocialProofCard = ({
   showAction?: boolean;
 }) => {
   const SocialProofCardHeader = () => {
-    const [byInitiative] = useInitiative(socialProof.byInitiative);
+    const [fromMember] = useMember(socialProof.fromMember);
     return (
-      <CardActionArea href={`/initiatives/${socialProof.byInitiative}`}>
+      <CardActionArea href={`/${socialProof.fromMember}`}>
         <CardHeader
           title={
             <Stack
@@ -35,7 +39,7 @@ const SocialProofCard = ({
               sx={{ justifyContent: "center", alignItems: "center" }}
             >
               <Box pr={2}>
-                {byInitiative ? `${byInitiative.name}: ` : <CircularProgress />}
+                {fromMember ? `${fromMember.name}: ` : <CircularProgress />}
               </Box>
               <Rating value={socialProof.rating} />
             </Stack>

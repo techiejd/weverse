@@ -1,4 +1,4 @@
-import { app, useMemberConverter } from "../utils/firebase";
+import { app } from "../utils/firebase";
 import {
   getStorage,
   connectStorageEmulator,
@@ -10,11 +10,6 @@ import {
   Firestore,
   doc,
   updateDoc,
-  DocumentData,
-  FirestoreDataConverter,
-  QueryDocumentSnapshot,
-  WithFieldValue,
-  serverTimestamp,
 } from "firebase/firestore";
 import { getAuth, connectAuthEmulator, User, Auth } from "firebase/auth";
 
@@ -34,9 +29,8 @@ import { lightConfiguration } from "../components/theme";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
 import { AbstractIntlMessages } from "next-intl";
 import { NextIntlClientProvider } from "next-intl";
-import { DbBase, Locale } from "../../functions/shared/src";
+import { Locale } from "../../functions/shared/src";
 import { useDocumentData } from "react-firebase-hooks/firestore";
-import { z } from "zod";
 
 const isDevEnvironment = process && process.env.NODE_ENV === "development";
 
@@ -146,7 +140,7 @@ const AppProvider: React.FC<{
       }
       return Promise.resolve();
     };
-  }, [member]);
+  }, [member, user?.uid]);
 
   const appState = useMemo(() => {
     return {

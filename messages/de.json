@@ -329,7 +329,6 @@
     },
     "incubateeEntrance": {
       "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>lädt Sie ein, Teil ihres Inkubatornetzes zu sein.</prompt>",
-      "specialTitleForGWNLmXTQ3qXtpYSE6awp": "<prompt>Hey Coolleader 😎, <initiativeNameTag>{initiativeName}</initiativeNameTag> lädt Sie ein, den Internationalen Tag des Friedens IDP zu feiern.</prompt>",
       "whyEnter": "Wenn Sie den Inkubator betreten, werden Sie die damit einhergehende Belichtung und Mentalität genießen.",
       "callToAction": "Inkubator eingeben",
       "acceptedIncubateeInitiatives": "Die Initiativen, die den Sprung getan haben:",

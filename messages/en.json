@@ -10,13 +10,29 @@
   },
   "index": {
     "publish": "Publish",
+    "publishDialog": {
+      "title": "Share with the world",
+      "whatToPublish": "What do you want to publish?",
+      "action": "Publish an action",
+      "initiative": "Publish an initiative",
+      "logInPrompt": "In order to publish, you must login or register",
+      "initiativeNeededDialog": {
+        "title": "You need an initiative to publish an action.",
+        "prompt": "Please, publish an initiative first.",
+        "publishInitiative": "Publish initiative"
+      },
+      "chooseInitiativeDialog": {
+        "title": "Under which initiative would you like to publish this action?",
+        "prompt": "Please, choose an initiative first."
+      }
+    },
     "myPage": "My page",
     "seeContentIn": "See content in",
     "countMeInDialog": {
       "title": "Glad to have you on board!",
       "contribute": "Contribute to the OneWe movement.",
       "sponsorOneWe": "Sponsor OneWe",
-      "uploadAnAction": "Upload an action",
+      "publishSomething": "Publish (action, initiatives, etc)",
       "registerOrLoginPrompt": "Register as a member (or login)",
       "giveOneWeTestimonial": "Give OneWe a testimonial",
       "shareOneWe": "Share OneWe",
@@ -87,10 +103,6 @@
     "callToAction": {
       "countMeIn": "Count me in",
       "edit": "Edit",
-      "actions": {
-        "list": "Actions",
-        "add": "Add your action"
-      },
       "home": "Home",
       "listInitiatives": "Initiatives",
       "login": "Log In",
@@ -102,7 +114,8 @@
       "testify": "Give testimonial",
       "connect": "Connect",
       "update": "Update",
-      "delete": "Delete"
+      "delete": "Delete",
+      "publish": "Publish"
     },
     "meta_comment": "TODO(techiejd): Move all things that are Actions under an initiative and move their common components under initiative.",
     "solicitHelpDialog": {
@@ -299,7 +312,7 @@
       "videoSuggestions": "30 seconds to 5 minutes and optional.",
       "inTextFormat": "In your own words",
       "andOptional": "{numChars} and optional.",
-      "writtenTestimonial": "Written testiomonial",
+      "writtenTestimonial": "Written testimonial",
       "whatImpactPrompt": "with details, what impact did this {forAction, select, true {action} other {Initiative}} have in your life?",
       "submit": "Publish testimonial"
     },
@@ -330,11 +343,10 @@
     },
     "incubateeEntrance": {
       "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>is inviting you to be a part of their incubator network.</prompt>",
-      "specialTitleForGWNLmXTQ3qXtpYSE6awp": "<prompt>Hey cooleader 😎, <initiativeNameTag>{initiativeName}</initiativeNameTag> is inviting you to celebrate the International Day of Peace IDP.</prompt>",
       "whyEnter": "By entering the incubator, you will enjoy the exposure and mentorship that comes with it.",
       "callToAction": "Enter the incubator",
       "acceptedIncubateeInitiatives": "The initiatives who have taken the plunge:",
-      "alreadyIncubated": "Your initiative is already part of this incubator.",
+      "alreadyIncubated": "This initiative is already part of this incubator.",
       "logInPrompt": "To enter the incubator, you must first register as a member or log in.",
       "dialog": {
         "tryWithDifferentInitiative": "Try with a different initiative",
@@ -342,9 +354,16 @@
         "successTitle": "Welcome!",
         "successMessage": "You have successfully entered as an incubatee.",
         "viewMyInitiative": "Go to my initiative",
-        "changeIncubatorPromptTitle": "Are you sure you want to change your incubator?",
-        "currentlyIncubatedBy": "You are currently incubated by <incubatorNameTag>{incubatorName}</incubatorNameTag>.",
-        "notAnIncubatorErrorTitle": "This initiative is not an incubator."
+        "notAnIncubatorErrorTitle": "This initiative is not an incubator.",
+        "needAnInitiativeTitle": "You need an initiative to enter an incubator.",
+        "publishAnInitiative": "Publish an initiative to continue",
+        "chooseInitiativesTitle": "Choose the initiative(s) you would like to enter the incubator",
+        "currentlyIncubatedBy": "This initiative is currently incubated by <incubatorNameTag>{incubatorName}</incubatorNameTag>. An initiative can only be incubated by one other initiative and selecting this will remove the prior incubator.",
+        "warningPriorIncubatorWillBeRemoved": "Warning: Selecting this initiative will remove prior incubator.",
+        "cantIncubateSelf": "An initiative can not incubate itself. It can only be incubated by another initiative.",
+        "alreadyIncubating": "This initiative is already incubated by this incubator.",
+        "orPublishAnotherInitiative": "Or publish another initiative",
+        "viewIncubator": "View incubator's page"
       }
     },
     "incubator": {
@@ -402,18 +421,16 @@
     },
     "edit": {
       "title": "Edit your initiative's page",
+      "publishTitle": "Publish your initiative's page",
       "initiativeDefinition": "Initiative = an act or strategy intended to resolve a difficulty or improve a situation.",
       "chooseInitiativeType": {
         "individual": "I work alone",
         "organization": "I'm part of an organization",
         "essentialInformation": "Essential initiative information",
-        "organizationType": {
-          "namePrompt": "What's the organization's name?",
-          "title": "Organization type"
-        }
+        "namePrompt": "What's the {initiativeType, select, individual {initiative} other {organization}}'s name?"
       },
       "detailedInput": {
-        "askForInfoMsg": "{initiativeType, select, individual {Please, tell us about yourself.} other {Please, tell us about your organization.}}",
+        "askForInfoMsg": "Please, tell us about your {initiativeType, select, individual {initiative} other {organization}}.",
         "askForImage": "{initiativeType, select, individual {Select an image with which you'll be identified by the OneWe community.} other {Upload your logo.}}",
         "incubator": {
           "whatIsYourValidationProcess": "How does the incubator validate actions in order to give out seals of approval?",
@@ -476,6 +493,13 @@
       "myInitiativeSpeedDial": {
         "view": "View",
         "mine": "Mine"
+      }
+    },
+    "flow": {
+      "title": "Would you like to continue your journey",
+      "action": {
+        "prompt": "Would you like to publish an action?",
+        "yes": "Publish an action"
       }
     }
   },

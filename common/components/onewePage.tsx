@@ -31,6 +31,7 @@ const RegisterModal = () => {
 export const asOneWePage = <P extends object>(
   Component: ComponentType<P>
 ): FC<P> => {
+  // TODO(techiejd): Bring in the locale2Messages and put it as context.
   const OWP = (props: P) => {
     const appState = useAppState();
     return (

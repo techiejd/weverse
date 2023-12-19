@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useMyMemberOnce } from "../../../common/context/weverseUtils";
+import { useMyMember } from "../../../common/context/weverseUtils";
 import InitializeSponsor from "./initialize";
 import RepeatSponsor from "./repeat";
 import { Initiative } from "../../../functions/shared/src";
@@ -21,11 +21,16 @@ export default function Sponsor({
   const sponsorTranslations = useTranslations("common.sponsor");
   const router = useRouter();
   const { isReady, query } = useRouter();
-  const { sponsorStep, initiativeId, ...queryOthers } = query;
+  const { sponsorStep, ...queryOthers } = query;
   const currPath = router.asPath.split("?")[0];
   const [activeStep, setActiveStep] = React.useState(0);
-  const [myMember, myMemberLoading, myMemberErrors] = useMyMemberOnce();
-  const isRepeatSponsor = myMember?.stripe?.status === "active";
+  const [myMember] = useMyMember();
+  const [isRepeatSponsor, setIsRepeatSponsor] = useState<boolean | undefined>();
+  React.useEffect(() => {
+    if (isRepeatSponsor === undefined && myMember) {
+      setIsRepeatSponsor(myMember?.stripe?.status === "active");
+    }
+  }, [myMember, isRepeatSponsor]);
   React.useEffect(() => {
     if (isReady) {
       setActiveStep(sponsorStep ? parseInt(sponsorStep as string) : 0);

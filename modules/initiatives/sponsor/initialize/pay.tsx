@@ -17,10 +17,15 @@ import {
 import { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useAppState } from "../../../../common/context/appState";
-import { useMyMember } from "../../../../common/context/weverseUtils";
+import {
+  pathAndType2FromCollectionId,
+  useMyMember,
+} from "../../../../common/context/weverseUtils";
 import {
   useSponsorshipConverter,
   useMemberConverter,
+  useFromConverter,
+  splitPath,
 } from "../../../../common/utils/firebase";
 import { Step } from "./utils";
 import Details from "../common/details";
@@ -43,6 +48,7 @@ const Pay = ({
   const StripePortal = () => {
     const memberConverter = useMemberConverter();
     const sponsorshipConverter = useSponsorshipConverter();
+    const fromConverter = useFromConverter();
     const stripe = useStripe();
     const elements = useElements();
     const [errorMessage, setErrorMessage] = useState("");
@@ -114,32 +120,30 @@ const Pay = ({
         }
 
         const batch = writeBatch(appState.firestore);
+        const sponsorshipPath =
+          beneficiary.path! + "/sponsorships/" + splitPath(myMember.path).id;
         const updateSponsorshipData = {
           paymentsStarted: new Date(paymentIntent!.created * 1000),
         };
         batch.update(
-          doc(
-            appState.firestore,
-            "initiatives",
-            beneficiary.id!,
-            "sponsorships",
-            myMember.id!
-          ).withConverter(sponsorshipConverter),
+          doc(appState.firestore, sponsorshipPath).withConverter(
+            sponsorshipConverter
+          ),
           updateSponsorshipData
         );
-        batch.update(
+        // TODO(techiejd): Refactor update vs set + merge logic into some other function
+        batch.set(
           doc(
             appState.firestore,
-            "members",
-            myMember.id!,
-            "sponsorships",
-            beneficiary.id!
-          ).withConverter(sponsorshipConverter),
-          updateSponsorshipData
+            myMember.path!,
+            "from",
+            pathAndType2FromCollectionId(beneficiary.path!, "sponsorship")!
+          ).withConverter(fromConverter),
+          { type: "sponsorship", data: updateSponsorshipData },
+          { merge: true }
         );
-
         batch.update(
-          doc(appState.firestore, "members", myMember.id!).withConverter(
+          doc(appState.firestore, myMember.path!).withConverter(
             memberConverter
           ),
           { "stripe.status": "active" }

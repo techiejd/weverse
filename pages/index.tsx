@@ -16,9 +16,7 @@ import {
   useTheme,
 } from "@mui/material";
 import {
-  collection,
-  doc,
-  Firestore,
+  collectionGroup,
   getDocs,
   limit,
   orderBy,
@@ -26,7 +24,6 @@ import {
   QueryDocumentSnapshot,
   QuerySnapshot,
   startAfter,
-  updateDoc,
 } from "firebase/firestore";
 import PlusOne from "@mui/icons-material/PlusOne";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -34,20 +31,13 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { asOneWePage } from "../common/components/onewePage";
 import { useAppState } from "../common/context/appState";
-import {
-  useMemberConverter,
-  usePosiFormDataConverter,
-} from "../common/utils/firebase";
+import { usePosiFormDataConverter } from "../common/utils/firebase";
 import { WithTranslationsStaticProps } from "../common/utils/translations";
 import { Locale, PosiFormData } from "../functions/shared/src";
 import ImpactCard from "../modules/posi/action/card";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  useInitiative,
-  useMyMember,
-  useMySponsorships,
-} from "../common/context/weverseUtils";
+import { useInitiative, useMyMember } from "../common/context/weverseUtils";
 import ShareActionArea from "../common/components/shareActionArea";
 import AuthDialog from "../modules/auth/AuthDialog";
 import { AuthAction } from "../modules/auth/AuthDialog/context";
@@ -58,11 +48,17 @@ import Share from "@mui/icons-material/Share";
 import Login from "@mui/icons-material/Login";
 import Campaign from "@mui/icons-material/Campaign";
 import HeartHandshakeIcon from "../common/svg/HeartHandshake";
+import PublishDialog from "../common/components/publishDialog";
+import { useMySponsorships } from "../modules/members/context";
 
 export const getStaticProps = WithTranslationsStaticProps();
 
 const BottomBar = () => {
   const [myMember] = useMyMember();
+  const [publishDialogOpen, setPublishDialogOpen] = useState(false);
+  const closePublishDialog = useCallback(() => {
+    setPublishDialogOpen(false);
+  }, [setPublishDialogOpen]);
   useEffect(() => {
     const scrollAnimElements = document.querySelectorAll(
       "[data-animate-on-scroll]"
@@ -94,16 +90,18 @@ const BottomBar = () => {
   }, []);
 
   const t = useTranslations("index");
+  const callToActionTranslations = useTranslations("common.callToAction");
 
   return (
     <div
       className="bottom-navigation-bar rounded-[50px] bg-whitesmoke-200 overflow-hidden flex flex-row py-0 px-4 items-center justify-center gap-[12px] opacity-[0] border-[4px] border-solid border-lightgray [&.animate]:animate-[1s_ease_0s_1_normal_forwards_fade-in-top]"
       data-animate-on-scroll
     >
+      <PublishDialog open={publishDialogOpen} close={closePublishDialog} />
       <Link
         href={
           myMember
-            ? `/members/${myMember.id}`
+            ? `/${myMember.path}`
             : "/members/logIn?registerRequested=true"
         }
         style={{ textDecoration: "none" }}
@@ -118,9 +116,10 @@ const BottomBar = () => {
           </b>
         </div>
       </Link>
-      <Link
-        href="/posi/upload"
-        style={{ textDecoration: "none" }}
+      <div
+        onClick={() => {
+          setPublishDialogOpen(true);
+        }}
         className="cursor-pointer [border:none] py-2 px-2.5 bg-[transparent] overflow-hidden flex flex-row items-start justify-start"
       >
         <div className="w-[49px] h-11 flex flex-col items-center justify-start gap-[5px]">
@@ -128,10 +127,10 @@ const BottomBar = () => {
             <Image fill alt="" src="/group.svg" />
           </div>
           <b className="relative text-xs font-bottom-nav-bar-label-text text-bottom-nav-bar-icons-inactive text-left">
-            Publicar
+            {callToActionTranslations("publish")}
           </b>
         </div>
-      </Link>
+      </div>
     </div>
   );
 };
@@ -145,13 +144,15 @@ const CountMeInDialog = ({
 }) => {
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [myMember] = useMyMember();
-  const [oneWeInitiative] = useInitiative("275EEG2k7FUKYCITnk0Z");
+  const [oneWeInitiative] = useInitiative(
+    "/members/Xhge4AaVYBRGqAObaIMYBLSlaf42/initiatives/275EEG2k7FUKYCITnk0Z"
+  );
   const [sponsorOneWeOpen, setSponsorOneWeOpen] = useState(false);
-  const [sponsorships] = useMySponsorships();
+  const [mySponsorships] = useMySponsorships();
   const sponsoring =
-    oneWeInitiative && sponsorships
-      ? sponsorships.some(
-          (s) => s.initiative == oneWeInitiative.id && !!s.paymentsStarted
+    oneWeInitiative && mySponsorships
+      ? mySponsorships.some(
+          (s) => s.initiative == oneWeInitiative.path && !!s.paymentsStarted
         )
       : false;
   const closeSponsorOneWe = useCallback(() => {
@@ -160,6 +161,7 @@ const CountMeInDialog = ({
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const t = useTranslations("index.countMeInDialog");
+  const [publishDialogOpen, setPublishDialogOpen] = useState(false);
   return (
     <Dialog
       open={open}
@@ -185,6 +187,10 @@ const CountMeInDialog = ({
           />
         )}
       </Dialog>
+      <PublishDialog
+        open={publishDialogOpen}
+        close={() => setPublishDialogOpen(false)}
+      />
       <AppBar sx={{ position: "relative" }}>
         <Toolbar>
           <Typography sx={{ flex: 1 }}>{t("title")}</Typography>
@@ -226,10 +232,12 @@ const CountMeInDialog = ({
           )}
           <Button
             variant="outlined"
-            href="/posi/upload"
             startIcon={<PlusOne />}
+            onClick={() => {
+              setPublishDialogOpen(true);
+            }}
           >
-            {t("uploadAnAction")}
+            {t("publishSomething")}
           </Button>
           {!myMember && (
             <Button
@@ -242,7 +250,7 @@ const CountMeInDialog = ({
           )}
           <Button
             variant="outlined"
-            href="/initiatives/275EEG2k7FUKYCITnk0Z/impact/upload"
+            href="/members/Xhge4AaVYBRGqAObaIMYBLSlaf42/initiatives/275EEG2k7FUKYCITnk0Z/impact/upload"
             startIcon={<Campaign />}
           >
             {t("giveOneWeTestimonial")}
@@ -304,7 +312,6 @@ const IndexPage = () => {
   const fetchActions = useCallback(
     async ({ startDoc }: { startDoc: any | undefined }) => {
       let currLatestDoc = startDoc;
-      console.log({ currLatestDoc });
       let latestActions: PosiFormData[] = [];
       let latestContentActions: PosiFormData[] = [];
       let enoughLatestContentActions = false;
@@ -312,7 +319,7 @@ const IndexPage = () => {
       do {
         const snap: QuerySnapshot<PosiFormData> = await getDocs(
           query(
-            collection(appState.firestore, "impacts").withConverter(
+            collectionGroup(appState.firestore, "actions").withConverter(
               posiFormDataConverter
             ),
             limit(batchSize),
@@ -325,12 +332,10 @@ const IndexPage = () => {
           ...latestActions,
           ...snap.docs.map((doc) => doc.data()),
         ];
-        console.log({ latestActions });
         latestContentActions = latestActions.filter((action) =>
           isContentAction(action, chosenLocales)
         );
         enoughLatestContentActions = latestContentActions.length >= batchSize;
-        console.log({ enoughLatestContentActions, hasMore });
         hasMore = snap.docs.length == batchSize;
       } while (!enoughLatestContentActions && hasMore);
 
@@ -347,7 +352,6 @@ const IndexPage = () => {
   }, [fetchActions]);
 
   useEffect(() => {
-    console.log({ cachedActions });
     setDisplayedActions([
       ...cachedActions.filter((action) =>
         isContentAction(action, chosenLocales)
@@ -359,7 +363,6 @@ const IndexPage = () => {
     (async () => {
       const latestActions = await fetchActions({ startDoc: latestDoc });
       setCachedActions((actions) => {
-        console.log({ actions, latestActions });
         return [...actions, ...latestActions];
       });
     })();
@@ -410,7 +413,7 @@ const IndexPage = () => {
       </Stack>
       <Grid container spacing={1} pl={1} pr={1}>
         {displayedActions.map((action) => (
-          <Grid item xs={12} md={6} lg={4} key={action.id}>
+          <Grid item xs={12} md={6} lg={4} key={action.path}>
             <ImpactCard posiData={action} />
           </Grid>
         ))}

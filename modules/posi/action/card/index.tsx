@@ -77,7 +77,7 @@ const ImpactCard = ({ posiData }: { posiData: PosiFormData }) => {
         setOpen={setLogInPromptDialogOpen}
       />
       <MemberLogInTrigger setLogInPromptDialogOpen={setLogInPromptDialogOpen} />
-      <CardActionArea href={`/posi/${posiData.id}`}>
+      <CardActionArea href={`/${posiData.path}`}>
         <Box
           sx={{
             width: "100%",

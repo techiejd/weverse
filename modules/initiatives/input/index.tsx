@@ -6,6 +6,7 @@ import {
   FormControlLabel,
   Radio,
   TextField,
+  FormLabel,
 } from "@mui/material";
 import { useTranslations } from "next-intl";
 import {
@@ -19,10 +20,14 @@ import AddInternationalizedDetailedInput from "../../../common/components/addInt
 import Section from "../../../common/components/section";
 import { sectionStyles } from "../../../common/components/theme";
 import { Locale2Messages } from "../../../common/utils/translations";
-import { Initiative, Media } from "../../../functions/shared/src";
+import {
+  Initiative,
+  Media,
+  OrganizationType,
+  organizationType,
+} from "../../../functions/shared/src";
 import { FileInput } from "../../posi/input";
 import DetailedInput from "./detailedInput";
-import OrganizationTypeInput from "./organizationTypeInput";
 
 const InitiativeInput = ({
   userName,
@@ -46,12 +51,8 @@ const InitiativeInput = ({
       type: type,
       organizationType:
         type == "organization" ? val.organizationType : undefined,
-      name: type == "organization" ? val.name : userName,
     }));
   };
-  const chooseInitiativeTypeTranslations = useTranslations(
-    "initiatives.edit.chooseInitiativeType"
-  );
 
   const setEmail = (email: string) => {
     setVal((initiative) => ({
@@ -73,7 +74,23 @@ const InitiativeInput = ({
     }
   }, [pic, setVal]);
 
+  const organizationTypeChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    value: string
+  ) => {
+    const type = value as OrganizationType;
+    setVal((initiative) => ({
+      ...initiative,
+      organizationType: type,
+    }));
+  };
+
   const inputTranslations = useTranslations("input");
+  const initiativeTypesTranslations = useTranslations("initiatives.types");
+  const chooseInitiativeTypeTranslations = useTranslations(
+    "initiatives.edit.chooseInitiativeType"
+  );
+
   return (
     <Stack alignItems={"center"}>
       <Stack sx={sectionStyles}>
@@ -104,8 +121,43 @@ const InitiativeInput = ({
             initiativeType: val.type,
           })}
         </Typography>
+        <TextField
+          required
+          fullWidth
+          label={`${chooseInitiativeTypeTranslations("namePrompt", {
+            initiativeType: val.type,
+          })}* (${inputTranslations("numChars", { numChars: 75 })})`}
+          margin="normal"
+          inputProps={{ maxLength: 75 }}
+          value={val.name ? val.name : ""}
+          onChange={(e) => {
+            setVal((initiative) => ({
+              ...initiative,
+              name: e.target.value,
+            }));
+          }}
+        />
         {val.type == "organization" && (
-          <OrganizationTypeInput val={val} setVal={setVal} />
+          <FormControl>
+            <FormLabel>{initiativeTypesTranslations("title")}</FormLabel>
+            <RadioGroup
+              name="chooseOrganizationType"
+              onChange={organizationTypeChange}
+              value={val.organizationType ?? null}
+            >
+              {Object.keys(organizationType.Values).map((val) => {
+                const oType = val as OrganizationType;
+                return (
+                  <FormControlLabel
+                    key={oType}
+                    value={oType}
+                    control={<Radio required />}
+                    label={initiativeTypesTranslations("long." + oType)}
+                  />
+                );
+              })}
+            </RadioGroup>
+          </FormControl>
         )}
         <Section label={detailedInputTranslations("email")}>
           <TextField
@@ -131,7 +183,7 @@ const InitiativeInput = ({
             setMedia={setPic}
             maxFileSize={10485760 /** 10MB */}
             accept={"img"}
-            metadata={{ initiativeId: "", userID: "" }}
+            metadata={{ initiativePath: val.path || "" }}
           />
         </Section>
       </Stack>

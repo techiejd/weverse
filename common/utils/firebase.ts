@@ -16,6 +16,7 @@ import {
   content,
   sponsorship,
   incubatee,
+  from,
 } from "../../functions/shared/src";
 import { z } from "zod";
 import { useRouter } from "next/router";
@@ -60,7 +61,7 @@ const createUseLocalizedDataConverterFor = <T extends z.ZodType<DbBase>>(
           const data = snapshot.data();
           return zAny.parse({
             ...data,
-            id: snapshot.id,
+            path: snapshot.ref.path,
             createdAt: data.createdAt ? data.createdAt.toDate() : undefined,
           });
         },
@@ -84,3 +85,12 @@ export const useSponsorshipConverter =
   createUseLocalizedDataConverterFor(sponsorship);
 export const useIncubateeConverter =
   createUseLocalizedDataConverterFor(incubatee);
+export const useFromConverter = createUseLocalizedDataConverterFor(from);
+
+export const splitPath = (path: string | undefined) => {
+  if (!path) return { collection: undefined, id: undefined };
+  const splits = path.split("/");
+  const id = splits.pop();
+  const collection = splits.join("/");
+  return { collection, id };
+};

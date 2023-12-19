@@ -33,54 +33,56 @@ import Close from "@mui/icons-material/Close";
 import ContentCopy from "@mui/icons-material/ContentCopy";
 import Check from "@mui/icons-material/Check";
 import PersonAdd from "@mui/icons-material/PersonAdd";
-import SupportBottomBar from "../../../common/components/supportBottomBar";
-import {
-  useCurrentActions,
-  useCurrentImpacts,
-  useCurrentInitiative,
-} from "../../../modules/initiatives/context";
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import moment from "moment";
-import ImpactCard from "../../../modules/posi/action/card";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/router";
+import CenterBottomCircularProgress from "../../../../../common/components/centerBottomCircularProgress";
+import CenterBottomFab from "../../../../../common/components/centerBottomFab";
+import IconButtonWithLabel from "../../../../../common/components/iconButtonWithLabel";
+import { asOneWePage } from "../../../../../common/components/onewePage";
+import RatingsStack from "../../../../../common/components/ratings";
+import ShareActionArea from "../../../../../common/components/shareActionArea";
+import SolicitDialog from "../../../../../common/components/solicitHelpDialog";
+import SupportBottomBar from "../../../../../common/components/supportBottomBar";
+import { useAppState } from "../../../../../common/context/appState";
 import {
-  useInitiativeTypeLabel,
   useCurrentIncubatees,
   useCurrentNeedsValidation,
-  useMyInitiative,
-} from "../../../common/context/weverseUtils";
-import SolicitDialog from "../../../common/components/solicitHelpDialog";
-import {
-  Incubatee,
-  Initiative,
-  PosiFormData,
-} from "../../../functions/shared/src";
-import { Content } from "../../../modules/posi/content";
-import RatingsStack from "../../../common/components/ratings";
-import ShareActionArea from "../../../common/components/shareActionArea";
-import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
-import CenterBottomCircularProgress from "../../../common/components/centerBottomCircularProgress";
-import CenterBottomFab from "../../../common/components/centerBottomFab";
-import { useVipState } from "../../../common/utils/vip";
-import { useRouter } from "next/router";
-import SocialProofCard from "../../../modules/posi/socialProofCard";
-import Sponsorships from "../../../modules/initiatives/sponsor/list";
-import InitiativeCard from "../../../modules/initiatives/InitiativeCard";
-import { useAppState } from "../../../common/context/appState";
-import { doc, updateDoc, writeBatch } from "firebase/firestore";
-import {
-  buildShareLinks,
-  useCopyToClipboard,
-} from "../../../modules/initiatives/inviteAnInitiative";
-import UnderConstruction from "../../../modules/posi/underConstruction";
-import { usePosiFormDataConverter } from "../../../common/utils/firebase";
+  useMyInitiatives,
+  useInitiativeTypeLabel,
+  useIsMine,
+} from "../../../../../common/context/weverseUtils";
+import { usePosiFormDataConverter } from "../../../../../common/utils/firebase";
+import { CachePaths } from "../../../../../common/utils/staticPaths";
 import {
   WithTranslationsStaticProps,
   useLocalizedPresentationInfo,
-} from "../../../common/utils/translations";
-import { CachePaths } from "../../../common/utils/staticPaths";
-import { useTranslations } from "next-intl";
-import { asOneWePage } from "../../../common/components/onewePage";
-import Media from "../../../modules/posi/media";
+} from "../../../../../common/utils/translations";
+import { useVipState } from "../../../../../common/utils/vip";
+import {
+  Incubatee,
+  PosiFormData,
+  Initiative,
+  Content,
+} from "../../../../../functions/shared/src";
+import InitiativeCard from "../../../../../modules/initiatives/InitiativeCard";
+import {
+  useCurrentInitiative,
+  useCurrentActions,
+  useCurrentTestimonials,
+  useCurrentSponsorships,
+} from "../../../../../modules/initiatives/context";
+import {
+  useCopyToClipboard,
+  buildShareLinks,
+} from "../../../../../modules/initiatives/inviteAnInitiative";
+import Sponsorships from "../../../../../modules/initiatives/sponsor/list";
+import ImpactCard from "../../../../../modules/posi/action/card";
+import Media from "../../../../../modules/posi/media";
+import SocialProofCard from "../../../../../modules/posi/socialProofCard";
+import UnderConstruction from "../../../../../modules/posi/underConstruction";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -91,61 +93,54 @@ const IncubatorSection = () => {
   const appState = useAppState();
   const [incubatees] = useCurrentIncubatees();
   const acceptedIncubatees = incubatees?.filter(
-    (incubatee) => incubatee.acceptedInvite
+    (incubatee) => incubatee.initiativePath
   );
   const notAcceptedIncubatees = incubatees?.filter(
-    (incubatee) => !incubatee.acceptedInvite
+    (incubatee) => !incubatee.initiativePath
   );
   const [needsValidation] = useCurrentNeedsValidation();
-  const [myInitiative] = useMyInitiative();
   const [initiative] = useCurrentInitiative();
-  const isMyInitiative =
-    myInitiative && initiative && myInitiative.id == initiative.id;
+
+  const isMyInitiative = useIsMine();
   const [loading, setLoading] = useState(false);
   const [value, copy] = useCopyToClipboard();
 
   const InvitedIncubateePortal = ({ incubatee }: { incubatee: Incubatee }) => {
     const { path, href } = initiative
-      ? buildShareLinks(incubatee.id!, initiative!.id!)
+      ? buildShareLinks(incubatee.path!)
       : { path: "", href: "" };
+    const longInitiativeTypesTranslations = useTranslations(
+      "initiatives.types.long"
+    );
     return loading ? (
       <CircularProgress />
     ) : (
       <Stack
-        direction={"row"}
-        key={incubatee.id}
-        alignItems={"center"}
+        direction="row"
+        key={incubatee.initiativePath}
+        alignItems="center"
+        justifyContent="space-between"
         spacing={2}
         sx={{ border: "1px solid", borderColor: "grey.300" }}
       >
         <IconButton
-          onClick={() => {
-            // Here we delete the initiative that had been invited by the incubator
-            // And we delete the incubatee relationship with the incubator
+          onClick={async () => {
+            // Here we delete the incubatee relationship with the incubator
             if (!initiative || !incubatee) return;
             setLoading(true);
-            const incubateeRef = doc(
-              appState.firestore,
-              "initiatives",
-              initiative.id!,
-              "incubatees",
-              incubatee.id!
-            );
-            const incubateeInitiativeRef = doc(
-              appState.firestore,
-              "initiatives",
-              incubatee.id!
-            );
-            const batch = writeBatch(appState.firestore);
-            batch.delete(incubateeRef);
-            batch.delete(incubateeInitiativeRef);
-            batch.commit();
+            const incubateeRef = doc(appState.firestore, incubatee.path!);
+            await deleteDoc(incubateeRef);
             setLoading(false);
           }}
         >
           <Close />
         </IconButton>
-        <InitiativeCard initiativeId={incubatee.id!} key={incubatee.id!} />
+        <Stack spacing={2}>
+          <Typography>{incubatee.initializeWith?.name}</Typography>
+          <Typography>
+            {longInitiativeTypesTranslations(incubatee.initializeWith?.type)}
+          </Typography>
+        </Stack>
         <Stack spacing={2}>
           <IconButton onClick={() => copy(href)}>
             {value && value.includes(href) ? <Check /> : <ContentCopy />}
@@ -185,7 +180,7 @@ const IncubatorSection = () => {
               onClick={() => {
                 setValidating(true);
                 updateDoc(
-                  doc(appState.firestore, "impacts", action.id!).withConverter(
+                  doc(appState.firestore, action.path!).withConverter(
                     posiFormDataConverter
                   ),
                   {
@@ -224,8 +219,8 @@ const IncubatorSection = () => {
           {needsValidation && needsValidation.length > 0 ? (
             <Grid container spacing={1}>
               {needsValidation.map((action) => (
-                <Grid item sm={12} md={6} lg={4} xl={3} key={action.id}>
-                  <ValidateActionPortal key={action.id} action={action} />
+                <Grid item sm={12} md={6} lg={4} xl={3} key={action.path}>
+                  <ValidateActionPortal key={action.path} action={action} />
                 </Grid>
               ))}
             </Grid>
@@ -242,7 +237,10 @@ const IncubatorSection = () => {
       <Stack spacing={2}>
         {acceptedIncubatees && acceptedIncubatees.length > 0 ? (
           acceptedIncubatees.map((incubatee) => (
-            <InitiativeCard initiativeId={incubatee.id!} key={incubatee.id!} />
+            <InitiativeCard
+              initiativePath={incubatee.initiativePath!}
+              key={incubatee.initiativePath!}
+            />
           ))
         ) : (
           <Typography>{incubatorTranslations("incubatees.none")}</Typography>
@@ -257,7 +255,7 @@ const IncubatorSection = () => {
             {notAcceptedIncubatees && notAcceptedIncubatees.length > 0 ? (
               notAcceptedIncubatees.map((incubatee) => (
                 <InvitedIncubateePortal
-                  key={incubatee.id!}
+                  key={incubatee.path!}
                   incubatee={incubatee}
                 />
               ))
@@ -306,28 +304,89 @@ const AboutSection = ({ initiative }: { initiative?: Initiative }) => {
   );
 };
 
+const ContinueToPublishAnActionDialog = ({
+  open,
+  close,
+}: {
+  open: boolean;
+  close: () => void;
+}) => {
+  const t = useTranslations("initiatives.flow");
+  const inputTranslations = useTranslations("input");
+  const [initiative] = useCurrentInitiative();
+  return (
+    <Dialog
+      open={open}
+      onClose={() => {
+        close();
+      }}
+    >
+      <DialogTitle>{t("title")}</DialogTitle>
+      <DialogContent>
+        <Typography>{t("action.prompt")}</Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={() => {
+            close();
+          }}
+        >
+          {inputTranslations("cancel")}
+        </Button>
+        <Button
+          variant="contained"
+          href={`/${initiative?.path}/actions/upload`}
+        >
+          {t("action.yes")}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 const InitiativeProfile = () => {
   const [initiative] = useCurrentInitiative();
-  const [myInitiative] = useMyInitiative();
   const initiativeTypeLabel = useInitiativeTypeLabel(initiative);
+  const isMyInitiative = useIsMine();
+  const router = useRouter();
+  const { flow } = router.query;
+  const [
+    continueToPublishAnActionDialogOpen,
+    setContinueToPublishAnActionDialogOpen,
+  ] = useState(false);
+  useEffect(() => {
+    if (flow) {
+      setContinueToPublishAnActionDialogOpen(true);
+    }
+  }, [flow, setContinueToPublishAnActionDialogOpen]);
+
   return initiative ? (
-    <Stack
-      spacing={2}
-      sx={{ justifyContent: "center", alignItems: "center", pb: 2 }}
-    >
-      <Typography variant="h1">{initiative.name}</Typography>
-      <RatingsStack ratings={initiative.ratings} />
-      <Avatar src={initiative.pic} sx={{ width: 225, height: 225 }} />
-      <Typography>{initiativeTypeLabel}</Typography>
-      <AboutSection initiative={initiative} />
-      <Stack sx={{ width: "100%" }}>
-        {initiative.type == "organization" &&
-          initiative.organizationType == "incubator" && <IncubatorSection />}
-        <Sponsorships
-          showAmount={myInitiative && myInitiative?.id == initiative?.id}
+    <Fragment>
+      {isMyInitiative && (
+        <ContinueToPublishAnActionDialog
+          open={continueToPublishAnActionDialogOpen}
+          close={() => setContinueToPublishAnActionDialogOpen(false)}
         />
+      )}
+      <Stack
+        spacing={2}
+        sx={{ justifyContent: "center", alignItems: "center", pb: 2 }}
+      >
+        <Typography variant="h1">{initiative.name}</Typography>
+        <RatingsStack ratings={initiative.ratings} />
+        <Avatar src={initiative.pic} sx={{ width: 225, height: 225 }} />
+        <Typography>{initiativeTypeLabel}</Typography>
+        <AboutSection initiative={initiative} />
+        <Stack sx={{ width: "100%" }}>
+          {initiative.type == "organization" &&
+            initiative.organizationType == "incubator" && <IncubatorSection />}
+          <Sponsorships
+            showAmount={isMyInitiative}
+            useCurrentSponsorships={useCurrentSponsorships}
+          />
+        </Stack>
       </Stack>
-    </Stack>
+    </Fragment>
   ) : (
     <CircularProgress />
   );
@@ -335,7 +394,7 @@ const InitiativeProfile = () => {
 
 const InitiativeContent = () => {
   const [actions] = useCurrentActions();
-  const [socialProofs] = useCurrentImpacts();
+  const [socialProofs] = useCurrentTestimonials();
   const [actionsContent, setActionsContent] = useState<Content[]>([]);
   const [socialProofsContent, setSocialProofsContent] = useState<Content[]>([]);
   const [content, setContent] = useState<Content[]>([]);
@@ -355,7 +414,7 @@ const InitiativeContent = () => {
     if (socialProofs && socialProofs.length > 0) {
       setSocialProofsContent(
         socialProofs.map((socialProof) => ({
-          type: "impact",
+          type: "testimonial",
           data: socialProof,
           createdAt: socialProof.createdAt
             ? socialProof.createdAt
@@ -383,7 +442,7 @@ const InitiativeContent = () => {
           md={4}
           lg={3}
           xl={2}
-          key={c.data.id ? c.data.id : idx}
+          key={c.data.path ? c.data.path : idx}
         >
           {c.type == "action" ? (
             <ImpactCard posiData={c.data} />
@@ -409,7 +468,7 @@ const VipDialog = ({
 }) => {
   const vipDialogTranslations = useTranslations("initiatives.vip.dialog");
   const [actions] = useCurrentActions();
-  const [socialProofs] = useCurrentImpacts();
+  const [socialProofs] = useCurrentTestimonials();
   const vipState = useVipState(myInitiative, socialProofs, actions);
   return (
     <Dialog open={open}>
@@ -417,7 +476,10 @@ const VipDialog = ({
       <DialogContent>
         <Typography>{vipDialogTranslations("startProcessPrompt")}</Typography>
         <List>
-          <ListItemButton href="/posi/upload" disabled={vipState.oneActionDone}>
+          <ListItemButton
+            href={`/${myInitiative.path}/actions/upload`}
+            disabled={vipState.oneActionDone}
+          >
             <ListItemIcon>
               {vipState.oneActionDone ? <CheckBox /> : <CheckBoxOutlineBlank />}
             </ListItemIcon>
@@ -449,7 +511,7 @@ const VipDialog = ({
             />
           </ListItemButton>
           <ListItemButton
-            href={`/initiatives/${myInitiative.id}/edit`}
+            href={`/${myInitiative.path}/edit`}
             disabled={vipState.allFieldsFinished}
           >
             <ListItemIcon>
@@ -514,7 +576,7 @@ const BottomBar = () => {
   const bottomBarTranslations = useTranslations("initiatives.bottomBar");
   const callToActionTranslations = useTranslations("common.callToAction");
   const [initiative] = useCurrentInitiative();
-  const [myInitiative] = useMyInitiative();
+  const [myInitiatives] = useMyInitiatives();
   const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
   const router = useRouter();
   const { vipDialogOpen: queryVipDialogOpen } = router.query;
@@ -522,14 +584,15 @@ const BottomBar = () => {
     Boolean(queryVipDialogOpen)
   );
   const [incubateeVIPDialogOpen, setIncubateeVIPDialogOpen] = useState(false);
-  const [socialProofs] = useCurrentImpacts();
+  const [socialProofs] = useCurrentTestimonials();
   const [actions] = useCurrentActions();
-  const vipState = useVipState(myInitiative, socialProofs, actions);
+  const vipState = useVipState(myInitiatives?.[0], socialProofs, actions);
   const vipButtonBehavior = initiative?.incubator
     ? { onClick: () => setIncubateeVIPDialogOpen(true) }
     : vipState.entryGiven
     ? { href: "/initiatives/vip" }
     : { onClick: () => setVipDialogOpen(true) };
+  const isMine = useIsMine();
 
   const VipCenterBottomFab = () => (
     <CenterBottomFab color="secondary" {...vipButtonBehavior}>
@@ -543,10 +606,7 @@ const BottomBar = () => {
   }: {
     initiative: Initiative;
   }) => (
-    <CenterBottomFab
-      color="secondary"
-      href={`/initiatives/${initiative.id}/invite`}
-    >
+    <CenterBottomFab color="secondary" href={`/${initiative.path}/invite`}>
       <PersonAdd />
       <Typography fontSize={12}>{bottomBarTranslations("invite")}</Typography>
     </CenterBottomFab>
@@ -554,7 +614,7 @@ const BottomBar = () => {
   const presentationInfo = useLocalizedPresentationInfo(initiative);
   return initiative == undefined ? (
     <CenterBottomCircularProgress />
-  ) : myInitiative && myInitiative.id == initiative.id ? (
+  ) : isMine ? (
     <AppBar
       position="fixed"
       color="primary"
@@ -566,22 +626,22 @@ const BottomBar = () => {
         howToSupport={
           presentationInfo?.howToSupport ? presentationInfo?.howToSupport : {}
         }
-        solicitOpinionPath={`/initiatives/${initiative.id}/impact/upload`}
-        pathUnderSupport={`/initiatives/${initiative.id}`}
-        editInitiativePath={`/initiatives/${initiative.id}/edit`}
+        solicitOpinionPath={`${initiative.path}/impact/upload`}
+        pathUnderSupport={`${initiative.path}`}
+        editInitiativePath={`/${initiative.path}/edit`}
       />
       <VipDialog
         open={vipDialogOpen}
         setOpen={setVipDialogOpen}
         setSolicitDialogOpen={setSolicitDialogOpen}
-        myInitiative={myInitiative}
+        myInitiative={initiative}
       />
       <IncubateeVIPDialog
         open={incubateeVIPDialogOpen}
         setOpen={setIncubateeVIPDialogOpen}
       />
       <Toolbar>
-        <IconButtonWithLabel href={`/initiatives/${initiative.id}/edit`}>
+        <IconButtonWithLabel href={`/${initiative.path}/edit`}>
           <Edit />
           <Typography>{callToActionTranslations("edit")}</Typography>
         </IconButtonWithLabel>
@@ -600,7 +660,7 @@ const BottomBar = () => {
         <ShareActionArea
           shareProps={{
             title: bottomBarTranslations("sharePrompt"),
-            path: `initiatives/${initiative.id}`,
+            path: `${initiative.path}`,
           }}
         >
           <IconButtonWithLabel>
@@ -608,7 +668,7 @@ const BottomBar = () => {
             <Typography>{callToActionTranslations("share")}</Typography>
           </IconButtonWithLabel>
         </ShareActionArea>
-        <IconButtonWithLabel href={`/posi/upload`}>
+        <IconButtonWithLabel href={`/${initiative.path}/actions/upload`}>
           <Add />
           <Typography>{bottomBarTranslations("addActionShort")}</Typography>
         </IconButtonWithLabel>

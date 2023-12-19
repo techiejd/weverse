@@ -17,10 +17,11 @@ import RatingsStack from "../../../common/components/ratings";
 import ValidationInfo from "./card/validationInfo";
 import { useTranslations } from "next-intl";
 import { useLocalizedPresentationInfo } from "../../../common/utils/translations";
+import { useInitiative } from "../context";
 
 const AboutContent = ({
   location,
-  initiativeId: initiativeId,
+  path,
   ratings,
   validation,
   ...locale2PresentationInfo
@@ -29,6 +30,7 @@ const AboutContent = ({
   const presentationInfo = useLocalizedPresentationInfo(
     locale2PresentationInfo
   );
+  const [initiative] = useInitiative({ path });
   return (
     (presentationInfo && (
       <Box>
@@ -88,7 +90,9 @@ const AboutContent = ({
               </CardContent>
             </Box>
           )}
-          <InitiativeCard initiativeId={initiativeId} />
+          {initiative?.path && (
+            <InitiativeCard initiativePath={initiative.path} />
+          )}
         </Stack>
       </Box>
     )) || <CircularProgress />

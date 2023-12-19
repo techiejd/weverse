@@ -47,7 +47,8 @@ export const locale = z.enum(["en", "es", "fr", "de", "pl", "pt"]);
 export type Locale = z.infer<typeof locale>;
 
 const dbBase = z.object({
-  id: z.string().optional(),
+  //deprecated: id: z.string().optional(),
+  path: z.string().min(1).optional(),
   locale: locale.optional(),
   createdAt: z.date().optional(), // from db iff exists
 });
@@ -81,7 +82,6 @@ export function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(
 // deprecated: maker
 export const initiative = dbBase
   .extend({
-    ownerId: z.string().or(z.enum(["invited"])),
     type: initiativeType,
     organizationType: organizationType.optional(),
     name: z.string().min(1),
@@ -127,7 +127,7 @@ export const phoneNumber = z.object({
 
 export const member = dbBase.extend({
   // deprecated: makerId: z.string().optional(),
-  initiativeId: z.string(),
+  // deprecated: initiativeId: z.string(),
   customer: customer.optional(),
   stripe: stripe.optional(),
   pic: formUrl.optional(),
@@ -145,7 +145,8 @@ export const socialProof = dbBase.extend({
   rating: z.number(),
   videoUrl: formUrl.optional(),
   // deprecated: byMaker: z.string().optional(),
-  byInitiative: z.string(),
+  // deprecated: byInitiative: z.string(),
+  fromMember: z.string(),
   // deprecated: forMaker: z.string().optional(),
   forInitiative: z.string(),
   forAction: z.string().optional(),
@@ -200,13 +201,11 @@ const location = z
   .deepPartial(); // TODO(techiejd): Look into this error.
 
 const validation = z.object({
-  validator: z.string(), // incubator id
+  validator: z.string(), // incubator path
   validated: z.boolean(),
 });
 export type Validation = z.infer<typeof validation>;
 
-// TODO(techiejd): Reshape db. It should go posi
-// {action: Action, impacts: Impact[], initiativeId}
 export const actionPresentationExtension = z.object({
   media: media,
   summary: z.string().min(1),
@@ -215,7 +214,7 @@ export const actionPresentationExtension = z.object({
 export const posiFormData = dbBase
   .extend({
     // deprecated: makerId: z.string().optional(),
-    initiativeId: z.string(),
+    // deprecated: initiativeId: z.string(),
     location: location.optional(),
     ratings: ratings.optional(),
     validation: validation.optional(),
@@ -239,7 +238,7 @@ const actionContent = dbBase.extend({
   data: parseDBInfo(posiFormData),
 });
 const socialProofContent = dbBase.extend({
-  type: z.literal("socialProof"),
+  type: z.literal("testimonial"),
   data: parseDBInfo(socialProof),
 });
 
@@ -271,7 +270,27 @@ export const sponsorship = dbBase.extend({
 export type Sponsorship = z.infer<typeof sponsorship>;
 
 export const incubatee = dbBase.extend({
-  acceptedInvite: z.boolean().optional(),
+  initiativePath: z.string().optional(), // Path to the initiative that accepted.
+  initializeWith: z
+    .object({
+      name: z.string().min(1),
+      type: initiativeType,
+      organizationType: organizationType.optional(),
+      incubator: z.string().min(1),
+    })
+    .optional(),
 });
 
 export type Incubatee = z.infer<typeof incubatee>;
+
+const fromTypes = z.enum(["testimonial", "sponsorship", "like"]);
+export type FromType = z.infer<typeof fromTypes>;
+
+// This is are all edges from the member to the initiative or action. The id is the path of the initiative or action where we replaced "/" with "_".
+// Watch out! If you update({type, data}), data will be overwritten given Firestore's API. So you need to use set({type, data}, {merge: true}) instead.
+// TODO(techiejd): Refactor out updates vs set({merge: true}), so that it's less of a headache for developer.
+export const from = z.discriminatedUnion("type", [
+  dbBase.extend({ type: z.literal("testimonial"), data: socialProof }),
+  dbBase.extend({ type: z.literal("sponsorship"), data: sponsorship }),
+  dbBase.extend({ type: z.literal("like"), data: like }),
+]);

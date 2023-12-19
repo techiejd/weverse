@@ -3,6 +3,7 @@ import { initializeApp, getApps, cert } from "firebase-admin/app";
 import {
   DbBase,
   SponsorshipLevel,
+  from,
   member,
   sponsorship,
   sponsorshipLevel,
@@ -23,6 +24,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 import { getFirestore } from "firebase-admin/firestore";
+import { pathAndType2FromCollectionId } from "../../../common/context/weverseUtils";
+import { splitPath } from "../../../common/utils/firebase";
 
 const sponsorshipLevelsToPlanIds: Record<SponsorshipLevel, string> =
   isDevEnvironment
@@ -71,7 +74,7 @@ namespace Utils {
       // anything with serverTimestamp does not exist atm if pending writes.
       return zAny.parse({
         ...data,
-        id: snapshot.id,
+        path: snapshot.ref.path,
         createdAt: data.createdAt ? data.createdAt.toDate() : undefined,
       });
     },
@@ -79,6 +82,7 @@ namespace Utils {
 
   export const memberConverter = makeDataConverter(member);
   export const sponsorshipConverter = makeDataConverter(sponsorship);
+  export const fromConverter = makeDataConverter(from);
 }
 
 const badRequest = (res: NextApiResponse) =>
@@ -122,17 +126,27 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
   } = body;
 
   const initiativeSponsorshipDoc = firestore
-    .doc(`initiatives/${initiative}/sponsorships/${member}`)
+    .doc(`${initiative}/sponsorships/${splitPath(member).id}`)
     .withConverter(Utils.sponsorshipConverter);
-  const memberSponsorshipDoc = firestore
-    .doc(`members/${member}/sponsorships/${initiative}`)
-    .withConverter(Utils.sponsorshipConverter);
+  const memberFromSponsorshipDoc = firestore
+    .doc(
+      `${member}/from/${pathAndType2FromCollectionId(
+        initiative,
+        "sponsorship"
+      )}`
+    )
+    .withConverter(Utils.fromConverter);
   const mirroredSponsorshipUpdate = (
     data: z.infer<typeof partialSponsorship>
   ) => {
     const batch = firestore.batch();
     batch.update(initiativeSponsorshipDoc, data);
-    batch.update(memberSponsorshipDoc, data);
+    // TODO(techiejd): Refactor update vs set + merge logic into some other function
+    batch.set(
+      memberFromSponsorshipDoc,
+      { type: "sponsorship", data },
+      { merge: true }
+    );
     return batch.commit();
   };
 
@@ -171,12 +185,15 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
       denyFee: !!denyFee,
       //TODO(techiejd): Flesh out publishing name support.
       memberPublishable: !!memberPublishable,
-      initiative: initiative,
+      initiative,
       member,
       currency,
     };
     batch.set(initiativeSponsorshipDoc, sponsorshipData);
-    batch.set(memberSponsorshipDoc, sponsorshipData);
+    batch.set(memberFromSponsorshipDoc, {
+      type: "sponsorship",
+      data: sponsorshipData,
+    });
 
     await Promise.all([archiveLastSponsorshipPricePromise, batch.commit()]);
 
@@ -246,7 +263,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
         });
         const firestorePromise = subscriptionPromise.then((subscription) =>
           firestore
-            .doc(`members/${member}`)
+            .doc(`${member}`)
             .withConverter(Utils.memberConverter)
             .update({
               customer: oneWeCustomer,

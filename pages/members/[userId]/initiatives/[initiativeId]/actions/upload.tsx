@@ -1,45 +1,43 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
-import { useAppState } from "../../common/context/appState";
-import { useRouter } from "next/router";
-import PosiForm from "../../modules/posi/action/form";
-import LogInPrompt from "../../common/components/logInPrompt";
-import { usePosiFormDataConverter } from "../../common/utils/firebase";
-import { PosiFormData, locale } from "../../functions/shared/src";
-import {
-  Locale2Messages,
-  WithTranslationsStaticProps,
-} from "../../common/utils/translations";
-import { asOneWePage } from "../../common/components/onewePage";
 import { useCallback } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/router";
+import LogInPrompt from "../../../../../../common/components/logInPrompt";
+import { asOneWePage } from "../../../../../../common/components/onewePage";
+import { useAppState } from "../../../../../../common/context/appState";
+import { usePosiFormDataConverter } from "../../../../../../common/utils/firebase";
+import {
+  WithTranslationsStaticProps,
+  Locale2Messages,
+} from "../../../../../../common/utils/translations";
+import { PosiFormData, locale } from "../../../../../../functions/shared/src";
+import PosiForm from "../../../../../../modules/posi/action/form";
+import { CachePaths } from "../../../../../../common/utils/staticPaths";
+import { useCurrentInitiative } from "../../../../../../modules/initiatives/context";
 
+export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 
 const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
   const appState = useAppState();
   const router = useRouter();
-  const { user } = useAppState().authState;
+  const [initiative] = useCurrentInitiative();
   const posiFormDataConverter = usePosiFormDataConverter();
   const localeIn = appState.languages.primary;
   const onSubmit = useCallback(
     async (usersPosi: PosiFormData) => {
+      if (!initiative) return;
       const docRef = await addDoc(
-        collection(appState.firestore, "impacts").withConverter(
-          posiFormDataConverter
-        ),
+        collection(
+          appState.firestore,
+          `${initiative.path!}/actions`
+        ).withConverter(posiFormDataConverter),
         usersPosi
       );
-      router.push(`/posi/${docRef.id}/impact/solicit`);
+      router.push(`/${docRef.path}/impact/solicit`);
     },
-    [appState.firestore, posiFormDataConverter, router]
+    [appState.firestore, initiative, posiFormDataConverter, router]
   );
   const t = useTranslations("actions.upload");
 
@@ -67,7 +65,7 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
           </div>
         </Box>
       </Stack>
-      {user ? (
+      {initiative ? (
         <PosiForm
           onInteraction={{ type: "create", onSubmit }}
           locale2Messages={locale2Messages}
