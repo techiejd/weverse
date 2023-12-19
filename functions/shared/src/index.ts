@@ -286,7 +286,7 @@ export type Incubatee = z.infer<typeof incubatee>;
 const fromTypes = z.enum(["testimonial", "sponsorship", "like"]);
 export type FromType = z.infer<typeof fromTypes>;
 
-// This is are all edges from the member to the initiative or action. The id is the id of the initiative or action.
+// This is are all edges from the member to the initiative or action. The id is the path of the initiative or action where we replaced "/" with "_".
 // Watch out! If you update({type, data}), data will be overwritten given Firestore's API. So you need to use set({type, data}, {merge: true}) instead.
 // TODO(techiejd): Refactor out updates vs set({merge: true}), so that it's less of a headache for developer.
 export const from = z.discriminatedUnion("type", [

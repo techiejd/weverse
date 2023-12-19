@@ -226,9 +226,20 @@ exports.sponsorship = dbBase.extend({
     currency: currency,
 });
 exports.incubatee = dbBase.extend({
-    initiativePath: zod_1.z.string().optional(), // Path to the initiative that accepted.
+    initiativePath: zod_1.z.string().optional(),
+    initializeWith: zod_1.z
+        .object({
+        name: zod_1.z.string().min(1),
+        type: exports.initiativeType,
+        organizationType: exports.organizationType.optional(),
+        incubator: zod_1.z.string().min(1),
+    })
+        .optional(),
 });
-// This is are all edges from the member to the initiative or action.
+const fromTypes = zod_1.z.enum(["testimonial", "sponsorship", "like"]);
+// This is are all edges from the member to the initiative or action. The id is the path of the initiative or action where we replaced "/" with "_".
+// Watch out! If you update({type, data}), data will be overwritten given Firestore's API. So you need to use set({type, data}, {merge: true}) instead.
+// TODO(techiejd): Refactor out updates vs set({merge: true}), so that it's less of a headache for developer.
 exports.from = zod_1.z.discriminatedUnion("type", [
     dbBase.extend({ type: zod_1.z.literal("testimonial"), data: exports.socialProof }),
     dbBase.extend({ type: zod_1.z.literal("sponsorship"), data: exports.sponsorship }),

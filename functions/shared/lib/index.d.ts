@@ -1640,18 +1640,48 @@ export declare const incubatee: z.ZodObject<{
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
     createdAt: z.ZodOptional<z.ZodDate>;
     initiativePath: z.ZodOptional<z.ZodString>;
+    initializeWith: z.ZodOptional<z.ZodObject<{
+        name: z.ZodString;
+        type: z.ZodEnum<["individual", "organization"]>;
+        organizationType: z.ZodOptional<z.ZodEnum<["nonprofit", "religious", "unincorporated", "profit", "incubator"]>>;
+        incubator: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        name?: string;
+        type?: "individual" | "organization";
+        organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
+        incubator?: string;
+    }, {
+        name?: string;
+        type?: "individual" | "organization";
+        organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
+        incubator?: string;
+    }>>;
 }, "strip", z.ZodTypeAny, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
     createdAt?: Date;
     initiativePath?: string;
+    initializeWith?: {
+        name?: string;
+        type?: "individual" | "organization";
+        organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
+        incubator?: string;
+    };
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
     createdAt?: Date;
     initiativePath?: string;
+    initializeWith?: {
+        name?: string;
+        type?: "individual" | "organization";
+        organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
+        incubator?: string;
+    };
 }>;
 export type Incubatee = z.infer<typeof incubatee>;
+declare const fromTypes: z.ZodEnum<["testimonial", "sponsorship", "like"]>;
+export type FromType = z.infer<typeof fromTypes>;
 export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
