@@ -40,6 +40,24 @@ const firestore = (() => {
 namespace Utils {
   //TODO(techiejd): This is a hack to get around sharing the same schema between nextjs and firebase functions.
   //TODO(techiejd): WET -> Dry
+  function createdAtToDateEverywhere(obj: any): any {
+    if (typeof obj === "object" && obj !== null) {
+      if (Array.isArray(obj)) {
+        return obj.map((item) => createdAtToDateEverywhere(item));
+      } else {
+        const newObj: any = {};
+        Object.entries(obj).forEach(([k, v]) => {
+          newObj[k] =
+            k === "createdAt"
+              ? (v as any).toDate()
+              : createdAtToDateEverywhere(v);
+        });
+        return newObj;
+      }
+    } else {
+      return obj;
+    }
+  }
   const makeDataConverter = <T extends z.ZodType<DbBase>>(
     zAny: T
   ): FirestoreDataConverter<z.infer<typeof zAny>> => ({
@@ -49,11 +67,11 @@ namespace Utils {
     },
     fromFirestore: (snapshot: QueryDocumentSnapshot): z.infer<typeof zAny> => {
       const data = snapshot.data();
+      const parsedDateData = createdAtToDateEverywhere(data);
       // anything with serverTimestamp does not exist atm if pending writes.
       return zAny.parse({
-        ...data,
+        ...parsedDateData,
         path: snapshot.ref.path,
-        createdAt: data.createdAt ? data.createdAt.toDate() : undefined,
       });
     },
   });
