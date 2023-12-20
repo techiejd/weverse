@@ -29,9 +29,9 @@ const SocialProofCard = ({
   showAction?: boolean;
 }) => {
   const SocialProofCardHeader = () => {
-    const [fromMember] = useMember(socialProof.fromMember);
+    const [byMember] = useMember(socialProof.byMember);
     return (
-      <CardActionArea href={`/${socialProof.fromMember}`}>
+      <CardActionArea href={`/${socialProof.byMember}`}>
         <CardHeader
           title={
             <Stack
@@ -39,7 +39,7 @@ const SocialProofCard = ({
               sx={{ justifyContent: "center", alignItems: "center" }}
             >
               <Box pr={2}>
-                {fromMember ? `${fromMember.name}: ` : <CircularProgress />}
+                {byMember ? `${byMember.name}: ` : <CircularProgress />}
               </Box>
               <Rating value={socialProof.rating} />
             </Stack>

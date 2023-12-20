@@ -71,7 +71,7 @@ const UploadSocialProofForm = () => {
             pickBy(
               {
                 rating: rating,
-                fromMember: myMember.path,
+                byMember: myMember.path,
                 forInitiative: forInitiative.path,
                 forAction: forAction?.path,
                 videoUrl: media && media != "loading" ? media.url : undefined,
