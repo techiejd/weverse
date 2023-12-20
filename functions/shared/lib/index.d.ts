@@ -39,7 +39,7 @@ export declare const ratings: z.ZodObject<{
 export type Ratings = z.infer<typeof ratings>;
 export declare const locale: z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>;
 export type Locale = z.infer<typeof locale>;
-declare const dbBase: z.ZodObject<{
+export declare const dbBase: z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
     createdAt: z.ZodOptional<z.ZodDate>;
@@ -1680,7 +1680,7 @@ export declare const incubatee: z.ZodObject<{
     };
 }>;
 export type Incubatee = z.infer<typeof incubatee>;
-declare const fromTypes: z.ZodEnum<["testimonial", "sponsorship", "like"]>;
+export declare const fromTypes: z.ZodEnum<["testimonial", "sponsorship", "like"]>;
 export type FromType = z.infer<typeof fromTypes>;
 export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;

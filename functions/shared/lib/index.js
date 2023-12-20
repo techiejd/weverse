@@ -11,7 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.from = exports.incubatee = exports.sponsorship = exports.sponsorshipLevel = exports.content = exports.posiFormData = exports.actionPresentationExtension = exports.socialProof = exports.like = exports.member = exports.phoneNumber = exports.initiative = exports.createNestedLocalizedSchema = exports.locale = exports.ratings = exports.organizationType = exports.initiativeType = exports.media = exports.mediaType = exports.formUrl = exports.timeStamp = void 0;
+exports.from = exports.fromTypes = exports.incubatee = exports.sponsorship = exports.sponsorshipLevel = exports.content = exports.posiFormData = exports.actionPresentationExtension = exports.socialProof = exports.like = exports.member = exports.phoneNumber = exports.initiative = exports.createNestedLocalizedSchema = exports.dbBase = exports.locale = exports.ratings = exports.organizationType = exports.initiativeType = exports.media = exports.mediaType = exports.formUrl = exports.timeStamp = void 0;
 const zod_1 = require("zod");
 exports.timeStamp = zod_1.z.any().transform((val, ctx) => {
     if (val instanceof Date) {
@@ -46,7 +46,7 @@ const howToSupport = zod_1.z.object({
 });
 exports.ratings = zod_1.z.object({ sum: zod_1.z.number(), count: zod_1.z.number() });
 exports.locale = zod_1.z.enum(["en", "es", "fr", "de", "pl", "pt"]);
-const dbBase = zod_1.z.object({
+exports.dbBase = zod_1.z.object({
     //deprecated: id: z.string().optional(),
     path: zod_1.z.string().min(1).optional(),
     locale: exports.locale.optional(),
@@ -71,7 +71,7 @@ function createNestedLocalizedSchema(itemSchema) {
 }
 exports.createNestedLocalizedSchema = createNestedLocalizedSchema;
 // deprecated: maker
-exports.initiative = dbBase
+exports.initiative = exports.dbBase
     .extend({
     type: exports.initiativeType,
     organizationType: exports.organizationType.optional(),
@@ -108,7 +108,7 @@ exports.phoneNumber = zod_1.z.object({
     countryCallingCode: zod_1.z.string().min(1),
     nationalNumber: zod_1.z.string().min(1),
 });
-exports.member = dbBase.extend({
+exports.member = exports.dbBase.extend({
     // deprecated: makerId: z.string().optional(),
     // deprecated: initiativeId: z.string(),
     customer: customer.optional(),
@@ -119,8 +119,8 @@ exports.member = dbBase.extend({
     phoneNumber: exports.phoneNumber,
 });
 // This is an edge.
-exports.like = dbBase;
-exports.socialProof = dbBase.extend({
+exports.like = exports.dbBase;
+exports.socialProof = exports.dbBase.extend({
     rating: zod_1.z.number(),
     videoUrl: exports.formUrl.optional(),
     // deprecated: byMaker: z.string().optional(),
@@ -183,7 +183,7 @@ exports.actionPresentationExtension = zod_1.z.object({
     media: exports.media,
     summary: zod_1.z.string().min(1),
 });
-exports.posiFormData = dbBase
+exports.posiFormData = exports.dbBase
     .extend({
     // deprecated: makerId: z.string().optional(),
     // deprecated: initiativeId: z.string(),
@@ -197,11 +197,11 @@ const parseDBInfo = (zAny) => zod_1.z.preprocess((val) => {
     const _a = zod_1.z.object({}).passthrough().parse(val), { createdAt } = _a, others = __rest(_a, ["createdAt"]);
     return Object.assign({ createdAt: createdAt ? createdAt.toDate() : undefined }, others);
 }, zAny);
-const actionContent = dbBase.extend({
+const actionContent = exports.dbBase.extend({
     type: zod_1.z.literal("action"),
     data: parseDBInfo(exports.posiFormData),
 });
-const socialProofContent = dbBase.extend({
+const socialProofContent = exports.dbBase.extend({
     type: zod_1.z.literal("testimonial"),
     data: parseDBInfo(exports.socialProof),
 });
@@ -210,7 +210,7 @@ exports.content = zod_1.z.discriminatedUnion("type", [
     socialProofContent,
 ]);
 exports.sponsorshipLevel = zod_1.z.enum(["admirer", "fan", "lover", "custom"]);
-exports.sponsorship = dbBase.extend({
+exports.sponsorship = exports.dbBase.extend({
     stripeSubscriptionItem: zod_1.z.string().or(zod_1.z.enum(["incomplete"])),
     stripePrice: zod_1.z.string(),
     paymentsStarted: exports.timeStamp.optional(),
@@ -225,7 +225,7 @@ exports.sponsorship = dbBase.extend({
     memberPublishable: zod_1.z.boolean().optional(),
     currency: currency,
 });
-exports.incubatee = dbBase.extend({
+exports.incubatee = exports.dbBase.extend({
     initiativePath: zod_1.z.string().optional(),
     initializeWith: zod_1.z
         .object({
@@ -236,13 +236,13 @@ exports.incubatee = dbBase.extend({
     })
         .optional(),
 });
-const fromTypes = zod_1.z.enum(["testimonial", "sponsorship", "like"]);
+exports.fromTypes = zod_1.z.enum(["testimonial", "sponsorship", "like"]);
 // This is are all edges from the member to the initiative or action. The id is the path of the initiative or action where we replaced "/" with "_".
 // Watch out! If you update({type, data}), data will be overwritten given Firestore's API. So you need to use set({type, data}, {merge: true}) instead.
 // TODO(techiejd): Refactor out updates vs set({merge: true}), so that it's less of a headache for developer.
 exports.from = zod_1.z.discriminatedUnion("type", [
-    dbBase.extend({ type: zod_1.z.literal("testimonial"), data: exports.socialProof }),
-    dbBase.extend({ type: zod_1.z.literal("sponsorship"), data: exports.sponsorship }),
-    dbBase.extend({ type: zod_1.z.literal("like"), data: exports.like }),
+    exports.dbBase.extend({ type: zod_1.z.literal("testimonial"), data: exports.socialProof }),
+    exports.dbBase.extend({ type: zod_1.z.literal("sponsorship"), data: exports.sponsorship }),
+    exports.dbBase.extend({ type: zod_1.z.literal("like"), data: exports.like }),
 ]);
 //# sourceMappingURL=index.js.map

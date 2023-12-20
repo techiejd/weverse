@@ -46,7 +46,7 @@ export type Ratings = z.infer<typeof ratings>;
 export const locale = z.enum(["en", "es", "fr", "de", "pl", "pt"]);
 export type Locale = z.infer<typeof locale>;
 
-const dbBase = z.object({
+export const dbBase = z.object({
   //deprecated: id: z.string().optional(),
   path: z.string().min(1).optional(),
   locale: locale.optional(),
@@ -146,7 +146,7 @@ export const socialProof = dbBase.extend({
   videoUrl: formUrl.optional(),
   // deprecated: byMaker: z.string().optional(),
   // deprecated: byInitiative: z.string(),
-  fromMember: z.string(),
+  byMember: z.string(),
   // deprecated: forMaker: z.string().optional(),
   forInitiative: z.string(),
   forAction: z.string().optional(),
@@ -283,7 +283,7 @@ export const incubatee = dbBase.extend({
 
 export type Incubatee = z.infer<typeof incubatee>;
 
-const fromTypes = z.enum(["testimonial", "sponsorship", "like"]);
+export const fromTypes = z.enum(["testimonial", "sponsorship", "like"]);
 export type FromType = z.infer<typeof fromTypes>;
 
 // This is are all edges from the member to the initiative or action. The id is the path of the initiative or action where we replaced "/" with "_".
