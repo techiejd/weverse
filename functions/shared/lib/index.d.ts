@@ -595,7 +595,7 @@ export declare const socialProof: z.ZodObject<{
     createdAt: z.ZodOptional<z.ZodDate>;
     rating: z.ZodNumber;
     videoUrl: z.ZodOptional<z.ZodString>;
-    fromMember: z.ZodString;
+    byMember: z.ZodString;
     forInitiative: z.ZodString;
     forAction: z.ZodOptional<z.ZodString>;
     text: z.ZodOptional<z.ZodString>;
@@ -605,7 +605,7 @@ export declare const socialProof: z.ZodObject<{
     createdAt?: Date;
     rating?: number;
     videoUrl?: string;
-    fromMember?: string;
+    byMember?: string;
     forInitiative?: string;
     forAction?: string;
     text?: string;
@@ -615,7 +615,7 @@ export declare const socialProof: z.ZodObject<{
     createdAt?: Date;
     rating?: number;
     videoUrl?: string;
-    fromMember?: string;
+    byMember?: string;
     forInitiative?: string;
     forAction?: string;
     text?: string;
@@ -1524,7 +1524,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt: z.ZodOptional<z.ZodDate>;
         rating: z.ZodNumber;
         videoUrl: z.ZodOptional<z.ZodString>;
-        fromMember: z.ZodString;
+        byMember: z.ZodString;
         forInitiative: z.ZodString;
         forAction: z.ZodOptional<z.ZodString>;
         text: z.ZodOptional<z.ZodString>;
@@ -1534,7 +1534,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt?: Date;
         rating?: number;
         videoUrl?: string;
-        fromMember?: string;
+        byMember?: string;
         forInitiative?: string;
         forAction?: string;
         text?: string;
@@ -1544,7 +1544,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt?: Date;
         rating?: number;
         videoUrl?: string;
-        fromMember?: string;
+        byMember?: string;
         forInitiative?: string;
         forAction?: string;
         text?: string;
@@ -1554,7 +1554,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt?: Date;
         rating?: number;
         videoUrl?: string;
-        fromMember?: string;
+        byMember?: string;
         forInitiative?: string;
         forAction?: string;
         text?: string;
@@ -1570,7 +1570,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt?: Date;
         rating?: number;
         videoUrl?: string;
-        fromMember?: string;
+        byMember?: string;
         forInitiative?: string;
         forAction?: string;
         text?: string;
@@ -1693,7 +1693,7 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt: z.ZodOptional<z.ZodDate>;
         rating: z.ZodNumber;
         videoUrl: z.ZodOptional<z.ZodString>;
-        fromMember: z.ZodString;
+        byMember: z.ZodString;
         forInitiative: z.ZodString;
         forAction: z.ZodOptional<z.ZodString>;
         text: z.ZodOptional<z.ZodString>;
@@ -1703,7 +1703,7 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt?: Date;
         rating?: number;
         videoUrl?: string;
-        fromMember?: string;
+        byMember?: string;
         forInitiative?: string;
         forAction?: string;
         text?: string;
@@ -1713,7 +1713,7 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt?: Date;
         rating?: number;
         videoUrl?: string;
-        fromMember?: string;
+        byMember?: string;
         forInitiative?: string;
         forAction?: string;
         text?: string;
@@ -1729,7 +1729,7 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt?: Date;
         rating?: number;
         videoUrl?: string;
-        fromMember?: string;
+        byMember?: string;
         forInitiative?: string;
         forAction?: string;
         text?: string;
@@ -1745,7 +1745,7 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         createdAt?: Date;
         rating?: number;
         videoUrl?: string;
-        fromMember?: string;
+        byMember?: string;
         forInitiative?: string;
         forAction?: string;
         text?: string;

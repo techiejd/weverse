@@ -125,7 +125,7 @@ exports.socialProof = exports.dbBase.extend({
     videoUrl: exports.formUrl.optional(),
     // deprecated: byMaker: z.string().optional(),
     // deprecated: byInitiative: z.string(),
-    fromMember: zod_1.z.string(),
+    byMember: zod_1.z.string(),
     // deprecated: forMaker: z.string().optional(),
     forInitiative: zod_1.z.string(),
     forAction: zod_1.z.string().optional(),
