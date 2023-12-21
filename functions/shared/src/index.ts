@@ -1,6 +1,9 @@
 import { z } from "zod";
 
 export const timeStamp = z.any().transform((val, ctx) => {
+  if (val == null) {
+    return undefined; // When the field is null it means it exists locally only and not on the server.
+  }
   if (val instanceof Date) {
     return val;
   }

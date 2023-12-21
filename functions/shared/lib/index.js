@@ -14,6 +14,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.from = exports.fromTypes = exports.incubatee = exports.sponsorship = exports.sponsorshipLevel = exports.content = exports.posiFormData = exports.actionPresentationExtension = exports.socialProof = exports.like = exports.member = exports.phoneNumber = exports.initiative = exports.createNestedLocalizedSchema = exports.dbBase = exports.locale = exports.ratings = exports.organizationType = exports.initiativeType = exports.media = exports.mediaType = exports.formUrl = exports.timeStamp = void 0;
 const zod_1 = require("zod");
 exports.timeStamp = zod_1.z.any().transform((val, ctx) => {
+    if (val == null) {
+        return undefined; // When the field is null it means it exists locally only and not on the server.
+    }
     if (val instanceof Date) {
         return val;
     }

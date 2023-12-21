@@ -28,7 +28,6 @@ export const testimonialUnderInitiativeAdded = functions.firestore
   .onCreate(async (snapshot, context) => {
     const store = getFirestore();
     if (await shouldAbortFunction(store)) {
-      console.log("Aborting function");
       return Promise.resolve();
     }
 
@@ -63,7 +62,6 @@ export const testimonialsUnderActionAdded = functions.firestore
   .onCreate(async (snapshot, context) => {
     const store = getFirestore();
     if (await shouldAbortFunction(store)) {
-      console.log("Aborting function");
       return Promise.resolve();
     }
 
