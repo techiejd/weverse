@@ -37,25 +37,6 @@ export const creds = {
 
 export const app = initializeApp(creds);
 
-function createdAtToDateEverywhere(obj: any): any {
-  if (typeof obj === "object" && obj !== null) {
-    if (Array.isArray(obj)) {
-      return obj.map((item) => createdAtToDateEverywhere(item));
-    } else {
-      const newObj: any = {};
-      Object.entries(obj).forEach(([k, v]) => {
-        newObj[k] =
-          k === "createdAt"
-            ? (v as any).toDate()
-            : createdAtToDateEverywhere(v);
-      });
-      return newObj;
-    }
-  } else {
-    return obj;
-  }
-}
-
 const createUseLocalizedDataConverterFor = <T extends z.ZodType<DbBase>>(
   zAny: T
 ): (() => FirestoreDataConverter<z.infer<typeof zAny>>) => {
@@ -78,9 +59,8 @@ const createUseLocalizedDataConverterFor = <T extends z.ZodType<DbBase>>(
           snapshot: QueryDocumentSnapshot
         ): z.infer<typeof zAny> => {
           const data = snapshot.data();
-          const parsedDateData = createdAtToDateEverywhere(data);
           return zAny.parse({
-            ...parsedDateData,
+            ...data,
             path: snapshot.ref.path,
           });
         },

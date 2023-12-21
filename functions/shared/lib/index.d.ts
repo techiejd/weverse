@@ -42,7 +42,7 @@ export type Locale = z.infer<typeof locale>;
 export declare const dbBase: z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+    createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
 }, "strip", z.ZodTypeAny, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
@@ -50,7 +50,7 @@ export declare const dbBase: z.ZodObject<{
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-    createdAt?: Date;
+    createdAt?: any;
 }>;
 export type DbBase = z.infer<typeof dbBase>;
 declare const initiativePresentationExtension: z.ZodObject<{
@@ -123,7 +123,7 @@ export declare const initiative: z.ZodObject<{
     email: z.ZodOptional<z.ZodString>;
     incubator: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+    createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     organizationType: z.ZodOptional<z.ZodEnum<["nonprofit", "religious", "unincorporated", "profit", "incubator"]>>;
     pic: z.ZodOptional<z.ZodString>;
     ratings: z.ZodOptional<z.ZodObject<{
@@ -361,7 +361,7 @@ export declare const initiative: z.ZodObject<{
     email?: string;
     incubator?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-    createdAt?: Date;
+    createdAt?: any;
     organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
     pic?: string;
     ratings?: {
@@ -433,7 +433,7 @@ export declare const phoneNumber: z.ZodObject<{
 export declare const member: z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+    createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     customer: z.ZodOptional<z.ZodObject<{
         firstName: z.ZodString;
         lastName: z.ZodString;
@@ -545,7 +545,7 @@ export declare const member: z.ZodObject<{
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-    createdAt?: Date;
+    createdAt?: any;
     customer?: {
         firstName?: string;
         lastName?: string;
@@ -578,7 +578,7 @@ export type Member = z.infer<typeof member>;
 export declare const like: z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+    createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
 }, "strip", z.ZodTypeAny, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
@@ -586,13 +586,13 @@ export declare const like: z.ZodObject<{
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-    createdAt?: Date;
+    createdAt?: any;
 }>;
 export type Like = z.infer<typeof like>;
 export declare const socialProof: z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+    createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     rating: z.ZodNumber;
     videoUrl: z.ZodOptional<z.ZodString>;
     byMember: z.ZodString;
@@ -612,7 +612,7 @@ export declare const socialProof: z.ZodObject<{
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-    createdAt?: Date;
+    createdAt?: any;
     rating?: number;
     videoUrl?: string;
     byMember?: string;
@@ -716,7 +716,7 @@ export declare const posiFormData: z.ZodObject<{
         validated?: boolean;
     }>>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+    createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     ratings: z.ZodOptional<z.ZodObject<{
         sum: z.ZodNumber;
         count: z.ZodNumber;
@@ -962,7 +962,7 @@ export declare const posiFormData: z.ZodObject<{
         validated?: boolean;
     };
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-    createdAt?: Date;
+    createdAt?: any;
     ratings?: {
         sum?: number;
         count?: number;
@@ -1014,7 +1014,7 @@ export type PosiFormData = z.infer<typeof posiFormData>;
 export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+    createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     type: z.ZodLiteral<"action">;
     data: z.ZodEffects<z.ZodObject<{
         location: z.ZodOptional<z.ZodObject<{
@@ -1075,7 +1075,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             validated?: boolean;
         }>>;
         locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-        createdAt: z.ZodOptional<z.ZodDate>;
+        createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
         ratings: z.ZodOptional<z.ZodObject<{
             sum: z.ZodNumber;
             count: z.ZodNumber;
@@ -1321,7 +1321,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             validated?: boolean;
         };
         locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-        createdAt?: Date;
+        createdAt?: any;
         ratings?: {
             sum?: number;
             count?: number;
@@ -1510,18 +1510,18 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-    createdAt?: Date;
+    createdAt?: any;
     type?: "action";
     data?: unknown;
 }>, z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+    createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     type: z.ZodLiteral<"testimonial">;
     data: z.ZodEffects<z.ZodObject<{
         path: z.ZodOptional<z.ZodString>;
         locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-        createdAt: z.ZodOptional<z.ZodDate>;
+        createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
         rating: z.ZodNumber;
         videoUrl: z.ZodOptional<z.ZodString>;
         byMember: z.ZodString;
@@ -1541,7 +1541,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
     }, {
         path?: string;
         locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-        createdAt?: Date;
+        createdAt?: any;
         rating?: number;
         videoUrl?: string;
         byMember?: string;
@@ -1578,7 +1578,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-    createdAt?: Date;
+    createdAt?: any;
     type?: "testimonial";
     data?: unknown;
 }>]>;
@@ -1588,7 +1588,7 @@ export type SponsorshipLevel = z.infer<typeof sponsorshipLevel>;
 export declare const sponsorship: z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+    createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     stripeSubscriptionItem: z.ZodUnion<[z.ZodString, z.ZodEnum<["incomplete"]>]>;
     stripePrice: z.ZodString;
     paymentsStarted: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
@@ -1620,7 +1620,7 @@ export declare const sponsorship: z.ZodObject<{
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-    createdAt?: Date;
+    createdAt?: any;
     stripeSubscriptionItem?: string;
     stripePrice?: string;
     paymentsStarted?: any;
@@ -1638,7 +1638,7 @@ export type Sponsorship = z.infer<typeof sponsorship>;
 export declare const incubatee: z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+    createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     initiativePath: z.ZodOptional<z.ZodString>;
     initializeWith: z.ZodOptional<z.ZodObject<{
         name: z.ZodString;
@@ -1670,7 +1670,7 @@ export declare const incubatee: z.ZodObject<{
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-    createdAt?: Date;
+    createdAt?: any;
     initiativePath?: string;
     initializeWith?: {
         name?: string;
@@ -1685,12 +1685,12 @@ export type FromType = z.infer<typeof fromTypes>;
 export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+    createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     type: z.ZodLiteral<"testimonial">;
     data: z.ZodObject<{
         path: z.ZodOptional<z.ZodString>;
         locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-        createdAt: z.ZodOptional<z.ZodDate>;
+        createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
         rating: z.ZodNumber;
         videoUrl: z.ZodOptional<z.ZodString>;
         byMember: z.ZodString;
@@ -1710,7 +1710,7 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
     }, {
         path?: string;
         locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-        createdAt?: Date;
+        createdAt?: any;
         rating?: number;
         videoUrl?: string;
         byMember?: string;
@@ -1737,12 +1737,12 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-    createdAt?: Date;
+    createdAt?: any;
     type?: "testimonial";
     data?: {
         path?: string;
         locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-        createdAt?: Date;
+        createdAt?: any;
         rating?: number;
         videoUrl?: string;
         byMember?: string;
@@ -1753,12 +1753,12 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
 }>, z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+    createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     type: z.ZodLiteral<"sponsorship">;
     data: z.ZodObject<{
         path: z.ZodOptional<z.ZodString>;
         locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-        createdAt: z.ZodOptional<z.ZodDate>;
+        createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
         stripeSubscriptionItem: z.ZodUnion<[z.ZodString, z.ZodEnum<["incomplete"]>]>;
         stripePrice: z.ZodString;
         paymentsStarted: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
@@ -1790,7 +1790,7 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
     }, {
         path?: string;
         locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-        createdAt?: Date;
+        createdAt?: any;
         stripeSubscriptionItem?: string;
         stripePrice?: string;
         paymentsStarted?: any;
@@ -1829,12 +1829,12 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-    createdAt?: Date;
+    createdAt?: any;
     type?: "sponsorship";
     data?: {
         path?: string;
         locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-        createdAt?: Date;
+        createdAt?: any;
         stripeSubscriptionItem?: string;
         stripePrice?: string;
         paymentsStarted?: any;
@@ -1851,12 +1851,12 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
 }>, z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-    createdAt: z.ZodOptional<z.ZodDate>;
+    createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     type: z.ZodLiteral<"like">;
     data: z.ZodObject<{
         path: z.ZodOptional<z.ZodString>;
         locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
-        createdAt: z.ZodOptional<z.ZodDate>;
+        createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     }, "strip", z.ZodTypeAny, {
         path?: string;
         locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
@@ -1864,7 +1864,7 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
     }, {
         path?: string;
         locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-        createdAt?: Date;
+        createdAt?: any;
     }>;
 }, "strip", z.ZodTypeAny, {
     path?: string;
@@ -1879,12 +1879,12 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-    createdAt?: Date;
+    createdAt?: any;
     type?: "like";
     data?: {
         path?: string;
         locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
-        createdAt?: Date;
+        createdAt?: any;
     };
 }>]>;
 export {};

@@ -50,7 +50,7 @@ export const dbBase = z.object({
   //deprecated: id: z.string().optional(),
   path: z.string().min(1).optional(),
   locale: locale.optional(),
-  createdAt: z.date().optional(), // from db iff exists
+  createdAt: timeStamp.optional(), // from db iff exists
 });
 export type DbBase = z.infer<typeof dbBase>;
 

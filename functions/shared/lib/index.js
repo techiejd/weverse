@@ -50,7 +50,7 @@ exports.dbBase = zod_1.z.object({
     //deprecated: id: z.string().optional(),
     path: zod_1.z.string().min(1).optional(),
     locale: exports.locale.optional(),
-    createdAt: zod_1.z.date().optional(), // from db iff exists
+    createdAt: exports.timeStamp.optional(), // from db iff exists
 });
 const initiativePresentationExtension = zod_1.z.object({
     presentationVideo: exports.formUrl.optional(),
