@@ -10,13 +10,29 @@
   },
   "index": {
     "publish": "Veröffentlichen",
+    "publishDialog": {
+      "title": "Mit der Welt teilen",
+      "whatToPublish": "Was möchten Sie veröffentlichen?",
+      "action": "Aktion veröffentlichen",
+      "initiative": "Initiative veröffentlichen",
+      "logInPrompt": "Um zu veröffentlichen, müssen Sie sich anmelden oder registrieren",
+      "initiativeNeededDialog": {
+        "title": "Sie benötigen eine Initiative, um eine Aktion zu veröffentlichen.",
+        "prompt": "Bitte veröffentlichen Sie zuerst eine Initiative.",
+        "publishInitiative": "Initiative veröffentlichen"
+      },
+      "chooseInitiativeDialog": {
+        "title": "In welcher Initiative möchten Sie diese Aktion veröffentlichen?",
+        "prompt": "Bitte wählen Sie zuerst eine Initiative aus."
+      }
+    },
     "myPage": "Meine Seite",
     "seeContentIn": "Inhalt ansehen in",
     "countMeInDialog": {
       "title": "Wir freuen uns, Sie an Bord zu haben!",
       "contribute": "Beitrag zur OneWe Bewegung.",
       "sponsorOneWe": "Sponsor OneWe",
-      "uploadAnAction": "Eine Aktion hochladen",
+      "publishSomething": "Veröffentlichen (Aktion, Initiativen, etc.)",
       "registerOrLoginPrompt": "Als Mitglied registrieren (oder einloggen)",
       "giveOneWeTestimonial": "Geben Sie OneWe ein Zeugnis",
       "shareOneWe": "OneWe teilen",
@@ -87,10 +103,6 @@
     "callToAction": {
       "countMeIn": "Zähle mich in",
       "edit": "Bearbeiten",
-      "actions": {
-        "list": "Aktionen",
-        "add": "Aktion hinzufügen"
-      },
       "home": "Zuhause",
       "listInitiatives": "Initiativen",
       "login": "Anmelden",
@@ -102,7 +114,8 @@
       "testify": "Zeugnis geben",
       "connect": "Verbinden",
       "update": "Aktualisieren",
-      "delete": "Löschen"
+      "delete": "Löschen",
+      "publish": "Veröffentlichen"
     },
     "meta_comment": "TODO(techiejd): Bewege alle Dinge, die Actions sind, unter einer Initiative und bewege ihre gemeinsamen Komponenten unter Initiative.",
     "solicitHelpDialog": {
@@ -172,6 +185,7 @@
           },
           "fee": {
             "prompt": "Möchten Sie die Zahlungsabwicklungsgebühr decken?",
+            "feeExplanation": "{denyFee, select, true {Diese Transaktionen sind jetzt für dich kostenlos} other {{feePercentage}% + {feeAmount} pro Transaktion}}",
             "preferInitiativePays": "Ich bevorzuge die Initiative zahlt die Gebühr"
           },
           "publicizeSupporter": {
@@ -340,9 +354,16 @@
         "successTitle": "Willkommen!",
         "successMessage": "Du hast erfolgreich als Inkubate eingetragen.",
         "viewMyInitiative": "Zu meiner Initiative",
-        "changeIncubatorPromptTitle": "Sind Sie sicher, dass Sie Ihren Inkubator ändern möchten?",
+        "notAnIncubatorErrorTitle": "Diese Initiative ist kein Inkubator.",
+        "needAnInitiativeTitle": "Sie benötigen eine Initiative, um einen Inkubator zu betreten.",
+        "publishAnInitiative": "Eine Initiative veröffentlichen um fortzufahren",
+        "chooseInitiativesTitle": "Wählen Sie die Initiative(n) aus, die Sie den Inkubator eingeben möchten",
         "currentlyIncubatedBy": "Sie sind derzeit von <incubatorNameTag>{incubatorName}</incubatorNameTag> inkubiert.",
-        "notAnIncubatorErrorTitle": "Diese Initiative ist kein Inkubator."
+        "warningPriorIncubatorWillBeRemoved": "Warnung: Durch das Auswählen dieser Initiative wird der vorherige Inkubator entfernt.",
+        "cantIncubateSelf": "Eine Initiative kann sich nicht ausbreiten, sie kann nur durch eine andere Initiative ausgelöst werden.",
+        "alreadyIncubating": "Diese Initiative wird bereits von diesem Inkubator angeheizt.",
+        "orPublishAnotherInitiative": "Oder eine andere Initiative veröffentlichen",
+        "viewIncubator": "Inkubator-Seite anzeigen"
       }
     },
     "incubator": {
@@ -400,15 +421,13 @@
     },
     "edit": {
       "title": "Seite Ihrer Initiative bearbeiten",
+      "publishTitle": "Veröffentlichen Sie die Seite Ihrer Initiative",
       "initiativeDefinition": "Initiative = ein Akt oder eine Strategie, um eine Schwierigkeit zu lösen oder eine Situation zu verbessern.",
       "chooseInitiativeType": {
         "individual": "Ich arbeite alleine",
         "organization": "Ich bin Teil einer Organisation",
         "essentialInformation": "Wichtige Informationen zur Initiative",
-        "organizationType": {
-          "namePrompt": "Wie lautet der Name der Organisation?",
-          "title": "Organisationstyp"
-        }
+        "namePrompt": "Was ist die {initiativeType, select, individual {Initiative} other {Organisation}}'s Name?"
       },
       "detailedInput": {
         "askForInfoMsg": "{initiativeType, select, individual {Bitte erzählen Sie uns über Sie.} other {Bitte erzählen Sie uns über Ihre Organisation.}}",
@@ -474,6 +493,13 @@
       "myInitiativeSpeedDial": {
         "view": "Ansicht",
         "mine": "Mine"
+      }
+    },
+    "flow": {
+      "title": "Möchten Sie Ihre Reise fortsetzen",
+      "action": {
+        "prompt": "Möchten Sie eine Aktion veröffentlichen?",
+        "yes": "Aktion veröffentlichen"
       }
     }
   },

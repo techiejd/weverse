@@ -10,13 +10,29 @@
   },
   "index": {
     "publish": "Publicar",
+    "publishDialog": {
+      "title": "Compartir con el mundo",
+      "whatToPublish": "¿Qué quieres publicar?",
+      "action": "Publicar una acción",
+      "initiative": "Publicar una iniciativa",
+      "logInPrompt": "Para poder publicar, debes iniciar sesión o registrarte",
+      "initiativeNeededDialog": {
+        "title": "Necesita una iniciativa para publicar una acción.",
+        "prompt": "Por favor, publique una iniciativa primero.",
+        "publishInitiative": "Publicar iniciativa"
+      },
+      "chooseInitiativeDialog": {
+        "title": "¿Bajo qué iniciativa desea publicar esta acción?",
+        "prompt": "Por favor, seleccione primero una iniciativa."
+      }
+    },
     "myPage": "Mi página",
     "seeContentIn": "Vea contenido en",
     "countMeInDialog": {
       "title": "¡Encantado de tenerte a bordo!",
       "contribute": "Contribuir al movimiento OneWe .",
       "sponsorOneWe": "Sponsor OneWe",
-      "uploadAnAction": "Subir una acción",
+      "publishSomething": "Publicar (acción, iniciativas, etc.)",
       "registerOrLoginPrompt": "Registrarse como miembro (o iniciar sesión)",
       "giveOneWeTestimonial": "Dale un testimonio a OneWe",
       "shareOneWe": "Compartir OneWe",
@@ -87,10 +103,6 @@
     "callToAction": {
       "countMeIn": "Me sumo",
       "edit": "Editar",
-      "actions": {
-        "list": "Acciones",
-        "add": "Agrega tu Acción"
-      },
       "home": "Inicio",
       "listInitiatives": "Iniciativas",
       "login": "Iniciar Sesión",
@@ -147,7 +159,7 @@
     },
     "sponsor": {
       "sponsorship": "Patrocinio",
-      "title": "Patrocina a {initiativeName}",
+      "title": "Patrocina a {InitiativeName}",
       "total": "Total",
       "monthly": "Al mes",
       "levels": {
@@ -342,14 +354,21 @@
         "successTitle": "¡Bienvenido a la incubadora!",
         "successMessage": "Has entrado a la incubadora con éxito.",
         "viewMyInitiative": "Ver mi iniciativa",
-        "changeIncubatorPromptTitle": "¿Quieres cambiar de incubadora?",
+        "notAnIncubatorErrorTitle": "Esta inciativa no es una incubadora.",
+        "needAnInitiativeTitle": "Necesita una iniciativa para entrar en un incubador.",
+        "publishAnInitiative": "Publicar una iniciativa para continuar",
+        "chooseInitiativesTitle": "Elija la(s) iniciativa(s) que le gustaría entrar en la incubadora",
         "currentlyIncubatedBy": "Tu iniciativa en este momento afiliada con <incubatorNameTag>{incubatorName}</incubatorNameTag>.",
-        "notAnIncubatorErrorTitle": "Esta inciativa no es una incubadora."
+        "warningPriorIncubatorWillBeRemoved": "Advertencia: Al seleccionar esta iniciativa se eliminará la incubadora anterior.",
+        "cantIncubateSelf": "Una iniciativa no puede incubarse por sí misma, sólo puede ser incubada por otra iniciativa.",
+        "alreadyIncubating": "Esta iniciativa ya está incubada por este incubador.",
+        "orPublishAnotherInitiative": "O publicar otra iniciativa",
+        "viewIncubator": "Ver página del incubador"
       }
     },
     "incubator": {
       "title": "Incubadora:",
-      "joinPrompt": "{initiativeName} te invita a unirte a su red de incubadora.",
+      "joinPrompt": "{InitiativeName} te invita a unirte a su red de incubadora.",
       "isThisActionValid": "¿Esta acción es válida?",
       "actionIsValid": "Sí, es valida",
       "validationProcess": {
@@ -402,15 +421,13 @@
     },
     "edit": {
       "title": "Editar la página de la iniciativa",
+      "publishTitle": "Publica la página de tu iniciativa",
       "initiativeDefinition": "Iniciativa = acto o estrategia destinado a resolver una dificultad o mejorar una situación.",
       "chooseInitiativeType": {
         "individual": "Trabajo solo",
         "organization": "Pertenezco a una organización",
         "essentialInformation": "Información esencial de la iniciativa",
-        "organizationType": {
-          "namePrompt": "¿Cómo se llama la organización?",
-          "title": "Tipo de organización"
-        }
+        "namePrompt": "¿Cuál es el {initiativeType, select, individual {iniciativa} other {organización}}Nombre de la misma?"
       },
       "detailedInput": {
         "askForInfoMsg": "{initiativeType, select, individual {Por favor, danos más información sobre ti.} other {Por favor, danos más información sobre tu organización.}}",
@@ -476,6 +493,13 @@
       "myInitiativeSpeedDial": {
         "view": "Ver",
         "mine": "Mio"
+      }
+    },
+    "flow": {
+      "title": "Te gustaría continuar tu viaje",
+      "action": {
+        "prompt": "¿Quieres publicar una acción?",
+        "yes": "Publicar una acción"
       }
     }
   },
