@@ -10,13 +10,29 @@
   },
   "index": {
     "publish": "公開",
+    "publishDialog": {
+      "title": "世界と共有",
+      "whatToPublish": "何を公開しますか？",
+      "action": "アクションを公開",
+      "initiative": "イニシアチブを公開",
+      "logInPrompt": "公開するにはログインするか登録する必要があります",
+      "initiativeNeededDialog": {
+        "title": "アクションを公開するには、イニシアチブが必要です。",
+        "prompt": "最初にイニシアチブを公開してください。",
+        "publishInitiative": "イニシアチブを公開"
+      },
+      "chooseInitiativeDialog": {
+        "title": "このアクションをどのイニシアチブで公開しますか？",
+        "prompt": "まず、イニシアチブを選択してください。"
+      }
+    },
     "myPage": "マイページ",
     "seeContentIn": "内容を見る",
     "countMeInDialog": {
       "title": "あなたを乗せてくれてうれしい!",
       "contribute": "OneWe運動に貢献します。",
       "sponsorOneWe": "Sponsor OneWe",
-      "uploadAnAction": "アクションをアップロード",
+      "publishSomething": "公開 (アクション、イニシアチブなど)",
       "registerOrLoginPrompt": "メンバーとして登録（またはログイン）",
       "giveOneWeTestimonial": "1つを与える私たちは証言です",
       "shareOneWe": "OneWeを共有",
@@ -87,10 +103,6 @@
     "callToAction": {
       "countMeIn": "私を数えてください",
       "edit": "編集",
-      "actions": {
-        "list": "アクション",
-        "add": "アクションを追加"
-      },
       "home": "ホーム",
       "listInitiatives": "取り組み",
       "login": "ログイン",
@@ -102,7 +114,8 @@
       "testify": "証言を与える",
       "connect": "接続する",
       "update": "更新",
-      "delete": "削除"
+      "delete": "削除",
+      "publish": "公開"
     },
     "meta_comment": "TODO(techiejd): Actionsであるすべてのものをイニシアチブの下に移動し、その共通コンポーネントをイニシアチブの下に移動させます。",
     "solicitHelpDialog": {
@@ -172,6 +185,7 @@
           },
           "fee": {
             "prompt": "支払い処理手数料をカバーしたいですか？",
+            "feeExplanation": "{denyFee, select, true {これらのトランザクションはあなたのために無料になりました} other {{feePercentage}% + {feeAmount} トランザクションごとに}}",
             "preferInitiativePays": "私はイニシアチブが手数料を支払う"
           },
           "publicizeSupporter": {
@@ -298,7 +312,7 @@
       "videoSuggestions": "30秒から5分と任意。",
       "inTextFormat": "自分の言葉で",
       "andOptional": "{numChars} とオプション。",
-      "writtenTestimonial": "記述されたtestioonial",
+      "writtenTestimonial": "証言書",
       "whatImpactPrompt": "詳細は {forAction, select, true {アクション} other {イニシアチブ}} あなたの人生にはどんな影響がありますか?",
       "submit": "証言を公開"
     },
@@ -329,11 +343,10 @@
     },
     "incubateeEntrance": {
       "title": "<initiativeNameTag>{initiativeName}</initiativeNameTag> <prompt>がインキュベーターネットワークの一部になるよう招待しています。</prompt>",
-      "specialTitleForGWNLmXTQ3qXtpYSE6awp": "<prompt>Hey cooleader 😎, <initiativeNameTag>{initiativeName}</initiativeNameTag> が国際平和デーを祝うためにあなたを招待しています。</prompt>",
       "whyEnter": "インキュベーターに入ると、それに付属する露出と指導を楽しむことができます。",
       "callToAction": "インキュベーターを入力してください",
       "acceptedIncubateeInitiatives": "急落したイニシアチブ:",
-      "alreadyIncubated": "あなたのイニシアチブはすでにこのインキュベーターの一部です。",
+      "alreadyIncubated": "このイニシアチブはすでにこのインキュベーターの一部です。",
       "logInPrompt": "インキュベーターに入るには、まずメンバーとして登録するか、ログインする必要があります。",
       "dialog": {
         "tryWithDifferentInitiative": "別のイニシアチブで試す",
@@ -341,9 +354,16 @@
         "successTitle": "ようこそ！",
         "successMessage": "正常にインキュベイトとして入力しました。",
         "viewMyInitiative": "私のイニシアチブに移動",
-        "changeIncubatorPromptTitle": "インキュベーターを変更してもよろしいですか？",
-        "currentlyIncubatedBy": "現在、 <incubatorNameTag>{incubatorName}</incubatorNameTag> によってインキュベーションされています。",
-        "notAnIncubatorErrorTitle": "このイニシアチブはインキュベーターではありません。"
+        "notAnIncubatorErrorTitle": "このイニシアチブはインキュベーターではありません。",
+        "needAnInitiativeTitle": "インキュベーターに入るにはイニシアチブが必要です。",
+        "publishAnInitiative": "イニシアチブを公開して続行する",
+        "chooseInitiativesTitle": "インキュベーターに入るイニシアチブを選択してください",
+        "currentlyIncubatedBy": "このイニシアチブは現在、 <incubatorNameTag>{incubatorName}</incubatorNameTag>によってインキュベーションされています。 イニシアチブは他のイニシアチブによってのみインキュベーションすることができ、これを選択すると事前のインキュベーターが削除されます。",
+        "warningPriorIncubatorWillBeRemoved": "警告: このイニシアチブを選択すると、事前のインキュベーターが削除されます。",
+        "cantIncubateSelf": "イニシアチブは自身をインキュベートすることはできません。別のイニシアチブによってのみインキュベートすることができます。",
+        "alreadyIncubating": "このイニシアチブはすでにこのインキュベーターによってインキュベーションされています。",
+        "orPublishAnotherInitiative": "または別のイニシアチブを公開する",
+        "viewIncubator": "インキュベーターのページを表示"
       }
     },
     "incubator": {
@@ -401,18 +421,16 @@
     },
     "edit": {
       "title": "イニシアチブのページを編集",
+      "publishTitle": "イニシアチブのページを公開する",
       "initiativeDefinition": "イニシアチブ=困難を解決したり、状況を改善することを目的とした行動または戦略。",
       "chooseInitiativeType": {
         "individual": "私は単独で作業します",
         "organization": "私は組織の一員です",
         "essentialInformation": "本質的なイニシアチブ情報",
-        "organizationType": {
-          "namePrompt": "組織の名前は？",
-          "title": "組織の種類"
-        }
+        "namePrompt": "{initiativeType, select, individual {イニシアチブ} other {組織}}の名前は？"
       },
       "detailedInput": {
-        "askForInfoMsg": "{initiativeType, select, individual {あなたについて教えてください。} other {あなたの組織について教えてください。}}",
+        "askForInfoMsg": "あなたの {initiativeType, select, individual {イニシアチブについて教えてください} other {組織}}",
         "askForImage": "{initiativeType, select, individual {OneWe コミュニティで識別される画像を選択してください。} other {ロゴをアップロードしてください。}}",
         "incubator": {
           "whatIsYourValidationProcess": "インキュベーターは、承認のシールを与えるための行動をどのように検証しますか?",
@@ -475,6 +493,13 @@
       "myInitiativeSpeedDial": {
         "view": "表示",
         "mine": "Mina"
+      }
+    },
+    "flow": {
+      "title": "旅を続けますか？",
+      "action": {
+        "prompt": "アクションを公開しますか？",
+        "yes": "アクションを公開"
       }
     }
   },
