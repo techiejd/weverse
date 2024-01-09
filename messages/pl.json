@@ -10,13 +10,29 @@
   },
   "index": {
     "publish": "Opublikuj",
+    "publishDialog": {
+      "title": "Udostępnij ze światem",
+      "whatToPublish": "Co chcesz opublikować?",
+      "action": "Opublikuj akcję",
+      "initiative": "Opublikuj inicjatywę",
+      "logInPrompt": "Aby opublikować, musisz się zalogować lub zarejestrować",
+      "initiativeNeededDialog": {
+        "title": "Potrzebujesz inicjatywy, aby opublikować działanie.",
+        "prompt": "Proszę najpierw opublikować inicjatywę.",
+        "publishInitiative": "Opublikuj inicjatywę"
+      },
+      "chooseInitiativeDialog": {
+        "title": "W ramach której inicjatywy chciałbyś opublikować to działanie?",
+        "prompt": "Proszę najpierw wybrać inicjatywę."
+      }
+    },
     "myPage": "Moja strona",
     "seeContentIn": "Zobacz zawartość w",
     "countMeInDialog": {
       "title": "Miło cię na pokładzie!",
       "contribute": "Przyczyń się do ruchu Oneus.",
       "sponsorOneWe": "Sponsor OneWe",
-      "uploadAnAction": "Prześlij akcję",
+      "publishSomething": "Publikacja (działanie, inicjatywy itd.)",
       "registerOrLoginPrompt": "Zarejestruj się jako członek (lub zaloguj)",
       "giveOneWeTestimonial": "Daj OneWe zeznanie",
       "shareOneWe": "Udostępnij OneWe",
@@ -87,10 +103,6 @@
     "callToAction": {
       "countMeIn": "Policz mnie w",
       "edit": "Edytuj",
-      "actions": {
-        "list": "Akcje",
-        "add": "Dodaj swoją akcję"
-      },
       "home": "Strona główna",
       "listInitiatives": "Inicjatywy",
       "login": "Zaloguj się",
@@ -102,7 +114,8 @@
       "testify": "Wydaj zeznanie",
       "connect": "Połącz",
       "update": "Aktualizuj",
-      "delete": "Usuń"
+      "delete": "Usuń",
+      "publish": "Opublikuj"
     },
     "meta_comment": "TODO(techii): Przenieś wszystkie rzeczy, które są działaniami w ramach inicjatywy i przenosi wspólne komponenty do inicjatywy.",
     "solicitHelpDialog": {
@@ -172,6 +185,7 @@
           },
           "fee": {
             "prompt": "Chcesz pokryć opłatę za przelew?",
+            "feeExplanation": "{denyFee, select, true {Te transakcje są dla Ciebie darmowe} other {{feePercentage}% + {feeAmount} za transakcję}}.",
             "preferInitiativePays": "Wolałbym, aby inicjatywa uiściła opłatę."
           },
           "publicizeSupporter": {
@@ -340,9 +354,16 @@
         "successTitle": "Witaj!",
         "successMessage": "Pomyślnie wpisałeś się jako inkubator.",
         "viewMyInitiative": "Przejdź do mojej inicjatywy",
-        "changeIncubatorPromptTitle": "Czy na pewno chcesz zmienić swój inkubator?",
+        "notAnIncubatorErrorTitle": "Ta inicjatywa nie jest inkubatorem.",
+        "needAnInitiativeTitle": "Potrzebujesz inicjatywy, aby wejść do inkubatora.",
+        "publishAnInitiative": "Opublikuj inicjatywę, aby kontynuować",
+        "chooseInitiativesTitle": "Wybierz inicjatywę, którą chcesz wprowadzić do inkubatora",
         "currentlyIncubatedBy": "Jesteś obecnie inkubowany przez <incubatorNameTag>{incubatorName}</incubatorNameTag>.",
-        "notAnIncubatorErrorTitle": "Ta inicjatywa nie jest inkubatorem."
+        "warningPriorIncubatorWillBeRemoved": "Ostrzeżenie: Wybranie tej inicjatywy spowoduje usunięcie wcześniejszego inkubatora.",
+        "cantIncubateSelf": "Inicjatywa nie może sama się inkubować, ale może być inkubowana tylko przez inną inicjatywę.",
+        "alreadyIncubating": "Inicjatywa ta jest już inkubowana przez ten inkubator.",
+        "orPublishAnotherInitiative": "Lub opublikuj inną inicjatywę",
+        "viewIncubator": "Zobacz stronę inkubatora"
       }
     },
     "incubator": {
@@ -400,15 +421,13 @@
     },
     "edit": {
       "title": "Edytuj stronę swojej inicjatywy",
+      "publishTitle": "Opublikuj stronę swojej inicjatywy",
       "initiativeDefinition": "Inicjatywa = działanie lub strategia mające na celu rozwiązanie trudności lub poprawę sytuacji.",
       "chooseInitiativeType": {
         "individual": "Pracuję samodzielnie",
         "organization": "Jestem częścią organizacji",
         "essentialInformation": "Podstawowe informacje z inicjatywy",
-        "organizationType": {
-          "namePrompt": "Jaka jest nazwa organizacji?",
-          "title": "Typ organizacji"
-        }
+        "namePrompt": "Jaka jest inicjatywa {initiativeType, select, individual {} other {organizacja}}ma imienie?"
       },
       "detailedInput": {
         "askForInfoMsg": "{initiativeType, select, individual {Opowiedz nam o sobie.} other {Proszę, powiedz nam o swojej organizacji.}}",
@@ -474,6 +493,13 @@
       "myInitiativeSpeedDial": {
         "view": "Widok",
         "mine": "Kopalnia"
+      }
+    },
+    "flow": {
+      "title": "Czy chcesz kontynuować swoją podróż",
+      "action": {
+        "prompt": "Czy chcesz opublikować akcję?",
+        "yes": "Opublikuj akcję"
       }
     }
   },

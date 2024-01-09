@@ -10,13 +10,29 @@
   },
   "index": {
     "publish": "Publier",
+    "publishDialog": {
+      "title": "Partager avec le monde",
+      "whatToPublish": "Que voulez-vous publier ?",
+      "action": "Publier une action",
+      "initiative": "Publier une initiative",
+      "logInPrompt": "Pour publier, vous devez vous connecter ou vous inscrire",
+      "initiativeNeededDialog": {
+        "title": "Vous avez besoin d'une initiative pour publier une action.",
+        "prompt": "S'il vous plaît, publiez d'abord une initiative.",
+        "publishInitiative": "Publier l'initiative"
+      },
+      "chooseInitiativeDialog": {
+        "title": "Dans quelle initiative souhaitez-vous publier cette action?",
+        "prompt": "Veuillez d'abord choisir une initiative."
+      }
+    },
     "myPage": "Mon profil",
     "seeContentIn": "Voir le contenu dans",
     "countMeInDialog": {
       "title": "Heureux de vous avoir à bord!",
       "contribute": "Contribuez au mouvement OneWe.",
       "sponsorOneWe": "Sponsor OneWe",
-      "uploadAnAction": "Télécharger une action",
+      "publishSomething": "Publier (action, initiatives, etc.)",
       "registerOrLoginPrompt": "S'inscrire en tant que membre (ou se connecter)",
       "giveOneWeTestimonial": "Donnez un témoignage à OneWe",
       "shareOneWe": "Partagez OneWe",
@@ -87,10 +103,6 @@
     "callToAction": {
       "countMeIn": "Comptez moi dans",
       "edit": "Modifier",
-      "actions": {
-        "list": "Actions",
-        "add": "Ajoutez votre action"
-      },
       "home": "Accueil",
       "listInitiatives": "Initiatives",
       "login": "Se déconnecter",
@@ -102,7 +114,8 @@
       "testify": "Donner un témoignage",
       "connect": "Connecter",
       "update": "Mettre à jour",
-      "delete": "Supprimer"
+      "delete": "Supprimer",
+      "publish": "Publier"
     },
     "meta_comment": "TODO(techiejd): Move all things that are Actions under a Initiative and move their common components under initiative.",
     "solicitHelpDialog": {
@@ -172,6 +185,7 @@
           },
           "fee": {
             "prompt": "Vous voulez couvrir les frais de traitement des paiements?",
+            "feeExplanation": "{denyFee, select, true {Ces transactions sont maintenant gratuites pour vous} other {{feePercentage}% + {feeAmount} par transaction}}",
             "preferInitiativePays": "Je préfère que l'initiative paie les frais"
           },
           "publicizeSupporter": {
@@ -298,6 +312,7 @@
       "videoSuggestions": "30 secondes à 5 minutes et facultatif.",
       "inTextFormat": "Dans vos propres mots",
       "andOptional": "{numChars} et facultatif.",
+      "writtenTestimonial": "Témoignage écrit",
       "whatImpactPrompt": "with details, what impact did this {forAction, select, true {action} other {initiative}} have in your life?",
       "submit": "Publier le témoignage"
     },
@@ -339,9 +354,16 @@
         "successTitle": "Bienvenue!",
         "successMessage": "Vous êtes entré en tant qu'incubateur.",
         "viewMyInitiative": "Aller à mon initiative",
-        "changeIncubatorPromptTitle": "Êtes-vous sûr de vouloir changer votre incubateur?",
+        "notAnIncubatorErrorTitle": "Cette initiative n'est pas un incubateur.",
+        "needAnInitiativeTitle": "Vous avez besoin d'une initiative pour entrer dans un incubateur.",
+        "publishAnInitiative": "Publier une initiative pour continuer",
+        "chooseInitiativesTitle": "Choisissez la(les) initiative(s) que vous souhaitez entrer dans l'incubateur",
         "currentlyIncubatedBy": "Vous êtes actuellement incubé par <incubatorNameTag>{incubatorName}</incubatorNameTag>.",
-        "notAnIncubatorErrorTitle": "Cette initiative n'est pas un incubateur."
+        "warningPriorIncubatorWillBeRemoved": "Attention : sélectionner cette initiative supprimera l'incubateur préalable.",
+        "cantIncubateSelf": "Une initiative ne peut pas s'incuber, elle ne peut être incubée que par une autre initiative.",
+        "alreadyIncubating": "Cette initiative est déjà incubée par cet incubateur.",
+        "orPublishAnotherInitiative": "Ou publier une autre initiative",
+        "viewIncubator": "Voir la page de l'incubateur"
       }
     },
     "incubator": {
@@ -399,15 +421,13 @@
     },
     "edit": {
       "title": "Modifier la page de votre initiative",
+      "publishTitle": "Publier la page de votre initiative",
       "initiativeDefinition": "Initiative = un acte ou une stratégie visant à résoudre une difficulté ou à améliorer une situation.",
       "chooseInitiativeType": {
         "individual": "Je travaille seul",
         "organization": "Je fais partie d'une organisation",
         "essentialInformation": "Informations essentielles sur l'initiative",
-        "organizationType": {
-          "namePrompt": "Quel est le nom de l'organisation ?",
-          "title": "Type d'organisation"
-        }
+        "namePrompt": "Qu'est-ce que la {initiativeType, select, individual {initiative} other {organisation}}c'est le nom ?"
       },
       "detailedInput": {
         "askForInfoMsg": "{initiativeType, select, individual {S'il vous plaît, parlez-nous de vous.} other {S'il vous plaît, parlez-nous de votre organisation.}}",
@@ -473,6 +493,13 @@
       "myInitiativeSpeedDial": {
         "view": "Voir",
         "mine": "Miner"
+      }
+    },
+    "flow": {
+      "title": "Souhaitez-vous poursuivre votre voyage",
+      "action": {
+        "prompt": "Voulez-vous publier une action ?",
+        "yes": "Publier une action"
       }
     }
   },
