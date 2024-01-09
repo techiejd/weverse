@@ -13,6 +13,7 @@ import { useTranslations } from "next-intl";
 import UnderConstruction from "../../modules/posi/underConstruction";
 import { asOneWePage } from "../../common/components/onewePage";
 
+// TODO(techiejd): Maybe remove or do something about this feature. It is unused and stale.
 export const getStaticProps = WithTranslationsStaticProps();
 const Vip = asOneWePage(() => {
   const router = useRouter();

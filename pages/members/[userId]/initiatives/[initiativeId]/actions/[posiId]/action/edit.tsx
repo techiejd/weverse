@@ -47,7 +47,7 @@ const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
     }
     router.prefetch(initiative?.path);
     await deleteDoc(posiDocRef);
-    router.push(initiative?.path);
+    router.push(`/${initiative?.path}`);
   }, [initiative?.path, posiDocRef, router]);
 
   return (
