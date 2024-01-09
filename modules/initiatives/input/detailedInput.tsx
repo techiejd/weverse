@@ -162,7 +162,7 @@ const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
                 presentationVideo != "loading" ? presentationVideo : undefined
               }
               setMedia={setPresentationVideo}
-              maxFileSize={15728640 /** 15MB */}
+              maxFileSize={2147483648 /** 2GB */}
               accept={"video"}
               metadata={{ initiativePath: val?.path || "" }}
             />
