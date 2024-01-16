@@ -43,6 +43,8 @@ const howToSupport = z.object({
 });
 export type HowToSupport = z.infer<typeof howToSupport>;
 
+// TODO(techiejd): Look into initializing ratings to zero a different way.
+export const zeroRatings = { sum: 0, count: 0 };
 export const ratings = z.object({ sum: z.number(), count: z.number() });
 export type Ratings = z.infer<typeof ratings>;
 
@@ -91,7 +93,7 @@ export const initiative = dbBase
     pic: formUrl.optional(),
     email: z.string().optional(),
     incubator: z.string().optional(),
-    ratings: ratings.optional(),
+    ratings,
   })
   .merge(
     createNestedLocalizedSchema(initiativePresentationExtension.optional())
@@ -219,7 +221,7 @@ export const posiFormData = dbBase
     // deprecated: makerId: z.string().optional(),
     // deprecated: initiativeId: z.string(),
     location: location.optional(),
-    ratings: ratings.optional(),
+    ratings,
     validation: validation.optional(),
     // retired - howToIdentifyImpactedPeople: z.string().min(1).optional(),
   })
@@ -280,6 +282,7 @@ export const incubatee = dbBase.extend({
       type: initiativeType,
       organizationType: organizationType.optional(),
       incubator: z.string().min(1),
+      ratings: z.object({ sum: z.literal(0), count: z.literal(0) }),
     })
     .optional(),
 });

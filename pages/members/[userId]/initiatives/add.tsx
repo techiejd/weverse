@@ -13,7 +13,11 @@ import {
   WithTranslationsStaticProps,
   Locale2Messages,
 } from "../../../../common/utils/translations";
-import { Initiative, initiative } from "../../../../functions/shared/src";
+import {
+  Initiative,
+  initiative,
+  zeroRatings,
+} from "../../../../functions/shared/src";
 import InitiativeInput from "../../../../modules/initiatives/input";
 
 export const getStaticPaths = CachePaths;
@@ -27,10 +31,10 @@ const InitiativeFormContent = ({
 }) => {
   const appState = useAppState();
   const callToActionTranslations = useTranslations("common.callToAction");
-  const addTranslations = useTranslations("initiatives.add");
   const [workingInitiative, setWorkingInitiative] = useState<Initiative>({
     name: user.displayName!,
     type: "individual",
+    ratings: zeroRatings,
   });
   const [uploading, setUploading] = useState(false);
   const router = useRouter();

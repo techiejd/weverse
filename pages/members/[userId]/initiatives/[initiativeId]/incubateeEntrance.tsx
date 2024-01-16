@@ -53,6 +53,7 @@ import {
   Incubatee,
   Initiative,
   initiative,
+  zeroRatings,
 } from "../../../../../functions/shared/src";
 import { pickBy, identity } from "lodash";
 import InitiativeInput from "../../../../../modules/initiatives/input";
@@ -82,6 +83,7 @@ const PublishInitiativeDialog = ({
   const [workingInitiative, setWorkingInitiative] = useState<Initiative>({
     name: appState.authState.user!.displayName!,
     type: "individual",
+    ratings: zeroRatings,
   });
   const [uploading, setUploading] = useState(false);
   const initiativeConverter = useInitiativeConverter();

@@ -323,6 +323,7 @@ const IndexPage = () => {
               posiFormDataConverter
             ),
             limit(batchSize),
+            orderBy("ratings.count", "desc"),
             orderBy("createdAt", "desc"),
             ...(currLatestDoc ? [startAfter(currLatestDoc)] : [])
           )

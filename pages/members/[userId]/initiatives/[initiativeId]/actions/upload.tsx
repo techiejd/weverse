@@ -11,7 +11,11 @@ import {
   WithTranslationsStaticProps,
   Locale2Messages,
 } from "../../../../../../common/utils/translations";
-import { PosiFormData, locale } from "../../../../../../functions/shared/src";
+import {
+  PosiFormData,
+  locale,
+  zeroRatings,
+} from "../../../../../../functions/shared/src";
 import PosiForm from "../../../../../../modules/posi/action/form";
 import { CachePaths } from "../../../../../../common/utils/staticPaths";
 import { useCurrentInitiative } from "../../../../../../modules/initiatives/context";
@@ -69,7 +73,7 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
         <PosiForm
           onInteraction={{ type: "create", onSubmit }}
           locale2Messages={locale2Messages}
-          initialPosi={{ locale: locale.parse(localeIn) }}
+          initialPosi={{ locale: locale.parse(localeIn), ratings: zeroRatings }}
         />
       ) : (
         <LogInPrompt title={t("logInPrompt")} />
