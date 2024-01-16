@@ -26,6 +26,10 @@ declare const howToSupport: z.ZodObject<{
     contact?: string;
 }>;
 export type HowToSupport = z.infer<typeof howToSupport>;
+export declare const zeroRatings: {
+    sum: number;
+    count: number;
+};
 export declare const ratings: z.ZodObject<{
     sum: z.ZodNumber;
     count: z.ZodNumber;
@@ -126,7 +130,7 @@ export declare const initiative: z.ZodObject<{
     createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     organizationType: z.ZodOptional<z.ZodEnum<["nonprofit", "religious", "unincorporated", "profit", "incubator"]>>;
     pic: z.ZodOptional<z.ZodString>;
-    ratings: z.ZodOptional<z.ZodObject<{
+    ratings: z.ZodObject<{
         sum: z.ZodNumber;
         count: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
@@ -135,7 +139,7 @@ export declare const initiative: z.ZodObject<{
     }, {
         sum?: number;
         count?: number;
-    }>>;
+    }>;
     en: z.ZodOptional<z.ZodObject<{
         presentationVideo: z.ZodOptional<z.ZodString>;
         howToSupport: z.ZodOptional<z.ZodObject<{
@@ -717,7 +721,7 @@ export declare const posiFormData: z.ZodObject<{
     }>>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
     createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
-    ratings: z.ZodOptional<z.ZodObject<{
+    ratings: z.ZodObject<{
         sum: z.ZodNumber;
         count: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
@@ -726,7 +730,7 @@ export declare const posiFormData: z.ZodObject<{
     }, {
         sum?: number;
         count?: number;
-    }>>;
+    }>;
     en: z.ZodOptional<z.ZodObject<{
         media: z.ZodObject<{
             type: z.ZodEnum<["video", "img"]>;
@@ -1076,7 +1080,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         }>>;
         locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
         createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
-        ratings: z.ZodOptional<z.ZodObject<{
+        ratings: z.ZodObject<{
             sum: z.ZodNumber;
             count: z.ZodNumber;
         }, "strip", z.ZodTypeAny, {
@@ -1085,7 +1089,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         }, {
             sum?: number;
             count?: number;
-        }>>;
+        }>;
         en: z.ZodOptional<z.ZodObject<{
             media: z.ZodObject<{
                 type: z.ZodEnum<["video", "img"]>;
@@ -1645,16 +1649,34 @@ export declare const incubatee: z.ZodObject<{
         type: z.ZodEnum<["individual", "organization"]>;
         organizationType: z.ZodOptional<z.ZodEnum<["nonprofit", "religious", "unincorporated", "profit", "incubator"]>>;
         incubator: z.ZodString;
+        ratings: z.ZodObject<{
+            sum: z.ZodLiteral<0>;
+            count: z.ZodLiteral<0>;
+        }, "strip", z.ZodTypeAny, {
+            sum?: 0;
+            count?: 0;
+        }, {
+            sum?: 0;
+            count?: 0;
+        }>;
     }, "strip", z.ZodTypeAny, {
         name?: string;
         type?: "individual" | "organization";
         organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
         incubator?: string;
+        ratings?: {
+            sum?: 0;
+            count?: 0;
+        };
     }, {
         name?: string;
         type?: "individual" | "organization";
         organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
         incubator?: string;
+        ratings?: {
+            sum?: 0;
+            count?: 0;
+        };
     }>>;
 }, "strip", z.ZodTypeAny, {
     path?: string;
@@ -1666,6 +1688,10 @@ export declare const incubatee: z.ZodObject<{
         type?: "individual" | "organization";
         organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
         incubator?: string;
+        ratings?: {
+            sum?: 0;
+            count?: 0;
+        };
     };
 }, {
     path?: string;
@@ -1677,6 +1703,10 @@ export declare const incubatee: z.ZodObject<{
         type?: "individual" | "organization";
         organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
         incubator?: string;
+        ratings?: {
+            sum?: 0;
+            count?: 0;
+        };
     };
 }>;
 export type Incubatee = z.infer<typeof incubatee>;

@@ -11,7 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.from = exports.fromTypes = exports.incubatee = exports.sponsorship = exports.sponsorshipLevel = exports.content = exports.posiFormData = exports.actionPresentationExtension = exports.socialProof = exports.like = exports.member = exports.phoneNumber = exports.initiative = exports.createNestedLocalizedSchema = exports.dbBase = exports.locale = exports.ratings = exports.organizationType = exports.initiativeType = exports.media = exports.mediaType = exports.formUrl = exports.timeStamp = void 0;
+exports.from = exports.fromTypes = exports.incubatee = exports.sponsorship = exports.sponsorshipLevel = exports.content = exports.posiFormData = exports.actionPresentationExtension = exports.socialProof = exports.like = exports.member = exports.phoneNumber = exports.initiative = exports.createNestedLocalizedSchema = exports.dbBase = exports.locale = exports.ratings = exports.zeroRatings = exports.organizationType = exports.initiativeType = exports.media = exports.mediaType = exports.formUrl = exports.timeStamp = void 0;
 const zod_1 = require("zod");
 exports.timeStamp = zod_1.z.any().transform((val, ctx) => {
     if (val == null) {
@@ -47,6 +47,8 @@ exports.organizationType = zod_1.z.enum([
 const howToSupport = zod_1.z.object({
     contact: zod_1.z.string().max(500).optional(),
 });
+// TODO(techiejd): Look into initializing ratings to zero a different way.
+exports.zeroRatings = { sum: 0, count: 0 };
 exports.ratings = zod_1.z.object({ sum: zod_1.z.number(), count: zod_1.z.number() });
 exports.locale = zod_1.z.enum(["en", "es", "fr", "de", "pl", "pt"]);
 exports.dbBase = zod_1.z.object({
@@ -82,7 +84,7 @@ exports.initiative = exports.dbBase
     pic: exports.formUrl.optional(),
     email: zod_1.z.string().optional(),
     incubator: zod_1.z.string().optional(),
-    ratings: exports.ratings.optional(),
+    ratings: exports.ratings,
 })
     .merge(createNestedLocalizedSchema(initiativePresentationExtension.optional()));
 const currency = zod_1.z.enum(["cop", "usd", "eur", "gbp"]);
@@ -191,7 +193,7 @@ exports.posiFormData = exports.dbBase
     // deprecated: makerId: z.string().optional(),
     // deprecated: initiativeId: z.string(),
     location: location.optional(),
-    ratings: exports.ratings.optional(),
+    ratings: exports.ratings,
     validation: validation.optional(),
     // retired - howToIdentifyImpactedPeople: z.string().min(1).optional(),
 })
@@ -236,6 +238,7 @@ exports.incubatee = exports.dbBase.extend({
         type: exports.initiativeType,
         organizationType: exports.organizationType.optional(),
         incubator: zod_1.z.string().min(1),
+        ratings: zod_1.z.object({ sum: zod_1.z.literal(0), count: zod_1.z.literal(0) }),
     })
         .optional(),
 });

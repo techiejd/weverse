@@ -102,6 +102,7 @@ const MyInitiativeSpeedDial = ({ initiative }: { initiative: Initiative }) => {
 };
 
 const MyInitiativePortal = () => {
+  // TODO(techiejd): fix if zero or more than one initiative.
   const [myInitiatives, myInitiativesLoading] = useMyInitiatives();
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const t = useTranslations("initiatives.myInitiativePortal");

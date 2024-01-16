@@ -2,7 +2,7 @@ import { Stack, Divider, Typography, Rating } from "@mui/material";
 import { Ratings } from "../../functions/shared/src";
 import { useTranslations } from "next-intl";
 
-const RatingsStack = ({ ratings }: { ratings: Ratings | undefined }) => {
+const RatingsStack = ({ ratings }: { ratings: Ratings }) => {
   const t = useTranslations("actions");
   return (
     <Stack
@@ -15,9 +15,9 @@ const RatingsStack = ({ ratings }: { ratings: Ratings | undefined }) => {
           🙋
         </Typography>
         <Typography color={"grey"}>{t("testimonials")}:</Typography>
-        <Typography ml={2}>{ratings ? ratings.count : 0}</Typography>
+        <Typography ml={2}>{ratings.count}</Typography>
       </Stack>
-      <Rating value={ratings ? ratings.sum! / ratings.count! : null} readOnly />
+      <Rating value={ratings.sum / ratings.count} readOnly />
     </Stack>
   );
 };

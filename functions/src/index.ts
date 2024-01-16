@@ -6,6 +6,7 @@ import {
   posiFormDataConverter,
   socialProofConverter,
 } from "./utils";
+import { Ratings } from "../shared/lib";
 
 initializeApp();
 
@@ -22,6 +23,10 @@ const testimonialsUnderInitiativePath =
   "members/{memberId}/initiatives/{initiativeId}/testimonials/{testimonialId}";
 const testimonialsUnderActionPath =
   "members/{memberId}/initiatives/{initiativeId}/actions/{actionId}/testimonials/{testimonialId}";
+
+const isIllFormedRatings = (ratings?: Ratings) => {
+  return !ratings || ratings.sum == undefined || ratings.count == undefined;
+};
 
 export const testimonialUnderInitiativeAdded = functions.firestore
   .document(testimonialsUnderInitiativePath)
@@ -40,19 +45,25 @@ export const testimonialUnderInitiativeAdded = functions.firestore
       const initiativeDoc = await t.get(initiativeDocRef);
       const initiative = initiativeDoc.data();
       if (!initiative) {
-        throw new Error(`No initiative found for testimonial ${snapshot.id}`);
+        throw new Error(
+          `No initiative found for testimonial ${snapshot.ref.path}`
+        );
+      }
+      if (isIllFormedRatings(initiative.ratings)) {
+        throw new Error(
+          `Ratings ill formed for initiative ${
+            initiativeDocRef.path
+          }: ${JSON.stringify(initiative.ratings)}`
+        );
+      }
+      if (!testimonial.rating) {
+        throw new Error(`Testimonial ${snapshot.ref.path} ill formed`);
       }
       t.update(initiativeDoc.ref, {
-        ratings:
-          initiative.ratings &&
-          initiative.ratings.sum &&
-          testimonial.rating &&
-          initiative.ratings.count
-            ? {
-                sum: initiative.ratings.sum + testimonial.rating,
-                count: initiative.ratings.count + 1,
-              }
-            : { sum: testimonial.rating, count: 1 },
+        ratings: {
+          sum: initiative.ratings!.sum! + testimonial.rating,
+          count: initiative.ratings!.count! + 1,
+        },
       });
     });
   });
@@ -83,33 +94,40 @@ export const testimonialsUnderActionAdded = functions.firestore
       const initiative = initiativeDoc.data();
       const action = actionDoc.data();
       if (!initiative) {
-        throw new Error(`No initiative found for testimonial ${snapshot.id}`);
+        throw new Error(
+          `No initiative found for testimonial ${snapshot.ref.path}`
+        );
+      }
+      if (isIllFormedRatings(initiative.ratings)) {
+        throw new Error(
+          `Ratings ill formed for initiative ${
+            ancestorRefs.initiative.path
+          }: ${JSON.stringify(initiative.ratings)}`
+        );
       }
       if (!action) {
-        throw new Error(`No action found for testimonial ${snapshot.id}`);
+        throw new Error(`No action found for testimonial ${snapshot.ref.path}`);
+      }
+      if (isIllFormedRatings(action.ratings)) {
+        throw new Error(
+          `Ratings ill formed for action ${
+            ancestorRefs.action.path
+          }: ${JSON.stringify(action.ratings)}`
+        );
+      }
+      if (!testimonial.rating) {
+        throw new Error(`Testimonial ${snapshot.ref.path} ill formed`);
       }
       t.update(initiativeDoc.ref, {
-        ratings:
-          initiative.ratings &&
-          initiative.ratings.sum &&
-          testimonial.rating &&
-          initiative.ratings.count
-            ? {
-                sum: initiative.ratings.sum + testimonial.rating,
-                count: initiative.ratings.count + 1,
-              }
-            : { sum: testimonial.rating, count: 1 },
+        ratings: {
+          sum: initiative.ratings!.sum! + testimonial.rating,
+          count: initiative.ratings!.count! + 1,
+        },
       }).update(actionDoc.ref, {
-        ratings:
-          action.ratings &&
-          action.ratings.sum &&
-          testimonial.rating &&
-          action.ratings.count
-            ? {
-                sum: action.ratings.sum + testimonial.rating,
-                count: action.ratings.count + 1,
-              }
-            : { sum: testimonial.rating, count: 1 },
+        ratings: {
+          sum: action.ratings!.sum! + testimonial.rating,
+          count: action.ratings!.count! + 1,
+        },
       });
     });
   });
