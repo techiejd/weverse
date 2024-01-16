@@ -1,119 +1,18 @@
 import {
   AppBar,
   Box,
-  BoxProps,
   Button,
   CircularProgress,
-  IconButton,
   Link,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
   Toolbar,
-  Typography,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
-import Home from "@mui/icons-material/Home";
-import Login from "@mui/icons-material/Login";
-import PlusOne from "@mui/icons-material/PlusOne";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
-import Logout from "@mui/icons-material/Logout";
-import { useSignOut } from "react-firebase-hooks/auth";
 import AuthDialog, { AuthDialogButton } from "../../../modules/auth/AuthDialog";
 import { useAppState } from "../../context/appState";
-import LinkBehavior from "../../utils/linkBehavior";
 import LanguagePortal from "./languagePortal";
 import { Locale2Messages } from "../../utils/translations";
-import PublishDialog from "../publishDialog";
-
-export const MenuComponent = (props: BoxProps) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [authDialogOpen, setAuthDialogOpen] = useState(false);
-  const menuOpen = Boolean(anchorEl);
-  const closeMenu = () => setAnchorEl(null);
-  const t = useTranslations("common.callToAction");
-  const appState = useAppState();
-  const [signOut] = useSignOut(appState.auth);
-  const [publishDialogOpen, setPublishDialogOpen] = useState(false);
-  const UserPortal = () => {
-    const { user } = useAppState().authState;
-    return user ? (
-      <MenuItem
-        onClick={() => {
-          signOut();
-          closeMenu();
-        }}
-      >
-        <ListItemIcon>
-          <Logout />
-        </ListItemIcon>
-        <ListItemText>Log out</ListItemText>
-      </MenuItem>
-    ) : (
-      <MenuItem
-        onClick={() => {
-          setAuthDialogOpen(true);
-          closeMenu();
-        }}
-      >
-        <ListItemIcon>
-          <Login />
-        </ListItemIcon>
-        <ListItemText>{t("login")}</ListItemText>
-      </MenuItem>
-    );
-  };
-  return (
-    <Box {...props}>
-      <PublishDialog
-        open={publishDialogOpen}
-        close={() => setPublishDialogOpen(false)}
-      />
-      <AuthDialog open={authDialogOpen} setOpen={setAuthDialogOpen} />
-      <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
-        <MenuIcon />
-      </IconButton>
-      <Menu anchorEl={anchorEl} open={menuOpen} onClose={closeMenu}>
-        <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
-          <MenuItem>
-            <ListItemIcon>
-              <Home />
-            </ListItemIcon>
-            <ListItemText>{t("home")}</ListItemText>
-          </MenuItem>
-        </Link>
-        <MenuItem
-          onClick={() => {
-            closeMenu();
-            setPublishDialogOpen(true);
-          }}
-        >
-          <ListItemIcon>
-            <PlusOne />
-          </ListItemIcon>
-          <ListItemText>{t("publish")}</ListItemText>
-        </MenuItem>
-        <Link
-          href="/initiatives"
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          <MenuItem>
-            <ListItemIcon>
-              <Typography>
-                <b>💪</b>
-              </Typography>
-            </ListItemIcon>
-            <ListItemText>{t("listInitiatives")}</ListItemText>
-          </MenuItem>
-        </Link>
-        <UserPortal />
-      </Menu>
-    </Box>
-  );
-};
+import MenuComponent from "./menuComponent";
 
 const UserPortal = () => {
   const { user, loading: userLoading } = useAppState().authState;
