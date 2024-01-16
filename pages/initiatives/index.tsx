@@ -1,8 +1,5 @@
-import {
-  useCollection,
-  useCollectionData,
-} from "react-firebase-hooks/firestore";
-import { collection, collectionGroup } from "firebase/firestore";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { collectionGroup, orderBy, query } from "firebase/firestore";
 import { useAppState } from "../../common/context/appState";
 import {
   Box,
@@ -14,7 +11,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import InitiativeCard from "../../modules/initiatives/InitiativeCard";
 import PageTitle from "../../common/components/pageTitle";
 import Edit from "@mui/icons-material/Edit";
@@ -143,8 +140,12 @@ const Initiatives = asOneWePage(() => {
   const appState = useAppState();
   const initiativeConverter = useInitiativeConverter();
   const [initiatives, initiativesLoading, initiativesError] = useCollectionData(
-    collectionGroup(appState.firestore, "initiatives").withConverter(
-      initiativeConverter
+    query(
+      collectionGroup(appState.firestore, "initiatives").withConverter(
+        initiativeConverter
+      ),
+      orderBy("ratings.count", "desc"),
+      orderBy("createdAt", "desc")
     )
   );
   const initiativesTranslations = useTranslations("initiatives");
