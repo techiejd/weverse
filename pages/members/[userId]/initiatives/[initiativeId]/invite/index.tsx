@@ -26,6 +26,7 @@ import {
   organizationType,
   initiativeType as initiativeTypeSchema,
   incubatee,
+  zeroRatings,
 } from "../../../../../../functions/shared/src";
 import { useCurrentInitiative } from "../../../../../../modules/initiatives/context";
 
@@ -214,6 +215,7 @@ const Invite = asOneWePage(() => {
                 initializeWith: {
                   name: initiativeNames[idx],
                   incubator: initiative.path!,
+                  ratings: zeroRatings,
                   type:
                     initiativeTypes[idx] == "individual"
                       ? "individual"
