@@ -12,7 +12,10 @@ import { pickBy, identity } from "lodash";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { Media, socialProof } from "../../../functions/shared/src";
-import { useMyMember } from "../../context/weverseUtils";
+import {
+  pathAndType2FromCollectionId,
+  useMyMember,
+} from "../../context/weverseUtils";
 import {
   useFromConverter,
   useSocialProofConverter,
@@ -85,16 +88,21 @@ const UploadSocialProofForm = () => {
           const collectionPath = `${
             isAction ? forAction.path! : forInitiative.path!
           }/testimonials`;
+          const testimonialDocRef = doc(
+            collection(appState.firestore, collectionPath)
+          ).withConverter(socialProofConverter);
+          const testimonialFromPath = `${
+            collection(appState.firestore, myMember.path!, "from").path
+          }/${pathAndType2FromCollectionId(
+            testimonialDocRef.path,
+            "testimonial"
+          )!}`;
+
+          batch.set(testimonialDocRef, socialProofEncoded);
           batch.set(
-            doc(collection(appState.firestore, collectionPath)).withConverter(
-              socialProofConverter
+            doc(appState.firestore, testimonialFromPath).withConverter(
+              fromConverter
             ),
-            socialProofEncoded
-          );
-          batch.set(
-            doc(
-              collection(appState.firestore, myMember.path!, "from")
-            ).withConverter(fromConverter),
             { type: "testimonial", data: socialProofEncoded }
           );
           await batch.commit();

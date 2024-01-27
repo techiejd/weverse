@@ -97,16 +97,41 @@ export const useCurrentInitiatives = () => {
   return useInitiatives(currentMember?.path);
 };
 
+function pathUniquenessDisrespected(path: string, fromType: FromType) {
+  const fromTypeUnique: Record<FromType, boolean> = {
+    testimonial: false,
+    sponsorship: true,
+    like: true,
+  };
+  if (fromTypeUnique[fromType]) {
+    // Respecting uniqueness would not include the formtype in path.
+    // As the path should be "parent/path" in order to keep uniqueness.
+    return path.includes(fromType);
+  } else {
+    // Respecting non-uniqueness would include the formtype in path.
+    // As the path should be "parent/path/fromType/uuid" in order to allow
+    // multiple of formType.
+    return !path.includes(fromType);
+  }
+}
 export const pathAndType2FromCollectionId = (
   path: string | undefined,
   fromType: FromType
 ) => {
   // if path is undefined, return undefined
-  // if path exists, return the path with all slashes replaced with underscores and prepended with fromType
   if (!path) return undefined;
+  // if path exists, raise error if the path includes
+  // the fromType when it is unique.
+  if (pathUniquenessDisrespected(path, fromType)) {
+    throw new Error(
+      `Path ${path} disrespects fromType ${fromType}'s uniqueness.`
+    );
+  }
+  // return the path with all slashes replaced with underscores and prepended with fromType
   return `${fromType}_${path.replaceAll("/", "_")}`;
 };
 
+// Note: It is up to the caller to ensure that the path is valid, processed and consumed correctly.
 const fromCollectionId2PathAndType = (fromId: string | undefined) => {
   // if fromId is undefined, return undefined
   // if fromId exists, return the path and fromType
