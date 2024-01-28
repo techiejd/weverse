@@ -1,6 +1,6 @@
 import { CircularProgress } from "@mui/material";
 import { asOneWePage } from "../../../../../../../common/components/onewePage";
-import UploadSocialProofPrompt from "../../../../../../../common/components/upload/prompt";
+import UploadPrompt from "../../../../../../../common/components/testimonials/uploadPrompt";
 import { CachePaths } from "../../../../../../../common/utils/staticPaths";
 import { WithTranslationsStaticProps } from "../../../../../../../common/utils/translations";
 import { useCurrentInitiative } from "../../../../../../../modules/initiatives/context";
@@ -9,7 +9,7 @@ export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
 const Upload = asOneWePage(() => {
   const [initiative] = useCurrentInitiative();
-  return initiative ? <UploadSocialProofPrompt /> : <CircularProgress />;
+  return initiative ? <UploadPrompt /> : <CircularProgress />;
 });
 
 export default Upload;

@@ -626,7 +626,7 @@ const BottomBar = () => {
         howToSupport={
           presentationInfo?.howToSupport ? presentationInfo?.howToSupport : {}
         }
-        solicitOpinionPath={`${initiative.path}/impact/upload`}
+        solicitOpinionPath={`${initiative.path}/testimonials/upload`}
         pathUnderSupport={`${initiative.path}`}
         editInitiativePath={`/${initiative.path}/edit`}
       />

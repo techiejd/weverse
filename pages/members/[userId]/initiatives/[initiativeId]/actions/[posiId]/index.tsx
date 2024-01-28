@@ -49,7 +49,7 @@ const AdminBottomBar = ({
   myInitiative: Initiative;
 }) => {
   const [solicitDialogOpen, setSolicitDialogOpen] = useState(false);
-  const solicitOpinionPath = `${action.path}/impact/upload`;
+  const solicitOpinionPath = `${action.path}/testimonials/upload`;
   const callToActionTranslations = useTranslations("common.callToAction");
   const solicitTranslations = useTranslations("actions.solicit");
   const presentationInfo = useLocalizedPresentationInfo(action);
@@ -64,7 +64,7 @@ const AdminBottomBar = ({
         open={solicitDialogOpen}
         setOpen={setSolicitDialogOpen}
         howToSupport={initiativePresentationInfo?.howToSupport || {}}
-        solicitOpinionPath={`${action.path}/impact/upload`}
+        solicitOpinionPath={`${action.path}/testimonials/upload`}
         pathUnderSupport={`${action.path}`}
         editInitiativePath={`${myInitiative.path}/edit`}
       />

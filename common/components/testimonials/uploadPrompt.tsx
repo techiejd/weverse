@@ -10,7 +10,7 @@ import {
   useCurrentInitiative,
 } from "../../../modules/initiatives/context";
 
-const UploadSocialProofPrompt = () => {
+const UploadPrompt = () => {
   const [forInitiative] = useCurrentInitiative();
   const [actions] = useCurrentActions();
   const [forAction] = useCurrentPosi();
@@ -63,8 +63,8 @@ const UploadSocialProofPrompt = () => {
               sx={{ width: "fit-content" }}
               href={
                 forAction
-                  ? `/${forAction.path}/impact/upload/form`
-                  : `/${forInitiative?.path}/impact/upload/form`
+                  ? `/${forAction.path}/testimonials/upload/form`
+                  : `/${forInitiative?.path}/testimonials/upload/form`
               }
             >
               {promptTranslations("callToAction")}
@@ -97,4 +97,4 @@ const UploadSocialProofPrompt = () => {
   );
 };
 
-export default UploadSocialProofPrompt;
+export default UploadPrompt;

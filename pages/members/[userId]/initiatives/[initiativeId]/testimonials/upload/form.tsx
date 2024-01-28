@@ -1,6 +1,6 @@
 import { CircularProgress } from "@mui/material";
 import { asOneWePage } from "../../../../../../../common/components/onewePage";
-import UploadSocialProofForm from "../../../../../../../common/components/upload/form";
+import TestimonialsForm from "../../../../../../../common/components/testimonials/form";
 import { useMyMember } from "../../../../../../../common/context/weverseUtils";
 import { CachePaths } from "../../../../../../../common/utils/staticPaths";
 import { WithTranslationsStaticProps } from "../../../../../../../common/utils/translations";
@@ -14,7 +14,7 @@ const UploadForm = asOneWePage(() => {
   const [myMember] = useMyMember();
 
   return myMember && forInitiative && forInitiative.path ? (
-    <UploadSocialProofForm
+    <TestimonialsForm
       onInteraction={{ type: "create", parentPath: forInitiative.path }}
       initialTestimonial={{
         rating: null,

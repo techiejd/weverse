@@ -39,7 +39,7 @@ const Upload = asOneWePage((locale2Messages: Locale2Messages) => {
         ).withConverter(posiFormDataConverter),
         usersPosi
       );
-      router.push(`/${docRef.path}/impact/solicit`);
+      router.push(`/${docRef.path}/testimonials/solicit`);
     },
     [appState.firestore, initiative, posiFormDataConverter, router]
   );

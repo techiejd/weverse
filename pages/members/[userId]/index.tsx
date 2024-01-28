@@ -123,7 +123,7 @@ const UserPage = asOneWePage(() => {
                       t.data().data.forAction
                         ? t.data().data.forAction
                         : t.data().data.forInitiative
-                    }/impact/edit`
+                    }/testimonials/edit`
                   : undefined
               }
             />

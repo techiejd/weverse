@@ -85,7 +85,7 @@ const useOnSubmitTestimonial = (parentPath: string | undefined) => {
   );
 };
 
-const UploadSocialProofForm = ({
+const TestimonialsForm = ({
   onInteraction,
   initialTestimonial,
 }: {
@@ -214,4 +214,4 @@ const UploadSocialProofForm = ({
   );
 };
 
-export default UploadSocialProofForm;
+export default TestimonialsForm;

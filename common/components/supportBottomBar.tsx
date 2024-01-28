@@ -238,8 +238,8 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
   const supportDialogTranslations = useTranslations("common.supportDialog");
 
   const addSocialProofPath = beneficiary.action
-    ? `/${beneficiary.action.path}/impact/upload`
-    : `/${beneficiary.initiative.path}/impact/upload`;
+    ? `/${beneficiary.action.path}/testimonials/upload`
+    : `/${beneficiary.initiative.path}/testimonials/upload`;
 
   const shareProps = {
     title: supportDialogTranslations("share", {

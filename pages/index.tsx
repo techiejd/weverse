@@ -250,7 +250,7 @@ const CountMeInDialog = ({
           )}
           <Button
             variant="outlined"
-            href="/members/Xhge4AaVYBRGqAObaIMYBLSlaf42/initiatives/275EEG2k7FUKYCITnk0Z/impact/upload"
+            href="/members/Xhge4AaVYBRGqAObaIMYBLSlaf42/initiatives/275EEG2k7FUKYCITnk0Z/testimonials/upload"
             startIcon={<Campaign />}
           >
             {t("giveOneWeTestimonial")}
