@@ -7,50 +7,109 @@ import {
   Typography,
 } from "@mui/material";
 import { FileInput } from "../../../modules/posi/input";
-import { collection, doc, writeBatch } from "firebase/firestore";
 import { pickBy, identity } from "lodash";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import { Media, socialProof } from "../../../functions/shared/src";
-import {
-  pathAndType2FromCollectionId,
-  useMyMember,
-} from "../../context/weverseUtils";
-import {
-  useFromConverter,
-  useSocialProofConverter,
-} from "../../utils/firebase";
-import { useAppState } from "../../context/appState";
+import { useState, useEffect, useCallback } from "react";
+import { z } from "zod";
+import { Media, SocialProof, socialProof } from "../../../functions/shared/src";
 import { useTranslations } from "next-intl";
-import { useCurrentInitiative } from "../../../modules/initiatives/context";
-import { useCurrentPosi } from "../../../modules/posi/context";
+import { writeBatch, doc, collection } from "firebase/firestore";
+import { useRouter } from "next/router";
+import { useAppState } from "../../context/appState";
+import { pathAndType2FromCollectionId } from "../../context/weverseUtils";
+import {
+  useSocialProofConverter,
+  useFromConverter,
+} from "../../utils/firebase";
 
-const buildThankYouPath = (path: string) => {
-  const parts = path.split("/");
-  parts.pop();
-  return `${parts.join("/")}/thanks`;
-};
+type onInteractionProp =
+  | { type: "create"; parentPath: string }
+  | {
+      type: "update";
+      onUpdate: (testimonial: SocialProof) => Promise<void>;
+      onDelete: () => Promise<void>;
+      parentPath: string;
+    };
 
-const UploadSocialProofForm = () => {
+const workingSocialProof = socialProof
+  .omit({ rating: true })
+  .extend({ rating: z.number().nullable() });
+type WorkingSocialProof = z.infer<typeof workingSocialProof>;
+
+const useOnSubmitTestimonial = (parentPath: string | undefined) => {
   const appState = useAppState();
   const router = useRouter();
   const { asPath } = router;
-  const [forInitiative] = useCurrentInitiative();
-  const [forAction] = useCurrentPosi();
-  const isAction = !!forAction;
+  const socialProofConverter = useSocialProofConverter();
+  const fromConverter = useFromConverter();
 
-  const [myMember] = useMyMember();
+  const buildThankYouPath = (path: string) => {
+    const parts = path.split("/");
+    parts.pop();
+    return `${parts.join("/")}/thanks`;
+  };
+
+  return useCallback(
+    async (testimonial: SocialProof) => {
+      if (!parentPath) throw new Error("parentPath is undefined");
+      const batch = writeBatch(appState.firestore);
+      const collectionPath = `${parentPath}/testimonials`;
+      const testimonialDocRef = doc(
+        collection(appState.firestore, collectionPath)
+      ).withConverter(socialProofConverter);
+      const testimonialFromPath = `${
+        collection(appState.firestore, testimonial.byMember, "from").path
+      }/${pathAndType2FromCollectionId(
+        testimonialDocRef.path,
+        "testimonial"
+      )!}`;
+
+      batch.set(testimonialDocRef, testimonial);
+      batch.set(
+        doc(appState.firestore, testimonialFromPath).withConverter(
+          fromConverter
+        ),
+        { type: "testimonial", data: testimonial }
+      );
+      await batch.commit();
+
+      router.push(buildThankYouPath(asPath));
+    },
+    [
+      appState.firestore,
+      asPath,
+      fromConverter,
+      parentPath,
+      router,
+      socialProofConverter,
+    ]
+  );
+};
+
+const UploadSocialProofForm = ({
+  onInteraction,
+  initialTestimonial,
+}: {
+  onInteraction: onInteractionProp;
+  initialTestimonial: WorkingSocialProof;
+}) => {
+  console.log({ initialTestimonial });
+  const isAction = !!initialTestimonial.forAction;
+
   const [error, setError] = useState("");
-  const [rating, setRating] = useState<number | null>(null);
+  const [rating, setRating] = useState<number | null>(
+    initialTestimonial.rating
+  );
   const [media, setMedia] = useState<Media | undefined | "loading">(undefined);
   const [text, setText] = useState("");
   const [uploading, setUploading] = useState(false);
   const needsRatingMsg = "Calificación necesaria.";
   const formTranslations = useTranslations("testimonials.form");
   const inputTranslations = useTranslations("input");
+  const callToActionTranslations = useTranslations("common.callToAction");
+  const uploadActionTranslation = useTranslations("actions.upload");
   const maxLength = 500;
-  const socialProofConverter = useSocialProofConverter();
-  const fromConverter = useFromConverter();
+
+  const onSubmit = useOnSubmitTestimonial(onInteraction.parentPath);
   useEffect(() => {
     if (error == needsRatingMsg && rating != null) {
       setError("");
@@ -64,52 +123,24 @@ const UploadSocialProofForm = () => {
           setError(needsRatingMsg);
           return;
         }
-
-        if (myMember) {
-          setUploading(true);
-          if (!forInitiative) {
-            return;
-          }
-          const socialProofEncoded = socialProof.parse(
-            pickBy(
-              {
-                rating: rating,
-                byMember: myMember.path,
-                forInitiative: forInitiative.path,
-                forAction: forAction?.path,
-                videoUrl: media && media != "loading" ? media.url : undefined,
-                text: text != "" ? text : undefined,
-              },
-              identity
-            )
-          );
-
-          const batch = writeBatch(appState.firestore);
-          const collectionPath = `${
-            isAction ? forAction.path! : forInitiative.path!
-          }/testimonials`;
-          const testimonialDocRef = doc(
-            collection(appState.firestore, collectionPath)
-          ).withConverter(socialProofConverter);
-          const testimonialFromPath = `${
-            collection(appState.firestore, myMember.path!, "from").path
-          }/${pathAndType2FromCollectionId(
-            testimonialDocRef.path,
-            "testimonial"
-          )!}`;
-
-          batch.set(testimonialDocRef, socialProofEncoded);
-          batch.set(
-            doc(appState.firestore, testimonialFromPath).withConverter(
-              fromConverter
-            ),
-            { type: "testimonial", data: socialProofEncoded }
-          );
-          await batch.commit();
-
-          router.push(buildThankYouPath(asPath));
+        const socialProofEncoded = socialProof.parse(
+          pickBy(
+            {
+              rating: rating,
+              byMember: initialTestimonial.byMember,
+              forInitiative: initialTestimonial.forInitiative,
+              forAction: initialTestimonial.forAction,
+              videoUrl: media && media != "loading" ? media.url : undefined,
+              text: text != "" ? text : undefined,
+            },
+            identity
+          )
+        );
+        setUploading(true);
+        if (onInteraction.type == "create") {
+          await onSubmit(socialProofEncoded);
         } else {
-          setError("Internal error.");
+          await onInteraction.onUpdate(socialProofEncoded);
         }
       }}
     >
@@ -162,14 +193,22 @@ const UploadSocialProofForm = () => {
           onChange={(e) => setText(e.target.value)}
           sx={{ maxWidth: 700, width: "100%" }}
         />
-        {myMember &&
-          (media == "loading" || uploading ? (
-            <CircularProgress />
-          ) : (
-            <Button type="submit" variant="contained">
-              {formTranslations("submit")}
+        {media == "loading" || uploading ? (
+          <CircularProgress />
+        ) : onInteraction.type == "create" ? (
+          <Button variant="contained" sx={{ mt: 3 }} type="submit">
+            {uploadActionTranslation("submit")}
+          </Button>
+        ) : (
+          <Stack direction={"row"} sx={{ mt: 3 }} spacing={1}>
+            <Button variant="outlined" onClick={onInteraction.onDelete}>
+              {callToActionTranslations("delete")}
             </Button>
-          ))}
+            <Button variant="contained" type="submit">
+              {callToActionTranslations("update")}
+            </Button>
+          </Stack>
+        )}
       </Stack>
     </form>
   );

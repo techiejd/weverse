@@ -1,10 +1,12 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Grid, Stack, Typography } from "@mui/material";
 import { useSignOut } from "react-firebase-hooks/auth";
 import { useTranslations } from "next-intl";
 import { asOneWePage } from "../../../common/components/onewePage";
 import { useAppState } from "../../../common/context/appState";
 import {
   useCurrentInitiatives,
+  useCurrentLikes,
+  useCurrentTestimonials,
   useIsMine,
   useMyMember,
 } from "../../../common/context/weverseUtils";
@@ -14,6 +16,7 @@ import { Sponsorship } from "../../../functions/shared/src";
 import InitiativeCard from "../../../modules/initiatives/InitiativeCard";
 import Sponsorships from "../../../modules/initiatives/sponsor/list";
 import { useCurrentSponsorships } from "../../../modules/members/context";
+import SocialProofCard from "../../../modules/posi/socialProofCard";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -24,6 +27,8 @@ const UserPage = asOneWePage(() => {
   const appState = useAppState();
   const [initiatives, initiativesLoading, initiativesError] =
     useCurrentInitiatives();
+  const [testimonials] = useCurrentTestimonials();
+  const [likedActionPaths] = useCurrentLikes();
 
   const [signOut] = useSignOut(appState.auth);
   const [myMember] = useMyMember();
@@ -106,6 +111,26 @@ const UserPage = asOneWePage(() => {
           Publish a new initiative
         </Button>
       )}
+      <Typography variant="h2">Your testimonials</Typography>
+      <Grid container spacing={1}>
+        {testimonials?.map((t, idx) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={t.ref.path}>
+            <SocialProofCard
+              socialProof={t.data().data}
+              href={
+                isMine
+                  ? `/${
+                      t.data().data.forAction
+                        ? t.data().data.forAction
+                        : t.data().data.forInitiative
+                    }/impact/edit`
+                  : undefined
+              }
+            />
+          </Grid>
+        ))}
+      </Grid>
+      <Typography variant="h2">Your liked actions</Typography>
     </Stack>
   );
 });

@@ -23,15 +23,17 @@ const SocialProofCard = ({
   socialProof,
   showInitiative = true,
   showAction = true,
+  href,
 }: {
   socialProof: SocialProof;
   showInitiative?: boolean;
   showAction?: boolean;
+  href?: string;
 }) => {
   const SocialProofCardHeader = () => {
     const [byMember] = useMember(socialProof.byMember);
     return (
-      <CardActionArea href={`/${socialProof.byMember}`}>
+      <CardActionArea href={href ? href : `/${socialProof.byMember}`}>
         <CardHeader
           title={
             <Stack

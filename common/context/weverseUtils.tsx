@@ -5,6 +5,7 @@ import {
   useDocumentData,
 } from "react-firebase-hooks/firestore";
 import {
+  QueryDocumentSnapshot,
   collection,
   collectionGroup,
   doc,
@@ -29,6 +30,8 @@ import {
   InitiativeType,
   initiativeType,
   FromType,
+  From,
+  SocialProof,
 } from "../../functions/shared/src";
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
@@ -97,27 +100,28 @@ export const useCurrentInitiatives = () => {
   return useInitiatives(currentMember?.path);
 };
 
-function pathUniquenessDisrespected(path: string, fromType: FromType) {
-  const fromTypeUnique: Record<FromType, boolean> = {
-    testimonial: false,
-    sponsorship: true,
-    like: true,
-  };
-  if (fromTypeUnique[fromType]) {
-    // Respecting uniqueness would not include the formtype in path.
-    // As the path should be "parent/path" in order to keep uniqueness.
-    return path.includes(fromType);
-  } else {
-    // Respecting non-uniqueness would include the formtype in path.
-    // As the path should be "parent/path/fromType/uuid" in order to allow
-    // multiple of formType.
-    return !path.includes(fromType);
-  }
-}
 export const pathAndType2FromCollectionId = (
   path: string | undefined,
   fromType: FromType
 ) => {
+  const pathUniquenessDisrespected = (path: string, fromType: FromType) => {
+    const fromTypeUnique: Record<FromType, boolean> = {
+      testimonial: false,
+      sponsorship: true,
+      like: true,
+    };
+    if (fromTypeUnique[fromType]) {
+      // Respecting uniqueness would not include the formtype in path.
+      // As the path should be "parent/path" in order to keep uniqueness.
+      return path.includes(fromType);
+    } else {
+      // Respecting non-uniqueness would include the formtype in path.
+      // As the path should be "parent/path/fromType/uuid" in order to allow
+      // multiple of formType.
+      return !path.includes(fromType);
+    }
+  };
+
   // if path is undefined, return undefined
   if (!path) return undefined;
   // if path exists, raise error if the path includes
@@ -163,7 +167,7 @@ export const useFilteredFromCollection = (
 };
 
 export const useMyLikes = () => {
-  // Returns a list of the paths of the actions that the current user has liked.
+  // Returns a list of the paths of the actions that the current signed in member has liked.
   const [myMember] = useMyMember();
   const [likes, likesLoading, likesError] = useFilteredFromCollection(
     myMember?.path,
@@ -174,6 +178,52 @@ export const useMyLikes = () => {
     likesLoading,
     likesError,
   ] as const;
+};
+
+const sortFromByDate = (
+  a: QueryDocumentSnapshot<From>,
+  b: QueryDocumentSnapshot<From>
+) => {
+  // Look if the createdAt doesn't exist it's because it hasn't hit the server
+  // yet. So we use the current time.
+  const aCreatedAt = a.data().createdAt || new Date();
+  const bCreatedAt = b.data().createdAt || new Date();
+  return bCreatedAt.getTime() - aCreatedAt.getTime();
+};
+
+export const useCurrentLikes = () => {
+  // Returns a list of the paths of the actions that the member in context has liked.
+  const [currentMember] = useCurrentMember();
+  const [likes, likesLoading, likesError] = useFilteredFromCollection(
+    currentMember?.path,
+    "like"
+  );
+  return [
+    likes
+      ?.sort(sortFromByDate)
+      .map((doc) => fromCollectionId2PathAndType(doc.id)?.path),
+    likesLoading,
+    likesError,
+  ] as [string[] | undefined, boolean, Error | undefined];
+};
+
+export const useCurrentTestimonials = () => {
+  // Returns a list of the testimonials of the actions that the member in context has done in desc order.
+  const [currentMember] = useCurrentMember();
+  const [testimonials, testimonialsLoading, testimonialsError] =
+    useFilteredFromCollection(currentMember?.path, "testimonial");
+  return [
+    testimonials?.sort(sortFromByDate),
+    testimonialsLoading,
+    testimonialsError,
+  ] as [
+    (
+      | QueryDocumentSnapshot<{ type: "testimonial"; data: SocialProof }>[]
+      | undefined
+    ),
+    boolean,
+    Error | undefined
+  ];
 };
 
 export const useLikesCount = (actionPath: string | undefined) => {

@@ -300,3 +300,4 @@ export const from = z.discriminatedUnion("type", [
   dbBase.extend({ type: z.literal("sponsorship"), data: sponsorship }),
   dbBase.extend({ type: z.literal("like"), data: like }),
 ]);
+export type From = z.infer<typeof from>;
