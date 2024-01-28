@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { asOneWePage } from "../../../common/components/onewePage";
 import { useAppState } from "../../../common/context/appState";
 import {
+  fromCollectionId2PathAndType,
   useCurrentInitiatives,
   useCurrentLikes,
   useCurrentTestimonials,
@@ -119,11 +120,7 @@ const UserPage = asOneWePage(() => {
               socialProof={t.data().data}
               href={
                 isMine
-                  ? `/${
-                      t.data().data.forAction
-                        ? t.data().data.forAction
-                        : t.data().data.forInitiative
-                    }/testimonials/edit`
+                  ? `/${fromCollectionId2PathAndType(t.id)!.path}/edit`
                   : undefined
               }
             />

@@ -136,7 +136,7 @@ export const pathAndType2FromCollectionId = (
 };
 
 // Note: It is up to the caller to ensure that the path is valid, processed and consumed correctly.
-const fromCollectionId2PathAndType = (fromId: string | undefined) => {
+export const fromCollectionId2PathAndType = (fromId: string | undefined) => {
   // if fromId is undefined, return undefined
   // if fromId exists, return the path and fromType
   if (!fromId) return undefined;
@@ -370,6 +370,26 @@ export const useCurrentNeedsValidation = () => {
           where("validation.validator", "==", path),
           where("validation.validated", "==", false)
         )
+      : undefined
+  );
+};
+
+export const useCurrentTestimonial = (parentPath: string | undefined) => {
+  // TODO(techiejd): Now that initiatives and testimonials have been nested, we can
+  // remove the posi context.
+  const appState = useAppState();
+  const socialProofConverter = useSocialProofConverter();
+  const router = useRouter();
+  const { testimonialId } = router.query;
+
+  return useDocumentData(
+    testimonialId && parentPath
+      ? doc(
+          appState.firestore,
+          parentPath,
+          "testimonials",
+          testimonialId as string
+        ).withConverter(socialProofConverter)
       : undefined
   );
 };

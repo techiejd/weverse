@@ -8,11 +8,11 @@ import {
 } from "@mui/material";
 import { FileInput } from "../../../modules/posi/input";
 import { pickBy, identity } from "lodash";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, use } from "react";
 import { z } from "zod";
 import { Media, SocialProof, socialProof } from "../../../functions/shared/src";
 import { useTranslations } from "next-intl";
-import { writeBatch, doc, collection } from "firebase/firestore";
+import { writeBatch, doc, collection, Firestore } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useAppState } from "../../context/appState";
 import { pathAndType2FromCollectionId } from "../../context/weverseUtils";
@@ -25,9 +25,8 @@ type onInteractionProp =
   | { type: "create"; parentPath: string }
   | {
       type: "update";
-      onUpdate: (testimonial: SocialProof) => Promise<void>;
-      onDelete: () => Promise<void>;
-      parentPath: string;
+      path: string;
+      fromPath: string;
     };
 
 const workingSocialProof = socialProof
@@ -56,12 +55,11 @@ const useOnSubmitTestimonial = (parentPath: string | undefined) => {
       const testimonialDocRef = doc(
         collection(appState.firestore, collectionPath)
       ).withConverter(socialProofConverter);
-      const testimonialFromPath = `${
-        collection(appState.firestore, testimonial.byMember, "from").path
-      }/${pathAndType2FromCollectionId(
-        testimonialDocRef.path,
-        "testimonial"
-      )!}`;
+      const testimonialFromPath = createTestimonialFromPath(
+        appState.firestore,
+        testimonial,
+        testimonialDocRef
+      );
 
       batch.set(testimonialDocRef, testimonial);
       batch.set(
@@ -85,6 +83,96 @@ const useOnSubmitTestimonial = (parentPath: string | undefined) => {
   );
 };
 
+const buildThankYouPathForUpdate = (path: string) => {
+  const parts = path.split("/testimonials/");
+  console.log({ parts1: parts });
+  parts.pop();
+  console.log({ parts2: parts });
+  parts.push("testimonials/upload/thanks");
+  console.log({ parts3: parts });
+  console.log({ return: `${parts.join("/")}` });
+  return `${parts.join("/")}`;
+};
+
+const useOnUpdateTestimonial = (
+  path: string | undefined,
+  fromPath: string | undefined
+) => {
+  const appState = useAppState();
+  const router = useRouter();
+  const { asPath } = router;
+  const socialProofConverter = useSocialProofConverter();
+  const fromConverter = useFromConverter();
+
+  return useCallback(
+    async (testimonial: SocialProof) => {
+      if (!path || !fromPath)
+        throw new Error(`path ${path} or fromPath ${fromPath} is undefined`);
+      const batch = writeBatch(appState.firestore);
+      const testimonialDocRef = doc(appState.firestore, path).withConverter(
+        socialProofConverter
+      );
+
+      batch.update(testimonialDocRef, testimonial);
+      batch.update(
+        // No need to use `batch.set(memberFromTestimonialDoc,
+        // { type: "testimonial", data }, { merge: true } );` because
+        // we are completely overwriting the document.
+        doc(appState.firestore, fromPath).withConverter(fromConverter),
+        { type: "testimonial", data: testimonial }
+      );
+      await batch.commit();
+
+      router.push(buildThankYouPathForUpdate(asPath));
+    },
+    [
+      appState.firestore,
+      asPath,
+      fromConverter,
+      fromPath,
+      path,
+      router,
+      socialProofConverter,
+    ]
+  );
+};
+
+const useOnDeleteTestimonial = (
+  path: string | undefined,
+  fromPath: string | undefined
+) => {
+  const appState = useAppState();
+  const router = useRouter();
+  const { asPath } = router;
+  const socialProofConverter = useSocialProofConverter();
+  const fromConverter = useFromConverter();
+
+  return useCallback(async () => {
+    if (!path || !fromPath)
+      throw new Error(`path ${path} or fromPath ${fromPath} is undefined`);
+    const batch = writeBatch(appState.firestore);
+    const testimonialDocRef = doc(appState.firestore, path).withConverter(
+      socialProofConverter
+    );
+
+    batch.delete(testimonialDocRef);
+    batch.delete(
+      doc(appState.firestore, fromPath).withConverter(fromConverter)
+    );
+    await batch.commit();
+
+    router.push(buildThankYouPathForUpdate(asPath));
+  }, [
+    appState.firestore,
+    asPath,
+    fromConverter,
+    fromPath,
+    path,
+    router,
+    socialProofConverter,
+  ]);
+};
+
 const TestimonialsForm = ({
   onInteraction,
   initialTestimonial,
@@ -94,13 +182,18 @@ const TestimonialsForm = ({
 }) => {
   console.log({ initialTestimonial });
   const isAction = !!initialTestimonial.forAction;
+  const initialMedia = initialTestimonial.videoUrl
+    ? ({ url: initialTestimonial.videoUrl, type: "video" } as Media)
+    : undefined;
 
   const [error, setError] = useState("");
   const [rating, setRating] = useState<number | null>(
     initialTestimonial.rating
   );
-  const [media, setMedia] = useState<Media | undefined | "loading">(undefined);
-  const [text, setText] = useState("");
+  const [media, setMedia] = useState<Media | undefined | "loading">(
+    initialMedia
+  );
+  const [text, setText] = useState(initialTestimonial.text ?? "");
   const [uploading, setUploading] = useState(false);
   const needsRatingMsg = "Calificación necesaria.";
   const formTranslations = useTranslations("testimonials.form");
@@ -109,7 +202,17 @@ const TestimonialsForm = ({
   const uploadActionTranslation = useTranslations("actions.upload");
   const maxLength = 500;
 
-  const onSubmit = useOnSubmitTestimonial(onInteraction.parentPath);
+  const onSubmit = useOnSubmitTestimonial(
+    onInteraction.type == "create" ? onInteraction?.parentPath : undefined
+  );
+  const onUpdate = useOnUpdateTestimonial(
+    onInteraction.type == "update" ? onInteraction.path : undefined,
+    onInteraction.type == "update" ? onInteraction.fromPath : undefined
+  );
+  const onDelete = useOnDeleteTestimonial(
+    onInteraction.type == "update" ? onInteraction?.path : undefined,
+    onInteraction.type == "update" ? onInteraction?.fromPath : undefined
+  );
   useEffect(() => {
     if (error == needsRatingMsg && rating != null) {
       setError("");
@@ -140,7 +243,7 @@ const TestimonialsForm = ({
         if (onInteraction.type == "create") {
           await onSubmit(socialProofEncoded);
         } else {
-          await onInteraction.onUpdate(socialProofEncoded);
+          await onUpdate(socialProofEncoded);
         }
       }}
     >
@@ -169,6 +272,7 @@ const TestimonialsForm = ({
         </Typography>
         <FileInput
           setMedia={setMedia}
+          initialMedia={initialMedia}
           maxFileSize={2147483648 /** 2GB */}
           accept={"video"}
           metadata={{ impactId: "", isTestimonial: "true", from: "" }}
@@ -201,7 +305,12 @@ const TestimonialsForm = ({
           </Button>
         ) : (
           <Stack direction={"row"} sx={{ mt: 3 }} spacing={1}>
-            <Button variant="outlined" onClick={onInteraction.onDelete}>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                onDelete();
+              }}
+            >
               {callToActionTranslations("delete")}
             </Button>
             <Button variant="contained" type="submit">
@@ -215,3 +324,12 @@ const TestimonialsForm = ({
 };
 
 export default TestimonialsForm;
+function createTestimonialFromPath(
+  firestore: Firestore,
+  testimonial: WorkingSocialProof,
+  testimonialDocRef: ReturnType<typeof doc>
+) {
+  return `${
+    collection(firestore, testimonial.byMember, "from").path
+  }/${pathAndType2FromCollectionId(testimonialDocRef.path, "testimonial")!}`;
+}
