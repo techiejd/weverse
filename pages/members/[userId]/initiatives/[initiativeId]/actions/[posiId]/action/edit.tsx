@@ -38,7 +38,7 @@ const Edit = asOneWePage((locale2Messages: Locale2Messages) => {
     const cleanedPosi = pickBy(usersPosi, identity);
     const parsedPosi = posiFormData.parse(cleanedPosi);
     await setDoc(posiDocRef, parsedPosi);
-    router.push(posi.path);
+    router.push(`/${posi.path}`);
   };
 
   const onDelete = useCallback(async () => {
