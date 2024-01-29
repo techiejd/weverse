@@ -43,7 +43,6 @@ const UserPage = asOneWePage(() => {
     useCurrentInitiatives();
   const [testimonials] = useCurrentTestimonials();
   const [likedActionPaths] = useCurrentLikes();
-  console.log(likedActionPaths);
 
   const [signOut] = useSignOut(appState.auth);
   const [myMember] = useMyMember();

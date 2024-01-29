@@ -189,11 +189,11 @@ const Sponsorships = ({
             },
           ]}
         >
-          {activeSponsorships.map((sponsorship) => (
+          {activeSponsorships.map((sponsorship, idx) => (
             <SponsorshipDisplay
               type={myMember ? "for" : "from"}
               sponsorship={sponsorship}
-              key={sponsorship.path}
+              key={idx}
               handleCancelSponsorship={handleCancelSponsorship}
               showAmount={showAmount}
             />

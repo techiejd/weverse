@@ -85,12 +85,8 @@ const useOnSubmitTestimonial = (parentPath: string | undefined) => {
 
 const buildThankYouPathForUpdate = (path: string) => {
   const parts = path.split("/testimonials/");
-  console.log({ parts1: parts });
   parts.pop();
-  console.log({ parts2: parts });
   parts.push("testimonials/upload/thanks");
-  console.log({ parts3: parts });
-  console.log({ return: `${parts.join("/")}` });
   return `${parts.join("/")}`;
 };
 
@@ -180,7 +176,6 @@ const TestimonialsForm = ({
   onInteraction: onInteractionProp;
   initialTestimonial: WorkingSocialProof;
 }) => {
-  console.log({ initialTestimonial });
   const isAction = !!initialTestimonial.forAction;
   const initialMedia = initialTestimonial.videoUrl
     ? ({ url: initialTestimonial.videoUrl, type: "video" } as Media)
