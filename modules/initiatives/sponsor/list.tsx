@@ -18,7 +18,7 @@ import {
   useCurrentMember,
 } from "../../../common/context/weverseUtils";
 import { Sponsorship } from "../../../functions/shared/src";
-import { feePercentage, toDisplayCurrency, currencyInfo } from "./common/utils";
+import { feePercentage, toDisplayCurrency, paymentInfo } from "./common/utils";
 import { useTranslations } from "next-intl";
 import { sectionStyles } from "../../../common/components/theme";
 import { useAppState } from "../../../common/context/appState";
@@ -63,7 +63,7 @@ const SponsorshipDisplay = ({
     type == "for"
       ? undefined
       : (() => {
-          const feeCharge = currencyInfo[sponsorship.currency].feeCharge.amount;
+          const feeCharge = paymentInfo[sponsorship.currency].feeCharge.amount;
           const tipPercent = sponsorship.tipAmount / 100;
           const amountReceivedFromMemberIfFeePaidByMember =
             (sponsorship.total - feeCharge) / (1 + tipPercent + feePercentage);

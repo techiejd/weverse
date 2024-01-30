@@ -1,5 +1,6 @@
 import {
   Currency,
+  PaymentPlanOptions,
   SponsorshipLevel,
   sponsorshipLevel,
 } from "../../../../functions/shared/src";
@@ -21,29 +22,48 @@ export const toDisplayCurrency = {
   gbp: toGbp,
 };
 
-type CurrencyInfo = Record<
-  Currency,
-  {
+type PaymentInfo = {
+  [currency in Currency]: {
     feeCharge: { amount: number; displayAmount: string };
-    sponsorshipLevelInfo: Record<
-      SponsorshipLevel,
-      { amount: number; displayCurrency: string }
-    >;
-  }
->;
+    paymentPlanAndSponsorshipLevelInfo: {
+      [paymentPlanOption in PaymentPlanOptions]: {
+        [sponsorshipLevel in SponsorshipLevel]: {
+          amount: number;
+          displayCurrency: string;
+        };
+      };
+    };
+  };
+};
 
-export const currencyInfo: CurrencyInfo = (() => {
-  const applySponsorshipLevelInfo = (
+const paymentPlanMultiplier = {
+  monthly: 1,
+  oneTime: 6,
+};
+
+export const paymentInfo: PaymentInfo = (() => {
+  const formatPaymentPlanAndSponsorshipLevelInfo = (
     currency: "cop" | "usd" | "eur" | "gbp",
     sponsorshipLevelInfo: Record<SponsorshipLevel, number>
   ) =>
-    Object.entries(sponsorshipLevelInfo).reduce((acc, [key, value]) => {
-      acc[key as SponsorshipLevel] = {
-        amount: value,
-        displayCurrency: toDisplayCurrency[currency](value),
-      };
-      return acc;
-    }, {} as Record<SponsorshipLevel, { amount: number; displayCurrency: string }>);
+    Object.entries(paymentPlanMultiplier).reduce(
+      (acc, [paymentPlanOption, multiplier]) => {
+        acc[paymentPlanOption as PaymentPlanOptions] = Object.entries(
+          sponsorshipLevelInfo
+        ).reduce((acc, [sponsorshipLevel, amount]) => {
+          acc[sponsorshipLevel as SponsorshipLevel] = {
+            amount: amount * multiplier,
+            displayCurrency: toDisplayCurrency[currency](amount * multiplier),
+          };
+          return acc;
+        }, {} as Record<SponsorshipLevel, { amount: number; displayCurrency: string }>);
+        return acc;
+      },
+      {} as Record<
+        PaymentPlanOptions,
+        Record<SponsorshipLevel, { amount: number; displayCurrency: string }>
+      >
+    );
   const copAmounts = {
     [sponsorshipLevel.Enum.admirer]: 5_000,
     [sponsorshipLevel.Enum.fan]: 10_000,
@@ -59,10 +79,10 @@ export const currencyInfo: CurrencyInfo = (() => {
   const feeCharges = { cop: 1300, usd: 0.3, eur: 0.3, gbp: 0.25 };
 
   const sponsorshipLevelInfo = {
-    cop: applySponsorshipLevelInfo("cop", copAmounts),
-    usd: applySponsorshipLevelInfo("usd", otherAmounts),
-    eur: applySponsorshipLevelInfo("eur", otherAmounts),
-    gbp: applySponsorshipLevelInfo("gbp", otherAmounts),
+    cop: formatPaymentPlanAndSponsorshipLevelInfo("cop", copAmounts),
+    usd: formatPaymentPlanAndSponsorshipLevelInfo("usd", otherAmounts),
+    eur: formatPaymentPlanAndSponsorshipLevelInfo("eur", otherAmounts),
+    gbp: formatPaymentPlanAndSponsorshipLevelInfo("gbp", otherAmounts),
   };
 
   const currencyInfo = Object.entries(feeCharges).reduce(
@@ -73,12 +93,12 @@ export const currencyInfo: CurrencyInfo = (() => {
           displayAmount:
             toDisplayCurrency[key as "cop" | "usd" | "eur" | "gbp"](value),
         },
-        sponsorshipLevelInfo:
+        paymentPlanAndSponsorshipLevelInfo:
           sponsorshipLevelInfo[key as "cop" | "usd" | "eur" | "gbp"],
       };
       return acc;
     },
-    {} as CurrencyInfo
+    {} as PaymentInfo
   );
   return currencyInfo;
 })();

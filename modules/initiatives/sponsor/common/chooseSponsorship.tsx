@@ -16,11 +16,12 @@ import {
   Typography,
 } from "@mui/material";
 import { Fragment, useEffect, useState } from "react";
-import { feePercentage, currencyInfo, toDisplayCurrency } from "./utils";
+import { feePercentage, paymentInfo, toDisplayCurrency } from "./utils";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 import {
   Currency,
   Initiative,
+  PaymentPlanOptions,
   SponsorshipLevel,
   sponsorshipLevel,
 } from "../../../../functions/shared/src";
@@ -46,7 +47,13 @@ const ChooseSponsorship = ({
       (sponsorForm.currency as Currency) ||
       (messages ? (chooseTranslations("defaultCurrency") as Currency) : "usd")
   );
-  const sponsorshipLevelInfo = currencyInfo[currency].sponsorshipLevelInfo;
+  const [paymentPlan, setPaymentPlan] = useState<PaymentPlanOptions>("monthly");
+  const togglePaymentPlan = () => {
+    setPaymentPlan(paymentPlan == "monthly" ? "oneTime" : "monthly");
+  };
+
+  const sponsorshipLevelInfo =
+    paymentInfo[currency].paymentPlanAndSponsorshipLevelInfo[paymentPlan];
   const [customAmount, setCustomAmount] = useState(
     sponsorForm.customAmount
       ? sponsorForm.customAmount
@@ -70,6 +77,11 @@ const ChooseSponsorship = ({
         : "fan"
     );
 
+  const minCustomAmount =
+    sponsorshipLevelIn === sponsorshipLevel.Enum.custom
+      ? sponsorshipLevelInfo[sponsorshipLevel.Enum.custom].amount
+      : 0;
+
   const [tipPercentage, setTipPercentage] = useState(15);
   const [initiativePaysFee, setInitiativePaysFee] = useState(false);
   const [memberPublishable, setMemberPublishable] = useState(true);
@@ -81,7 +93,7 @@ const ChooseSponsorship = ({
   const feeAmount = (() => {
     const feeAmount =
       feePercentage * sponsorshipAmount +
-      currencyInfo[currency].feeCharge.amount;
+      paymentInfo[currency].feeCharge.amount;
     return initiativePaysFee
       ? 0
       : currency == "cop"
@@ -90,7 +102,7 @@ const ChooseSponsorship = ({
   })();
   const feeDisplayAmount = toDisplayCurrency[currency](feeAmount);
   const flatFeeDisplayAmount = toDisplayCurrency[currency](
-    currencyInfo[currency].feeCharge.amount
+    paymentInfo[currency].feeCharge.amount
   );
 
   const sponsorshipDisplayAmount =
@@ -122,57 +134,25 @@ const ChooseSponsorship = ({
     );
   };
 
-  const ChooseCurrency = () => {
-    return (
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        sx={{ display: currencyIn ? "none" : "flex" }}
-      >
-        <Stack>
-          <Typography>{chooseTranslations("currency.prompt")}</Typography>
-          <Typography variant="body2" color="text.secondary">
-            {chooseTranslations("currency.chooseWiselyWarning")}
-          </Typography>
-        </Stack>
-        <NativeSelect
-          inputProps={{
-            name: "currency",
-            id: "currency",
-          }}
-          value={currency}
-          onChange={(e) => setCurrency(e.target.value as Currency)}
-          disableUnderline
-          sx={{
-            border: "1px solid #ccc",
-            borderRadius: 4,
-            pl: 1,
-            minWidth: 90,
-          }}
-        >
-          <option value="cop">COP 🇨🇴</option>
-          <option value="usd">USD 🇺🇸</option>
-          <option value="eur">EUR 🇪🇺</option>
-          <option value="gbp">GBP 🇬🇧</option>
-        </NativeSelect>
-      </Stack>
-    );
-  };
-
   return (
     <Fragment>
-      <ChooseCurrency />
-      <Typography variant="h6" gutterBottom>
-        {chooseTranslations("title")}
-      </Typography>
-
       <input hidden value={"chooseSponsorship"} name="stepString" readOnly />
       <input hidden value={total} name="total" readOnly />
       <input hidden value={beneficiary.path} name="initiative" readOnly />
-      <input hidden value={myMember?.path} name="member" readOnly />
+      <input hidden value={myMember?.path || ""} name="member" readOnly />
+      <input hidden value={paymentPlan} name="billingFrequency" readOnly />
 
+      <Typography variant="h6" gutterBottom>
+        {chooseTranslations("title")}
+      </Typography>
       <Stack spacing={2} divider={<Divider />}>
+        <ChooseCurrency {...{ currencyIn, currency, setCurrency }} />
+        <ChoosePaymentPlan
+          {...{
+            paymentPlan: paymentPlan,
+            togglePaymentPlan: togglePaymentPlan,
+          }}
+        />
         <Stack>
           <ListItem sx={{ px: 0 }}>
             <ListItemText
@@ -222,12 +202,7 @@ const ChooseSponsorship = ({
                         }}
                         inputMode="numeric"
                         inputProps={{
-                          min:
-                            sponsorshipLevelIn === sponsorshipLevel.Enum.custom
-                              ? sponsorshipLevelInfo[
-                                  sponsorshipLevel.Enum.custom
-                                ].amount
-                              : undefined,
+                          min: minCustomAmount,
                           type: "number",
                         }}
                       />
@@ -353,3 +328,149 @@ const ChooseSponsorship = ({
 };
 
 export default ChooseSponsorship;
+
+const ChoosePaymentPlan = ({
+  paymentPlan,
+  togglePaymentPlan,
+}: {
+  paymentPlan: "monthly" | "oneTime";
+  togglePaymentPlan: () => void;
+}) => {
+  const choosePaymentPlanTranslations = useTranslations(
+    "common.sponsor.steps.choose.paymentPlan"
+  );
+  return (
+    <Stack>
+      <Typography>Choose your payment plan</Typography>
+      <Typography variant="body2" color="text.secondary">
+        {choosePaymentPlanTranslations("explanation", {
+          paymentPlan,
+        })}
+      </Typography>
+      <div className="sponsorship-plan-colors self-stretch flex flex-col items-center justify-center p-2.5 text-center text-primary-700">
+        <div className="rounded-12xl bg-primary-50 w-[297px] flex flex-row items-center justify-center py-1 pr-2.5 pl-1 box-border mix-blend-multiply">
+          {paymentPlan == "monthly" ? (
+            <MonthlyBillingFrequencySelected
+              togglePaymentPlan={togglePaymentPlan}
+            />
+          ) : (
+            <OneTimeBillingFrequencySelected
+              togglePaymentPlan={togglePaymentPlan}
+            />
+          )}
+        </div>
+      </div>
+    </Stack>
+  );
+};
+
+const MonthlyBillingFrequencySelected = ({
+  togglePaymentPlan,
+}: {
+  togglePaymentPlan: () => void;
+}) => {
+  const choosePaymentPlanTranslations = useTranslations(
+    "common.sponsor.steps.choose.paymentPlan"
+  );
+  return (
+    <Fragment>
+      <div className="flex flex-row items-center justify-center py-0 pr-0 pl-6 mix-blend-normal">
+        <div className="rounded-10xl bg-white w-[163px] flex flex-row items-center justify-center py-2.5 px-4 box-border">
+          <div className="relative leading-[20px] font-semibold">
+            {choosePaymentPlanTranslations("monthly")}
+          </div>
+        </div>
+      </div>
+      <div
+        className="cursor-pointer [border:none] p-0 bg-[transparent] flex flex-row items-center justify-center mix-blend-normal"
+        onClick={togglePaymentPlan}
+      >
+        <div className="rounded-10xl w-[143px] flex flex-row items-center justify-center py-2.5 px-4 box-border">
+          <div className="relative text-sm leading-[20px] font-medium font-text-sm-regular text-primary-700 text-center">
+            {choosePaymentPlanTranslations("oneTime")}
+          </div>
+        </div>
+      </div>
+    </Fragment>
+  );
+};
+
+const OneTimeBillingFrequencySelected = ({
+  togglePaymentPlan,
+}: {
+  togglePaymentPlan: () => void;
+}) => {
+  const choosePaymentPlanTranslations = useTranslations(
+    "common.sponsor.steps.choose.paymentPlan"
+  );
+  return (
+    <Fragment>
+      <div
+        className="cursor-pointer [border:none] p-0 bg-[transparent] flex flex-row items-center justify-center mix-blend-normal"
+        onClick={togglePaymentPlan}
+      >
+        <div className="rounded-10xl w-[143px] flex flex-row items-center justify-center py-2.5 px-4 box-border">
+          <div className="relative text-sm leading-[20px] font-medium font-text-sm-regular text-primary-700 text-center">
+            {choosePaymentPlanTranslations("monthly")}
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-row items-center justify-center mix-blend-normal ml-[-6px]">
+        <div className="rounded-10xl bg-white flex flex-row items-center justify-center py-2.5 px-8">
+          <div className="relative leading-[20px] font-semibold">
+            {choosePaymentPlanTranslations("oneTime")}
+          </div>
+        </div>
+      </div>
+    </Fragment>
+  );
+};
+
+const ChooseCurrency = ({
+  currencyIn,
+  currency,
+  setCurrency,
+}: {
+  currency?: Currency;
+  setCurrency: (currency: Currency) => void;
+  currencyIn?: Currency;
+}) => {
+  const chooseCurrencyTranslations = useTranslations(
+    "common.sponsor.steps.choose.currency"
+  );
+  return (
+    <Stack
+      direction="row"
+      alignItems="center"
+      justifyContent="space-between"
+      sx={{ display: currencyIn ? "none" : "flex" }}
+    >
+      <Stack>
+        <Typography>{chooseCurrencyTranslations("prompt")}</Typography>
+        <Typography variant="body2" color="text.secondary">
+          {chooseCurrencyTranslations("chooseWiselyWarning")}
+        </Typography>
+      </Stack>
+      <NativeSelect
+        inputProps={{
+          name: "currency",
+          id: "currency",
+        }}
+        value={currency}
+        onChange={(e) => setCurrency(e.target.value as Currency)}
+        disableUnderline
+        sx={{
+          border: "1px solid #ccc",
+          borderRadius: 4,
+          pl: 1,
+          minWidth: 90,
+        }}
+      >
+        <option value="cop">COP 🇨🇴</option>
+        <option value="usd">USD 🇺🇸</option>
+        <option value="eur">EUR 🇪🇺</option>
+        <option value="gbp">GBP 🇬🇧</option>
+      </NativeSelect>
+    </Stack>
+  );
+};

@@ -172,11 +172,17 @@
         "choose": {
           "defaultCurrency": "usd",
           "short": "Choose",
-          "title": "Choose your sponsorship level",
+          "title": "Set up the sponsorship plan",
           "level": "Level {level}",
           "currency": {
             "prompt": "Choose your currency",
             "chooseWiselyWarning": "Choose wisely. You can only choose your currency in this first sponsor, since we save this information."
+          },
+          "paymentPlan": {
+            "prompt": "Choose your payment plan",
+            "explanation": "{paymentPlan, select, oneTime {One time payments are charged immediately, and you will receive updates for six months} other {You will be billed monthly on the same day, starting today, and receive updates from the initiatives while sponsoring}}.",
+            "oneTime": "One time",
+            "monthly": "Monthly"
           },
           "tip": {
             "prompt": "Want to leave a tip for OneWe?",

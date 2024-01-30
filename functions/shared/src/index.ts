@@ -100,6 +100,8 @@ export const initiative = dbBase
   );
 export type Initiative = z.infer<typeof initiative>;
 
+const paymentPlanOptions = z.enum(["monthly", "oneTime"]);
+export type PaymentPlanOptions = z.infer<typeof paymentPlanOptions>;
 const currency = z.enum(["cop", "usd", "eur", "gbp"]);
 export type Currency = z.infer<typeof currency>;
 
