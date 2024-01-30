@@ -89,6 +89,9 @@ const ChooseSponsorship = ({
       : Number(feeAmount.toFixed(2));
   })();
   const feeDisplayAmount = toDisplayCurrency[currency](feeAmount);
+  const flatFeeDisplayAmount = toDisplayCurrency[currency](
+    currencyInfo[currency].feeCharge.amount
+  );
 
   const sponsorshipDisplayAmount =
     sponsorshipLevelIn == sponsorshipLevel.Enum.custom
@@ -278,7 +281,7 @@ const ChooseSponsorship = ({
                 chooseTranslations("fee.feeExplanation", {
                   denyFee: initiativePaysFee,
                   feePercentage: `${(feePercentage * 100).toFixed(1)}`,
-                  feeAmount: feeDisplayAmount,
+                  feeAmount: flatFeeDisplayAmount,
                 })
               }
             />
