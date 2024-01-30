@@ -26,6 +26,7 @@ import Sponsorships from "../../../modules/initiatives/sponsor/list";
 import { useCurrentSponsorships } from "../../../modules/members/context";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
 import ImpactCard from "../../../modules/posi/action/card";
+import { useEffect, useState } from "react";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -42,11 +43,17 @@ const UserPage = asOneWePage(() => {
   const [initiatives, initiativesLoading, initiativesError] =
     useCurrentInitiatives();
   const [testimonials] = useCurrentTestimonials();
-  const [likedActionPaths] = useCurrentLikes();
+  const [likedActionPaths, setLikedActionPaths] = useState<string[]>([]);
+  const [likedPaths] = useCurrentLikes();
 
   const [signOut] = useSignOut(appState.auth);
   const [myMember] = useMyMember();
   const isMine = useIsMine();
+
+  useEffect(() => {
+    // TODO(techiejd): Find out how liked initiatives exist.
+    setLikedActionPaths(likedPaths?.filter((l) => l.includes("action")) ?? []);
+  }, [likedPaths]);
 
   return (
     <Stack
