@@ -1,31 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 import {
-  DbBase,
   SponsorshipLevel,
-  from,
-  member,
   sponsorship,
   sponsorshipLevel,
 } from "../../../functions/shared/src";
 import Stripe from "stripe";
-import {
-  FirestoreDataConverter,
-  WithFieldValue,
-  DocumentData,
-  QueryDocumentSnapshot,
-  Timestamp,
-} from "firebase-admin/firestore";
 import { z } from "zod";
+import { getFirestore } from "firebase-admin/firestore";
+import { pathAndType2FromCollectionId } from "../../../common/context/weverseUtils";
+import { splitPath } from "../../../common/utils/firebase";
+import Utils from "../../../common/context/serverUtils";
 
 const isDevEnvironment = process && process.env.NODE_ENV === "development";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2022-11-15",
 });
-
-import { getFirestore } from "firebase-admin/firestore";
-import { pathAndType2FromCollectionId } from "../../../common/context/weverseUtils";
-import { splitPath } from "../../../common/utils/firebase";
 
 const sponsorshipLevelsToPlanIds: Record<SponsorshipLevel, string> =
   isDevEnvironment
@@ -59,30 +49,6 @@ const firestore = (() => {
   }
   return getFirestore(getApps()[0]);
 })();
-
-namespace Utils {
-  //TODO(techiejd): This is a hack to get around sharing the same schema between nextjs and firebase functions.
-  const makeDataConverter = <T extends z.ZodType<DbBase>>(
-    zAny: T
-  ): FirestoreDataConverter<z.infer<typeof zAny>> => ({
-    toFirestore: (data: WithFieldValue<z.infer<typeof zAny>>): DocumentData => {
-      const { createdAt, ...others } = data;
-      return { ...others, createdAt: createdAt ? createdAt : Timestamp.now() };
-    },
-    fromFirestore: (snapshot: QueryDocumentSnapshot): z.infer<typeof zAny> => {
-      const data = snapshot.data();
-      // anything with serverTimestamp does not exist atm if pending writes.
-      return zAny.parse({
-        ...data,
-        path: snapshot.ref.path,
-      });
-    },
-  });
-
-  export const memberConverter = makeDataConverter(member);
-  export const sponsorshipConverter = makeDataConverter(sponsorship);
-  export const fromConverter = makeDataConverter(from);
-}
 
 const badRequest = (res: NextApiResponse) =>
   res.status(400).json({ message: "Bad Request" });

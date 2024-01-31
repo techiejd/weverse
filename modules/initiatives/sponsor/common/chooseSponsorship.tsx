@@ -117,7 +117,11 @@ const ChooseSponsorship = ({
   })();
   const tipDisplayAmount = toDisplayCurrency[currency](tipAmount);
 
-  const total = sponsorshipAmount + feeAmount + tipAmount;
+  const total = Number(
+    (
+      Math.ceil((sponsorshipAmount + feeAmount + tipAmount) * 100) / 100
+    ).toFixed(2)
+  ); // We do this to avoid floating point errors.
   const displayTotal = toDisplayCurrency[currency](total);
 
   const [myMember] = useMyMember();
