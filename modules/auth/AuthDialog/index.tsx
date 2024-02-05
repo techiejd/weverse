@@ -191,14 +191,13 @@ const AuthDialogContent = ({
         const setSessionPromise = userCred.user
           .getIdToken(true)
           .then(async (token) => {
-            const result = await fetch("/api/auth", {
+            const result = await fetch("/api/auth/logIn", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({ token }),
             });
-            console.log(result);
             if (!result.ok) {
               setSessionError = await result.text();
             }

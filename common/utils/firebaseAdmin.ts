@@ -56,3 +56,11 @@ export async function verifyCookie(cookie: string) {
     uid: uid,
   };
 }
+
+export const sessionExpiresIn = 5 * 60 * 1000;
+export const cookieOptions = {
+  maxAge: sessionExpiresIn,
+  httpOnly: true,
+  secure: true,
+  path: "/",
+};

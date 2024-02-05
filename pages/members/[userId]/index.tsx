@@ -5,10 +5,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useSignOut } from "react-firebase-hooks/auth";
 import { useTranslations } from "next-intl";
 import { asOneWePage } from "../../../common/components/onewePage";
-import { useAppState } from "../../../common/context/appState";
 import {
   fromCollectionId2PathAndType,
   useAction,
@@ -27,6 +25,7 @@ import { useCurrentSponsorships } from "../../../modules/members/context";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
 import ImpactCard from "../../../modules/posi/action/card";
 import { useEffect, useState } from "react";
+import { useSignOut } from "../../../common/utils/firebase";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -39,14 +38,13 @@ const ImpactCardWrapper = ({ path }: { path: string }) => {
 const UserPage = asOneWePage(() => {
   // TODO(techiejd): Do admin story so that user page can be protected.
   const yourMemberTranslations = useTranslations("members.yours");
-  const appState = useAppState();
   const [initiatives, initiativesLoading, initiativesError] =
     useCurrentInitiatives();
   const [testimonials] = useCurrentTestimonials();
   const [likedActionPaths, setLikedActionPaths] = useState<string[]>([]);
   const [likedPaths] = useCurrentLikes();
 
-  const [signOut] = useSignOut(appState.auth);
+  const signOut = useSignOut();
   const [myMember] = useMyMember();
   const isMine = useIsMine();
 

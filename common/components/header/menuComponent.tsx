@@ -11,7 +11,6 @@ import {
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
-import { useSignOut } from "react-firebase-hooks/auth";
 import Home from "@mui/icons-material/Home";
 import Login from "@mui/icons-material/Login";
 import PlusOne from "@mui/icons-material/PlusOne";
@@ -20,6 +19,7 @@ import Logout from "@mui/icons-material/Logout";
 import AuthDialog from "../../../modules/auth/AuthDialog";
 import { useAppState } from "../../context/appState";
 import PublishDialog from "../publishDialog";
+import { useSignOut } from "../../utils/firebase";
 
 const UserPortal = ({
   closeMenu,
@@ -28,9 +28,8 @@ const UserPortal = ({
   closeMenu: () => void;
   openAuthDialog: () => void;
 }) => {
-  const appState = useAppState();
   const { user } = useAppState().authState;
-  const [signOut] = useSignOut(appState.auth);
+  const signOut = useSignOut();
   const t = useTranslations("common.callToAction");
   return user ? (
     <MenuItem
