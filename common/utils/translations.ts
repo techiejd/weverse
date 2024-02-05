@@ -1,4 +1,9 @@
-import { GetStaticPropsContext, GetStaticPropsResult } from "next";
+import {
+  GetServerSidePropsContext,
+  GetServerSidePropsResult,
+  GetStaticPropsContext,
+  GetStaticPropsResult,
+} from "next";
 import { Locale, locale } from "../../functions/shared/src";
 import { useAppState } from "../context/appState";
 type StaticProps = {
@@ -21,6 +26,40 @@ const spreadTranslationsStaticProps = async () => {
       es: es.default,
       fr: fr.default,
     },
+  };
+};
+
+export const WithTranslationsServerSideProps = <T extends StaticProps>(
+  gssp?: (
+    context: GetServerSidePropsContext
+  ) => Promise<GetServerSidePropsResult<T>>
+) => {
+  return async (context: GetServerSidePropsContext) => {
+    const { locale } = context;
+    const othersPromise = gssp ? gssp(context) : Promise.resolve({ props: {} });
+    const messagesPromise = import(`../../messages/${locale}.json`);
+    const spreadTranslationsStaticPropsPromise =
+      spreadTranslationsStaticProps();
+    const [others, messages, spreadTranslations] = await Promise.all([
+      othersPromise,
+      messagesPromise,
+      spreadTranslationsStaticPropsPromise,
+    ]);
+    type PropsResult = {
+      props: any;
+    };
+    const isProps = (o: typeof others): o is PropsResult => {
+      return (others as PropsResult).props !== undefined;
+    };
+    return isProps(others)
+      ? {
+          props: {
+            ...others.props,
+            messages: messages.default,
+            ...spreadTranslations.props,
+          },
+        }
+      : others;
   };
 };
 

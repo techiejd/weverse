@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { initializeApp, getApps, cert } from "firebase-admin/app";
 import {
   SponsorshipLevel,
   sponsorship,
@@ -7,12 +6,14 @@ import {
 } from "../../../functions/shared/src";
 import Stripe from "stripe";
 import { z } from "zod";
-import { getFirestore } from "firebase-admin/firestore";
 import { pathAndType2FromCollectionId } from "../../../common/context/weverseUtils";
 import { splitPath } from "../../../common/utils/firebase";
 import Utils from "../../../common/context/serverUtils";
+import {
+  getAdminFirestore,
+  isDevEnvironment,
+} from "../../../common/utils/firebaseAdmin";
 
-const isDevEnvironment = process && process.env.NODE_ENV === "development";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2022-11-15",
 });
@@ -32,23 +33,7 @@ const sponsorshipLevelsToPlanIds: Record<SponsorshipLevel, string> =
         [sponsorshipLevel.Enum.custom]: "prod_O76x3IxBN4ROwm",
       };
 
-const firestore = (() => {
-  if (isDevEnvironment) {
-    process.env.FIRESTORE_EMULATOR_HOST = "localhost:8080";
-  }
-  if (!getApps().length) {
-    const fs = getFirestore(
-      initializeApp({
-        credential: cert(
-          JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT! as string)
-        ),
-      })
-    );
-    fs.settings({ ignoreUndefinedProperties: true });
-    return fs;
-  }
-  return getFirestore(getApps()[0]);
-})();
+const firestore = getAdminFirestore();
 
 const badRequest = (res: NextApiResponse) =>
   res.status(400).json({ message: "Bad Request" });

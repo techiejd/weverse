@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { DbBase, member, sponsorship } from "../../../functions/shared/src";
 import Stripe from "stripe";
 import {
@@ -12,30 +11,13 @@ import {
 } from "firebase-admin/firestore";
 import { z } from "zod";
 
-const isDevEnvironment = process && process.env.NODE_ENV === "development";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2022-11-15",
 });
 
-import { getFirestore } from "firebase-admin/firestore";
+import { getAdminFirestore } from "../../../common/utils/firebaseAdmin";
 
-const firestore = (() => {
-  if (isDevEnvironment) {
-    process.env.FIRESTORE_EMULATOR_HOST = "localhost:8080";
-  }
-  if (!getApps().length) {
-    const fs = getFirestore(
-      initializeApp({
-        credential: cert(
-          JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT! as string)
-        ),
-      })
-    );
-    fs.settings({ ignoreUndefinedProperties: true });
-    return fs;
-  }
-  return getFirestore(getApps()[0]);
-})();
+const firestore = getAdminFirestore();
 
 namespace Utils {
   //TODO(techiejd): This is a hack to get around sharing the same schema between nextjs and firebase functions.
