@@ -28,7 +28,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { lightConfiguration } from "../components/theme";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
 import { AbstractIntlMessages } from "next-intl";
-import { NextIntlClientProvider } from "next-intl";
 import { Locale } from "../../functions/shared/src";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
@@ -102,8 +101,7 @@ const AppStateContext = createContext(weverse);
 
 const AppProvider: React.FC<{
   children: React.ReactNode;
-  messages?: AbstractIntlMessages;
-}> = ({ children, messages }) => {
+}> = ({ children }) => {
   const [user, loading, error] = useAuthState(weverse.auth);
   const [member] = useDocumentData(
     user ? doc(weverse.firestore, "members", user.uid as string) : undefined
@@ -164,13 +162,11 @@ const AppProvider: React.FC<{
   //TODO(techiejd): Look into removing registermodal and header into somewhere else so that getstaticprops can be used.
   return (
     <AppStateContext.Provider value={appState}>
-      <NextIntlClientProvider messages={messages}>
-        <ThemeProvider theme={createTheme(lightConfiguration)}>
-          <CssBaseline>
-            <main>{children}</main>
-          </CssBaseline>
-        </ThemeProvider>
-      </NextIntlClientProvider>
+      <ThemeProvider theme={createTheme(lightConfiguration)}>
+        <CssBaseline>
+          <main>{children}</main>
+        </CssBaseline>
+      </ThemeProvider>
     </AppStateContext.Provider>
   );
 };

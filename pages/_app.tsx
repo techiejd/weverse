@@ -41,7 +41,7 @@ function WeVerse({ Component, pageProps }: AppProps) {
 
           gtag('config', 'G-NN708F3V4T');`}
       </Script>
-      <AppProvider messages={pageProps.messages}>
+      <AppProvider>
         <Component {...pageProps} />
       </AppProvider>
     </>
