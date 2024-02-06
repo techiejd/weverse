@@ -1,6 +1,7 @@
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
+import { parseCookies } from "nookies";
 
 export const isDevEnvironment =
   process && process.env.NODE_ENV === "development";
@@ -35,18 +36,24 @@ export const getAdminFirestore = () => {
   return getFirestore(getAdminApp());
 };
 
-export async function verifyCookie(cookie: string) {
+export type AuthenticationProp = {
+  authenticated: boolean;
+  uid: string;
+};
+
+async function verifyCookie(cookie: string) {
   const auth = getAdminAuth();
 
   var uid = "";
   var bAuth = false;
   await auth
-    .verifySessionCookie(cookie, true /** checkRevoked */)
+    .verifyIdToken(cookie, true /** checkRevoked */)
     .then((decodedClaims) => {
       bAuth = true;
       uid = decodedClaims.uid;
     })
-    .catch(() => {
+    .catch((error) => {
+      console.error("Error verifying session cookie:", error);
       // Session cookie is unavailable or invalid. Force user to login.
       bAuth = false;
     });
@@ -55,6 +62,15 @@ export async function verifyCookie(cookie: string) {
     authenticated: bAuth,
     uid: uid,
   };
+}
+
+export async function getAuthentication(
+  ctx: Parameters<typeof parseCookies>[0]
+) {
+  const cookies = parseCookies(ctx);
+  return cookies.token
+    ? await verifyCookie(cookies.token)
+    : { authenticated: false, uid: "" };
 }
 
 export const sessionExpiresIn = 5 * 60 * 1000;

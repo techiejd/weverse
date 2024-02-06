@@ -23,8 +23,9 @@ import {
   useMemo,
   useState,
 } from "react";
+import nookies from "nookies";
 import { useRouter } from "next/router";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuthState, useIdToken } from "react-firebase-hooks/auth";
 import { lightConfiguration } from "../components/theme";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
 import { AbstractIntlMessages } from "next-intl";
@@ -139,6 +140,28 @@ const AppProvider: React.FC<{
       return Promise.resolve();
     };
   }, [member, user?.uid]);
+
+  useEffect(() => {
+    return weverse.auth.onIdTokenChanged(async (user) => {
+      if (!user) {
+        nookies.set(undefined, "token", "", { path: "/" });
+      } else {
+        const token = await user.getIdToken();
+        nookies.set(undefined, "token", token, { path: "/" });
+      }
+    });
+  }, []);
+
+  // force refresh the token every 10 minutes
+  useEffect(() => {
+    const handle = setInterval(async () => {
+      const user = weverse.auth.currentUser;
+      if (user) await user.getIdToken(true);
+    }, 10 * 60 * 1000);
+
+    // clean up setInterval
+    return () => clearInterval(handle);
+  }, []);
 
   const appState = useMemo(() => {
     return {

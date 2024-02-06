@@ -19,8 +19,7 @@ import {
   from,
 } from "../../functions/shared/src";
 import { z } from "zod";
-import { useCallback, useMemo } from "react";
-import { useSignOut as useSignOutExternal } from "react-firebase-hooks/auth";
+import { useMemo } from "react";
 import { useAppState } from "../context/appState";
 
 export const creds = {
@@ -36,28 +35,6 @@ export const creds = {
 };
 
 export const app = initializeApp(creds);
-
-export const useSignOut = () => {
-  const appState = useAppState();
-  const [signOut] = useSignOutExternal(appState.auth);
-  return useCallback(async () => {
-    signOut().then(async (signedOutClient) => {
-      if (!signedOutClient) {
-        throw new Error("Failed to sign out");
-      }
-      const signOutResult = await fetch("/api/auth/logOut", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ action: "signOut" }),
-      });
-      if (!signOutResult.ok) {
-        throw new Error("Failed to sign out on server side.");
-      }
-    });
-  }, [signOut]);
-};
 
 const createUseLocalizedDataConverterFor = <T extends z.ZodType<DbBase>>(
   zAny: T

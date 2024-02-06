@@ -188,20 +188,7 @@ const AuthDialogContent = ({
       .then(async (userCred) => {
         let setSessionError = "";
         let setUpUserAndInitiativeError = "";
-        const setSessionPromise = userCred.user
-          .getIdToken(true)
-          .then(async (token) => {
-            const result = await fetch("/api/auth/logIn", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ token }),
-            });
-            if (!result.ok) {
-              setSessionError = await result.text();
-            }
-          });
+
         if (authDialogState.authAction == AuthAction.register) {
           const createUserAndInitiative = async () => {
             const updateSuccessful = updateProfile({
@@ -241,7 +228,6 @@ const AuthDialogContent = ({
 
             const [finishedUpdateSuccessful] = await Promise.all([
               updateSuccessful,
-              setSessionPromise,
               batch.commit(),
             ]);
 

@@ -19,7 +19,7 @@ import Logout from "@mui/icons-material/Logout";
 import AuthDialog from "../../../modules/auth/AuthDialog";
 import { useAppState } from "../../context/appState";
 import PublishDialog from "../publishDialog";
-import { useSignOut } from "../../utils/firebase";
+import { useSignOut } from "react-firebase-hooks/auth";
 
 const UserPortal = ({
   closeMenu,
@@ -28,8 +28,9 @@ const UserPortal = ({
   closeMenu: () => void;
   openAuthDialog: () => void;
 }) => {
-  const { user } = useAppState().authState;
-  const signOut = useSignOut();
+  const appState = useAppState();
+  const { user } = appState.authState;
+  const [signOut] = useSignOut(appState.auth);
   const t = useTranslations("common.callToAction");
   return user ? (
     <MenuItem
