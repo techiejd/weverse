@@ -50,10 +50,12 @@ const UserPage = asOneWePage(() => {
   const [myMember] = useMyMember();
   const isMine = useIsMine();
 
-  useEffect(() => {
+  //TODO(techiejd): Figure out how to get this initiative stuff without bug.
+  /**useEffect(() => {
     // TODO(techiejd): Find out how liked initiatives exist.
+    console.log("Triggered");
     setLikedActionPaths(likedPaths?.filter((l) => l.includes("action")) ?? []);
-  }, [likedPaths]);
+  }, [likedPaths]);**/
 
   return (
     <Stack
