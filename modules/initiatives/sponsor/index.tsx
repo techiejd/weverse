@@ -9,6 +9,7 @@ import InitializeSponsor from "./initialize";
 import RepeatSponsor from "./repeat";
 import { Initiative } from "../../../functions/shared/src";
 import { useTranslations } from "next-intl";
+import UnderConstruction from "../../posi/underConstruction";
 
 export default function Sponsor({
   exitButtonBehavior,
@@ -89,6 +90,8 @@ export default function Sponsor({
       }
     });
   };
+
+  return <UnderConstruction />;
 
   return (
     <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>

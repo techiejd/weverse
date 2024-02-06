@@ -8,15 +8,11 @@ import Stripe from "stripe";
 import { z } from "zod";
 import { pathAndType2FromCollectionId } from "../../../common/context/weverseUtils";
 import { splitPath } from "../../../common/utils/firebase";
-import Utils from "../../../common/context/serverUtils";
+import Utils, { badRequest, stripe } from "../../../common/context/serverUtils";
 import {
   getAdminFirestore,
   isDevEnvironment,
 } from "../../../common/utils/firebaseAdmin";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2022-11-15",
-});
 
 const sponsorshipLevelsToPlanIds: Record<SponsorshipLevel, string> =
   isDevEnvironment
@@ -34,9 +30,6 @@ const sponsorshipLevelsToPlanIds: Record<SponsorshipLevel, string> =
       };
 
 const firestore = getAdminFirestore();
-
-const badRequest = (res: NextApiResponse) =>
-  res.status(400).json({ message: "Bad Request" });
 
 const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {

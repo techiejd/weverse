@@ -1,6 +1,7 @@
 import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
+import { GetServerSidePropsContext } from "next";
 import { parseCookies } from "nookies";
 
 export const isDevEnvironment =
@@ -64,10 +65,10 @@ async function verifyCookie(cookie: string) {
   };
 }
 
-export async function getAuthentication(
-  ctx: Parameters<typeof parseCookies>[0]
-) {
-  const cookies = parseCookies(ctx);
+type ParseCookiesParameters = Parameters<typeof parseCookies>;
+
+export async function getAuthentication(...args: ParseCookiesParameters) {
+  const cookies = parseCookies(args[0]);
   return cookies.token
     ? await verifyCookie(cookies.token)
     : { authenticated: false, uid: "" };

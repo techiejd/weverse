@@ -118,11 +118,22 @@ const customer = z.object({
   currency: currency,
 });
 
+const accounts = z.record(
+  z.string().min(1),
+  z.object({
+    title: z.string().min(1),
+    initiatives: z.array(z.string().min(1)),
+    status: z.enum(["onboarding", "active"]),
+  })
+);
+export type Accounts = z.infer<typeof accounts>;
+
 const stripe = z.object({
-  customer: z.string().min(1),
-  subscription: z.string().min(1).optional(),
-  billingCycleAnchor: timeStamp.optional(),
-  status: z.enum(["active", "incomplete", "canceled"]),
+  customer: z.string().min(1).optional(), // Look into optionality.
+  subscription: z.string().min(1).optional(), // TODO(techiejd): Not unique.
+  billingCycleAnchor: timeStamp.optional(), // TODO(techiejd): Not unique.
+  status: z.enum(["active", "incomplete", "canceled"]).optional(), // TODO(techiejd): Not unique. Look into optionality.
+  accounts: accounts.optional(),
 });
 const contentSettings = z.object({
   locales: locale.array(),
