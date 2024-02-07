@@ -24,6 +24,7 @@ export default async function handler(
 
     // Check call came from same origin
     const origin = req.headers.origin;
+    console.log(`origin: ${origin}, publicBaseUrl: ${publicBaseUrl}`);
     if (origin !== publicBaseUrl) {
       return badRequest(res, 403, "Forbidden");
     }
@@ -39,6 +40,7 @@ export default async function handler(
 
     // Validate request body
     const { title, initiativePath } = req.body;
+    console.log(`initiativePath: ${initiativePath}, user.uid: ${user.uid}`);
     console.log(`check 3.1: ${title}, ${initiativePath}`);
     if (!title || !initiativePath) {
       return badRequest(res, 400, "Missing required fields");
