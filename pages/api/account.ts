@@ -29,7 +29,7 @@ export default async function handler(
     console.log({
       isDevEnvironment,
       NEXT_PUBLIC_BASE_URL_DEV: process.env.NEXT_PUBLIC_BASE_URL_DEV!,
-      NEXT_PUBLIC_BASE_URL_REAL: process.env.NEXT_PUBLIC_BASE_URL_REAL!,
+      NEXT_PUBLIC_BASE_URL_PROD: process.env.NEXT_PUBLIC_BASE_URL_PROD!,
     });
     if (origin !== publicBaseUrl) {
       return badRequest(res, 403, "Forbidden");

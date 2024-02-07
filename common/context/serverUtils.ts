@@ -55,7 +55,7 @@ export const stripe = new Stripe(
 
 export const publicBaseUrl = isDevEnvironment
   ? process.env.NEXT_PUBLIC_BASE_URL_DEV!
-  : process.env.NEXT_PUBLIC_BASE_URL_REAL!;
+  : process.env.NEXT_PUBLIC_BASE_URL_PROD!;
 
 export const createStripeAccountLink = async (
   accountId: string,
