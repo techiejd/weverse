@@ -8,6 +8,7 @@ import Utils, {
 import {
   getAdminFirestore,
   getAuthentication,
+  isDevEnvironment,
 } from "../../common/utils/firebaseAdmin";
 import { Accounts } from "../../functions/shared/src";
 
@@ -41,6 +42,11 @@ export default async function handler(
     // Validate request body
     const { title, initiativePath } = req.body;
     console.log(`initiativePath: ${initiativePath}, user.uid: ${user.uid}`);
+    console.log({
+      isDevEnvironment,
+      NEXT_PUBLIC_BASE_URL_DEV: process.env.NEXT_PUBLIC_BASE_URL_DEV!,
+      NEXT_PUBLIC_BASE_URL_REAL: process.env.NEXT_PUBLIC_BASE_URL_REAL!,
+    });
     console.log(`check 3.1: ${title}, ${initiativePath}`);
     if (!title || !initiativePath) {
       return badRequest(res, 400, "Missing required fields");
