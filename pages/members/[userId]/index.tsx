@@ -43,19 +43,11 @@ const UserPage = asOneWePage(() => {
   const [initiatives, initiativesLoading, initiativesError] =
     useCurrentInitiatives();
   const [testimonials] = useCurrentTestimonials();
-  const [likedActionPaths, setLikedActionPaths] = useState<string[]>([]);
   const [likedPaths] = useCurrentLikes();
 
   const [signOut] = useSignOut(appState.auth);
   const [myMember] = useMyMember();
   const isMine = useIsMine();
-
-  //TODO(techiejd): Figure out how to get this initiative stuff without bug.
-  /**useEffect(() => {
-    // TODO(techiejd): Find out how liked initiatives exist.
-    console.log("Triggered");
-    setLikedActionPaths(likedPaths?.filter((l) => l.includes("action")) ?? []);
-  }, [likedPaths]);**/
 
   return (
     <Stack
@@ -151,11 +143,13 @@ const UserPage = asOneWePage(() => {
       </Grid>
       <Typography variant="h2">Your liked actions</Typography>
       <Grid container spacing={1}>
-        {likedActionPaths?.map((l, idx) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={l}>
-            <ImpactCardWrapper path={l} />
-          </Grid>
-        ))}
+        {likedPaths
+          ?.filter((l) => l.includes("action"))
+          ?.map((l, idx) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={l}>
+              <ImpactCardWrapper path={l} />
+            </Grid>
+          ))}
       </Grid>
     </Stack>
   );
