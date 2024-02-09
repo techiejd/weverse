@@ -108,9 +108,7 @@ const UserPage = asOneWePage(() => {
         </Typography>
       )}
       {initiativesLoading && (
-        <Typography>
-          {yourMemberTranslations("initiatives.initiativesLoading")}
-        </Typography>
+        <Typography>{yourMemberTranslations("initiatives.loading")}</Typography>
       )}
       {!initiativesLoading &&
         !initiativesError &&
