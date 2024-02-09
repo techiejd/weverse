@@ -1,6 +1,7 @@
 export const CachePaths = async () => {
   return {
     paths: [],
-    fallback: true,
+    // TODO(techiejd): Remove this for skeleton page instead.
+    fallback: "blocking",
   };
 };

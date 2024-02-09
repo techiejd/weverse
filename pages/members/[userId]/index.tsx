@@ -24,7 +24,6 @@ import Sponsorships from "../../../modules/initiatives/sponsor/list";
 import { useCurrentSponsorships } from "../../../modules/members/context";
 import SocialProofCard from "../../../modules/posi/socialProofCard";
 import ImpactCard from "../../../modules/posi/action/card";
-import { useEffect, useState } from "react";
 import { useSignOut } from "react-firebase-hooks/auth";
 import { useAppState } from "../../../common/context/appState";
 
