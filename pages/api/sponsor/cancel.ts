@@ -3,6 +3,7 @@ import { FieldValue } from "firebase-admin/firestore";
 import Utils, { stripe } from "../../../common/context/serverUtils";
 
 import { getAdminFirestore } from "../../../common/utils/firebaseAdmin";
+import { pathAndType2FromCollectionId } from "../../../common/context/weverseUtils";
 
 const firestore = getAdminFirestore();
 
@@ -16,14 +17,30 @@ const Cancel = async (req: NextApiRequest, res: NextApiResponse) => {
   const { stripeSubscription, stripeSubscriptionItem, initiative, member } =
     body;
 
-  const initiativeSponsorshipDoc = firestore
-    .doc(`initiatives/${initiative}/sponsorships/${member}`)
-    .withConverter(Utils.sponsorshipConverter);
-  const memberSponsorshipDoc = firestore
-    .doc(`members/${member}/sponsorships/${initiative}`)
-    .withConverter(Utils.sponsorshipConverter);
+  const initiativeSponsorshipDoc = (async () => {
+    const initiativeSponsorshipCollection = await firestore
+      .collection(`${initiative}/sponsorships`)
+      .where("member", "==", member)
+      .get();
+    if (initiativeSponsorshipCollection.empty) {
+      throw new Error("No sponsorship found");
+    }
+    if (initiativeSponsorshipCollection.size > 1) {
+      throw new Error("Multiple sponsorships found");
+    }
+    return initiativeSponsorshipCollection.docs[0].ref;
+  })();
+  const memberSponsorshipDoc = (() => {
+    const fromCollectionId = pathAndType2FromCollectionId(
+      initiative,
+      "sponsorship"
+    );
+    return firestore
+      .doc(`${member}/from/${fromCollectionId}`)
+      .withConverter(Utils.fromConverter);
+  })();
   const memberDoc = firestore
-    .doc(`members/${member}`)
+    .doc(`${member}`)
     .withConverter(Utils.memberConverter);
 
   const batch = firestore.batch();
@@ -37,15 +54,19 @@ const Cancel = async (req: NextApiRequest, res: NextApiResponse) => {
       ) {
         throw new Error(err);
       }
+      // All subscription items but this one have been deleted and
+      // thus it is necessary to delete the subscription in order
+      // to delete the subscription item.
       await stripe.subscriptions.cancel(stripeSubscription);
       batch.update(memberDoc, {
+        // TODO(techiejd): This might be a problem if the user has multiple sponsorships.
         "stripe.subscription": FieldValue.delete(),
         "stripe.billingCycleAnchor": FieldValue.delete(),
         "stripe.status": "canceled",
       });
     });
 
-  batch.delete(initiativeSponsorshipDoc);
+  batch.delete(await initiativeSponsorshipDoc);
   batch.delete(memberSponsorshipDoc);
   await batch.commit();
 
