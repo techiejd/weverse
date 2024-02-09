@@ -158,8 +158,6 @@ const StripeConnect = asOneWePage(
           }}`
         );
       }
-      console.log("Creating new account for initiative", initiative.path);
-      console.log("Creating new account with title", titleForNewAccount);
       // Create a new account
       const newAccountResponse = await fetch("/api/account", {
         method: "POST",
@@ -192,8 +190,6 @@ const StripeConnect = asOneWePage(
           label: value.title,
         }))
       : [];
-
-    console.log({ connectedAccount, continueOnboarding, possibleAccounts });
 
     return (
       <Stack spacing={4} sx={{ alignItems: "center", m: 2 }}>

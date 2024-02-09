@@ -17,24 +17,15 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    console.log("check 0");
     if (req.method !== "POST") {
       return badRequest(res, 405, "Method Not Allowed");
     }
-    console.log("check 1");
 
     // Check call came from same origin
     const origin = req.headers.origin;
-    console.log(`origin: ${origin}, publicBaseUrl: ${publicBaseUrl}`);
-    console.log({
-      isDevEnvironment,
-      NEXT_PUBLIC_BASE_URL_DEV: process.env.NEXT_PUBLIC_BASE_URL_DEV!,
-      NEXT_PUBLIC_BASE_URL_PROD: process.env.NEXT_PUBLIC_BASE_URL_PROD!,
-    });
     if (origin !== publicBaseUrl) {
       return badRequest(res, 403, "Forbidden");
     }
-    console.log("check 2");
 
     // Check if user is signed in
     const user = await getAuthentication({ req });
@@ -42,21 +33,16 @@ export default async function handler(
     if (!user.authenticated) {
       return badRequest(res, 401, "User not authenticated");
     }
-    console.log("check 3");
 
     // Validate request body
     const { title, initiativePath } = req.body;
-    console.log(`initiativePath: ${initiativePath}, user.uid: ${user.uid}`);
-    console.log(`check 3.1: ${title}, ${initiativePath}`);
     if (!title || !initiativePath) {
       return badRequest(res, 400, "Missing required fields");
     }
-    console.log("check 4");
 
     if (!initiativePath.includes(user.uid)) {
       return badRequest(res, 403, "Unauthorized");
     }
-    console.log("check 5");
 
     // Get Firestore instance
     const firestore = getAdminFirestore();
@@ -65,7 +51,6 @@ export default async function handler(
     const stripeAccount = await stripe.accounts.create({
       type: "express",
     });
-    console.log(`check 6: ${JSON.stringify(stripeAccount)}`);
 
     // Create Stripe account link
     const stripeAccountLinkPromise = createStripeAccountLink(
