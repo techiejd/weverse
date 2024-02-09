@@ -245,7 +245,9 @@ const AuthDialogContent = ({
 
         setAuthDialogState((aDS) => ({ ...aDS, otpDialogOpen: false }));
         setOpen(false);
-        return JSON.stringify({ setUpUserAndInitiativeError, setSessionError });
+        return setUpUserAndInitiativeError != "" || setSessionError != ""
+          ? JSON.stringify({ setUpUserAndInitiativeError, setSessionError })
+          : "";
       })
       .catch((err) => {
         return authTranslations("handleOtp.invalidOtp");
