@@ -50,14 +50,33 @@ export const getServerSideProps = WithTranslationsServerSideProps(
 
     if (stripeAccount.details_submitted) {
       const firestore = getAdminFirestore();
-      const memberDocToBeUpdated = await firestore
-        .doc(`members/${userId}`)
-        .withConverter(Utils.memberConverter)
-        .get();
-      const accountsData = memberDocToBeUpdated.data()!.stripe!.accounts!;
-      accountsData[account].status = "active";
-      memberDocToBeUpdated.ref.update({
-        [`stripe.accounts.${account}`]: accountsData[account],
+      await firestore.runTransaction(async (transaction) => {
+        const memberDocToBeUpdated = await transaction.get(
+          firestore
+            .doc(`members/${userId}`)
+            .withConverter(Utils.memberConverter)
+        );
+        const accountsData = memberDocToBeUpdated.data()!.stripe!.accounts!;
+        accountsData[account].status = "active";
+        transaction.update(
+          memberDocToBeUpdated.ref,
+          `stripe.accounts.${account}`,
+          accountsData[account]
+        );
+        accountsData[account].initiatives.forEach((iPath) => {
+          const initiativeDocRef = firestore
+            .doc(iPath)
+            .withConverter(Utils.initiativeConverter);
+          transaction.set(
+            initiativeDocRef,
+            {
+              connectedAccount: {
+                status: "active",
+              },
+            },
+            { merge: true }
+          );
+        });
       });
       return {
         props: {

@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { DbBase, member, sponsorship, from } from "../../functions/shared/src";
+import {
+  DbBase,
+  member,
+  sponsorship,
+  from,
+  initiative,
+} from "../../functions/shared/src";
 import {
   DocumentData,
   FirestoreDataConverter,
@@ -33,6 +39,7 @@ namespace Utils {
   export const memberConverter = makeDataConverter(member);
   export const sponsorshipConverter = makeDataConverter(sponsorship);
   export const fromConverter = makeDataConverter(from);
+  export const initiativeConverter = makeDataConverter(initiative);
 }
 
 export default Utils;

@@ -33,6 +33,7 @@ export default async function handler(
     if (!user.authenticated) {
       return badRequest(res, 401, "User not authenticated");
     }
+    const memberPath = `members/${user.uid}`;
 
     // Validate request body
     const { title, initiativePath } = req.body;
@@ -62,11 +63,7 @@ export default async function handler(
     const updateMemberAccountPromise = firestore.runTransaction(
       async (transaction) => {
         return transaction
-          .get(
-            firestore
-              .doc(`members/${user.uid}`)
-              .withConverter(Utils.memberConverter)
-          )
+          .get(firestore.doc(memberPath).withConverter(Utils.memberConverter))
           .then((doc) => {
             if (!doc.exists) {
               throw new Error("Document does not exist");
@@ -94,10 +91,23 @@ export default async function handler(
       }
     );
 
+    // Save account under initiative using Firestore
+    const updateInitiativeAccountPromise = firestore
+      .doc(initiativePath)
+      .update({
+        connectedAccount: {
+          ownerMemberPath: memberPath,
+          stripeAccountId: stripeAccount.id,
+          title,
+          status: "onboarding",
+        },
+      });
+
     // Wait for both promises to resolve
-    const [stripeAccountLink, _] = await Promise.all([
+    const [stripeAccountLink] = await Promise.all([
       stripeAccountLinkPromise,
       updateMemberAccountPromise,
+      updateInitiativeAccountPromise,
     ]);
 
     // Return the account link

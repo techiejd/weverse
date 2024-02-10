@@ -84,6 +84,9 @@ export function createNestedLocalizedSchema<ItemType extends z.ZodTypeAny>(
   });
 }
 
+const accountStatus = z.enum(["onboarding", "active"]);
+export type AccountStatus = z.infer<typeof accountStatus>;
+
 // deprecated: maker
 export const initiative = dbBase
   .extend({
@@ -94,6 +97,14 @@ export const initiative = dbBase
     email: z.string().optional(),
     incubator: z.string().optional(),
     ratings,
+    connectedAccount: z
+      .object({
+        ownerMemberPath: z.string(),
+        stripeAccountId: z.string(),
+        status: accountStatus,
+        title: z.string(),
+      })
+      .optional(),
   })
   .merge(
     createNestedLocalizedSchema(initiativePresentationExtension.optional())
@@ -123,7 +134,7 @@ const accounts = z.record(
   z.object({
     title: z.string().min(1),
     initiatives: z.array(z.string().min(1)),
-    status: z.enum(["onboarding", "active"]),
+    status: accountStatus,
   })
 );
 export type Accounts = z.infer<typeof accounts>;

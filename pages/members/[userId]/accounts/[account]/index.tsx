@@ -4,10 +4,7 @@ import {
   getAdminFirestore,
   getAuthentication,
 } from "../../../../../common/utils/firebaseAdmin";
-import Utils, {
-  createStripeAccountLink,
-  stripe,
-} from "../../../../../common/context/serverUtils";
+import Utils, { stripe } from "../../../../../common/context/serverUtils";
 import { asOneWePage } from "../../../../../common/components/onewePage";
 import { Button, Stack, Typography } from "@mui/material";
 

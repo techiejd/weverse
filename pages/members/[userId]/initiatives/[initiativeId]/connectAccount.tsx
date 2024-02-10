@@ -74,43 +74,45 @@ export const getServerSideProps = WithTranslationsServerSideProps(
     }
 
     // Check if this initiative is already connected to an account.
-    // If already connected, add a button to disconnect the account or visit the account.
+    // If already connected and onboarded add a button to disconnect the account or visit the account.
+    // If already connected but not onboarded, add a button to continue onboarding.
     // If not already connected, give them the option to connect an account.
 
     const firestore = getAdminFirestore();
-    const memberRef = await firestore
-      .doc(`members/${userId}`)
-      .withConverter(Utils.memberConverter)
-      .get();
-    const accounts = memberRef.data()?.stripe?.accounts;
-    for (const account in accounts) {
-      const accountInfo = accounts[account];
-      if (
-        accountInfo.initiatives.includes(
-          `members/${userId}/initiatives/${initiativeId}`
-        )
-      ) {
-        if (accountInfo.status == "onboarding") {
-          // Return props to continue onboarding & to edit account title.
-          return {
-            props: {
-              continueOnboarding: {
-                title: accountInfo.title,
-                link: (await createStripeAccountLink(account, userId)).url,
-              },
-            },
-          };
-        }
+    const initiative = (
+      await firestore
+        .doc(`members/${userId}/initiatives/${initiativeId}`)
+        .withConverter(Utils.initiativeConverter)
+        .get()
+    ).data();
+    if (initiative?.connectedAccount) {
+      const a = initiative.connectedAccount;
+      if (a.status == "onboarding") {
+        // Return props to continue onboarding & to edit account title.
         return {
           props: {
-            connectedAccount: {
-              url: `/members/${userId}/accounts/${account}`,
-              title: accountInfo.title,
+            continueOnboarding: {
+              title: initiative.connectedAccount.title,
+              link: (await createStripeAccountLink(a.stripeAccountId, userId))
+                .url,
             },
           },
         };
       }
+      return {
+        props: {
+          connectedAccount: {
+            url: `/members/${userId}/accounts/${a.stripeAccountId}`,
+            title: a.title,
+          },
+        },
+      };
     }
+    const memberDoc = await firestore
+      .doc(`members/${userId}`)
+      .withConverter(Utils.memberConverter)
+      .get();
+    const accounts = memberDoc.data()?.stripe?.accounts;
 
     if (accounts) {
       return {
