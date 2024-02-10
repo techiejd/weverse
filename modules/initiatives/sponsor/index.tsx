@@ -91,8 +91,6 @@ export default function Sponsor({
     });
   };
 
-  return <UnderConstruction />;
-
   return (
     <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
       <Paper

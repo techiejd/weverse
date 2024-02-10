@@ -35,6 +35,7 @@ const InitiativeFormContent = ({
     name: user.displayName!,
     type: "individual",
     ratings: zeroRatings,
+    locale: appState.languages.primary,
   });
   const [uploading, setUploading] = useState(false);
   const router = useRouter();

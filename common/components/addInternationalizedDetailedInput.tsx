@@ -60,6 +60,8 @@ const AddInternationalizedDetailedInput = <T extends ValType>({
     "input.internationalizedDetailed"
   );
 
+  console.log({ val, chosenLocales, choosableLocales, selectedLocale });
+
   // In this section, we will make a box that holds in it
   // 1. A title that says "Detailed info in other languages"
   return (
