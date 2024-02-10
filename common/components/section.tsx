@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
 const Section = ({
@@ -9,10 +9,10 @@ const Section = ({
   children: ReactNode;
 }) => {
   return (
-    <Box width="100%">
+    <Stack sx={{ width: "100%" }} spacing={2}>
       <Typography variant="h2">{label}:</Typography>
       {children}
-    </Box>
+    </Stack>
   );
 };
 

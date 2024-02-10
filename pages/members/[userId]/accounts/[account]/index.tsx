@@ -114,7 +114,7 @@ const ReturnPage = asOneWePage(
     title: string;
   }) => {
     return (
-      <Stack>
+      <Stack sx={{ m: 2 }} spacing={2}>
         <Typography variant="h1">Account: {title}</Typography>
         <Typography variant="h2">Balances</Typography>
         {balances.map((balance) => (
@@ -123,7 +123,11 @@ const ReturnPage = asOneWePage(
             {balance.pending}
           </Typography>
         ))}
-        <Button href={accessStripeAccountLink} variant="contained">
+        <Button
+          href={accessStripeAccountLink}
+          variant="contained"
+          sx={{ width: "fit-content" }}
+        >
           Access account from Stripe
         </Button>
         <Button
@@ -131,6 +135,7 @@ const ReturnPage = asOneWePage(
             alert("Not yet implemented");
           }}
           variant="contained"
+          sx={{ width: "fit-content" }}
         >
           Payout
         </Button>

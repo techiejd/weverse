@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   CircularProgress,
   FormControl,
@@ -143,6 +144,7 @@ const StripeConnect = asOneWePage(
     };
     const [titleForNewAccount, setTitleForNewAccount] = useState("");
     const [loading, setLoading] = useState(false);
+    const [redirecting, setRedirecting] = useState(false);
 
     const createNewAccount = async () => {
       setLoading(true);
@@ -174,6 +176,7 @@ const StripeConnect = asOneWePage(
       if (newAccountResponse.ok) {
         const newAccountLink = await newAccountResponse.json();
         router.push(newAccountLink.link);
+        setRedirecting(true);
       } else {
         alert(
           `Error creating new account ${newAccountResponse.status}: ${newAccountResponse.statusText}`
@@ -193,8 +196,16 @@ const StripeConnect = asOneWePage(
         }))
       : [];
 
-    return (
-      <Stack spacing={4} sx={{ alignItems: "center", m: 2 }}>
+    return redirecting ? (
+      <Stack sx={{ alignItems: "center", m: 2 }}>
+        <Typography variant="h2">
+          Redirecting to our partner: Stripe.
+        </Typography>
+        <Typography variant="h3">Please wait...</Typography>
+        <CircularProgress />
+      </Stack>
+    ) : (
+      <Stack sx={{ alignItems: "center", m: 2 }}>
         {connectedAccount && (
           <Stack>
             <Typography variant="h2">

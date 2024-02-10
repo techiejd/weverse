@@ -1,4 +1,4 @@
-import { TextField, Stack, Box, Typography } from "@mui/material";
+import { TextField, Stack, Box, Typography, Button } from "@mui/material";
 import { useTranslations } from "next-intl";
 import {
   FC,
@@ -19,12 +19,29 @@ import {
   Media,
 } from "../../../functions/shared/src";
 import { FileInput } from "../../posi/input";
+import { useRouter } from "next/router";
 
 const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
   val,
   setVal,
   locale,
 }: DetailedInputProps<Initiative>) => {
+  const currentPath = useRouter().asPath;
+  const isPublished = currentPath.includes("edit");
+  const connectAccountHref = (() => {
+    if (isPublished) {
+      return currentPath.replace("edit", "connectAccount");
+    }
+    return undefined;
+  })();
+  const accountOnboarding = val?.connectedAccount?.status == "onboarding";
+  const viewConnectedAccountHref = (() => {
+    if (val?.connectedAccount?.status == "active") {
+      return `/${val.connectedAccount.ownerMemberPath}/accounts/${val.connectedAccount.stripeAccountId}`;
+    }
+    return undefined;
+  })();
+  console.log({ viewConnectedAccountHref });
   const detailedInputTranslations = useTranslations(
     "initiatives.edit.detailedInput"
   );
@@ -190,6 +207,46 @@ const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
           </Box>
         </Stack>
       </Section>
+      {connectAccountHref && (
+        <Section label="Get financial help">
+          {!viewConnectedAccountHref && !accountOnboarding && (
+            <Typography variant="h3">
+              In order to get financial help, you need to connect an account.
+            </Typography>
+          )}
+          {accountOnboarding && (
+            <Typography variant="h3">
+              Your have not finished onboarding your account. You will be able
+              to receive financial help once the process is complete.
+            </Typography>
+          )}
+          {viewConnectedAccountHref && (
+            <Typography variant="h3">
+              Congratulations, you are on your way to receiving financial help.
+            </Typography>
+          )}
+          <Button
+            variant={viewConnectedAccountHref ? "outlined" : "contained"}
+            href={connectAccountHref}
+            sx={{ width: "fit-content", alignSelf: "center" }}
+          >
+            {!viewConnectedAccountHref &&
+              !accountOnboarding &&
+              "Connect account"}
+            {accountOnboarding && "Continue onboarding"}
+            {viewConnectedAccountHref && "Modify connected account"}
+          </Button>
+          {viewConnectedAccountHref && (
+            <Button
+              variant="contained"
+              href={viewConnectedAccountHref}
+              sx={{ width: "fit-content", alignSelf: "center" }}
+            >
+              View Account
+            </Button>
+          )}
+        </Section>
+      )}
       {targetedQuestion}
     </Stack>
   );
