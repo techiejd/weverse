@@ -63,10 +63,10 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
     postalCode,
     countryCode,
     country,
-    sponsorshipPrice: sponsorshipPriceIn,
     subscription: subscriptionIn,
     customer: customerIn,
   } = body;
+  console.log({ total });
 
   const initiativeSponsorshipDoc = firestore
     .doc(`${initiative}/sponsorships/${splitPath(member).id}`)
@@ -93,10 +93,11 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
     return batch.commit();
   };
 
-  const setUpSubscriptionPrice = async (res: NextApiResponse) => {
+  // WIP
+  const setUpSponsorshipPrice = async () => {
     const sponsorshipPlanId =
       sponsorshipLevelsToPlanIds[sponsorshipLevel as SponsorshipLevel];
-    const totalNoDecimal = Number(total) * 100;
+    const totalNoDecimal = Math.round(Number(total) * 100);
 
     const archiveLastSponsorshipPricePromise = !prevSponsorshipPrice
       ? Promise.resolve()
@@ -140,15 +141,13 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
 
     await Promise.all([archiveLastSponsorshipPricePromise, batch.commit()]);
 
-    res.status(200).json({ sponsorshipPrice: sponsorshipPrice.id });
+    return sponsorshipPrice.id;
   };
 
   const initializeSponsorship = async (res: NextApiResponse) => {
     switch (step) {
-      case "chooseSponsorship":
-        await setUpSubscriptionPrice(res);
-        break;
       case "customerDetails":
+        const sponsorshipPriceInPromise = await setUpSponsorshipPrice();
         const stripeCustomer = {
           name: `${firstName} ${lastName}`,
           email,
@@ -182,7 +181,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
         } else {
           customerPromise = stripe.customers.create(stripeCustomer);
         }
-        const subscriptionPromise = customerPromise.then((customer) => {
+        const subscriptionPromise = customerPromise.then(async (customer) => {
           return stripe.subscriptions.create({
             metadata: {
               member,
@@ -193,7 +192,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
             customer: customer.id,
             items: [
               {
-                price: sponsorshipPriceIn,
+                price: await sponsorshipPriceInPromise,
                 metadata: { initiative, member, tipAmount, denyFee },
               },
             ], // you can't update a default_incomplete subscription's price, so we choose to assume the price is stale and, thusly, to create a new subscription.
@@ -250,9 +249,6 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const updateSponsorship = async (res: NextApiResponse) => {
     switch (step) {
-      case "chooseSponsorship":
-        await setUpSubscriptionPrice(res);
-        break;
       case "confirm":
         const subscriptionItem = await stripe.subscriptionItems.create({
           metadata: {
@@ -260,7 +256,7 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
             member,
           },
           subscription: subscriptionIn,
-          price: sponsorshipPriceIn,
+          price: await setUpSponsorshipPrice(),
         });
 
         await mirroredSponsorshipUpdate({

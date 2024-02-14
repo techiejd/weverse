@@ -41,7 +41,6 @@ const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
     }
     return undefined;
   })();
-  console.log({ viewConnectedAccountHref });
   const detailedInputTranslations = useTranslations(
     "initiatives.edit.detailedInput"
   );

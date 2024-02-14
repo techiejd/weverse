@@ -56,6 +56,14 @@ export default function Sponsor({
 
   const submit = (sponsorForm: Record<string, string>) => {
     const stepString = sponsorForm.stepString;
+    if (stepString == "chooseSponsorship") {
+      setSponsorForm((sponsorForm) => ({
+        ...sponsorForm,
+        status: "success",
+        [stepString]: "success",
+      }));
+      return;
+    }
     setSponsorForm((sponsorForm) => ({
       ...sponsorForm,
       status: "loading",
@@ -90,8 +98,6 @@ export default function Sponsor({
       }
     });
   };
-
-  return <UnderConstruction />;
 
   return (
     <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>

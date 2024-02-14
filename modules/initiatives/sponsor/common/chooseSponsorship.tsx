@@ -47,7 +47,9 @@ const ChooseSponsorship = ({
       (sponsorForm.currency as Currency) ||
       (messages ? (chooseTranslations("defaultCurrency") as Currency) : "usd")
   );
-  const [paymentPlan, setPaymentPlan] = useState<PaymentPlanOptions>("monthly");
+  const [paymentPlan, setPaymentPlan] = useState<PaymentPlanOptions>(
+    (sponsorForm.paymentPlan as PaymentPlanOptions) || "monthly"
+  );
   const togglePaymentPlan = () => {
     setPaymentPlan(paymentPlan == "monthly" ? "oneTime" : "monthly");
   };
