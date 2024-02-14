@@ -144,7 +144,7 @@ const ChooseSponsorship = ({
       <input hidden value={total} name="total" readOnly />
       <input hidden value={beneficiary.path} name="initiative" readOnly />
       <input hidden value={myMember?.path || ""} name="member" readOnly />
-      <input hidden value={paymentPlan} name="billingFrequency" readOnly />
+      <input hidden value={paymentPlan} name="paymentPlan" readOnly />
 
       <Typography variant="h6" gutterBottom>
         {chooseTranslations("title")}
@@ -354,13 +354,9 @@ const ChoosePaymentPlan = ({
       <div className="sponsorship-plan-colors self-stretch flex flex-col items-center justify-center p-2.5 text-center text-primary-700">
         <div className="rounded-12xl bg-primary-50 w-[297px] flex flex-row items-center justify-center py-1 pr-2.5 pl-1 box-border mix-blend-multiply">
           {paymentPlan == "monthly" ? (
-            <MonthlyBillingFrequencySelected
-              togglePaymentPlan={togglePaymentPlan}
-            />
+            <MonthlyPaymentPlanSelected togglePaymentPlan={togglePaymentPlan} />
           ) : (
-            <OneTimeBillingFrequencySelected
-              togglePaymentPlan={togglePaymentPlan}
-            />
+            <OneTimePaymentPlanSelected togglePaymentPlan={togglePaymentPlan} />
           )}
         </div>
       </div>
@@ -368,7 +364,7 @@ const ChoosePaymentPlan = ({
   );
 };
 
-const MonthlyBillingFrequencySelected = ({
+const MonthlyPaymentPlanSelected = ({
   togglePaymentPlan,
 }: {
   togglePaymentPlan: () => void;
@@ -399,7 +395,7 @@ const MonthlyBillingFrequencySelected = ({
   );
 };
 
-const OneTimeBillingFrequencySelected = ({
+const OneTimePaymentPlanSelected = ({
   togglePaymentPlan,
 }: {
   togglePaymentPlan: () => void;
