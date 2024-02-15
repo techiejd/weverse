@@ -287,13 +287,25 @@ export const sponsorship = dbBase.extend({
   total: z.number(),
   sponsorshipLevel: sponsorshipLevel,
   customAmount: z.number().optional(),
-  tipAmount: z.number(),
-  denyFee: z.boolean().optional(),
+  // deprecated: tipAmount: z.number(),
+  tipPercentage: z.number(),
+  // deprecated: denyFee: z.boolean().optional(),
+  denyStripeFee: z.boolean().optional(),
   // deprecated: maker: z.string()
   initiative: z.string(),
   member: z.string(),
   memberPublishable: z.boolean().optional(),
   currency: currency,
+  canceledAt: timeStamp.optional(), // When this particular sponsorship was canceled.
+  oneWeAmount: z.number(), // The amount that goes to OneWe.
+  initiativeAmount: z.number(), // The amount that goes to the initiative.
+  stripeFeeAmount: z.number(), // The amount that goes to Stripe.
+  status: z
+    .enum(["active", "incomplete", "canceled", "incomplete_expired"])
+    .optional(),
+  applicationFee: z
+    .object({ percent: z.number() })
+    .or(z.object({ amount: z.number() })),
 });
 
 export type Sponsorship = z.infer<typeof sponsorship>;

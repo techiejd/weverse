@@ -75,6 +75,7 @@ function createNestedLocalizedSchema(itemSchema) {
     });
 }
 exports.createNestedLocalizedSchema = createNestedLocalizedSchema;
+const accountStatus = zod_1.z.enum(["onboarding", "active"]);
 // deprecated: maker
 exports.initiative = exports.dbBase
     .extend({
@@ -85,8 +86,17 @@ exports.initiative = exports.dbBase
     email: zod_1.z.string().optional(),
     incubator: zod_1.z.string().optional(),
     ratings: exports.ratings,
+    connectedAccount: zod_1.z
+        .object({
+        ownerMemberPath: zod_1.z.string(),
+        stripeAccountId: zod_1.z.string(),
+        status: accountStatus,
+        title: zod_1.z.string(),
+    })
+        .optional(),
 })
     .merge(createNestedLocalizedSchema(initiativePresentationExtension.optional()));
+const paymentPlanOptions = zod_1.z.enum(["monthly", "oneTime"]);
 const currency = zod_1.z.enum(["cop", "usd", "eur", "gbp"]);
 const customer = zod_1.z.object({
     firstName: zod_1.z.string().min(1),
@@ -100,11 +110,17 @@ const customer = zod_1.z.object({
     }),
     currency: currency,
 });
+const accounts = zod_1.z.record(zod_1.z.string().min(1), zod_1.z.object({
+    title: zod_1.z.string().min(1),
+    initiatives: zod_1.z.array(zod_1.z.string().min(1)),
+    status: accountStatus,
+}));
 const stripe = zod_1.z.object({
-    customer: zod_1.z.string().min(1),
+    customer: zod_1.z.string().min(1).optional(),
     subscription: zod_1.z.string().min(1).optional(),
     billingCycleAnchor: exports.timeStamp.optional(),
-    status: zod_1.z.enum(["active", "incomplete", "canceled"]),
+    status: zod_1.z.enum(["active", "incomplete", "canceled"]).optional(),
+    accounts: accounts.optional(),
 });
 const contentSettings = zod_1.z.object({
     locales: exports.locale.array(),
@@ -222,13 +238,22 @@ exports.sponsorship = exports.dbBase.extend({
     total: zod_1.z.number(),
     sponsorshipLevel: exports.sponsorshipLevel,
     customAmount: zod_1.z.number().optional(),
-    tipAmount: zod_1.z.number(),
-    denyFee: zod_1.z.boolean().optional(),
+    // deprecated: tipAmount: z.number(),
+    tipPercentage: zod_1.z.number(),
+    // deprecated: denyFee: z.boolean().optional(),
+    denyStripeFee: zod_1.z.boolean().optional(),
     // deprecated: maker: z.string()
     initiative: zod_1.z.string(),
     member: zod_1.z.string(),
     memberPublishable: zod_1.z.boolean().optional(),
     currency: currency,
+    canceledAt: exports.timeStamp.optional(),
+    oneWeAmount: zod_1.z.number(),
+    initiativeAmount: zod_1.z.number(),
+    stripeFeeAmount: zod_1.z.number(),
+    status: zod_1.z
+        .enum(["active", "incomplete", "canceled", "incomplete_expired"])
+        .optional(),
 });
 exports.incubatee = exports.dbBase.extend({
     initiativePath: zod_1.z.string().optional(),
