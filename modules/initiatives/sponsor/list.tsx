@@ -8,7 +8,6 @@ import {
   Avatar,
   Typography,
   List,
-  ListSubheader,
   CircularProgress,
 } from "@mui/material";
 import { useState, Fragment } from "react";
@@ -64,13 +63,13 @@ const SponsorshipDisplay = ({
       ? undefined
       : (() => {
           const feeCharge = paymentInfo[sponsorship.currency].feeCharge.amount;
-          const tipPercent = sponsorship.tipAmount / 100;
+          const tipPercent = sponsorship.tipPercentage / 100;
           const amountReceivedFromMemberIfFeePaidByMember =
             (sponsorship.total - feeCharge) / (1 + tipPercent + feePercentage);
           const amountReceivedFromMemberIfFeePaidByInitiative =
             (sponsorship.total - feeCharge - feeCharge * tipPercent) /
             (1 + tipPercent + feePercentage + tipPercent * feePercentage);
-          return sponsorship.denyFee
+          return sponsorship.denyStripeFee
             ? amountReceivedFromMemberIfFeePaidByInitiative
             : amountReceivedFromMemberIfFeePaidByMember;
         })();
@@ -143,7 +142,6 @@ const Sponsorships = ({
   ];
 }) => {
   const sponsorshipsTranslations = useTranslations("initiatives.sponsorships");
-  const localizedDateFormat = useLocalizedDateFormat();
   const [sponsorships, sponsorshipsLoading, sponsorshipsError] =
     useCurrentSponsorships();
   const [myMember] = useCurrentMember();
@@ -170,17 +168,6 @@ const Sponsorships = ({
       {noSponsorships && <Typography></Typography>}
       {activeSponsorships && activeSponsorships?.length > 0 && (
         <List
-          subheader={
-            myMember && (
-              <ListSubheader>
-                {sponsorshipsTranslations("billingCycleStarted", {
-                  formattedDate: localizedDateFormat(
-                    myMember.stripe?.billingCycleAnchor
-                  ),
-                })}
-              </ListSubheader>
-            )
-          }
           sx={[
             sectionStyles,
             {

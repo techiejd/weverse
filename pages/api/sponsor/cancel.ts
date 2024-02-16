@@ -58,7 +58,8 @@ const Cancel = async (req: NextApiRequest, res: NextApiResponse) => {
       // thus it is necessary to delete the subscription in order
       // to delete the subscription item.
       await stripe.subscriptions.cancel(stripeSubscription);
-      batch.update(memberDoc, {
+      // TODO(techiejd): Fix this 'any'.
+      batch.update(memberDoc as any, {
         // TODO(techiejd): This might be a problem if the user has multiple sponsorships.
         "stripe.subscription": FieldValue.delete(),
         "stripe.billingCycleAnchor": FieldValue.delete(),

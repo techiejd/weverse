@@ -10,6 +10,7 @@ import RepeatSponsor from "./repeat";
 import { Initiative } from "../../../functions/shared/src";
 import { useTranslations } from "next-intl";
 import UnderConstruction from "../../posi/underConstruction";
+import { Button, Stack } from "@mui/material";
 
 export default function Sponsor({
   exitButtonBehavior,
@@ -26,12 +27,14 @@ export default function Sponsor({
   const currPath = router.asPath.split("?")[0];
   const [activeStep, setActiveStep] = React.useState(0);
   const [myMember] = useMyMember();
-  const [isRepeatSponsor, setIsRepeatSponsor] = useState<boolean | undefined>();
+  const [hasCustomerDetails, setHasCustomerDetails] = useState<
+    boolean | undefined
+  >();
   React.useEffect(() => {
-    if (isRepeatSponsor === undefined && myMember) {
-      setIsRepeatSponsor(myMember?.stripe?.status === "active");
+    if (hasCustomerDetails === undefined && myMember) {
+      setHasCustomerDetails(myMember?.stripe?.customer?.status == "confirmed");
     }
-  }, [myMember, isRepeatSponsor]);
+  }, [myMember, hasCustomerDetails]);
   React.useEffect(() => {
     if (isReady) {
       setActiveStep(sponsorStep ? parseInt(sponsorStep as string) : 0);
@@ -52,13 +55,17 @@ export default function Sponsor({
     router.back();
   };
 
-  const [sponsorForm, setSponsorForm] = useState<Record<string, string>>({});
+  const [sponsorForm, setSponsorForm] = useState<Record<string, string>>({
+    initiative: beneficiary.path || "",
+    destinationAccount: beneficiary.connectedAccount?.stripeAccountId || "",
+  });
 
-  const submit = (sponsorForm: Record<string, string>) => {
-    const stepString = sponsorForm.stepString;
+  const submit = (sponsorFormIn: Record<string, string>) => {
+    const stepString = sponsorFormIn.stepString;
     if (stepString == "chooseSponsorship") {
       setSponsorForm((sponsorForm) => ({
         ...sponsorForm,
+        ...sponsorFormIn,
         status: "success",
         [stepString]: "success",
       }));
@@ -66,6 +73,7 @@ export default function Sponsor({
     }
     setSponsorForm((sponsorForm) => ({
       ...sponsorForm,
+      ...sponsorFormIn,
       status: "loading",
       [stepString]: "loading",
     }));
@@ -73,21 +81,23 @@ export default function Sponsor({
       `/api/sponsor/?` +
         new URLSearchParams({
           step: stepString,
-          sponsorState: isRepeatSponsor ? "repeat" : "initialize",
+          sponsorState: hasCustomerDetails ? "repeat" : "initialize",
         }),
       {
         method: "POST",
-        body: JSON.stringify(sponsorForm),
+        body: JSON.stringify(sponsorFormIn),
       }
     ).then((res) => {
       if (res.ok) {
         res.json().then((data) => {
           setSponsorForm((sponsorForm) => {
+            const newSponsorForm: Record<string, string> = {};
             Object.entries(data).forEach(([key, value]) => {
-              sponsorForm[key] = value as string;
+              newSponsorForm[key] = value as string;
             });
             return {
               ...sponsorForm,
+              ...newSponsorForm,
               status: "success",
               [stepString]: "success",
             };
@@ -98,6 +108,20 @@ export default function Sponsor({
       }
     });
   };
+
+  if (!beneficiary.path || !beneficiary.connectedAccount?.stripeAccountId) {
+    return (
+      <Stack spacing={2} sx={{ p: 2 }}>
+        <Typography variant="h4">
+          This initiative is not set up for sponsorship
+        </Typography>
+        <UnderConstruction />
+        <Button href="/" variant="contained" color="primary">
+          Go home
+        </Button>
+      </Stack>
+    );
+  }
 
   return (
     <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
@@ -126,7 +150,7 @@ export default function Sponsor({
           <Typography component="h1" variant="h4" align="center">
             {sponsorTranslations("title", { initiativeName: beneficiary.name })}
           </Typography>
-          {isRepeatSponsor ? (
+          {hasCustomerDetails ? (
             <RepeatSponsor
               step={activeStep}
               sponsorForm={sponsorForm}

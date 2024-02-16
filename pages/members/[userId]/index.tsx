@@ -78,10 +78,9 @@ const UserPage = asOneWePage(() => {
             ? undefined
             : async (sponsorship: Sponsorship) => {
                 return fetch("/api/sponsor/cancel", {
+                  //TODO(techiejd): Fix cancelling a sponsorship.
                   method: "POST",
                   body: JSON.stringify({
-                    stripeSubscription: myMember.stripe?.subscription,
-                    stripeSubscriptionItem: sponsorship.stripeSubscriptionItem,
                     initiative: sponsorship.initiative,
                     member: sponsorship.member,
                   }),

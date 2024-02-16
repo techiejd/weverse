@@ -5,7 +5,6 @@ import {
   sponsorshipLevel,
 } from "../../../functions/shared/src";
 import Stripe from "stripe";
-import { z } from "zod";
 import { pathAndType2FromCollectionId } from "../../../common/context/weverseUtils";
 import { splitPath } from "../../../common/utils/firebase";
 import Utils, { badRequest, stripe } from "../../../common/context/serverUtils";
@@ -48,11 +47,17 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
   const {
     member,
     initiative,
-    total,
+    paymentPlan, // TODO(techiejd): Next step is to allow for single payments.
+    denyStripeFee,
+    destinationAccount,
+    paymentMethod,
+    total: totalIn,
     sponsorshipLevel,
-    customAmount,
-    tipAmount,
-    denyFee,
+    customAmount: customAmountIn,
+    tipPercentage: tipPercentageIn,
+    oneWeAmount: oneWeAmountIn,
+    initiativeAmount: initiativeAmountIn,
+    stripeFeeAmount: stripeFeeAmountIn,
     memberPublishable,
     prevSponsorshipPrice,
     currency,
@@ -66,7 +71,21 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
     subscription: subscriptionIn,
     customer: customerIn,
   } = body;
-  console.log({ total });
+  const {
+    total,
+    customAmount,
+    tipPercentage,
+    oneWeAmount,
+    initiativeAmount,
+    stripeFeeAmount,
+  } = {
+    total: Number(totalIn),
+    customAmount: Number(customAmountIn),
+    tipPercentage: Number(tipPercentageIn),
+    oneWeAmount: Number(oneWeAmountIn),
+    initiativeAmount: Number(initiativeAmountIn),
+    stripeFeeAmount: Number(stripeFeeAmountIn),
+  };
 
   const initiativeSponsorshipDoc = firestore
     .doc(`${initiative}/sponsorships/${splitPath(member).id}`)
@@ -79,11 +98,39 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
       )}`
     )
     .withConverter(Utils.fromConverter);
-  const mirroredSponsorshipUpdate = (
-    data: z.infer<typeof partialSponsorship>
+  const saveSponsorshipWith = (
+    subscription: Stripe.Subscription,
+    sponsorshipPrice: Stripe.Price,
+    paymentsStarted?: Date
   ) => {
     const batch = firestore.batch();
-    batch.update(initiativeSponsorshipDoc, data);
+    const data = {
+      version: "0.0.2" as const,
+      sponsorshipLevel,
+      initiative,
+      member,
+      memberPublishable: memberPublishable == "true",
+      currency,
+      total,
+      customAmount,
+      tipPercentage,
+      oneWeAmount,
+      initiativeAmount,
+      stripeFeeAmount,
+      destinationAccount,
+      denyStripeFee: denyStripeFee == "true",
+      paymentPlan: {
+        type: "monthly" as const,
+        id: subscription.id,
+        billingCycleAnchor: new Date(subscription.billing_cycle_anchor * 1000),
+        status: paymentsStarted ? ("active" as const) : ("incomplete" as const),
+        item: subscription.items.data[0].id,
+        price: sponsorshipPrice.id,
+        applicationFeePercent: applicationFeePercent,
+      },
+      ...(paymentsStarted ? { paymentsStarted } : {}),
+    };
+    batch.set(initiativeSponsorshipDoc, data, { merge: true });
     // TODO(techiejd): Refactor update vs set + merge logic into some other function
     batch.set(
       memberFromSponsorshipDoc,
@@ -93,182 +140,189 @@ const Sponsor = async (req: NextApiRequest, res: NextApiResponse) => {
     return batch.commit();
   };
 
-  // WIP
-  const setUpSponsorshipPrice = async () => {
-    const sponsorshipPlanId =
-      sponsorshipLevelsToPlanIds[sponsorshipLevel as SponsorshipLevel];
-    const totalNoDecimal = Math.round(Number(total) * 100);
+  const sponsorshipPlanId =
+    sponsorshipLevelsToPlanIds[sponsorshipLevel as SponsorshipLevel];
+  const totalNoDecimal = Math.round(total * 100);
+  const applicationFeePercent = Math.round((oneWeAmount * 100) / total);
 
-    const archiveLastSponsorshipPricePromise = !prevSponsorshipPrice
-      ? Promise.resolve()
-      : stripe.prices.update(prevSponsorshipPrice, {
-          active: false,
-        });
-
-    const sponsorshipPrice = await stripe.prices.create({
+  const createSubscription = async (customer: string, paymentMethod?: string) =>
+    stripe.subscriptions.create({
       metadata: {
-        initiative,
         member,
-        tipAmount,
-        denyFee,
+        initiative,
+        oneWeAmount,
+        initiativeAmount,
+        stripeFeeAmount,
+        tipPercentage,
+        denyStripeFee,
       },
-      unit_amount: totalNoDecimal,
-      currency: currency,
-      recurring: { interval: "month" },
-      product: sponsorshipPlanId,
-    });
-
-    const batch = firestore.batch();
-    const sponsorshipData = {
-      stripeSubscriptionItem: "incomplete",
-      stripePrice: sponsorshipPrice.id,
-      total: Number(total),
-      sponsorshipLevel,
-      customAmount: Number(customAmount),
-      tipAmount: Number(tipAmount),
-      denyFee: !!denyFee,
-      //TODO(techiejd): Flesh out publishing name support.
-      memberPublishable: !!memberPublishable,
-      initiative,
-      member,
-      currency,
-    };
-    batch.set(initiativeSponsorshipDoc, sponsorshipData);
-    batch.set(memberFromSponsorshipDoc, {
-      type: "sponsorship",
-      data: sponsorshipData,
-    });
-
-    await Promise.all([archiveLastSponsorshipPricePromise, batch.commit()]);
-
-    return sponsorshipPrice.id;
-  };
-
-  const initializeSponsorship = async (res: NextApiResponse) => {
-    switch (step) {
-      case "customerDetails":
-        const sponsorshipPriceInPromise = await setUpSponsorshipPrice();
-        const stripeCustomer = {
-          name: `${firstName} ${lastName}`,
-          email,
-          phone,
-          address: {
-            postal_code: postalCode,
-            country: countryCode,
-          },
-        };
-        const oneWeCustomer = {
-          firstName,
-          lastName,
-          email,
-          phone,
-          address: {
-            postalCode,
-            country,
-            countryCode,
-          },
-          currency,
-        };
-        let customerPromise: Promise<Stripe.Customer>;
-        const isAnUpdate = customerIn && subscriptionIn;
-
-        if (isAnUpdate) {
-          const ditch = (subscription: any) => {
-            /** do nothing since it's initialized as default_incomplete. */
-          };
-          ditch(subscriptionIn);
-          customerPromise = stripe.customers.update(customerIn, stripeCustomer);
-        } else {
-          customerPromise = stripe.customers.create(stripeCustomer);
-        }
-        const subscriptionPromise = customerPromise.then(async (customer) => {
-          return stripe.subscriptions.create({
-            metadata: {
-              member,
-              initiative,
-              tipAmount,
-              denyFee,
-            },
-            customer: customer.id,
-            items: [
-              {
-                price: await sponsorshipPriceInPromise,
-                metadata: { initiative, member, tipAmount, denyFee },
-              },
-            ], // you can't update a default_incomplete subscription's price, so we choose to assume the price is stale and, thusly, to create a new subscription.
-            payment_behavior: "default_incomplete", // since it's default incomplete, we can just ditch it.
-            payment_settings: {
-              save_default_payment_method: "on_subscription",
-            },
-            expand: ["latest_invoice.payment_intent"],
-          });
-        });
-        const firestorePromise = subscriptionPromise.then((subscription) =>
-          firestore
-            .doc(`${member}`)
-            .withConverter(Utils.memberConverter)
-            .update({
-              customer: oneWeCustomer,
-              stripe: {
-                customer: subscription.customer as string,
-                subscription: subscription.id,
-                status: "incomplete",
-                billingCycleAnchor: new Date(
-                  subscription.billing_cycle_anchor * 1000
-                ),
-              },
-            })
-        );
-        const updateSubscriptionItemPromise = subscriptionPromise.then(
-          (subscription) => {
-            const subscriptionItem = subscription.items.data[0];
-            return mirroredSponsorshipUpdate({
-              stripeSubscriptionItem: subscriptionItem.id,
-            });
-          }
-        );
-        const [customer, subscription] = await Promise.all([
-          customerPromise,
-          subscriptionPromise,
-          firestorePromise,
-          updateSubscriptionItemPromise,
-        ]);
-        res.status(200).json({
-          customer: customer.id,
-          subscription: subscription.id,
-          clientSecret: (
-            (subscription.latest_invoice as Stripe.Invoice)
-              .payment_intent as Stripe.PaymentIntent
-          ).client_secret,
-        });
-        break;
-      default:
-        badRequest(res);
-    }
-  };
-
-  const updateSponsorship = async (res: NextApiResponse) => {
-    switch (step) {
-      case "confirm":
-        const subscriptionItem = await stripe.subscriptionItems.create({
+      items: [
+        {
+          price: (await sponsorshipPricePromise).id,
           metadata: {
             initiative,
             member,
+            tipPercentage,
+            denyStripeFee,
           },
-          subscription: subscriptionIn,
-          price: await setUpSponsorshipPrice(),
-        });
+        },
+      ],
+      payment_settings: {
+        save_default_payment_method: "on_subscription",
+      },
+      expand: ["latest_invoice.payment_intent"],
+      application_fee_percent: applicationFeePercent,
+      transfer_data: {
+        destination: destinationAccount,
+      },
+      customer,
+      payment_behavior: paymentMethod
+        ? "error_if_incomplete"
+        : "default_incomplete",
+      ...(paymentMethod
+        ? {
+            collection_method: "charge_automatically",
+            default_payment_method: paymentMethod,
+          }
+        : {}),
+    });
 
-        await mirroredSponsorshipUpdate({
-          stripeSubscriptionItem: subscriptionItem.id,
-          paymentsStarted: new Date(subscriptionItem.created * 1000),
-        });
+  const sponsorshipPricePromise = stripe.prices.create({
+    metadata: {
+      initiative,
+      member,
+      tipPercentage,
+      denyStripeFee,
+    },
+    unit_amount: totalNoDecimal,
+    currency: currency,
+    recurring: { interval: "month" },
+    product: sponsorshipPlanId,
+  });
 
-        res.status(200).json({});
-        break;
-      default:
-        badRequest(res);
+  const getExpandedPaymentIntent = (subscription: Stripe.Subscription) =>
+    (subscription.latest_invoice as Stripe.Invoice)
+      .payment_intent as Stripe.PaymentIntent;
+
+  const initializeSponsorship = async (res: NextApiResponse) => {
+    if (step != "customerDetails") badRequest(res);
+    const cleanUpBeforehandChanges = () => {
+      const archiveLastSponsorshipPricePromise = !prevSponsorshipPrice
+        ? Promise.resolve()
+        : stripe.prices.update(prevSponsorshipPrice, {
+            active: false,
+          });
+      if (subscriptionIn != undefined) {
+        const ditch = (subscription: any) => {
+          /** do nothing since subscriptions are initialized as default_incomplete. */
+        };
+        ditch(subscriptionIn);
+      }
+      return archiveLastSponsorshipPricePromise;
+    };
+
+    const cleanUpPromise = cleanUpBeforehandChanges();
+
+    const stripeCustomer = {
+      name: `${firstName} ${lastName}`,
+      email,
+      phone,
+      address: {
+        postal_code: postalCode,
+        country: countryCode,
+      },
+    };
+    const oneWeCustomer = {
+      firstName,
+      lastName,
+      email,
+      phone,
+      address: {
+        postalCode,
+        country,
+        countryCode,
+      },
+      currency,
+    };
+    let customerPromise: Promise<Stripe.Customer>;
+    const isAnUpdate = customerIn != undefined;
+
+    if (isAnUpdate) {
+      customerPromise = stripe.customers.update(customerIn, stripeCustomer);
+    } else {
+      customerPromise = stripe.customers.create(stripeCustomer);
     }
+    const subscriptionPromise = (async () =>
+      createSubscription((await customerPromise).id))();
+    const updatePaymentAsFutureUsagePromise = (async () => {
+      const subscription = await subscriptionPromise;
+      const paymentIntent = getExpandedPaymentIntent(subscription);
+      return stripe.paymentIntents.update(paymentIntent.id, {
+        setup_future_usage: "off_session",
+      });
+    })();
+    const firestorePromise = subscriptionPromise.then((subscription) =>
+      firestore
+        .doc(`${member}`)
+        .withConverter(Utils.memberConverter)
+        .update({
+          customer: oneWeCustomer,
+          stripe: {
+            customer: {
+              id: subscription.customer as string,
+              status: "incomplete",
+            },
+          },
+        })
+    );
+    const updateSubscriptionItemPromise = (async () =>
+      saveSponsorshipWith(
+        await subscriptionPromise,
+        await sponsorshipPricePromise
+      ))();
+    const [customer, subscription] = await Promise.all([
+      customerPromise,
+      subscriptionPromise,
+      firestorePromise,
+      updateSubscriptionItemPromise,
+      cleanUpPromise,
+      updatePaymentAsFutureUsagePromise,
+    ]);
+    res.status(200).json({
+      customer: customer.id,
+      subscription: subscription.id,
+      clientSecret: getExpandedPaymentIntent(subscription).client_secret,
+    });
+  };
+
+  const updateSponsorship = async (res: NextApiResponse) => {
+    if (step != "confirm") badRequest(res, 400, "Must be in confirm step");
+    if (!customerIn || !paymentMethod)
+      badRequest(
+        res,
+        400,
+        `Missing customer or paymentMethod: ${JSON.stringify({
+          customerIn,
+          paymentMethod,
+        })}`
+      );
+    const subscription = await createSubscription(customerIn, paymentMethod);
+
+    const updateSubscriptionItemPromise = (async () => {
+      const sponsorshipPrice = await sponsorshipPricePromise;
+      const paymentsStarted = new Date(
+        getExpandedPaymentIntent(subscription).created * 1000
+      );
+      return saveSponsorshipWith(
+        subscription,
+        sponsorshipPrice,
+        paymentsStarted
+      );
+    })();
+
+    await updateSubscriptionItemPromise;
+
+    res.status(200).json({});
   };
 
   switch (sponsorState) {

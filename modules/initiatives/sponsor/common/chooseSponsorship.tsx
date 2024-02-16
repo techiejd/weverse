@@ -16,7 +16,12 @@ import {
   Typography,
 } from "@mui/material";
 import { Fragment, useEffect, useState } from "react";
-import { feePercentage, paymentInfo, toDisplayCurrency } from "./utils";
+import {
+  feePercentage,
+  paymentInfo,
+  toDisplayCurrency,
+  toRoundedCurrency,
+} from "./utils";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 import {
   Currency,
@@ -47,6 +52,8 @@ const ChooseSponsorship = ({
       (sponsorForm.currency as Currency) ||
       (messages ? (chooseTranslations("defaultCurrency") as Currency) : "usd")
   );
+  const toDisplay = toDisplayCurrency[currency];
+  const toRounded = toRoundedCurrency[currency];
   const [paymentPlan, setPaymentPlan] = useState<PaymentPlanOptions>(
     (sponsorForm.paymentPlan as PaymentPlanOptions) || "monthly"
   );
@@ -85,8 +92,14 @@ const ChooseSponsorship = ({
       : 0;
 
   const [tipPercentage, setTipPercentage] = useState(15);
-  const [initiativePaysFee, setInitiativePaysFee] = useState(false);
-  const [memberPublishable, setMemberPublishable] = useState(true);
+  const [initiativePaysFee, setInitiativePaysFee] = useState(
+    sponsorForm.denyStripeFee === "true"
+  );
+  const [memberPublishable, setMemberPublishable] = useState(
+    sponsorForm.memberPublishable == undefined
+      ? true
+      : sponsorForm.memberPublishable === "true"
+  );
 
   const sponsorshipAmount =
     sponsorshipLevelIn == sponsorshipLevel.Enum.custom
@@ -96,35 +109,23 @@ const ChooseSponsorship = ({
     const feeAmount =
       feePercentage * sponsorshipAmount +
       paymentInfo[currency].feeCharge.amount;
-    return initiativePaysFee
-      ? 0
-      : currency == "cop"
-      ? Math.ceil(feeAmount)
-      : Number(feeAmount.toFixed(2));
+    return initiativePaysFee ? 0 : toRounded(feeAmount);
   })();
-  const feeDisplayAmount = toDisplayCurrency[currency](feeAmount);
-  const flatFeeDisplayAmount = toDisplayCurrency[currency](
+  const feeDisplayAmount = toDisplay(feeAmount);
+  const flatFeeDisplayAmount = toDisplay(
     paymentInfo[currency].feeCharge.amount
   );
 
   const sponsorshipDisplayAmount =
     sponsorshipLevelIn == sponsorshipLevel.Enum.custom
-      ? toDisplayCurrency[currency](sponsorshipAmount)
+      ? toDisplay(sponsorshipAmount)
       : sponsorshipLevelInfo[sponsorshipLevelIn].displayCurrency;
 
-  const tipAmount = (() => {
-    return currency == "cop"
-      ? Math.ceil((sponsorshipAmount * tipPercentage) / 100)
-      : Number(((sponsorshipAmount * tipPercentage) / 100).toFixed(2));
-  })();
-  const tipDisplayAmount = toDisplayCurrency[currency](tipAmount);
+  const oneWeAmount = toRounded((sponsorshipAmount * tipPercentage) / 100);
+  const tipDisplayAmount = toDisplay(oneWeAmount);
 
-  const total = Number(
-    (
-      Math.ceil((sponsorshipAmount + feeAmount + tipAmount) * 100) / 100
-    ).toFixed(2)
-  ); // We do this to avoid floating point errors.
-  const displayTotal = toDisplayCurrency[currency](total);
+  const total = toRounded(sponsorshipAmount + feeAmount + oneWeAmount);
+  const displayTotal = toDisplay(total);
 
   const [myMember] = useMyMember();
 
@@ -140,10 +141,33 @@ const ChooseSponsorship = ({
     );
   };
 
+  const initiativeAmount = initiativePaysFee
+    ? toRounded(
+        (sponsorshipAmount - paymentInfo[currency].feeCharge.amount) /
+          (1 + feePercentage)
+      )
+    : sponsorshipAmount;
+  const stripeFeeAmount = toRounded(total - initiativeAmount - oneWeAmount);
+
   return (
     <Fragment>
       <input hidden value={"chooseSponsorship"} name="stepString" readOnly />
       <input hidden value={total} name="total" readOnly />
+      <input hidden value={oneWeAmount} name="oneWeAmount" readOnly />
+      <input hidden value={initiativeAmount} name="initiativeAmount" readOnly />
+      <input hidden value={stripeFeeAmount} name="stripeFeeAmount" readOnly />
+      <input
+        hidden
+        value={String(initiativePaysFee)}
+        name="denyStripeFee"
+        readOnly
+      />
+      <input
+        hidden
+        value={String(memberPublishable)}
+        name="memberPublishable"
+        readOnly
+      />
       <input hidden value={beneficiary.path} name="initiative" readOnly />
       <input hidden value={myMember?.path || ""} name="member" readOnly />
       <input hidden value={paymentPlan} name="paymentPlan" readOnly />
@@ -212,9 +236,7 @@ const ChooseSponsorship = ({
                           type: "number",
                         }}
                       />
-                      <Typography>
-                        {toDisplayCurrency[currency](customAmountNumber)}
-                      </Typography>
+                      <Typography>{toDisplay(customAmountNumber)}</Typography>
                     </Stack>
                   }
                 />
@@ -237,11 +259,11 @@ const ChooseSponsorship = ({
           </ListItem>
           <ListItem sx={{ pt: 3, px: 2 }}>
             <Slider
-              aria-label="Tip amount"
+              aria-label="Tip percentage"
               value={tipPercentage}
               onChange={(e, v) => setTipPercentage(v as number)}
               valueLabelDisplay="on"
-              name="tipAmount"
+              name="tipPercentage"
               step={5}
               marks={[
                 { value: 0, label: "0%" },
@@ -273,9 +295,11 @@ const ChooseSponsorship = ({
               control={
                 <Checkbox
                   color="secondary"
-                  name="denyFee"
                   checked={initiativePaysFee}
-                  onChange={(e) => setInitiativePaysFee(e.target.checked)}
+                  onChange={(e) => {
+                    setInitiativePaysFee(e.target.checked);
+                    e.preventDefault();
+                  }}
                 />
               }
               label={chooseTranslations("fee.preferInitiativePays")}
@@ -302,7 +326,6 @@ const ChooseSponsorship = ({
               control={
                 <Checkbox
                   color="secondary"
-                  name="memberPublishable"
                   onChange={(e) => setMemberPublishable(e.target.checked)}
                   checked={memberPublishable}
                 />

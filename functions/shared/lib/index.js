@@ -116,10 +116,16 @@ const accounts = zod_1.z.record(zod_1.z.string().min(1), zod_1.z.object({
     status: accountStatus,
 }));
 const stripe = zod_1.z.object({
-    customer: zod_1.z.string().min(1).optional(),
-    subscription: zod_1.z.string().min(1).optional(),
-    billingCycleAnchor: exports.timeStamp.optional(),
-    status: zod_1.z.enum(["active", "incomplete", "canceled"]).optional(),
+    customer: zod_1.z
+        .object({
+        id: zod_1.z.string().min(1),
+        status: zod_1.z.enum(["incomplete", "confirmed"]),
+        paymentMethod: zod_1.z.string().min(1).optional(),
+    })
+        .optional(),
+    // deprecated: subscription: z.string().min(1).optional(), // TODO(techiejd): Not unique.
+    // deprecated: billingCycleAnchor: timeStamp.optional(), // TODO(techiejd): Not unique.
+    // deprecated: status: z.enum(["active", "incomplete", "canceled"]).optional(), // TODO(techiejd): Not unique. Look into optionality.
     accounts: accounts.optional(),
 });
 const contentSettings = zod_1.z.object({
@@ -231,9 +237,22 @@ exports.content = zod_1.z.discriminatedUnion("type", [
     socialProofContent,
 ]);
 exports.sponsorshipLevel = zod_1.z.enum(["admirer", "fan", "lover", "custom"]);
+const paymentPlanMonthlyStatus = zod_1.z.enum(["active", "incomplete", "canceled"]);
 exports.sponsorship = exports.dbBase.extend({
-    stripeSubscriptionItem: zod_1.z.string().or(zod_1.z.enum(["incomplete"])),
-    stripePrice: zod_1.z.string(),
+    version: zod_1.z.enum(["0.0.1", "0.0.2"]),
+    paymentPlan: zod_1.z.discriminatedUnion("type", [
+        zod_1.z.object({
+            type: zod_1.z.literal("monthly"),
+            id: zod_1.z.string().min(1).optional(),
+            billingCycleAnchor: exports.timeStamp.optional(),
+            status: paymentPlanMonthlyStatus,
+            item: zod_1.z.string().min(1),
+            price: zod_1.z.string().min(1),
+            applicationFeePercent: zod_1.z.number(), // Number between 0 and 100.
+        }),
+    ]),
+    // deprecated: stripeSubscription: z.string().optional(),
+    // deprecated: stripePrice: z.string(), // Stripe's price id.
     paymentsStarted: exports.timeStamp.optional(),
     total: zod_1.z.number(),
     sponsorshipLevel: exports.sponsorshipLevel,
@@ -251,6 +270,7 @@ exports.sponsorship = exports.dbBase.extend({
     oneWeAmount: zod_1.z.number(),
     initiativeAmount: zod_1.z.number(),
     stripeFeeAmount: zod_1.z.number(),
+    destinationAccount: zod_1.z.string().or(zod_1.z.enum(["legacy"])),
     status: zod_1.z
         .enum(["active", "incomplete", "canceled", "incomplete_expired"])
         .optional(),

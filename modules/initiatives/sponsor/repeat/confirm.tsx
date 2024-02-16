@@ -23,8 +23,14 @@ const Confirm = ({
       <input hidden value={"confirm"} name="stepString" readOnly />
       <input
         hidden
-        value={myMember?.stripe?.subscription ?? ""}
-        name="subscription"
+        value={myMember?.stripe?.customer?.id || ""}
+        name="customer"
+        readOnly
+      />
+      <input
+        hidden
+        value={myMember?.stripe?.customer?.paymentMethod || ""}
+        name="paymentMethod"
         readOnly
       />
       <Details

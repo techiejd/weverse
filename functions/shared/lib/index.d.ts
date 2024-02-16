@@ -527,10 +527,19 @@ export declare const member: z.ZodObject<{
         currency?: "cop" | "usd" | "eur" | "gbp";
     }>>;
     stripe: z.ZodOptional<z.ZodObject<{
-        customer: z.ZodOptional<z.ZodString>;
-        subscription: z.ZodOptional<z.ZodString>;
-        billingCycleAnchor: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
-        status: z.ZodOptional<z.ZodEnum<["active", "incomplete", "canceled"]>>;
+        customer: z.ZodOptional<z.ZodObject<{
+            id: z.ZodString;
+            status: z.ZodEnum<["incomplete", "confirmed"]>;
+            paymentMethod: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            id?: string;
+            status?: "incomplete" | "confirmed";
+            paymentMethod?: string;
+        }, {
+            id?: string;
+            status?: "incomplete" | "confirmed";
+            paymentMethod?: string;
+        }>>;
         accounts: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodObject<{
             title: z.ZodString;
             initiatives: z.ZodArray<z.ZodString, "many">;
@@ -545,20 +554,22 @@ export declare const member: z.ZodObject<{
             status?: "active" | "onboarding";
         }>>>;
     }, "strip", z.ZodTypeAny, {
-        customer?: string;
-        subscription?: string;
-        billingCycleAnchor?: Date;
-        status?: "active" | "canceled" | "incomplete";
+        customer?: {
+            id?: string;
+            status?: "incomplete" | "confirmed";
+            paymentMethod?: string;
+        };
         accounts?: Record<string, {
             title?: string;
             initiatives?: string[];
             status?: "active" | "onboarding";
         }>;
     }, {
-        customer?: string;
-        subscription?: string;
-        billingCycleAnchor?: any;
-        status?: "active" | "canceled" | "incomplete";
+        customer?: {
+            id?: string;
+            status?: "incomplete" | "confirmed";
+            paymentMethod?: string;
+        };
         accounts?: Record<string, {
             title?: string;
             initiatives?: string[];
@@ -601,10 +612,11 @@ export declare const member: z.ZodObject<{
         currency?: "cop" | "usd" | "eur" | "gbp";
     };
     stripe?: {
-        customer?: string;
-        subscription?: string;
-        billingCycleAnchor?: Date;
-        status?: "active" | "canceled" | "incomplete";
+        customer?: {
+            id?: string;
+            status?: "incomplete" | "confirmed";
+            paymentMethod?: string;
+        };
         accounts?: Record<string, {
             title?: string;
             initiatives?: string[];
@@ -637,10 +649,11 @@ export declare const member: z.ZodObject<{
         currency?: "cop" | "usd" | "eur" | "gbp";
     };
     stripe?: {
-        customer?: string;
-        subscription?: string;
-        billingCycleAnchor?: any;
-        status?: "active" | "canceled" | "incomplete";
+        customer?: {
+            id?: string;
+            status?: "incomplete" | "confirmed";
+            paymentMethod?: string;
+        };
         accounts?: Record<string, {
             title?: string;
             initiatives?: string[];
@@ -1668,12 +1681,38 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
 export type Content = z.infer<typeof content>;
 export declare const sponsorshipLevel: z.ZodEnum<["admirer", "fan", "lover", "custom"]>;
 export type SponsorshipLevel = z.infer<typeof sponsorshipLevel>;
+declare const paymentPlanMonthlyStatus: z.ZodEnum<["active", "incomplete", "canceled"]>;
+export type PaymentPlanMonthlyStatus = z.infer<typeof paymentPlanMonthlyStatus>;
 export declare const sponsorship: z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
     createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
-    stripeSubscriptionItem: z.ZodUnion<[z.ZodString, z.ZodEnum<["incomplete"]>]>;
-    stripePrice: z.ZodString;
+    version: z.ZodEnum<["0.0.1", "0.0.2"]>;
+    paymentPlan: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
+        type: z.ZodLiteral<"monthly">;
+        id: z.ZodOptional<z.ZodString>;
+        billingCycleAnchor: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
+        status: z.ZodEnum<["active", "incomplete", "canceled"]>;
+        item: z.ZodString;
+        price: z.ZodString;
+        applicationFeePercent: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        type?: "monthly";
+        id?: string;
+        billingCycleAnchor?: Date;
+        status?: "active" | "canceled" | "incomplete";
+        item?: string;
+        price?: string;
+        applicationFeePercent?: number;
+    }, {
+        type?: "monthly";
+        id?: string;
+        billingCycleAnchor?: any;
+        status?: "active" | "canceled" | "incomplete";
+        item?: string;
+        price?: string;
+        applicationFeePercent?: number;
+    }>]>;
     paymentsStarted: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     total: z.ZodNumber;
     sponsorshipLevel: z.ZodEnum<["admirer", "fan", "lover", "custom"]>;
@@ -1688,13 +1727,22 @@ export declare const sponsorship: z.ZodObject<{
     oneWeAmount: z.ZodNumber;
     initiativeAmount: z.ZodNumber;
     stripeFeeAmount: z.ZodNumber;
+    destinationAccount: z.ZodUnion<[z.ZodString, z.ZodEnum<["legacy"]>]>;
     status: z.ZodOptional<z.ZodEnum<["active", "incomplete", "canceled", "incomplete_expired"]>>;
 }, "strip", z.ZodTypeAny, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
     createdAt?: Date;
-    stripeSubscriptionItem?: string;
-    stripePrice?: string;
+    version?: "0.0.1" | "0.0.2";
+    paymentPlan?: {
+        type?: "monthly";
+        id?: string;
+        billingCycleAnchor?: Date;
+        status?: "active" | "canceled" | "incomplete";
+        item?: string;
+        price?: string;
+        applicationFeePercent?: number;
+    };
     paymentsStarted?: Date;
     total?: number;
     sponsorshipLevel?: "custom" | "admirer" | "fan" | "lover";
@@ -1709,13 +1757,22 @@ export declare const sponsorship: z.ZodObject<{
     oneWeAmount?: number;
     initiativeAmount?: number;
     stripeFeeAmount?: number;
+    destinationAccount?: string;
     status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
 }, {
     path?: string;
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
     createdAt?: any;
-    stripeSubscriptionItem?: string;
-    stripePrice?: string;
+    version?: "0.0.1" | "0.0.2";
+    paymentPlan?: {
+        type?: "monthly";
+        id?: string;
+        billingCycleAnchor?: any;
+        status?: "active" | "canceled" | "incomplete";
+        item?: string;
+        price?: string;
+        applicationFeePercent?: number;
+    };
     paymentsStarted?: any;
     total?: number;
     sponsorshipLevel?: "custom" | "admirer" | "fan" | "lover";
@@ -1730,6 +1787,7 @@ export declare const sponsorship: z.ZodObject<{
     oneWeAmount?: number;
     initiativeAmount?: number;
     stripeFeeAmount?: number;
+    destinationAccount?: string;
     status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
 }>;
 export type Sponsorship = z.infer<typeof sponsorship>;
@@ -1883,8 +1941,32 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         path: z.ZodOptional<z.ZodString>;
         locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
         createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
-        stripeSubscriptionItem: z.ZodUnion<[z.ZodString, z.ZodEnum<["incomplete"]>]>;
-        stripePrice: z.ZodString;
+        version: z.ZodEnum<["0.0.1", "0.0.2"]>;
+        paymentPlan: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
+            type: z.ZodLiteral<"monthly">;
+            id: z.ZodOptional<z.ZodString>;
+            billingCycleAnchor: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
+            status: z.ZodEnum<["active", "incomplete", "canceled"]>;
+            item: z.ZodString;
+            price: z.ZodString;
+            applicationFeePercent: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            type?: "monthly";
+            id?: string;
+            billingCycleAnchor?: Date;
+            status?: "active" | "canceled" | "incomplete";
+            item?: string;
+            price?: string;
+            applicationFeePercent?: number;
+        }, {
+            type?: "monthly";
+            id?: string;
+            billingCycleAnchor?: any;
+            status?: "active" | "canceled" | "incomplete";
+            item?: string;
+            price?: string;
+            applicationFeePercent?: number;
+        }>]>;
         paymentsStarted: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
         total: z.ZodNumber;
         sponsorshipLevel: z.ZodEnum<["admirer", "fan", "lover", "custom"]>;
@@ -1899,13 +1981,22 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         oneWeAmount: z.ZodNumber;
         initiativeAmount: z.ZodNumber;
         stripeFeeAmount: z.ZodNumber;
+        destinationAccount: z.ZodUnion<[z.ZodString, z.ZodEnum<["legacy"]>]>;
         status: z.ZodOptional<z.ZodEnum<["active", "incomplete", "canceled", "incomplete_expired"]>>;
     }, "strip", z.ZodTypeAny, {
         path?: string;
         locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
         createdAt?: Date;
-        stripeSubscriptionItem?: string;
-        stripePrice?: string;
+        version?: "0.0.1" | "0.0.2";
+        paymentPlan?: {
+            type?: "monthly";
+            id?: string;
+            billingCycleAnchor?: Date;
+            status?: "active" | "canceled" | "incomplete";
+            item?: string;
+            price?: string;
+            applicationFeePercent?: number;
+        };
         paymentsStarted?: Date;
         total?: number;
         sponsorshipLevel?: "custom" | "admirer" | "fan" | "lover";
@@ -1920,13 +2011,22 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         oneWeAmount?: number;
         initiativeAmount?: number;
         stripeFeeAmount?: number;
+        destinationAccount?: string;
         status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
     }, {
         path?: string;
         locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
         createdAt?: any;
-        stripeSubscriptionItem?: string;
-        stripePrice?: string;
+        version?: "0.0.1" | "0.0.2";
+        paymentPlan?: {
+            type?: "monthly";
+            id?: string;
+            billingCycleAnchor?: any;
+            status?: "active" | "canceled" | "incomplete";
+            item?: string;
+            price?: string;
+            applicationFeePercent?: number;
+        };
         paymentsStarted?: any;
         total?: number;
         sponsorshipLevel?: "custom" | "admirer" | "fan" | "lover";
@@ -1941,6 +2041,7 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         oneWeAmount?: number;
         initiativeAmount?: number;
         stripeFeeAmount?: number;
+        destinationAccount?: string;
         status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -1952,8 +2053,16 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         path?: string;
         locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
         createdAt?: Date;
-        stripeSubscriptionItem?: string;
-        stripePrice?: string;
+        version?: "0.0.1" | "0.0.2";
+        paymentPlan?: {
+            type?: "monthly";
+            id?: string;
+            billingCycleAnchor?: Date;
+            status?: "active" | "canceled" | "incomplete";
+            item?: string;
+            price?: string;
+            applicationFeePercent?: number;
+        };
         paymentsStarted?: Date;
         total?: number;
         sponsorshipLevel?: "custom" | "admirer" | "fan" | "lover";
@@ -1968,6 +2077,7 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         oneWeAmount?: number;
         initiativeAmount?: number;
         stripeFeeAmount?: number;
+        destinationAccount?: string;
         status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
     };
 }, {
@@ -1979,8 +2089,16 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         path?: string;
         locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
         createdAt?: any;
-        stripeSubscriptionItem?: string;
-        stripePrice?: string;
+        version?: "0.0.1" | "0.0.2";
+        paymentPlan?: {
+            type?: "monthly";
+            id?: string;
+            billingCycleAnchor?: any;
+            status?: "active" | "canceled" | "incomplete";
+            item?: string;
+            price?: string;
+            applicationFeePercent?: number;
+        };
         paymentsStarted?: any;
         total?: number;
         sponsorshipLevel?: "custom" | "admirer" | "fan" | "lover";
@@ -1995,6 +2113,7 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
         oneWeAmount?: number;
         initiativeAmount?: number;
         stripeFeeAmount?: number;
+        destinationAccount?: string;
         status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
     };
 }>, z.ZodObject<{

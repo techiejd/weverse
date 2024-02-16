@@ -140,10 +140,16 @@ const accounts = z.record(
 export type Accounts = z.infer<typeof accounts>;
 
 const stripe = z.object({
-  customer: z.string().min(1).optional(), // Look into optionality.
-  subscription: z.string().min(1).optional(), // TODO(techiejd): Not unique.
-  billingCycleAnchor: timeStamp.optional(), // TODO(techiejd): Not unique.
-  status: z.enum(["active", "incomplete", "canceled"]).optional(), // TODO(techiejd): Not unique. Look into optionality.
+  customer: z
+    .object({
+      id: z.string().min(1),
+      status: z.enum(["incomplete", "confirmed"]),
+      paymentMethod: z.string().min(1).optional(),
+    })
+    .optional(), // Look into uniqueness.
+  // deprecated: subscription: z.string().min(1).optional(), // TODO(techiejd): Not unique.
+  // deprecated: billingCycleAnchor: timeStamp.optional(), // TODO(techiejd): Not unique.
+  // deprecated: status: z.enum(["active", "incomplete", "canceled"]).optional(), // TODO(techiejd): Not unique. Look into optionality.
   accounts: accounts.optional(),
 });
 const contentSettings = z.object({
@@ -280,9 +286,23 @@ export type Content = z.infer<typeof content>;
 export const sponsorshipLevel = z.enum(["admirer", "fan", "lover", "custom"]);
 export type SponsorshipLevel = z.infer<typeof sponsorshipLevel>;
 
+const paymentPlanMonthlyStatus = z.enum(["active", "incomplete", "canceled"]);
+export type PaymentPlanMonthlyStatus = z.infer<typeof paymentPlanMonthlyStatus>;
 export const sponsorship = dbBase.extend({
-  stripeSubscriptionItem: z.string().or(z.enum(["incomplete"])),
-  stripePrice: z.string(), // Stripe's price id.
+  version: z.enum(["0.0.1", "0.0.2"]),
+  paymentPlan: z.discriminatedUnion("type", [
+    z.object({
+      type: z.literal("monthly"),
+      id: z.string().min(1).optional(),
+      billingCycleAnchor: timeStamp.optional(),
+      status: paymentPlanMonthlyStatus,
+      item: z.string().min(1),
+      price: z.string().min(1),
+      applicationFeePercent: z.number(), // Number between 0 and 100.
+    }),
+  ]),
+  // deprecated: stripeSubscription: z.string().optional(),
+  // deprecated: stripePrice: z.string(), // Stripe's price id.
   paymentsStarted: timeStamp.optional(), // When this particular sponsorship started being paid for.
   total: z.number(),
   sponsorshipLevel: sponsorshipLevel,
@@ -300,12 +320,10 @@ export const sponsorship = dbBase.extend({
   oneWeAmount: z.number(), // The amount that goes to OneWe.
   initiativeAmount: z.number(), // The amount that goes to the initiative.
   stripeFeeAmount: z.number(), // The amount that goes to Stripe.
+  destinationAccount: z.string().or(z.enum(["legacy"])), // The account that the money goes to; if legacy then it goes straight to onewe's account.
   status: z
     .enum(["active", "incomplete", "canceled", "incomplete_expired"])
     .optional(),
-  applicationFee: z
-    .object({ percent: z.number() })
-    .or(z.object({ amount: z.number() })),
 });
 
 export type Sponsorship = z.infer<typeof sponsorship>;

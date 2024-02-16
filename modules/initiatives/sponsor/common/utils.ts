@@ -15,6 +15,17 @@ const toEur = (amount: number) =>
 const toGbp = (amount: number) =>
   amount.toLocaleString("en-US", { style: "currency", currency: "GBP" });
 
+const toNoDecimal = (amount: number) => Math.ceil(amount);
+const toTwoDecimal = (amount: number) =>
+  Number((Math.ceil(amount * 100) / 100).toFixed(2)); // We do this to avoid floating point errors.
+
+export const toRoundedCurrency = {
+  cop: toNoDecimal,
+  usd: toTwoDecimal,
+  eur: toTwoDecimal,
+  gbp: toTwoDecimal,
+};
+
 export const toDisplayCurrency = {
   cop: toCop,
   usd: toUsd,
