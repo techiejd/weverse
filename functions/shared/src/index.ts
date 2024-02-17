@@ -300,6 +300,11 @@ export const sponsorship = dbBase.extend({
       price: z.string().min(1),
       applicationFeePercent: z.number(), // Number between 0 and 100.
     }),
+    z.object({
+      type: z.literal("oneTime"),
+      status: z.enum(["active", "incomplete"]),
+      applicationFeeAmount: z.number(), // Amount paid, no decimal
+    }),
   ]),
   // deprecated: stripeSubscription: z.string().optional(),
   // deprecated: stripePrice: z.string(), // Stripe's price id.
