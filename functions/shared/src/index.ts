@@ -286,7 +286,12 @@ export type Content = z.infer<typeof content>;
 export const sponsorshipLevel = z.enum(["admirer", "fan", "lover", "custom"]);
 export type SponsorshipLevel = z.infer<typeof sponsorshipLevel>;
 
-const paymentPlanMonthlyStatus = z.enum(["active", "incomplete", "canceled"]);
+const paymentPlanMonthlyStatus = z.enum([
+  "active",
+  "incomplete",
+  "canceled",
+  "incomplete_expired",
+]); //TODO(techiejd): Look into removing incomplete_expired.
 export type PaymentPlanMonthlyStatus = z.infer<typeof paymentPlanMonthlyStatus>;
 export const sponsorship = dbBase.extend({
   version: z.enum(["0.0.1", "0.0.2"]),
