@@ -7,7 +7,7 @@ export const content = z.discriminatedUnion("type", [
     createdAt: z.date(),
   }),
   z.object({
-    type: z.literal("impact"),
+    type: z.literal("testimonial"),
     data: socialProof,
     createdAt: z.date(),
   }),
