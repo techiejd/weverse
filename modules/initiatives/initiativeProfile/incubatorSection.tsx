@@ -26,15 +26,122 @@ import {
 } from "../../../common/context/weverseUtils";
 import { usePosiFormDataConverter } from "../../../common/utils/firebase";
 import { useLocalizedPresentationInfo } from "../../../common/utils/translations";
-import { Incubatee, PosiFormData } from "../../../functions/shared/src";
+import {
+  Incubatee,
+  Initiative,
+  PosiFormData,
+} from "../../../functions/shared/src";
 import ImpactCard from "../../posi/action/card";
 import InitiativeCard from "../InitiativeCard";
 import { useCurrentInitiative } from "../context";
 import { useCopyToClipboard, buildShareLinks } from "../inviteAnInitiative";
 
+const InvitedIncubateePortal = ({
+  incubatee,
+  initiative,
+}: {
+  incubatee: Incubatee;
+  initiative?: Initiative;
+}) => {
+  const appState = useAppState();
+  const [loading, setLoading] = useState(false);
+  const [value, copy] = useCopyToClipboard();
+  const { path, href } = initiative
+    ? buildShareLinks(incubatee.path!)
+    : { path: "", href: "" };
+  const longInitiativeTypesTranslations = useTranslations(
+    "initiatives.types.long"
+  );
+  const incubatorTranslations = useTranslations("initiatives.incubator");
+  return loading ? (
+    <CircularProgress />
+  ) : (
+    <Stack
+      direction="row"
+      key={incubatee.initiativePath}
+      alignItems="center"
+      justifyContent="space-between"
+      spacing={2}
+      sx={{ border: "1px solid", borderColor: "grey.300" }}
+    >
+      <IconButton
+        onClick={async () => {
+          // Here we delete the incubatee relationship with the incubator
+          if (!initiative || !incubatee) return;
+          setLoading(true);
+          const incubateeRef = doc(appState.firestore, incubatee.path!);
+          await deleteDoc(incubateeRef);
+          setLoading(false);
+        }}
+      >
+        <Close />
+      </IconButton>
+      <Stack spacing={2}>
+        <Typography>{incubatee.initializeWith?.name}</Typography>
+        <Typography>
+          {longInitiativeTypesTranslations(incubatee.initializeWith?.type)}
+        </Typography>
+      </Stack>
+      <Stack spacing={2}>
+        <IconButton onClick={() => copy(href)}>
+          {value && value.includes(href) ? <Check /> : <ContentCopy />}
+        </IconButton>
+        <ShareActionArea
+          shareProps={{
+            title: incubatorTranslations("joinPrompt", {
+              initiativeName: initiative?.name,
+            }),
+            path: path,
+          }}
+        >
+          <IconButton>
+            <Share />
+          </IconButton>
+        </ShareActionArea>
+      </Stack>
+    </Stack>
+  );
+};
+
+const ValidateActionPortal = ({ action }: { action: PosiFormData }) => {
+  const [validating, setValidating] = useState(false);
+  const posiFormDataConverter = usePosiFormDataConverter();
+  const appState = useAppState();
+  const incubatorTranslations = useTranslations("initiatives.incubator");
+  return (
+    <Card>
+      <CardHeader title={incubatorTranslations("isThisActionValid")} />
+      <CardContent>
+        <ImpactCard posiData={action} />
+      </CardContent>
+      <CardActions>
+        {validating ? (
+          <CircularProgress />
+        ) : (
+          <Button
+            variant="contained"
+            onClick={() => {
+              setValidating(true);
+              updateDoc(
+                doc(appState.firestore, action.path!).withConverter(
+                  posiFormDataConverter
+                ),
+                {
+                  "validation.validated": true,
+                }
+              );
+            }}
+          >
+            {incubatorTranslations("actionIsValid")}
+          </Button>
+        )}
+      </CardActions>
+    </Card>
+  );
+};
+
 const IncubatorSection = () => {
   const incubatorTranslations = useTranslations("initiatives.incubator");
-  const appState = useAppState();
   const [incubatees] = useCurrentIncubatees();
   const acceptedIncubatees = incubatees?.filter(
     (incubatee) => incubatee.initiativePath
@@ -46,100 +153,6 @@ const IncubatorSection = () => {
   const [initiative] = useCurrentInitiative();
 
   const isMyInitiative = useIsMine();
-  const [loading, setLoading] = useState(false);
-  const [value, copy] = useCopyToClipboard();
-
-  const InvitedIncubateePortal = ({ incubatee }: { incubatee: Incubatee }) => {
-    const { path, href } = initiative
-      ? buildShareLinks(incubatee.path!)
-      : { path: "", href: "" };
-    const longInitiativeTypesTranslations = useTranslations(
-      "initiatives.types.long"
-    );
-    return loading ? (
-      <CircularProgress />
-    ) : (
-      <Stack
-        direction="row"
-        key={incubatee.initiativePath}
-        alignItems="center"
-        justifyContent="space-between"
-        spacing={2}
-        sx={{ border: "1px solid", borderColor: "grey.300" }}
-      >
-        <IconButton
-          onClick={async () => {
-            // Here we delete the incubatee relationship with the incubator
-            if (!initiative || !incubatee) return;
-            setLoading(true);
-            const incubateeRef = doc(appState.firestore, incubatee.path!);
-            await deleteDoc(incubateeRef);
-            setLoading(false);
-          }}
-        >
-          <Close />
-        </IconButton>
-        <Stack spacing={2}>
-          <Typography>{incubatee.initializeWith?.name}</Typography>
-          <Typography>
-            {longInitiativeTypesTranslations(incubatee.initializeWith?.type)}
-          </Typography>
-        </Stack>
-        <Stack spacing={2}>
-          <IconButton onClick={() => copy(href)}>
-            {value && value.includes(href) ? <Check /> : <ContentCopy />}
-          </IconButton>
-          <ShareActionArea
-            shareProps={{
-              title: incubatorTranslations("joinPrompt", {
-                initiativeName: initiative?.name,
-              }),
-              path: path,
-            }}
-          >
-            <IconButton>
-              <Share />
-            </IconButton>
-          </ShareActionArea>
-        </Stack>
-      </Stack>
-    );
-  };
-
-  const ValidateActionPortal = ({ action }: { action: PosiFormData }) => {
-    const [validating, setValidating] = useState(false);
-    const posiFormDataConverter = usePosiFormDataConverter();
-    return (
-      <Card>
-        <CardHeader title={incubatorTranslations("isThisActionValid")} />
-        <CardContent>
-          <ImpactCard posiData={action} />
-        </CardContent>
-        <CardActions>
-          {validating ? (
-            <CircularProgress />
-          ) : (
-            <Button
-              variant="contained"
-              onClick={() => {
-                setValidating(true);
-                updateDoc(
-                  doc(appState.firestore, action.path!).withConverter(
-                    posiFormDataConverter
-                  ),
-                  {
-                    "validation.validated": true,
-                  }
-                );
-              }}
-            >
-              {incubatorTranslations("actionIsValid")}
-            </Button>
-          )}
-        </CardActions>
-      </Card>
-    );
-  };
 
   const presentationInfo = useLocalizedPresentationInfo(initiative);
 
@@ -201,6 +214,7 @@ const IncubatorSection = () => {
                 <InvitedIncubateePortal
                   key={incubatee.path!}
                   incubatee={incubatee}
+                  initiative={initiative}
                 />
               ))
             ) : (
