@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   CircularProgress,
   FormControl,
@@ -21,7 +20,6 @@ import {
 import Utils, {
   createStripeAccountLink,
 } from "../../../../../common/context/serverUtils";
-import { useCurrentInitiative } from "../../../../../modules/initiatives/context";
 import { useRouter } from "next/router";
 
 // Should be able to see the connected account to this initiative.
@@ -43,6 +41,8 @@ type AccountProps = {
     link: string;
   };
   possibleAccounts?: Record<string, { title: string; initiatives: string[] }>;
+  possibleTitle: string;
+  initiativePath: string;
 };
 
 export const getServerSideProps = WithTranslationsServerSideProps(
@@ -86,25 +86,37 @@ export const getServerSideProps = WithTranslationsServerSideProps(
         .withConverter(Utils.initiativeConverter)
         .get()
     ).data();
+    if (!initiative) {
+      throw new Error(`Initiative not found: ${initiativeId}`);
+    }
+    const initiativeInfo = {
+      possibleTitle: initiative.name,
+      initiativePath: initiative.path,
+    };
     if (initiative?.connectedAccount) {
-      const a = initiative.connectedAccount;
-      if (a.status == "onboarding") {
+      const connectedAccount = initiative.connectedAccount;
+      if (connectedAccount.status == "onboarding") {
         // Return props to continue onboarding & to edit account title.
         return {
           props: {
             continueOnboarding: {
               title: initiative.connectedAccount.title,
-              link: (await createStripeAccountLink(a.stripeAccountId, userId))
-                .url,
+              link: (
+                await createStripeAccountLink(
+                  connectedAccount.stripeAccountId,
+                  userId
+                )
+              ).url,
             },
           },
         };
       }
       return {
         props: {
+          ...initiativeInfo,
           connectedAccount: {
-            url: `/members/${userId}/accounts/${a.stripeAccountId}`,
-            title: a.title,
+            url: `/members/${userId}/accounts/${connectedAccount.stripeAccountId}`,
+            title: connectedAccount.title,
           },
         },
       };
@@ -118,13 +130,14 @@ export const getServerSideProps = WithTranslationsServerSideProps(
     if (accounts) {
       return {
         props: {
+          ...initiativeInfo,
           possibleAccounts: accounts,
         },
       };
     }
 
     return {
-      props: {},
+      props: initiativeInfo,
     };
   }
 );
@@ -134,29 +147,25 @@ const StripeConnect = asOneWePage(
     connectedAccount,
     possibleAccounts,
     continueOnboarding,
+    possibleTitle,
+    initiativePath,
   }: AccountProps) => {
-    const [initiative, initiativeLoading] = useCurrentInitiative();
     const router = useRouter();
     const [selectedAccount, setSelectedAccount] = useState<null | string>(null);
     const [checkedNew, setCheckedNew] = useState(false);
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setSelectedAccount((event.target as HTMLInputElement).value);
     };
-    const [titleForNewAccount, setTitleForNewAccount] = useState("");
+    const [titleForNewAccount, setTitleForNewAccount] = useState(possibleTitle);
+    console.log(titleForNewAccount);
     const [loading, setLoading] = useState(false);
     const [redirecting, setRedirecting] = useState(false);
 
     const createNewAccount = async () => {
       setLoading(true);
-      if (
-        !initiative ||
-        !initiative.path ||
-        !titleForNewAccount ||
-        !router.isReady
-      ) {
+      if (!titleForNewAccount || !router.isReady) {
         throw new Error(
           `Error in creating a new account. Missing data: ${{
-            initiative,
             titleForNewAccount,
             routerIsReady: router.isReady,
           }}`
@@ -170,7 +179,7 @@ const StripeConnect = asOneWePage(
         },
         body: JSON.stringify({
           title: titleForNewAccount,
-          initiativePath: initiative!.path!,
+          initiativePath,
         }),
       });
       if (newAccountResponse.ok) {
@@ -265,7 +274,7 @@ const StripeConnect = asOneWePage(
                 ))}
               </RadioGroup>
             </FormControl>
-            {loading || initiativeLoading || !router.isReady ? (
+            {loading || !router.isReady ? (
               <CircularProgress />
             ) : (
               <Button
