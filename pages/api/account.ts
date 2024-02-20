@@ -23,22 +23,17 @@ export default async function handler(
 
     // Check call came from same origin
     const origin = req.headers.origin;
-    console.log({ origin, publicBaseUrl });
     if (origin !== publicBaseUrl) {
-      console.log("out here");
       return badRequest(res, 403, "Forbidden");
     }
-    console.log("out here1");
 
     // Check if user is signed in
     const user = await getAuthentication({ req });
-    console.log("out here2");
 
     if (!user.authenticated) {
       return badRequest(res, 401, "User not authenticated");
     }
     const memberPath = `members/${user.uid}`;
-    console.log("out here3");
 
     // Validate request body
     const { title, initiativePath, incubator } = req.body;
@@ -46,14 +41,11 @@ export default async function handler(
       return badRequest(res, 400, "Missing required fields");
     }
 
-    console.log("out here4");
-
     // Get Firestore instance
     const firestore = getAdminFirestore();
 
     // Check if user is authorized
     const unauthorized = await (async () => {
-      console.log({ initiativePath, user, incubator });
       if (initiativePath.includes(user.uid)) return false;
       if (incubator) {
         if (!incubator.includes(user.uid)) return true;
@@ -69,7 +61,6 @@ export default async function handler(
     if (unauthorized) {
       return badRequest(res, 403, "Unauthorized");
     }
-    console.log("out here5");
 
     // Create Stripe account
     const stripeAccount = await stripe.accounts.create({

@@ -102,7 +102,6 @@ const ReturnPage = asOneWePage(
     continueOnboardingLink?: string;
     successOnboardingLink?: string;
   }) => {
-    console.log(continueOnboardingLink, successOnboardingLink);
     return successOnboardingLink ? (
       <div>
         <p>You have successfully onboarded your account</p>

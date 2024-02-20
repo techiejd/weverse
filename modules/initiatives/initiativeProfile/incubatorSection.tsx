@@ -152,16 +152,18 @@ const ValidateActionPortal = ({ action }: { action: PosiFormData }) => {
   );
 };
 
-const PreemptivelyConnectAccountDialog = ({
+const ConnectAccountDialog = ({
   open,
   close,
   initiativeName,
   initiativePath,
+  skipExplanation,
 }: {
   open: boolean;
   close: () => void;
   initiativeName: string;
   initiativePath: string;
+  skipExplanation: boolean;
 }) => {
   const alertOrRedirectToOnboardingStripeAccount =
     useAlertOrRedirectToOnboardingStripeAccount();
@@ -169,7 +171,7 @@ const PreemptivelyConnectAccountDialog = ({
   const [title, setTitle] = useState(initiativeName);
   const [loading, setLoading] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
-  const [understood, setUnderstood] = useState(false);
+  const [understood, setUnderstood] = useState(skipExplanation || false);
   const internalClose = () => {
     if (loading || redirecting) {
       alert("Please wait for the process to finish.");
@@ -292,7 +294,8 @@ const IncubateeManipulationPortal = ({
   const connectedAccount = incubateeInitiative?.connectedAccount;
   const incubatorRelationshipWithConnectedAccount =
     incubateeInitiative?.incubator?.connectedAccount;
-  const [explainDialogOpen, setExplainDialogOpen] = useState(false);
+  const [connectAccountDialogOpen, setConnectAccountDialogOpen] =
+    useState(false);
   // TODO(techiejd): Move the continue onboarding link logic to the backend.
   const [redirecting, setRedirecting] = useState(false);
   const router = useRouter();
@@ -301,11 +304,14 @@ const IncubateeManipulationPortal = ({
   return (
     <Fragment>
       {incubateeInitiative && (
-        <PreemptivelyConnectAccountDialog
-          open={explainDialogOpen}
-          close={() => setExplainDialogOpen(false)}
+        <ConnectAccountDialog
+          open={connectAccountDialogOpen}
+          close={() => setConnectAccountDialogOpen(false)}
           initiativeName={incubateeInitiative.name}
           initiativePath={incubatee.initiativePath!}
+          skipExplanation={
+            incubatorRelationshipWithConnectedAccount == "incubateeRequested"
+          }
         />
       )}
       <RedirectingDialog open={redirecting} />
@@ -360,7 +366,10 @@ const IncubateeManipulationPortal = ({
           ))}
         {incubatorRelationshipWithConnectedAccount == "incubateeRequested" &&
           !connectedAccount && (
-            <Button variant="contained">
+            <Button
+              variant="contained"
+              onClick={() => setConnectAccountDialogOpen(true)}
+            >
               Connect account through our partner Stripe.
             </Button>
           )}
@@ -373,7 +382,7 @@ const IncubateeManipulationPortal = ({
         {!incubatorRelationshipWithConnectedAccount && !connectedAccount && (
           <Button
             variant="contained"
-            onClick={() => setExplainDialogOpen(true)}
+            onClick={() => setConnectAccountDialogOpen(true)}
           >
             Preemptively connect an account.
           </Button>

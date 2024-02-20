@@ -34,16 +34,31 @@ export const getServerSideProps = WithTranslationsServerSideProps(
         },
       };
     }
-    if (userId !== authentication.uid) {
-      return {
-        redirect: {
-          destination: `/401`, // TODO: redirect to the current page after login
-          permanent: false,
-        },
-      };
-    }
 
     const firestore = getAdminFirestore();
+    const accountPromise = firestore
+      .doc(`members/${userId}`)
+      .withConverter(Utils.memberConverter)
+      .get()
+      .then((doc) => {
+        const member = doc.data();
+        return member!.stripe!.accounts![account]!;
+      });
+
+    let isIncubateeTryingToSeeTheirAccount = false;
+    if (userId !== authentication.uid) {
+      isIncubateeTryingToSeeTheirAccount = await accountPromise.then((a) =>
+        a.initiatives[0].includes(authentication.uid)
+      );
+      if (!isIncubateeTryingToSeeTheirAccount) {
+        return {
+          redirect: {
+            destination: `/401`, // TODO: redirect to the current page after login
+            permanent: false,
+          },
+        };
+      }
+    }
 
     const accessStripeAccountLinkPromise = stripe.accounts
       .createLoginLink(account)
@@ -74,14 +89,7 @@ export const getServerSideProps = WithTranslationsServerSideProps(
         );
       });
 
-    const titlePromise = firestore
-      .doc(`members/${userId}`)
-      .withConverter(Utils.memberConverter)
-      .get()
-      .then((doc) => {
-        const member = doc.data();
-        return member!.stripe!.accounts![account]!.title;
-      });
+    const titlePromise = accountPromise.then((a) => a.title);
 
     const [accessStripeAccountLink, balances, title] = await Promise.all([
       accessStripeAccountLinkPromise,
@@ -91,7 +99,9 @@ export const getServerSideProps = WithTranslationsServerSideProps(
 
     return {
       props: {
-        accessStripeAccountLink,
+        ...(isIncubateeTryingToSeeTheirAccount
+          ? {}
+          : { accessStripeAccountLink }),
         balances,
         title,
       },
@@ -110,7 +120,7 @@ const ReturnPage = asOneWePage(
       available?: number;
       pending?: number;
     }[];
-    accessStripeAccountLink: string;
+    accessStripeAccountLink?: string;
     title: string;
   }) => {
     return (
@@ -123,13 +133,15 @@ const ReturnPage = asOneWePage(
             {balance.pending}
           </Typography>
         ))}
-        <Button
-          href={accessStripeAccountLink}
-          variant="contained"
-          sx={{ width: "fit-content" }}
-        >
-          Access account from Stripe
-        </Button>
+        {accessStripeAccountLink && (
+          <Button
+            href={accessStripeAccountLink}
+            variant="contained"
+            sx={{ width: "fit-content" }}
+          >
+            Access account from Stripe
+          </Button>
+        )}
         <Button
           onClick={() => {
             alert("Not yet implemented");

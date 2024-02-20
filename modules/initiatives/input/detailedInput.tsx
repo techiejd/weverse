@@ -170,12 +170,6 @@ const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
       </Section>
     );
 
-  console.log({
-    val,
-    connectAccount: val?.incubator?.connectedAccount,
-    connectIncubatorAccountNeedsAttn,
-    ifIncubatorAccountDoesNotNeedAttn,
-  });
   return (
     <Stack spacing={2} sx={sectionStyles}>
       <Section

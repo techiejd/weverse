@@ -165,10 +165,12 @@ export const getServerSideProps = WithTranslationsServerSideProps(
         };
       }
       if (initiative.incubator?.connectedAccount == "allAccepted") {
+        const owningAccountMember =
+          initiative.incubator.path.split("/initiatives/")[0];
         return {
           props: {
             properlyConnectedAccount: {
-              url: `/members/${userId}/accounts/${connectedAccount.stripeAccountId}`,
+              url: `/${owningAccountMember}/accounts/${connectedAccount.stripeAccountId}`,
               title: connectedAccount.title,
             },
           },
@@ -308,7 +310,6 @@ type AccountProps =
 
 const StripeConnect = asOneWePage(
   ({ properlyConnectedAccount, needsAction }: AccountProps) => {
-    console.log({ properlyConnectedAccount, needsAction });
     const appState = useAppState();
     const [selectedAccount, setSelectedAccount] = useState<null | string>(null);
     const [checkedNew, setCheckedNew] = useState(false);
@@ -396,11 +397,6 @@ const StripeConnect = asOneWePage(
           label: value.title,
         }))
       : [];
-    console.log({
-      options,
-      possibleOwnAccounts:
-        needsAction?.fromInitiative?.chooseAccounts?.possibleOwnAccounts,
-    });
 
     if (redirecting) {
       return (
