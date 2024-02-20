@@ -127,21 +127,20 @@ export declare const initiative: z.ZodObject<{
     name: z.ZodString;
     path: z.ZodOptional<z.ZodString>;
     email: z.ZodOptional<z.ZodString>;
-    incubator: z.ZodOptional<z.ZodString>;
+    incubator: z.ZodOptional<z.ZodObject<{
+        path: z.ZodString;
+        connectedAccount: z.ZodOptional<z.ZodEnum<["incubateeRequested", "pendingIncubateeApproval", "allAccepted"]>>;
+    }, "strip", z.ZodTypeAny, {
+        path?: string;
+        connectedAccount?: "incubateeRequested" | "pendingIncubateeApproval" | "allAccepted";
+    }, {
+        path?: string;
+        connectedAccount?: "incubateeRequested" | "pendingIncubateeApproval" | "allAccepted";
+    }>>;
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
     createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     organizationType: z.ZodOptional<z.ZodEnum<["nonprofit", "religious", "unincorporated", "profit", "incubator"]>>;
     pic: z.ZodOptional<z.ZodString>;
-    ratings: z.ZodObject<{
-        sum: z.ZodNumber;
-        count: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        sum?: number;
-        count?: number;
-    }, {
-        sum?: number;
-        count?: number;
-    }>;
     connectedAccount: z.ZodOptional<z.ZodObject<{
         ownerMemberPath: z.ZodString;
         stripeAccountId: z.ZodString;
@@ -158,6 +157,16 @@ export declare const initiative: z.ZodObject<{
         status?: "active" | "onboarding";
         title?: string;
     }>>;
+    ratings: z.ZodObject<{
+        sum: z.ZodNumber;
+        count: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        sum?: number;
+        count?: number;
+    }, {
+        sum?: number;
+        count?: number;
+    }>;
     en: z.ZodOptional<z.ZodObject<{
         presentationVideo: z.ZodOptional<z.ZodString>;
         howToSupport: z.ZodOptional<z.ZodObject<{
@@ -319,20 +328,23 @@ export declare const initiative: z.ZodObject<{
     name?: string;
     path?: string;
     email?: string;
-    incubator?: string;
+    incubator?: {
+        path?: string;
+        connectedAccount?: "incubateeRequested" | "pendingIncubateeApproval" | "allAccepted";
+    };
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
     createdAt?: Date;
     organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
     pic?: string;
-    ratings?: {
-        sum?: number;
-        count?: number;
-    };
     connectedAccount?: {
         ownerMemberPath?: string;
         stripeAccountId?: string;
         status?: "active" | "onboarding";
         title?: string;
+    };
+    ratings?: {
+        sum?: number;
+        count?: number;
     };
     en?: {
         presentationVideo?: string;
@@ -387,20 +399,23 @@ export declare const initiative: z.ZodObject<{
     name?: string;
     path?: string;
     email?: string;
-    incubator?: string;
+    incubator?: {
+        path?: string;
+        connectedAccount?: "incubateeRequested" | "pendingIncubateeApproval" | "allAccepted";
+    };
     locale?: "en" | "es" | "fr" | "de" | "pl" | "pt";
     createdAt?: any;
     organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
     pic?: string;
-    ratings?: {
-        sum?: number;
-        count?: number;
-    };
     connectedAccount?: {
         ownerMemberPath?: string;
         stripeAccountId?: string;
         status?: "active" | "onboarding";
         title?: string;
+    };
+    ratings?: {
+        sum?: number;
+        count?: number;
     };
     en?: {
         presentationVideo?: string;
@@ -1681,7 +1696,7 @@ export declare const content: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
 export type Content = z.infer<typeof content>;
 export declare const sponsorshipLevel: z.ZodEnum<["admirer", "fan", "lover", "custom"]>;
 export type SponsorshipLevel = z.infer<typeof sponsorshipLevel>;
-declare const paymentPlanMonthlyStatus: z.ZodEnum<["active", "incomplete", "canceled"]>;
+declare const paymentPlanMonthlyStatus: z.ZodEnum<["active", "incomplete", "canceled", "incomplete_expired"]>;
 export type PaymentPlanMonthlyStatus = z.infer<typeof paymentPlanMonthlyStatus>;
 export declare const sponsorship: z.ZodObject<{
     path: z.ZodOptional<z.ZodString>;
@@ -1692,7 +1707,7 @@ export declare const sponsorship: z.ZodObject<{
         type: z.ZodLiteral<"monthly">;
         id: z.ZodOptional<z.ZodString>;
         billingCycleAnchor: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
-        status: z.ZodEnum<["active", "incomplete", "canceled"]>;
+        status: z.ZodEnum<["active", "incomplete", "canceled", "incomplete_expired"]>;
         item: z.ZodString;
         price: z.ZodString;
         applicationFeePercent: z.ZodNumber;
@@ -1700,7 +1715,7 @@ export declare const sponsorship: z.ZodObject<{
         type?: "monthly";
         id?: string;
         billingCycleAnchor?: Date;
-        status?: "active" | "canceled" | "incomplete";
+        status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
         item?: string;
         price?: string;
         applicationFeePercent?: number;
@@ -1708,10 +1723,22 @@ export declare const sponsorship: z.ZodObject<{
         type?: "monthly";
         id?: string;
         billingCycleAnchor?: any;
-        status?: "active" | "canceled" | "incomplete";
+        status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
         item?: string;
         price?: string;
         applicationFeePercent?: number;
+    }>, z.ZodObject<{
+        type: z.ZodLiteral<"oneTime">;
+        status: z.ZodEnum<["active", "incomplete"]>;
+        applicationFeeAmount: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        type?: "oneTime";
+        status?: "active" | "incomplete";
+        applicationFeeAmount?: number;
+    }, {
+        type?: "oneTime";
+        status?: "active" | "incomplete";
+        applicationFeeAmount?: number;
     }>]>;
     paymentsStarted: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     total: z.ZodNumber;
@@ -1738,10 +1765,14 @@ export declare const sponsorship: z.ZodObject<{
         type?: "monthly";
         id?: string;
         billingCycleAnchor?: Date;
-        status?: "active" | "canceled" | "incomplete";
+        status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
         item?: string;
         price?: string;
         applicationFeePercent?: number;
+    } | {
+        type?: "oneTime";
+        status?: "active" | "incomplete";
+        applicationFeeAmount?: number;
     };
     paymentsStarted?: Date;
     total?: number;
@@ -1768,10 +1799,14 @@ export declare const sponsorship: z.ZodObject<{
         type?: "monthly";
         id?: string;
         billingCycleAnchor?: any;
-        status?: "active" | "canceled" | "incomplete";
+        status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
         item?: string;
         price?: string;
         applicationFeePercent?: number;
+    } | {
+        type?: "oneTime";
+        status?: "active" | "incomplete";
+        applicationFeeAmount?: number;
     };
     paymentsStarted?: any;
     total?: number;
@@ -1796,38 +1831,230 @@ export declare const incubatee: z.ZodObject<{
     locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
     createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
     initiativePath: z.ZodOptional<z.ZodString>;
-    initializeWith: z.ZodOptional<z.ZodObject<{
-        name: z.ZodString;
+    initializeWith: z.ZodOptional<z.ZodObject<Pick<{
         type: z.ZodEnum<["individual", "organization"]>;
-        organizationType: z.ZodOptional<z.ZodEnum<["nonprofit", "religious", "unincorporated", "profit", "incubator"]>>;
-        incubator: z.ZodString;
-        ratings: z.ZodObject<{
-            sum: z.ZodLiteral<0>;
-            count: z.ZodLiteral<0>;
+        name: z.ZodString;
+        path: z.ZodOptional<z.ZodString>;
+        email: z.ZodOptional<z.ZodString>;
+        incubator: z.ZodOptional<z.ZodObject<{
+            path: z.ZodString;
+            connectedAccount: z.ZodOptional<z.ZodEnum<["incubateeRequested", "pendingIncubateeApproval", "allAccepted"]>>;
         }, "strip", z.ZodTypeAny, {
-            sum?: 0;
-            count?: 0;
+            path?: string;
+            connectedAccount?: "incubateeRequested" | "pendingIncubateeApproval" | "allAccepted";
         }, {
-            sum?: 0;
-            count?: 0;
+            path?: string;
+            connectedAccount?: "incubateeRequested" | "pendingIncubateeApproval" | "allAccepted";
+        }>>;
+        locale: z.ZodOptional<z.ZodEnum<["en", "es", "fr", "de", "pl", "pt"]>>;
+        createdAt: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
+        organizationType: z.ZodOptional<z.ZodEnum<["nonprofit", "religious", "unincorporated", "profit", "incubator"]>>;
+        pic: z.ZodOptional<z.ZodString>;
+        connectedAccount: z.ZodOptional<z.ZodObject<{
+            ownerMemberPath: z.ZodString;
+            stripeAccountId: z.ZodString;
+            status: z.ZodEnum<["onboarding", "active"]>;
+            title: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            ownerMemberPath?: string;
+            stripeAccountId?: string;
+            status?: "active" | "onboarding";
+            title?: string;
+        }, {
+            ownerMemberPath?: string;
+            stripeAccountId?: string;
+            status?: "active" | "onboarding";
+            title?: string;
+        }>>;
+        ratings: z.ZodObject<{
+            sum: z.ZodNumber;
+            count: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            sum?: number;
+            count?: number;
+        }, {
+            sum?: number;
+            count?: number;
         }>;
-    }, "strip", z.ZodTypeAny, {
-        name?: string;
+        en: z.ZodOptional<z.ZodObject<{
+            presentationVideo: z.ZodOptional<z.ZodString>;
+            howToSupport: z.ZodOptional<z.ZodObject<{
+                contact: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                contact?: string;
+            }, {
+                contact?: string;
+            }>>;
+            about: z.ZodOptional<z.ZodString>;
+            validationProcess: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            presentationVideo?: string;
+            howToSupport?: {
+                contact?: string;
+            };
+            about?: string;
+            validationProcess?: string;
+        }, {
+            presentationVideo?: string;
+            howToSupport?: {
+                contact?: string;
+            };
+            about?: string;
+            validationProcess?: string;
+        }>>;
+        es: z.ZodOptional<z.ZodObject<{
+            presentationVideo: z.ZodOptional<z.ZodString>;
+            howToSupport: z.ZodOptional<z.ZodObject<{
+                contact: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                contact?: string;
+            }, {
+                contact?: string;
+            }>>;
+            about: z.ZodOptional<z.ZodString>;
+            validationProcess: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            presentationVideo?: string;
+            howToSupport?: {
+                contact?: string;
+            };
+            about?: string;
+            validationProcess?: string;
+        }, {
+            presentationVideo?: string;
+            howToSupport?: {
+                contact?: string;
+            };
+            about?: string;
+            validationProcess?: string;
+        }>>;
+        fr: z.ZodOptional<z.ZodObject<{
+            presentationVideo: z.ZodOptional<z.ZodString>;
+            howToSupport: z.ZodOptional<z.ZodObject<{
+                contact: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                contact?: string;
+            }, {
+                contact?: string;
+            }>>;
+            about: z.ZodOptional<z.ZodString>;
+            validationProcess: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            presentationVideo?: string;
+            howToSupport?: {
+                contact?: string;
+            };
+            about?: string;
+            validationProcess?: string;
+        }, {
+            presentationVideo?: string;
+            howToSupport?: {
+                contact?: string;
+            };
+            about?: string;
+            validationProcess?: string;
+        }>>;
+        de: z.ZodOptional<z.ZodObject<{
+            presentationVideo: z.ZodOptional<z.ZodString>;
+            howToSupport: z.ZodOptional<z.ZodObject<{
+                contact: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                contact?: string;
+            }, {
+                contact?: string;
+            }>>;
+            about: z.ZodOptional<z.ZodString>;
+            validationProcess: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            presentationVideo?: string;
+            howToSupport?: {
+                contact?: string;
+            };
+            about?: string;
+            validationProcess?: string;
+        }, {
+            presentationVideo?: string;
+            howToSupport?: {
+                contact?: string;
+            };
+            about?: string;
+            validationProcess?: string;
+        }>>;
+        pl: z.ZodOptional<z.ZodObject<{
+            presentationVideo: z.ZodOptional<z.ZodString>;
+            howToSupport: z.ZodOptional<z.ZodObject<{
+                contact: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                contact?: string;
+            }, {
+                contact?: string;
+            }>>;
+            about: z.ZodOptional<z.ZodString>;
+            validationProcess: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            presentationVideo?: string;
+            howToSupport?: {
+                contact?: string;
+            };
+            about?: string;
+            validationProcess?: string;
+        }, {
+            presentationVideo?: string;
+            howToSupport?: {
+                contact?: string;
+            };
+            about?: string;
+            validationProcess?: string;
+        }>>;
+        pt: z.ZodOptional<z.ZodObject<{
+            presentationVideo: z.ZodOptional<z.ZodString>;
+            howToSupport: z.ZodOptional<z.ZodObject<{
+                contact: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                contact?: string;
+            }, {
+                contact?: string;
+            }>>;
+            about: z.ZodOptional<z.ZodString>;
+            validationProcess: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            presentationVideo?: string;
+            howToSupport?: {
+                contact?: string;
+            };
+            about?: string;
+            validationProcess?: string;
+        }, {
+            presentationVideo?: string;
+            howToSupport?: {
+                contact?: string;
+            };
+            about?: string;
+            validationProcess?: string;
+        }>>;
+    }, "type" | "name" | "incubator" | "organizationType" | "ratings">, "strip", z.ZodTypeAny, {
         type?: "individual" | "organization";
+        name?: string;
+        incubator?: {
+            path?: string;
+            connectedAccount?: "incubateeRequested" | "pendingIncubateeApproval" | "allAccepted";
+        };
         organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
-        incubator?: string;
         ratings?: {
-            sum?: 0;
-            count?: 0;
+            sum?: number;
+            count?: number;
         };
     }, {
-        name?: string;
         type?: "individual" | "organization";
+        name?: string;
+        incubator?: {
+            path?: string;
+            connectedAccount?: "incubateeRequested" | "pendingIncubateeApproval" | "allAccepted";
+        };
         organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
-        incubator?: string;
         ratings?: {
-            sum?: 0;
-            count?: 0;
+            sum?: number;
+            count?: number;
         };
     }>>;
 }, "strip", z.ZodTypeAny, {
@@ -1836,13 +2063,16 @@ export declare const incubatee: z.ZodObject<{
     createdAt?: Date;
     initiativePath?: string;
     initializeWith?: {
-        name?: string;
         type?: "individual" | "organization";
+        name?: string;
+        incubator?: {
+            path?: string;
+            connectedAccount?: "incubateeRequested" | "pendingIncubateeApproval" | "allAccepted";
+        };
         organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
-        incubator?: string;
         ratings?: {
-            sum?: 0;
-            count?: 0;
+            sum?: number;
+            count?: number;
         };
     };
 }, {
@@ -1851,13 +2081,16 @@ export declare const incubatee: z.ZodObject<{
     createdAt?: any;
     initiativePath?: string;
     initializeWith?: {
-        name?: string;
         type?: "individual" | "organization";
+        name?: string;
+        incubator?: {
+            path?: string;
+            connectedAccount?: "incubateeRequested" | "pendingIncubateeApproval" | "allAccepted";
+        };
         organizationType?: "nonprofit" | "religious" | "unincorporated" | "profit" | "incubator";
-        incubator?: string;
         ratings?: {
-            sum?: 0;
-            count?: 0;
+            sum?: number;
+            count?: number;
         };
     };
 }>;
@@ -1946,7 +2179,7 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             type: z.ZodLiteral<"monthly">;
             id: z.ZodOptional<z.ZodString>;
             billingCycleAnchor: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
-            status: z.ZodEnum<["active", "incomplete", "canceled"]>;
+            status: z.ZodEnum<["active", "incomplete", "canceled", "incomplete_expired"]>;
             item: z.ZodString;
             price: z.ZodString;
             applicationFeePercent: z.ZodNumber;
@@ -1954,7 +2187,7 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             type?: "monthly";
             id?: string;
             billingCycleAnchor?: Date;
-            status?: "active" | "canceled" | "incomplete";
+            status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
             item?: string;
             price?: string;
             applicationFeePercent?: number;
@@ -1962,10 +2195,22 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             type?: "monthly";
             id?: string;
             billingCycleAnchor?: any;
-            status?: "active" | "canceled" | "incomplete";
+            status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
             item?: string;
             price?: string;
             applicationFeePercent?: number;
+        }>, z.ZodObject<{
+            type: z.ZodLiteral<"oneTime">;
+            status: z.ZodEnum<["active", "incomplete"]>;
+            applicationFeeAmount: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            type?: "oneTime";
+            status?: "active" | "incomplete";
+            applicationFeeAmount?: number;
+        }, {
+            type?: "oneTime";
+            status?: "active" | "incomplete";
+            applicationFeeAmount?: number;
         }>]>;
         paymentsStarted: z.ZodOptional<z.ZodEffects<z.ZodAny, Date, any>>;
         total: z.ZodNumber;
@@ -1992,10 +2237,14 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             type?: "monthly";
             id?: string;
             billingCycleAnchor?: Date;
-            status?: "active" | "canceled" | "incomplete";
+            status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
             item?: string;
             price?: string;
             applicationFeePercent?: number;
+        } | {
+            type?: "oneTime";
+            status?: "active" | "incomplete";
+            applicationFeeAmount?: number;
         };
         paymentsStarted?: Date;
         total?: number;
@@ -2022,10 +2271,14 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             type?: "monthly";
             id?: string;
             billingCycleAnchor?: any;
-            status?: "active" | "canceled" | "incomplete";
+            status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
             item?: string;
             price?: string;
             applicationFeePercent?: number;
+        } | {
+            type?: "oneTime";
+            status?: "active" | "incomplete";
+            applicationFeeAmount?: number;
         };
         paymentsStarted?: any;
         total?: number;
@@ -2058,10 +2311,14 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             type?: "monthly";
             id?: string;
             billingCycleAnchor?: Date;
-            status?: "active" | "canceled" | "incomplete";
+            status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
             item?: string;
             price?: string;
             applicationFeePercent?: number;
+        } | {
+            type?: "oneTime";
+            status?: "active" | "incomplete";
+            applicationFeeAmount?: number;
         };
         paymentsStarted?: Date;
         total?: number;
@@ -2094,10 +2351,14 @@ export declare const from: z.ZodDiscriminatedUnion<"type", [z.ZodObject<{
             type?: "monthly";
             id?: string;
             billingCycleAnchor?: any;
-            status?: "active" | "canceled" | "incomplete";
+            status?: "active" | "canceled" | "incomplete" | "incomplete_expired";
             item?: string;
             price?: string;
             applicationFeePercent?: number;
+        } | {
+            type?: "oneTime";
+            status?: "active" | "incomplete";
+            applicationFeeAmount?: number;
         };
         paymentsStarted?: any;
         total?: number;

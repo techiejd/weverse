@@ -8,6 +8,7 @@ import {
   useCallback,
   useState,
   useEffect,
+  Fragment,
 } from "react";
 import { DetailedInputProps } from "../../../common/components/addInternationalizedDetailedInput";
 import Section from "../../../common/components/section";
@@ -20,6 +21,7 @@ import {
 } from "../../../functions/shared/src";
 import { FileInput } from "../../posi/input";
 import { useRouter } from "next/router";
+import { extractAccountLink } from "../context";
 
 const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
   val,
@@ -37,10 +39,17 @@ const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
   const accountOnboarding = val?.connectedAccount?.status == "onboarding";
   const viewConnectedAccountHref = (() => {
     if (val?.connectedAccount?.status == "active") {
-      return `/${val.connectedAccount.ownerMemberPath}/accounts/${val.connectedAccount.stripeAccountId}`;
+      return extractAccountLink(val.connectedAccount);
     }
     return undefined;
   })();
+  const connectIncubatorAccountNeedsAttn =
+    (val?.connectedAccount &&
+      val?.incubator?.connectedAccount == "pendingIncubateeApproval") ||
+    val?.incubator?.connectedAccount == "incubateeRequested";
+  const ifIncubatorAccountDoesNotNeedAttn =
+    !val?.incubator?.connectedAccount ||
+    val?.incubator?.connectedAccount == "allAccepted";
   const detailedInputTranslations = useTranslations(
     "initiatives.edit.detailedInput"
   );
@@ -161,6 +170,12 @@ const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
       </Section>
     );
 
+  console.log({
+    val,
+    connectAccount: val?.incubator?.connectedAccount,
+    connectIncubatorAccountNeedsAttn,
+    ifIncubatorAccountDoesNotNeedAttn,
+  });
   return (
     <Stack spacing={2} sx={sectionStyles}>
       <Section
@@ -208,42 +223,57 @@ const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
       </Section>
       {connectAccountHref && (
         <Section label="Get financial help">
-          {!viewConnectedAccountHref && !accountOnboarding && (
-            <Typography variant="h3">
-              In order to get financial help, you need to connect an account.
-            </Typography>
-          )}
-          {accountOnboarding && (
-            <Typography variant="h3">
+          {!viewConnectedAccountHref &&
+            !accountOnboarding && [
+              <Typography variant="h3" key="connectAccountMsg">
+                In order to get financial help, you need to connect an account.
+              </Typography>,
+              <Button
+                variant="contained"
+                href={connectAccountHref}
+                sx={{ width: "fit-content", alignSelf: "center" }}
+                key="connectAccountBtn"
+              >
+                Connect account
+              </Button>,
+            ]}
+          {(accountOnboarding || connectIncubatorAccountNeedsAttn) && [
+            <Typography variant="h3" key="finishOnboardingMsg">
               Your have not finished onboarding your account. You will be able
               to receive financial help once the process is complete.
-            </Typography>
-          )}
-          {viewConnectedAccountHref && (
-            <Typography variant="h3">
-              Congratulations, you are on your way to receiving financial help.
-            </Typography>
-          )}
-          <Button
-            variant={viewConnectedAccountHref ? "outlined" : "contained"}
-            href={connectAccountHref}
-            sx={{ width: "fit-content", alignSelf: "center" }}
-          >
-            {!viewConnectedAccountHref &&
-              !accountOnboarding &&
-              "Connect account"}
-            {accountOnboarding && "Continue onboarding"}
-            {viewConnectedAccountHref && "Modify connected account"}
-          </Button>
-          {viewConnectedAccountHref && (
+            </Typography>,
             <Button
               variant="contained"
-              href={viewConnectedAccountHref}
+              href={connectAccountHref}
               sx={{ width: "fit-content", alignSelf: "center" }}
+              key="finishOnboardingBtn"
             >
-              View Account
-            </Button>
-          )}
+              Continue onboarding
+            </Button>,
+          ]}
+          {viewConnectedAccountHref &&
+            ifIncubatorAccountDoesNotNeedAttn && [
+              <Typography variant="h3" key="connectedAccountOkMsg">
+                Congratulations, you are on your way to receiving financial
+                help.
+              </Typography>,
+              <Button
+                variant="outlined"
+                href={connectAccountHref}
+                sx={{ width: "fit-content", alignSelf: "center" }}
+                key="modifyConnectedAccountBtn"
+              >
+                Modify connected account
+              </Button>,
+              <Button
+                variant="contained"
+                href={viewConnectedAccountHref}
+                sx={{ width: "fit-content", alignSelf: "center" }}
+                key="viewConnectedAccountBtn"
+              >
+                View Account
+              </Button>,
+            ]}
         </Section>
       )}
       {targetedQuestion}

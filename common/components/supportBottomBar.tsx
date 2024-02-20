@@ -318,20 +318,23 @@ const SupportBottomBar = ({ beneficiary }: { beneficiary: Beneficiary }) => {
             {callToActionTranslations("testify")}
           </Typography>
         </IconButtonWithLabel>
-        {beneficiary.initiative.connectedAccount && (
-          <CenterBottomFab
-            color="secondary"
-            aria-label="add"
-            sx={{ width: 70, height: 70 }}
-            onClick={() => {
-              //TODO(techiejd): Honestly posi should be under initiatives/initiativePath/posi.
-              setSponsorDialogOpen(true);
-              if (!sponsoring) setInAddSponsorshipExperience(true);
-            }}
-          >
-            <SponsorCallToAction />
-          </CenterBottomFab>
-        )}
+        {beneficiary.initiative.connectedAccount?.status == "active" &&
+          (!beneficiary.initiative.incubator?.connectedAccount ||
+            beneficiary.initiative.incubator?.connectedAccount ==
+              "allAccepted") && (
+            <CenterBottomFab
+              color="secondary"
+              aria-label="add"
+              sx={{ width: 70, height: 70 }}
+              onClick={() => {
+                //TODO(techiejd): Honestly posi should be under initiatives/initiativePath/posi.
+                setSponsorDialogOpen(true);
+                if (!sponsoring) setInAddSponsorshipExperience(true);
+              }}
+            >
+              <SponsorCallToAction />
+            </CenterBottomFab>
+          )}
         <Box sx={{ flexGrow: 1 }} />
         <IconButtonWithLabel onClick={() => setConnectDialogOpen(true)}>
           <Add fontSize="large" />

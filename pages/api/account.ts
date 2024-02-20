@@ -8,9 +8,9 @@ import Utils, {
 import {
   getAdminFirestore,
   getAuthentication,
-  isDevEnvironment,
 } from "../../common/utils/firebaseAdmin";
 import { Accounts } from "../../functions/shared/src";
+import { deleteField } from "firebase/firestore";
 
 export default async function handler(
   req: NextApiRequest,
@@ -23,30 +23,53 @@ export default async function handler(
 
     // Check call came from same origin
     const origin = req.headers.origin;
+    console.log({ origin, publicBaseUrl });
     if (origin !== publicBaseUrl) {
+      console.log("out here");
       return badRequest(res, 403, "Forbidden");
     }
+    console.log("out here1");
 
     // Check if user is signed in
     const user = await getAuthentication({ req });
+    console.log("out here2");
 
     if (!user.authenticated) {
       return badRequest(res, 401, "User not authenticated");
     }
     const memberPath = `members/${user.uid}`;
+    console.log("out here3");
 
     // Validate request body
-    const { title, initiativePath } = req.body;
+    const { title, initiativePath, incubator } = req.body;
     if (!title || !initiativePath) {
       return badRequest(res, 400, "Missing required fields");
     }
 
-    if (!initiativePath.includes(user.uid)) {
-      return badRequest(res, 403, "Unauthorized");
-    }
+    console.log("out here4");
 
     // Get Firestore instance
     const firestore = getAdminFirestore();
+
+    // Check if user is authorized
+    const unauthorized = await (async () => {
+      console.log({ initiativePath, user, incubator });
+      if (initiativePath.includes(user.uid)) return false;
+      if (incubator) {
+        if (!incubator.includes(user.uid)) return true;
+        const initiativeDoc = await firestore
+          .doc(initiativePath)
+          .withConverter(Utils.initiativeConverter)
+          .get();
+        const initiative = initiativeDoc.data();
+        if (initiative?.incubator?.path == incubator) return false;
+      }
+      return true;
+    })();
+    if (unauthorized) {
+      return badRequest(res, 403, "Unauthorized");
+    }
+    console.log("out here5");
 
     // Create Stripe account
     const stripeAccount = await stripe.accounts.create({
@@ -59,7 +82,7 @@ export default async function handler(
       user.uid
     );
 
-    // Save account under the member using Firestore
+    // Save account under the member
     const updateMemberAccountPromise = firestore.runTransaction(
       async (transaction) => {
         return transaction
@@ -69,6 +92,7 @@ export default async function handler(
               throw new Error("Document does not exist");
             }
 
+            // We're using transaction so member data doesn't change under us.
             const member = doc.data();
             const accounts: Accounts = member?.stripe?.accounts
               ? member.stripe.accounts
@@ -91,7 +115,7 @@ export default async function handler(
       }
     );
 
-    // Save account under initiative using Firestore
+    // Save account under initiative
     const updateInitiativeAccountPromise = firestore
       .doc(initiativePath)
       .update({
@@ -103,11 +127,37 @@ export default async function handler(
         },
       });
 
-    // Wait for both promises to resolve
+    // Save update incubator under initiative's account information.
+    const updateIncubatorPromise = firestore.runTransaction(
+      async (transaction) => {
+        if (!incubator) return Promise.resolve();
+        const initiativeDoc = await transaction.get(
+          firestore.doc(initiativePath)
+        );
+        const initiative = initiativeDoc.data();
+        if (!initiative)
+          throw new Error(`Initiative ${initiativePath} does not exist`);
+        return transaction.set(
+          initiativeDoc.ref,
+          {
+            incubator: {
+              connectedAccount:
+                initiative.incubator.connectedAccount == "incubateeRequested"
+                  ? "allAccepted"
+                  : "pendingIncubateeApproval",
+            },
+          },
+          { merge: true }
+        );
+      }
+    );
+
+    // Wait for all promises to resolve
     const [stripeAccountLink] = await Promise.all([
       stripeAccountLinkPromise,
       updateMemberAccountPromise,
       updateInitiativeAccountPromise,
+      updateIncubatorPromise,
     ]);
 
     // Return the account link

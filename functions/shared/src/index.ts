@@ -28,6 +28,7 @@ export const media = z.object({
 export type Media = z.infer<typeof media>;
 
 export const initiativeType = z.enum(["individual", "organization"]);
+// TODO(techiejd): Those exports that don't export the schema should use Type["subtype"] notation.
 export type InitiativeType = z.infer<typeof initiativeType>;
 export const organizationType = z.enum([
   "nonprofit",
@@ -95,7 +96,18 @@ export const initiative = dbBase
     name: z.string().min(1),
     pic: formUrl.optional(),
     email: z.string().optional(),
-    incubator: z.string().optional(),
+    incubator: z
+      .object({
+        path: z.string().min(1),
+        connectedAccount: z
+          .enum([
+            "incubateeRequested",
+            "pendingIncubateeApproval",
+            "allAccepted",
+          ])
+          .optional(),
+      })
+      .optional(),
     ratings,
     connectedAccount: z
       .object({
@@ -340,13 +352,13 @@ export type Sponsorship = z.infer<typeof sponsorship>;
 
 export const incubatee = dbBase.extend({
   initiativePath: z.string().optional(), // Path to the initiative that accepted.
-  initializeWith: z
-    .object({
-      name: z.string().min(1),
-      type: initiativeType,
-      organizationType: organizationType.optional(),
-      incubator: z.string().min(1),
-      ratings: z.object({ sum: z.literal(0), count: z.literal(0) }),
+  initializeWith: initiative
+    .pick({
+      name: true,
+      type: true,
+      organizationType: true,
+      incubator: true,
+      ratings: true,
     })
     .optional(),
 });

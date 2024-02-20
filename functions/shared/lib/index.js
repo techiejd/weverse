@@ -84,7 +84,18 @@ exports.initiative = exports.dbBase
     name: zod_1.z.string().min(1),
     pic: exports.formUrl.optional(),
     email: zod_1.z.string().optional(),
-    incubator: zod_1.z.string().optional(),
+    incubator: zod_1.z
+        .object({
+        path: zod_1.z.string().min(1),
+        connectedAccount: zod_1.z
+            .enum([
+            "incubateeRequested",
+            "pendingIncubateeApproval",
+            "allAccepted",
+        ])
+            .optional(),
+    })
+        .optional(),
     ratings: exports.ratings,
     connectedAccount: zod_1.z
         .object({
@@ -237,7 +248,12 @@ exports.content = zod_1.z.discriminatedUnion("type", [
     socialProofContent,
 ]);
 exports.sponsorshipLevel = zod_1.z.enum(["admirer", "fan", "lover", "custom"]);
-const paymentPlanMonthlyStatus = zod_1.z.enum(["active", "incomplete", "canceled"]);
+const paymentPlanMonthlyStatus = zod_1.z.enum([
+    "active",
+    "incomplete",
+    "canceled",
+    "incomplete_expired",
+]); //TODO(techiejd): Look into removing incomplete_expired.
 exports.sponsorship = exports.dbBase.extend({
     version: zod_1.z.enum(["0.0.1", "0.0.2"]),
     paymentPlan: zod_1.z.discriminatedUnion("type", [
@@ -249,6 +265,11 @@ exports.sponsorship = exports.dbBase.extend({
             item: zod_1.z.string().min(1),
             price: zod_1.z.string().min(1),
             applicationFeePercent: zod_1.z.number(), // Number between 0 and 100.
+        }),
+        zod_1.z.object({
+            type: zod_1.z.literal("oneTime"),
+            status: zod_1.z.enum(["active", "incomplete"]),
+            applicationFeeAmount: zod_1.z.number(), // Amount paid, no decimal
         }),
     ]),
     // deprecated: stripeSubscription: z.string().optional(),
@@ -277,13 +298,13 @@ exports.sponsorship = exports.dbBase.extend({
 });
 exports.incubatee = exports.dbBase.extend({
     initiativePath: zod_1.z.string().optional(),
-    initializeWith: zod_1.z
-        .object({
-        name: zod_1.z.string().min(1),
-        type: exports.initiativeType,
-        organizationType: exports.organizationType.optional(),
-        incubator: zod_1.z.string().min(1),
-        ratings: zod_1.z.object({ sum: zod_1.z.literal(0), count: zod_1.z.literal(0) }),
+    initializeWith: exports.initiative
+        .pick({
+        name: true,
+        type: true,
+        organizationType: true,
+        incubator: true,
+        ratings: true,
     })
         .optional(),
 });

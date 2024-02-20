@@ -265,7 +265,7 @@ const MyDialogContent = ({
         batch.delete(
           doc(
             appState.firestore,
-            selectedInitiative.incubator,
+            selectedInitiative.incubator.path,
             "incubatees",
             id
           )
@@ -276,7 +276,7 @@ const MyDialogContent = ({
           initiativeConverter
         ),
         {
-          incubator: incubator.path,
+          incubator: { path: incubator.path },
         }
       );
     }
@@ -373,8 +373,8 @@ const MyDialogContent = ({
                     <FormHelperText>{t("alreadyIncubating")}</FormHelperText>
                   )}
                   {initiative.incubator &&
-                    !(incubator?.path == initiative.incubator) && (
-                      <IncubatedBy incubatorPath={initiative.incubator} />
+                    !(incubator?.path == initiative.incubator.path) && (
+                      <IncubatedBy incubatorPath={initiative.incubator.path} />
                     )}
                   {incubator?.path == initiative.path && (
                     <FormHelperText>{t("cantIncubateSelf")}</FormHelperText>

@@ -13,6 +13,12 @@ import {
   CardActions,
   Button,
   Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  TextField,
 } from "@mui/material";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { useTranslations } from "next-intl";
@@ -22,6 +28,7 @@ import { useAppState } from "../../../common/context/appState";
 import {
   useCurrentIncubatees,
   useCurrentNeedsValidation,
+  useInitiative,
   useIsMine,
 } from "../../../common/context/weverseUtils";
 import { usePosiFormDataConverter } from "../../../common/utils/firebase";
@@ -33,8 +40,13 @@ import {
 } from "../../../functions/shared/src";
 import ImpactCard from "../../posi/action/card";
 import InitiativeCard from "../InitiativeCard";
-import { useCurrentInitiative } from "../context";
+import {
+  extractAccountLink,
+  useAlertOrRedirectToOnboardingStripeAccount,
+  useCurrentInitiative,
+} from "../context";
 import { useCopyToClipboard, buildShareLinks } from "../inviteAnInitiative";
+import { useRouter } from "next/router";
 
 const InvitedIncubateePortal = ({
   incubatee,
@@ -140,6 +152,237 @@ const ValidateActionPortal = ({ action }: { action: PosiFormData }) => {
   );
 };
 
+const PreemptivelyConnectAccountDialog = ({
+  open,
+  close,
+  initiativeName,
+  initiativePath,
+}: {
+  open: boolean;
+  close: () => void;
+  initiativeName: string;
+  initiativePath: string;
+}) => {
+  const alertOrRedirectToOnboardingStripeAccount =
+    useAlertOrRedirectToOnboardingStripeAccount();
+  const [incubator, incubatorLoading] = useCurrentInitiative();
+  const [title, setTitle] = useState(initiativeName);
+  const [loading, setLoading] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
+  const [understood, setUnderstood] = useState(false);
+  const internalClose = () => {
+    if (loading || redirecting) {
+      alert("Please wait for the process to finish.");
+    }
+    setUnderstood(false);
+    if (title == "") setTitle(initiativeName);
+    close();
+  };
+  const explainIncubateeMustAcceptConnectedAccountComponents = (
+    <Fragment>
+      <DialogTitle>
+        Your incubatee must accept this connected account in order for them to
+        receive payments.
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          They can accept through their initiative edit page, clicking{" "}
+          {'"connect account"'} followed by selecting{" "}
+          {'"accept incubator\'s connect account"'} and lastly clicking{" "}
+          {'"connect account"'}.
+        </DialogContentText>
+        <DialogContentText>
+          You will be redirected to our partner Stripe to connect an account.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={internalClose}>Cancel</Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setUnderstood(true);
+          }}
+        >
+          Understood
+        </Button>
+      </DialogActions>
+    </Fragment>
+  );
+  const askingForTitleComponents = (
+    <Fragment>
+      <DialogTitle>Give the account a title.</DialogTitle>
+      <DialogContent>
+        <TextField
+          label="Please give a title for the new account"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          error={title == "" ? true : false}
+          helperText={title == "" ? "The account must have a title." : ""}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button disabled={loading} onClick={internalClose}>
+          Cancel
+        </Button>
+        <Button
+          disabled={loading || title == "" || redirecting || incubatorLoading}
+          variant="contained"
+          onClick={() => {
+            setLoading(true);
+            alertOrRedirectToOnboardingStripeAccount(
+              title,
+              initiativePath,
+              incubator?.path!
+            );
+            setLoading(false);
+            setRedirecting(true);
+          }}
+        >
+          Connect account
+        </Button>
+      </DialogActions>
+    </Fragment>
+  );
+  const redirectingComponents = (
+    <Fragment>
+      <DialogTitle>Please wait</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Please wait while redirect you to our Stripe partner.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <CircularProgress />
+      </DialogActions>
+    </Fragment>
+  );
+  return (
+    <Dialog open={open} onClose={internalClose}>
+      {!understood && explainIncubateeMustAcceptConnectedAccountComponents}
+      {understood && !redirecting && askingForTitleComponents}
+      {understood && redirecting && redirectingComponents}
+    </Dialog>
+  );
+};
+
+const RedirectingDialog = ({ open }: { open: boolean }) => {
+  return (
+    <Dialog open={open}>
+      <DialogTitle>Please wait</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Please wait while we redirect you to our Stripe partner.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <CircularProgress />
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const IncubateeManipulationPortal = ({
+  incubatee,
+}: {
+  incubatee: Incubatee;
+}) => {
+  const [incubateeInitiative, loading] = useInitiative(
+    incubatee.initiativePath
+  );
+  const connectedAccount = incubateeInitiative?.connectedAccount;
+  const incubatorRelationshipWithConnectedAccount =
+    incubateeInitiative?.incubator?.connectedAccount;
+  const [explainDialogOpen, setExplainDialogOpen] = useState(false);
+  // TODO(techiejd): Move the continue onboarding link logic to the backend.
+  const [redirecting, setRedirecting] = useState(false);
+  const router = useRouter();
+  // TODO(techiejd): Figure out how to pass either initiative or
+  // initiative path to InitiativeCard.
+  return (
+    <Fragment>
+      {incubateeInitiative && (
+        <PreemptivelyConnectAccountDialog
+          open={explainDialogOpen}
+          close={() => setExplainDialogOpen(false)}
+          initiativeName={incubateeInitiative.name}
+          initiativePath={incubatee.initiativePath!}
+        />
+      )}
+      <RedirectingDialog open={redirecting} />
+      <Stack spacing={2} sx={{ borderColor: "primary.main", border: 1, p: 2 }}>
+        <InitiativeCard initiativePath={incubatee.initiativePath!} />
+        {loading && <CircularProgress />}
+        {connectedAccount?.status == "active" &&
+          !incubatorRelationshipWithConnectedAccount && (
+            <Button
+              variant="contained"
+              href={extractAccountLink(connectedAccount)}
+            >
+              View account
+            </Button>
+          )}
+        {connectedAccount?.status == "onboarding" &&
+          (incubatorRelationshipWithConnectedAccount ? (
+            <Button
+              variant="contained"
+              onClick={async () => {
+                setRedirecting(true);
+                // TODO(techiejd): Move the continue onboarding link logic to the backend.
+                const continueOnboardingLinkResponse = await fetch(
+                  "/api/continueOnboardingLink",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      stripeAccountId: connectedAccount.stripeAccountId,
+                    }),
+                  }
+                );
+                if (continueOnboardingLinkResponse.ok) {
+                  const continueOnboardingLink =
+                    await continueOnboardingLinkResponse.json();
+                  router.push(continueOnboardingLink.link);
+                } else {
+                  alert(
+                    `Error getting continue onboarding link ${continueOnboardingLinkResponse.status}: ${continueOnboardingLinkResponse.statusText}`
+                  );
+                }
+              }}
+            >
+              Finish onboarding through our partner Stripe.
+            </Button>
+          ) : (
+            <Typography color="red">
+              Incubatee must finish onboarding through Stripe.
+            </Typography>
+          ))}
+        {incubatorRelationshipWithConnectedAccount == "incubateeRequested" &&
+          !connectedAccount && (
+            <Button variant="contained">
+              Connect account through our partner Stripe.
+            </Button>
+          )}
+        {incubatorRelationshipWithConnectedAccount ==
+          "pendingIncubateeApproval" && (
+          <Typography color="red">
+            Waiting for incubatee to approve connected account.
+          </Typography>
+        )}
+        {!incubatorRelationshipWithConnectedAccount && !connectedAccount && (
+          <Button
+            variant="contained"
+            onClick={() => setExplainDialogOpen(true)}
+          >
+            Preemptively connect an account.
+          </Button>
+        )}
+      </Stack>
+    </Fragment>
+  );
+};
+
 const IncubatorSection = () => {
   const incubatorTranslations = useTranslations("initiatives.incubator");
   const [incubatees] = useCurrentIncubatees();
@@ -193,12 +436,19 @@ const IncubatorSection = () => {
       </Typography>
       <Stack spacing={2}>
         {acceptedIncubatees && acceptedIncubatees.length > 0 ? (
-          acceptedIncubatees.map((incubatee) => (
-            <InitiativeCard
-              initiativePath={incubatee.initiativePath!}
-              key={incubatee.initiativePath!}
-            />
-          ))
+          acceptedIncubatees.map((incubatee) =>
+            isMyInitiative ? (
+              <IncubateeManipulationPortal
+                incubatee={incubatee}
+                key={incubatee.initiativePath}
+              />
+            ) : (
+              <InitiativeCard
+                initiativePath={incubatee.initiativePath!}
+                key={incubatee.initiativePath}
+              />
+            )
+          )
         ) : (
           <Typography>{incubatorTranslations("incubatees.none")}</Typography>
         )}

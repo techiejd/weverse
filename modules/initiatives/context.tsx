@@ -11,6 +11,8 @@ import {
   useSponsorshipConverter,
 } from "../../common/utils/firebase";
 import { useAppState } from "../../common/context/appState";
+import { Initiative } from "../../functions/shared/src";
+import { useCallback } from "react";
 
 export const useCurrentInitiative = () => {
   const router = useRouter();
@@ -64,4 +66,42 @@ export const useCurrentSponsorships = () => {
       : undefined
   );
   return [sponsorships, loading, error] as const;
+};
+
+export const extractAccountLink = (
+  connectedAccount: Initiative["connectedAccount"]
+) =>
+  connectedAccount
+    ? `/${connectedAccount.ownerMemberPath}/accounts/${connectedAccount.stripeAccountId}`
+    : "";
+
+export const useAlertOrRedirectToOnboardingStripeAccount = () => {
+  const router = useRouter();
+  return useCallback(
+    async (title: string, initiativePath: string, incubator?: string) => {
+      if (!router.isReady) {
+        alert(`Error creating new account: Router not ready`);
+      }
+      const newAccountResponse = await fetch("/api/account", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          initiativePath,
+          incubator,
+        }),
+      });
+      if (newAccountResponse.ok) {
+        const newAccountLink = await newAccountResponse.json();
+        router.push(newAccountLink.link);
+      } else {
+        alert(
+          `Error creating new account ${newAccountResponse.status}: ${newAccountResponse.statusText}`
+        );
+      }
+    },
+    [router]
+  );
 };

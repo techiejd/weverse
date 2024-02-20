@@ -6,7 +6,7 @@ import {
 } from "next";
 import { Locale, locale } from "../../functions/shared/src";
 import { useAppState } from "../context/appState";
-type StaticProps = {
+export type BaseProps = {
   [x: string | number | symbol]: unknown;
 };
 
@@ -29,7 +29,7 @@ const spreadTranslationsStaticProps = async () => {
   };
 };
 
-export const WithTranslationsServerSideProps = <T extends StaticProps>(
+export const WithTranslationsServerSideProps = <T extends BaseProps>(
   gssp?: (
     context: GetServerSidePropsContext
   ) => Promise<GetServerSidePropsResult<T>>
@@ -66,7 +66,7 @@ export const WithTranslationsServerSideProps = <T extends StaticProps>(
 export function WithTranslationsStaticProps(
   gsp?: (
     context: GetStaticPropsContext
-  ) => Promise<GetStaticPropsResult<StaticProps>>
+  ) => Promise<GetStaticPropsResult<BaseProps>>
 ) {
   return async (context: GetStaticPropsContext) => {
     const { locale } = context;

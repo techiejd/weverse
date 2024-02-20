@@ -112,7 +112,7 @@ const PosiForm = ({
                 />
                 {myInitiative && myInitiative.incubator && (
                   <Section label={t("sections.validator.title")}>
-                    <ValidatorInput incubator={myInitiative.incubator} />
+                    <ValidatorInput incubator={myInitiative.incubator.path} />
                   </Section>
                 )}
                 {uploading ||
