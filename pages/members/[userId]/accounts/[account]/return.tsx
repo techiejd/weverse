@@ -87,7 +87,8 @@ export const getServerSideProps = WithTranslationsServerSideProps(
 
     return {
       props: {
-        continueOnboardingLink: await createStripeAccountLink(account, userId),
+        continueOnboardingLink: (await createStripeAccountLink(account, userId))
+          .url,
       },
     };
   }
@@ -101,6 +102,7 @@ const ReturnPage = asOneWePage(
     continueOnboardingLink?: string;
     successOnboardingLink?: string;
   }) => {
+    console.log(continueOnboardingLink, successOnboardingLink);
     return successOnboardingLink ? (
       <div>
         <p>You have successfully onboarded your account</p>
