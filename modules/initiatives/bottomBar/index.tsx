@@ -3,10 +3,22 @@ import { default as SupportIcon } from "@mui/icons-material/Support";
 import Share from "@mui/icons-material/Share";
 import Add from "@mui/icons-material/Add";
 import PersonAdd from "@mui/icons-material/PersonAdd";
-import { Typography, AppBar, Toolbar, Box } from "@mui/material";
+import {
+  Typography,
+  AppBar,
+  Toolbar,
+  Box,
+  FabProps,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Stack,
+} from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import CenterBottomCircularProgress from "../../../common/components/centerBottomCircularProgress";
 import CenterBottomFab from "../../../common/components/centerBottomFab";
 import IconButtonWithLabel from "../../../common/components/iconButtonWithLabel";
@@ -19,7 +31,6 @@ import {
 } from "../../../common/context/weverseUtils";
 import { useLocalizedPresentationInfo } from "../../../common/utils/translations";
 import { useVipState } from "../../../common/utils/vip";
-import { Initiative } from "../../../functions/shared/src";
 import {
   useCurrentInitiative,
   useCurrentTestimonials,
@@ -27,6 +38,87 @@ import {
 } from "../context";
 import VipDialog from "./vipDialog";
 import IncubateeVipDialog from "./incubateVipDialog";
+
+const VipCenterBottomFab = ({
+  vipButtonBehavior,
+}: {
+  vipButtonBehavior: FabProps;
+}) => {
+  const bottomBarTranslations = useTranslations("initiatives.bottomBar");
+  return (
+    <CenterBottomFab color="secondary" {...vipButtonBehavior}>
+      <Typography fontSize={25}>👑</Typography>
+      <Typography fontSize={12}>{bottomBarTranslations("vip")}</Typography>
+    </CenterBottomFab>
+  );
+};
+
+const IncubatorInviteInitiativeMenuDialog = ({
+  open,
+  close,
+}: {
+  open: boolean;
+  close: () => void;
+}) => {
+  const [initiative] = useCurrentInitiative();
+  const router = useRouter();
+  const shareIncubateeEntrancePortalPath = `${router.asPath}/incubateeEntrance`;
+  return (
+    <div>
+      <Dialog open={open} onClose={close}>
+        <DialogTitle>Invite</DialogTitle>
+        <DialogContent>
+          <Stack spacing={2}>
+            <Stack spacing={1}>
+              Most personalized option: send a customized link for the
+              initiative(s). Perfect for when they have not joined OneWe yet.
+              <Button href={`/${initiative?.path}/invite`} variant="contained">
+                Invite individually
+              </Button>
+            </Stack>
+            <Stack spacing={1}>
+              Simplest option: share your incubator entrance portal. Perfect for
+              when they have already joined OneWe.
+              <ShareActionArea
+                shareProps={{
+                  title: "Join my incubator on OneWe",
+                  path: shareIncubateeEntrancePortalPath,
+                }}
+              >
+                <Button variant="contained">Share entrance portal</Button>
+              </ShareActionArea>
+            </Stack>
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={close}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+};
+
+//href={`/${initiative.path}/invite`}
+
+const IncubatorInviteInitiativeCenterBottomFab = () => {
+  const bottomBarTranslations = useTranslations("initiatives.bottomBar");
+  const [openInviteMenu, setOpenInviteMenu] = useState(false);
+  return (
+    <Fragment>
+      <IncubatorInviteInitiativeMenuDialog
+        open={openInviteMenu}
+        close={() => setOpenInviteMenu(false)}
+      />
+      <CenterBottomFab
+        color="secondary"
+        onClick={() => setOpenInviteMenu(true)}
+      >
+        <PersonAdd />
+        <Typography fontSize={12}>{bottomBarTranslations("invite")}</Typography>
+      </CenterBottomFab>
+    </Fragment>
+  );
+};
 
 const BottomBar = () => {
   const bottomBarTranslations = useTranslations("initiatives.bottomBar");
@@ -50,23 +142,6 @@ const BottomBar = () => {
     : { onClick: () => setVipDialogOpen(true) };
   const isMine = useIsMine();
 
-  const VipCenterBottomFab = () => (
-    <CenterBottomFab color="secondary" {...vipButtonBehavior}>
-      <Typography fontSize={25}>👑</Typography>
-      <Typography fontSize={12}>{bottomBarTranslations("vip")}</Typography>
-    </CenterBottomFab>
-  );
-
-  const IncubatorInviteInitiativeCenterBottomFab = ({
-    initiative,
-  }: {
-    initiative: Initiative;
-  }) => (
-    <CenterBottomFab color="secondary" href={`/${initiative.path}/invite`}>
-      <PersonAdd />
-      <Typography fontSize={12}>{bottomBarTranslations("invite")}</Typography>
-    </CenterBottomFab>
-  );
   const presentationInfo = useLocalizedPresentationInfo(initiative);
   return initiative == undefined ? (
     <CenterBottomCircularProgress />
@@ -108,9 +183,9 @@ const BottomBar = () => {
           </Typography>
         </IconButtonWithLabel>
         {initiative?.organizationType == "incubator" ? (
-          <IncubatorInviteInitiativeCenterBottomFab initiative={initiative} />
+          <IncubatorInviteInitiativeCenterBottomFab />
         ) : (
-          <VipCenterBottomFab />
+          <VipCenterBottomFab vipButtonBehavior={vipButtonBehavior} />
         )}
         <Box sx={{ flexGrow: 1 }} />
         <ShareActionArea
