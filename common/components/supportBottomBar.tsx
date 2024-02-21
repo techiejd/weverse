@@ -73,7 +73,7 @@ const SponsorDialog = ({
       <Dialog open={open} onClose={handleClose}>
         <LogInPrompt
           title={sponsorDialogTranslations("logInPrompt")}
-          setOpen={setOpen}
+          exitButtonBehavior={{ onClick: () => setOpen(false) }}
         />
       </Dialog>
     );

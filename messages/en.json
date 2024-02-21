@@ -239,6 +239,7 @@
   },
   "actions": {
     "card": {
+      "logInToLike": "You must log in to give a like",
       "validation": {
         "validatedBy": "Validated by:",
         "inValidationProcess": "In validation process with:"
@@ -510,6 +511,7 @@
     }
   },
   "members": {
+    "logInPrompt": "Log in to see your member page.",
     "yours": {
       "title": "Your member page",
       "initiatives": {

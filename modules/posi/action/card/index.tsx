@@ -15,6 +15,7 @@ import LogInPrompt from "../../../../common/components/logInPrompt";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 import ValidationInfo from "./validationInfo";
 import { useLocalizedPresentationInfo } from "../../../../common/utils/translations";
+import { useTranslations } from "next-intl";
 
 const LogInPromptDialog = ({
   open,
@@ -24,11 +25,12 @@ const LogInPromptDialog = ({
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
   //TODO(techiejd): Figure out the log in stuff. bring to top of app.
+  const actionCardTranslations = useTranslations("actions.card");
   return (
     <Dialog open={open}>
       <LogInPrompt
-        title="Para dar 'Me Gusta' debes iniciar sesión."
-        setOpen={setOpen}
+        title={actionCardTranslations("logInToLike")}
+        exitButtonBehavior={{ onClick: () => setOpen(false) }}
       />
     </Dialog>
   );

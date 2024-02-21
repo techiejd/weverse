@@ -221,13 +221,6 @@ const PublishDialog = ({
     selected,
   ]);
 
-  // TODO(techiejd): Change setOpen in LogInPrompt to close().
-  const callClose = ((wantOpen: boolean) => {
-    if (!wantOpen) {
-      close();
-    }
-  }) as Dispatch<SetStateAction<boolean>>;
-
   return (
     <Fragment>
       <InitiativeNeededDialog
@@ -263,7 +256,10 @@ const PublishDialog = ({
               </RadioGroup>
             </FormControl>
           ) : (
-            <LogInPrompt title={t("logInPrompt")} setOpen={callClose} />
+            <LogInPrompt
+              title={t("logInPrompt")}
+              exitButtonBehavior={{ onClick: close }}
+            />
           )}
         </DialogContent>
         <DialogActions>

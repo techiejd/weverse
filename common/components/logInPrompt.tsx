@@ -14,20 +14,14 @@ import { sectionStyles } from "./theme";
 
 const LogInPrompt = ({
   title,
-  setOpen,
+  exitButtonBehavior,
 }: {
   title: string;
-  setOpen?: Dispatch<SetStateAction<boolean>>;
+  exitButtonBehavior?: { href: string } | { onClick: () => void };
 }) => {
   const [logInDialogOpen, setLogInDialogOpen] = useState(false);
   const [registerDialogOpen, setRegisterDialogOpen] = useState(false);
-  const behavior = setOpen
-    ? {
-        onClick: () => {
-          setOpen(false);
-        },
-      }
-    : { href: "/" };
+  const behavior = exitButtonBehavior || { href: "/" };
   const t = useTranslations("common");
   const inputTranslations = useTranslations("input");
   return (
