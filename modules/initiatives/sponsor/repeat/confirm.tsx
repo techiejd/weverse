@@ -1,9 +1,42 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Details from "../common/details";
 import { useMyMember } from "../../../../common/context/weverseUtils";
-import { Box, Button, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Step } from "./utils";
+import { useTranslations } from "next-intl";
+
+const MustGoBackToSelectSponsorshipWithSavedCurrencyDialog = ({
+  open,
+  handleBack,
+}: {
+  open: boolean;
+  handleBack: () => void;
+}) => {
+  const inputTranslations = useTranslations("input");
+  const confirmTranslations = useTranslations("common.sponsor.steps.confirm");
+  return (
+    <Dialog open={open}>
+      <DialogTitle>{confirmTranslations("mustGoBackTitle")}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          {confirmTranslations("currencyMismatchExplanation")}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleBack}>{inputTranslations("back")}</Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 const Confirm = ({
   sponsorForm,
@@ -12,14 +45,29 @@ const Confirm = ({
   sponsorForm: Record<string, string>;
   handleBack: () => void;
 }) => {
-  const [myMember, myMemberError, myMemberLoading] = useMyMember();
+  const inputTranslations = useTranslations("input");
+  const [myMember] = useMyMember();
 
   const prevStepLoading =
     sponsorForm[Step.toString(Step.chooseSponsorship)] == "loading";
 
+  const [mustGoBackToFixCurrency, setMustGoBackToFixCurrency] = useState(false);
+  useEffect(() => {
+    const selectedCurrency = sponsorForm.currency;
+    const persistedCurrency = myMember?.customer?.currency;
+    if (persistedCurrency && persistedCurrency != selectedCurrency) {
+      // This must have been selected before signing in.
+      setMustGoBackToFixCurrency(true);
+    }
+  }, [myMember?.customer?.currency, prevStepLoading, sponsorForm.currency]);
+
   const loading = !myMember || prevStepLoading;
   return (
     <Fragment>
+      <MustGoBackToSelectSponsorshipWithSavedCurrencyDialog
+        open={mustGoBackToFixCurrency}
+        handleBack={handleBack}
+      />
       <input hidden value={"confirm"} name="stepString" readOnly />
       <input
         hidden
@@ -48,7 +96,7 @@ const Confirm = ({
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Fragment>
           <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-            <span>Atras</span>
+            <span>{inputTranslations("back")}</span>
           </Button>
           <LoadingButton
             variant="contained"
@@ -57,7 +105,7 @@ const Confirm = ({
             disabled={loading}
             loading={loading}
           >
-            <span>Listo</span>
+            <span>{inputTranslations("Ok")}</span>
           </LoadingButton>
         </Fragment>
       </Box>

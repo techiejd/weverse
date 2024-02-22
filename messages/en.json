@@ -213,7 +213,9 @@
           }
         },
         "confirm": {
-          "short": "Confirm"
+          "short": "Confirm",
+          "mustGoBackTitle": "You must go back",
+          "currencyMismatchExplanation": "The currency you chose in the first step doesn't match the currency we have saved for you. Please, go back and choose a sponsorship denoted in your saved currency."
         }
       },
       "details": {
