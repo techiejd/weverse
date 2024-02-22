@@ -364,6 +364,7 @@ const AuthDialogContent = ({
       <form
         onSubmit={async (e) => {
           e.preventDefault();
+          e.stopPropagation();
           onSubmit();
         }}
       >

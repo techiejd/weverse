@@ -151,8 +151,7 @@
     },
     "sponsorDialog": {
       "title": "Thank you for your sponsorship!",
-      "oneWeIsWorkingOnMakingAGoodExp": "We are working with the initiative on making a good experience for you.",
-      "logInPrompt": "You must be a registered member to sponsor."
+      "oneWeIsWorkingOnMakingAGoodExp": "We are working with the initiative on making a good experience for you."
     },
     "underConstruction": {
       "title": "Come back soon!"
@@ -203,7 +202,8 @@
         },
         "customer": {
           "short": "Customer info",
-          "title": "Customer Information"
+          "title": "Customer Information",
+          "logInPrompt": "You must be a registered member to sponsor."
         },
         "payment": {
           "short": "Payment",

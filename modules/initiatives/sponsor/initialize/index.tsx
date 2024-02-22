@@ -41,7 +41,11 @@ const InitializeSponsor = ({
         );
       case Step.customerDetails:
         return (
-          <CustomerDetails sponsorForm={sponsorForm} handleBack={handleBack} />
+          <CustomerDetails
+            sponsorForm={sponsorForm}
+            handleBack={handleBack}
+            exitButtonBehavior={exitButtonBehavior}
+          />
         );
       case Step.pay:
         return (

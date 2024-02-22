@@ -1,18 +1,17 @@
-import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-
 import { Autocomplete, Box, TextField } from "@mui/material";
 import {
   MuiTelInput,
   MuiTelInputCountry,
   MuiTelInputInfo,
 } from "mui-tel-input";
-import { useState } from "react";
-
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Step } from "./utils";
-import { useTranslations } from "next-intl";
+import { useMyMember } from "../../../../common/context/weverseUtils";
+import LogInPrompt from "../../../../common/components/logInPrompt";
 
 const PhoneInput = ({
   sponsorForm,
@@ -20,7 +19,7 @@ const PhoneInput = ({
   phoneError: phoneError,
 }: {
   sponsorForm: Record<string, string>;
-  setPhoneError: React.Dispatch<React.SetStateAction<boolean>>;
+  setPhoneError: Dispatch<SetStateAction<boolean>>;
   phoneError: boolean;
 }) => {
   //TODO(techiejd): WET -> DRY
@@ -37,6 +36,14 @@ const PhoneInput = ({
     }
   };
   const t = useTranslations("input");
+  const [myMember] = useMyMember();
+  useEffect(() => {
+    if (myMember && phoneIn === "") {
+      setPhoneIn(
+        `+${myMember.phoneNumber.countryCallingCode} ${myMember.phoneNumber.nationalNumber}`
+      );
+    }
+  }, [myMember, phoneIn]);
   return (
     <Box>
       <MuiTelInput
@@ -57,16 +64,21 @@ const PhoneInput = ({
 const CustomerDetails = ({
   sponsorForm,
   handleBack,
+  exitButtonBehavior,
 }: {
   sponsorForm: Record<string, string>;
   handleBack: () => void;
+  exitButtonBehavior: { href: string } | { onClick: () => void };
 }) => {
   const customerTranslations = useTranslations("common.sponsor.steps.customer");
   const inputTranslations = useTranslations("input");
-  const [phoneError, setPhoneError] = React.useState(false);
-  const [forwardDisabled, setForwardDisabled] = React.useState(false);
+  const [phoneError, setPhoneError] = useState(false);
+  const [forwardDisabled, setForwardDisabled] = useState(false);
+  const [firstName, setFirstName] = useState(sponsorForm.firstName ?? "");
+  const [lastName, setLastName] = useState(sponsorForm.lastName ?? "");
+  const [myMember] = useMyMember();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setForwardDisabled(phoneError);
   }, [phoneError, setForwardDisabled]);
 
@@ -85,17 +97,27 @@ const CustomerDetails = ({
   const prevStepLoading =
     sponsorForm[Step.toString(Step.chooseSponsorship)] == "loading";
 
-  return (
-    <React.Fragment>
+  useEffect(() => {
+    if (myMember && firstName === "" && lastName === "") {
+      const parsedName = parseName(myMember.name);
+      setFirstName(parsedName.firstName);
+      setLastName(parsedName.lastName);
+    }
+  }, [myMember, firstName, lastName]);
+
+  return myMember ? (
+    <Fragment>
       <Typography variant="h6" gutterBottom>
         {customerTranslations("title")}
       </Typography>
       <input hidden value={"customerDetails"} name="stepString" readOnly />
       <input hidden readOnly value={countryInfo.code} name="countryCode" />
+      <input hidden value={myMember?.path || ""} name="member" readOnly />
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <TextField
-            defaultValue={sponsorForm.firstName ?? ""}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             label={inputTranslations("firstName")}
             name="firstName"
             variant="standard"
@@ -105,7 +127,8 @@ const CustomerDetails = ({
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
-            defaultValue={sponsorForm.lastName ?? ""}
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
             label={inputTranslations("lastName")}
             name="lastName"
             variant="standard"
@@ -164,7 +187,7 @@ const CustomerDetails = ({
         </Grid>
       </Grid>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <React.Fragment>
+        <Fragment>
           <LoadingButton
             onClick={handleBack}
             sx={{ mt: 3, ml: 1 }}
@@ -182,9 +205,14 @@ const CustomerDetails = ({
           >
             <span>{inputTranslations("next")}</span>
           </LoadingButton>
-        </React.Fragment>
+        </Fragment>
       </Box>
-    </React.Fragment>
+    </Fragment>
+  ) : (
+    <LogInPrompt
+      title={customerTranslations("logInPrompt")}
+      exitButtonBehavior={exitButtonBehavior}
+    />
   );
 };
 
@@ -248,3 +276,29 @@ const countries = [
   { country: "United States", code: "US" },
   { country: "Uruguay", code: "UY" },
 ];
+
+function parseName(fullName: string) {
+  // This is simply a best effort to split the name into first and last name.
+  // It's not perfect, but it's better than nothing.
+  var result = { firstName: "", lastName: "" };
+  const names = fullName.split(" ");
+  switch (names.length) {
+    case 1:
+      result.firstName = names[0];
+      break;
+    case 2:
+      result.firstName = names[0];
+      result.lastName = names[1];
+      break;
+    case 3:
+      result.firstName = `${names[0]} ${names[1]}`;
+      result.lastName = names[2];
+      break;
+    default:
+      result.firstName = `${names[0]} ${names[1]}`;
+      result.lastName = names.slice(2).join(" ");
+      break;
+  }
+
+  return result;
+}

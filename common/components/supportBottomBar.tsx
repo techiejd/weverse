@@ -31,9 +31,7 @@ import {
 import IconButtonWithLabel from "./iconButtonWithLabel";
 import CenterBottomFab from "./centerBottomFab";
 import Sponsor from "../../modules/initiatives/sponsor";
-import { useMyMember } from "../context/weverseUtils";
 import UnderConstruction from "../../modules/posi/underConstruction";
-import LogInPrompt from "./logInPrompt";
 import { useTranslations } from "next-intl";
 import { useLocalizedPresentationInfo } from "../utils/translations";
 import { useMySponsorships } from "../../modules/members/context";
@@ -67,17 +65,6 @@ const SponsorDialog = ({
   const sponsorDialogTranslations = useTranslations("common.sponsorDialog");
   const inputTranslations = useTranslations("input");
   const handleClose = () => setOpen(false);
-  const [myMember] = useMyMember();
-  if (!myMember) {
-    return (
-      <Dialog open={open} onClose={handleClose}>
-        <LogInPrompt
-          title={sponsorDialogTranslations("logInPrompt")}
-          exitButtonBehavior={{ onClick: () => setOpen(false) }}
-        />
-      </Dialog>
-    );
-  }
   return sponsoring && !inAddSponsorshipExperience ? (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>{sponsorDialogTranslations("title")}</DialogTitle>

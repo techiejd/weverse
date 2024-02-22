@@ -127,8 +127,6 @@ const ChooseSponsorship = ({
   const total = toRounded(sponsorshipAmount + feeAmount + oneWeAmount);
   const displayTotal = toDisplay(total);
 
-  const [myMember] = useMyMember();
-
   const sponsorshipLevelLabel = (sponsorshipLevelIn: SponsorshipLevel) => {
     return (
       <FormControlLabel
@@ -169,7 +167,6 @@ const ChooseSponsorship = ({
         readOnly
       />
       <input hidden value={beneficiary.path} name="initiative" readOnly />
-      <input hidden value={myMember?.path || ""} name="member" readOnly />
       <input hidden value={paymentPlan} name="paymentPlan" readOnly />
 
       <Typography variant="h6" gutterBottom>

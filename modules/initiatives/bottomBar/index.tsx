@@ -98,8 +98,6 @@ const IncubatorInviteInitiativeMenuDialog = ({
   );
 };
 
-//href={`/${initiative.path}/invite`}
-
 const IncubatorInviteInitiativeCenterBottomFab = () => {
   const bottomBarTranslations = useTranslations("initiatives.bottomBar");
   const [openInviteMenu, setOpenInviteMenu] = useState(false);
