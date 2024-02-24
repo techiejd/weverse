@@ -551,7 +551,6 @@ const StripeConnect = asOneWePage(
                       ).then(() => {
                         router.reload();
                       });
-                      router.reload();
                       break;
                     case "new":
                       createNewAccount();
