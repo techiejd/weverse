@@ -216,11 +216,11 @@ const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
         </Stack>
       </Section>
       {connectAccountHref && (
-        <Section label="Get financial help">
+        <Section label={detailedInputTranslations("connectAccount.title")}>
           {!viewConnectedAccountHref &&
             !accountOnboarding && [
               <Typography variant="h3" key="connectAccountMsg">
-                In order to get financial help, you need to connect an account.
+                {detailedInputTranslations("connectAccount.prompt")}
               </Typography>,
               <Button
                 variant="contained"
@@ -228,13 +228,14 @@ const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
                 sx={{ width: "fit-content", alignSelf: "center" }}
                 key="connectAccountBtn"
               >
-                Connect account
+                {detailedInputTranslations("connectAccount.connectAccountBtn")}
               </Button>,
             ]}
           {(accountOnboarding || connectIncubatorAccountNeedsAttn) && [
             <Typography variant="h3" key="finishOnboardingMsg">
-              Your have not finished onboarding your account. You will be able
-              to receive financial help once the process is complete.
+              {detailedInputTranslations(
+                "connectAccount.continueOnboardingPrompt"
+              )}
             </Typography>,
             <Button
               variant="contained"
@@ -242,14 +243,17 @@ const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
               sx={{ width: "fit-content", alignSelf: "center" }}
               key="finishOnboardingBtn"
             >
-              Continue onboarding
+              {detailedInputTranslations(
+                "connectAccount.continueOnboardingBtn"
+              )}
             </Button>,
           ]}
           {viewConnectedAccountHref &&
             ifIncubatorAccountDoesNotNeedAttn && [
               <Typography variant="h3" key="connectedAccountOkMsg">
-                Congratulations, you are on your way to receiving financial
-                help.
+                {detailedInputTranslations(
+                  "connectAccount.accountConnected.prompt"
+                )}
               </Typography>,
               <Button
                 variant="outlined"
@@ -257,7 +261,9 @@ const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
                 sx={{ width: "fit-content", alignSelf: "center" }}
                 key="modifyConnectedAccountBtn"
               >
-                Modify connected account
+                {detailedInputTranslations(
+                  "connectAccount.accountConnected.modifyAccountBtn"
+                )}
               </Button>,
               <Button
                 variant="contained"
@@ -265,7 +271,9 @@ const DetailedInput: FC<DetailedInputProps<Initiative>> = ({
                 sx={{ width: "fit-content", alignSelf: "center" }}
                 key="viewConnectedAccountBtn"
               >
-                View Account
+                {detailedInputTranslations(
+                  "connectAccount.accountConnected.viewAccountBtn"
+                )}
               </Button>,
             ]}
         </Section>

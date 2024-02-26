@@ -172,9 +172,15 @@ const ConnectAccountDialog = ({
   const [loading, setLoading] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
   const [understood, setUnderstood] = useState(skipExplanation || false);
+  const connectAccountDialogTranslations = useTranslations(
+    "initiatives.incubator.connectAccountDialog"
+  );
+  const inputTranslations = useTranslations("input");
   const internalClose = () => {
     if (loading || redirecting) {
-      alert("Please wait for the process to finish.");
+      alert(
+        connectAccountDialogTranslations("pleaseWaitForTheProcessToFinish")
+      );
     }
     setUnderstood(false);
     if (title == "") setTitle(initiativeName);
@@ -183,18 +189,18 @@ const ConnectAccountDialog = ({
   const explainIncubateeMustAcceptConnectedAccountComponents = (
     <Fragment>
       <DialogTitle>
-        Your incubatee must accept this connected account in order for them to
-        receive payments.
+        {connectAccountDialogTranslations("explainIncubateeMustAccept.title")}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          They can accept through their initiative edit page, clicking{" "}
-          {'"connect account"'} followed by selecting{" "}
-          {'"accept incubator\'s connect account"'} and lastly clicking{" "}
-          {'"connect account"'}.
+          {connectAccountDialogTranslations(
+            "explainIncubateeMustAccept.prompt"
+          )}
         </DialogContentText>
         <DialogContentText>
-          You will be redirected to our partner Stripe to connect an account.
+          {connectAccountDialogTranslations(
+            "explainIncubateeMustAccept.stripeExplanation"
+          )}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -205,26 +211,36 @@ const ConnectAccountDialog = ({
             setUnderstood(true);
           }}
         >
-          Understood
+          {inputTranslations("ok")}
         </Button>
       </DialogActions>
     </Fragment>
   );
   const askingForTitleComponents = (
     <Fragment>
-      <DialogTitle>Give the account a title.</DialogTitle>
+      <DialogTitle>
+        {connectAccountDialogTranslations("askingForTitleComponents.title")}
+      </DialogTitle>
       <DialogContent>
         <TextField
-          label="Please give a title for the new account"
+          label={connectAccountDialogTranslations(
+            "askingForTitleComponents.prompt"
+          )}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           error={title == "" ? true : false}
-          helperText={title == "" ? "The account must have a title." : ""}
+          helperText={
+            title == ""
+              ? connectAccountDialogTranslations(
+                  "askingForTitleComponents.errorHelperText"
+                )
+              : ""
+          }
         />
       </DialogContent>
       <DialogActions>
         <Button disabled={loading} onClick={internalClose}>
-          Cancel
+          {inputTranslations("cancel")}
         </Button>
         <Button
           disabled={loading || title == "" || redirecting || incubatorLoading}
@@ -240,17 +256,21 @@ const ConnectAccountDialog = ({
             setRedirecting(true);
           }}
         >
-          Connect account
+          {connectAccountDialogTranslations(
+            "askingForTitleComponents.connectAccount"
+          )}
         </Button>
       </DialogActions>
     </Fragment>
   );
   const redirectingComponents = (
     <Fragment>
-      <DialogTitle>Please wait</DialogTitle>
+      <DialogTitle>
+        {connectAccountDialogTranslations("redirecting.title")}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Please wait while redirect you to our Stripe partner.
+          {connectAccountDialogTranslations("redirecting.prompt")}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -268,12 +288,16 @@ const ConnectAccountDialog = ({
 };
 
 const RedirectingDialog = ({ open }: { open: boolean }) => {
+  // TODO(techiejd): WET -> DRY; or if you move this to backend no need to wait on redirect.
+  const redirectingTranslations = useTranslations(
+    "initiatives.incubator.connectAccountDialog.redirecting"
+  );
   return (
     <Dialog open={open}>
-      <DialogTitle>Please wait</DialogTitle>
+      <DialogTitle>{redirectingTranslations("title")}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Please wait while we redirect you to our Stripe partner.
+          {redirectingTranslations("prompt")}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -299,6 +323,9 @@ const IncubateeManipulationPortal = ({
   // TODO(techiejd): Move the continue onboarding link logic to the backend.
   const [redirecting, setRedirecting] = useState(false);
   const router = useRouter();
+  const portalTranslations = useTranslations(
+    "initiatives.incubator.incubateeManipulationPortal"
+  );
   // TODO(techiejd): Figure out how to pass either initiative or
   // initiative path to InitiativeCard.
   return (
@@ -324,7 +351,7 @@ const IncubateeManipulationPortal = ({
               variant="contained"
               href={extractAccountLink(connectedAccount)}
             >
-              View account
+              {portalTranslations("viewAccount")}
             </Button>
           )}
         {connectedAccount?.status == "onboarding" &&
@@ -352,16 +379,19 @@ const IncubateeManipulationPortal = ({
                   router.push(continueOnboardingLink.link);
                 } else {
                   alert(
-                    `Error getting continue onboarding link ${continueOnboardingLinkResponse.status}: ${continueOnboardingLinkResponse.statusText}`
+                    portalTranslations("errorGettingOnboardLink", {
+                      status: continueOnboardingLinkResponse.status,
+                      statusText: continueOnboardingLinkResponse.statusText,
+                    })
                   );
                 }
               }}
             >
-              Finish onboarding through our partner Stripe.
+              {portalTranslations("finishOnboarding")}
             </Button>
           ) : (
             <Typography color="red">
-              Incubatee must finish onboarding through Stripe.
+              {portalTranslations("incubateeMustFinishOnboarding")}
             </Typography>
           ))}
         {incubatorRelationshipWithConnectedAccount == "incubateeRequested" &&
@@ -370,13 +400,13 @@ const IncubateeManipulationPortal = ({
               variant="contained"
               onClick={() => setConnectAccountDialogOpen(true)}
             >
-              Connect account through our partner Stripe.
+              {portalTranslations("connectAccountThroughStripe")}
             </Button>
           )}
         {incubatorRelationshipWithConnectedAccount ==
           "pendingIncubateeApproval" && (
           <Typography color="red">
-            Waiting for incubatee to approve connected account.
+            {portalTranslations("waitingForIncubateeToApproveAccount")}
           </Typography>
         )}
         {!incubatorRelationshipWithConnectedAccount && !connectedAccount && (
@@ -384,7 +414,7 @@ const IncubateeManipulationPortal = ({
             variant="contained"
             onClick={() => setConnectAccountDialogOpen(true)}
           >
-            Preemptively connect an account.
+            {portalTranslations("preemptivelyConnectAccount")}
           </Button>
         )}
       </Stack>

@@ -30,6 +30,7 @@ import {
 } from "../../../../../common/utils/firebase";
 import { useRouter } from "next/router";
 import { GetServerSidePropsResult } from "next";
+import { useTranslations } from "next-intl";
 
 // Should be able to see the connected account to this initiative.
 // Should be able to connect an account if not connected already.
@@ -328,7 +329,15 @@ const StripeConnect = asOneWePage(
     const initiativeConverter = useInitiativeConverter();
     const memberConverter = useMemberConverter();
 
+    const connectAccountTranslations = useTranslations(
+      "initiatives.connectAccount"
+    );
+
     const createNewAccount = async () => {
+      if (!titleForNewAccount) {
+        alert(connectAccountTranslations("error.missingTitle"));
+        return;
+      }
       setLoading(true);
       if (
         needsAction?.fromInitiative?.chooseAccounts
@@ -368,13 +377,6 @@ const StripeConnect = asOneWePage(
         );
         await batch.commit();
       }
-      if (!titleForNewAccount) {
-        throw new Error(
-          `Error in creating a new account. Missing data: ${{
-            titleForNewAccount,
-          }}`
-        );
-      }
       await alertOrRedirectToOnboardingStripeAccount(
         titleForNewAccount,
         needsAction?.fromInitiative?.chooseAccounts?.possibleNewAccount
@@ -385,7 +387,11 @@ const StripeConnect = asOneWePage(
     };
 
     const connectAccount = () => {
-      alert("Connect account not implemented at the moment");
+      alert(
+        connectAccountTranslations(
+          "error.connectAccountNotImplementedAtThisMoment"
+        )
+      );
     };
 
     const options: { value: string; label: string }[] = needsAction
@@ -402,9 +408,11 @@ const StripeConnect = asOneWePage(
       return (
         <Stack sx={{ alignItems: "center", m: 2 }}>
           <Typography variant="h2">
-            Redirecting to our partner: Stripe.
+            {connectAccountTranslations("redirecting")}
           </Typography>
-          <Typography variant="h3">Please wait...</Typography>
+          <Typography variant="h3">
+            {connectAccountTranslations("pleaseWait")}
+          </Typography>
           <CircularProgress />
         </Stack>
       );
@@ -415,20 +423,27 @@ const StripeConnect = asOneWePage(
         {properlyConnectedAccount && (
           <Stack>
             <Typography variant="h2">
-              Connected account: {properlyConnectedAccount.title}
+              {connectAccountTranslations("connectedAccount", {
+                account: properlyConnectedAccount.title,
+              })}
             </Typography>
-            <Button href={properlyConnectedAccount.url}>Visit account</Button>
-            <Button href={"/401"}>Disconnect account</Button>
+            <Button href={properlyConnectedAccount.url}>
+              {connectAccountTranslations("visitAccount")}
+            </Button>
+            <Button href={"/401"}>
+              {connectAccountTranslations("disconnectAccount")}
+            </Button>
           </Stack>
         )}
         {needsAction?.fromInitiative?.continueOnboarding && (
           <Stack>
             <Typography variant="h2">
-              Continue onboarding:{" "}
-              {needsAction?.fromInitiative?.continueOnboarding.title}
+              {connectAccountTranslations("continueOnboarding", {
+                account: needsAction?.fromInitiative?.continueOnboarding.title,
+              })}
             </Typography>
             <Button href={needsAction?.fromInitiative?.continueOnboarding.link}>
-              Finish onboarding
+              {connectAccountTranslations("finishOnboarding")}
             </Button>
           </Stack>
         )}
@@ -436,23 +451,26 @@ const StripeConnect = asOneWePage(
           <Stack>
             {needsAction?.fromIncubator?.action == "finishOnboarding" && (
               <Typography variant="h2">
-                Incubator still has to finish onboarding:{" "}
-                {needsAction?.fromIncubator?.continueOnboarding.title}
+                {connectAccountTranslations("finishOnboarding", {
+                  account: needsAction?.fromIncubator?.continueOnboarding.title,
+                })}
               </Typography>
             )}
             {needsAction?.fromIncubator?.action == "acceptRequest" && (
               <Typography variant="h2">
-                Waiting for your incubator to connect an account.
+                {connectAccountTranslations("waitingForIncubatorToConnect")}
               </Typography>
             )}
             <Button href={`/${needsAction?.fromIncubator?.forInitiative}`}>
-              Go back to your initiative page
+              {connectAccountTranslations("goBackToYourInitiativePage")}
             </Button>
           </Stack>
         )}
         {needsAction?.fromInitiative?.chooseAccounts && (
           <Stack>
-            <Typography variant="h2">Connect to an account</Typography>
+            <Typography variant="h2">
+              {connectAccountTranslations("title")}
+            </Typography>
             <FormControl>
               <RadioGroup value={selectedAccount} onChange={handleChange}>
                 {needsAction?.fromInitiative?.chooseAccounts
@@ -463,9 +481,9 @@ const StripeConnect = asOneWePage(
                     <FormControlLabel
                       value={"askIncubator"}
                       control={<Radio />}
-                      label={
-                        "You as an incubatee can ask your incubator for an account."
-                      }
+                      label={connectAccountTranslations(
+                        "incubateeCanAskIncubatorForAnAccount"
+                      )}
                     />
                   )}
                 {needsAction?.fromInitiative?.chooseAccounts
@@ -474,9 +492,9 @@ const StripeConnect = asOneWePage(
                   <FormControlLabel
                     value={"acceptIncubator"}
                     control={<Radio />}
-                    label={
-                      "Your incubator has asked you to accept their connected account."
-                    }
+                    label={connectAccountTranslations(
+                      "incubatorHasRequestedAcceptTheirAccount"
+                    )}
                   />
                 )}
                 <FormControlLabel
@@ -493,7 +511,7 @@ const StripeConnect = asOneWePage(
                     checkedNew ? (
                       <TextField
                         disabled={!checkedNew || loading}
-                        label="Please give a title for the new account"
+                        label={connectAccountTranslations("newAccountPrompt")}
                         value={titleForNewAccount}
                         onChange={(e) => setTitleForNewAccount(e.target.value)}
                         onClick={(e) => {
@@ -502,7 +520,7 @@ const StripeConnect = asOneWePage(
                         }}
                       />
                     ) : (
-                      "New account"
+                      connectAccountTranslations("newAccount")
                     )
                   }
                 />
@@ -556,7 +574,9 @@ const StripeConnect = asOneWePage(
                       createNewAccount();
                       break;
                     case null:
-                      alert("Please select an account to connect to.");
+                      alert(
+                        connectAccountTranslations("error.noAccountSelected")
+                      );
                       break;
                     default:
                       connectAccount();
@@ -564,7 +584,9 @@ const StripeConnect = asOneWePage(
                   }
                 }}
               >
-                {checkedNew ? "Create and connect account" : "Connect account"}
+                {checkedNew
+                  ? connectAccountTranslations("createAndConnectAccount")
+                  : connectAccountTranslations("connect")}
               </Button>
             )}
           </Stack>

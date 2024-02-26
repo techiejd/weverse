@@ -395,6 +395,33 @@
       "invited": {
         "title": "Invited:",
         "none": "No one has been invited."
+      },
+      "connectAccountDialog": {
+        "explainIncubateeMustAccept": {
+          "pleaseWaitForTheProcessToFinish": "Please wait for the process to finish.",
+          "title":"Your incubatee must accept this connected account in order for them to receive payments.",
+         "prompt": "They can accept through their initiative edit page, clicking \"connect account\", followed by selecting \"accept incubator's connect account\" and lastly clicking \"connect account\".",
+          "stripeExplanation": "You will be redirected to our partner Stripe to connect an account."
+        },
+        "askingForTitleComponents": {
+          "title": "Give the account a title.",
+          "prompt": "Please give a title for the new account.",
+          "errorHelperText": "The account must have a title.",
+          "connectAccount": "Connect account"
+        },
+        "redirecting": {
+          "title": "Please wait",
+          "prompt": "Please wait while redirect you to our Stripe partner."
+        }
+      },
+      "incubateeManipulationPortal": {
+        "viewAccount": "View account",
+        "errorGettingOnboardLink": "Error getting continue onboarding link {status}: {statusText}",
+        "finishOnboarding": "Finish onboarding through our partner Stripe.",
+        "incubateeMustFinishOnboarding": "Incubatee must finish onboarding through our partner Stripe.",
+        "connectAccountThroughStripe": "Connect account through our partner Stripe.",
+        "waitingForIncubateeToApproveAccount": "Waiting for incubatee to approve connected account.",
+        "preemptivelyConnectAccount": "Preemptively connect account"
       }
     },
     "bottomBar": {
@@ -464,6 +491,18 @@
             "prompt": "Give us a story",
             "helperText": "Here you can be as detailed as you wish."
           }
+        },
+        "connectAccount": {
+          "title": "Get financial support",
+          "prompt": "Connect your account to receive financial support.",
+          "connectAccountBtn": "Connect account",
+          "continueOnboardingPrompt": "Your have not finished onboarding your account. You will be able to receive financial help once the process is complete.",
+          "continueOnboardingBtn": "Continue onboarding",
+          "accountConnected": {
+            "prompt": "Congratulations, your account is connected and ready to receive financial support.",
+            "modifyAccountBtn": "Modify account",
+            "viewAccountBtn": "View account"
+          }
         }
       }
     },
@@ -510,6 +549,30 @@
         "prompt": "Would you like to publish an action?",
         "yes": "Publish an action"
       }
+    },
+    "connectAccount": {
+      "error": {
+        "missingTitle": "Error in creating new account. Title cannot be empty.",
+        "connectAccountNotImplementedAtThisMoment": "Connect account not implemented at this moment.",
+        "noAccountSelected": "Please select an account."
+      },
+      "redirecting": "Redirecting to our partner 'Stripe'.",
+      "pleaseWait": "Please wait...",
+      "connectedAccount": "Connected account: {account}",
+      "visitAccount": "Visit account",
+      "disconnectAccount": "Disconnect account",
+      "continueOnboarding": "Continue onboarding account: {account}",
+      "finishOnboarding": "Finish onboarding",
+      "incubatorStillNeedsToFinishOnboarding": "Incubator still has to finish onboarding: {account}",
+      "waitingForIncubatorToConnect": "Waiting for your incubator to connect an account.",
+      "goBackToYourInitiativePage": "Go back to your initiative page",
+      "title": "Connect to an account to receive financial support",
+      "incubateeCanAskIncubatorForAnAccount": "You as an incubatee can ask your incubator for an account.",
+      "incubatorHasRequestedAcceptTheirAccount":"Your incubator has asked you to accept their connected account.",
+      "newAccountPrompt": "Please give a title for the new account",
+      "newAccount": "New account",
+      "createAndConnectAccount": "Create and connect account",
+      "connect": "Connect account"
     }
   },
   "members": {
