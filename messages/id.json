@@ -151,8 +151,7 @@
     },
     "sponsorDialog": {
       "title": "Thank you for your sponsorship!",
-      "oneWeIsWorkingOnMakingAGoodExp": "We are working with the initiative on making a good experience for you.",
-      "logInPrompt": "You must be a registered member to sponsor."
+      "oneWeIsWorkingOnMakingAGoodExp": "We are working with the initiative on making a good experience for you."
     },
     "underConstruction": {
       "title": "Come back soon!"
@@ -178,6 +177,12 @@
             "prompt": "Choose your currency",
             "chooseWiselyWarning": "Choose wisely. You can only choose your currency in this first sponsor, since we save this information."
           },
+          "paymentPlan": {
+            "prompt": "Choose your payment plan",
+            "explanation": "{paymentPlan, select, oneTime {One time payments are charged immediately, and you will receive updates for six months} other {You will be billed monthly on the same day, starting today, and receive updates from the initiatives while sponsoring}}.",
+            "oneTime": "One time",
+            "monthly": "Monthly"
+          },
           "tip": {
             "prompt": "Want to leave a tip for OneWe?",
             "showUsYourLove": "Show us!, how much you love us.",
@@ -197,7 +202,8 @@
         },
         "customer": {
           "short": "Customer info",
-          "title": "Customer Information"
+          "title": "Customer Information",
+          "logInPrompt": "You must be a registered member to sponsor."
         },
         "payment": {
           "short": "Payment",
@@ -207,7 +213,9 @@
           }
         },
         "confirm": {
-          "short": "Confirm"
+          "short": "Confirm",
+          "mustGoBackTitle": "You must go back",
+          "currencyMismatchExplanation": "The currency you chose in the first step doesn't match the currency we have saved for you. Please, go back and choose a sponsorship denoted in your saved currency."
         }
       },
       "details": {
@@ -233,6 +241,7 @@
   },
   "actions": {
     "card": {
+      "logInToLike": "You must log in to give a like",
       "validation": {
         "validatedBy": "Validated by:",
         "inValidationProcess": "In validation process with:"
@@ -386,6 +395,33 @@
       "invited": {
         "title": "Invited:",
         "none": "No one has been invited."
+      },
+      "connectAccountDialog": {
+        "explainIncubateeMustAccept": {
+          "pleaseWaitForTheProcessToFinish": "Please wait for the process to finish.",
+          "title": "Your incubatee must accept this connected account in order for them to receive payments.",
+          "prompt": "They can accept through their initiative edit page, clicking \"connect account\", followed by selecting \"accept incubator's connect account\" and lastly clicking \"connect account\".",
+          "stripeExplanation": "You will be redirected to our partner Stripe to connect an account."
+        },
+        "askingForTitleComponents": {
+          "title": "Give the account a title.",
+          "prompt": "Please give a title for the new account.",
+          "errorHelperText": "The account must have a title.",
+          "connectAccount": "Connect account"
+        },
+        "redirecting": {
+          "title": "Please wait",
+          "prompt": "Please wait while redirect you to our Stripe partner."
+        }
+      },
+      "incubateeManipulationPortal": {
+        "viewAccount": "View account",
+        "errorGettingOnboardLink": "Error getting continue onboarding link {status}: {statusText}",
+        "finishOnboarding": "Finish onboarding through our partner Stripe.",
+        "incubateeMustFinishOnboarding": "Incubatee must finish onboarding through our partner Stripe.",
+        "connectAccountThroughStripe": "Connect account through our partner Stripe.",
+        "waitingForIncubateeToApproveAccount": "Waiting for incubatee to approve connected account.",
+        "preemptivelyConnectAccount": "Preemptively connect account"
       }
     },
     "bottomBar": {
@@ -455,6 +491,18 @@
             "prompt": "Give us a story",
             "helperText": "Here you can be as detailed as you wish."
           }
+        },
+        "connectAccount": {
+          "title": "Get financial support",
+          "prompt": "Connect your account to receive financial support.",
+          "connectAccountBtn": "Connect account",
+          "continueOnboardingPrompt": "Your have not finished onboarding your account. You will be able to receive financial help once the process is complete.",
+          "continueOnboardingBtn": "Continue onboarding",
+          "accountConnected": {
+            "prompt": "Congratulations, your account is connected and ready to receive financial support.",
+            "modifyAccountBtn": "Modify account",
+            "viewAccountBtn": "View account"
+          }
         }
       }
     },
@@ -501,9 +549,34 @@
         "prompt": "Would you like to publish an action?",
         "yes": "Publish an action"
       }
+    },
+    "connectAccount": {
+      "error": {
+        "missingTitle": "Error in creating new account. Title cannot be empty.",
+        "connectAccountNotImplementedAtThisMoment": "Connect account not implemented at this moment.",
+        "noAccountSelected": "Please select an account."
+      },
+      "redirecting": "Redirecting to our partner 'Stripe'.",
+      "pleaseWait": "Please wait...",
+      "connectedAccount": "Connected account: {account}",
+      "visitAccount": "Visit account",
+      "disconnectAccount": "Disconnect account",
+      "continueOnboarding": "Continue onboarding account: {account}",
+      "finishOnboarding": "Finish onboarding",
+      "incubatorStillNeedsToFinishOnboarding": "Incubator still has to finish onboarding: {account}",
+      "waitingForIncubatorToConnect": "Waiting for your incubator to connect an account.",
+      "goBackToYourInitiativePage": "Go back to your initiative page",
+      "title": "Connect to an account to receive financial support",
+      "incubateeCanAskIncubatorForAnAccount": "You as an incubatee can ask your incubator for an account.",
+      "incubatorHasRequestedAcceptTheirAccount": "Your incubator has asked you to accept their connected account.",
+      "newAccountPrompt": "Please give a title for the new account",
+      "newAccount": "New account",
+      "createAndConnectAccount": "Create and connect account",
+      "connect": "Connect account"
     }
   },
   "members": {
+    "logInPrompt": "Log in to see your member page.",
     "yours": {
       "title": "Your member page",
       "initiatives": {

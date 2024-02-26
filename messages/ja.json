@@ -151,8 +151,7 @@
     },
     "sponsorDialog": {
       "title": "あなたのスポンサーシップに感謝します!",
-      "oneWeIsWorkingOnMakingAGoodExp": "私たちはあなたのために良い経験をするためのイニシアチブと協力しています。",
-      "logInPrompt": "スポンサー登録会員である必要があります。"
+      "oneWeIsWorkingOnMakingAGoodExp": "私たちはあなたのために良い経験をするためのイニシアチブと協力しています。"
     },
     "underConstruction": {
       "title": "すぐに戻ってきなさい！"
@@ -178,6 +177,12 @@
             "prompt": "通貨を選択してください",
             "chooseWiselyWarning": "賢明に選択してください。この情報を保存するため、最初のスポンサーでのみ通貨を選択できます。"
           },
+          "paymentPlan": {
+            "prompt": "支払いプランを選択してください",
+            "explanation": "{paymentPlan, select, oneTime {One time payments are charged immediately, and you will receive updates for six months} other {You will be billed monthly on the same day, starting today, and receive updates from the initiatives while sponsoring}}.",
+            "oneTime": "一度だけ",
+            "monthly": "月ごと"
+          },
           "tip": {
             "prompt": "OneWeのためにヒントを残したいですか?",
             "showUsYourLove": "私たちを見せてください!, あなたは私たちを愛してどのくらい.",
@@ -197,7 +202,8 @@
         },
         "customer": {
           "short": "顧客情報",
-          "title": "顧客情報"
+          "title": "顧客情報",
+          "logInPrompt": "スポンサー登録会員である必要があります。"
         },
         "payment": {
           "short": "支払い",
@@ -207,7 +213,9 @@
           }
         },
         "confirm": {
-          "short": "確認する"
+          "short": "確認する",
+          "mustGoBackTitle": "戻る必要があります",
+          "currencyMismatchExplanation": "最初のステップで選択した通貨は、あなたのために保存した通貨と一致しません。 戻って、保存された通貨で示されたスポンサーシップを選択してください。"
         }
       },
       "details": {
@@ -233,6 +241,7 @@
   },
   "actions": {
     "card": {
+      "logInToLike": "いいね！をするにはログインが必要です",
       "validation": {
         "validatedBy": "認証者：",
         "inValidationProcess": "検証プロセス:"
@@ -386,6 +395,33 @@
       "invited": {
         "title": "招待済み:",
         "none": "招待された人はいません。"
+      },
+      "connectAccountDialog": {
+        "explainIncubateeMustAccept": {
+          "pleaseWaitForTheProcessToFinish": "処理が完了するまでお待ちください。",
+          "title": "彼らが支払いを受け取るためには、incubateはこの接続されたアカウントに同意する必要があります。",
+          "prompt": "彼らは彼らのイニシアチブの編集ページで受け入れることができます, クリックします \"アカウントを接続します\", そして、選択します \"インキュベーターの接続アカウントを受け入れます\" そして最後にクリックします \"アカウントを接続します\".",
+          "stripeExplanation": "アカウントを接続するために、パートナーStripeにリダイレクトされます。"
+        },
+        "askingForTitleComponents": {
+          "title": "アカウントにタイトルを付けます。",
+          "prompt": "新しいアカウントのタイトルを入力してください。",
+          "errorHelperText": "アカウントにはタイトルが必要です。",
+          "connectAccount": "アカウントに接続"
+        },
+        "redirecting": {
+          "title": "お待ちください",
+          "prompt": "Stripeのパートナーにリダイレクトするまでお待ちください。"
+        }
+      },
+      "incubateeManipulationPortal": {
+        "viewAccount": "アカウントを表示",
+        "errorGettingOnboardLink": "オンボーディングリンク {status}の取得に失敗しました : {statusText}",
+        "finishOnboarding": "パートナーStripeを通じてオンボーディングを終了します。",
+        "incubateeMustFinishOnboarding": "IncubateeはパートナーStripeを通じてオンボーディングを終了する必要があります。",
+        "connectAccountThroughStripe": "私たちのパートナーStripeからアカウントを接続します。",
+        "waitingForIncubateeToApproveAccount": "incubateが接続されたアカウントの承認を待っています。",
+        "preemptivelyConnectAccount": "先行してアカウントに接続"
       }
     },
     "bottomBar": {
@@ -455,6 +491,18 @@
             "prompt": "ストーリーを教えてください",
             "helperText": "ここでは、あなたが望むように詳細にすることができます。"
           }
+        },
+        "connectAccount": {
+          "title": "財政支援を受ける",
+          "prompt": "財務サポートを受けるには、アカウントを接続してください。",
+          "connectAccountBtn": "アカウントに接続",
+          "continueOnboardingPrompt": "アカウントの登録が完了していません。手続きが完了すると、資金援助を受けることができます。",
+          "continueOnboardingBtn": "オンボーディングを続ける",
+          "accountConnected": {
+            "prompt": "おめでとうございます。アカウントが接続され、財政支援を受ける準備ができました。",
+            "modifyAccountBtn": "アカウントを変更",
+            "viewAccountBtn": "アカウントを表示"
+          }
         }
       }
     },
@@ -501,9 +549,34 @@
         "prompt": "アクションを公開しますか？",
         "yes": "アクションを公開"
       }
+    },
+    "connectAccount": {
+      "error": {
+        "missingTitle": "新しいアカウントを作成中にエラーが発生しました。タイトルは空にできません。",
+        "connectAccountNotImplementedAtThisMoment": "接続アカウントは現在実装されていません。",
+        "noAccountSelected": "アカウントを選択してください。"
+      },
+      "redirecting": "パートナーの 'Stripe' にリダイレクトしています。",
+      "pleaseWait": "しばらくお待ちください...",
+      "connectedAccount": "接続済みアカウント: {account}",
+      "visitAccount": "アカウントを開く",
+      "disconnectAccount": "アカウントを切断する",
+      "continueOnboarding": "オンボーディングアカウントを継続: {account}",
+      "finishOnboarding": "オンボーディングを終了",
+      "incubatorStillNeedsToFinishOnboarding": "インキュベーターはまだオンボードを終了する必要があります: {account}",
+      "waitingForIncubatorToConnect": "アカウントの接続を待っています。",
+      "goBackToYourInitiativePage": "イニシアチブページに戻る",
+      "title": "アカウントに接続して、財政的なサポートを受けます",
+      "incubateeCanAskIncubatorForAnAccount": "インキュベイトとして、インキュベーターにアカウントを依頼することができます。",
+      "incubatorHasRequestedAcceptTheirAccount": "インキュベーターが接続されたアカウントに同意するように求めています。",
+      "newAccountPrompt": "新しいアカウントのタイトルを入力してください",
+      "newAccount": "新規アカウント",
+      "createAndConnectAccount": "アカウントの作成と接続",
+      "connect": "アカウントに接続"
     }
   },
   "members": {
+    "logInPrompt": "メンバーページを見るにはログインしてください。",
     "yours": {
       "title": "メンバーページ",
       "initiatives": {

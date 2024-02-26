@@ -151,8 +151,7 @@
     },
     "sponsorDialog": {
       "title": "Vielen Dank für Ihre Unterstützung!",
-      "oneWeIsWorkingOnMakingAGoodExp": "Wir arbeiten mit der Initiative daran, eine gute Erfahrung für Sie zu machen.",
-      "logInPrompt": "Du musst ein registriertes Mitglied sein, um zu sponsern."
+      "oneWeIsWorkingOnMakingAGoodExp": "Wir arbeiten mit der Initiative daran, eine gute Erfahrung für Sie zu machen."
     },
     "underConstruction": {
       "title": "Kommen Sie bald wieder!"
@@ -178,6 +177,12 @@
             "prompt": "Wählen Sie Ihre Währung",
             "chooseWiselyWarning": "Wählen Sie klug aus. Sie können Ihre Währung nur in diesem ersten Sponsor wählen, da wir diese Informationen speichern."
           },
+          "paymentPlan": {
+            "prompt": "Wähle deinen Zahlungsplan",
+            "explanation": "{paymentPlan, select, oneTime {Einmal werden Zahlungen sofort belastet und du wirst Updates für sechs Monate erhalten} other {Du wirst am selben Tag monatlich abgerechnet, ab heute und erhältst Aktualisierungen von den Initiativen beim Sponsoring}}",
+            "oneTime": "Einmal",
+            "monthly": "Monatlich"
+          },
           "tip": {
             "prompt": "Willst du einen Tipp für OneWe?",
             "showUsYourLove": "Zeigen Sie uns!, wie sehr Sie uns lieben.",
@@ -197,7 +202,8 @@
         },
         "customer": {
           "short": "Kundeninfo",
-          "title": "Kundeninformationen"
+          "title": "Kundeninformationen",
+          "logInPrompt": "Du musst ein registriertes Mitglied sein, um zu sponsern."
         },
         "payment": {
           "short": "Zahlung",
@@ -207,7 +213,9 @@
           }
         },
         "confirm": {
-          "short": "Bestätigen"
+          "short": "Bestätigen",
+          "mustGoBackTitle": "Sie müssen zurück gehen",
+          "currencyMismatchExplanation": "Die Währung, die Sie im ersten Schritt gewählt haben, entspricht nicht der Währung, die wir für Sie gespeichert haben. Bitte gehen Sie zurück und wählen Sie ein Sponsoring aus, das in Ihrer gespeicherten Währung angegeben ist."
         }
       },
       "details": {
@@ -233,6 +241,7 @@
   },
   "actions": {
     "card": {
+      "logInToLike": "Sie müssen sich anmelden, um Gleiches zu geben",
       "validation": {
         "validatedBy": "Bestätigt von:",
         "inValidationProcess": "In Validierungsprozess mit:"
@@ -386,6 +395,33 @@
       "invited": {
         "title": "Eingeladen,",
         "none": "Niemand wurde eingeladen."
+      },
+      "connectAccountDialog": {
+        "explainIncubateeMustAccept": {
+          "pleaseWaitForTheProcessToFinish": "Bitte warten Sie, bis der Prozess beendet ist.",
+          "title": "Dein Inkubat muss dieses verbundene Konto akzeptieren, damit diese Zahlungen erhalten können.",
+          "prompt": "Sie können durch ihre Initiative bearbeiten Seite, klicken Sie auf \"Konto verbinden\", gefolgt von \"Konto akzeptieren Inkubator-Verbindungen\" und schließlich klicken Sie auf \"Konto verbinden\".",
+          "stripeExplanation": "Sie werden zu unserem Partner Stripe weitergeleitet, um ein Konto zu erstellen."
+        },
+        "askingForTitleComponents": {
+          "title": "Gib dem Konto einen Titel.",
+          "prompt": "Bitte geben Sie einen Titel für das neue Konto an.",
+          "errorHelperText": "Das Konto muss einen Titel haben.",
+          "connectAccount": "Konto verbinden"
+        },
+        "redirecting": {
+          "title": "Bitte warten",
+          "prompt": "Bitte warten Sie, während Sie Sie zu unserem Stripe-Partner weiterleiten."
+        }
+      },
+      "incubateeManipulationPortal": {
+        "viewAccount": "Konto anzeigen",
+        "errorGettingOnboardLink": "Fehler beim Abrufen des Onboarding-Links {status}: {statusText}",
+        "finishOnboarding": "Beenden Sie das Einsteigen über unseren Partner Stripe.",
+        "incubateeMustFinishOnboarding": "Inkubatee muss das Einsteigen über unseren Partner Stripe beenden.",
+        "connectAccountThroughStripe": "Verbinden Sie Ihr Konto über unseren Partner Stripe.",
+        "waitingForIncubateeToApproveAccount": "Warten auf Inkubatee um das verbundene Konto zu genehmigen.",
+        "preemptivelyConnectAccount": "Konto voraussichtlich verbinden"
       }
     },
     "bottomBar": {
@@ -455,6 +491,18 @@
             "prompt": "Gib uns eine Geschichte",
             "helperText": "Hier können Sie so detailliert wie Sie möchten."
           }
+        },
+        "connectAccount": {
+          "title": "Bekomme finanzielle Unterstützung",
+          "prompt": "Verbinden Sie Ihr Konto, um finanzielle Unterstützung zu erhalten.",
+          "connectAccountBtn": "Konto verbinden",
+          "continueOnboardingPrompt": "Sie haben Ihr Konto noch nicht beendet, Sie können finanzielle Hilfe erhalten, sobald der Vorgang abgeschlossen ist.",
+          "continueOnboardingBtn": "Onboarding fortsetzen",
+          "accountConnected": {
+            "prompt": "Herzlichen Glückwunsch, Ihr Konto ist verbunden und bereit, finanzielle Unterstützung zu erhalten.",
+            "modifyAccountBtn": "Konto ändern",
+            "viewAccountBtn": "Konto anzeigen"
+          }
         }
       }
     },
@@ -501,9 +549,34 @@
         "prompt": "Möchten Sie eine Aktion veröffentlichen?",
         "yes": "Aktion veröffentlichen"
       }
+    },
+    "connectAccount": {
+      "error": {
+        "missingTitle": "Fehler beim Erstellen eines neuen Kontos. Titel darf nicht leer sein.",
+        "connectAccountNotImplementedAtThisMoment": "Konto im Moment nicht implementiert.",
+        "noAccountSelected": "Bitte wählen Sie ein Konto."
+      },
+      "redirecting": "Weiterleitung an unseren Partner 'Stripe'.",
+      "pleaseWait": "Bitte warten...",
+      "connectedAccount": "Verbundenes Konto: {account}",
+      "visitAccount": "Konto besuchen",
+      "disconnectAccount": "Konto trennen",
+      "continueOnboarding": "Onboarding-Konto fortsetzen: {account}",
+      "finishOnboarding": "Onboarding beenden",
+      "incubatorStillNeedsToFinishOnboarding": "Inkubator muss noch an Bord fertig sein: {account}",
+      "waitingForIncubatorToConnect": "Warten, bis dein Inkubator ein Konto verbindet.",
+      "goBackToYourInitiativePage": "Zurück zu Ihrer Initiativseite",
+      "title": "Verbinden Sie sich mit einem Konto, um finanzielle Unterstützung zu erhalten",
+      "incubateeCanAskIncubatorForAnAccount": "Sie als Inkubate können Ihren Inkubator nach einem Konto fragen.",
+      "incubatorHasRequestedAcceptTheirAccount": "Dein Inkubator hat dich gebeten, sein Konto zu akzeptieren.",
+      "newAccountPrompt": "Bitte geben Sie einen Titel für das neue Konto ein",
+      "newAccount": "Neues Konto",
+      "createAndConnectAccount": "Konto erstellen und verbinden",
+      "connect": "Konto verbinden"
     }
   },
   "members": {
+    "logInPrompt": "Melden Sie sich an, um Ihre Mitgliedsseite zu sehen.",
     "yours": {
       "title": "Deine Mitgliederseite",
       "initiatives": {

@@ -151,8 +151,7 @@
     },
     "sponsorDialog": {
       "title": "Obrigado por seu patrocínio!",
-      "oneWeIsWorkingOnMakingAGoodExp": "Estamos a trabalhar com a iniciativa de fazer uma boa experiência para V. Exas.",
-      "logInPrompt": "Você deve ser um membro registrado para patrocinar."
+      "oneWeIsWorkingOnMakingAGoodExp": "Estamos a trabalhar com a iniciativa de fazer uma boa experiência para V. Exas."
     },
     "underConstruction": {
       "title": "Volte em breve!"
@@ -178,6 +177,12 @@
             "prompt": "Escolha a sua moeda",
             "chooseWiselyWarning": "Escolha sabiamente. Você só pode escolher sua moeda neste primeiro patrocinador, já que salvamos estas informações."
           },
+          "paymentPlan": {
+            "prompt": "Escolha seu plano de pagamento",
+            "explanation": "{paymentPlan, select, oneTime {Pagamentos únicos são cobrados imediatamente, e você receberá atualizações por seis meses} other {Você será cobrado mensalmente no mesmo dia, a partir de hoje e receberá atualizações das iniciativas patrocinando}}",
+            "oneTime": "Uma única vez",
+            "monthly": "Mensual"
+          },
           "tip": {
             "prompt": "Quer deixar uma dica para OneWe?",
             "showUsYourLove": "Mostre-nos!, o quanto você nos ama.",
@@ -197,7 +202,8 @@
         },
         "customer": {
           "short": "Informação do cliente",
-          "title": "Informação do Cliente"
+          "title": "Informação do Cliente",
+          "logInPrompt": "Você deve ser um membro registrado para patrocinar."
         },
         "payment": {
           "short": "Pagamento",
@@ -207,7 +213,9 @@
           }
         },
         "confirm": {
-          "short": "Confirmar"
+          "short": "Confirmar",
+          "mustGoBackTitle": "Você precisa voltar",
+          "currencyMismatchExplanation": "A moeda que você escolheu no primeiro passo não corresponde à moeda que salvamos para você. Por favor, volte e escolha um patrocínio indicado em sua moeda salva."
         }
       },
       "details": {
@@ -233,6 +241,7 @@
   },
   "actions": {
     "card": {
+      "logInToLike": "Você deve fazer login para dar uma curtida",
       "validation": {
         "validatedBy": "Validado por:",
         "inValidationProcess": "Em processo de validação com:"
@@ -386,6 +395,33 @@
       "invited": {
         "title": "Convidado:",
         "none": "Ninguém foi convidado."
+      },
+      "connectAccountDialog": {
+        "explainIncubateeMustAccept": {
+          "pleaseWaitForTheProcessToFinish": "Por favor, aguarde o término do processo.",
+          "title": "Sua incubatee deve aceitar esta conta conectada para que eles possam receber pagamentos.",
+          "prompt": "Eles podem aceitar através de sua página de edição de iniciativa, clicando em \"conectar conta\", seguida selecionando \"aceitar conta de conexão da incubador\" e, por último, clicando em \"conectar conta\".",
+          "stripeExplanation": "Você será redirecionado para nosso parceiro Stripe para conectar uma conta."
+        },
+        "askingForTitleComponents": {
+          "title": "Dê um título à conta.",
+          "prompt": "Por favor, dê um título para a nova conta.",
+          "errorHelperText": "A conta deve ter um título",
+          "connectAccount": "Conectar conta"
+        },
+        "redirecting": {
+          "title": "Por favor, aguarde",
+          "prompt": "Aguarde enquanto o redirecionamos para nosso parceiro do Stripe."
+        }
+      },
+      "incubateeManipulationPortal": {
+        "viewAccount": "Ver conta",
+        "errorGettingOnboardLink": "Erro ao obter link continuo de integração {status}: {statusText}",
+        "finishOnboarding": "Termine de integrar com nosso parceiro Stripe.",
+        "incubateeMustFinishOnboarding": "Incubatee precisa terminar de entrar através de nosso parceiro Stripe.",
+        "connectAccountThroughStripe": "Conecte a conta através do nosso parceiro Stripe.",
+        "waitingForIncubateeToApproveAccount": "Esperando a incubatee aprovar a conta conectada.",
+        "preemptivelyConnectAccount": "Conectar conta antecipadamente"
       }
     },
     "bottomBar": {
@@ -455,6 +491,18 @@
             "prompt": "Dê-nos uma história",
             "helperText": "Aqui pode ser o mais detalhado possível."
           }
+        },
+        "connectAccount": {
+          "title": "Obtenha suporte financeiro",
+          "prompt": "Conecte sua conta para receber suporte financeiro.",
+          "connectAccountBtn": "Conectar conta",
+          "continueOnboardingPrompt": "Sua conta ainda não terminou. Você poderá receber ajuda financeira após a conclusão do processo.",
+          "continueOnboardingBtn": "Continuar integração",
+          "accountConnected": {
+            "prompt": "Parabéns, sua conta está conectada e pronta para receber apoio financeiro.",
+            "modifyAccountBtn": "Modificar conta",
+            "viewAccountBtn": "Ver conta"
+          }
         }
       }
     },
@@ -501,9 +549,34 @@
         "prompt": "Você gostaria de publicar uma ação?",
         "yes": "Publicar uma ação"
       }
+    },
+    "connectAccount": {
+      "error": {
+        "missingTitle": "Erro na criação da nova conta. O título não pode estar vazio.",
+        "connectAccountNotImplementedAtThisMoment": "Conecte a conta não implementada neste momento.",
+        "noAccountSelected": "Por favor, selecione uma conta."
+      },
+      "redirecting": "Redirecionando para o nosso parceiro \"Stripe\".",
+      "pleaseWait": "Por favor, aguarde...",
+      "connectedAccount": "Conta conectada: {account}",
+      "visitAccount": "Visitar conta",
+      "disconnectAccount": "Conta desconectada",
+      "continueOnboarding": "Continuar a integração da conta: {account}",
+      "finishOnboarding": "Finalizar integração",
+      "incubatorStillNeedsToFinishOnboarding": "Incubadora ainda precisa terminar a integração: {account}",
+      "waitingForIncubatorToConnect": "Esperando que sua incubadora conecte uma conta.",
+      "goBackToYourInitiativePage": "Volte para sua página de iniciativa",
+      "title": "Conecte-se a uma conta para receber suporte financeiro",
+      "incubateeCanAskIncubatorForAnAccount": "Você como uma incubadora pode pedir uma conta à sua incubadora.",
+      "incubatorHasRequestedAcceptTheirAccount": "Sua incubadora pediu para você aceitar a conta conectada a ela.",
+      "newAccountPrompt": "Por favor, dê um título para a nova conta",
+      "newAccount": "Nova conta",
+      "createAndConnectAccount": "Criar e conectar conta",
+      "connect": "Conectar conta"
     }
   },
   "members": {
+    "logInPrompt": "Faça o login para ver sua página de membro.",
     "yours": {
       "title": "Sua página de membro",
       "initiatives": {
