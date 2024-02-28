@@ -63,20 +63,18 @@ export default function Sponsor({
   const submit = (sponsorFormIn: Record<string, string>) => {
     const stepString = sponsorFormIn.stepString;
     if (stepString == "chooseSponsorship") {
-      setSponsorForm((sponsorForm) => ({
-        ...sponsorForm,
+      setSponsorForm({
         ...sponsorFormIn,
         status: "success",
         [stepString]: "success",
-      }));
+      });
       return;
     }
-    setSponsorForm((sponsorForm) => ({
-      ...sponsorForm,
+    setSponsorForm({
       ...sponsorFormIn,
       status: "loading",
       [stepString]: "loading",
-    }));
+    });
     fetch(
       `/api/sponsor/?` +
         new URLSearchParams({
@@ -91,12 +89,11 @@ export default function Sponsor({
       if (res.ok) {
         res.json().then((data) => {
           setSponsorForm((sponsorForm) => {
-            const newSponsorForm: Record<string, string> = {};
+            const newSponsorForm = { ...sponsorForm };
             Object.entries(data).forEach(([key, value]) => {
               newSponsorForm[key] = value as string;
             });
             return {
-              ...sponsorForm,
               ...newSponsorForm,
               status: "success",
               [stepString]: "success",

@@ -105,7 +105,7 @@ const Confirm = ({
             disabled={loading}
             loading={loading}
           >
-            <span>{inputTranslations("Ok")}</span>
+            <span>{inputTranslations("ok")}</span>
           </LoadingButton>
         </Fragment>
       </Box>

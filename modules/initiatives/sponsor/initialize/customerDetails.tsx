@@ -112,7 +112,12 @@ const CustomerDetails = ({
       </Typography>
       <input hidden value={"customerDetails"} name="stepString" readOnly />
       <input hidden readOnly value={countryInfo.code} name="countryCode" />
-      <input hidden value={myMember?.path || ""} name="member" readOnly />
+      <input
+        hidden
+        value={sponsorForm.member == "" ? myMember?.path! : sponsorForm.member}
+        name="member"
+        readOnly
+      />
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <TextField

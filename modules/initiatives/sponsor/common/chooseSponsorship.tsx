@@ -44,6 +44,7 @@ const ChooseSponsorship = ({
   currency?: Currency;
 }) => {
   const messages = useMessages();
+  const [myMember] = useMyMember();
   const sponsorTranslations = useTranslations("common.sponsor");
   const chooseTranslations = useTranslations("common.sponsor.steps.choose");
   const inputTranslations = useTranslations("input");
@@ -150,6 +151,7 @@ const ChooseSponsorship = ({
   return (
     <Fragment>
       <input hidden value={"chooseSponsorship"} name="stepString" readOnly />
+      <input hidden value={myMember?.path || ""} name="member" readOnly />
       <input hidden value={total} name="total" readOnly />
       <input hidden value={oneWeAmount} name="oneWeAmount" readOnly />
       <input hidden value={initiativeAmount} name="initiativeAmount" readOnly />
