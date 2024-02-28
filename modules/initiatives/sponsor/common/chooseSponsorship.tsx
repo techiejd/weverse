@@ -133,9 +133,7 @@ const ChooseSponsorship = ({
       <FormControlLabel
         value={sponsorshipLevelIn}
         control={<Radio />}
-        label={`${sponsorTranslations("levels." + sponsorshipLevelIn)}: ${
-          sponsorshipLevelInfo[sponsorshipLevelIn].displayCurrency
-        }`}
+        label={`${sponsorshipLevelInfo[sponsorshipLevelIn].displayCurrency}`}
       />
     );
   };
@@ -184,12 +182,7 @@ const ChooseSponsorship = ({
         />
         <Stack>
           <ListItem sx={{ px: 0 }}>
-            <ListItemText
-              primary={sponsorTranslations("sponsorship")}
-              secondary={chooseTranslations("level", {
-                level: sponsorTranslations("levels." + sponsorshipLevelIn),
-              })}
-            />
+            <ListItemText primary={sponsorTranslations("sponsorship")} />
             <Typography variant="body2">{sponsorshipDisplayAmount}</Typography>
           </ListItem>
           <ListItem>
@@ -299,6 +292,7 @@ const ChooseSponsorship = ({
                     setInitiativePaysFee(e.target.checked);
                     e.preventDefault();
                   }}
+                  id="initiativePaysFeeCheckbox"
                 />
               }
               label={chooseTranslations("fee.preferInitiativePays")}
@@ -327,6 +321,7 @@ const ChooseSponsorship = ({
                   color="secondary"
                   onChange={(e) => setMemberPublishable(e.target.checked)}
                   checked={memberPublishable}
+                  id="memberPublishableCheckbox"
                 />
               }
               label={chooseTranslations("publicizeSupporter.publish")}

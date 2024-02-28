@@ -161,18 +161,11 @@
       "title": "Sponsor {initiativeName}",
       "total": "Total",
       "monthly": "Monthly",
-      "levels": {
-        "admirer": "Admirer",
-        "fan": "Fan",
-        "lover": "Lover",
-        "custom": "Custom"
-      },
       "steps": {
         "choose": {
           "defaultCurrency": "usd",
           "short": "Choose",
           "title": "Set up the sponsorship plan",
-          "level": "Level {level}",
           "currency": {
             "prompt": "Choose your currency",
             "chooseWiselyWarning": "Choose wisely. You can only choose your currency in this first sponsor, since we save this information."

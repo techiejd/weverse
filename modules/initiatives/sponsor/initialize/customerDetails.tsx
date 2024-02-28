@@ -56,6 +56,7 @@ const PhoneInput = ({
         required
         error={phoneError}
         fullWidth
+        autoComplete="tel"
       />
     </Box>
   );
@@ -150,6 +151,7 @@ const CustomerDetails = ({
             variant="standard"
             required
             fullWidth
+            autoComplete="email"
           />
         </Grid>
         <Grid item xs={12} md={6}>

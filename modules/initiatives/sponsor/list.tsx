@@ -121,9 +121,6 @@ const SponsorshipDisplay = ({
         }
         secondaryTypographyProps={{ fontSize: 12 }}
       />
-      <Typography variant="body2">
-        {sponsorTranslations("levels." + sponsorship.sponsorshipLevel)}
-      </Typography>
     </ListItem>
   );
 };

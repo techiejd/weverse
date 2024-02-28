@@ -158,7 +158,7 @@
     },
     "sponsor": {
       "sponsorship": "Patrocinio",
-      "title": "Patrocina a {InitiativeName}",
+      "title": "Patrocina a {initiativeName}",
       "total": "Total",
       "monthly": "Al mes",
       "levels": {

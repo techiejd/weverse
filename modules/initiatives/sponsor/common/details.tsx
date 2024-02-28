@@ -51,10 +51,6 @@ const Details = ({
   const sponsorTranslations = useTranslations("common.sponsor");
   const sponsorship = [
     {
-      name: sponsorTranslations("details.sponsorshipSummary.level"),
-      detail: sponsorTranslations("levels." + sponsorshipIn.sponsorshipLevel),
-    },
-    {
       name: sponsorTranslations("total"),
       detail: toDisplayCurrency[sponsorshipIn.currency](
         Number(sponsorshipIn.total)
