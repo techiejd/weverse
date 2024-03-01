@@ -4,8 +4,9 @@ import {
   MuiTelInputCountry,
 } from "mui-tel-input";
 import { Dispatch, SetStateAction, useState } from "react";
-import { AuthAction, AuthDialogState } from "./context";
+import { AuthDialogState } from "./context";
 import { useTranslations } from "next-intl";
+import { useAppState } from "../../../common/context/appState";
 
 const PhoneInput = ({
   authDialogState,
@@ -15,6 +16,7 @@ const PhoneInput = ({
   setAuthDialogState: Dispatch<SetStateAction<AuthDialogState>>;
 }) => {
   const [phoneNumberIn, setPhoneNumberIn] = useState("");
+  const appState = useAppState();
 
   const onPhoneNumberChange = (value: string, info: MuiTelInputInfo) => {
     if (info.nationalNumber == null || info.nationalNumber.length <= 12) {
@@ -38,6 +40,7 @@ const PhoneInput = ({
       defaultCountry={
         inputTranslations("defaultCountry.short") as MuiTelInputCountry
       }
+      langOfCountryName={appState.languages.primary}
       value={phoneNumberIn}
       error={authDialogState.phoneNumberInputError}
       onChange={onPhoneNumberChange}

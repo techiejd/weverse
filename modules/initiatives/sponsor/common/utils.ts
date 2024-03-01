@@ -58,13 +58,20 @@ export const paymentInfo: PaymentInfo = (() => {
     sponsorshipLevelInfo: Record<SponsorshipLevel, number>
   ) =>
     Object.entries(paymentPlanMultiplier).reduce(
-      (acc, [paymentPlanOption, multiplier]) => {
+      (acc, [paymentPlanOption, multiplierIn]) => {
         acc[paymentPlanOption as PaymentPlanOptions] = Object.entries(
           sponsorshipLevelInfo
-        ).reduce((acc, [sponsorshipLevel, amount]) => {
+        ).reduce((acc, [sponsorshipLevel, amountIn]) => {
+          // We do this to make the one time payment custom level an even 100 units,
+          // instead of say 120 units.
+          const multiplier =
+            paymentPlanOption === "oneTime" && sponsorshipLevel === "custom"
+              ? 5
+              : multiplierIn;
+          const amount = amountIn * multiplier;
           acc[sponsorshipLevel as SponsorshipLevel] = {
-            amount: amount * multiplier,
-            displayCurrency: toDisplayCurrency[currency](amount * multiplier),
+            amount,
+            displayCurrency: toDisplayCurrency[currency](amount),
           };
           return acc;
         }, {} as Record<SponsorshipLevel, { amount: number; displayCurrency: string }>);

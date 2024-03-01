@@ -12,6 +12,10 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { Step } from "./utils";
 import { useMyMember } from "../../../../common/context/weverseUtils";
 import LogInPrompt from "../../../../common/components/logInPrompt";
+import { useAppState } from "../../../../common/context/appState";
+import { parsePhoneNumber } from "libphonenumber-js";
+import { z } from "zod";
+import { phoneNumber } from "../../../../functions/shared/src";
 
 const PhoneInput = ({
   sponsorForm,
@@ -37,16 +41,16 @@ const PhoneInput = ({
   };
   const t = useTranslations("input");
   const [myMember] = useMyMember();
+  const appState = useAppState();
   useEffect(() => {
     if (myMember && phoneIn === "") {
-      setPhoneIn(
-        `+${myMember.phoneNumber.countryCallingCode} ${myMember.phoneNumber.nationalNumber}`
-      );
+      setPhoneIn(formatPhoneNumber(myMember.phoneNumber));
     }
   }, [myMember, phoneIn]);
   return (
     <Box>
       <MuiTelInput
+        langOfCountryName={appState.languages.primary}
         variant="standard"
         defaultCountry={t("defaultCountry.short") as MuiTelInputCountry}
         name="phone"
@@ -99,12 +103,35 @@ const CustomerDetails = ({
     sponsorForm[Step.toString(Step.chooseSponsorship)] == "loading";
 
   useEffect(() => {
-    if (myMember && firstName === "" && lastName === "") {
-      const parsedName = parseName(myMember.name);
-      setFirstName(parsedName.firstName);
-      setLastName(parsedName.lastName);
+    if (myMember) {
+      if (firstName === "" && lastName === "") {
+        const parsedName = parseName(myMember.name);
+        setFirstName(parsedName.firstName);
+        setLastName(parsedName.lastName);
+      }
+
+      const guessedCountryCode = myMember?.phoneNumber
+        ? guessCountryCode(myMember.phoneNumber)
+        : undefined;
+      const guessedCountry = countryCodeToCountry(guessedCountryCode ?? "");
+      if (
+        !(sponsorForm.country && sponsorForm.countryCode) &&
+        guessedCountryCode &&
+        guessedCountry
+      ) {
+        setCountryInfo({
+          country: guessedCountry,
+          code: guessedCountryCode,
+        });
+      }
     }
-  }, [myMember, firstName, lastName]);
+  }, [
+    myMember,
+    firstName,
+    lastName,
+    sponsorForm.country,
+    sponsorForm.countryCode,
+  ]);
 
   return myMember ? (
     <Fragment>
@@ -225,6 +252,18 @@ const CustomerDetails = ({
 
 export default CustomerDetails;
 
+type PhoneNumber = z.infer<typeof phoneNumber>;
+
+export const formatPhoneNumber = (pN: PhoneNumber) =>
+  `+${pN.countryCallingCode} ${pN.nationalNumber}`;
+
+export const guessCountryCode = (pN: PhoneNumber) => {
+  const parsed = parsePhoneNumber(formatPhoneNumber(pN));
+  return parsed?.country || parsed?.getPossibleCountries().length > 0
+    ? parsed?.getPossibleCountries()[0]
+    : "US";
+};
+
 const countries = [
   { country: "Argentina", code: "AR" },
   { country: "Australia", code: "AU" },
@@ -283,6 +322,9 @@ const countries = [
   { country: "United States", code: "US" },
   { country: "Uruguay", code: "UY" },
 ];
+
+const countryCodeToCountry = (code: string) =>
+  countries.find((c) => c.code === code)?.country;
 
 function parseName(fullName: string) {
   // This is simply a best effort to split the name into first and last name.

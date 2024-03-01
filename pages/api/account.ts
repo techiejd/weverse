@@ -10,7 +10,6 @@ import {
   getAuthentication,
 } from "../../common/utils/firebaseAdmin";
 import { Accounts } from "../../functions/shared/src";
-import { deleteField } from "firebase/firestore";
 
 export default async function handler(
   req: NextApiRequest,
