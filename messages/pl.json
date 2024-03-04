@@ -161,18 +161,11 @@
       "title": "Sponsor {initiativeName}",
       "total": "Łącznie",
       "monthly": "Miesięczny",
-      "levels": {
-        "admirer": "Admirał",
-        "fan": "Wentylator",
-        "lover": "Dźwięk",
-        "custom": "Własny"
-      },
       "steps": {
         "choose": {
           "defaultCurrency": "eur",
           "short": "Wybierz",
           "title": "Wybierz poziom sponsorowania",
-          "level": "Poziom {level}",
           "currency": {
             "prompt": "Wybierz walutę",
             "chooseWiselyWarning": "Wybieraj mądrze. Możesz wybrać walutę tylko w pierwszym sponsorze, ponieważ zapisujemy te informacje."
@@ -279,10 +272,12 @@
       }
     },
     "impact": {
-      "solicit": {
-        "title": "{initiativeName}, Zdobądź zeznania i zyskaj więcej zaangażowania!",
+      "success": {
+        "title": "Twoje zeznanie zostało opublikowane",
+        "solicit": "{initiativeName}, Zdobądź zeznania i zyskaj więcej zaangażowania!",
         "solicitText": "Podaj mi swoją opinię na temat mojej akcji: {for}",
-        "clickOnEarToSolicit": "Kliknij na uchu, aby wysłać im ankietę z prośbą o zeznania."
+        "shareLink": "Udostępnij link, aby otrzymywać zeznania",
+        "qrCode": "Lub otrzymuj zeznania za pomocą tego kodu QR"
       }
     },
     "about": {

@@ -161,18 +161,11 @@
       "title": "Patrocinador {initiativeName}",
       "total": "Total:",
       "monthly": "Mensual",
-      "levels": {
-        "admirer": "Admirador",
-        "fan": "Ventilador",
-        "lover": "Amante",
-        "custom": "Personalizado"
-      },
       "steps": {
         "choose": {
           "defaultCurrency": "brz",
           "short": "Selecionar",
           "title": "Escolha seu nível de patrocínio",
-          "level": "Nível {level}",
           "currency": {
             "prompt": "Escolha a sua moeda",
             "chooseWiselyWarning": "Escolha sabiamente. Você só pode escolher sua moeda neste primeiro patrocinador, já que salvamos estas informações."
@@ -279,10 +272,12 @@
       }
     },
     "impact": {
-      "solicit": {
-        "title": "{initiativeName}, ganhe testemunhos e ganhe mais compromissos!",
+      "success": {
+        "title": "Seu depoimento foi publicado",
+        "solicit": "{initiativeName}, ganhe testemunhos e ganhe mais compromissos!",
         "solicitText": "Por favor, dê-me sua opinião sobre minha ação: {for}",
-        "clickOnEarToSolicit": "Clique na orelha para enviar uma pesquisa pedindo depoimentos."
+        "shareLink": "Compartilhar link para receber depoimentos",
+        "qrCode": "Ou receber depoimentos através deste código QR"
       }
     },
     "about": {

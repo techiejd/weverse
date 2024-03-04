@@ -161,18 +161,11 @@
       "title": "Sponsor {initiativeName}",
       "total": "Gesamt",
       "monthly": "Monatlich",
-      "levels": {
-        "admirer": "Bewunderer",
-        "fan": "Fächer",
-        "lover": "Lover",
-        "custom": "Eigene"
-      },
       "steps": {
         "choose": {
           "defaultCurrency": "eur",
           "short": "Auswählen",
           "title": "Wähle dein Sponsoring-Level",
-          "level": "Level {level}",
           "currency": {
             "prompt": "Wählen Sie Ihre Währung",
             "chooseWiselyWarning": "Wählen Sie klug aus. Sie können Ihre Währung nur in diesem ersten Sponsor wählen, da wir diese Informationen speichern."
@@ -279,10 +272,12 @@
       }
     },
     "impact": {
-      "solicit": {
-        "title": "{initiativeName}, Hol dir Zeugnisse und mehr Engagement!",
+      "success": {
+        "title": "Ihr Zeugnis wurde veröffentlicht",
+        "solicit": "{initiativeName}, Hol dir Zeugnisse und mehr Engagement!",
         "solicitText": "Bitte geben Sie mir Ihre Meinung zu meiner Handlung: {for}",
-        "clickOnEarToSolicit": "Klicken Sie auf das Ohr, um ihnen eine Umfrage zu senden, in der Sie nach einem Zeugnis fragen."
+        "shareLink": "Link teilen um Zeugnisse zu erhalten",
+        "qrCode": "Oder erhalten Sie Zeugnisse durch diesen QR-Code"
       }
     },
     "about": {

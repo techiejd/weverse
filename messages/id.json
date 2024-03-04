@@ -161,18 +161,11 @@
       "title": "Sponsor {initiativeName}",
       "total": "Total",
       "monthly": "Monthly",
-      "levels": {
-        "admirer": "Admirer",
-        "fan": "Fan",
-        "lover": "Lover",
-        "custom": "Custom"
-      },
       "steps": {
         "choose": {
           "defaultCurrency": "usd",
           "short": "Choose",
           "title": "Choose your sponsorship level",
-          "level": "Level {level}",
           "currency": {
             "prompt": "Choose your currency",
             "chooseWiselyWarning": "Choose wisely. You can only choose your currency in this first sponsor, since we save this information."
@@ -279,10 +272,12 @@
       }
     },
     "impact": {
-      "solicit": {
-        "title": "{initiativeName}, get testimonials and get more engagement!",
+      "success": {
+        "title": "Your testimonial has been published",
+        "solicit": "{initiativeName}, Get testimonials and get more engagement!",
         "solicitText": "Please give me your opinion on my action: {for}",
-        "clickOnEarToSolicit": "Click on the ear to send them a survey asking for a testimonials."
+        "shareLink": "Share link to receive testimonials",
+        "qrCode": "Or receive testimonials through this QR code"
       }
     },
     "about": {
