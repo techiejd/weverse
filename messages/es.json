@@ -161,18 +161,11 @@
       "title": "Patrocina a {initiativeName}",
       "total": "Total",
       "monthly": "Al mes",
-      "levels": {
-        "admirer": "Admirador",
-        "fan": "Aficionado",
-        "lover": "Amante",
-        "custom": "Personalizado"
-      },
       "steps": {
         "choose": {
           "defaultCurrency": "cop",
           "short": "Elige",
           "title": "Elige tu nivel de patrocinio",
-          "level": "Nivel {level}",
           "currency": {
             "prompt": "Escoge tu divisa",
             "chooseWiselyWarning": "Elige sabiamente. Solo puedes elegir la divisa en este primer patrocinio, porque almacenamos este dato."
@@ -279,10 +272,12 @@
       }
     },
     "impact": {
-      "solicit": {
-        "title": "{initiativeName}, ¡Obten los comentarios y obten más participación!",
-        "solicitText": "Por favor dame tu opinion sobre mi acción social: {for}",
-        "clickOnEarToSolicit": "Haz clic en la oreja para enviarles una encuesta sobre esta acción."
+      "success": {
+        "title": "Tu testimonio ha sido publicado",
+        "solicit": "{initiativeName}, ¡Obtén testimonales y participa más!",
+        "solicitText": "Por favor, dame tu opinión sobre mi acción: {for}",
+        "shareLink": "Compartir enlace para recibir testimonios",
+        "qrCode": "O recibir testimonios a través de este código QR"
       }
     },
     "about": {
