@@ -161,18 +161,11 @@
       "title": "Parrainer {initiativeName}",
       "total": "Total",
       "monthly": "Mensuel",
-      "levels": {
-        "admirer": "Admirer",
-        "fan": "Ventilateur",
-        "lover": "Louvain",
-        "custom": "Personnalisé"
-      },
       "steps": {
         "choose": {
           "defaultCurrency": "eur",
           "short": "Choisir",
           "title": "Choisissez votre niveau de sponsoring",
-          "level": "Niveau {level}",
           "currency": {
             "prompt": "Choisissez votre devise",
             "chooseWiselyWarning": "Choisissez judicieusement. Vous ne pouvez choisir votre devise que dans ce premier sponsor, puisque nous enregistrons ces informations."
@@ -279,10 +272,12 @@
       }
     },
     "impact": {
-      "solicit": {
-        "title": "{initiativeName}, obtenez des témoignages et obtenez plus d’engagement!",
+      "success": {
+        "title": "Votre témoignage a été publié",
+        "solicit": "{initiativeName}, obtenez des témoignages et obtenez plus d’engagement!",
         "solicitText": "Veuillez me donner votre avis sur mon action : {for}",
-        "clickOnEarToSolicit": "Cliquez sur l'oreille pour leur envoyer une enquête demandant un témoignage."
+        "shareLink": "Partager le lien pour recevoir des témoignages",
+        "qrCode": "Ou recevoir des témoignages grâce à ce code QR"
       }
     },
     "about": {
