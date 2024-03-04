@@ -161,18 +161,11 @@
       "title": "スポンサー {initiativeName}",
       "total": "合計",
       "monthly": "月ごと",
-      "levels": {
-        "admirer": "アドミラー",
-        "fan": "ファン",
-        "lover": "Lover",
-        "custom": "カスタム"
-      },
       "steps": {
         "choose": {
           "defaultCurrency": "SD",
           "short": "選択",
           "title": "スポンサーレベルを選択してください",
-          "level": "レベル {level}",
           "currency": {
             "prompt": "通貨を選択してください",
             "chooseWiselyWarning": "賢明に選択してください。この情報を保存するため、最初のスポンサーでのみ通貨を選択できます。"
@@ -279,10 +272,12 @@
       }
     },
     "impact": {
-      "solicit": {
-        "title": "{initiativeName}, 証言を得て、より多くのエンゲージメントを得ましょう!",
+      "success": {
+        "title": "あなたの証言が公開されました",
+        "solicit": "{initiativeName}, 証言を得て、より多くのエンゲージメントを得ましょう!",
         "solicitText": "私の行動についてのご意見をお聞かせください： {for}",
-        "clickOnEarToSolicit": "彼らに証言を求める調査を送るために耳をクリックしてください。"
+        "shareLink": "証言を受け取るためのリンクを共有",
+        "qrCode": "または、このQRコードを通じて証言を受け取る"
       }
     },
     "about": {
