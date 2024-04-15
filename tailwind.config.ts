@@ -220,6 +220,45 @@ const config: Config = {
             },
           },
         },
+        {
+          name: "header",
+          extend: {
+            colors: {
+              white: "#fff",
+              "international-red": "#ff5700",
+              "gray-700": "#344054",
+              lightgray: "rgba(210, 201, 200, 0.5)",
+            },
+            spacing: {},
+            fontFamily: {
+              "bricolage-grotesque": "'Bricolage Grotesque'",
+            },
+            borderRadius: {
+              "71xl": "90px",
+            },
+          },
+          fontSize: {
+            xs: "0.75rem",
+            mini: "0.938rem",
+            "2xs": "0.688rem",
+            smi: "0.813rem",
+            sm: "0.875rem",
+            base: "1rem",
+            lg: "1.125rem",
+            inherit: "inherit",
+          },
+          screens: {
+            lg: {
+              max: "1200px",
+            },
+            md: {
+              max: "960px",
+            },
+            sm: {
+              max: "420px",
+            },
+          },
+        },
       ],
     }),
   ],
