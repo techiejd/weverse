@@ -255,7 +255,10 @@ const AppLanguageModal = ({
   );
 
   return (
-    <NextIntlClientProvider messages={locale2Messages[requestedLocale]}>
+    <NextIntlClientProvider
+      locale={requestedLocale}
+      messages={locale2Messages[requestedLocale]}
+    >
       <AppLanguageModalContent
         onClose={onClose}
         selectedLocale={requestedLocale}

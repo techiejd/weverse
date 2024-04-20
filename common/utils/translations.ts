@@ -69,7 +69,7 @@ export function WithTranslationsStaticProps(
   ) => Promise<GetStaticPropsResult<BaseProps>>
 ) {
   return async (context: GetStaticPropsContext) => {
-    const { locale } = context;
+    const { locale } = context.params as { locale: Locale };
     const othersPromise = gsp ? gsp(context) : Promise.resolve({ props: {} });
     const messagesPromise = import(`../../messages/${locale}.json`);
     const spreadTranslationsStaticPropsPromise =
@@ -126,3 +126,12 @@ export const useLocalizedPresentationInfo = <T extends object>(
     objInUserPrimaryLanguage || objInUserAnyLanguage || objInItsOwnLanguage
   );
 };
+
+export async function localesSpreadPaths() {
+  return {
+    paths: Object.values(locale.Values).map((locale) => ({
+      params: { locale },
+    })),
+    fallback: false,
+  };
+}

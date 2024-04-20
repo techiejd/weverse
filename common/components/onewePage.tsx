@@ -36,6 +36,7 @@ export const asOneWePage = <P extends object>(
     const appState = useAppState();
     return (
       <NextIntlClientProvider
+        locale={appState.languages.primary}
         messages={(props as Locale2Messages)[appState.languages.primary]}
       >
         <Fragment>

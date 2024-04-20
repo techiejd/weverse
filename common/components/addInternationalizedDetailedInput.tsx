@@ -102,7 +102,7 @@ const AddInternationalizedDetailedInput = <T extends ValType>({
               </IconButton>
               <Typography variant="h3">{localeDisplayNames[l]}</Typography>
             </Stack>
-            <NextIntlClientProvider messages={locale2Messages[l]}>
+            <NextIntlClientProvider locale={l} messages={locale2Messages[l]}>
               <DetailedInput val={val} setVal={setVal} locale={l} />
             </NextIntlClientProvider>
           </Box>

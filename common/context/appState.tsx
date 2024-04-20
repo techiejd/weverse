@@ -108,22 +108,19 @@ const AppProvider: React.FC<{
     user ? doc(weverse.firestore, "members", user.uid as string) : undefined
   );
   const router = useRouter();
-  const locale = (router.locale || "en") as Locale;
+  const locale = (router.query.locale || "en") as Locale;
   const [cachedLanguages, setCachedLanguages] = useState<Languages>({
-    primary: member?.locale || locale,
+    primary: locale,
     content:
       member?.settings?.locales ||
       (member?.locale ? [member?.locale!] : [locale]),
   });
 
   useEffect(() => {
-    setCachedLanguages((cachedLanguages) => ({
-      primary: member?.locale || cachedLanguages.primary,
-      content:
-        member?.settings?.locales ||
-        (member?.locale ? [member?.locale!] : cachedLanguages.content),
-    }));
-  }, [member?.locale, member?.settings?.locales]);
+    if (member?.locale && member?.locale != locale) {
+      router.push(`/${member?.locale}/${router.asPath.slice(3)}`);
+    }
+  }, [locale, member?.locale, router]);
 
   const useSetLanguages = useCallback(() => {
     return (languages: Languages) => {
@@ -136,10 +133,12 @@ const AppProvider: React.FC<{
             locales: languages.content,
           },
         });
+      } else {
+        router.push(`/${languages.primary}/${router.asPath.slice(3)}`);
       }
       return Promise.resolve();
     };
-  }, [member, user?.uid]);
+  }, [member, router, user?.uid]);
 
   useEffect(() => {
     return weverse.auth.onIdTokenChanged(async (user) => {
