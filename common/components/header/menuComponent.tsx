@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Home from "@mui/icons-material/Home";
 import Login from "@mui/icons-material/Login";
 import PlusOne from "@mui/icons-material/PlusOne";
@@ -21,6 +21,12 @@ import { useAppState } from "../../context/appState";
 import PublishDialog from "../publishDialog";
 import { useSignOut } from "react-firebase-hooks/auth";
 import mixpanel from "mixpanel-browser";
+
+const trackSubmit = () => {
+  mixpanel.track("Menu", {
+    action: "Submit",
+  });
+};
 
 const UserPortal = ({
   closeMenu,
@@ -36,6 +42,7 @@ const UserPortal = ({
   return user ? (
     <MenuItem
       onClick={() => {
+        trackSubmit();
         mixpanel.track("Authentication", {
           action: "Sign out",
         });
@@ -51,6 +58,7 @@ const UserPortal = ({
   ) : (
     <MenuItem
       onClick={() => {
+        trackSubmit();
         openAuthDialog();
         closeMenu();
       }}
@@ -67,7 +75,12 @@ export const MenuComponent = (props: BoxProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const menuOpen = Boolean(anchorEl);
-  const closeMenu = () => setAnchorEl(null);
+  const closeMenu = () => {
+    mixpanel.track("Menu", {
+      action: "Close",
+    });
+    setAnchorEl(null);
+  };
   const t = useTranslations("common.callToAction");
   const [publishDialogOpen, setPublishDialogOpen] = useState(false);
   return (
@@ -77,10 +90,22 @@ export const MenuComponent = (props: BoxProps) => {
         close={() => setPublishDialogOpen(false)}
       />
       <AuthDialog open={authDialogOpen} setOpen={setAuthDialogOpen} />
-      <IconButton onClick={(e) => setAnchorEl(e.currentTarget)}>
+      <IconButton
+        onClick={(e) => {
+          mixpanel.track("Menu", {
+            action: "View",
+          });
+          setAnchorEl(e.currentTarget);
+        }}
+      >
         <MenuIcon />
       </IconButton>
-      <Menu anchorEl={anchorEl} open={menuOpen} onClose={closeMenu}>
+      <Menu
+        anchorEl={anchorEl}
+        open={menuOpen}
+        onClose={closeMenu}
+        MenuListProps={{ id: "MenuList" }}
+      >
         <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
           <MenuItem>
             <ListItemIcon>
@@ -91,6 +116,7 @@ export const MenuComponent = (props: BoxProps) => {
         </Link>
         <MenuItem
           onClick={() => {
+            trackSubmit();
             closeMenu();
             setPublishDialogOpen(true);
           }}
