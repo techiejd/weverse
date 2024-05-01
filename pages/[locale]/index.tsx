@@ -53,6 +53,8 @@ import Campaign from "@mui/icons-material/Campaign";
 import HeartHandshakeIcon from "../../common/svg/HeartHandshake";
 import PublishDialog from "../../common/components/publishDialog";
 import { useMySponsorships } from "../../modules/members/context";
+import mixpanel from "mixpanel-browser";
+import YouTube from "react-youtube";
 
 export const getStaticProps = WithTranslationsStaticProps();
 export const getStaticPaths = localesSpreadPaths;
@@ -166,12 +168,25 @@ const CountMeInDialog = ({
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const t = useTranslations("index.countMeInDialog");
   const [publishDialogOpen, setPublishDialogOpen] = useState(false);
+  useEffect(() => {
+    if (open) {
+      mixpanel.track("Count Me In Dialog", {
+        action: "View",
+      });
+      mixpanel.track_links("#CountMeInDialog-Stack a", "Count Me In Dialog", {
+        action: "Click Give Testimonial",
+      });
+    }
+  }, [open]);
   return (
     <Dialog
       open={open}
       onClose={(e: any) => {
         e.preventDefault();
         e.stopPropagation();
+        mixpanel.track("Count Me In Dialog", {
+          action: "Close",
+        });
         onClose();
       }}
       fullScreen={fullScreen}
@@ -215,18 +230,40 @@ const CountMeInDialog = ({
       <DialogContent>
         <Typography>{t("contribute")}</Typography>
         <br />
-        <Stack spacing={1}>
-          <div className="aspect-w-16 aspect-h-9">
-            <iframe
-              src="https://www.youtube.com/embed/8dIKfizbirA?si=9bzRmB_x61ye9ngO"
-              title="How to join vid"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            ></iframe>
-          </div>
+        <Stack spacing={1} id="CountMeInDialog-Stack">
+          <YouTube
+            className="aspect-w-16 aspect-h-9"
+            videoId="8dIKfizbirA"
+            title="How to join vid"
+            opts={{ playerVars: { autoplay: 1 } }}
+            onPlay={() => {
+              mixpanel.track("Count Me In Dialog", {
+                action: "Play",
+              });
+            }}
+            onEnd={() => {
+              mixpanel.track("Count Me In Dialog", {
+                action: "End",
+              });
+            }}
+            onPause={() => {
+              mixpanel.track("Count Me In Dialog", {
+                action: "Pause",
+              });
+            }}
+            onReady={() => {
+              mixpanel.track("Count Me In Dialog", {
+                action: "Ready",
+              });
+            }}
+          />
           {!sponsoring && (
             <Button
               variant="outlined"
               onClick={() => {
+                mixpanel.track("Count Me In Dialog", {
+                  action: "Sponsor OneWe",
+                });
                 setSponsorOneWeOpen(true);
               }}
               startIcon={<HeartHandshakeIcon />}
@@ -238,6 +275,9 @@ const CountMeInDialog = ({
             variant="outlined"
             startIcon={<PlusOne />}
             onClick={() => {
+              mixpanel.track("Count Me In Dialog", {
+                action: "Publish",
+              });
               setPublishDialogOpen(true);
             }}
           >
@@ -247,7 +287,12 @@ const CountMeInDialog = ({
             <Button
               variant="outlined"
               startIcon={<Login />}
-              onClick={() => setAuthDialogOpen(true)}
+              onClick={() => {
+                mixpanel.track("Count Me In Dialog", {
+                  action: "Register",
+                });
+                setAuthDialogOpen(true);
+              }}
             >
               {t("registerOrLoginPrompt")}
             </Button>
@@ -264,6 +309,11 @@ const CountMeInDialog = ({
               path: "/",
               title: "Join the OneWe movement",
             }}
+            onClick={() => {
+              mixpanel.track("Count Me In Dialog", {
+                action: "Share",
+              });
+            }}
           >
             <Button variant="outlined" startIcon={<Share />}>
               {t("shareOneWe")}
@@ -276,6 +326,9 @@ const CountMeInDialog = ({
           onClick={(event) => {
             event.preventDefault();
             event.stopPropagation();
+            mixpanel.track("Count Me In Dialog", {
+              action: "See OneWe",
+            });
             onClose();
           }}
         >
