@@ -26,6 +26,7 @@ import SocialProofCard from "../../../../modules/posi/socialProofCard";
 import ImpactCard from "../../../../modules/posi/action/card";
 import { useSignOut } from "react-firebase-hooks/auth";
 import { useAppState } from "../../../../common/context/appState";
+import mixpanel from "mixpanel-browser";
 
 export const getStaticPaths = CachePaths;
 export const getStaticProps = WithTranslationsStaticProps();
@@ -65,7 +66,12 @@ const UserPage = asOneWePage(() => {
         <Button
           key="disconnect button"
           variant="contained"
-          onClick={() => signOut()}
+          onClick={() => {
+            mixpanel.track("Authentication", {
+              action: "Sign out",
+            });
+            signOut();
+          }}
         >
           {yourMemberTranslations("signOut")}
         </Button>,

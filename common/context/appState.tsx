@@ -25,14 +25,24 @@ import {
 } from "react";
 import nookies from "nookies";
 import { useRouter } from "next/router";
-import { useAuthState, useIdToken } from "react-firebase-hooks/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { lightConfiguration } from "../components/theme";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
-import { AbstractIntlMessages } from "next-intl";
 import { Locale } from "../../functions/shared/src";
 import { useDocumentData } from "react-firebase-hooks/firestore";
+import mixpanel from "mixpanel-browser";
 
 const isDevEnvironment = process && process.env.NODE_ENV === "development";
+
+mixpanel.init(
+  isDevEnvironment
+    ? process.env.NEXT_PUBLIC_MIXPANEL_TOKEN_DEV!
+    : process.env.NEXT_PUBLIC_MIXPANEL_TOKEN_PROD!,
+  {
+    debug: true,
+    persistence: "localStorage",
+  }
+);
 
 const storage = (() => {
   const storage = getStorage(app);
@@ -141,12 +151,21 @@ const AppProvider: React.FC<{
   }, [member, router, user?.uid]);
 
   useEffect(() => {
-    return weverse.auth.onIdTokenChanged(async (user) => {
+    weverse.auth.onIdTokenChanged(async (user) => {
       if (!user) {
         nookies.set(undefined, "token", "", { path: "/" });
       } else {
         const token = await user.getIdToken();
         nookies.set(undefined, "token", token, { path: "/" });
+      }
+    });
+    weverse.auth.onAuthStateChanged((user) => {
+      if (!user) {
+        console.log("resetting mixpanel");
+        mixpanel.reset();
+      } else {
+        console.log("identifying mixpanel");
+        mixpanel.identify(user.uid);
       }
     });
   }, []);

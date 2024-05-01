@@ -11,6 +11,7 @@ import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { AuthDialogState, encodePhoneNumber } from "./context";
 import { useAppState } from "../../../common/context/appState";
 import { useTranslations } from "next-intl";
+import mixpanel from "mixpanel-browser";
 
 const RecaptchaDialog = ({
   authDialogState,
@@ -29,6 +30,12 @@ const RecaptchaDialog = ({
       setRecaptchaContainerReady(false);
     }
   }, [authDialogState.recaptchaDialogOpen]);
+  useEffect(() => {
+    mixpanel.track("Authentication", {
+      action: "View",
+      dialog: "Recaptcha",
+    });
+  }, []);
 
   useEffect(() => {
     const phoneNumberIsReady =
@@ -60,6 +67,10 @@ const RecaptchaDialog = ({
             verifier.clear();
           };
           resetRecaptchaDialogState();
+          mixpanel.track("Authentication", {
+            action: "Submit",
+            dialog: "Recaptcha",
+          });
 
           setAuthDialogState((aDS) => ({
             ...aDS,

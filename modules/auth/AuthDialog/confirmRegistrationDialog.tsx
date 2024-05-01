@@ -7,10 +7,11 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import Login from "@mui/icons-material/Login";
 import { AuthDialogState } from "./context";
 import { useTranslations } from "next-intl";
+import mixpanel from "mixpanel-browser";
 
 const ConfirmRegistrationDialog = ({
   authDialogState,
@@ -24,6 +25,12 @@ const ConfirmRegistrationDialog = ({
   const inputTranslations = useTranslations("input");
   const authTranslations = useTranslations("auth");
   const t = useTranslations("auth.confirmRegistrationDialog");
+  useEffect(() => {
+    mixpanel.track("Authentication", {
+      action: "View",
+      dialog: "Confirm Registration",
+    });
+  }, []);
   return (
     <Dialog open={authDialogState.confirmRegistrationDialogOpen}>
       <DialogTitle>{t("review")}</DialogTitle>
@@ -48,6 +55,10 @@ const ConfirmRegistrationDialog = ({
           variant="outlined"
           color="secondary"
           onClick={(e) => {
+            mixpanel.track("Authentication", {
+              action: "Cancel",
+              dialog: "Confirm Registration",
+            });
             setAuthDialogState((aDS) => ({
               ...aDS,
               confirmRegistrationDialogOpen: false,
@@ -60,6 +71,10 @@ const ConfirmRegistrationDialog = ({
           variant="contained"
           endIcon={<Login />}
           onClick={(e) => {
+            mixpanel.track("Authentication", {
+              action: "Submit",
+              dialog: "Confirm Registration",
+            });
             confirm();
           }}
         >

@@ -13,6 +13,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import AuthCode from "react-auth-code-input";
 import { AuthDialogState } from "./context";
 import { useTranslations } from "next-intl";
+import mixpanel from "mixpanel-browser";
 
 const OtpDialog = ({
   authDialogState,
@@ -30,6 +31,13 @@ const OtpDialog = ({
   const [error, setError] = useState("");
   const [waitingVerificationResult, setWaitingVerificationResult] =
     useState(false);
+
+  useEffect(() => {
+    mixpanel.track("Authentication", {
+      action: "View",
+      dialog: "OTP",
+    });
+  }, []);
 
   useEffect(() => {
     setVerifyButtonDisabled(authCodeInput.length == 6 ? false : true);
@@ -60,9 +68,13 @@ const OtpDialog = ({
         <Button
           variant="outlined"
           color="secondary"
-          onClick={() =>
-            setAuthDialogState((aDS) => ({ ...aDS, otpDialogOpen: false }))
-          }
+          onClick={() => {
+            mixpanel.track("Authentication", {
+              action: "Cancel",
+              dialog: "OTP",
+            });
+            setAuthDialogState((aDS) => ({ ...aDS, otpDialogOpen: false }));
+          }}
           disabled={waitingVerificationResult}
         >
           {inputTranslations("cancel")}
@@ -71,6 +83,10 @@ const OtpDialog = ({
           variant="contained"
           endIcon={<Login />}
           onClick={() => {
+            mixpanel.track("Authentication", {
+              action: "Submit",
+              dialog: "OTP",
+            });
             const verify = async () => {
               setWaitingVerificationResult(true);
               const err = await handleVerification(authCodeInput);

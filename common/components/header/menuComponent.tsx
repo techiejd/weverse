@@ -20,6 +20,7 @@ import AuthDialog from "../../../modules/auth/AuthDialog";
 import { useAppState } from "../../context/appState";
 import PublishDialog from "../publishDialog";
 import { useSignOut } from "react-firebase-hooks/auth";
+import mixpanel from "mixpanel-browser";
 
 const UserPortal = ({
   closeMenu,
@@ -35,6 +36,9 @@ const UserPortal = ({
   return user ? (
     <MenuItem
       onClick={() => {
+        mixpanel.track("Authentication", {
+          action: "Sign out",
+        });
         signOut();
         closeMenu();
       }}

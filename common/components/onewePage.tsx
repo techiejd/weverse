@@ -6,6 +6,7 @@ import { AuthAction } from "../../modules/auth/AuthDialog/context";
 import { useAppState } from "../context/appState";
 import { Locale2Messages } from "../utils/translations";
 import { NextIntlClientProvider } from "next-intl";
+import mixpanel from "mixpanel-browser";
 
 const RegisterModal = () => {
   //TODO(techiejd): Look into how to consolidate all AuthDialogs into one.
@@ -32,6 +33,8 @@ export const asOneWePage = <P extends object>(
   Component: ComponentType<P>
 ): FC<P> => {
   // TODO(techiejd): Bring in the locale2Messages and put it as context.
+
+  mixpanel.track_pageview();
   const OWP = (props: P) => {
     const appState = useAppState();
     return (

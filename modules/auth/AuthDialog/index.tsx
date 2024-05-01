@@ -37,6 +37,7 @@ import {
 import { useRouter } from "next/router";
 import { useTranslations } from "next-intl";
 import { useDocumentData } from "react-firebase-hooks/firestore";
+import mixpanel from "mixpanel-browser";
 
 const usePrompts = () => {
   const t = useTranslations("auth");
@@ -45,6 +46,11 @@ const usePrompts = () => {
     [AuthAction.logIn]: commonTranslations("callToAction.login"),
     [AuthAction.register]: t("register"),
   };
+};
+
+const authActionToDialog = {
+  [AuthAction.logIn]: "Log In",
+  [AuthAction.register]: "Register",
 };
 
 const TabControl = ({
@@ -56,6 +62,12 @@ const TabControl = ({
 }) => {
   const { loading } = useAppState().authState;
   const prompts = usePrompts();
+  useEffect(() => {
+    mixpanel.track("Authentication", {
+      action: "View",
+      dialog: authActionToDialog[authDialogState.authAction],
+    });
+  }, [authDialogState.authAction]);
   return (
     <Tabs
       value={authDialogState.authAction}
@@ -181,13 +193,24 @@ const AuthDialogContent = ({
   ]);
 
   const handleOtp = async (otp: string) => {
-    if (authDialogState.recaptchaConfirmationResult == undefined)
+    if (authDialogState.recaptchaConfirmationResult == undefined) {
+      mixpanel.track("Authentication", {
+        action: "Error",
+        dialog: "Recaptcha",
+        error: "Confirmation result is undefined",
+      });
       return authTranslations("handleOtp.restartPrompt");
+    }
     return authDialogState.recaptchaConfirmationResult
       .confirm(otp)
       .then(async (userCred) => {
         let setSessionError = "";
         let setUpUserAndInitiativeError = "";
+
+        mixpanel.track("Authentication", {
+          action: "Sign in",
+          dialog: authActionToDialog[authDialogState.authAction],
+        });
 
         if (authDialogState.authAction == AuthAction.register) {
           const createUserAndInitiative = async () => {
@@ -285,6 +308,11 @@ const AuthDialogContent = ({
   };
 
   const onSubmit = async () => {
+    mixpanel.track("Authentication", {
+      action: "Submit",
+      dialog: authActionToDialog[authDialogState.authAction],
+    });
+
     const phoneNumber = authDialogState.phoneNumber;
     if (
       !phoneNumber.countryCallingCode ||
@@ -421,6 +449,10 @@ const AuthDialogContent = ({
             variant="outlined"
             color="secondary"
             onClick={(e) => {
+              mixpanel.track("Authentication", {
+                action: "Cancel",
+                dialog: authActionToDialog[authDialogState.authAction],
+              });
               setOpen(false);
             }}
           >
