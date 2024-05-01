@@ -14,17 +14,10 @@ import {
   NativeSelect,
 } from "@mui/material";
 import { useTranslations } from "next-intl";
-import {
-  useState,
-  useCallback,
-  useEffect,
-  Fragment,
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-} from "react";
+import { useState, useCallback, useEffect, Fragment, ChangeEvent } from "react";
 import { useMyInitiatives, useMyMember } from "../context/weverseUtils";
 import LogInPrompt from "./logInPrompt";
+import mixpanel from "mixpanel-browser";
 
 const InitiativeNeededDialog = ({
   open,
@@ -36,10 +29,30 @@ const InitiativeNeededDialog = ({
   const [myMember] = useMyMember();
   const t = useTranslations("index.publishDialog.initiativeNeededDialog");
   const inputTranslations = useTranslations("input");
+  useEffect(() => {
+    if (open) {
+      mixpanel.track("Publish Dialog", {
+        action: "View",
+        dialog: "Initiative Needed",
+      });
+      mixpanel.track_links(
+        "#Publish-Initiative-Needed-Dialog-Actions a",
+        "Publish Dialog",
+        {
+          action: "Submit",
+          dialog: "Initiative Needed",
+        }
+      );
+    }
+  }, [open]);
   return (
     <Dialog
       open={open}
       onClose={() => {
+        mixpanel.track("Publish Dialog", {
+          action: "Close",
+          dialog: "Initiative Needed",
+        });
         close();
       }}
     >
@@ -50,6 +63,10 @@ const InitiativeNeededDialog = ({
       <DialogActions>
         <Button
           onClick={() => {
+            mixpanel.track("Publish Dialog", {
+              action: "Cancel",
+              dialog: "Initiative Needed",
+            });
             close();
           }}
         >
@@ -95,10 +112,31 @@ const ChooseInitiativeDialog = ({
     }
   }, [myInitiatives]);
 
+  useEffect(() => {
+    if (open) {
+      mixpanel.track("Publish Dialog", {
+        action: "View",
+        dialog: "Choose Initiative",
+      });
+      mixpanel.track_links(
+        "#Choose-Initiative-Dialog-Actions a",
+        "Publish Dialog",
+        {
+          action: "Submit",
+          dialog: "Choose Initiative",
+        }
+      );
+    }
+  }, [open]);
+
   return (
     <Dialog
       open={open}
       onClose={() => {
+        mixpanel.track("Publish Dialog", {
+          action: "Close",
+          dialog: "Choose Initiative",
+        });
         close();
       }}
     >
@@ -116,9 +154,13 @@ const ChooseInitiativeDialog = ({
           </NativeSelect>
         </FormControl>
       </DialogContent>
-      <DialogActions>
+      <DialogActions id="Choose-Initiative-Dialog-Actions">
         <Button
           onClick={() => {
+            mixpanel.track("Publish Dialog", {
+              action: "Cancel",
+              dialog: "Choose Initiative",
+            });
             close();
           }}
         >
@@ -131,6 +173,12 @@ const ChooseInitiativeDialog = ({
     </Dialog>
   );
 };
+
+const trackSubmit = () =>
+  mixpanel.track("Publish Dialog", {
+    action: "Submit",
+    dialog: "Publish",
+  });
 
 const PublishDialog = ({
   open,
@@ -147,12 +195,14 @@ const PublishDialog = ({
   const [initiativeNeededDialogOpen, setInitiativeNeededDialogOpen] =
     useState(false);
   const closePromptAndOpenInitiativeNeededDialog = useCallback(() => {
+    trackSubmit();
     setPublishPromptDialogOpen(false);
     setInitiativeNeededDialogOpen(true);
   }, [setPublishPromptDialogOpen, setInitiativeNeededDialogOpen]);
   const [chooseInitiativeDialogOpen, setChooseInitiativeDialogOpen] =
     useState(false);
   const closePromptAndOpenChooseInitiativeDialog = useCallback(() => {
+    trackSubmit();
     setPublishPromptDialogOpen(false);
     setChooseInitiativeDialogOpen(true);
   }, [setPublishPromptDialogOpen, setChooseInitiativeDialogOpen]);
@@ -183,6 +233,15 @@ const PublishDialog = ({
   const [buttonBehavior, setButtonBehavior] = useState<
     {} | { href: string } | { onClick: () => void }
   >({});
+
+  useEffect(() => {
+    if (buttonBehavior.hasOwnProperty("href")) {
+      mixpanel.track_links("#Publish-Dialog-Actions a", "Publish Dialog", {
+        action: "Submit",
+        dialog: "Publish",
+      });
+    }
+  }, [buttonBehavior]);
 
   useEffect(() => {
     switch (selected) {
@@ -220,6 +279,15 @@ const PublishDialog = ({
     myMember?.path,
     selected,
   ]);
+
+  useEffect(() => {
+    if (open) {
+      mixpanel.track("Publish Dialog", {
+        action: "View",
+        dialog: "Publish",
+      });
+    }
+  }, [open]);
 
   return (
     <Fragment>
@@ -262,9 +330,13 @@ const PublishDialog = ({
             />
           )}
         </DialogContent>
-        <DialogActions>
+        <DialogActions id="Publish-Dialog-Actions">
           <Button
             onClick={() => {
+              mixpanel.track("Publish Dialog", {
+                action: "Cancel",
+                dialog: "Publish",
+              });
               close();
             }}
           >

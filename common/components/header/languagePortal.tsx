@@ -9,11 +9,12 @@ import {
   useTheme,
 } from "@mui/material";
 import { NextIntlClientProvider, useTranslations } from "next-intl";
-import { useState, Fragment, Dispatch, SetStateAction } from "react";
+import { useState, Fragment, Dispatch, SetStateAction, useEffect } from "react";
 import { locale, Locale } from "../../../functions/shared/src";
 import { Locale2Messages, localeDisplayNames } from "../../utils/translations";
 import Image from "next/image";
 import { useAppState } from "../../context/appState";
+import mixpanel from "mixpanel-browser";
 
 const ChoosingPrimary = ({
   setChoosing,
@@ -126,6 +127,11 @@ const AsCheckbox = ({
   />
 );
 
+const choosingToDialog = {
+  primary: "Primary",
+  content: "Content",
+};
+
 const AppLanguageModalContent = ({
   onClose,
   selectedLocale,
@@ -145,12 +151,24 @@ const AppLanguageModalContent = ({
     appState.languages.content
   );
   const setLanguages = appState.useSetLanguages();
+  useEffect(() => {
+    mixpanel.track("Language", {
+      action: "View",
+      dialog: choosingToDialog[choosing],
+    });
+  }, [choosing]);
   return (
     <div className="language-selection-modal w-full rounded-xl bg-white shadow-[0px_20px_24px_-4px_rgba(16,_24,_40,_0.08),_0px_8px_8px_-4px_rgba(16,_24,_40,_0.03)] h-[692px] overflow-hidden shrink-0 flex flex-col items-start justify-start px-4 pb-4 box-border gap-[24px] max-w-[680px]">
       <div className="self-stretch flex flex-col items-end justify-start gap-[16px] text-gray-900">
         <button
           className="cursor-pointer p-0 bg-primary-100 relative rounded-9xl box-border w-14 h-14 border-[8px] border-solid border-primary-50"
-          onClick={onClose}
+          onClick={() => {
+            mixpanel.track("Language", {
+              action: "Close",
+              dialog: choosingToDialog[choosing],
+            });
+            onClose();
+          }}
         >
           <div className="absolute top-[calc(50%_-_16px)] left-[calc(50%_-_16px)] w-6 h-6 overflow-hidden">
             <Image fill alt="" src="/close-icon.svg" />
@@ -212,6 +230,10 @@ const AppLanguageModalContent = ({
             disabled={loading}
             className="cursor-pointer py-2.5 px-[18px] bg-primary-600 flex-1 rounded-lg shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] overflow-hidden flex flex-row items-center justify-center border-[1px] border-solid border-primary-600"
             onClick={() => {
+              mixpanel.track("Language", {
+                action: "Submit",
+                dialog: choosingToDialog[choosing],
+              });
               setLoading(true);
               setLanguages({
                 primary: selectedLocale,
@@ -229,7 +251,13 @@ const AppLanguageModalContent = ({
         </div>
         <button
           className="cursor-pointer [border:none] p-0 bg-[transparent] self-stretch rounded-lg flex flex-row items-start justify-start"
-          onClick={onClose}
+          onClick={() => {
+            mixpanel.track("Language", {
+              action: "Cancel",
+              dialog: choosingToDialog[choosing],
+            }),
+              onClose();
+          }}
         >
           <div className="flex-1 rounded-lg bg-white shadow-[0px_1px_2px_rgba(16,_24,_40,_0.05)] overflow-hidden flex flex-row items-center justify-center py-2.5 px-[18px] border-[1px] border-solid border-gray-300">
             <div className="relative text-base leading-[24px] font-semibold font-text-sm-regular text-gray-700 text-left">
