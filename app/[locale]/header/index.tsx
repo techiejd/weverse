@@ -1,5 +1,5 @@
 import { useLocale, useTranslations } from "next-intl";
-import MenuPortal from "./menuPortal";
+import DrawerButton from "./drawerButton";
 
 const Header = () => {
   const t = useTranslations("header");
@@ -7,7 +7,21 @@ const Header = () => {
   return (
     <header className="header self-stretch h-[4.5rem] bg-white flex flex-row items-center justify-center py-[0.906rem] px-[0.5rem] box-border sticky top-[0] z-[99] max-w-full">
       <div className="self-stretch flex-1 flex flex-row items-center justify-between max-w-[85rem] gap-[1.25rem]">
-        <MenuPortal>{t("menu")}</MenuPortal>
+        <DrawerButton>
+          <div className="h-[1.875rem] rounded-lg overflow-hidden flex flex-row items-center justify-center py-[0.188rem] px-[0.5rem] box-border">
+            <img
+              className="h-[1.5rem] w-[1.5rem] relative overflow-hidden shrink-0"
+              loading="lazy"
+              alt=""
+              src="/menu.svg"
+            />
+          </div>
+          <div className="flex flex-row items-center justify-start py-[0rem] pr-[0.5rem] pl-[0rem]">
+            <div className="relative text-[1rem] tracking-[-1px] leading-[1.875rem] font-medium font-bottom-nav-bar-label-text text-gray-700 text-left inline-block min-w-[2.5rem]">
+              {t("menu")}
+            </div>
+          </div>
+        </DrawerButton>
         <button className="cursor-pointer [border:none] p-0 bg-[transparent] h-[1.794rem] w-[6.813rem] overflow-hidden shrink-0 flex flex-col items-center justify-between">
           <img
             className="self-stretch h-[1.794rem] relative max-w-full overflow-hidden shrink-0"
