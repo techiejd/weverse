@@ -3,8 +3,11 @@ import Header from "./header";
 import "./global.css";
 import { unstable_setRequestLocale } from "next-intl/server";
 import { locale } from "../../functions/shared/src";
-import Drawer from "./drawer/drawer";
 import { AppStateProvider } from "./appState";
+import dynamic from "next/dynamic";
+const DynamicDrawer = dynamic(() => import("./drawer"), {
+  ssr: false,
+});
 
 export function generateStaticParams() {
   return Object.values(locale.Values).map((locale) => ({ locale }));
@@ -23,9 +26,9 @@ export default async function Layout({
       <body>
         <AppStateProvider>
           <Header />
-          <Drawer>
+          <DynamicDrawer>
             <main>{children}</main>
-          </Drawer>
+          </DynamicDrawer>
         </AppStateProvider>
       </body>
     </html>
