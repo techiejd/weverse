@@ -155,8 +155,6 @@ const AppStateProvider: FC<{
           },
         });
       } else {
-        console.log("Setting content languages in cookie");
-        console.log({ languages });
         nookies.set(undefined, "contentLanguages", languages.toString(), {
           path: "/",
         });
@@ -165,12 +163,9 @@ const AppStateProvider: FC<{
   }, [member, memberConverter]);
 
   const refreshLanguages = useCallback(() => {
-    console.log("Refreshing languages");
     if (nextLanguageRoute && nextLanguageRoute !== pathName) {
-      console.log("Pushing route: ", nextLanguageRoute);
       router.push(nextLanguageRoute);
     } else {
-      console.log("Refreshing router");
       router.refresh();
     }
   }, [nextLanguageRoute, pathName, router]);

@@ -48,13 +48,6 @@ const LanguagePortal = ({
     setRequestedBack(true);
   };
   const onClose = async (internalRefreshAndSetContent?: boolean) => {
-    console.log("On CLose Called");
-    console.log({
-      loading,
-      primaryRequestsRefresh,
-      contentRequestsRefreshAndSet,
-      internalRefreshAndSetContent,
-    });
     if (loading) return;
     setLoading(true);
     if (

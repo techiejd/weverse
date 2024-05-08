@@ -161,10 +161,8 @@ const AppProvider: React.FC<{
     });
     weverse.auth.onAuthStateChanged((user) => {
       if (!user) {
-        console.log("resetting mixpanel");
         mixpanel.reset();
       } else {
-        console.log("identifying mixpanel");
         mixpanel.identify(user.uid);
       }
     });
