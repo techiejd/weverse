@@ -1,0 +1,14 @@
+{
+  "languagePortal": {
+    "chooseYourPrimaryLanguage": "Choose your primary language",
+    "doYouSpeakMultipleLanguages": "Do you speak multiple languages?",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saveAndClose": "Save and close",
+    "close": "Close",
+    "explanationPrimaryLanguage": "The main language that is used throughout the entire application.",
+    "explanationContentLanguages": "At Onewe, you can see content from our global community in different languages at the same time.",
+    "primaryLanguage": "Primary language",
+    "ordinalLanguage": "{index, selectordinal, one {#st} two {#nd} few {#rd} other {#th}} language"
+  }
+}

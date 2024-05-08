@@ -1,11 +1,25 @@
-import { useLocale, useTranslations } from "next-intl";
+import { AbstractIntlMessages, useLocale, useTranslations } from "next-intl";
 import DrawerButton from "./drawerButton";
+import LanguagePortal from "./languagePortal";
+import { locale, Locale } from "../../../functions/shared/src";
+import { getTranslations } from "next-intl/server";
 
-const Header = () => {
-  const t = useTranslations("header");
+const getLocalePortalMessages = async () => {
+  const possibleLocales = Object.keys(locale.Enum) as Locale[];
+  return possibleLocales.reduce(async (acc, l) => {
+    return {
+      ...(await acc),
+      [l]: await import(`../../../messages/languagePortal/${l}.json`),
+    };
+  }, Promise.resolve({} as Record<Locale, AbstractIntlMessages>));
+};
+
+const Header = async () => {
+  const t = await getTranslations("header");
   const l = useLocale();
+  const languagePortalMessages = await getLocalePortalMessages();
   return (
-    <header className="header self-stretch h-[4.5rem] bg-white flex flex-row items-center justify-center py-[0.906rem] px-[0.5rem] box-border sticky top-[0] z-[99] max-w-full">
+    <header className="header self-stretch h-[4.5rem] bg-white flex flex-row items-center justify-center py-[0.906rem] px-[0.5rem] box-border sticky top-[0] max-w-full">
       <div className="self-stretch flex-1 flex flex-row items-center justify-between max-w-[85rem] gap-[1.25rem]">
         <DrawerButton>
           <div className="h-[1.875rem] rounded-lg overflow-hidden flex flex-row items-center justify-center py-[0.188rem] px-[0.5rem] box-border">
@@ -31,7 +45,7 @@ const Header = () => {
           />
         </button>
         <div className="self-stretch flex flex-row items-center justify-start py-[0rem] pr-[0.5rem] pl-[0rem] gap-[0.25rem]">
-          <button className="cursor-pointer [border:none] p-0 bg-[transparent] h-[1.875rem] flex flex-row items-center justify-start gap-[0.188rem]">
+          <LanguagePortal messages={JSON.stringify(languagePortalMessages)}>
             <img
               className="h-[1.125rem] w-[1.125rem] relative overflow-hidden shrink-0"
               loading="lazy"
@@ -48,7 +62,7 @@ const Header = () => {
                 src="/chevrondown.svg"
               />
             </div>
-          </button>
+          </LanguagePortal>
           <button className="cursor-pointer [border:none] p-0 bg-[transparent] self-stretch w-[2.163rem] flex flex-row items-center justify-start">
             <img
               className="h-[1.35rem] w-[1.35rem] relative overflow-hidden shrink-0"

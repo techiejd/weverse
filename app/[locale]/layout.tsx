@@ -26,9 +26,8 @@ export default async function Layout({
       <body>
         <AppStateProvider>
           <Header />
-          <DynamicDrawer>
-            <main>{children}</main>
-          </DynamicDrawer>
+          <DynamicDrawer />
+          <main>{children}</main>
         </AppStateProvider>
       </body>
     </html>

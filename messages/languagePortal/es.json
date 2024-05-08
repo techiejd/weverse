@@ -1,0 +1,12 @@
+{
+  "languagePortal": {
+    "chooseYourPrimaryLanguage": "Elige tu idioma principal",
+    "doYouSpeakMultipleLanguages": "¿Hablas varios idiomas?",
+    "save": "Guardar",
+    "cancel": "Anular",
+    "saveAndClose": "Guardar y cerrar",
+    "close": "Cerrar",
+    "explanationPrimaryLanguage": "Esta será el idioma principal utilizado a travez de toda la aplicación.",
+    "explanationContentLanguages": "En Onewe puedes ver el contenido de nuestra comunidad mundial en diferentes idiomas al mismo tiempo."
+  }
+}
