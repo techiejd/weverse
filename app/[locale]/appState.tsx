@@ -31,7 +31,7 @@ import {
 } from "firebase/firestore";
 import { useMemo } from "react";
 import { useLocale } from "next-intl";
-import nookies from "nookies";
+import nookies, { parseCookies } from "nookies";
 
 const isDevEnvironment = process && process.env.NODE_ENV === "development";
 
@@ -94,7 +94,10 @@ const AppStateProvider: FC<{
   const [cachedLanguages, setCachedLanguages] = useState<Languages>({
     primary: member?.locale || l,
     content:
-      member?.settings?.locales || (member?.locale ? [member?.locale!] : [l]),
+      member?.settings?.locales ||
+      (member?.locale
+        ? [member?.locale]
+        : (parseCookies()["contentLanguages"]?.split(",") as Locale[]) || [l]),
   });
   const [nextLanguageRoute, setNextLanguageRoute] = useState<string | null>(
     pathName
@@ -131,15 +134,11 @@ const AppStateProvider: FC<{
         await updateDoc(memberRef, {
           locale: primary,
         });
-      } else {
-        setNextLanguageRoute((nextLanguageRoute) => {
-          return nextLanguageRoute
-            ? `/${primary}/${nextLanguageRoute.slice(4)}`
-            : null;
-        });
+      } else if (pathName) {
+        setNextLanguageRoute(`/${primary}/${pathName.slice(4)}`);
       }
     };
-  }, [member, memberConverter]);
+  }, [member, memberConverter, pathName]);
   const useSetContentLanguages = useCallback(() => {
     return async (languages: Locale[]) => {
       setCachedLanguages((cachedLanguages) => ({
@@ -167,11 +166,14 @@ const AppStateProvider: FC<{
 
   const refreshLanguages = useCallback(() => {
     console.log("Refreshing languages");
-    if (nextLanguageRoute) {
+    if (nextLanguageRoute && nextLanguageRoute !== pathName) {
       console.log("Pushing route: ", nextLanguageRoute);
       router.push(nextLanguageRoute);
+    } else {
+      console.log("Refreshing router");
+      router.refresh();
     }
-  }, [nextLanguageRoute, router]);
+  }, [nextLanguageRoute, pathName, router]);
 
   return (
     <AppStateContext.Provider
