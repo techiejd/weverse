@@ -16,9 +16,10 @@ const Drawer: FC<{ children?: React.ReactNode }> = (props) => {
       direction="left"
       size={304}
       className="drawer tracking-[normal] leading-[normal] h-full overflow-auto"
+      lockBackgroundScroll={true}
       {...props}
     >
-      <section className="h-[1225px] flex-1 bg-white overflow-hidden flex flex-col items-start justify-start pt-[45px] px-4 pb-[102px] box-border text-center text-sm text-dark-green font-text-sm-regular">
+      <section className="h-screen flex-1 bg-white overflow-hidden flex flex-col items-start justify-start pt-[45px] px-4 pb-[102px] box-border text-center text-sm text-dark-green font-text-sm-regular">
         <div className="self-stretch flex flex-col items-start justify-start py-0 px-0 gap-[32px]">
           <div className="self-stretch flex flex-row items-center justify-start gap-[42px]">
             <div className="flex-1 flex flex-row items-start justify-start gap-[29px]">
