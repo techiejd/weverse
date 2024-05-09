@@ -31,8 +31,7 @@ const LanguagePortal = ({
   const [chosenLocales, setChosenLocales] = useState<Locale[]>(
     languages.content
   );
-  const [contentRequestsRefreshAndSet, setContentRequestsRefreshAndSet] =
-    useState(false);
+  const [contentRequestsRefresh, setContentRequestsRefresh] = useState(false);
   const possibleLocales = Object.keys(locale.Enum) as Locale[];
   const localeMessages = JSON.parse(messages) as Record<
     Locale,
@@ -44,25 +43,12 @@ const LanguagePortal = ({
   const [loading, setLoading] = useState(false);
   const [requestedBack, setRequestedBack] = useState(false);
   const [modalLeft, setModalLeft] = useState(false);
+  const [closeRequested, setCloseRequested] = useState(false);
   const requestBack = () => {
     setRequestedBack(true);
   };
-  const onClose = async (internalRefreshAndSetContent?: boolean) => {
-    if (loading) return;
-    setLoading(true);
-    if (
-      !primaryRequestsRefresh &&
-      !contentRequestsRefreshAndSet &&
-      !internalRefreshAndSetContent
-    ) {
-      setOpen(false);
-      return;
-    }
-    if (contentRequestsRefreshAndSet || internalRefreshAndSetContent) {
-      await setContentLanguages(chosenLocales);
-    }
-    refreshLanguages();
-    setOpen(false);
+  const onClose = async (_?: any) => {
+    setCloseRequested(true);
   };
   const onPrimarySave = async () => {
     setLoading(true);
@@ -71,27 +57,35 @@ const LanguagePortal = ({
     } else {
       setPrimaryRequestsRefresh(false);
     }
-    await setPrimaryLanguage(chosenPrimaryLocale);
+    const primaryPromise = setPrimaryLanguage(chosenPrimaryLocale);
+    let contentPromise = Promise.resolve();
     if (
-      languages.content.length > 1 ||
+      languages.content.length == 1 &&
       languages.content[0] !== chosenPrimaryLocale
     ) {
       setChosenLocales([chosenPrimaryLocale]);
-      setContentRequestsRefreshAndSet(true);
+      setContentRequestsRefresh(true);
+      contentPromise = setContentLanguages(chosenLocales);
+    } else if (languages.content.length > 1) {
+      let newContentLanguages = languages.content.slice();
+      if (languages.content.includes(chosenPrimaryLocale)) {
+        newContentLanguages = languages.content.filter(
+          (locale) => locale !== chosenPrimaryLocale
+        );
+      }
+      newContentLanguages.unshift(chosenPrimaryLocale);
+      contentPromise = setContentLanguages(newContentLanguages);
     }
+    await Promise.all([primaryPromise, contentPromise]);
     setChoosing("content");
     setLoading(false);
   };
   const onContentSaveAndClose = async () => {
-    if (!contentRequestsRefreshAndSet) {
-      if (
-        languages.content.length != chosenLocales.length ||
-        !languages.content.every((locale, i) => chosenLocales[i] == locale)
-      ) {
-        setContentRequestsRefreshAndSet(true);
-      }
-    }
-    onClose(true);
+    setLoading(true);
+    setContentRequestsRefresh(true);
+    await setContentLanguages(chosenLocales);
+    setLoading(false);
+    onClose();
   };
   useEffect(() => {
     if (!open && modalLeft) {
@@ -102,7 +96,7 @@ const LanguagePortal = ({
       setModalLeft(false);
       setLoading(false);
       setPrimaryRequestsRefresh(false);
-      setContentRequestsRefreshAndSet(false);
+      setContentRequestsRefresh(false);
     }
   }, [open, modalLeft]);
   useEffect(() => {
@@ -111,6 +105,22 @@ const LanguagePortal = ({
       setPrimaryLeft(false);
     }
   }, [requestedBack]);
+  useEffect(() => {
+    if (closeRequested && !loading) {
+      setLoading(true);
+      if (primaryRequestsRefresh || contentRequestsRefresh) {
+        refreshLanguages();
+      }
+      setOpen(false);
+      setCloseRequested(false);
+    }
+  }, [
+    closeRequested,
+    contentRequestsRefresh,
+    loading,
+    primaryRequestsRefresh,
+    refreshLanguages,
+  ]);
   return (
     <Fragment>
       <Transition.Root show={open} as={Fragment}>

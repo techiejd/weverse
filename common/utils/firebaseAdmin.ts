@@ -24,7 +24,7 @@ export const getAdminApp = () => {
 
 export const getAdminAuth = () => {
   if (isDevEnvironment) {
-    process.env.FIREBASE_AUTH_EMULATOR_HOST = "localhost:9099";
+    process.env.FIREBASE_AUTH_EMULATOR_HOST = "127.0.0.1:9099";
   }
   const adminApp = getAdminApp();
   return getAuth(adminApp);
@@ -32,7 +32,7 @@ export const getAdminAuth = () => {
 
 export const getAdminFirestore = () => {
   if (isDevEnvironment) {
-    process.env.FIRESTORE_EMULATOR_HOST = "localhost:8080";
+    process.env.FIRESTORE_EMULATOR_HOST = "127.0.0.1:8080";
   }
   return getFirestore(getAdminApp());
 };
@@ -42,7 +42,7 @@ export type AuthenticationProp = {
   uid: string;
 };
 
-async function verifyCookie(cookie: string) {
+export async function verifyCookie(cookie: string) {
   const auth = getAdminAuth();
 
   var uid = "";

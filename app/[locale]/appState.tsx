@@ -137,6 +137,7 @@ const AppStateProvider: FC<{
       } else if (pathName) {
         setNextLanguageRoute(`/${primary}/${pathName.slice(4)}`);
       }
+      await new Promise((r) => setTimeout(r, 2000));
     };
   }, [member, memberConverter, pathName]);
   const useSetContentLanguages = useCallback(() => {
@@ -159,6 +160,7 @@ const AppStateProvider: FC<{
           path: "/",
         });
       }
+      await new Promise((r) => setTimeout(r, 2000));
     };
   }, [member, memberConverter]);
 
