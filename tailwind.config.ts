@@ -421,13 +421,6 @@ const config: Config = {
                 "800": "rgba(255, 255, 255, 0.5)",
                 "1000": "rgba(0, 0, 0, 0.5)",
               },
-              gray: {
-                "100": "#212121",
-                "200": "rgba(2, 13, 14, 0.5)",
-                "300": "rgba(4, 4, 4, 0.5)",
-                "400": "rgba(2, 13, 14, 0.3)",
-                "500": "rgba(4, 4, 4, 0.3)",
-              },
               lightslategray: "#789cb8",
               darkgray: "rgba(163, 150, 150, 0.8)",
               lightgoldenrodyellow: "#d5ffcc",

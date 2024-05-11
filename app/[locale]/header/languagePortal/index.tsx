@@ -8,6 +8,8 @@ import LanguagePortalChooseContent from "./languagePortalChooseContent";
 import { LanguagePortalContext } from "./languagePortalContext";
 import { useLanguages } from "../../appState";
 
+import "./languagePortal.css";
+
 const LanguagePortal = ({
   children,
   messages,
