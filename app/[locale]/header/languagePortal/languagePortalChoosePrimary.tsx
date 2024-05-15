@@ -1,12 +1,12 @@
 import { useTranslations } from "next-intl";
-import { useContext } from "react";
+import { FC, forwardRef, useContext } from "react";
 import { localeDisplayNames } from "../../../../common/utils/translations";
 import Image from "next/image";
 import { Locale } from "../../../../functions/shared/src";
 import { LanguagePortalContext } from "./languagePortalContext";
 import { LoadingCard } from "./loading";
 
-const LanguagePortalChoosePrimary = () => {
+const LanguagePortalChoosePrimary = ({}, ref: React.Ref<HTMLDivElement>) => {
   const {
     chosenPrimaryLocale,
     setChosenPrimaryLocale,
@@ -17,7 +17,10 @@ const LanguagePortalChoosePrimary = () => {
   } = useContext(LanguagePortalContext);
   const t = useTranslations("languagePortal");
   return (
-    <div className="flex-1 rounded-xl bg-white overflow-hidden pt-[1.25rem] px-[1rem] pb-[1rem] box-border gap-[1rem] max-w-[42.5rem]">
+    <div
+      ref={ref}
+      className="flex-1 rounded-xl bg-white overflow-hidden pt-[1.25rem] px-[1rem] pb-[1rem] box-border gap-[1rem] max-w-[42.5rem]"
+    >
       <div
         className={`flex flex-col items-end justify-start ${
           loading ? "opacity-20 pointer-events-none" : ""
@@ -95,4 +98,4 @@ const LanguagePortalChoosePrimary = () => {
   );
 };
 
-export default LanguagePortalChoosePrimary;
+export default forwardRef(LanguagePortalChoosePrimary);

@@ -1,6 +1,11 @@
 "use client";
-import { Fragment, ReactNode, useEffect, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
+import {
+  Dialog,
+  DialogPanel,
+  Transition,
+  TransitionChild,
+} from "@headlessui/react";
 import { Locale, locale } from "../../../../functions/shared/src";
 import { AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
 import LanguagePortalChoosePrimary from "./languagePortalChoosePrimary";
@@ -46,6 +51,8 @@ const LanguagePortal = ({
   const [requestedBack, setRequestedBack] = useState(false);
   const [modalLeft, setModalLeft] = useState(false);
   const [closeRequested, setCloseRequested] = useState(false);
+  const languagePortalChoosePrimaryRef = useRef<HTMLDivElement>(null);
+  const languagePortalChooseContentRef = useRef<HTMLDivElement>(null);
   const requestBack = () => {
     setRequestedBack(true);
   };
@@ -125,9 +132,9 @@ const LanguagePortal = ({
   ]);
   return (
     <Fragment>
-      <Transition.Root show={open} as={Fragment}>
+      <Transition show={open} as={Fragment}>
         <Dialog className="language-portal relative z-10" onClose={onClose}>
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
@@ -140,11 +147,11 @@ const LanguagePortal = ({
             }}
           >
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          </Transition.Child>
+          </TransitionChild>
 
           <div className="fixed inset-0 w-screen overflow-y-auto">
             <div className="flex min-h-full justify-center p-4 text-center items-center">
-              <Transition.Child
+              <TransitionChild
                 as={Fragment}
                 enter="ease-out duration-300"
                 enterFrom="opacity-0 translate-y-4 sm:scale-95"
@@ -153,7 +160,7 @@ const LanguagePortal = ({
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:scale-95"
               >
-                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:w-full sm:max-w-lg">
+                <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:w-full sm:max-w-lg">
                   <NextIntlClientProvider
                     messages={localeMessages[chosenPrimaryLocale]}
                     locale={chosenPrimaryLocale}
@@ -191,7 +198,9 @@ const LanguagePortal = ({
                         leaveTo="opacity-0 translate-y-4 sm:scale-95"
                         afterLeave={() => setPrimaryLeft(true)}
                       >
-                        <LanguagePortalChoosePrimary />
+                        <LanguagePortalChoosePrimary
+                          ref={languagePortalChoosePrimaryRef}
+                        />
                       </Transition>
                       <Transition
                         show={choosing == "content" && primaryLeft}
@@ -209,16 +218,18 @@ const LanguagePortal = ({
                             }
                           : {})}
                       >
-                        <LanguagePortalChooseContent />
+                        <LanguagePortalChooseContent
+                          ref={languagePortalChooseContentRef}
+                        />
                       </Transition>
                     </LanguagePortalContext.Provider>
                   </NextIntlClientProvider>
-                </Dialog.Panel>
-              </Transition.Child>
+                </DialogPanel>
+              </TransitionChild>
             </div>
           </div>
         </Dialog>
-      </Transition.Root>
+      </Transition>
       <button
         className="cursor-pointer [border:none] p-0 bg-[transparent] h-[1.875rem] flex flex-row items-center justify-start gap-[0.188rem]"
         onClick={() => {

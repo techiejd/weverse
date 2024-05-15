@@ -1,5 +1,11 @@
 import { useTranslations } from "next-intl";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import {
+  Dispatch,
+  forwardRef,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 import { localeDisplayNames } from "../../../../common/utils/translations";
 import Image from "next/image";
 import { Locale } from "../../../../functions/shared/src";
@@ -62,7 +68,7 @@ const ChooseLanguageButton = ({
   );
 };
 
-const LanguagePortalChooseContent = () => {
+const LanguagePortalChooseContent = ({}, ref: React.Ref<HTMLDivElement>) => {
   const {
     chosenLocales,
     setChosenLocales,
@@ -74,7 +80,10 @@ const LanguagePortalChooseContent = () => {
   } = useContext(LanguagePortalContext);
   const t = useTranslations("languagePortal");
   return (
-    <div className="flex-1 rounded-xl bg-white overflow-hidden pt-[1.25rem] px-[1rem] pb-[1rem] box-border gap-[1rem] max-w-[42.5rem]">
+    <div
+      ref={ref}
+      className="flex-1 rounded-xl bg-white overflow-hidden pt-[1.25rem] px-[1rem] pb-[1rem] box-border gap-[1rem] max-w-[42.5rem]"
+    >
       <div
         className={`flex flex-col items-end justify-start ${
           loading ? "opacity-20 pointer-events-none" : ""
@@ -144,4 +153,4 @@ const LanguagePortalChooseContent = () => {
   );
 };
 
-export default LanguagePortalChooseContent;
+export default forwardRef(LanguagePortalChooseContent);
