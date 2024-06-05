@@ -3,6 +3,7 @@ import DrawerButton from "./drawerButton";
 import LanguagePortal from "./languagePortal";
 import { locale, Locale } from "../../../functions/shared/src";
 import { getTranslations } from "next-intl/server";
+import NotificationsPortal from "./notificationsPortal";
 import Image from "next/image";
 
 const getLocalePortalMessages = async () => {
@@ -53,18 +54,11 @@ const Header = async () => {
               </div>
             </div>
           </LanguagePortal>
-          <button className="cursor-pointer [border:none] p-0 bg-[transparent] self-stretch w-[2.163rem] flex flex-row items-center justify-start">
+          <NotificationsPortal>
             <div className="h-[1.35rem] w-[1.35rem] relative overflow-hidden shrink-0">
-              <Image alt="" src="/bell04.svg" fill />
+              <Image alt="notifications bell" fill src="/bell04.svg" />
             </div>
-            <div className="flex-1 flex flex-row items-center justify-start pt-[1.25rem] px-[0rem] pb-[0rem] z-[1] ml-[-0.625rem]">
-              <div className="flex-1 rounded-71xl bg-international-red flex flex-col items-center justify-center p-[0.438rem] border-[1px] border-solid border-white">
-                <div className="w-[0.438rem] h-[0.563rem] relative text-[0.75rem] tracking-[-1px] leading-[1.875rem] font-medium font-bottom-nav-bar-label-text text-white text-center flex items-center justify-center shrink-0 min-w-[0.438rem]">
-                  3
-                </div>
-              </div>
-            </div>
-          </button>
+          </NotificationsPortal>
         </div>
       </div>
     </header>
